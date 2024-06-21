@@ -11,6 +11,7 @@ from redis.exceptions import LockError
 import time
 import numpy as np
 from pyorcid import OrcidAuthentication, Orcid
+from typing import Tuple
 
 
 
@@ -52,7 +53,7 @@ class OrcidClient():
         except Exception as e:
             raise e
 
-    def next_item(self) -> tuple:
+    def next_item(self) -> Tuple[str, dict, str]:
         queue, msg = self.redis_store.blpop("orcid")
         msg = json.loads(msg.decode('utf-8'))
         k = msg.get('id')
@@ -112,7 +113,7 @@ class OrcidClient():
                     self.logger.error(e)
         
     @error_logging_aspect(log_level=logging.ERROR)
-    def execute_search(self, params) -> dict:
+    def execute_search(self, params: dict) -> dict:
         q = params.get('q')
         service = params.get('service')
         data = {}
@@ -124,6 +125,8 @@ class OrcidClient():
             works = retrieve_full_works_metadata(orcid)
             self.logger.debug(works.columns)
             metadata = apply_metadata_schema(works)
+            metadata["authors"] = author_info["author_name"]
+            metadata = sanitize_metadata(metadata)
             self.logger.debug(metadata.columns)
             # in BASE it is ["title", "paper_abstract", "subject_orig", "published_in", "sanitized_authors"]
             text = pd.concat([metadata.id, metadata[["title", "paper_abstract"]]
@@ -145,7 +148,7 @@ class OrcidClient():
             raise
 
 @error_logging_aspect(log_level=logging.ERROR)
-def extract_author_info(orcid) -> dict:
+def extract_author_info(orcid: Orcid) -> dict:
     personal_details = orcid.personal_details()
     orcid_id = orcid._orcid_id
     author_name = " ".join(
@@ -154,7 +157,7 @@ def extract_author_info(orcid) -> dict:
     )
     author_keywords = ", ".join(orcid.keywords()[0])
     biography = personal_details.get("biography", {}).get("content", "") \
-                    if personal_details.get("biography", {}).get("visibility") == "public" \
+                    if (personal_details.get("biography") and personal_details.get("biography", {}).get("visibility") == "public" )\
                     else ""
     external_identifiers = extract_external_identifiers(orcid)
     countries = extract_countries(orcid)
@@ -171,31 +174,45 @@ def extract_author_info(orcid) -> dict:
     return author_info
 
 @error_logging_aspect(log_level=logging.WARNING)
-def extract_countries(orcid) -> list:
+def sanitize_metadata(metadata: pd.DataFrame) -> pd.DataFrame:
+    metadata["id"] = metadata["id"].astype(str)
+    return metadata
+
+@error_logging_aspect(log_level=logging.WARNING)
+def extract_countries(orcid: Orcid) -> list:
     countries = pd.DataFrame(orcid.address()["address"])
-    countries = countries[countries["visibility"] == "public"]
-    countries["country"] = countries["country"].apply(lambda x: x.get("value"))
-    countries = countries["country"]
-    return countries.tolist()
+    if not countries.empty:
+        countries = countries[countries["visibility"] == "public"]
+        countries["country"] = countries["country"].apply(lambda x: x.get("value"))
+        countries = countries["country"]
+        return countries.tolist()
+    else:
+        return []
 
 @error_logging_aspect(log_level=logging.WARNING)
-def extract_external_identifiers(orcid) -> list:
+def extract_external_identifiers(orcid: Orcid) -> list:
     external_identifiers = pd.DataFrame(orcid.external_identifiers()["external-identifier"])
-    external_identifiers = external_identifiers[external_identifiers["visibility"] == "public"]
-    external_identifiers["external-id-url"] = external_identifiers["external-id-url"].apply(lambda x: x.get("value"))
-    external_identifiers = external_identifiers[[ "external-id-type", "external-id-url", "external-id-value", "external-id-relationship"]]
-    return external_identifiers.to_dict(orient='records')
+    if not external_identifiers.empty:
+        external_identifiers = external_identifiers[external_identifiers["visibility"] == "public"]
+        external_identifiers["external-id-url"] = external_identifiers["external-id-url"].apply(lambda x: x.get("value"))
+        external_identifiers = external_identifiers[[ "external-id-type", "external-id-url", "external-id-value", "external-id-relationship"]]
+        return external_identifiers.to_dict(orient='records')
+    else:
+        return []
 
 @error_logging_aspect(log_level=logging.WARNING)
-def extract_websites(orcid) -> list:
+def extract_websites(orcid: Orcid) -> list:
     urls = pd.DataFrame(orcid.researcher_urls()["researcher-url"])
-    urls = urls[urls["visibility"] == "public"]
-    urls["url"] = urls["url"].apply(lambda x: x.get("value"))
-    urls = urls[[ "url-name", "url"]]
-    return urls.to_dict(orient='records')
+    if not urls.empty:
+        urls = urls[urls["visibility"] == "public"]
+        urls["url"] = urls["url"].apply(lambda x: x.get("value"))
+        urls = urls[[ "url-name", "url"]]
+        return urls.to_dict(orient='records')
+    else:
+        return []
 
 @error_logging_aspect(log_level=logging.ERROR)
-def retrieve_full_works_metadata(orcid) -> pd.DataFrame:
+def retrieve_full_works_metadata(orcid: Orcid) -> pd.DataFrame:
     works = pd.DataFrame(orcid.works()[1]["group"]).explode("work-summary")
     works = pd.json_normalize(works["work-summary"])
     works["publication-date"] = works.apply(get_publication_date, axis=1)
@@ -208,10 +225,13 @@ def retrieve_full_works_metadata(orcid) -> pd.DataFrame:
     works["resulttype"] = works["type"].map(lambda x: [x])
     works["subject"] = ""
     works["sanitized_authors"] = ""    
+    works["cited_by_tweeters_count"] = np.random.randint(0, 100, size=len(works))
+    works["readers.mendeley"] = np.random.randint(0, 100, size=len(works))
+    works["citation_count"] = np.random.randint(0, 100, size=len(works))
     return works
     
 @error_logging_aspect(log_level=logging.ERROR)
-def apply_metadata_schema(works) -> pd.DataFrame:
+def apply_metadata_schema(works: pd.DataFrame) -> pd.DataFrame:
     works.rename(columns=works_mapping, inplace=True)
     metadata = works
     return metadata
@@ -220,7 +240,7 @@ def filter_dicts_by_value(dicts, key, value) -> list:
     return [d for d in dicts if d.get(key) == value]
     
 @error_logging_aspect(log_level=logging.WARNING)
-def extract_dois(work) -> str:
+def extract_dois(work: pd.DataFrame) -> str:
     external_ids = work["external-ids.external-id"]
     external_ids = external_ids if isinstance(external_ids, list) else []
     external_ids = (filter_dicts_by_value(
@@ -237,14 +257,14 @@ def get_publication_date(work) -> str:
     day = work["publication-date.day.value"]
     publication_date = ""
     parsed_publication_date = publication_date
-    if year is not pd.np.NaN:
+    if year is not np.NaN:
         publication_date+=str(int(year))
         parsed_publication_date = publication_date
-    if month is not pd.np.NaN:
+    if month is not np.NaN:
         publication_date+=("-"+str(int(month)))
         date_obj = parse(publication_date)
         parsed_publication_date = date_obj.strftime('%Y-%m')
-    if day is not pd.np.NaN:
+    if day is not np.NaN:
         publication_date+=("-"+str(int(day)))
         date_obj = parse(publication_date)
         parsed_publication_date = date_obj.strftime('%Y-%m-%d')
