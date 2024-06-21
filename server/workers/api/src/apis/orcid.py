@@ -36,10 +36,10 @@ class Search(Resource):
         orcid_ns.logger.debug(params)
         if "optradio" in params:
             del params["optradio"]
-        errors = search_param_schema.validate(params, partial=True)
-        orcid_ns.logger.debug(errors)
-        if errors:
-            abort(400, str(errors))
+        # errors = search_param_schema.validate(params, partial=True)
+        # orcid_ns.logger.debug(errors)
+        # if errors:
+        #     abort(400, str(errors))
         k = str(uuid.uuid4())
         d = {"id": k, "params": params,
              "endpoint": "search"}

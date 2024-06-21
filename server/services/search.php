@@ -66,7 +66,8 @@ function search($service, $dirty_query
     , "pubmed" => "PubMed"
     , "doaj" => "DOAJ"
     , "base" => "BASE"
-    , "openaire" => "OpenAire");
+    , "openaire" => "OpenAire"
+    , "orcid" => "ORCID",);
 
     $query = ($do_clean_query === true)
         ? (cleanQuery($dirty_query, $transform_query_tolowercase, $add_slashes))

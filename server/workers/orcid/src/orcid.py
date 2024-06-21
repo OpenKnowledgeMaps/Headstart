@@ -1,10 +1,11 @@
 import os
+import sys
 import json
-import subprocess
 import pandas as pd
 import logging
 from datetime import timedelta
 from dateutil.parser import parse
+from common.decorators import error_logging_aspect
 import re
 from redis.exceptions import LockError
 import time
@@ -30,7 +31,7 @@ class OrcidClient():
         handler.setFormatter(formatter)
         handler.setLevel(loglevel)
         self.logger.addHandler(handler)
-        
+
         self.separation = 0.1
         self.rate_key = 'orcid-ratelimit'
         self.ORCID_CLIENT_ID = os.getenv("ORCID_CLIENT_ID")
@@ -41,12 +42,15 @@ class OrcidClient():
         else:
             self.sandbox = False
 
+    @error_logging_aspect(log_level=logging.ERROR)
     def authenticate(self) -> str:
-        orcid_auth = OrcidAuthentication(client_id=self.ORCID_CLIENT_ID,
-                                         client_secret=self.ORCID_CLIENT_SECRET)
-        access_token = orcid_auth.get_public_access_token()
-        return access_token
-
+        try:
+            orcid_auth = OrcidAuthentication(client_id=self.ORCID_CLIENT_ID,
+                                            client_secret=self.ORCID_CLIENT_SECRET)
+            access_token = orcid_auth.get_public_access_token()
+            return access_token
+        except Exception as e:
+            raise e
 
     def next_item(self) -> tuple:
         queue, msg = self.redis_store.blpop("orcid")
@@ -57,7 +61,7 @@ class OrcidClient():
         endpoint = msg.get('endpoint')
         return k, params, endpoint
     
-
+    @error_logging_aspect(log_level=logging.INFO)
     def orcid_rate_limit_reached(self) -> bool:
         """
         This implementation is inspired by an implementation of
@@ -83,6 +87,7 @@ class OrcidClient():
         except LockError:
             return True
         
+    @error_logging_aspect(log_level=logging.ERROR)
     def run(self) -> None:
         while True:
             while self.orcid_rate_limit_reached():
@@ -106,6 +111,7 @@ class OrcidClient():
                     self.logger.error(params)
                     self.logger.error(e)
         
+    @error_logging_aspect(log_level=logging.ERROR)
     def execute_search(self, params) -> dict:
         q = params.get('q')
         service = params.get('service')
@@ -116,24 +122,29 @@ class OrcidClient():
             orcid = Orcid(orcid_id=orcid_id, orcid_access_token=self.access_token, state = "public", sandbox=self.sandbox)
             author_info = extract_author_info(orcid)
             works = retrieve_full_works_metadata(orcid)
+            self.logger.debug(works.columns)
             metadata = apply_metadata_schema(works)
+            self.logger.debug(metadata.columns)
             # in BASE it is ["title", "paper_abstract", "subject_orig", "published_in", "sanitized_authors"]
             text = pd.concat([metadata.id, metadata[["title", "paper_abstract"]]
                                     .apply(lambda x: " ".join(x), axis=1)], axis=1)
             text.columns = ["id", "content"]
+            self.logger.debug(metadata.head())
+            self.logger.debug(text.head())
             input_data = {}
             input_data["metadata"] = metadata.to_json(orient='records')
             input_data["text"] = text.to_json(orient='records')
             res = {}
             res["input_data"] = input_data
             # merge author info into params
-            params = params.update(author_info)
+            params.update(author_info)
             res["params"] = params
             return res
         except Exception as e:
             self.logger.error(e)
             raise
 
+@error_logging_aspect(log_level=logging.ERROR)
 def extract_author_info(orcid) -> dict:
     personal_details = orcid.personal_details()
     orcid_id = orcid._orcid_id
@@ -159,6 +170,7 @@ def extract_author_info(orcid) -> dict:
     }
     return author_info
 
+@error_logging_aspect(log_level=logging.WARNING)
 def extract_countries(orcid) -> list:
     countries = pd.DataFrame(orcid.address()["address"])
     countries = countries[countries["visibility"] == "public"]
@@ -166,6 +178,7 @@ def extract_countries(orcid) -> list:
     countries = countries["country"]
     return countries.tolist()
 
+@error_logging_aspect(log_level=logging.WARNING)
 def extract_external_identifiers(orcid) -> list:
     external_identifiers = pd.DataFrame(orcid.external_identifiers()["external-identifier"])
     external_identifiers = external_identifiers[external_identifiers["visibility"] == "public"]
@@ -173,6 +186,7 @@ def extract_external_identifiers(orcid) -> list:
     external_identifiers = external_identifiers[[ "external-id-type", "external-id-url", "external-id-value", "external-id-relationship"]]
     return external_identifiers.to_dict(orient='records')
 
+@error_logging_aspect(log_level=logging.WARNING)
 def extract_websites(orcid) -> list:
     urls = pd.DataFrame(orcid.researcher_urls()["researcher-url"])
     urls = urls[urls["visibility"] == "public"]
@@ -180,13 +194,23 @@ def extract_websites(orcid) -> list:
     urls = urls[[ "url-name", "url"]]
     return urls.to_dict(orient='records')
 
+@error_logging_aspect(log_level=logging.ERROR)
 def retrieve_full_works_metadata(orcid) -> pd.DataFrame:
-    raw_works = pd.DataFrame(orcid.works()[1]["group"]).explode("work-summary")
-    works = pd.json_normalize(pd.DataFrame(raw_works["work-summary"]))
+    works = pd.DataFrame(orcid.works()[1]["group"]).explode("work-summary")
+    works = pd.json_normalize(works["work-summary"])
     works["publication-date"] = works.apply(get_publication_date, axis=1)
     works["doi"] = works.apply(extract_dois, axis=1)
+    # THIS IS EMPTY FOR NOW BECAUSE WE DON'T HAVE THIS INFO YET
+    works["short-description"] = ""
+    works["subject_orig"] = ""
+    works["subject_cleaned"] = ""
+    works["oa_state"] = 2
+    works["resulttype"] = works["type"].map(lambda x: [x])
+    works["subject"] = ""
+    works["sanitized_authors"] = ""    
     return works
     
+@error_logging_aspect(log_level=logging.ERROR)
 def apply_metadata_schema(works) -> pd.DataFrame:
     works.rename(columns=works_mapping, inplace=True)
     metadata = works
@@ -195,6 +219,7 @@ def apply_metadata_schema(works) -> pd.DataFrame:
 def filter_dicts_by_value(dicts, key, value) -> list:
     return [d for d in dicts if d.get(key) == value]
     
+@error_logging_aspect(log_level=logging.WARNING)
 def extract_dois(work) -> str:
     external_ids = work["external-ids.external-id"]
     external_ids = external_ids if isinstance(external_ids, list) else []
@@ -205,7 +230,7 @@ def extract_dois(work) -> str:
     doi = external_ids[0].get("external-id-value", "") if len(external_ids)>0 else ""
     return doi
 
-
+@error_logging_aspect(log_level=logging.WARNING)
 def get_publication_date(work) -> str:
     year = work["publication-date.year.value"]
     month = work["publication-date.month.value"]
@@ -232,7 +257,6 @@ works_mapping = {
     "short-description": "paper_abstract",
     "publication-date": "year",
     "work-contributors": "authors",
-    "type": "resulttype",
     "url.value": "link",
     "journal-title.value": "published_in"
 }
