@@ -6,6 +6,8 @@ import logging
 from datetime import timedelta
 from dateutil.parser import parse
 from common.decorators import error_logging_aspect
+from common.deduplication import find_duplicate_indexes,\
+    prioritize_OA_and_latest, mark_latest_doi, mark_duplicates
 import re
 from redis.exceptions import LockError
 import time
@@ -126,6 +128,8 @@ class OrcidClient():
             self.logger.debug(works.columns)
             metadata = apply_metadata_schema(works)
             metadata["authors"] = author_info["author_name"]
+            #metadata = mark_duplicates(metadata)
+            #metadata = filter_duplicates(metadata)
             metadata = sanitize_metadata(metadata)
             self.logger.debug(metadata.columns)
             # in BASE it is ["title", "paper_abstract", "subject_orig", "published_in", "sanitized_authors"]
@@ -143,6 +147,13 @@ class OrcidClient():
             params.update(author_info)
             res["params"] = params
             return res
+        except ValueError as e:
+            self.logger.error(e)
+            self.logger.error(params)
+            res = {}
+            res["params"] = params
+            res["status"] = "error"
+            res["reason"] = ["invalid orcid id"]
         except Exception as e:
             self.logger.error(e)
             raise
@@ -269,7 +280,25 @@ def get_publication_date(work) -> str:
         date_obj = parse(publication_date)
         parsed_publication_date = date_obj.strftime('%Y-%m-%d')
     return parsed_publication_date
-    
+
+@error_logging_aspect(log_level=logging.ERROR)
+def filter_duplicates(df: pd.DataFrame) -> pd.DataFrame:
+    df.drop_duplicates("id", inplace=True, keep="first")
+    df["is_latest"] = True
+    df["doi_duplicate"] = False
+    df["has_relations"] = False
+    df["link_duplicate"] = False
+    df["keep"] = False
+    dupind = find_duplicate_indexes(df)
+    pure_datasets = df[df.type == "data-set"]
+    non_datasets = df.loc[df.index.difference(pure_datasets.index)]
+    non_datasets = prioritize_OA_and_latest(non_datasets, dupind)
+    pure_datasets = mark_latest_doi(pure_datasets, dupind)
+    filtered_non_datasets = non_datasets[non_datasets.is_latest==True]
+    filtered_datasets = pure_datasets[(pure_datasets.keep==True) | (pure_datasets.is_duplicate==False)]
+    filtered = pd.concat([filtered_non_datasets, filtered_datasets])
+    filtered.sort_index(inplace=True)
+    return filtered
 
 works_mapping = {
     "put-code": "id",

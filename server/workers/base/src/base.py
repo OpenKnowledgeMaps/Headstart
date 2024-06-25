@@ -5,6 +5,12 @@ import pandas as pd
 import logging
 from datetime import timedelta
 from common.r_wrapper import RWrapper
+from common.deduplication import find_version_in_doi, get_unversioned_doi, get_publisher_doi, \
+    find_duplicate_indexes, mark_duplicate_dois, mark_duplicate_links,\
+    identify_relations, remove_false_positives_doi, remove_false_positives_link, \
+    add_false_negatives, remove_textual_duplicates_from_different_sources, \
+    mark_latest_doi, prioritize_OA_and_latest
+    
 import re
 from redis.exceptions import LockError
 import time
@@ -186,121 +192,8 @@ class BaseClient(RWrapper):
                     self.logger.error(params)
                     self.logger.error(e)
 
-pattern_doi = re.compile(r"\.v(\d)+$")
 pattern_annotations = re.compile(r"([A-Za-z]+:[\w'\- ]+);?")
 
-def find_version_in_doi(doi):
-    m = pattern_doi.findall(doi)
-    if m:
-        return int(m[0])
-    else:
-        return None
-    
-def extract_doi_suffix(doi):
-    return doi.split("/")[4:]
-
-def get_unversioned_doi(doi):
-    doi = "/".join(doi.split("/")[3:6])
-    return pattern_doi.sub("", doi)
-
-def get_publisher_doi(doi):
-    pdoi = re.findall(r"org/10\.(\d+)", doi)
-    if len(pdoi) > 0:
-        return pdoi[0]
-    else:
-        return ""
-
-def mark_duplicate_dois(df):
-    for doi, index in df.groupby("doi").groups.items():
-        if doi:
-            if len(index) > 1:
-                df.loc[index, "doi_duplicate"] = True
-    return df
-
-def mark_duplicate_links(df):
-    for link, index in df.groupby("link").groups.items():
-        if link:
-            if len(index) > 1:
-                df.loc[index, "link_duplicate"] = True
-    return df
-
-def identify_relations(df):
-    for udoi in df.unversioned_doi.unique():
-        if udoi:
-            tmp = df[df.identifier.str.contains(udoi)]
-            if len(tmp) > 1:
-                relations = tmp.id
-                r = pd.Series([relations.values.tolist()]*len(tmp), index=relations.index)
-                df.loc[relations.index, "relations"] = r
-                df.loc[relations.index, "has_relations"] = True
-    return df
-
-def remove_false_positives_doi(df):
-    df.loc[df[(df.doi != "") & (df.is_duplicate) & (~df.doi_duplicate)].index, "is_duplicate"] = False
-    return df
-
-def remove_false_positives_link(df):
-    df.loc[df[(df.link != "") & (df.is_duplicate) & (~df.link_duplicate)].index, "is_duplicate"] = False
-    return df
-
-def add_false_negatives(df):
-    df.loc[df[(~df.is_duplicate) & (df.link_duplicate)].index, "is_duplicate"] = True
-    df.loc[df[(~df.is_duplicate) & (df.doi_duplicate)].index, "is_duplicate"] = True
-    return df
-
-def find_duplicate_indexes(df):    
-    dupind = df.id.map(lambda x: df[df.duplicates.str.contains(x)].index)
-    tmp = pd.DataFrame(dupind).astype(str).drop_duplicates().index
-    return dupind[tmp]
-
-def mark_latest_doi(df, dupind):
-    for _, idx in dupind.iteritems():
-        idx = df.index.intersection(idx)
-        tmp = df.loc[idx]
-        for udoi in list(filter(None, tmp.unversioned_doi.unique().tolist())):
-            tmp2 = tmp[tmp.unversioned_doi == udoi]
-            if len(tmp2) > 0:
-                df.loc[tmp2.index, "is_latest"] = False
-                df.loc[tmp2.index, "keep"] = False
-                versions = tmp2.id
-                latest = tmp2.sort_values("doi_version", ascending=False).head(1).id
-                v = [{"versions": versions.values.tolist(), "latest": latest.values.tolist()}]*len(tmp2)
-                df.loc[versions.index, "versions"] = v
-                df.loc[latest.index, "is_latest"] = True
-                df.loc[latest.index, "keep"] = True
-    return df
-    
-def remove_textual_duplicates_from_different_sources(df, dupind):
-    for _, idx in dupind.iteritems():
-        if len(idx) > 1:
-            tmp = df.loc[idx]
-            df.loc[tmp.index, "is_duplicate"] = True
-            df.loc[tmp.index, "is_latest"] = False
-            publisher_dois = list(filter(None, tmp.publisher_doi.unique().tolist()))
-            if len(publisher_dois) > 0:
-                # keep entry with doi
-                df.loc[idx, "keep"] = False
-                df.loc[tmp[tmp.publisher_doi!=""].index, "is_latest"] = True
-                df.loc[tmp[tmp.publisher_doi!=""].index, "keep"] = True
-            else:
-                df.loc[tmp.sort_values(["doi", "year"], ascending=[False, False]).head(1).index, "is_latest"] = True
-                df.loc[tmp.sort_values(["doi", "year"], ascending=[False, False]).head(1).index, "keep"] = True
-    return df
-
-def prioritize_OA_and_latest(df, dupind):
-    for _, idx in dupind.iteritems():
-        idx = df.index.intersection(idx)
-        if len(idx) > 1:
-            tmp = df.loc[idx]
-            df.loc[idx, "keep"] = False
-            df.loc[idx, "is_latest"] = False
-            if len(tmp[tmp.oa_state=="1"]) > 0:
-                df.loc[tmp[tmp.oa_state=="1"].sort_values("year", ascending=False).head(1).index, "keep"] = True
-                df.loc[tmp[tmp.oa_state=="1"].sort_values("year", ascending=False).head(1).index, "is_latest"] = True
-            else:
-                df.loc[tmp.sort_values("year", ascending=False).head(1).index, "keep"] = True
-                df.loc[tmp.sort_values("year", ascending=False).head(1).index, "is_latest"] = True
-    return df
 
 def filter_duplicates(df):
     df.drop_duplicates("id", inplace=True, keep="first")
