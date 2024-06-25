@@ -233,7 +233,7 @@ def retrieve_full_works_metadata(orcid: Orcid) -> pd.DataFrame:
     works["subject_orig"] = ""
     works["subject_cleaned"] = ""
     works["oa_state"] = 2
-    works["resulttype"] = works["type"].map(lambda x: [x])
+    works["resulttype"] = works.type.map(lambda x: [doc_type_mapping.get(x)])
     works["subject"] = ""
     works["sanitized_authors"] = ""    
     works["cited_by_tweeters_count"] = np.random.randint(0, 100, size=len(works))
@@ -308,4 +308,52 @@ works_mapping = {
     "work-contributors": "authors",
     "url.value": "link",
     "journal-title.value": "published_in"
+}
+
+doc_type_mapping = {
+    "book": "Book",
+    "book-chapter": "Book chapter",
+    "book-review": "Book review",
+    "dictionary-entry": "Dictionary entry",
+    "dissertation": "Dissertation",
+    "dissertation-thesis": "Dissertation thesis",
+    "enyclopaedia-entry": "Encyclopedia entry",
+    "edited-book": "Edited book",
+    "journal-article": "Journal article",
+    "journal-issue": "Journal issue",
+    "magazine-article": "Magazine article",
+    "manual": "Manual",
+    "online-resource": "Online resource",
+    "newsletter-article": "Newsletter article",
+    "newspaper-article": "Newspaper article",
+    "preprint": "Preprint",
+    "report": "Report",
+    "review": "Review",
+    "research-tool": "Research tool",
+    "supervised-student-publication": "Supervised student publication",
+    "test": "Test",
+    "translation": "Translation",
+    "website": "Website",
+    "working-paper": "Working paper",
+    "conference-abstract": "Conference abstract",
+    "conference-paper": "Conference paper",
+    "conference-poster": "Conference poster",
+    "disclosure": "Disclosure",
+    "license": "License",
+    "patent": "Patent",
+    "registered-copyright": "Registered copyright",
+    "trademark": "Trademark",
+    "annotation": "Annotation",
+    "artistic-performance": "Artistic performance",
+    "data-management-plan": "Data management plan",
+    "data-set": "Data set",
+    "invention": "Invention",
+    "lecture-speech": "Lecture speech",
+    "physical-object": "Physical object",
+    "research-technique": "Research technique",
+    "software": "Software",
+    "spin-off-company": "Spin-off company",
+    "standards-and-policy": "Standards and policy",
+    "technical-standard": "Technical standard",
+    "other": "Other"
 }
