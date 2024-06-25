@@ -125,19 +125,15 @@ class OrcidClient():
             orcid = Orcid(orcid_id=orcid_id, orcid_access_token=self.access_token, state = "public", sandbox=self.sandbox)
             author_info = extract_author_info(orcid)
             works = retrieve_full_works_metadata(orcid)
-            self.logger.debug(works.columns)
             metadata = apply_metadata_schema(works)
             metadata["authors"] = author_info["author_name"]
             #metadata = mark_duplicates(metadata)
             #metadata = filter_duplicates(metadata)
             metadata = sanitize_metadata(metadata)
-            self.logger.debug(metadata.columns)
             # in BASE it is ["title", "paper_abstract", "subject_orig", "published_in", "sanitized_authors"]
             text = pd.concat([metadata.id, metadata[["title", "paper_abstract"]]
                                     .apply(lambda x: " ".join(x), axis=1)], axis=1)
             text.columns = ["id", "content"]
-            self.logger.debug(metadata.head())
-            self.logger.debug(text.head())
             input_data = {}
             input_data["metadata"] = metadata.to_json(orient='records')
             input_data["text"] = text.to_json(orient='records')
