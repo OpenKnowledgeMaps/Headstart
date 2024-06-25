@@ -263,9 +263,18 @@ def extract_dois(work: pd.DataFrame) -> str:
 
 @error_logging_aspect(log_level=logging.WARNING)
 def get_publication_date(work) -> str:
-    year = work["publication-date.year.value"]
-    month = work["publication-date.month.value"]
-    day = work["publication-date.day.value"]
+    try:
+        year = work["publication-date.year.value"]
+    except KeyError:
+        year = np.NaN
+    try:
+        month = work["publication-date.month.value"]
+    except KeyError:
+        month = np.NaN
+    try:
+        day = work["publication-date.day.value"]
+    except KeyError:
+        day = np.NaN
     publication_date = ""
     parsed_publication_date = publication_date
     if year is not np.NaN:
