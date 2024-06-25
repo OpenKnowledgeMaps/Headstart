@@ -108,7 +108,7 @@ const mapStateToProps = (state) => ({
   showBacklink: state.chartType === STREAMGRAPH_MODE && !!state.selectedPaper,
   isInStreamBacklink: !!state.selectedBubble,
   showDocTags: state.service === "base" || state.service === "orcid",
-  showAllDocTypes: state.service === "base" && !!state.selectedPaper,
+  showAllDocTypes: (state.service === "base" || state.service === "orcid") && !!state.selectedPaper,
 });
 
 export default connect(
