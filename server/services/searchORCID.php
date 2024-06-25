@@ -10,7 +10,7 @@ use headstart\library;
 $dirty_query = library\CommUtils::getParameter($_POST, "orcid");
 $precomputed_id = (isset($_POST["unique_id"]))?($_POST["unique_id"]):(null);
 
-$params_array = array("orcid");
+$params_array = array("orcid", "today");
 $optional_get_params = [];
 
 function filterEmptyString($value)
