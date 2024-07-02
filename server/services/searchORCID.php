@@ -31,7 +31,8 @@ $post_params = $_POST;
 $result = search("orcid", $dirty_query
                   , $post_params, $params_array
                   , true
-                  , true, null
+                  # TODO: set back to true before deployment
+                  , false, null
                   , $precomputed_id, false);
 echo $result
 
