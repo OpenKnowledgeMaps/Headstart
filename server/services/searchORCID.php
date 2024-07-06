@@ -11,7 +11,7 @@ $dirty_query = library\CommUtils::getParameter($_POST, "orcid");
 $precomputed_id = (isset($_POST["unique_id"]))?($_POST["unique_id"]):(null);
 
 $params_array = array("orcid", "today");
-$optional_get_params = [];
+$optional_get_params = array("limit");
 
 function filterEmptyString($value)
 {

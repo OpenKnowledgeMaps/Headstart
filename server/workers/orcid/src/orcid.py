@@ -130,8 +130,9 @@ class OrcidClient():
             #metadata = mark_duplicates(metadata)
             #metadata = filter_duplicates(metadata)
             metadata = sanitize_metadata(metadata)
+            metadata = metadata.head(params.get("limit"))
             # in BASE it is ["title", "paper_abstract", "subject_orig", "published_in", "sanitized_authors"]
-            text = pd.concat([metadata.id, metadata[["title", "paper_abstract"]]
+            text = pd.concat([metadata.id, metadata[["title", "paper_abstract", "subtitle", "published_in"]]
                                     .apply(lambda x: " ".join(x), axis=1)], axis=1)
             text.columns = ["id", "content"]
             input_data = {}
@@ -152,6 +153,8 @@ class OrcidClient():
             res["reason"] = ["invalid orcid id"]
         except Exception as e:
             self.logger.error(e)
+            res["params"] = params
+            res["status"] = "error"
             raise
 
 @error_logging_aspect(log_level=logging.ERROR)
@@ -183,6 +186,8 @@ def extract_author_info(orcid: Orcid) -> dict:
 @error_logging_aspect(log_level=logging.WARNING)
 def sanitize_metadata(metadata: pd.DataFrame) -> pd.DataFrame:
     metadata["id"] = metadata["id"].astype(str)
+    metadata["title"] = metadata["title"].fillna("").astype(str)
+    metadata["subtitle"] = metadata["subtitle"].fillna("").astype(str)
     return metadata
 
 @error_logging_aspect(log_level=logging.WARNING)
@@ -228,12 +233,14 @@ def retrieve_full_works_metadata(orcid: Orcid) -> pd.DataFrame:
     works["short-description"] = ""
     works["subject_orig"] = ""
     works["subject_cleaned"] = ""
-    works["oa_state"] = 2
+    works["subtitle"] = works["title.subtitle"]
     works["resulttype"] = works.type.map(lambda x: [doc_type_mapping.get(x)])
+    works["oa_state"] = 2
+    works["link"] = works["url.value"].fillna("").str.lower().map(lambda x: x if x.endswith(".pdf") else "").to_list()
+    works["oa_state"] = works["link"].map(lambda x: 1 if x else 2)
     works["subject"] = ""
-    works["sanitized_authors"] = ""    
-    works["cited_by_tweeters_count"] = np.random.randint(0, 100, size=len(works))
-    works["readers.mendeley"] = np.random.randint(0, 100, size=len(works))
+    works["sanitized_authors"] = ""
+    # TODO replace with data from rAltmetrics/rCrossref
     works["citation_count"] = np.random.randint(0, 100, size=len(works))
     return works
     
