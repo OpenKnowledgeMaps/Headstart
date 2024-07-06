@@ -36,6 +36,8 @@ class Search(Resource):
         orcid_ns.logger.debug(params)
         if "optradio" in params:
             del params["optradio"]
+        if "limit" not in params:
+            params["limit"] = 200
         # errors = search_param_schema.validate(params, partial=True)
         # orcid_ns.logger.debug(errors)
         # if errors:
