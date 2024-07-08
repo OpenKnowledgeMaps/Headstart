@@ -218,25 +218,108 @@ def extract_websites(orcid: Orcid) -> list:
     else:
         return []
 
-@error_logging_aspect(log_level=logging.ERROR)
+def get_short_description(work) -> str:
+    try:
+        short_description = work["short-description"]
+    except KeyError:
+        short_description = ""
+    return short_description
+
+
+def get_authors(work) -> str:
+    try:
+        contributors = work.get("contributors", {}).get("contributor", [])
+
+        authors = []
+
+        for contributor in contributors:
+            author = contributor.get("credit-name", {}).get("value")
+            if author:
+                authors.append(author)
+
+        authors_str = "; ".join(authors)
+    except KeyError:
+        authors_str = ""
+
+    return authors_str
+
+
+def get_subjects(work) -> str:
+    try:
+        subjects = work["subject"]
+    except KeyError:
+        subjects = ""
+    return subjects
+
+
+def get_title(work) -> str:
+    try:
+        title = work.get("title", {})
+        value = title.get("title", {}).get("value", "")
+    except AttributeError:
+        value = ""
+    return value
+
+
+def get_subtitle(work) -> str:
+    try:
+        title = work.get("title", {})
+        subtitle = title.get("subtitle", {}).get("value", "")
+    except AttributeError:
+        subtitle = ""
+    return subtitle
+
+
+def get_paper_abstract(work) -> str:
+    try:
+        paper_abstract = work["short-description"]
+    except KeyError:
+        paper_abstract = ""
+    return paper_abstract
+
+
+def get_resulttype(work) -> str:
+    try:
+        resulttype = work["work-type"]
+    except KeyError:
+        resulttype = ""
+    return resulttype
+
+
+def published_in(work) -> str:
+    try:
+        published_in = work["publication-date"]["year"]["value"]
+    except KeyError:
+        published_in = ""
+    return published_in
+
+
 def retrieve_full_works_metadata(orcid: Orcid) -> pd.DataFrame:
-    works = pd.DataFrame(orcid.works()[1]["group"]).explode("work-summary")
-    works = pd.json_normalize(works["work-summary"])
-    works["publication-date"] = works.apply(get_publication_date, axis=1)
-    works["doi"] = works.apply(extract_dois, axis=1)
-    # THIS IS EMPTY FOR NOW BECAUSE WE DON'T HAVE THIS INFO YET
-    works["short-description"] = ""
-    works["subject_orig"] = ""
-    works["subject_cleaned"] = ""
-    works["oa_state"] = 2
-    works["resulttype"] = works.type.map(lambda x: [doc_type_mapping.get(x)])
-    works["subject"] = ""
-    works["sanitized_authors"] = ""    
-    works["cited_by_tweeters_count"] = np.random.randint(0, 100, size=len(works))
-    works["readers.mendeley"] = np.random.randint(0, 100, size=len(works))
-    works["citation_count"] = np.random.randint(0, 100, size=len(works))
-    return works
-    
+    works_data = pd.DataFrame(orcid.works_full_metadata())
+    # works["publication-date"] = works.apply(get_publication_date, axis=1)
+    # works["doi"] = works.apply(extract_dois, axis=1)
+
+    new_works_data = pd.DataFrame()
+
+    # Perform transformations and store in new DataFrame
+    new_works_data["title"] = works_data.apply(get_title, axis=1)
+    new_works_data["subtitle"] = works_data.apply(get_subtitle, axis=1)
+    new_works_data["authors"] = works_data.apply(get_authors, axis=1)
+    new_works_data["paper_abstract"] = works_data.apply(get_paper_abstract, axis=1)
+    new_works_data["year"] = works_data.apply(get_publication_date, axis=1)
+    new_works_data["published_in"] = works_data.apply(published_in, axis=1)
+    new_works_data["resulttype"] = works_data.apply(get_resulttype, axis=1)
+    new_works_data["oa_state"] = 2
+    new_works_data["subject"] = works_data.apply(get_subjects, axis=1)
+    new_works_data["cited_by_tweeters_count"] = np.random.randint(
+        0, 100, size=len(works_data)
+    )
+    new_works_data["readers.mendeley"] = np.random.randint(0, 100, size=len(works_data))
+    new_works_data["citation_count"] = np.random.randint(0, 100, size=len(works_data))
+
+    return new_works_data
+
+
 @error_logging_aspect(log_level=logging.ERROR)
 def apply_metadata_schema(works: pd.DataFrame) -> pd.DataFrame:
     works.rename(columns=works_mapping, inplace=True)
