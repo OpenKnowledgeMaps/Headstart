@@ -14,6 +14,7 @@ import time
 import numpy as np
 from pyorcid import OrcidAuthentication, Orcid
 from typing import Tuple
+import requests
 
 
 
@@ -151,11 +152,12 @@ class OrcidClient():
             res["params"] = params
             res["status"] = "error"
             res["reason"] = ["invalid orcid id"]
+            return res
         except Exception as e:
             self.logger.error(e)
             res["params"] = params
             res["status"] = "error"
-            raise
+            return res
 
 @error_logging_aspect(log_level=logging.ERROR)
 def extract_author_info(orcid: Orcid) -> dict:
@@ -312,6 +314,57 @@ def filter_duplicates(df: pd.DataFrame) -> pd.DataFrame:
     filtered.sort_index(inplace=True)
     return filtered
 
+@error_logging_aspect(log_level=logging.ERROR)
+def enrich_from_BASE(metadata: pd.DataFrame) -> pd.DataFrame:
+    dois = metadata[metadata.doi.map(lambda x: len(x)>0)].doi.to_list()
+    doi_batches = batch_strings(dois)
+    url_BASE = "http://proxy-proxy-1/"+os.getenv("COMPOSE_PROJECT_NAME")+"/base/search"
+    params_BASE = {
+        "q": "",
+        "sorting": "most-relevant",
+        "document_types": ["4", "11", "111", "13", "16", "7", "5",
+                        "12", "121", "122", "17", "19", "3", "52",
+                        "2", "F", "1A", "14", "15", "6", "51",
+                        "1", "18", "181", "183", "182"],
+        "from": "1665-01-01",
+        "to": pd.Timestamp.now().strftime("%Y-%m-%d"),
+        "vis_type": "overview",
+        "raw": True,
+        "list_size": 120,
+        "min_descsize": 0
+    }
+
+    tmp = []
+    for batch in doi_batches:
+        try:
+            params_BASE["q_advanced"] = batch
+            response = requests.post(url_BASE, json=params_BASE)
+            data = response.json()
+            if "input_data" in data:
+                tmp.append(pd.DataFrame(json.loads(data['input_data']["metadata"])))
+        except Exception as e:
+            logging.error(e)
+    enrichment_data = pd.concat(tmp)
+    enrichment_data = enrichment_data[enrichment_data.doi.str.contains("|".join(dois))]
+    return metadata
+
+def batch_strings(strings, limit=400):
+    batches = []
+    current_batch = ""
+
+    for string in strings:
+        substring = 'OR dcdoi:"'+string+'"'
+        if len(current_batch) + len(substring) + 1 > limit:  # +1 for space or no space if first
+            batches.append("("+current_batch.strip()+")")  # Add current batch to batches
+            current_batch = 'dcdoi:"'+string+'"'  # Start a new batch with the current string
+        else:
+            current_batch += " " + substring if current_batch else substring  # Add string to current batch
+            
+    if current_batch:  # Add the last batch if it's not empty
+        batches.append("("+current_batch.strip()+")")
+
+    return batches
+
 works_mapping = {
     "put-code": "id",
     "title.title.value": "title",
@@ -358,7 +411,7 @@ doc_type_mapping = {
     "annotation": "Annotation",
     "artistic-performance": "Artistic performance",
     "data-management-plan": "Data management plan",
-    "data-set": "Data set",
+    "data-set": "Dataset",
     "invention": "Invention",
     "lecture-speech": "Lecture speech",
     "physical-object": "Physical object",
