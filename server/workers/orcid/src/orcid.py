@@ -93,6 +93,15 @@ class OrcidClient():
         
     @error_logging_aspect(log_level=logging.ERROR)
     def run(self) -> None:
+        """
+        This function is the main loop of the OrcidClient. It will continuously
+        check for new items in the Redis queue, process them, and store the results
+        back in Redis.
+
+        The function will also check if the rate limit for ORCID requests is reached.
+
+        return: None
+        """
         while True:
             while self.orcid_rate_limit_reached():
                 self.logger.debug('🛑 Request is limited')
@@ -117,6 +126,18 @@ class OrcidClient():
         
     @error_logging_aspect(log_level=logging.ERROR)
     def execute_search(self, params: dict) -> dict:
+        """
+        This function is the main function for the search endpoint. It will
+        retrieve the ORCID data for the given ORCID ID, extract the author
+        information and the works metadata, and return the results.
+
+        Parameters:
+        - params (dict): The parameters for the search endpoint. The parameters
+        should contain the ORCID ID of the author.
+        
+        Returns:
+        - dict: The results of the search endpoint.
+        """
         q = params.get('q')
         service = params.get('service')
         data = {}
@@ -167,6 +188,15 @@ class OrcidClient():
 
 @error_logging_aspect(log_level=logging.ERROR)
 def extract_author_info(orcid: Orcid) -> dict:
+    """
+    This function extracts the author information from the ORCID data.
+    
+    Parameters:
+    - orcid (Orcid): The Orcid object containing the ORCID data.
+
+    Returns:
+    - dict: The author information extracted from the ORCID data.
+    """
     personal_details = orcid.personal_details()
     orcid_id = orcid._orcid_id
     author_name = " ".join(
@@ -193,6 +223,16 @@ def extract_author_info(orcid: Orcid) -> dict:
 
 @error_logging_aspect(log_level=logging.WARNING)
 def sanitize_metadata(metadata: pd.DataFrame) -> pd.DataFrame:
+    """
+    This function sanitizes the metadata DataFrame by converting all columns
+    to string type and filling missing values with an empty string.
+
+    Parameters:
+    - metadata (pd.DataFrame): The metadata DataFrame to sanitize.
+
+    Returns:
+    - pd.DataFrame: The sanitized metadata DataFrame.
+    """
     metadata["id"] = metadata["id"].astype(str)
     metadata["title"] = metadata["title"].fillna("").astype(str)
     metadata["subtitle"] = metadata["subtitle"].fillna("").astype(str)
@@ -310,6 +350,15 @@ def published_in(work) -> str:
 
 @error_logging_aspect(log_level=logging.ERROR)
 def retrieve_full_works_metadata(orcid: Orcid) -> pd.DataFrame:
+    """
+    This function retrieves the full works metadata from the ORCID data.
+
+    Parameters:
+    - orcid (Orcid): The Orcid object containing the ORCID data.
+
+    Returns:
+    - pd.DataFrame: The full works metadata retrieved from the ORCID data.
+    """
     works_data = pd.DataFrame(orcid.works_full_metadata())
     # works["publication-date"] = works.apply(get_publication_date, axis=1)
     # works["doi"] = works.apply(extract_dois, axis=1)
@@ -401,8 +450,18 @@ def filter_duplicates(df: pd.DataFrame) -> pd.DataFrame:
 
 @error_logging_aspect(log_level=logging.ERROR)
 def enrich_from_BASE(metadata: pd.DataFrame) -> pd.DataFrame:
+    """
+    This function enriches the metadata DataFrame with additional information
+    from the BASE database.
+
+    Parameters:
+    - metadata (pd.DataFrame): The metadata DataFrame to enrich.
+
+    Returns:
+    - pd.DataFrame: The enriched metadata DataFrame.
+    """
     dois = metadata[metadata.doi.map(lambda x: len(x)>0)].doi.to_list()
-    doi_batches = batch_strings(dois)
+    doi_batches = batch_dois(dois)
     url_BASE = "http://proxy-proxy-1/"+os.getenv("COMPOSE_PROJECT_NAME")+"/base/search"
     params_BASE = {
         "q": "",
@@ -433,7 +492,18 @@ def enrich_from_BASE(metadata: pd.DataFrame) -> pd.DataFrame:
     enrichment_data = enrichment_data[enrichment_data.doi.str.contains("|".join(dois))]
     return metadata
 
-def batch_strings(strings, limit=400):
+def batch_dois(strings, limit=400):
+    """
+    This function batches a list of strings into groups of strings that
+    together are less than a specified limit.
+    It is used to batch DOIs for BASE enrichment.
+
+    Parameters:
+    - strings (list): The list of strings to batch.
+
+    Returns:
+    - list: The list of batches of strings.
+    """
     batches = []
     current_batch = ""
 
