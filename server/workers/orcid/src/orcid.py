@@ -130,6 +130,11 @@ class OrcidClient():
         This function is the main function for the search endpoint. It will
         retrieve the ORCID data for the given ORCID ID, extract the author
         information and the works metadata, and return the results.
+        In case of errors, it will return an error reason. Following errors
+        are possible:
+        - invalid orcid id
+        - not enough results for orcid
+        - unexpected data processing error        
 
         Parameters:
         - params (dict): The parameters for the search endpoint. The parameters
@@ -233,7 +238,6 @@ def sanitize_metadata(metadata: pd.DataFrame) -> pd.DataFrame:
     Returns:
     - pd.DataFrame: The sanitized metadata DataFrame.
     """
-    metadata["id"] = metadata["id"].astype(str)
     metadata["title"] = metadata["title"].fillna("").astype(str)
     metadata["subtitle"] = metadata["subtitle"].fillna("").astype(str)
     metadata["paper_abstract"] = metadata["paper_abstract"].fillna("").astype(str)
@@ -282,8 +286,9 @@ def get_short_description(work) -> str:
 
 
 def get_authors(work) -> str:
-    try:
-        contributors = work.get("contributors", {}).get("contributor", [])
+    try:        
+        contributors = work["contributors"]
+        contributors = contributors.get("contributor", {}) if contributors else []
 
         authors = []
 
@@ -335,16 +340,16 @@ def get_paper_abstract(work) -> str:
 
 def get_resulttype(work) -> str:
     try:
-        resulttype = work["work-type"]
+        resulttype = work["type"]
     except KeyError:
-        resulttype = ""
+        resulttype = ""        
     return resulttype
 
 
 def published_in(work) -> str:
     try:
-        published_in = work["publication-date"]["year"]["value"]
-    except KeyError:
+        published_in = work["journal-title"]["value"]
+    except Exception:
         published_in = ""
     return published_in
 
@@ -359,20 +364,22 @@ def retrieve_full_works_metadata(orcid: Orcid) -> pd.DataFrame:
     Returns:
     - pd.DataFrame: The full works metadata retrieved from the ORCID data.
     """
-    works_data = pd.DataFrame(orcid.works_full_metadata())
+    works_data = pd.DataFrame(orcid.works_full_metadata(limit=1000))
     # works["publication-date"] = works.apply(get_publication_date, axis=1)
     # works["doi"] = works.apply(extract_dois, axis=1)
 
     new_works_data = pd.DataFrame()
 
     # Perform transformations and store in new DataFrame
+    new_works_data["id"] = works_data["put-code"].astype(str)
     new_works_data["title"] = works_data.apply(get_title, axis=1)
     new_works_data["subtitle"] = works_data.apply(get_subtitle, axis=1)
     new_works_data["authors"] = works_data.apply(get_authors, axis=1)
-    new_works_data["paper_abstract"] = works_data.apply(get_paper_abstract, axis=1)
+    new_works_data["paper_abstract"] = works_data.apply(get_paper_abstract, axis=1).fillna("")
     new_works_data["year"] = works_data.apply(get_publication_date, axis=1)
     new_works_data["published_in"] = works_data.apply(published_in, axis=1)
-    new_works_data["resulttype"] = works_data.apply(get_resulttype, axis=1)
+    new_works_data["resulttype"] = works_data.apply(get_resulttype, axis=1).map(lambda x: doc_type_mapping.get(x, ""))
+    new_works_data["doi"] = works_data.apply(extract_dois, axis=1)
     new_works_data["oa_state"] = 2
     new_works_data["subject"] = "" # this needs to come from BASE enrichment
     new_works_data["citation_count"] = np.random.randint(0, 100, size=len(works_data))
@@ -391,7 +398,8 @@ def filter_dicts_by_value(dicts, key, value) -> list:
     
 @error_logging_aspect(log_level=logging.WARNING)
 def extract_dois(work: pd.DataFrame) -> str:
-    external_ids = work["external-ids.external-id"]
+    external_ids = work["external-ids"]
+    external_ids = external_ids["external-id"] if external_ids else []
     external_ids = external_ids if isinstance(external_ids, list) else []
     external_ids = (filter_dicts_by_value(
         external_ids,
@@ -403,16 +411,16 @@ def extract_dois(work: pd.DataFrame) -> str:
 @error_logging_aspect(log_level=logging.WARNING)
 def get_publication_date(work) -> str:
     try:
-        year = work["publication-date.year.value"]
-    except KeyError:
+        year = work["publication-date"]["year"]["value"]
+    except Exception:
         year = np.NaN
     try:
-        month = work["publication-date.month.value"]
-    except KeyError:
+        month = work["publication-date"]["month"]["value"]
+    except Exception:
         month = np.NaN
     try:
-        day = work["publication-date.day.value"]
-    except KeyError:
+        day = work["publication-date"]["day"]["value"]
+    except Exception:
         day = np.NaN
     publication_date = ""
     parsed_publication_date = publication_date
