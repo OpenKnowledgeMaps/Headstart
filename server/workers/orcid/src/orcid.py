@@ -125,14 +125,13 @@ class OrcidClient():
         try:
             orcid = Orcid(orcid_id=orcid_id, orcid_access_token=self.access_token, state = "public", sandbox=self.sandbox)
             author_info = extract_author_info(orcid)
-            works = retrieve_full_works_metadata(orcid)
-            if len(works) == 0:
+            metadata = retrieve_full_works_metadata(orcid)
+            if len(metadata) == 0:
                 res = {}
                 res["params"] = params
                 res["status"] = "error"
                 res["reason"] = ["not enough results for orcid"]
                 return res
-            metadata["authors"] = author_info["author_name"]
             #metadata = mark_duplicates(metadata)
             #metadata = filter_duplicates(metadata)
             metadata = sanitize_metadata(metadata)
@@ -197,6 +196,7 @@ def sanitize_metadata(metadata: pd.DataFrame) -> pd.DataFrame:
     metadata["id"] = metadata["id"].astype(str)
     metadata["title"] = metadata["title"].fillna("").astype(str)
     metadata["subtitle"] = metadata["subtitle"].fillna("").astype(str)
+    metadata["paper_abstract"] = metadata["paper_abstract"].fillna("").astype(str)
     metadata["published_in"] = metadata["published_in"].fillna("").astype(str)
     return metadata
 
@@ -308,7 +308,7 @@ def published_in(work) -> str:
         published_in = ""
     return published_in
 
-
+@error_logging_aspect(log_level=logging.ERROR)
 def retrieve_full_works_metadata(orcid: Orcid) -> pd.DataFrame:
     works_data = pd.DataFrame(orcid.works_full_metadata())
     # works["publication-date"] = works.apply(get_publication_date, axis=1)
@@ -325,11 +325,7 @@ def retrieve_full_works_metadata(orcid: Orcid) -> pd.DataFrame:
     new_works_data["published_in"] = works_data.apply(published_in, axis=1)
     new_works_data["resulttype"] = works_data.apply(get_resulttype, axis=1)
     new_works_data["oa_state"] = 2
-    new_works_data["subject"] = works_data.apply(get_subjects, axis=1)
-    new_works_data["cited_by_tweeters_count"] = np.random.randint(
-        0, 100, size=len(works_data)
-    )
-    new_works_data["readers.mendeley"] = np.random.randint(0, 100, size=len(works_data))
+    new_works_data["subject"] = "" # this needs to come from BASE enrichment
     new_works_data["citation_count"] = np.random.randint(0, 100, size=len(works_data))
 
     return new_works_data
