@@ -126,12 +126,17 @@ class OrcidClient():
             orcid = Orcid(orcid_id=orcid_id, orcid_access_token=self.access_token, state = "public", sandbox=self.sandbox)
             author_info = extract_author_info(orcid)
             works = retrieve_full_works_metadata(orcid)
-            metadata = apply_metadata_schema(works)
+            if len(works) == 0:
+                res = {}
+                res["params"] = params
+                res["status"] = "error"
+                res["reason"] = ["not enough results for orcid"]
+                return res
             metadata["authors"] = author_info["author_name"]
             #metadata = mark_duplicates(metadata)
             #metadata = filter_duplicates(metadata)
             metadata = sanitize_metadata(metadata)
-            metadata = metadata.head(params.get("limit"))
+            metadata = metadata.head(int(params.get("limit")))
             # in BASE it is ["title", "paper_abstract", "subject_orig", "published_in", "sanitized_authors"]
             text = pd.concat([metadata.id, metadata[["title", "paper_abstract", "subtitle", "published_in"]]
                                     .apply(lambda x: " ".join(x), axis=1)], axis=1)
@@ -155,8 +160,10 @@ class OrcidClient():
             return res
         except Exception as e:
             self.logger.error(e)
+            res = {}
             res["params"] = params
             res["status"] = "error"
+            res["reason"] = ["unexpected data processing error"]
             return res
 
 @error_logging_aspect(log_level=logging.ERROR)
@@ -190,6 +197,7 @@ def sanitize_metadata(metadata: pd.DataFrame) -> pd.DataFrame:
     metadata["id"] = metadata["id"].astype(str)
     metadata["title"] = metadata["title"].fillna("").astype(str)
     metadata["subtitle"] = metadata["subtitle"].fillna("").astype(str)
+    metadata["published_in"] = metadata["published_in"].fillna("").astype(str)
     return metadata
 
 @error_logging_aspect(log_level=logging.WARNING)
@@ -229,6 +237,7 @@ def extract_websites(orcid: Orcid) -> list:
 def retrieve_full_works_metadata(orcid: Orcid) -> pd.DataFrame:
     works = pd.DataFrame(orcid.works()[1]["group"]).explode("work-summary")
     works = pd.json_normalize(works["work-summary"])
+    works.drop(columns=["url", "title"], inplace=True)
     works["publication-date"] = works.apply(get_publication_date, axis=1)
     works["doi"] = works.apply(extract_dois, axis=1)
     # THIS IS EMPTY FOR NOW BECAUSE WE DON'T HAVE THIS INFO YET
@@ -371,7 +380,6 @@ works_mapping = {
     "short-description": "paper_abstract",
     "publication-date": "year",
     "work-contributors": "authors",
-    "url.value": "link",
     "journal-title.value": "published_in"
 }
 
