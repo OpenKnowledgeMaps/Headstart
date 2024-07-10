@@ -152,6 +152,7 @@ class OrcidClient():
             orcid = Orcid(orcid_id=orcid_id, orcid_access_token=self.access_token, state = "public", sandbox=self.sandbox)
             author_info = extract_author_info(orcid)
             metadata = retrieve_full_works_metadata(orcid)
+            metadata["authors"] = metadata["authors"].map(lambda x: author_info["author_name"] if x=="" else x)
             if len(metadata) == 0:
                 res = {}
                 res["params"] = params
@@ -163,7 +164,7 @@ class OrcidClient():
             metadata = sanitize_metadata(metadata)
             metadata = metadata.head(int(params.get("limit")))
             # in BASE it is ["title", "paper_abstract", "subject_orig", "published_in", "sanitized_authors"]
-            text = pd.concat([metadata.id, metadata[["title", "paper_abstract", "subtitle", "published_in"]]
+            text = pd.concat([metadata.id, metadata[["title", "paper_abstract", "subtitle", "published_in", "authors"]]
                                     .apply(lambda x: " ".join(x), axis=1)], axis=1)
             text.columns = ["id", "content"]
             input_data = {}
