@@ -294,9 +294,12 @@ def get_authors(work) -> str:
         authors = []
 
         for contributor in contributors:
-            author = contributor.get("credit-name", {}).get("value")
-            if author:
-                authors.append(author)
+            if contributor is not None:
+                credit_name = contributor.get("credit-name", {})
+                if credit_name is not None:
+                    author = credit_name.get("value")
+                    if author:
+                        authors.append(author)
 
         authors_str = "; ".join(authors)
     except KeyError:
