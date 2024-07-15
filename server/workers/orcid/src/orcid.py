@@ -102,6 +102,7 @@ class OrcidClient():
 
         return: None
         """
+        # TODO: add retry mechanism
         while True:
             while self.orcid_rate_limit_reached():
                 self.logger.debug('🛑 Request is limited')
@@ -112,7 +113,9 @@ class OrcidClient():
             if endpoint == "search":
                 try:
                     res = self.execute_search(params)
+                    self.logger.debug(res)
                     res["id"] = k
+                    
                     if res.get("status") == "error" or params.get('raw') is True:
                         self.redis_store.set(k+"_output", json.dumps(res))                        
                     else:
@@ -150,13 +153,31 @@ class OrcidClient():
         orcid_id = params.get("orcid")
         try:
             orcid = Orcid(orcid_id=orcid_id, orcid_access_token=self.access_token, state = "public", sandbox=self.sandbox)
+        except Exception as e:
+            self.logger.error(e)
+            res = {}
+            res["params"] = params
+            res["status"] = "error"
+            res["reason"] = ["invalid orcid id"]
+            self.logger.debug(
+                f"ORCID {orcid_id} is invalid."
+            )
+            return res
+
+        try:
             author_info = extract_author_info(orcid)
             metadata = retrieve_full_works_metadata(orcid)
+            self.logger.debug(f"metadata retrieved and length is: {len(metadata)}")
+            self.logger.debug(metadata)
+
             if len(metadata) == 0:
                 res = {}
                 res["params"] = params
                 res["status"] = "error"
                 res["reason"] = ["not enough results for orcid"]
+                self.logger.debug(
+                    f"ORCID {orcid_id} has no works metadata."
+                )
                 return res
             #metadata = mark_duplicates(metadata)
             #metadata = filter_duplicates(metadata)
@@ -190,6 +211,27 @@ class OrcidClient():
             res["status"] = "error"
             res["reason"] = ["unexpected data processing error"]
             return res
+
+
+# TODO: the following functions should be moved to a separate module
+def get_nested_value(data, keys, default=None):
+    """
+    Recursively retrieves a nested value from a dictionary.
+
+    :param data: Dictionary to retrieve the value from
+    :param keys: List of keys to follow in the dictionary
+    :param default: Default value to return if any key is not found
+    :return: The retrieved value or the default value
+    """
+    for key in keys:
+        try:
+            data = data.get(key)
+            if data is None:
+                return default
+        except AttributeError:
+            return default
+    return data
+
 
 @error_logging_aspect(log_level=logging.ERROR)
 def extract_author_info(orcid: Orcid) -> dict:
@@ -278,22 +320,18 @@ def extract_websites(orcid: Orcid) -> list:
         return []
 
 def get_short_description(work) -> str:
-    try:
-        short_description = work["short-description"]
-    except KeyError:
-        short_description = ""
-    return short_description
+    return get_nested_value(work, ["short-description"], "")
 
 
 def get_authors(work) -> str:
-    try:        
-        contributors = work["contributors"]
-        contributors = contributors.get("contributor", {}) if contributors else []
+    try:
+        contributors = get_nested_value(work, ["contributors", "contributor"], [])
 
         authors = []
 
         for contributor in contributors:
-            author = contributor.get("credit-name", {}).get("value")
+            author = get_nested_value(contributor, ["credit-name", "value"], None)
+
             if author:
                 authors.append(author)
 
@@ -305,53 +343,30 @@ def get_authors(work) -> str:
 
 
 def get_subjects(work) -> str:
-    try:
-        subjects = work["subject"]
-    except KeyError:
-        subjects = ""
-    return subjects
+    return get_nested_value(work, ["subject"], "")
 
 
 def get_title(work) -> str:
-    try:
-        title = work.get("title", {})
-        value = title.get("title", {}).get("value", "")
-    except AttributeError:
-        value = ""
-    return value
+    return get_nested_value(work, ["title", "title", "value"], "")
 
 
 def get_subtitle(work) -> str:
-    try:
-        title = work.get("title", {})
-        subtitle = title.get("subtitle", {}).get("value", "")
-    except AttributeError:
-        subtitle = ""
-    return subtitle
+    return get_nested_value(work, ["title", "subtitle", "value"], "")
 
 
 def get_paper_abstract(work) -> str:
-    try:
-        paper_abstract = work["short-description"]
-    except KeyError:
-        paper_abstract = ""
-    return paper_abstract
+    return get_nested_value(work, ["short-description"], "")
 
 
 def get_resulttype(work) -> str:
-    try:
-        resulttype = work["type"]
-    except KeyError:
-        resulttype = ""        
-    return resulttype
+    return get_nested_value(work, ["type"], "")
 
 
 def published_in(work) -> str:
-    try:
-        published_in = work["journal-title"]["value"]
-    except Exception:
-        published_in = ""
-    return published_in
+    return get_nested_value(work, ["journal-title", "value"], "")
+
+def get_put_code(work) -> str:
+    return get_nested_value(work, ["put-code"], "")
 
 @error_logging_aspect(log_level=logging.ERROR)
 def retrieve_full_works_metadata(orcid: Orcid) -> pd.DataFrame:
@@ -370,8 +385,11 @@ def retrieve_full_works_metadata(orcid: Orcid) -> pd.DataFrame:
 
     new_works_data = pd.DataFrame()
 
+    if works_data.empty:
+        return new_works_data
+
     # Perform transformations and store in new DataFrame
-    new_works_data["id"] = works_data["put-code"].astype(str)
+    new_works_data["id"] = works_data.apply(get_put_code, axis=1)
     new_works_data["title"] = works_data.apply(get_title, axis=1)
     new_works_data["subtitle"] = works_data.apply(get_subtitle, axis=1)
     new_works_data["authors"] = works_data.apply(get_authors, axis=1)

@@ -44,7 +44,6 @@ server/preprocessing/other-scripts/renv
 /*.Rproj
 .Rproj.user
 
-
 # python files
 *.pyc
 *.pkl
@@ -54,6 +53,7 @@ server/preprocessing/other-scripts/renv
 /server/nbproject/private/
 .pytest_cache
 *__pycache__*
+.venv
 
 # python files
 *.pyc

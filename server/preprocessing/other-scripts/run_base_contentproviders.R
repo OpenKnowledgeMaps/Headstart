@@ -25,18 +25,21 @@ if (DEBUG==TRUE){
   setup_logging('INFO')
 }
 
-
 log <- getLogger('base_repos')
+
+failed <- list()
+failed$status <- 'error'
 
 tryCatch({
   contentproviders <- bs_repositories("")
-  triple <- list(name="GoTriple", "internal_name"="fttriple")
+  if (is.null(contentproviders) || nrow(contentproviders) == 0) {
+    stop("No content providers retrieved.")
+  }
+  triple <- list(name = "GoTriple", internal_name = "fttriple")
   contentproviders <- rbind(contentproviders, triple)
-}, error=function(err){
-  log$error(paste("Contentprovider failed", "base", "retrieve_contentproviders", "", err, sep="||"))
-  failed <- list()
-  failed$reason <- list(err)
-  failed$status <- 'error'
+}, error = function(err) {
+  log$error(paste("Content provider retrieval failed", "base", "retrieve_contentproviders", "", err, sep = "||"))
+  failed$reason <- list(err$message)
 })
 
 
