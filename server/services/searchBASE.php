@@ -8,9 +8,10 @@ require 'search.php';
 use headstart\library;
 
 $dirty_query = library\CommUtils::getParameter($_POST, "q");
-$precomputed_id = (isset($_POST["unique_id"]))?($_POST["unique_id"]):(null);
 
-$params_array = array("from", "to", "document_types", "sorting", "min_descsize");
+$precomputed_id = $_POST["unique_id"] ?? null;
+
+$params_array = ["from", "to", "document_types", "sorting", "min_descsize"];
 $optional_get_params = ["repo", "coll", "vis_type", "q_advanced", "lang_id", "custom_title", "custom_clustering"];
 
 function filterEmptyString($value)
@@ -19,8 +20,8 @@ function filterEmptyString($value)
     return $value !== '';
 }
 
-foreach($optional_get_params as $param) {
-    if(isset($_POST[$param])) {
+foreach ($optional_get_params as $param) {
+    if (isset($_POST[$param])) {
         $params_array[] = $param;
     }
 }
@@ -37,12 +38,18 @@ if (isset($post_params["lang_id"])) {
     }
 }
 
+$result = search(
+    "base",
+    $dirty_query,
+    $post_params,
+    $params_array,
+    true,
+    true,
+    null,
+    $precomputed_id,
+    false
+);
 
-$result = search("base", $dirty_query
-                  , $post_params, $params_array
-                  , true
-                  , true, null
-                  , $precomputed_id, false);
 echo $result
 
 ?>
