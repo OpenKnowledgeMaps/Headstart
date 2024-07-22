@@ -27,12 +27,12 @@ prune_ngrams <- function(ngrams, stops){
   for (i in seq(1, total_length, batch_size)) {
     tokenized_ngrams = lapply(tokenized_ngrams, function(x) {
                               Filter(function(tokens){
-                                !any(stri_detect_fixed(stops[i:min(i+batch_size -1, total_length)], tolower(tokens[[1]])))
+                                !any(stringi::stri_detect_fixed(stops[i:min(i+batch_size -1, total_length)], tolower(tokens[[1]])))
                               }, x)})
     # remove ngrams ending with a stopword
     tokenized_ngrams = lapply(tokenized_ngrams, function(x) {
                               Filter(function(tokens){
-                                !any(stri_detect_fixed(stops[i:min(i+batch_size -1, total_length)], tolower(tail(tokens,1))))
+                                !any(stringi::stri_detect_fixed(stops[i:min(i+batch_size -1, total_length)], tolower(tail(tokens,1))))
                               }, x)})
   }
   # remove ngrams starting and ending with the same word
@@ -215,17 +215,30 @@ another_prune_ngrams <- function(ngrams, stops){
   # check if first token of ngrams in stopword list
   batch_size <- 1000
   total_length <- length(stops)
+  
   for (i in seq(1, total_length, batch_size)) try({
-    tokens = lapply(tokens, function(y){
-                            Filter(function(x){
-                                    if (x[1] != "") !any(stri_detect_fixed(stops[i:min(i+batch_size -1, total_length)], x[1]))
-                                              }, y)})
-    # check if last token of ngrams in stopword list
-    tokens = lapply(tokens, function(y){
-                            Filter(function(x){
-                                    if (tail(x,1) != "") !any(stri_detect_fixed(stops[i:min(i+batch_size -1, total_length)], tail(x,1)))
-                                              }, y)})
+      tokens = lapply(tokens, function(y){
+          Filter(function(x){
+              if (!is.na(x[1]) && x[1] != "") {
+                  !any(stringi::stri_detect_fixed(stops[i:min(i+batch_size-1, total_length)], x[1]))
+              } else {
+                  FALSE
+              }
+          }, y)
+      })
+      # check if last token of ngrams in stopword list
+      tokens = lapply(tokens, function(y){
+          Filter(function(x){
+              last_token <- tail(x, 1)
+              if (!is.na(last_token) && last_token != "") {
+                  !any(stringi::stri_detect_fixed(stops[i:min(i+batch_size-1, total_length)], last_token))
+              } else {
+                  FALSE
+              }
+          }, y)
+      })
   })
+  
   # check that first token is not the same as the last token
   tokens = lapply(tokens, function(y){
                     if(length(y) > 1) {

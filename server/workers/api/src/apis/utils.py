@@ -7,6 +7,7 @@ from datetime import timedelta
 import re
 import redis
 import pandas as pd
+import pathlib
 
 redis_config = {
     "host": os.getenv("REDIS_HOST"),
@@ -91,7 +92,10 @@ def get_or_create_contentprovider_lookup():
             cp_dict = df.name.to_dict()
             return cp_dict
     except Exception as e:
-        df = pd.read_json("contentproviders.json")
+        df = pd.read_json(
+            pathlib.Path(__file__).parent.absolute() /
+            "contentproviders.json"
+        )
         df.set_index("internal_name", inplace=True)
         cp_dict = df.name.to_dict()
         return cp_dict
