@@ -3,16 +3,14 @@ import sys
 import json
 import pandas as pd
 import logging
-from datetime import timedelta
 from dateutil.parser import parse
 from common.decorators import error_logging_aspect
 from common.deduplication import find_duplicate_indexes,\
-    prioritize_OA_and_latest, mark_latest_doi, mark_duplicates
-import re
+    prioritize_OA_and_latest, mark_latest_doi
 from redis.exceptions import LockError
 import time
 import numpy as np
-from pyorcid import OrcidAuthentication, Orcid
+from pyorcid import OrcidAuthentication, Orcid, errors as pyorcid_errors
 from typing import Tuple
 import requests
 
@@ -151,18 +149,7 @@ class OrcidClient():
         data = {}
         data["params"] = params
         orcid_id = params.get("orcid")
-        try:
-            orcid = Orcid(orcid_id=orcid_id, orcid_access_token=self.access_token, state = "public", sandbox=self.sandbox)
-        except Exception as e:
-            self.logger.error(e)
-            res = {}
-            res["params"] = params
-            res["status"] = "error"
-            res["reason"] = ["invalid orcid id"]
-            self.logger.debug(
-                f"ORCID {orcid_id} is invalid."
-            )
-            return res
+        orcid = Orcid(orcid_id=orcid_id, orcid_access_token=self.access_token, state = "public", sandbox=self.sandbox)
 
         try:
             author_info = extract_author_info(orcid)
@@ -196,7 +183,11 @@ class OrcidClient():
             params.update(author_info)
             res["params"] = params
             return res
-        except ValueError as e:
+        except (
+            pyorcid_errors.Forbidden, 
+            pyorcid_errors.NotFound,
+            pyorcid_errors.BadRequest,
+        ) as e:
             self.logger.error(e)
             self.logger.error(params)
             res = {}
@@ -204,8 +195,10 @@ class OrcidClient():
             res["status"] = "error"
             res["reason"] = ["invalid orcid id"]
             return res
-        except Exception as e:
+        # Unauthorized also should be internal server error, because we do not use client's credentials
+        except (pyorcid_errors.Unauthorized, Exception) as e:
             self.logger.error(e)
+            self.logger.error(params)
             res = {}
             res["params"] = params
             res["status"] = "error"

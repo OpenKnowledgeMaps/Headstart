@@ -53,7 +53,6 @@ function cleanQuery($dirty_query, $transform_query_tolowercase, $add_slashes) {
     return $query;
 }
 
-
 function search($service, $dirty_query
         , $post_params, $param_types
         , $transform_query_tolowercase = true
@@ -100,6 +99,7 @@ function search($service, $dirty_query
     $unique_id = ($precomputed_id === null)?($unique_id):($precomputed_id);
     $post_params["vis_id"] = $unique_id;
     if (array_key_exists("repo", $post_params)) {
+      // ? what it is?
       $payload = json_encode(array("repo" => $post_params["repo"]));
       $res = $apiclient->call_api($service . "/contentproviders", $payload);
       $res = $res["result"];
@@ -119,6 +119,7 @@ function search($service, $dirty_query
       }
     }
 
+    // ? here we are making requests, should we restructure a little bit our requests to handle errors better?
     $payload = json_encode($post_params);
     $res = $apiclient->call_api($service . "/search", $payload);
     if ($res["httpcode"] != 200) {
