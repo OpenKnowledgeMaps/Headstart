@@ -362,6 +362,25 @@ def published_in(work) -> str:
 def get_put_code(work) -> str:
     return get_nested_value(work, ["put-code"], "")
 
+def get_url(work) -> str:
+    url = get_nested_value(work, ["url", "value"], "")
+    if url == "":
+        ids = get_nested_value(work, ["external-ids", "external-id"], "")
+        if ids:
+            for id in ids:
+                if id["external-id-value"].startswith("http"):
+                    url = id["external-id-value"]
+                    break
+    return url
+
+def get_link(work) -> str:
+    url = get_nested_value(work, ["url", "value"], "")
+    if url.lower().endswith(".pdf"):
+        link = url
+    else:
+        link = ""
+    return link
+
 @error_logging_aspect(log_level=logging.ERROR)
 def retrieve_full_works_metadata(orcid: Orcid) -> pd.DataFrame:
     """
@@ -395,6 +414,8 @@ def retrieve_full_works_metadata(orcid: Orcid) -> pd.DataFrame:
     new_works_data["oa_state"] = 2
     new_works_data["subject"] = "" # this needs to come from BASE enrichment
     new_works_data["citation_count"] = np.random.randint(0, 100, size=len(works_data))
+    new_works_data["url"] = works_data.apply(get_url, axis=1)
+    new_works_data["link"] = works_data.apply(get_link, axis=1)
 
     return new_works_data
 
