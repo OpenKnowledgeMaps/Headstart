@@ -3,16 +3,14 @@ import sys
 import json
 import pandas as pd
 import logging
-from datetime import timedelta
 from dateutil.parser import parse
 from common.decorators import error_logging_aspect
 from common.deduplication import find_duplicate_indexes,\
-    prioritize_OA_and_latest, mark_latest_doi, mark_duplicates
-import re
+    prioritize_OA_and_latest, mark_latest_doi
 from redis.exceptions import LockError
 import time
 import numpy as np
-from pyorcid import OrcidAuthentication, Orcid
+from pyorcid import OrcidAuthentication, Orcid, errors as pyorcid_errors
 from typing import Tuple
 import requests
 
@@ -151,18 +149,7 @@ class OrcidClient():
         data = {}
         data["params"] = params
         orcid_id = params.get("orcid")
-        try:
-            orcid = Orcid(orcid_id=orcid_id, orcid_access_token=self.access_token, state = "public", sandbox=self.sandbox)
-        except Exception as e:
-            self.logger.error(e)
-            res = {}
-            res["params"] = params
-            res["status"] = "error"
-            res["reason"] = ["invalid orcid id"]
-            self.logger.debug(
-                f"ORCID {orcid_id} is invalid."
-            )
-            return res
+        orcid = Orcid(orcid_id=orcid_id, orcid_access_token=self.access_token, state = "public", sandbox=self.sandbox)
 
         try:
             author_info = extract_author_info(orcid)
@@ -197,7 +184,11 @@ class OrcidClient():
             params.update(author_info)
             res["params"] = params
             return res
-        except ValueError as e:
+        except (
+            pyorcid_errors.Forbidden, 
+            pyorcid_errors.NotFound,
+            pyorcid_errors.BadRequest,
+        ) as e:
             self.logger.error(e)
             self.logger.error(params)
             res = {}
@@ -205,8 +196,10 @@ class OrcidClient():
             res["status"] = "error"
             res["reason"] = ["invalid orcid id"]
             return res
-        except Exception as e:
+        # Unauthorized also should be internal server error, because we do not use client's credentials
+        except (pyorcid_errors.Unauthorized, Exception) as e:
             self.logger.error(e)
+            self.logger.error(params)
             res = {}
             res["params"] = params
             res["status"] = "error"
@@ -369,6 +362,25 @@ def published_in(work) -> str:
 def get_put_code(work) -> str:
     return get_nested_value(work, ["put-code"], "")
 
+def get_url(work) -> str:
+    url = get_nested_value(work, ["url", "value"], "")
+    if url == "":
+        ids = get_nested_value(work, ["external-ids", "external-id"], "")
+        if ids:
+            for id in ids:
+                if id["external-id-value"].startswith("http"):
+                    url = id["external-id-value"]
+                    break
+    return url
+
+def get_link(work) -> str:
+    url = get_nested_value(work, ["url", "value"], "")
+    if url.lower().endswith(".pdf"):
+        link = url
+    else:
+        link = ""
+    return link
+
 @error_logging_aspect(log_level=logging.ERROR)
 def retrieve_full_works_metadata(orcid: Orcid) -> pd.DataFrame:
     """
@@ -390,7 +402,7 @@ def retrieve_full_works_metadata(orcid: Orcid) -> pd.DataFrame:
         return new_works_data
 
     # Perform transformations and store in new DataFrame
-    new_works_data["id"] = works_data.apply(get_put_code, axis=1)
+    new_works_data["id"] = works_data.apply(get_put_code, axis=1).astype(str)
     new_works_data["title"] = works_data.apply(get_title, axis=1)
     new_works_data["subtitle"] = works_data.apply(get_subtitle, axis=1)
     new_works_data["authors"] = works_data.apply(get_authors, axis=1)
@@ -401,7 +413,8 @@ def retrieve_full_works_metadata(orcid: Orcid) -> pd.DataFrame:
     new_works_data["doi"] = works_data.apply(extract_dois, axis=1)
     new_works_data["oa_state"] = 2
     new_works_data["subject"] = "" # this needs to come from BASE enrichment
-    new_works_data["citation_count"] = np.random.randint(0, 100, size=len(works_data))
+    new_works_data["url"] = works_data.apply(get_url, axis=1)
+    new_works_data["link"] = works_data.apply(get_link, axis=1)
 
     return new_works_data
 
