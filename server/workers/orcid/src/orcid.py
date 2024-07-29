@@ -402,7 +402,7 @@ def retrieve_full_works_metadata(orcid: Orcid) -> pd.DataFrame:
         return new_works_data
 
     # Perform transformations and store in new DataFrame
-    new_works_data["id"] = works_data.apply(get_put_code, axis=1)
+    new_works_data["id"] = works_data.apply(get_put_code, axis=1).astype(str)
     new_works_data["title"] = works_data.apply(get_title, axis=1)
     new_works_data["subtitle"] = works_data.apply(get_subtitle, axis=1)
     new_works_data["authors"] = works_data.apply(get_authors, axis=1)
@@ -413,7 +413,6 @@ def retrieve_full_works_metadata(orcid: Orcid) -> pd.DataFrame:
     new_works_data["doi"] = works_data.apply(extract_dois, axis=1)
     new_works_data["oa_state"] = 2
     new_works_data["subject"] = "" # this needs to come from BASE enrichment
-    new_works_data["citation_count"] = np.random.randint(0, 100, size=len(works_data))
     new_works_data["url"] = works_data.apply(get_url, axis=1)
     new_works_data["link"] = works_data.apply(get_link, axis=1)
 
