@@ -411,10 +411,10 @@ def retrieve_full_works_metadata(orcid: Orcid) -> pd.DataFrame:
     new_works_data["published_in"] = works_data.apply(published_in, axis=1)
     new_works_data["resulttype"] = works_data.apply(get_resulttype, axis=1).map(lambda x: doc_type_mapping.get(x, ""))
     new_works_data["doi"] = works_data.apply(extract_dois, axis=1)
-    new_works_data["oa_state"] = 2
     new_works_data["subject"] = "" # this needs to come from BASE enrichment
     new_works_data["url"] = works_data.apply(get_url, axis=1)
     new_works_data["link"] = works_data.apply(get_link, axis=1)
+    new_works_data["oa_state"] = new_works_data.link.map(lambda x: 1 if x else 2)
 
     return new_works_data
 
