@@ -4,7 +4,7 @@ library('rcrossref')
 alog <- getLogger('altmetrics')
 
 
-enrich_output_json <- function(output_json){
+enrich_metadata_metrics <- function(output_json){
   start.time <- Sys.time()
 
   output<- fromJSON(output_json)

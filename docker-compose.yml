@@ -215,6 +215,34 @@ services:
     networks:
       - headstart
 
+  metrics:
+    build:
+      context: server
+      dockerfile: workers/metrics/Dockerfile
+    environment:
+      SERVICE_VERSION: "${SERVICE_VERSION}"
+      REDIS_HOST: "${REDIS_HOST}"
+      REDIS_PORT: "${REDIS_PORT}"
+      REDIS_DB: "${REDIS_DB}"
+      REDIS_PASSWORD: "${REDIS_PASSWORD}"
+      LOGLEVEL: "${LOGLEVEL}"
+      LOGFILE: "${LOGFILE}"
+      RENV_VERSION: 0.14.0-5
+      CRAN_REPOS: https://cran.wu.ac.at
+      LC_ALL: "en_US.UTF-8"
+      LANG: "en_US.UTF-8"
+      RENV_PATHS_CACHE: /renv/cache
+      PYTHONIOENCODING: "utf-8"
+    restart: unless-stopped
+    volumes:
+      - ./local_dev/renv/cache:/renv/cache
+      - /var/log/headstart:/var/log/headstart
+      - ./server/preprocessing/other-scripts:/headstart/other-scripts
+    depends_on:
+      - redis
+    networks:
+      - headstart
+
   searchflow:
     build: local_dev/searchflow-container
     volumes:

@@ -94,7 +94,7 @@ if(exists('input_data')) {
 if (!exists('output_json')) {
   output_json <- detect_error(failed, service, params)
 } else if (service=='openaire' && exists('output_json')) {
-  output_json <- enrich_output_json(output_json)
+  output_json <- enrich_metadata_metrics(output_json)
 }
 
 print(output_json)

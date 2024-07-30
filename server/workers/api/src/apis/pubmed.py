@@ -6,7 +6,7 @@ import pandas as pd
 from flask import Blueprint, request, make_response, jsonify, abort
 from flask_restx import Namespace, Resource, fields
 from .request_validators import SearchParamSchema
-from apis.utils import get_key, redis_store
+from common.utils import get_key
 
 
 pubmed_ns = Namespace("pubmed", description="PubMed API operations")

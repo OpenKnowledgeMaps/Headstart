@@ -13,6 +13,8 @@ import numpy as np
 from pyorcid import OrcidAuthentication, Orcid, errors as pyorcid_errors
 from typing import Tuple
 import requests
+from common.utils import get_key, redis_store
+import uuid
 
 
 
@@ -170,6 +172,7 @@ class OrcidClient():
             #metadata = mark_duplicates(metadata)
             #metadata = filter_duplicates(metadata)
             metadata = sanitize_metadata(metadata)
+            metadata = self.enrich_metadata(params, metadata)
             metadata = metadata.head(int(params.get("limit")))
             # in BASE it is ["title", "paper_abstract", "subject_orig", "published_in", "sanitized_authors"]
             text = pd.concat([metadata.id, metadata[["title", "paper_abstract", "subtitle", "published_in", "authors"]]
@@ -205,6 +208,14 @@ class OrcidClient():
             res["status"] = "error"
             res["reason"] = ["unexpected data processing error"]
             return res
+
+    def enrich_metadata(self, params, metadata: pd.DataFrame) -> pd.DataFrame:
+        request_id = str(uuid.uuid4())
+        task_data = {"id": request_id, "params": params, "metadata": metadata.to_json(orient='records')}
+        self.redis_store.rpush("metrics", json.dumps(task_data))
+        result = get_key(redis_store, request_id, 300)
+        metadata = pd.read_json(json.loads(result))
+        return metadata
 
 
 # TODO: the following functions should be moved to a separate module

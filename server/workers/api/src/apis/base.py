@@ -7,7 +7,7 @@ import time
 from flask import request, make_response, jsonify, abort, g
 from flask_restx import Namespace, Resource, fields
 from .request_validators import SearchParamSchema
-from apis.utils import get_key, redis_store, contentprovider_lookup
+from common.utils import get_key, redis_store, contentprovider_lookup
 
 
 
