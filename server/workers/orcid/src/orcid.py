@@ -214,7 +214,7 @@ class OrcidClient():
         task_data = {"id": request_id, "params": params, "metadata": metadata.to_json(orient='records')}
         self.redis_store.rpush("metrics", json.dumps(task_data))
         result = get_key(redis_store, request_id, 300)
-        metadata = pd.read_json(json.loads(result))
+        metadata = pd.DataFrame(json.loads(result["input_data"]))
         return metadata
 
 

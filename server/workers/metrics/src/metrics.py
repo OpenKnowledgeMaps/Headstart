@@ -74,11 +74,13 @@ class MetricsClient(RWrapper):
             stdout, stderr = proc.communicate(json.dumps(data))
             output = [o for o in stdout.split('\n') if len(o) > 0]
             error = [o for o in stderr.split('\n') if len(o) > 0]
-            raw_metadata = json.loads(output[-2])
+            raw_metadata = json.loads(output[-2])[0]
             if isinstance(raw_metadata, dict) and raw_metadata.get('status') == "error":
                 res = raw_metadata
             else:
-                metadata = pd.DataFrame(raw_metadata)
+                res = {}
+                res["input_data"] = raw_metadata
+                res["params"] = params
             return res
         except Exception as e:
             self.logger.error(e)

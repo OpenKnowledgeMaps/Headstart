@@ -51,11 +51,13 @@ services:
     volumes:
       - ./api_cache:/var/api_cache
       - ./server/workers/api/src:/api
+      - ./server/workers/common:/api/common
     depends_on:
       - redis
       - base
       - pubmed
       - openaire
+      - orcid
     networks:
       - headstart
 
