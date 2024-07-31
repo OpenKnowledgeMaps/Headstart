@@ -7,8 +7,9 @@ require 'search.php';
 
 use headstart\library;
 
-$dirty_query = library\CommUtils::getParameter($_POST, "orcid");
-$precomputed_id = (isset($_POST["unique_id"]))?($_POST["unique_id"]):(null);
+// trim ORCID query
+$dirty_query = trim(library\CommUtils::getParameter($_POST, "orcid"));
+$precomputed_id = $_POST["unique_id"] ?? null;
 
 $params_array = array("orcid", "today");
 $optional_get_params = array("limit");
@@ -28,12 +29,19 @@ foreach($optional_get_params as $param) {
 $post_params = $_POST;
 
 
-$result = search("orcid", $dirty_query
-                  , $post_params, $params_array
-                  , true
-                  # TODO: set back to true before deployment
-                  , false, null
-                  , $precomputed_id, false);
+$result = search(
+    "orcid",
+    $dirty_query,
+    $post_params,
+    $params_array,
+    true,
+    // TODO: set back to true before deployment
+    false,
+    null,
+    $precomputed_id,
+    false
+);
+
 echo $result
 
 ?>
