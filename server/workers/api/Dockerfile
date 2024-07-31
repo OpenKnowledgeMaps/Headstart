@@ -9,6 +9,6 @@ WORKDIR /api
 COPY workers/api/requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 RUN pip install git+https://github.com/python-restx/flask-restx
-COPY workers/api ./api
-COPY workers/common ./common
+COPY workers/api/src ./api
+COPY workers/common ./api/apis/common
 
