@@ -27,7 +27,7 @@ tslog <- getLogger('ts')
 
 source("vis_layout.R")
 source('openaire.R')
-source('altmetrics.R')
+source('metrics.R')
 
 MAX_CLUSTERS = 15
 

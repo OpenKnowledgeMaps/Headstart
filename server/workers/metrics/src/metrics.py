@@ -60,7 +60,7 @@ class MetricsClient(RWrapper):
             return True
 
     @error_logging_aspect(log_level=logging.ERROR)
-    def execute_search(self, params: dict, metadata: pd.DataFrame) -> dict:
+    def execute_search(self, params: dict, metadata: str) -> dict:
         q = params.get('q')
         service = params.get('service')
         data = {}

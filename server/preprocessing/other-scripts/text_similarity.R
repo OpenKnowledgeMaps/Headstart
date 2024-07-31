@@ -20,7 +20,7 @@ if (DEBUG==TRUE){
 tslog <- getLogger('ts')
 
 source(paste("../other-scripts/vis_layout.R", sep=""))
-source('../other-scripts/altmetrics.R')
+source('../other-scripts/metrics.R')
 
 
 if(!is.null(params_file) && !is.na(params_file)) {
