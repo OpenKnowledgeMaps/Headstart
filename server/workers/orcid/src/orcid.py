@@ -459,7 +459,7 @@ def get_publication_date(work) -> str:
     if year is not np.nan:
         publication_date += str(int(year))
         parsed_publication_date = publication_date
-    if month is not np.nan:
+    if month is not np.nan and month != "00":
         publication_date += "-" + str(int(month))
         date_obj = parse(publication_date)
         parsed_publication_date = date_obj.strftime("%Y-%m")
