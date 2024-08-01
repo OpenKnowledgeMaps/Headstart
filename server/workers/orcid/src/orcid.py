@@ -173,6 +173,7 @@ class OrcidClient():
             #metadata = filter_duplicates(metadata)
             metadata = sanitize_metadata(metadata)
             metadata = self.enrich_metadata(params, metadata)
+            author_info = self.enrich_author_info(author_info, metadata)
             metadata = metadata.head(int(params.get("limit")))
             # in BASE it is ["title", "paper_abstract", "subject_orig", "published_in", "sanitized_authors"]
             text = pd.concat([metadata.id, metadata[["title", "paper_abstract", "subtitle", "published_in", "authors"]]
@@ -209,13 +210,58 @@ class OrcidClient():
             res["reason"] = ["unexpected data processing error"]
             return res
 
-    def enrich_metadata(self, params, metadata: pd.DataFrame) -> pd.DataFrame:
+    def enrich_metadata(self, params: dict, metadata: pd.DataFrame) -> pd.DataFrame:
+        """
+        This function enriches the metadata DataFrame with additional information
+        from external sources, in this case crossref and altmetric.
+        The function will store the enriched metadata in the Redis queue for further
+        processing, from where it will be picked up by the metrics worker.
+        Returned data will be the original metadata enriched with additional
+        metadata columns from the external sources.
+
+        Parameters:
+        - params (dict): The parameters for the search endpoint.
+        - metadata (pd.DataFrame): The metadata DataFrame to enrich.
+
+        Returns:
+        - pd.DataFrame: The enriched metadata DataFrame.        
+        """
         request_id = str(uuid.uuid4())
         task_data = {"id": request_id, "params": params, "metadata": metadata.to_json(orient='records')}
         self.redis_store.rpush("metrics", json.dumps(task_data))
         result = get_key(redis_store, request_id, 300)
         metadata = pd.DataFrame(json.loads(result["input_data"]))
+        for c in ["cited_by_wikipedia_count",
+                         "cited_by_msm_count",
+                         "cited_by_policies_count",
+                         "cited_by_patents_count",
+                         "cited_by_accounts_count"]:
+            if c not in metadata.columns:
+                metadata[c] = np.NaN
         return metadata
+    
+    def enrich_author_info(self, author_info: dict, metadata: pd.DataFrame) -> dict:
+        """
+        This function enriches the author information with additional information.
+        Specifically we extract and aggregate metrics data from the author's works,
+        such as citation counts and altmetric counts.
+        The additional data is added to the params dictionary.
+
+        Parameters:
+        - author_info (dict): The author information dictionary.
+        - metadata (pd.DataFrame): The metadata DataFrame containing the author's works.
+
+        Returns:
+        - dict: The enriched author information dictionary.
+        """
+        author_info["total_citations"] = metadata["citation_count"].astype(float).sum().astype(int)
+        author_info["total_unique_social_media_mentions"] = metadata["cited_by_accounts_count"].astype(float).sum().astype(int)
+        author_info["total_neppr"] = metadata[[
+                                    "cited_by_wikipedia_count",
+                                    "cited_by_msm_count",
+                                    "cited_by_policies_count",
+                                    "cited_by_patents_count"]].astype(float).sum().sum().astype(int)
+        return author_info
 
 
 # TODO: the following functions should be moved to a separate module
