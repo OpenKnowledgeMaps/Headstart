@@ -157,7 +157,7 @@ class OrcidClient():
             author_info = extract_author_info(orcid)
             metadata = retrieve_full_works_metadata(orcid)
             self.logger.debug(f"metadata retrieved and length is: {len(metadata)}")
-            self.logger.debug(metadata)
+            self.logger.debug(metadata.head(3))
 
             if len(metadata) == 0:
                 res = {}
@@ -231,11 +231,12 @@ class OrcidClient():
         self.redis_store.rpush("metrics", json.dumps(task_data))
         result = get_key(redis_store, request_id, 300)
         metadata = pd.DataFrame(json.loads(result["input_data"]))
-        for c in ["cited_by_wikipedia_count",
-                         "cited_by_msm_count",
-                         "cited_by_policies_count",
-                         "cited_by_patents_count",
-                         "cited_by_accounts_count"]:
+        for c in ["citation_count",
+                  "cited_by_wikipedia_count",
+                  "cited_by_msm_count",
+                  "cited_by_policies_count",
+                  "cited_by_patents_count",
+                  "cited_by_accounts_count"]:
             if c not in metadata.columns:
                 metadata[c] = np.NaN
         return metadata
