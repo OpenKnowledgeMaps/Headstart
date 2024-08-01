@@ -245,7 +245,6 @@ class OrcidClient():
         This function enriches the author information with additional information.
         Specifically we extract and aggregate metrics data from the author's works,
         such as citation counts and altmetric counts.
-        The additional data is added to the params dictionary.
 
         Parameters:
         - author_info (dict): The author information dictionary.
@@ -254,13 +253,13 @@ class OrcidClient():
         Returns:
         - dict: The enriched author information dictionary.
         """
-        author_info["total_citations"] = metadata["citation_count"].astype(float).sum().astype(int)
-        author_info["total_unique_social_media_mentions"] = metadata["cited_by_accounts_count"].astype(float).sum().astype(int)
-        author_info["total_neppr"] = metadata[[
+        author_info["total_citations"] = int(metadata["citation_count"].astype(float).sum())
+        author_info["total_unique_social_media_mentions"] = int(metadata["cited_by_accounts_count"].astype(float).sum())
+        author_info["total_neppr"] = int(metadata[[
                                     "cited_by_wikipedia_count",
                                     "cited_by_msm_count",
                                     "cited_by_policies_count",
-                                    "cited_by_patents_count"]].astype(float).sum().sum().astype(int)
+                                    "cited_by_patents_count"]].astype(float).sum().sum())
         return author_info
 
 
