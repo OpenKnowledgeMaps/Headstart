@@ -33,6 +33,7 @@ enrich_metadata_metrics <- function(metadata){
       metadata[[metric]] = NA
     }
     alog$info("No altmetrics found for any paper in this dataset.")
+    output <- metadata
   }
   output <- add_citations(output)
 
