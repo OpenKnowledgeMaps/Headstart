@@ -443,30 +443,30 @@ def extract_dois(work: pd.DataFrame) -> str:
 @error_logging_aspect(log_level=logging.WARNING)
 def get_publication_date(work) -> str:
     try:
-        year = work["publication-date"]["year"]["value"]
-    except Exception:
-        year = np.NaN
+        year = get_nested_value(work, ["publication-date", "year", "value"], np.nan)
+    except KeyError:
+        year = np.nan
     try:
-        month = work["publication-date"]["month"]["value"]
-    except Exception:
-        month = np.NaN
+        month = get_nested_value(work, ["publication-date", "month", "value"], np.nan)
+    except KeyError:
+        month = np.nan
     try:
-        day = work["publication-date"]["day"]["value"]
-    except Exception:
-        day = np.NaN
+        day = get_nested_value(work, ["publication-date", "day", "value"], np.nan)
+    except KeyError:
+        day = np.nan
     publication_date = ""
     parsed_publication_date = publication_date
-    if year is not np.NaN:
-        publication_date+=str(int(year))
+    if year is not np.nan:
+        publication_date += str(int(year))
         parsed_publication_date = publication_date
-    if month is not np.NaN:
-        publication_date+=("-"+str(int(month)))
+    if month is not np.nan and month != "00":
+        publication_date += "-" + str(int(month))
         date_obj = parse(publication_date)
-        parsed_publication_date = date_obj.strftime('%Y-%m')
-    if day is not np.NaN:
-        publication_date+=("-"+str(int(day)))
+        parsed_publication_date = date_obj.strftime("%Y-%m")
+    if day is not np.nan:
+        publication_date += "-" + str(int(day))
         date_obj = parse(publication_date)
-        parsed_publication_date = date_obj.strftime('%Y-%m-%d')
+        parsed_publication_date = date_obj.strftime("%Y-%m-%d")
     return parsed_publication_date
 
 @error_logging_aspect(log_level=logging.ERROR)
