@@ -179,13 +179,13 @@ class OrcidClient():
             text = pd.concat([metadata.id, metadata[["title", "paper_abstract", "subtitle", "published_in", "authors"]]
                                     .apply(lambda x: " ".join(x), axis=1)], axis=1)
             text.columns = ["id", "content"]
-            input_data = {}
-            input_data["metadata"] = metadata.to_json(orient='records')
-            input_data["text"] = text.to_json(orient='records')
+            data = {}
+            data["metadata"] = metadata.to_json(orient='records')
+            data["text"] = text.to_json(orient='records')
             res = {}
-            res["input_data"] = input_data
+            res["input_data"] = data
+            res["author"] = author_info
             # merge author info into params
-            params.update(author_info)
             res["params"] = params
             return res
         except (

@@ -50,7 +50,8 @@ class Dataprocessing(object):
         k = msg.get('id')
         params = self.add_default_params(msg.get('params'))
         input_data = msg.get('input_data')
-        return k, params, input_data
+        author = msg.get('author')
+        return k, params, input_data, author
 
     def execute_search(self, params, input_data):
         q = params.get('q')
@@ -84,7 +85,7 @@ class Dataprocessing(object):
                 time.sleep(30)
         while self.tunnel_open:
             try:
-                k, params, input_data = self.next_item()
+                k, params, input_data, author = self.next_item()
                 self.logger.debug(k)
                 self.logger.debug(params)
             except (RedisError, ConnectionRefusedError):
@@ -103,7 +104,10 @@ class Dataprocessing(object):
                     res["status"] = "success"
                     self.redis_store.set(k+"_output", json.dumps(res))
                 else:
-                    res = self.execute_search(params, input_data)
+                    res = {}
+                    documents = self.execute_search(params, input_data)
+                    res["documents"] = documents
+                    res["author"] = author
                     self.redis_store.set(k+"_output", json.dumps(res))
             except ValueError as e:
                 self.logger.error(params)
