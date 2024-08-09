@@ -1,5 +1,5 @@
 FROM python:3.8
-MAINTAINER Chris Kittel "christopher.kittel@openknowledgemaps.org"
+LABEL maintainer="Chris Kittel <christopher.kittel@openknowledgemaps.org>"
 
 RUN apt-get update
 RUN apt-get install -y gcc git libpq-dev

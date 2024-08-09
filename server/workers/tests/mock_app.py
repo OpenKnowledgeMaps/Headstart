@@ -2,23 +2,22 @@ import os
 import json
 import sys
 import logging
-from flask import Flask, make_response, jsonify
+from flask import Flask, make_response
 from flask_restx import Api
 
 sys.path.append("workers/persistence/src")
 from persistence import persistence_ns
-from database import sessions
 
 
 def create_app(config_name):
     app = Flask(__name__)
 
     bind_params = {
-    "user": os.getenv("POSTGRES_USER"),
-    "pw": os.getenv("POSTGRES_PASSWORD"),
-    "host": os.getenv("POSTGRES_HOST"),
-    "port": os.getenv("POSTGRES_PORT"),
-    "db": os.getenv("DEFAULT_DATABASE")
+        "user": os.getenv("POSTGRES_USER"),
+        "pw": os.getenv("POSTGRES_PASSWORD"),
+        "host": os.getenv("POSTGRES_HOST"),
+        "port": os.getenv("POSTGRES_PORT"),
+        "db": os.getenv("DEFAULT_DATABASE")
     }
     app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://%(user)s:%(pw)s@%(host)s:%(port)s/%(db)s' % bind_params
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
