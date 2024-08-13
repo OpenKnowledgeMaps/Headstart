@@ -1,6 +1,6 @@
 FROM ubuntu:18.04
 
-MAINTAINER Chris Kittel "christopher.kittel@openknowledgemaps.org"
+LABEL maintainer="Chris Kittel <christopher.kittel@openknowledgemaps.org>"
 
 ENV DEBIAN_FRONTEND=noninteractive
 

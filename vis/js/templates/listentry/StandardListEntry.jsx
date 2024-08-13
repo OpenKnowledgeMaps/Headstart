@@ -17,6 +17,7 @@ import EntryBacklink from "./EntryBacklink";
 import Keywords from "./Keywords";
 import Link from "./Link";
 import Metrics from "./Metrics";
+import OrcidMetrics from './OrcidMetrics';
 import Title from "./Title";
 
 /**
@@ -36,6 +37,7 @@ const StandardListEntry = ({
   isInStreamBacklink,
   showDocTags,
   showAllDocTypes,
+  service,
   // event handlers
   handleBacklinkClick,
 }) => {
@@ -51,6 +53,8 @@ const StandardListEntry = ({
     !!baseUnit &&
     !showMetrics &&
     (!!citations || parseInt(citations) === 0);
+
+  console.log(paper);
 
   return (
     // html template starts here
@@ -73,11 +77,21 @@ const StandardListEntry = ({
         {paper.comments.length > 0 && <Comments items={paper.comments} />}
         {showKeywords && <Keywords>{paper.keywords}</Keywords>}
         {showAllDocTypes && <DocTypesRow types={paper.resulttype} />}
-        {showMetrics && (
+
+        {service !== "orcid" && showMetrics && (
           <Metrics
             citations={paper.citation_count}
             tweets={paper.cited_by_tweeters_count}
             readers={paper["readers.mendeley"]}
+            baseUnit={!isContentBased ? baseUnit : null}
+          />
+        )}
+
+        {service === "orcid" && showMetrics && (
+          <OrcidMetrics
+            citations={paper.citation_count}
+            social_media={paper.social}
+            references_outside_academia={paper.references}
             baseUnit={!isContentBased ? baseUnit : null}
           />
         )}
@@ -109,6 +123,7 @@ const mapStateToProps = (state) => ({
   isInStreamBacklink: !!state.selectedBubble,
   showDocTags: state.service === "base" || state.service === "orcid",
   showAllDocTypes: (state.service === "base" || state.service === "orcid") && !!state.selectedPaper,
+  service: state.service,
 });
 
 export default connect(

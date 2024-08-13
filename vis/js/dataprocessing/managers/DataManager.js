@@ -34,6 +34,7 @@ class DataManager {
   scalingFactors = {};
   streams = [];
   areas = [];
+  author = {};
 
   constructor(config, scheme = DEFAULT_SCHEME) {
     this.config = config;
@@ -45,6 +46,8 @@ class DataManager {
     this.__parseContext(backendData);
     // initialize this.papers
     this.__parsePapers(backendData);
+    // initialize this.authors
+    this.__parseAuthor(backendData);
     // initialize this.scalingFactors
     this.__computeScalingFactors(this.papers.length);
 
@@ -71,6 +74,25 @@ class DataManager {
     }
   }
 
+  __parseAuthor(backendData) {
+    this.author = this.__getAuthor(backendData);
+  }
+
+  __getAuthor(backendData) {
+    if (this.config.show_context) {
+      if (typeof backendData.data === "string") {
+        const data = JSON.parse(backendData.data);
+        return data.author ?? {}
+      }
+      return backendData.data?.author ?? {}
+    }
+    if (typeof backendData.data === "object") {
+      return backendData.data?.author ?? {};
+    }
+
+    return backendData;
+  }
+
   __parsePapers(backendData) {
     this.papers = this.__getPapersArray(backendData);
 
@@ -83,12 +105,13 @@ class DataManager {
   __getPapersArray(backendData) {
     if (this.config.show_context) {
       if (typeof backendData.data === "string") {
-        return JSON.parse(backendData.data);
+        const data = JSON.parse(backendData.data);
+        return data.documents ? JSON.parse(data?.documents) : [];
       }
-      return backendData.data;
+      return backendData.data?.documents ?? [];
     }
     if (typeof backendData.data === "object") {
-      return backendData.data;
+      return backendData.data?.documents ?? [];
     }
 
     return backendData;
@@ -109,15 +132,15 @@ class DataManager {
       this.__escapeStrings(paper);
       this.__sanitizeTitle(paper);
       this.__parseAuthors(paper);
+      this.__parseAccess(paper);
+      this.__parseLink(paper);
+      this.__parseComments(paper);
+      this.__countMetrics(paper);
       this.__parseCoordinates(paper);
       while (blockedCoords[`${paper.x}:${paper.y}`]) {
         this.__adjustCoordinates(paper);
       }
       blockedCoords[`${paper.x}:${paper.y}`] = true;
-      this.__parseAccess(paper);
-      this.__parseLink(paper);
-      this.__parseComments(paper);
-      this.__countMetrics(paper);
       this.__parseTags(paper);
       this.__parseKeywords(paper);
     });
@@ -143,8 +166,8 @@ class DataManager {
   __parseAuthors(paper) {
     paper.authors_objects = extractAuthors(paper.authors);
     paper.authors_list = getAuthorsList(
-        paper.authors,
-        this.config.convert_author_names
+      paper.authors,
+      this.config.convert_author_names
     );
 
     // old variable with all authors_string
@@ -211,20 +234,40 @@ class DataManager {
     paper.num_readers = 0;
     paper.internal_readers = 1;
 
+    paper.readers = paper.num_readers;
+    paper.tweets = getVisibleMetric(paper, "cited_by_tweeters_count");
+    paper.citations = getVisibleMetric(paper, "citation_count");
+    paper.readers = getVisibleMetric(paper, "readers.mendeley");
+
+    paper.social = getVisibleMetric(paper, "cited_by_accounts_count");
+    paper.references = [
+      paper.cited_by_wikipedia_count,
+      paper.cited_by_msm_count,
+      paper.cited_by_policies_count,
+      paper.cited_by_patents_count,
+    ].reduce((acc, val) => {
+      if (typeof val === "string" || typeof val === "number") {
+        return (acc ?? 0) + +val;
+      } else if (val === undefined || val === null) {
+        return acc;
+      }
+    }, null);
+
     if (!config.content_based && !config.scale_by) {
       paper.num_readers = getVisibleMetric(paper, "readers");
       paper.internal_readers = getInternalMetric(paper, "readers") + 1;
     }
-    if (config.scale_by) {
-      paper.num_readers = getVisibleMetric(paper, config.scale_by);
-      paper.internal_readers = getInternalMetric(paper, config.scale_by) + 1;
-    }
 
-    paper.readers = paper.num_readers;
-    if (config.metric_list) {
-      paper.tweets = getVisibleMetric(paper, "cited_by_tweeters_count");
-      paper.citations = getVisibleMetric(paper, "citation_count");
-      paper.readers = getVisibleMetric(paper, "readers.mendeley");
+    if (config.scale_by) {
+      paper.num_readers = getVisibleMetric(
+        paper,
+        config.scale_base_unit?.[config.scale_by] ?? config.scale_by
+      );
+      paper.internal_readers =
+        getInternalMetric(
+          paper,
+          config.scale_base_unit?.[config.scale_by] ?? config.scale_by
+        ) + 1;
     }
   }
 

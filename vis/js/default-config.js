@@ -600,6 +600,13 @@ var config = {
             please_note: "Please note",
             citation_warning: "we were not able to verify whether this citation is formatted correctly based on the metadata received. Please check before reuse.",
             time_frame_context_sg: "Please note that we remove time intervals with only a few associated papers during the computation of your streamgraph to increase its readability. As a result the time on the x-axis may not align with the time range you selected.",
+            citations_count_label: "citations",
+            social_media_count_label: "social media mentions",
+            references_count_label: "references outside academia",
+            citations: "citations",
+            social: "social media mentions",
+            references: "references outside academia",
+            scale_by_infolink_label: 'Find out more',
         },
         eng_openaire: {
             loading: "Loading...",
@@ -698,8 +705,13 @@ var config = {
             please_note: "Please note",
             citation_warning: "we were not able to verify whether this citation is formatted correctly based on the metadata received. Please check before reuse.",
             faqs_url: "https://openknowledgemaps.org/faq",
+            // citations_count_label: "citations",
+            researcher_info: "Researcher information",
+            social_media_count_label: " social media mentions",
+            references_count_label: "references outside academia",
+            // scale_by_infolink_label: 'Find out more'
         },
-         ger_cris: {
+        ger_cris: {
             loading: "Wird geladen...",
             search_placeholder: "Suchwort eingeben",
             show_list: "Liste ausklappen",

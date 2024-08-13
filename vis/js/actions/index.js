@@ -60,7 +60,8 @@ export const initializeStore = (
   streamWidth,
   streamHeight,
   listHeight,
-  scalingFactors
+  scalingFactors,
+  author
 ) => ({
   type: "INITIALIZE",
   configObject,
@@ -73,6 +74,7 @@ export const initializeStore = (
   streamHeight,
   listHeight,
   scalingFactors,
+  author
 });
 
 export const toggleList = () => ({ type: "TOGGLE_LIST" });
@@ -149,6 +151,9 @@ export const closeViperEditModal = () => ({ type: "CLOSE_VIPER_EDIT_MODAL" });
 
 export const openInfoModal = () => ({ type: "OPEN_INFO_MODAL" });
 export const closeInfoModal = () => ({ type: "CLOSE_INFO_MODAL" });
+
+export const openResearcherModal = () => ({ type: "OPEN_RESEARCHER_MODAL" });
+export const closeResearcherModal = () => ({ type: "CLOSE_RESEARCHER_MODAL" });
 
 export const scaleMap = (value, baseUnit, contentBased, sort) => ({
   type: "SCALE",

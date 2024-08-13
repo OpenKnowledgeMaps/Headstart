@@ -158,7 +158,9 @@ const getParamSortFunction = (field) => {
     field === "relevance" ||
     field === "citations" ||
     field === "readers" ||
-    field === "tweets"
+    field === "tweets" ||
+    field === "social" ||
+    field === "references"
   ) {
     return (a, b) => stringCompare(a[field], b[field], "desc");
   }

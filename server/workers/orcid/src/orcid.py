@@ -244,7 +244,7 @@ class OrcidClient():
     def enrich_author_info(self, author_info: dict, metadata: pd.DataFrame) -> dict:
         """
         This function enriches the author information with additional information.
-        Specifically we extract and aggregate metrics data from the author's works,
+        Specifically, we extract and aggregate metrics data from the author's works,
         such as citation counts and altmetric counts.
 
         Parameters:
@@ -254,13 +254,69 @@ class OrcidClient():
         Returns:
         - dict: The enriched author information dictionary.
         """
+
+        # Total citations
         author_info["total_citations"] = int(metadata["citation_count"].astype(float).sum())
-        author_info["total_unique_social_media_mentions"] = int(metadata["cited_by_accounts_count"].astype(float).sum())
-        author_info["total_neppr"] = int(metadata[[
-                                    "cited_by_wikipedia_count",
-                                    "cited_by_msm_count",
-                                    "cited_by_policies_count",
-                                    "cited_by_patents_count"]].astype(float).sum().sum())
+
+        # Total unique social media mentions
+        author_info["total_unique_social_media_mentions"] = int(
+            metadata["cited_by_accounts_count"].astype(float).sum()
+        )
+
+        # Total NEPPR (non-academic references)
+        author_info["total_neppr"] = int(
+            metadata[
+                [
+                    "cited_by_wikipedia_count",
+                    "cited_by_msm_count",
+                    "cited_by_policies_count",
+                    "cited_by_patents_count",
+                ]
+            ]
+            .astype(float)
+            .sum()
+            .sum()
+        )
+
+        # Calculate h-index
+        citation_counts = (
+            metadata["citation_count"].astype(float).sort_values(ascending=False).values
+        )
+        h_index = np.sum(citation_counts >= np.arange(1, len(citation_counts) + 1))
+        author_info["h_index"] = int(h_index)
+
+        def extract_year(value):
+            try:
+                # Attempt to extract the year assuming various formats
+                year_str = str(value)
+                if len(year_str) >= 4:
+                    return int(year_str[:4])
+                return None
+            except (ValueError, TypeError):
+                return None
+            
+        # Apply the function to extract the year
+        metadata["publication_year"] = metadata["year"].apply(extract_year)
+
+        # Filter out rows where year could not be extracted
+        valid_years = metadata["publication_year"].dropna().astype(int)
+
+        if valid_years.empty:
+            # If no valid years are found, set academic age to 0 or some default value
+            academic_age = 0
+        else:
+            # Calculate academic age
+            current_year = pd.Timestamp.now().year
+            earliest_publication_year = valid_years.min()
+            academic_age = current_year - earliest_publication_year
+
+        author_info["academic_age"] = str(academic_age)
+
+        # Calculate normalized h-index
+        author_info["normalized_h_index"] = (
+            h_index / academic_age if academic_age > 0 else 0
+        )
+
         return author_info
 
 
