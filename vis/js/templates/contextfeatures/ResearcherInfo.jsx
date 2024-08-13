@@ -27,7 +27,7 @@ const ResearcherInfo = ({ onClick }) => {
       title="More information about the visualization"
     >
       <span onClick={handleClick} className="context_moreinfo infolink">
-        <i className="fas fa-user"></i> {loc.intro_label}
+        <i className="fas fa-chart-line"></i> {loc.metrics_label}
       </span>
     </span>
 

@@ -61,7 +61,7 @@ listen_addresses = 'localhost,headstart_db_1,headstart-db-1'
 Run tests
 
 ```
-docker-compose -f docker-compose-end2endtest.yml run end2endtest
+docker compose -f docker-compose-end2endtest.yml --env-file .docker.test.env run end2endtest
 ```
 
 ## Notes about the end-to-end test setup

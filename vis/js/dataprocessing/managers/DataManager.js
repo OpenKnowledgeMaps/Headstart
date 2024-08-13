@@ -35,6 +35,14 @@ class DataManager {
   streams = [];
   areas = [];
   author = {};
+  scale_base_unit = {
+    citations: "citations",
+    references: "references",
+    cited_by_accounts_count: "social",
+    citation_count: 'citations',
+    cited_by_tweeters_count: 'tweets',
+    'readers.mendeley': 'readers'
+  };
 
   constructor(config, scheme = DEFAULT_SCHEME) {
     this.config = config;
@@ -82,9 +90,9 @@ class DataManager {
     if (this.config.show_context) {
       if (typeof backendData.data === "string") {
         const data = JSON.parse(backendData.data);
-        return data.author ?? {}
+        return data.author ?? {};
       }
-      return backendData.data?.author ?? {}
+      return backendData.data?.author ?? {};
     }
     if (typeof backendData.data === "object") {
       return backendData.data?.author ?? {};
@@ -261,12 +269,12 @@ class DataManager {
     if (config.scale_by) {
       paper.num_readers = getVisibleMetric(
         paper,
-        config.scale_base_unit?.[config.scale_by] ?? config.scale_by
+        this.scale_base_unit?.[config.scale_by] ?? config.scale_by
       );
       paper.internal_readers =
         getInternalMetric(
           paper,
-          config.scale_base_unit?.[config.scale_by] ?? config.scale_by
+          this.scale_base_unit?.[config.scale_by] ?? config.scale_by
         ) + 1;
     }
   }
