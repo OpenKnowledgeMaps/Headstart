@@ -1,16 +1,10 @@
-import os
+import time
 import json
 import subprocess
-import pandas as pd
 import logging
-from datetime import timedelta
 from common.r_wrapper import RWrapper
 from common.decorators import error_logging_aspect
-    
-import re
-from redis.exceptions import LockError
-import time
-import numpy as np
+from common.rate_limiter import RateLimiter
 
 formatter = logging.Formatter(fmt='%(asctime)s %(levelname)-8s %(message)s',
                               datefmt='%Y-%m-%d %H:%M:%S')
@@ -25,6 +19,7 @@ class MetricsClient(RWrapper):
         # separation = round(period_in_seconds / rate limit per second)
         self.separation = 1.5
         self.rate_key = 'metrics-ratelimit'
+        self.rate_limiter = RateLimiter(self.redis_store, self.rate_key, self.separation)
 
     def next_item(self):
         queue, msg = self.redis_store.blpop("metrics")
@@ -33,31 +28,6 @@ class MetricsClient(RWrapper):
         params = self.add_default_params(msg.get('params'))
         metadata = msg.get('metadata')
         return k, params, metadata
-
-    def metrics_rate_limit_reached(self):
-        """
-        This implementation is inspired by an implementation of
-        Generic Cell Rate Algorithm based rate limiting,
-        seen on https://dev.to/astagi/rate-limiting-using-python-and-redis-58gk.
-        It has been simplified and adjusted to our use case.
-
-        BASE demands one request per second (1 QPS), per
-        https://www.base-search.net/about/download/base_interface.pdf
-        """
-        
-        t = self.redis_store.time()[0]
-        self.redis_store.setnx(self.rate_key, 0)
-        try:
-            with self.redis_store.lock('lock:' + self.rate_key, blocking_timeout=5) as lock:
-                theoretical_arrival_time = max(float(self.redis_store.get(self.rate_key)), t)
-                if theoretical_arrival_time - t <= 0:
-                    new_theoretical_arrival_time = max(theoretical_arrival_time, t) + self.separation
-                    self.redis_store.set(self.rate_key, new_theoretical_arrival_time)
-                    return False
-                return True
-        # the locking mechanism is needed if a key is requested multiple times at the same time
-        except LockError:
-            return True
 
     @error_logging_aspect(log_level=logging.ERROR)
     def execute_search(self, params: dict, metadata: str) -> dict:
@@ -90,7 +60,7 @@ class MetricsClient(RWrapper):
     @error_logging_aspect(log_level=logging.ERROR)
     def run(self):
         while True:
-            while self.metrics_rate_limit_reached():
+            while self.rate_limiter.rate_limit_reached():
                 self.logger.debug('🛑 Request is limited')
                 time.sleep(0.1)
             k, params, metadata = self.next_item()
