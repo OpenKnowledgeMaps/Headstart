@@ -2,7 +2,6 @@ import os
 import sys
 import copy
 import json
-import redis
 import logging
 
 

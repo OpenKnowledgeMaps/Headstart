@@ -7,9 +7,9 @@ import time
 from flask import request, make_response, jsonify, abort, g
 from flask_restx import Namespace, Resource, fields
 from .request_validators import SearchParamSchema
-from common.utils import get_key, redis_store, contentprovider_lookup
+from common.utils import get_key, redis_store, get_or_create_contentprovider_lookup
 
-
+contentprovider_lookup = get_or_create_contentprovider_lookup()
 
 base_ns = Namespace("base", description="BASE API operations")
 search_param_schema = SearchParamSchema()
