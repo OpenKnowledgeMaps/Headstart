@@ -7,11 +7,12 @@ import uuid
 from common.decorators import error_logging_aspect
 import time
 import numpy as np
-from pyorcid import OrcidAuthentication, Orcid, errors as pyorcid_errors
+from pyorcid import Orcid, errors as pyorcid_errors
+from pyorcid.orcid_authentication import OrcidAuthentication
 from typing import Tuple, Dict
 from common.utils import get_key, redis_store
 from common.rate_limiter import RateLimiter
-from transform import (
+from orcid.src.transform import (
     extract_author_info,
     retrieve_full_works_metadata,
     sanitize_metadata,
@@ -57,7 +58,6 @@ class OrcidClient:
         logger.addHandler(handler)
         return logger
 
-    @error_logging_aspect(log_level=logging.ERROR)
     def authenticate(self):
         if self.access_token is None:
             orcid_auth = OrcidAuthentication(
@@ -69,14 +69,14 @@ class OrcidClient:
         _, message = self.redis_store.blpop(self.service)
 
         try:
-            message_data = json.loads(message.decode("utf-8"))
+            message_data: dict = json.loads(message.decode("utf-8"))
         except (json.JSONDecodeError, AttributeError) as e:
             raise ValueError(f"Failed to decode message: {e}")
 
         item_id = message_data.get("id")
-        params = message.get("params")
+        params = message_data.get("params")
         params["service"] = self.service
-        endpoint = message.get("endpoint")
+        endpoint = message_data.get("endpoint")
         return item_id, params, endpoint
 
     @error_logging_aspect(log_level=logging.ERROR)
@@ -284,6 +284,7 @@ class OrcidClient:
         )
     
     def _retrieve_author_info_and_metadata(self, orcid: Orcid) -> Tuple[dict, pd.DataFrame]:
+        self.authenticate()
         author_info = extract_author_info(orcid)
         metadata = retrieve_full_works_metadata(orcid)
         return author_info, metadata
