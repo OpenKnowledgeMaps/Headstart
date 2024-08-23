@@ -1,6 +1,6 @@
 FROM ubuntu:20.04
 
-MAINTAINER Chris Kittel "christopher.kittel@openknowledgemaps.org"
+LABEL maintainer="Chris Kittel <christopher.kittel@openknowledgemaps.org>"
 
 ENV DEBIAN_FRONTEND=noninteractive
 
@@ -141,7 +141,7 @@ RUN R -e 'options(repos="https://cran.wu.ac.at")' && \
  R -e 'install.packages("remotes")' && \
  R -e 'install.packages("renv", version="0.14.0-5")'
 
-ENV PYTHONPATH="${PYTHONPATH}:/headstart/:/headstart/metrics/:/headstart/metrics/src/"
+ENV PYTHONPATH="/headstart/:/headstart/metrics/:/headstart/metrics/src/"
 
 WORKDIR /headstart
 COPY workers/metrics/requirements.txt .
@@ -156,11 +156,15 @@ RUN apt-get -y install automake
 RUN R -e 'renv::consent(provided = TRUE)' && \
     R -e 'setwd("./"); renv::activate(); renv::restore(lockfile = "./renv.lock")'
 
-COPY workers/common ./common
+COPY workers/common ../common
+COPY workers/metrics/requirements-e.txt .
+RUN pip3 install --no-cache-dir -r requirements-e.txt
+    
 COPY workers/metrics ./metrics
 COPY preprocessing/resources ./resources
 COPY preprocessing/other-scripts ./other-scripts
 RUN mkdir -p /var/log/headstart && touch /var/log/headstart/headstart.log
 
 COPY workers/metrics/*.py ./
-ENTRYPOINT python3 run_metrics.py
+
+CMD ["python3", "run_metrics.py"]

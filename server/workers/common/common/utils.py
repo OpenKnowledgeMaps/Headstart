@@ -9,6 +9,7 @@ import redis
 import pandas as pd
 import pathlib
 
+
 redis_config = {
     "host": os.getenv("REDIS_HOST"),
     "port": os.getenv("REDIS_PORT"),
@@ -16,6 +17,8 @@ redis_config = {
     "password": os.getenv("REDIS_PASSWORD"),
     "client_name": "api"
 }
+
+print("Connecting to Redis with config: ", redis_config)
 
 redis_store = redis.StrictRedis(**redis_config)
 
@@ -80,7 +83,7 @@ def get_or_create_contentprovider_lookup():
         k = str(uuid.uuid4())
         d = {"id": k, "params": {},"endpoint": "contentproviders"}
         redis_store.rpush("base", json.dumps(d))
-        result = get_key(redis_store, k)
+        result = get_key(redis_store, k, 10)
         if result.get("status") == "error":
             df = pd.read_json("contentproviders.json")
             df.set_index("internal_name", inplace=True)

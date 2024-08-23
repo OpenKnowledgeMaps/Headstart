@@ -24,10 +24,23 @@ redis_config = {
 }
 redis_store = redis.StrictRedis(**redis_config)
 
-input_model = vis_ns.model("InputModel",
-                            {"params": fields.Nested(base_querymodel),
-                             "input_data": fields.String()})
+input_model = vis_ns.model(
+    "InputModel",
+    {
+        "params": fields.Nested(base_querymodel), 
+        "input_data": fields.String()
+    },
+)
 
+def set_response_headers(accept_header, is_raw, result, filename):
+    headers = {}
+    if accept_header == "application/json":
+        headers["Content-Type"] = "application/json"
+    elif accept_header == "text/csv":
+        result = pd.read_json(json.loads(result)).to_csv() if is_raw else pd.read_json(json.loads(result)).to_csv()
+        headers["Content-Type"] = "text/csv"
+        headers["Content-Disposition"] = f"attachment; filename={filename}.csv"
+    return result, headers
 
 @vis_ns.route('/create')
 class Create(Resource):
@@ -42,28 +55,16 @@ class Create(Resource):
         params = data["params"]
         vis_ns.logger.debug(params)
         input_data = data["input_data"]
-        k = str(uuid.uuid4())
-        d = {"id": k, "params": params,
+        request_id = str(uuid.uuid4())
+        d = {"id": request_id, "params": params,
              "input_data": input_data}
         redis_store.rpush("input_data", json.dumps(d).encode('utf8'))
         q_len = redis_store.llen("input_data")
-        vis_ns.logger.debug("Queue length: %s %d %s" %("input_data", q_len, k))
-        result = get_key(redis_store, k)
+        vis_ns.logger.debug("Queue length: %s %d %s" %("input_data", q_len, request_id))
+        result = get_key(redis_store, request_id)
         try:
-            headers = {}
-            if request.headers["Accept"] == "application/json":
-                headers["Content-Type"] = "application/json"
-            if request.headers["Accept"] == "text/csv":
-                if params.get("raw") is True:
-                    df = pd.read_json(json.loads(result))
-                    result = df.to_csv()
-                else:
-                    result = pd.read_json(json.loads(result)).to_csv()
-                headers["Content-Type"] = "text/csv"
-                headers["Content-Disposition"] = "attachment; filename={0}.csv".format(k)
-            return make_response(result,
-                                 200,
-                                 headers)
+            result, headers = set_response_headers(request.headers["Accept"], params.get("raw"), result, request_id)
+            return make_response(result, 200, headers)
         except Exception as e:
             vis_ns.logger.error(e)
             abort(500, "Problem encountered, check logs.")

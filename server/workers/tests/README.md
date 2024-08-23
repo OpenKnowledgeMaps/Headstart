@@ -45,7 +45,7 @@ In `docker-compose-end2endtest.yml`, the POSTGRES_HOST should be the name of the
   end2endtest:
     build:
       context: ./server/workers/tests
-      dockerfile: ./Dockerfile_tests
+      dockerfile: ./Dockerfile.tests
     hostname: "end2endtest"
     environment:
       POSTGRES_USER: "testuser"
