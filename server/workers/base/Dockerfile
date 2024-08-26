@@ -154,11 +154,14 @@ COPY workers/base/activate.R .
 RUN R -e 'renv::consent(provided = TRUE)' && \
     R -e 'setwd("./"); renv::activate(); renv::restore(lockfile = "./renv.lock")'
 
-COPY workers/common ./common
+COPY workers/common ../common
+COPY workers/base/requirements-e.txt .
+RUN pip3 install --no-cache-dir -r requirements-e.txt
+
 COPY workers/base ./base
 COPY preprocessing/resources ./resources
 COPY preprocessing/other-scripts ./other-scripts
 RUN mkdir -p /var/log/headstart && touch /var/log/headstart/headstart.log
 
 COPY workers/base/*.py ./
-ENTRYPOINT python3 run_base.py
+CMD ["python3", "run_base.py"]

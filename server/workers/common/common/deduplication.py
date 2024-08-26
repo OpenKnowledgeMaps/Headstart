@@ -2,7 +2,6 @@ import re
 import numpy as np
 import pandas as pd
 import Levenshtein
-from sklearn.metrics import pairwise_distances
 
 pattern_doi = re.compile(r"\.v(\d)+$")
 
@@ -69,7 +68,7 @@ def add_false_negatives(df):
     return df
 
 def remove_textual_duplicates_from_different_sources(df, dupind):
-    for _, idx in dupind.iteritems():
+    for _, idx in dupind.items():
         if len(idx) > 1:
             tmp = df.loc[idx]
             df.loc[tmp.index, "is_duplicate"] = True
@@ -86,7 +85,7 @@ def remove_textual_duplicates_from_different_sources(df, dupind):
     return df
 
 def mark_latest_doi(df, dupind):
-    for _, idx in dupind.iteritems():
+    for _, idx in dupind.items():
         idx = df.index.intersection(idx)
         tmp = df.loc[idx]
         for udoi in list(filter(None, tmp.unversioned_doi.unique().tolist())):
@@ -103,7 +102,7 @@ def mark_latest_doi(df, dupind):
     return df
     
 def prioritize_OA_and_latest(df, dupind):
-    for _, idx in dupind.iteritems():
+    for _, idx in dupind.items():
         idx = df.index.intersection(idx)
         if len(idx) > 1:
             tmp = df.loc[idx]

@@ -155,7 +155,10 @@ COPY workers/dataprocessing/activate.R .
 RUN R -e 'renv::consent(provided = TRUE)' && \
     R -e 'setwd("./"); renv::activate(); renv::restore(lockfile = "./renv.lock")'
 
-COPY workers/common ./common
+COPY workers/common ../common
+COPY workers/dataprocessing/requirements-e.txt .
+RUN pip3 install --no-cache-dir -r requirements-e.txt
+    
 COPY workers/dataprocessing ./dataprocessing
 COPY preprocessing/resources ./resources
 COPY preprocessing/other-scripts ./other-scripts

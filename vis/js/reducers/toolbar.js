@@ -9,8 +9,6 @@ const toolbar = (state = {}, action) => {
         ...state,
         showScaleToolbar: action.configObject.scale_toolbar,
         scaleOptions: action.configObject.scale_types,
-        scaleLabels: action.configObject.scale_label,
-        scaleExplanations: action.configObject.scale_explanation,
         scaleBaseUnit: action.configObject.scale_base_unit,
         scaleValue: getScaleValue(action.configObject),
       };

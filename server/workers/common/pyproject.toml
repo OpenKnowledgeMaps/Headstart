@@ -1,0 +1,14 @@
+[build-system]
+requires = ["setuptools", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "common"
+version = "0.1.0"
+description = "A common utility package shared across microservices."
+
+[tool.setuptools.packages.find]
+where = ["."]
+
+[tool.setuptools]
+package-dir = {"" = "."}

@@ -63,4 +63,15 @@ server/preprocessing/other-scripts/renv
 /nbproject/private/
 /server/nbproject/private/
 .pytest_cache
+*.egg-info/
 *__pycache__*
+
+# Mac files
+.DS_Store
+
+# personal
+.vscode/settings.json
+# temporal
+local_dev/config_local_headstart.ini
+local_dev/config_local_searchflow.ini
+

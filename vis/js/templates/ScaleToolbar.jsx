@@ -7,13 +7,13 @@ import useMatomo from "../utils/useMatomo";
 const ScaleToolbar = ({
   value,
   options,
-  labels,
-  explanations,
   showCredit,
   onChange,
   onInfoClick,
 }) => {
   const localization = useLocalizationContext();
+  const labels = localization.scale_label;
+
   const { trackEvent } = useMatomo();
   const handleScaleChange = (id) => {
     onChange(id);
@@ -25,6 +25,8 @@ const ScaleToolbar = ({
     onInfoClick();
     trackEvent("Added components", "Open more info modal", "Toolbar");
   };
+
+  
 
   return (
     <div className="scale-toolbar btn-group dropup">
@@ -54,7 +56,9 @@ const ScaleToolbar = ({
         </DropdownButton>
       </div>
       <div className="context-scale-toolbar">
-        <span id="curr-scale-explanation">{explanations[value]}</span>
+        <span id="curr-scale-explanation">
+          {localization.scale_by_explanation}
+        </span>
         <a
           id="infolink"
           className="scale-infolink"

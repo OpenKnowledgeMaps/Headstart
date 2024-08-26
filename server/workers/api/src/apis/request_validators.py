@@ -10,7 +10,7 @@ class SearchParamSchema(Schema):
                         format="%Y-%m-%d")
     to = fields.Date(required=True,
                      format="%Y-%m-%d")
-    vis_type = fields.Str(require=True)
+    vis_type = fields.Str(required=True)
     limit = fields.Int()
     year_range = fields.Str()
     today = fields.Str()
@@ -38,11 +38,12 @@ class SearchParamSchema(Schema):
 
     @pre_load
     def fix_years(self, in_data, **kwargs):
-        if len(in_data.get('from')) == 4:
-            in_data["from"] = in_data["from"]+"-01-01"
-        if len(in_data.get('to')) == 4:
-            in_data["to"] = in_data["to"]+"-12-31"
-        return in_data
+        from_date = in_data.get('from')
+        to_date = in_data.get('to')
+        if from_date and len(from_date) == 4:
+            in_data["from"] = from_date + "-01-01"
+        if to_date and len(to_date) == 4:
+            in_data["to"] = to_date + "-12-31"
 
     @pre_load
     def fix_limit(self, in_data, **kwargs):

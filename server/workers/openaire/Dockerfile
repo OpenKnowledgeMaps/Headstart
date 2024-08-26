@@ -127,7 +127,7 @@ RUN locale-gen en_US.UTF-8 && \
 RUN apt update && apt full-upgrade -y && \
   apt install -y links curl vim libcurl4-openssl-dev \
                  libxml2-dev libz-dev libpoppler-cpp-dev \
-                 libopenmpi-dev libzmq3-dev \
+                 libopenmpi-dev libzmq3-dev build-essential python3-dev \
                  libssl1.1 libssl-dev && \
   apt clean && \
   rm -f /etc/localtime && \
@@ -141,8 +141,12 @@ RUN R -e 'options(repos="https://cran.wu.ac.at")' && \
  R -e 'install.packages("remotes")' && \
  R -e 'install.packages("renv", version="0.14.0-5")'
 
+ENV PYTHONPATH="/headstart/:/headstart/openaire/:/headstart/openaire/src/"
+
 WORKDIR /headstart
 COPY workers/openaire/requirements.txt .
+RUN pip3 install --no-cache-dir Cython
+RUN pip3 install --upgrade pip
 RUN pip3 install --no-cache-dir -r requirements.txt
 
 COPY workers/openaire/renv.lock .
@@ -152,11 +156,15 @@ RUN apt-get -y install automake
 RUN R -e 'renv::consent(provided = TRUE)' && \
     R -e 'setwd("./"); renv::activate(); renv::restore(lockfile = "./renv.lock")'
 
-COPY workers/common ./common
+COPY workers/common ../common
+COPY workers/openaire/requirements-e.txt .
+RUN pip3 install --no-cache-dir -r requirements-e.txt
+    
 COPY workers/openaire ./openaire
 COPY preprocessing/resources ./resources
 COPY preprocessing/other-scripts ./other-scripts
 RUN mkdir -p /var/log/headstart && touch /var/log/headstart/headstart.log
 
 COPY workers/openaire/*.py ./
-ENTRYPOINT python3 run_openaire.py
+
+CMD ["python3", "run_openaire.py"]
