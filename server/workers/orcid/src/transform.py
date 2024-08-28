@@ -5,7 +5,7 @@ import pandas as pd
 import numpy as np
 from common.decorators import error_logging_aspect
 from common.utils import get_nested_value
-from typing import List
+from typing import List, Optional
 
 
 @error_logging_aspect(log_level=logging.ERROR)
@@ -115,7 +115,7 @@ def sanitize_metadata(metadata: pd.DataFrame) -> pd.DataFrame:
 
 
 @error_logging_aspect(log_level=logging.ERROR)
-def retrieve_full_works_metadata(orcid: Orcid) -> pd.DataFrame:
+def retrieve_full_works_metadata(orcid: Orcid, limit: Optional[int]) -> pd.DataFrame:
     """
     This function retrieves the full works metadata from the ORCID data.
 
@@ -125,7 +125,7 @@ def retrieve_full_works_metadata(orcid: Orcid) -> pd.DataFrame:
     Returns:
     - pd.DataFrame: The full works metadata retrieved from the ORCID data.
     """
-    works_data = pd.DataFrame(orcid.works_full_metadata(limit=1000))
+    works_data = pd.DataFrame(orcid.works_full_metadata(limit=limit))
 
     new_works_data = pd.DataFrame()
 

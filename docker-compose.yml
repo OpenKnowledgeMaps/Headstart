@@ -45,7 +45,6 @@ services:
       BEHIND_PROXY: "${BEHIND_PROXY}"
       DEFAULT_DATABASE: "${DEFAULT_DATABASE}"
       FLASK_ENV: "${FLASK_ENV}"
-    command: ["python", "app.py"]
     volumes:
       - ./api_cache:/var/api_cache
       - ./server/workers/api/src:/api

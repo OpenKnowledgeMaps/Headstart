@@ -1,6 +1,7 @@
 import os
 import sys
 import json
+from typing import Optional
 import pandas as pd
 import logging
 import uuid
@@ -141,13 +142,16 @@ class OrcidClient:
             # q = params.get("q")
             # service = params.get("service")
             orcid_id = params.get("orcid")
+            limit = params.get("limit")
+            self.authenticate()
             orcid = self._initialize_orcid(orcid_id)
-            author_info, metadata = self._retrieve_author_info_and_metadata(orcid)
+            author_info, metadata = self._retrieve_author_info_and_metadata(orcid, limit)
 
             if metadata.empty:
                 return self._handle_insufficient_results(params, orcid_id)
             
             metadata = self._process_metadata(metadata, author_info, params)
+
             return self._format_response(data=metadata, author_info=author_info, params=params)
         except (
             pyorcid_errors.Forbidden,
@@ -180,6 +184,7 @@ class OrcidClient:
             "params": params,
             "metadata": metadata.to_json(orient="records"),
         }
+        # self.logger.debug(f"Enriching metadata for request {task_data}")
         self.redis_store.rpush("metrics", json.dumps(task_data))
         result = get_key(redis_store, request_id, 300)
         metadata = pd.DataFrame(json.loads(result["input_data"]))
@@ -283,10 +288,10 @@ class OrcidClient:
             sandbox=self.sandbox,
         )
     
-    def _retrieve_author_info_and_metadata(self, orcid: Orcid) -> Tuple[dict, pd.DataFrame]:
+    def _retrieve_author_info_and_metadata(self, orcid: Orcid, limit: Optional[int]) -> Tuple[dict, pd.DataFrame]:
         self.authenticate()
         author_info = extract_author_info(orcid)
-        metadata = retrieve_full_works_metadata(orcid)
+        metadata = retrieve_full_works_metadata(orcid, limit)
         return author_info, metadata
     
     def _process_metadata(self, metadata: pd.DataFrame, author_info: dict, params: dict) -> pd.DataFrame:

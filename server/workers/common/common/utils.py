@@ -113,7 +113,7 @@ def get_nested_value(data, keys, default=None):
     :return: The retrieved value or the default value
     """
     for key in keys:
-        if not isinstance(data, dict):
+        if not hasattr(data, 'get'):
             return default
         data = data.get(key)
         if data is None:
