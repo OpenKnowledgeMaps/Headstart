@@ -1,153 +1,57 @@
-import os
-import sys
+import logging
 import json
 from typing import Optional
 import pandas as pd
-import logging
 import uuid
 from common.decorators import error_logging_aspect
-import time
 import numpy as np
 from pyorcid import Orcid, errors as pyorcid_errors
 from pyorcid.orcid_authentication import OrcidAuthentication
-from typing import Tuple, Dict
-from common.utils import get_key, redis_store
-from common.rate_limiter import RateLimiter
-from orcid.src.transform import (
+from typing import Tuple
+from common.utils import get_key
+from transform import (
     extract_author_info,
     retrieve_full_works_metadata,
     sanitize_metadata,
 )
-from redis import Redis
+from redis import StrictRedis
 
-formatter = logging.Formatter(
-    fmt="%(asctime)s %(levelname)-8s %(message)s", datefmt="%Y-%m-%d %H:%M:%S"
-)
+class OrcidService:
+    logger = logging.getLogger(__name__)
 
-
-class OrcidWorker:
     def __init__(
         self,
-        redis_store: Redis = None,
-        language: str = None,
-        loglevel: str = "INFO",
-        client_id: str = None,
-        client_secret: str = None,
-        sandbox: bool = None,
+        access_token: str,
+        sandbox: bool,
+        redis_store: StrictRedis,
     ) -> None:
+        self.access_token = access_token
+        self.sandbox = sandbox
         self.redis_store = redis_store
-        self.rate_limiter = RateLimiter(redis_store, "orcid-ratelimit")
-        self.logger = self.setup_logger(loglevel)
 
-        self.service = "orcid"
-        self.default_params = {"language": language}
-
-        self.ORCID_CLIENT_ID = client_id or os.getenv("ORCID_CLIENT_ID")
-        self.ORCID_CLIENT_SECRET = client_secret or os.getenv("ORCID_CLIENT_SECRET")
-        self.sandbox = (
-            sandbox if sandbox is not None else os.getenv("FLASK_ENV") == "dev"
+    @staticmethod
+    def create(
+        orcid_client_id: str,
+        orcid_client_secret: str,
+        sandbox: bool = False,
+        redis_store: StrictRedis = None,
+    ):
+        orcid_auth = OrcidAuthentication(
+            client_id=orcid_client_id, client_secret=orcid_client_secret
         )
+        access_token = orcid_auth.get_public_access_token()
 
-        self.access_token = None
-
-    def setup_logger(self, loglevel: str) -> logging.Logger:
-        logger = logging.getLogger(__name__)
-        logger.setLevel(loglevel)
-        handler = logging.StreamHandler(sys.stdout)
-        handler.setFormatter(formatter)
-        handler.setLevel(loglevel)
-        logger.addHandler(handler)
-        return logger
-
-    def next_item(self) -> Tuple[str, Dict[str, str], str]:
-        _, message = self.redis_store.blpop(self.service)
-
-        try:
-            message_data: dict = json.loads(message.decode("utf-8"))
-        except (json.JSONDecodeError, AttributeError) as e:
-            raise ValueError(f"Failed to decode message: {e}")
-
-        request_id = message_data.get("id")
-        params = message_data.get("params")
-        params["service"] = self.service
-        endpoint = message_data.get("endpoint")
-        return request_id, params, endpoint
-
-    @error_logging_aspect(log_level=logging.ERROR)
-    def run(self) -> None:
-        """
-        This function is the main loop of the OrcidClient. It will continuously
-        check for new items in the Redis queue, process them, and store the results
-        back in Redis.
-
-        The function will also check if the rate limit for ORCID requests is reached.
-
-        return: None
-        """
-        while True:
-            while self.rate_limiter.rate_limit_reached():
-                self.logger.debug("🛑 Request is limited")
-                time.sleep(0.1)
-            request_id, params, endpoint = self.next_item()
-            self.logger.debug(request_id)
-            self.logger.debug(params)
-            if endpoint == "search":
-                self.handle_search(request_id, params)
-            
-    def handle_search(self, request_id: str, params: dict) -> None:
-        """
-        Transform the search request into a format that can be processed by the
-        execute_search function. The function will then execute the search and
-        store the results in the Redis queue.
-        """
-        try:
-            res = self.execute_search(params)
-            self.logger.debug(res)
-            res["id"] = request_id
-
-            if res.get("status") == "error" or params.get("raw") is True:
-                self.redis_store.set(request_id + "_output", json.dumps(res))
-            else:
-                self.redis_store.rpush("input_data", json.dumps(res).encode("utf8"))
-                q_len = self.redis_store.llen("input_data")
-                self.logger.debug(f"Queue length: input_data {q_len} {request_id}")
-        except Exception as e:
-            self.logger.exception("Exception during data retrieval.")
-            self.logger.error(params)
-            self.logger.error(e)
-
-    def authenticate(self):
-        if self.access_token is None:
-            orcid_auth = OrcidAuthentication(
-                client_id=self.ORCID_CLIENT_ID, client_secret=self.ORCID_CLIENT_SECRET
-            )
-            self.access_token = orcid_auth.get_public_access_token()
+        return OrcidService(
+            access_token=access_token,
+            sandbox=sandbox,
+            redis_store=redis_store,
+        )
 
     @error_logging_aspect(log_level=logging.ERROR)
     def execute_search(self, params: dict) -> dict:
-        """
-        This function is the main function for the search endpoint. It will
-        retrieve the ORCID data for the given ORCID ID, extract the author
-        information and the works metadata, and return the results.
-        In case of errors, it will return an error reason. Following errors
-        are possible:
-        - invalid orcid id
-        - not enough results for orcid
-        - unexpected data processing error
-
-        Parameters:
-        - params (dict): The parameters for the search endpoint. The parameters
-        should contain the ORCID ID of the author.
-
-        Returns:
-        - dict: The results of the search endpoint.
-        """
         try:
-            # q = params.get("q")
-            # service = params.get("service")
             orcid_id = params.get("orcid")
             limit = params.get("limit")
-            self.authenticate()
             orcid = self._initialize_orcid(orcid_id)
             author_info, metadata = self._retrieve_author_info_and_metadata(orcid, limit)
 
@@ -188,9 +92,9 @@ class OrcidWorker:
             "params": params,
             "metadata": metadata.to_json(orient="records"),
         }
-        # self.logger.debug(f"Enriching metadata for request {task_data}")
         self.redis_store.rpush("metrics", json.dumps(task_data))
-        result = get_key(redis_store, request_id, 300)
+        result = get_key(self.redis_store, request_id, 300)
+        self.logger.debug(f"Enriched metadata for request {request_id}")
         metadata = pd.DataFrame(json.loads(result["input_data"]))
         for c in [
             "citation_count",
@@ -293,17 +197,16 @@ class OrcidWorker:
         )
     
     def _retrieve_author_info_and_metadata(self, orcid: Orcid, limit: Optional[int]) -> Tuple[dict, pd.DataFrame]:
-        self.authenticate()
         personal_details = orcid.personal_details()
         author_info = extract_author_info(
             orcid._orcid_id,
             personal_details,
-
+            orcid,
         )
         works_data = pd.DataFrame(orcid.works_full_metadata(limit=limit))
         metadata = retrieve_full_works_metadata(works_data)
         return author_info, metadata
-    
+
     def _process_metadata(self, metadata: pd.DataFrame, author_info: dict, params: dict) -> pd.DataFrame:
         metadata["authors"] = metadata["authors"].replace("", author_info["author_name"])
         metadata = sanitize_metadata(metadata)
@@ -313,7 +216,6 @@ class OrcidWorker:
         return metadata
 
     def _format_response(self, data: pd.DataFrame, author_info: dict, params: dict) -> dict:
-        # in BASE it is ["title", "paper_abstract", "subject_orig", "published_in", "sanitized_authors"]
         text = pd.concat([data.id, data[["title", "paper_abstract", "subtitle", "published_in", "authors"]]
                         .apply(lambda x: " ".join(x), axis=1)], axis=1)
         text.columns = ["id", "content"]

@@ -5,7 +5,7 @@ import pandas as pd
 import numpy as np
 from common.decorators import error_logging_aspect
 from common.utils import get_nested_value
-from typing import List, Optional, Any, Dict
+from typing import List, Dict
 
 
 @error_logging_aspect(log_level=logging.ERROR)
@@ -14,10 +14,6 @@ def extract_author_info(
     personal_details: Dict,
     orcid: Orcid
 ) -> dict:
-    """
-    
-    """
-    
     author_name = " ".join(
         [
             personal_details.get("name", {}).get("given-names", {}).get("value", ""),

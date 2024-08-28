@@ -3,7 +3,7 @@ from unittest.mock import patch, MagicMock, Mock
 import json
 import pandas as pd
 from redis import Redis
-from orcid.src.orcid import OrcidWorker
+from orcid.src.worker import OrcidWorker
 from pyorcid import errors as pyorcid_errors
 import requests
 
