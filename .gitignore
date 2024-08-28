@@ -64,3 +64,6 @@ server/preprocessing/other-scripts/renv
 /server/nbproject/private/
 .pytest_cache
 *__pycache__*
+
+.venv
+.DS_Store
