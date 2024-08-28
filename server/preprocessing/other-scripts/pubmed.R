@@ -37,7 +37,7 @@ library("xml2")
 # get_papers(query = "ecology")
 # get_papers(query = "ecology", params = list(from = "2016/04/01", to = "2016/06/05"))
 
-
+source('preprocess.R')
 plog <- getLogger('api.pubmed')
 
 
@@ -45,6 +45,8 @@ get_papers <- function(query, params = NULL, retry_opts = rentrez::entrez_retry_
   # remove slashes in query that are added on php side to make it
   # safe to add queries to the database
   query <- gsub("\\\\", "", query)
+
+  limit <- params$limit
 
   plog$info(paste("vis_id:", .GlobalEnv$VIS_ID, "Search:", query))
   start.time <- Sys.time()
@@ -177,7 +179,3 @@ get_papers <- function(query, params = NULL, retry_opts = rentrez::entrez_retry_
 
 xtext <- function(x) xml2::xml_text(x)
 
-
-valid_langs <- list(
-    'eng'='english'
-)

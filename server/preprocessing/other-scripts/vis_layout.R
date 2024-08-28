@@ -1,7 +1,6 @@
 library(logging)
 library(vegan)
 library(tm)
-library(textcat)
 library(proxy)
 library(GMD)
 library(SnowballC)
@@ -11,6 +10,13 @@ library(doParallel)
 library(stringi)
 library(stringdist)
 library(plyr)
+
+source('preprocess.R')
+source('features.R')
+source('cluster.R')
+source('summarize.R')
+source('postprocess.R')
+
 registerDoParallel(detectCores(all.tests = FALSE, logical = TRUE)-1)
 
 
@@ -22,38 +28,17 @@ vlog <- getLogger('vis')
 vis_layout <- function(text, metadata, service,
                        max_clusters=15, maxit=500,
                        mindim=2, maxdim=2,
-                       lang=NULL, add_stop_words=NULL,
-                       testing=FALSE, taxonomy_separator=NULL, list_size=-1,
-                       vis_type='overview') {
-  TESTING <<- testing # makes testing param a global variable
+                       taxonomy_separator=NULL,
+                       vis_type='overview', list_size=-1,
+                       params=NULL) {
   start.time <- Sys.time()
-
-  tryCatch({
-   if(!isTRUE(testing)) {
-     source('preprocess.R')
-     source('features.R')
-     source('cluster.R')
-     source('summarize.R')
-     source('postprocess.R')
-   } else {
-     source('../preprocess.R')
-     source('../features.R')
-     source('../cluster.R')
-     source('../summarize.R')
-     source('../postprocess.R')
-   }
-  }, error = function(err) print(err)
-  )
-
   vlog$debug("preprocess")
-  metadata <- sanitize(metadata)
-  filtered <- filter_duplicates(metadata, text, list_size)
-  metadata <- filtered$metadata
-  text <- filtered$text
+  metadata <- sanitize_abstract(metadata)
+  languages <- names(head(sort(table(unlist(lapply(metadata$lang, strsplit, "; "))), decreasing = TRUE), 2))
   vlog$info(paste("vis_id:", .GlobalEnv$VIS_ID, "doc count:", nrow(metadata), sep=" "))
-  
+
   if(vis_type=='overview'){
-    stops <- get_stopwords(lang, testing)
+    stops <- get_stopwords(languages)
     corpus <- create_corpus(metadata, text, stops)
 
     vlog$debug("get features")
@@ -68,13 +53,13 @@ vis_layout <- function(text, metadata, service,
     metadata = replace_keywords_if_empty(metadata, stops)
     type_counts <- get_type_counts(corpus$unlowered)
     named_clusters <- create_cluster_labels(clusters, metadata,
-                                            service, lang,
                                             type_counts,
                                             weightingspec="ntn", top_n=3,
-                                            stops=stops, taxonomy_separator)
-    output <- create_overview_output(named_clusters, layout, metadata)
+                                            stops=stops, taxonomy_separator,
+                                            params)
+    output <- create_overview_output(named_clusters, layout, metadata, list_size)
   } else {
-    output <- create_streamgraph_output(metadata)
+    output <- create_streamgraph_output(metadata, list_size)
   }
 
   end.time <- Sys.time()

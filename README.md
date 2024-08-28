@@ -51,6 +51,37 @@ See [client configuration](doc/README.md) for details on adapting the client.
 
 See [Installing and configuring the server](doc/server_config.md) for instructions on how to install and configure the server. Also, see [HOWTO: Get the search repos example to work](doc/howto_search_repos.md).
 
+Make sure to have installed `node` version >= 14.18.1 and `npm` version >=8.1.1 (best way to install is with [nvm](https://github.com/nvm-sh/nvm), `nvm install 14.18.1`) and run the following two commands to build the Headstart client:
+
+    npm install
+    npm run dev
+
+We are using [webpack](https://webpack.github.io/) to build our client-side application. `webpack` is started in *watch mode* which means that changes to files are tracked and the created `headstart.js` is automatically updated.
+
+Now you can run a local dev server:
+
+	npm start
+
+Note: you can also set the skin in this step as an argument to the `npm start` command (e.g. `npm start -- --env skin=triple`).
+
+The browser will automatically open a new window with the example specified by the skin.
+
+Alternatively, you can point your browser to one of the following addresses:
+
+	http://localhost:8080/project_website/base.html
+	http://localhost:8080/project_website/pubmed.html
+	http://localhost:8080/local_covis/
+	http://localhost:8080/local_triple/map.html
+	http://localhost:8080/local_triple/stream.html
+	http://localhost:8080/local_viper/
+
+If everything has worked out, you should see the example visualization.
+
+To run Headstart on a different server (e.g. Apache), you need to set the publicPath in `config.js` to the URL of the `dist` directory:
+* Dev: specify the full path including protocol, e.g. `http://localhost/headstart/dist`
+* Production: specify the full path excluding protocol, e.g. `//example.org/headstart/dist`
+
+
 ## Contributors
 
 Maintainer: [Peter Kraker](https://github.com/pkraker) ([pkraker@openknowledgemaps.org](mailto:pkraker@openknowledgemaps.org))

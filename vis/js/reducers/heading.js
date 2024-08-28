@@ -2,23 +2,24 @@ const context = (state = {}, action) => {
   if (action.canceled) {
     return state;
   }
-  
+
   switch (action.type) {
     case "INITIALIZE":
       return {
         title: action.contextObject.params
-          ? action.contextObject.params.title
-          : undefined,
+            ? action.contextObject.params.title
+            : undefined,
         acronym: action.contextObject.params
-          ? action.contextObject.params.acronym
-          : undefined,
+            ? action.contextObject.params.acronym
+            : undefined,
         projectId: action.contextObject.params
-          ? action.contextObject.params.project_id
-          : undefined,
+            ? action.contextObject.params.project_id
+            : undefined,
         presetTitle: action.configObject.title,
-        titleStyle: getTitleStyle(action.configObject),
+        // Todo: set titleStyle = "custom" if custom_title exists
+        titleStyle: action.contextObject.params.custom_title ? 'custom' : getTitleStyle(action.configObject),
         titleLabelType: getTitleLabelType(action.configObject),
-        customTitle: action.configObject.custom_title,
+        customTitle: action.configObject.custom_title ? action.configObject.custom_title : action.contextObject.params.custom_title,
       };
     default:
       return state;
@@ -26,11 +27,11 @@ const context = (state = {}, action) => {
 };
 
 const getTitleStyle = (config) => {
+  
   if (config.create_title_from_context) {
     if (config.create_title_from_context_style) {
       return config.create_title_from_context_style;
     }
-
     return "standard";
   }
 

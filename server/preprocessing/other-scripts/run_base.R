@@ -35,6 +35,9 @@ f <- file("stdin")
 open(f)
 data = fromJSON(readLines(f))
 params <- data$params
+if ("q_advanced" %in% names(params)) {
+  params$q_advanced <- sanitize_query(params$q_advanced)$sanitized_query
+}
 
 
 if (!is.null(params$lang_id)) {
@@ -62,7 +65,7 @@ if (exists('input_data')) {
   print(toJSON(input_data$metadata))
   print(toJSON(input_data$text))
 } else {
-  output_json <- detect_error(failed, service)
+  output_json <- detect_error(failed, service, params)
   print(output_json)
   print(output_json)
 }

@@ -1,9 +1,15 @@
 library(stringdist)
 library(logging)
+library(stringi)
+
 
 sanitize_query <- function(query) {
-  query <- gsub("\\", "", query, fixed=T)
-  sanitized_query <- gsub('[“”]', '"', query)
+  if (!is.null(query)) {
+    query <- gsub("\\", "", query, fixed=T)
+    sanitized_query <- gsub('[“”„”]', '"', query)
+  } else {
+    sanitized_query <- NULL
+  }
   return(list(raw_query=query, sanitized_query=sanitized_query))
 }
 
@@ -22,41 +28,30 @@ check_metadata <- function (field) {
 }
 
 
-get_stopwords <- function(lang, testing) {
-  stops <- tryCatch({
-    stops <- stopwords(lang)
-  }, error = function(err){
-    return(unlist(""))
-  })
-
-  stops <- tryCatch({
-      # trycatch switch when in test mode
-      if (!isTRUE(testing)) {
-          add_stop_path <- paste0("../resources/", lang, ".stop")
-          additional_stops <- scan(add_stop_path, what="", sep="\n")
-          stops = c(stops, additional_stops)
-        } else if (dir.exists("./resources")) {
-          add_stop_path <- paste0("./resources/", lang, ".stop")
-          additional_stops <- scan(add_stop_path, what="", sep="\n")
-          stops = c(stops, additional_stops)
-        } else {
-          add_stop_path <- paste0("../../resources/", lang, ".stop")
-          additional_stops <- scan(add_stop_path, what="", sep="\n")
-          stops = c(stops, additional_stops)
-          return(stops)
-        }}, error = function(err) {
-        return(stops)
-      })
-  return(stops)
-}
-
-conditional_lowercase <- function(text, lang) {
-  if (lang == 'german') {
-    return(text)
-  } else {
-    return(tolower(text))
+get_stopwords <- function(languages) {
+  languages <- c(languages, "spa", "eng", "fre", "ger")
+  languages <- unique(languages)
+  if (dir.exists("../resources")) {
+      stops <- fromJSON("../resources/stopwords_iso_cleaned.json")
+      additional_stopwords <- readLines("../resources/additional_stopwords.txt")
+    } else if (dir.exists("./resources")) {
+      stops <- fromJSON("./resources/stopwords_iso_cleaned.json")
+      additional_stopwords <- readLines("./resources/additional_stopwords.txt")
+    } else {
+      stops <- fromJSON("../../resources/stopwords_iso_cleaned.json")
+      additional_stopwords <- readLines("../../resources/additional_stopwords.txt")
+    }
+  stopwords <- list()
+  for (l in languages) {
+    if (l %in% names(stops)) {
+      stopwords <- c(stopwords, stops[[l]])
+    }
   }
+  stopwords <- unlist(stopwords)
+  stopwords <- c(stopwords, additional_stopwords)
+  return(stopwords)
 }
+
 
 setup_logging <- function(loglevel) {
   # checks if LOGFILE is defined,
@@ -76,23 +71,7 @@ setup_logging <- function(loglevel) {
 }
 
 
-get_service_lang <- function(lang_id, valid_langs, service) {
-  if (lang_id == 'all'){
-    LANGUAGE <- 'english'
-  } else if (!is.null(valid_langs$lang_id)){
-    LANGUAGE <- valid_langs$lang_id
-  } else {
-    LANGUAGE <- 'english'
-  }
-  if (service == 'linkedcat' || service == 'linkedcat_authorview' || service == "linkedcat_browseview") {
-      lang_id <- 'ger'
-      LANGUAGE <- 'german'
-    }
-  return (list(lang_id = lang_id, name = LANGUAGE))
-}
-
-
-detect_error <- function(failed, service) {
+detect_error <- function(failed, service, params) {
   output <- list()
   reason <- list()
   phrasepattern <- '"(.*?)"'
@@ -100,9 +79,6 @@ detect_error <- function(failed, service) {
   if (!is.null(failed$query_reason)) {
     # map response to individual error codes/messages
     # then return them as json list
-    if (grepl("Timeout was reached", failed$query_reason, fixed=TRUE)){
-        reason <- c(reason, 'API error: timeout')
-    }
     if (length(reason) == 0 && service == 'base') {
       if (grepl("Timeout was reached: [api.base-search.net]", failed$query_reason, fixed=TRUE)){
           reason <- list('BASE error: timeout')
@@ -112,6 +88,11 @@ detect_error <- function(failed, service) {
       }
       if (grepl("read_xml.raw", failed$query_reason, fixed=TRUE)){
         reason <- c(reason, 'API error: BASE not reachable')
+      }
+    }
+    if (length(reason) == 0 && service == 'base') {
+      if (grepl("Timeout was reached", failed$query_reason, fixed=TRUE)){
+          reason <- c(reason, 'API error: timeout')
       }
     }
     if (length(reason) == 0 && service == 'pubmed') {
@@ -126,6 +107,17 @@ detect_error <- function(failed, service) {
       }
       if (startsWith(failed$query_reason, "HTTP failure")){
           reason <- c(reason, 'unexpected PubMed API error')
+      }
+    }
+    if (length(reason) == 0 && service == 'openaire') {
+      if (grepl("Project not found", failed$query_reason, fixed=TRUE)) {
+        reason <- c(reason, "project id or funder id wrong")
+      }
+      if (grepl("No results retrieved", failed$query_reason, fixed=TRUE)) {
+        reason <- c(reason, "not enough results for project")
+      }
+      if (length(reason) == 0) {
+        reason <- c(reason, "API error: OpenAIRE not reachable")
       }
     }
     if (length(reason) == 0) {

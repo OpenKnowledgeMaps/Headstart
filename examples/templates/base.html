@@ -25,6 +25,7 @@
         content="Get an overview of digital education, find relevant papers, and identify important concepts.">
 
     <link type="text/css" rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../../dist/headstart.css">
     <link href='https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700,800' rel='stylesheet' type='text/css'>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 </head>
@@ -65,6 +66,32 @@
         data_config.credit_embed = true;
     </script>
     <script>
+        data_config.files = [{
+            // title: "digital education",
+            //title: "calcium",
+            //title: "production",
+            //title: "digital education",
+            //title: "fake news",
+            //title: "dotcom",
+            //title: "cognitive dissonance",
+            // title: "exclude_date_filters",
+            title: "philosophy_no_dates",
+            // file: "./data/digital-education.json",
+            // file: "./data/digital-education-lang.json",
+            // file: "./data/digital-education-lang[].json",
+            //file: "./data/calcium.json",
+            //file: "./data/production.json",
+            //file: "./data/digital-education-sg.json",
+            //file: "./data/fake-news-sg.json",
+            //file: "./data/dotcom-sg.json",
+            //file: "./data/cognitive-dissonance.json"
+            // file: "./data/custom_title.json",
+            // file: "./data/exclude_date_filters.json",
+            file: "./data/philosophy_no_dates.json",
+            // other attributes:
+            is_streamgraph: false, // set true for streamgraph data
+            show_area: true, // set false for streamgraph data
+        }]
         data_config.is_streamgraph = data_config.files[0].is_streamgraph;
         data_config.show_area = data_config.files[0].show_area;
         data_config.server_url = window.location.href.replace(/[^/]*$/, '') + "./main_integration/";
@@ -97,7 +124,5 @@
     }
 </script>
 <!-- End Matomo Code -->
-
-</html>
 
 </html>

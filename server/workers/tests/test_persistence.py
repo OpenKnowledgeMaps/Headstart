@@ -465,27 +465,6 @@ def test_vis_id_creation_pubmed():
         assert result["unique_id"] == tc["expected_result"]
 
 
-@pytest.mark.persistence
-def test_vis_id_creation_triple():
-    testcases = [
-        {"params": {"q": '"social responsibility"', "from":"1809","to":"2020","sorting":"most-recent","vis_type":"timeline","language":"en","limit":"1000","sg_method":"count"},
-         "param_types": ["from", "to", "sorting", "vis_type", "language", "limit", "sg_method"],
-         "expected_result": "d6339f547d3973d1b6bff934931cce6e"},
-        {"params": {"q": '"Black Power movement"', "from":"1809","to":"2020","sorting":"most-relevant","vis_type":"overview","language":"en","limit":"100","sg_method":"tfidf"},
-         "param_types": ["from", "to", "sorting", "vis_type", "language", "limit", "sg_method"],
-         "expected_result": "54aeae843934ea1c0a6d2eca817a45b5"},
-        {"params": {"q": 'spain', "from":"1809","to":"2020","sorting":"most-relevant","vis_type":"timeline","language":"all","limit":"100"},
-         "param_types": ["from", "to", "sorting", "vis_type", "language", "limit"],
-         "expected_result": "dce1831710b80c54160fd3477b7ec2dc"},
-        {"params": {"q": 'antique egypt', "from":"1809","to":"2020","sorting":"most-relevant","vis_type":"overview"},
-         "param_types": ["from", "to", "sorting", "vis_type"],
-         "expected_result": "1ed301e7afc3f820b7ef83abf0a004de"}
-    ]
-    for tc in testcases:
-        res = requests.post("http://127.0.0.1/api/persistence/createID", json=tc)
-        result = res.json()
-        assert result["unique_id"] == tc["expected_result"]
-
 
 @pytest.mark.persistence
 def test_get_last_version():

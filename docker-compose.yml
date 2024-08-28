@@ -5,45 +5,39 @@ services:
   db:
     image: 'postgres:12.2-alpine'
     hostname: "${POSTGRES_HOSTNAME}"
-    restart: always
+    restart: unless-stopped
     environment:
       POSTGRES_USER: "${POSTGRES_USER}"
       POSTGRES_PASSWORD: "${POSTGRES_PASSWORD}"
     command: postgres -c config_file=/etc/postgresql.conf -c hba_file=/etc/pg_hba.conf
     volumes:
       - db_data:/var/lib/postgresql/data
-      - ./pg_hba.conf:/etc/pg_hba.conf
-      - ./postgresql.conf:/etc/postgresql.conf
-    networks: 
-      - headstart
-
-  pgadmin:
-    image: 'dpage/pgadmin4'
-    ports:
-      - '127.0.0.1:54323:80'
+      - ./local_dev/pg_hba.conf:/etc/pg_hba.conf
+      - ./local_dev/postgresql.conf:/etc/postgresql.conf
     networks:
       - headstart
 
   redis:
     image: 'redis:6.0-alpine'
-    restart: always
+    restart: unless-stopped
     hostname: "${REDIS_HOST}"
     environment:
       REDIS_HOST: "${REDIS_HOST}"
       REDIS_PORT: "${REDIS_PORT}"
-    command: ["redis-server", "/etc/redis/redis.conf", "--bind", "${REDIS_HOST}", "--appendonly", "yes", "--port", "${REDIS_PORT}"]
+    command: ["redis-server", "/etc/redis/redis.conf", "--bind", "${REDIS_HOST}", "--port", "${REDIS_PORT}"]
     volumes:
         - 'redis:/var/lib/redis/data'
-        - ./redis.conf:/etc/redis/redis.conf
+        - ./local_dev/redis.conf:/etc/redis/redis.conf
     ports:
      - "127.0.0.1:${REDIS_PORT}:6379"
-    restart: always
-    networks: 
+    networks:
       - headstart
 
   api:
-    image: api:${SERVICE_VERSION}
-    restart: always
+    build:
+      context: server
+      dockerfile: workers/api/Dockerfile
+    restart: unless-stopped
     environment:
       SERVICE_VERSION: "${SERVICE_VERSION}"
       REDIS_HOST: "${REDIS_HOST}"
@@ -52,72 +46,44 @@ services:
       REDIS_DB: "${REDIS_DB}"
       BEHIND_PROXY: "${BEHIND_PROXY}"
       DEFAULT_DATABASE: "${DEFAULT_DATABASE}"
-      DATABASES: "${DATABASES}"
       FLASK_ENV: "${FLASK_ENV}"
-    command: ["gunicorn",  "--workers", "10", "--threads", "2", "-b", "0.0.0.0:${API_PORT}", "app:app", "--timeout", "300"]
+    command: ["python", "app.py"]
     volumes:
       - ./api_cache:/var/api_cache
+      - ./server/workers/api/src:/api
     depends_on:
       - redis
-    networks: 
+      - base
+      - pubmed
+      - openaire
+    networks:
       - headstart
 
   persistence:
-    image: persistence:${SERVICE_VERSION}
-    restart: always
+    build:
+      context: server
+      dockerfile: workers/persistence/Dockerfile
+    restart: unless-stopped
     environment:
       SERVICE_VERSION: "${SERVICE_VERSION}"
       POSTGRES_USER: "${POSTGRES_USER}"
       POSTGRES_PASSWORD: "${POSTGRES_PASSWORD}"
-      POSTGRES_HOST: "${POSTGRES_HOST}"
-      POSTGRES_PORT: "${POSTGRES_PORT}"
+      POSTGRES_HOSTS: "${POSTGRES_HOSTS}"
+      POSTGRES_PORTS: "${POSTGRES_PORTS}"
       BEHIND_PROXY: "${BEHIND_PROXY}"
       DEFAULT_DATABASE: "${DEFAULT_DATABASE}"
-      DATABASES: "${DATABASES}"
       FLASK_ENV: "${FLASK_ENV}"
-    command: ["gunicorn",  "--workers", "10", "--threads", "2", "-b", "0.0.0.0:${API_PORT}", "app:app", "--timeout", "300"]
-    networks: 
-      - headstart
-
-  triple:
-    image: triple:${SERVICE_VERSION}
-    environment:
-      SERVICE_VERSION: "${SERVICE_VERSION}"
-      REDIS_HOST: "${REDIS_HOST}"
-      REDIS_PORT: "${REDIS_PORT}"
-      REDIS_DB: "${REDIS_DB}"
-      REDIS_PASSWORD: "${REDIS_PASSWORD}"
-      LOGLEVEL: "${LOGLEVEL}"
-      TRIPLE_USER: "${TRIPLE_USER}"
-      TRIPLE_PASS: "${TRIPLE_PASS}"
-      TRIPLE_HOST: "${TRIPLE_HOST}"
-      TRIPLE_PORT: "${TRIPLE_PORT}"
-      TRIPLE_DOCUMENTS_INDEX: "${TRIPLE_DOCUMENTS_INDEX}"
-      TRIPLE_PROJECTS_INDEX: "${TRIPLE_PROJECTS_INDEX}"
-      TRIPLE_AUTHORS_INDEX: "${TRIPLE_AUTHORS_INDEX}"
-    restart: always
-    depends_on:
-      - redis
-    networks: 
-      - headstart
-
-  gsheets:
-    image: gsheets:${SERVICE_VERSION}
-    environment:
-      SERVICE_VERSION: "${SERVICE_VERSION}"
-      REDIS_HOST: "${REDIS_HOST}"
-      REDIS_PORT: "${REDIS_PORT}"
-      REDIS_DB: "${REDIS_DB}"
-      REDIS_PASSWORD: "${REDIS_PASSWORD}"
-      LOGLEVEL: "${LOGLEVEL}"
-    restart: always
-    depends_on:
-      - redis
-    networks: 
+      SSH_AUTH_SOCK: "/run/host-services/ssh-auth.sock"
+    command: ["python", "app.py"]
+    volumes:
+      - ./server/workers/persistence/src:/api
+    networks:
       - headstart
 
   dataprocessing:
-    image: dataprocessing:${SERVICE_VERSION}
+    build:
+      context: server
+      dockerfile: workers/dataprocessing/Dockerfile
     environment:
       SERVICE_VERSION: "${SERVICE_VERSION}"
       REDIS_HOST: "${REDIS_HOST}"
@@ -131,17 +97,21 @@ services:
       LC_ALL: "en_US.UTF-8"
       LANG: "en_US.UTF-8"
       RENV_PATHS_CACHE: /renv/cache
-    restart: always
+      PYTHONIOENCODING: "utf-8"
+    restart: unless-stopped
     volumes:
-      - /opt/local/renv/cache:/renv/cache
+      - ./local_dev/renv/cache:/renv/cache
       - /var/log/headstart:/var/log/headstart
+      - ./server/preprocessing/other-scripts:/headstart/other-scripts
     depends_on:
       - redis
-    networks: 
+    networks:
       - headstart
 
   base:
-    image: base:${SERVICE_VERSION}
+    build:
+      context: server
+      dockerfile: workers/base/Dockerfile
     environment:
       SERVICE_VERSION: "${SERVICE_VERSION}"
       REDIS_HOST: "${REDIS_HOST}"
@@ -156,17 +126,21 @@ services:
       LANG: "en_US.UTF-8"
       RENV_PATHS_CACHE: /renv/cache
       PYTHONIOENCODING: "utf-8"
-    restart: always
+      R_BASE_APIKEY: "${R_BASE_APIKEY}"
+    restart: unless-stopped
     volumes:
-      - /opt/local/renv/cache:/renv/cache
+      - ./local_dev/renv/cache:/renv/cache
       - /var/log/headstart:/var/log/headstart
+      - ./server/preprocessing/other-scripts:/headstart/other-scripts
     depends_on:
       - redis
     networks:
       - headstart
 
   pubmed:
-    image: pubmed:${SERVICE_VERSION}
+    build:
+      context: server
+      dockerfile: workers/pubmed/Dockerfile
     environment:
       SERVICE_VERSION: "${SERVICE_VERSION}"
       REDIS_HOST: "${REDIS_HOST}"
@@ -180,17 +154,21 @@ services:
       LC_ALL: "en_US.UTF-8"
       LANG: "en_US.UTF-8"
       RENV_PATHS_CACHE: /renv/cache
-    restart: always
+      PYTHONIOENCODING: "utf-8"
+    restart: unless-stopped
     volumes:
-      - /opt/local/renv/cache:/renv/cache
+      - ./local_dev/renv/cache:/renv/cache
       - /var/log/headstart:/var/log/headstart
+      - ./server/preprocessing/other-scripts:/headstart/other-scripts
     depends_on:
       - redis
     networks:
       - headstart
 
   openaire:
-    image: openaire:${SERVICE_VERSION}
+    build:
+      context: server
+      dockerfile: workers/openaire/Dockerfile
     environment:
       SERVICE_VERSION: "${SERVICE_VERSION}"
       REDIS_HOST: "${REDIS_HOST}"
@@ -204,14 +182,32 @@ services:
       LC_ALL: "en_US.UTF-8"
       LANG: "en_US.UTF-8"
       RENV_PATHS_CACHE: /renv/cache
-    restart: always
+      PYTHONIOENCODING: "utf-8"
+    restart: unless-stopped
     volumes:
-      - /opt/local/renv/cache:/renv/cache
+      - ./local_dev/renv/cache:/renv/cache
       - /var/log/headstart:/var/log/headstart
+      - ./server/preprocessing/other-scripts:/headstart/other-scripts
     depends_on:
       - redis
     networks:
       - headstart
+
+  searchflow:
+    build: local_dev/searchflow-container
+    volumes:
+      - ../project-website:/var/www/html
+      - ./local_dev/config_local_projectwebsite.php:/var/www/html/config_local.php
+      - ../search-flow/:/var/www/html/search-flow
+      - ./local_dev/config_local_searchflow.ini:/var/www/html/search-flow/config_local.ini
+      - ../Headstart:/var/www/html/headstart
+      - ./local_dev/config_local_headstart.ini:/var/www/html/headstart/server/preprocessing/conf/config_local.ini
+      - ./local_dev/entrypoint.php:/var/www/html/entrypoint.php
+    ports:
+      - 127.0.0.1:8085:80
+    networks:
+      - headstart
+
 
 volumes:
   redis:

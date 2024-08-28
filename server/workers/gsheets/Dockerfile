@@ -1,9 +1,9 @@
-FROM python:3.6.10-alpine3.10
+FROM python:3.7
 
 MAINTAINER Chris Kittel "christopher.kittel@openknowledgemaps.org"
 
-RUN apk update
-RUN apk add build-base gcc
+RUN apt update
+RUN apt-get install -y gcc
 
 WORKDIR /headstart
 COPY workers/gsheets/requirements.txt .

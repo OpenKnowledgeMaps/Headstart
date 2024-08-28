@@ -1,6 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
 
+
 import {
   BasicTitle,
   ProjectTitle,
@@ -9,41 +10,46 @@ import {
 } from "../templates/headingtitles";
 
 import { STREAMGRAPH_MODE } from "../reducers/chartType";
+import { queryConcatenator } from "../utils/data";
 
 const Heading = ({
-  localization,
-  zoomed,
-  query,
-  bubbleTitle,
-  headingParams,
-  streamgraph,
-}) => {
+                   localization,
+                   zoomed,
+                   query,
+                   bubbleTitle,
+                   headingParams,
+                   streamgraph,
+                   q_advanced,
+                     service,
+                 }) => {
   if (zoomed) {
     const label = streamgraph
-      ? localization.area_streamgraph
-      : localization.area;
+        ? localization.area_streamgraph
+        : localization.area;
 
     return (
-      // html template starts here
-      <h4>
-        <span id="area-bold">{label}:</span>{" "}
-        <span
-          id="area-not-bold"
-          dangerouslySetInnerHTML={{ __html: bubbleTitle }}
-        ></span>
-      </h4>
-      // html template ends here
+        // html template starts here
+        <h4>
+          <span id="area-bold">{label}:</span>{" "}
+          <span
+              id="area-not-bold"
+              dangerouslySetInnerHTML={{__html: bubbleTitle}}
+          ></span>
+        </h4>
+        // html template ends here
     );
   }
 
+  let queryString = queryConcatenator([query, q_advanced])
+
   return (
-    // html template starts here
-    <div className="heading-container">
-      <h4 className="heading">
-        {renderTitle(localization, query, headingParams)}
-      </h4>
-    </div>
-    // html template ends here
+      // html template starts here
+      <div className="heading-container">
+        <h4 className="heading">
+            {renderTitle(localization, queryString, headingParams, service)}
+        </h4>
+      </div>
+      // html template ends here
   );
 };
 
@@ -54,7 +60,11 @@ const mapStateToProps = (state) => ({
   bubbleTitle: state.selectedBubble ? state.selectedBubble.title : null,
   headingParams: state.heading,
   streamgraph: state.chartType === STREAMGRAPH_MODE,
+  q_advanced: state.q_advanced.text,
+    // get source BASE or PubMed
+    service: state.contextLine.dataSource,
 });
+
 
 export default connect(mapStateToProps)(Heading);
 
@@ -65,7 +75,8 @@ const MAX_LENGTH_CUSTOM = 100;
 /**
  * Renders the title for the correct setup.
  */
-const renderTitle = (localization, query, headingParams) => {
+const renderTitle = (localization, query, headingParams, service) => {
+
   if (headingParams.presetTitle) {
     return <BasicTitle title={headingParams.presetTitle} />;
   }
@@ -94,10 +105,18 @@ const renderTitle = (localization, query, headingParams) => {
       );
     }
 
+    // this condition for BASE service and custom title if its value exists in config params
+      if (service === "BASE") {
+              if (headingParams.customTitle) {
+                  return <StandardTitle label={label} title={headingParams.customTitle}/>;
+              }
+      }
+
     return <StandardTitle label={label} title={query} />;
   }
 
-  return <BasicTitle title={localization.default_title} />;
+
+    return <BasicTitle title={localization.default_title} />;
 };
 
 const renderViperTitle = (title, acronym, projectId) => {

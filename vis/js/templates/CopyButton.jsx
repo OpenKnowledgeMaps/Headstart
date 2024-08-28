@@ -23,7 +23,7 @@ const CopyButton = ({ id, className = "", textId, textContent, onClick }) => {
   };
 
   return (
-    <Button
+      <Button
       id={id}
       className={className + " " + (copied ? "copied-button" : "copy-button")}
       bsStyle="primary"

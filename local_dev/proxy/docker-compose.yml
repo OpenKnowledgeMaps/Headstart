@@ -1,0 +1,19 @@
+version: '3.7'
+
+services:
+
+  proxy:
+    image: 'nginx'
+    volumes:
+      - ./templates:/etc/nginx/templates
+    environment:
+      - NGINX_PORT=80
+    ports:
+      - '127.0.0.1:8081:80'
+    networks:
+      - dev_headstart
+
+networks:
+  dev_headstart:
+        external: true
+        name: dev_headstart

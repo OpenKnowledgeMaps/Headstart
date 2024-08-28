@@ -1,7 +1,3 @@
-server/preprocessing/other-scripts/.Rhistory
-server/preprocessing/other-scripts/renv
-/nbproject/private/
-/server/nbproject/private/
 *_local.*
 vis/images/*.pdf
 node_modules/
@@ -12,13 +8,7 @@ vis/stylesheets/*.css
 dist/
 .idea/
 /config.js
-*__pycache__*
-.pytest_cache
 .cache
-.Rhistory
-.ipynb_checkpoints
-.Rprofile
-.Rproj*
 coverage/
 
 # local deployment files
@@ -35,4 +25,42 @@ coverage/
 /lc_cache.json
 /linkedcat.sqlite
 .env
+backend_*.sh
+server/workers/tests/*.csv
+server/workers/tests/*.txt
+server/workers/tests/testutils/
+local_dev/renv/*
+
+# php files
+/server/classes/headstart/vendor
+/server/classes/headstart/var/*
+
+# R files
+server/preprocessing/other-scripts/.Rhistory
+server/preprocessing/other-scripts/renv
+.Rhistory
+.Rprofile
+.Rproj*
+/*.Rproj
 .Rproj.user
+
+
+# python files
+*.pyc
+*.pkl
+.ipynb_checkpoints
+*.ipynb
+/nbproject/private/
+/server/nbproject/private/
+.pytest_cache
+*__pycache__*
+
+# python files
+*.pyc
+*.pkl
+.ipynb_checkpoints
+*.ipynb
+/nbproject/private/
+/server/nbproject/private/
+.pytest_cache
+*__pycache__*

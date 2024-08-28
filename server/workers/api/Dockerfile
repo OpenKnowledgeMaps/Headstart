@@ -1,10 +1,9 @@
-FROM python:3.6.10-slim
+FROM python:3.8
 
 MAINTAINER Chris Kittel "christopher.kittel@openknowledgemaps.org"
 
 RUN apt-get update
-RUN apt-get install -y --no-install-recommends gcc
-RUN apt-get install -y --no-install-recommends git
+RUN apt-get install -y gcc git libpq-dev
 
 WORKDIR /api
 COPY workers/api/requirements.txt .

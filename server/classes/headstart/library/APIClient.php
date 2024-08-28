@@ -13,14 +13,7 @@ class APIClient {
     public function load_configs($ini_array) {
         $this->ini_array = $ini_array;
         $this->settings = $this->ini_array["general"];
-        $this->processing_backend = isset($this->ini_array["general"]["processing_backend"])
-        ? ($this->ini_array["general"]["processing_backend"])
-        : "legacy";
-        $this->persistence_backend = isset($this->ini_array["general"]["persistence_backend"])
-        ? ($this->ini_array["general"]["persistence_backend"])
-        : "legacy";
         $this->database = $this->ini_array["connection"]["database"];
-        $this->WORKING_DIR = $this->ini_array["general"]["preprocessing_dir"] . $this->ini_array["output"]["output_dir"];
         $api_url = $this->ini_array["general"]["api_url"];
         $api_flavor = isset($this->ini_array["general"]["api_flavor"])
                                 ? ($this->ini_array["general"]["api_flavor"])
@@ -42,7 +35,6 @@ class APIClient {
             $res = array("status"=>"error",
                          "httpcode"=>500,
                          "reason"=>array("unexpected data processing error"));
-            error_log(print_r($res, TRUE));
             return $res;
         }
         finally {
@@ -63,7 +55,6 @@ class APIClient {
             $res = array("status"=>"error",
                          "httpcode"=>500,
                          "reason"=>array("unexpected data processing error"));
-            error_log(print_r($res, TRUE));
             return $res;
         }
         finally {
@@ -76,8 +67,8 @@ class APIClient {
         //         $res = array("status"=>"error", reason=>array());
         //     }
         // }
+        $res["status"] = "error";
         if ($res["httpcode"] == 503) {
-            $res["status"] = "error";
             $res["reason"] = array();
         }
         if (!array_key_exists("reason", $res)) {

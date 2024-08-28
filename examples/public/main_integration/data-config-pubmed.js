@@ -40,6 +40,7 @@ var data_config = {
 
   faqs_button: false,
   faqs_url: "https://openknowledgemaps.org/faq",
+  faqs_url_streamgraph: "https://openknowledgemaps.org/faqs_streamgraph",
 
   show_cite_button: true,
 

@@ -41,28 +41,31 @@ if (!is.null(params$vis_type)) {
     vis_type <- 'overview'
 }
 
+if ("q_advanced" %in% names(params)) {
+  params$q_advanced <- sanitize_query(params$q_advanced)$sanitized_query
+}
+
 .GlobalEnv$VIS_ID <- params$vis_id
 taxonomy_separator = NULL
 limit = 100
-list_size = -1
 switch(service,
        pubmed={
          source('../other-scripts/pubmed.R')
          params$limit = 100
+         params$list_size = 100
        },
        base={
          source('../other-scripts/base.R')
          params$limit = 120
-         list_size = 100
+         params$list_size = 100
        },
        openaire={
          source('../other-scripts/openaire.R')
+         params$list_size = -1
        }
 )
 
 MAX_CLUSTERS = 15
-LANGUAGE <- get_service_lang(lang_id, valid_langs, service)
-ADDITIONAL_STOP_WORDS = LANGUAGE$name
 
 failed <- list(params=params)
 tryCatch({
@@ -78,10 +81,9 @@ if(exists('input_data')) {
   tryCatch({
     output_json = vis_layout(input_data$text, input_data$metadata,
                              service,
-                             max_clusters=MAX_CLUSTERS, add_stop_words=ADDITIONAL_STOP_WORDS,
-                             lang=LANGUAGE$name,
-                             taxonomy_separator=taxonomy_separator, list_size = list_size,
-                             vis_type=vis_type)
+                             max_clusters=MAX_CLUSTERS,
+                             taxonomy_separator=taxonomy_separator,
+                             vis_type=vis_type, list_size = params$list_size)
   }, error=function(err){
    tslog$error(gsub("\n", " ", paste("Processing failed", query$raw_query, paste(params, collapse=" "), err, sep="||")))
    failed$query <<- query$raw_query
@@ -90,7 +92,7 @@ if(exists('input_data')) {
 }
 
 if (!exists('output_json')) {
-  output_json <- detect_error(failed, service)
+  output_json <- detect_error(failed, service, params)
 } else if (service=='openaire' && exists('output_json')) {
   output_json <- enrich_output_json(output_json)
 }

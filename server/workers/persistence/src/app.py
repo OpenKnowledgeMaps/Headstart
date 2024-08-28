@@ -6,7 +6,7 @@ from flask_cors import CORS
 from werkzeug.middleware.proxy_fix import ProxyFix
 import logging
 
-from apis.persistence import persistence_ns
+from persistence import persistence_ns
 
 class ReverseProxied(object):
     '''Wrap the application in this middleware and configure the
@@ -69,4 +69,4 @@ app.logger.debug(app.url_map)
 
 
 if __name__ == '__main__':
-    app.run(host="127.0.0.1", port=5001, debug=True)
+    app.run(host="0.0.0.0", port=5001, debug=True)

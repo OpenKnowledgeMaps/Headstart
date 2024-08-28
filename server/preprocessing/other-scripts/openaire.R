@@ -41,6 +41,12 @@ get_papers <- function(query, params) {
   project_id <- params$project_id
   funder <- params$funder
 
+
+  
+  if (nrow(roa_projects(grant_id = params$project_id, funder = params$funder)) == 0) {
+    stop(paste("Project not found."))
+  }
+
   pubs_metadata <- tryCatch({
     response <- roa_pubs(project_id = project_id,
                          funder = funder,
@@ -66,6 +72,10 @@ get_papers <- function(query, params) {
     return (data.frame())
   })
 
+  if ((nrow(pubs_metadata) == 0) && nrow(pubs_metadata) == 0) {
+    stop(paste("No results retrieved."))
+  }
+
   all_artifacts <- tryCatch({
       all_artifacts <- rbind.fill(pubs_metadata, datasets_metadata)
     }, error = function(err){
@@ -89,7 +99,7 @@ get_papers <- function(query, params) {
     }, error = function(err){
       olog$warn(paste0(err))
       olog$warn((paste("Empty returns, most likely no results found for project_id", project_id)))
-      stop(paste("Empty returns, most likely no results found for project_id", project_id))
+      stop(paste("No results retrieved."))
     })
 }
 
@@ -134,6 +144,8 @@ preprocess_data <- function(all_artifacts){
                                                                              else {
                                                                                return (x)}
                                                                               })) # removes ;dk;atira;pure;researchoutput;pubmedpublicationtype;D013486
+   # remove greater / smaller than signs
+  all_artifacts$subject <- unlist(lapply(all_artifacts$subject, function(x) {gsub("&gt|&lt", "", x)}))
   all_artifacts$paper_abstract <- unlist(lapply(all_artifacts$paper_abstract, function(x){gsub("\\n", " ", x)}))
   all_artifacts$doi <- unlist(lapply(all_artifacts$doi, function(x) {str_replace_all(x, "[\r\n\t]" , "")}))
   return (all_artifacts)
@@ -185,18 +197,23 @@ fill_dois <- function(df) {
     olog$debug("Time for filling missing DOIs")
     olog$debug(system.time(cr_works(query=queries(titles), async=TRUE)))
   }
-  if (length(titles) > 1) {
-    response <- cr_works(query=queries(titles), async=TRUE)
-    candidates <- lapply(response, get_doi_candidates)
-    dois <- mapply(check_distance, titles, candidates, USE.NAMES=FALSE)
-  } else if (length(titles) == 1) {
-    response <- cr_works(flq=c('query.bibliographic'=titles))$data
-    candidate_response = response[1,]
-    dois <- check_distance(titles, candidate_response)
-  } else {
-    dois <- ""
-  }
-  df$doi[c(missing_doi_indices)] <- dois
+  tryCatch({
+    if (length(titles) > 1) {
+      response <- cr_works(query=queries(titles))
+      candidates <- lapply(response, get_doi_candidates)
+      dois <- mapply(check_distance, titles, candidates, USE.NAMES=FALSE)
+    } else if (length(titles) == 1) {
+      response <- cr_works(flq=c('query.title'=titles))$data
+      candidate_response = response[1,]
+      dois <- check_distance(titles, candidate_response)
+    } else {
+      dois <- ""
+    }
+    df$doi[c(missing_doi_indices)] <- dois
+    }, error=function(err){
+      olog$error(paste("vis_id:", .GlobalEnv$VIS_ID, "DOI enrichment failed:", paste(err)))
+    }
+  )
   return (df)
 }
 
@@ -222,13 +239,8 @@ check_distance <- function(title, candidate) {
 queries <- function(titles){
   queries <- c()
   for (title in titles){
-    nq <- list('query.bibliographic'=title)
+    nq <- list('query.title'=title)
     queries <- c(queries, nq)
   }
   return (queries)
 }
-
-
-valid_langs <- list(
-    'eng'='english'
-)

@@ -26,4 +26,6 @@ var data_config = {
     filter_menu_dropdown: true,
     sort_menu_dropdown: true,
     filter_options: ["all", "open_access"],
+    //show number of open access documents in context
+    show_context_oa_number: false,
 };

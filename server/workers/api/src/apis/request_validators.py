@@ -1,20 +1,23 @@
 from datetime import datetime
-from marshmallow import Schema, fields, pre_load, validates, ValidationError
+from marshmallow import Schema, fields, pre_load, validates, ValidationError, EXCLUDE
 
 
 class SearchParamSchema(Schema):
-    q = fields.Str(required=True)
+    class Meta:
+        unknown = EXCLUDE
+        
+    q = fields.Str()
+    q_advanced = fields.Str()
     sorting = fields.Str(required=True)
-    from_ = fields.Date(required=True, data_key="from",
+    from_ = fields.Date(data_key="from",
                         format="%Y-%m-%d")
-    to = fields.Date(required=True,
-                     format="%Y-%m-%d")
+    to = fields.Date(format="%Y-%m-%d")
     vis_type = fields.Str(require=True)
     limit = fields.Int()
     year_range = fields.Str()
     today = fields.Str()
     language = fields.Str()
-    lang_id = fields.Str()
+    lang_id = fields.List(fields.Str())
     time_range = fields.Str()
     document_types = fields.List(fields.Str())
     article_types = fields.List(fields.Str())
@@ -30,13 +33,20 @@ class SearchParamSchema(Schema):
     repo = fields.Str()
     repo_name = fields.Str()
     coll = fields.Str()
+    list_size = fields.Int()
+    custom_title = fields.Str()
+    exclude_date_filters = fields.Boolean()
+    custom_clustering = fields.Str()
+
 
     @pre_load
     def fix_years(self, in_data, **kwargs):
-        if len(in_data.get('from')) == 4:
-            in_data["from"] = in_data["from"]+"-01-01"
-        if len(in_data.get('to')) == 4:
-            in_data["to"] = in_data["to"]+"-12-31"
+        if "from" in in_data:
+            if len(in_data.get('from')) == 4:
+                in_data["from"] = in_data["from"]+"-01-01"
+        if "to" in in_data:
+            if len(in_data.get('to')) == 4:
+                in_data["to"] = in_data["to"]+"-12-31"
         return in_data
 
     @pre_load
@@ -54,6 +64,15 @@ class SearchParamSchema(Schema):
             return in_data
         except Exception:
             return in_data
+
+    @pre_load
+    def lang_id_empty_fallback(self, in_data, **kwargs):
+        lang_id = in_data.get("lang_id")
+        if lang_id:
+            lang_id = list(filter(lambda x: x != "", lang_id))
+            if len(lang_id) == 0:
+                in_data["lang_id"] = ["all-lang"]
+        return in_data
 
     @validates('from_')
     def is_not_in_future(self, date):

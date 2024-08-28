@@ -1,6 +1,7 @@
 library(rbace)
 library(stringr)
 library(dplyr)
+source('preprocess.R')
 
 # get_papers
 #
@@ -37,53 +38,63 @@ library(dplyr)
 
 blog <- getLogger('api.base')
 
-
 get_papers <- function(query, params,
                        retry_opts=rbace::bs_retry_options(3,60,3,4)) {
 
   blog$info(paste("vis_id:", .GlobalEnv$VIS_ID, "Search:", query))
   start.time <- Sys.time()
 
-  # remove pluses between terms
-  query_wt_plus = gsub("(?!\\B\"[^\"]*)[\\+]+(?![^\"]*\"\\B)", " ", query, perl=T)
-  # remove multiple minuses and spaces after minuses
-  query_wt_multi_minus = gsub("(?!\\B\"[^\"]*)((^|\\s))[\\-]+[\\s]*(?![^\"]*\"\\B)", "\\1-", query_wt_plus, perl=T)
-  # remove multiple spaces inside the query
-  query_wt_multi_spaces = gsub("(?!\\B\"[^\"]*)[\\s]{2,}(?![^\"]*\"\\B)", " ", query_wt_multi_minus, perl=T)
-  # trim query, if needed
-  query_cleaned = gsub("^\\s+|\\s+$", "", query_wt_multi_spaces, perl=T)
-
-  # add "textus:" to each word/phrase to enable verbatim search
-  # make sure it is added after any opening parentheses to enable queries such as "(a and b) or (a and c)"
-  exact_query = gsub('([\"]+(.*?)[\"]+)|(?<=\\(\\b|\\+|-\\"\\b|\\s-\\b|^-\\b)|(?!or\\b|and\\b|[-]+[\\"\\(]*\\b)(?<!\\S)(?=\\S)(?!\\(|\\+)'
-                     , "textus:\\1", query_cleaned, perl=T)
+  if (!is.null(query)) {
+    exact_query <- preprocess_query((query))
+  } else {
+    exact_query <- NULL
+  }
 
   blog$info(paste("vis_id:", .GlobalEnv$VIS_ID, "exact query:", exact_query))
 
-  year_from = params$from
-  year_to = params$to
   limit = params$limit
 
   # prepare query fields
-  date_string = paste0("dcdate:[", params$from, " TO ", params$to , "]")
   document_types = paste("dctypenorm:", "(", paste(params$document_types, collapse=" OR "), ")", sep="")
-  # language query field flag
-  # CHANGE TO MORE LANGUAGES!!! look up dclang specifications
-  lang_id <- params$lang_id
-  if (!is.null(valid_langs$lang_id)) {
-    lang_query <- paste0("dclang:", lang_id)
-    } else {
-    lang_query <- ""
-  }
+  
   sortby_string = ifelse(params$sorting == "most-recent", "dcyear desc", "")
-  return_fields <- "dcdocid,dctitle,dcdescription,dcsource,dcdate,dcsubject,dccreator,dclink,dcoa,dcidentifier,dcrelation,dctype,dctypenorm,dcprovider"
+  return_fields <- "dcdocid,dctitle,dcdescription,dcsource,dcdate,dcsubject,dccreator,dclink,dcoa,dcidentifier,dcrelation,dctype,dctypenorm,dcprovider,dclang,dclanguage,dccoverage"
 
-  base_query <- paste(paste0("(",exact_query,")") ,lang_query, date_string, document_types, collapse=" ")
+  if (!is.null(exact_query) && exact_query != '') {
+    base_query <- paste(paste0("(",exact_query,")"), document_types, collapse=" ")
+  } else {
+    base_query <- paste(document_types, collapse=" ")
+  }
+
+  if (!is.null(params$vis_type) && params$vis_type == "timeline") {
+    if (!is.null(params$exclude_date_filters)) {
+      params$exclude_date_filters <- NULL
+    }
+  }
+
+  if (!is.null(params$exclude_date_filters)
+      && (params$exclude_date_filters == TRUE || params$exclude_date_filters == "true")) {
+  } else {
+    date_string = paste0("dcdate:[", params$from, " TO ", params$to , "]")
+    base_query <- paste(date_string, base_query)
+  }
+
+  # apply language filter if parameter is set
+  lang_id <- params$lang_id
+  if (!is.null(lang_id) && lang_id != "all-lang") {
+    lang_query = paste("dclang:", "(", paste(params$lang_id, collapse=" OR "), ")", sep="")
+    base_query <- paste(base_query, lang_query)
+  }
+    
+  q_advanced = params$q_advanced
+  if (!is.null(q_advanced)) {
+    base_query <- paste(base_query, q_advanced)
+  }
 
   min_descsize <- if (is.null(params$min_descsize)) 300 else params$min_descsize
   filter <- I(paste0('descsize:[', min_descsize, '%20TO%20*]'))
   limit <- params$limit
-  
+
   repo = params$repo
   coll = params$coll
   if(!is.null(repo) && repo=="fttriple") {
@@ -91,13 +102,26 @@ get_papers <- function(query, params,
   } else {
     non_public = FALSE
   }
-  
+
+  cc <- params$custom_clustering
+  if (!is.null(cc)) {
+    if (cc %in% names(fieldmapper)) {
+      # this is the generic case for existing metadata
+      custom_clustering_query <- paste(fieldmapper[[cc]], ":", "*", sep="")
+      base_query <- paste(base_query, custom_clustering_query)
+    } else {
+      # this is the speciality case for custom clustering on annotations
+      custom_clustering_query <- paste("dcsubject:", cc, "*", sep="")
+      base_query <- paste(base_query, custom_clustering_query)
+      custom_clustering_query <- paste('textus:', '"', cc, ':"', sep="")
+      base_query <- paste(base_query, custom_clustering_query)
+      custom_clustering_query <- paste(cc, ':*', sep="")
+      base_query <- paste(base_query, custom_clustering_query)
+    }
+  }
+
   blog$info(paste("vis_id:", .GlobalEnv$VIS_ID, "BASE query:", base_query))
-  blog$info(paste("vis_id:", .GlobalEnv$VIS_ID, "Sort by:", sortby_string))
-  blog$info(paste("vis_id:", .GlobalEnv$VIS_ID, "Min descsize:", min_descsize))
-  blog$info(paste("vis_id:", .GlobalEnv$VIS_ID, "Target:", repo))
-  blog$info(paste("vis_id:", .GlobalEnv$VIS_ID, "Collection:", coll))
-  
+
   # execute search
   offset = 0
   res_raw <- get_raw_data(limit,
@@ -114,7 +138,20 @@ get_papers <- function(query, params,
   if (nrow(res)==0){
     stop(paste("No results retrieved."))
   }
-  while (nrow(res) < limit && attr(res_raw, "numFound")>+offset+120) {
+  metadata <- etl(res, repo, non_public)
+  metadata <- sanitize_abstract(metadata)
+  metadata <- mark_duplicates(metadata)
+  metadata$has_dataset <- unlist(lapply(metadata$resulttype, function(x) "Dataset" %in% x))
+  
+  req_limit <- 9
+  r <- 0
+  # check if custom clustering annotation param is in metadata
+  if (!is.null(cc)) {
+    if (!(cc %in% names(fieldmapper))) {
+      has_custom_clustering_annotation <- unlist(lapply(metadata$subject_orig, function(x) grepl(paste0(cc, ":"), x, fixed=TRUE)))
+      metadata <- metadata[has_custom_clustering_annotation,]
+  }}
+  while (nrow(metadata) - sum(metadata$is_duplicate) < limit && attr(res_raw, "numFound") > offset+120 && r < req_limit) {
     offset <- offset+120
     res_raw <- get_raw_data(limit,
                             base_query,
@@ -127,14 +164,52 @@ get_papers <- function(query, params,
                             offset,
                             non_public)
     res <- bind_rows(res, res_raw$docs)
+    metadata <- etl(res, repo, non_public)
+    metadata <- unique(metadata, by = "id")
+    metadata <- sanitize_abstract(metadata)
+    metadata <- mark_duplicates(metadata)
+    metadata$has_dataset <- unlist(lapply(metadata$resulttype, function(x) "Dataset" %in% x))
+    # check if custom clustering annotation param is in metadata
+    if (!is.null(cc)) {
+      if (!(cc %in% names(fieldmapper))) {
+        has_custom_clustering_annotation <- unlist(lapply(metadata$subject_orig, function(x) grepl(paste0(cc, ":"), x, fixed=TRUE)))
+        metadata <- metadata[has_custom_clustering_annotation,]
+    }}
+    r <- r+1
   }
+  # check if custom clustering annotation param is in metadata
+  if (!is.null(cc)) {
+    if (!(cc %in% names(fieldmapper))) {
+      has_custom_clustering_annotation <- unlist(lapply(metadata$subject_orig, function(x) grepl(paste0(cc, ":"), x, fixed=TRUE)))
+      metadata <- metadata[has_custom_clustering_annotation,]
+  }}
+  blog$info(paste("vis_id:", .GlobalEnv$VIS_ID, "Deduplication retrieval requests:", r))
 
+  metadata <- unique(metadata, by = "id")
+  # Add all keywords, including classification to text content for clustering
+  text <- data.frame(id = metadata$id,
+                     content = paste(metadata$title, metadata$paper_abstract,
+                                     metadata$subject_orig, metadata$published_in, metadata$authors,
+                                     sep=" "))
+
+
+  input_data=list("metadata" = metadata, "text"=text)
+
+  end.time <- Sys.time()
+  time.taken <- end.time - start.time
+  blog$info(paste("vis_id:", .GlobalEnv$VIS_ID, "Time taken:", time.taken, sep=" "))
+
+  return(input_data)
+}
+
+etl <- function(res, repo, non_public) {
   metadata = data.frame(matrix(nrow=length(res$dcdocid)))
 
   metadata$id = res$dcdocid
   metadata$relation = check_metadata(res$dcrelation)
   metadata$identifier = check_metadata(res$dcidentifier)
   metadata$title = check_metadata(res$dctitle)
+  metadata$title = gsub(" \\.\\.\\.$", "", metadata$title)
   metadata$paper_abstract = check_metadata(res$dcdescription)
   metadata$published_in = check_metadata(res$dcsource)
   metadata$year = check_metadata(res$dcdate)
@@ -142,8 +217,6 @@ get_papers <- function(query, params,
   subject_all = check_metadata(res$dcsubject)
 
   metadata$subject_orig = subject_all
-
-  #subject = ifelse(subject !="", paste(unique(strsplit(subject, "; ")), "; "),"")
 
   subject_cleaned = gsub("DOAJ:[^;]*(;|$)?", "", subject_all) # remove DOAJ classification
   subject_cleaned = gsub("/dk/atira[^;]*(;|$)?", "", subject_cleaned) # remove atira classification
@@ -154,20 +227,37 @@ get_papers <- function(query, params,
   subject_cleaned = gsub("[^\\(;]+\\(all\\)(;|$)?", "", subject_cleaned) # remove general subjects
   subject_cleaned = gsub("[^:;]+ ?:: ?[^;]+(;|$)?", "", subject_cleaned) #remove classification with separator ::
   subject_cleaned = gsub("[^\\[;]+\\[[A-Z,0-9]+\\](;|$)?", "", subject_cleaned) # remove WHO classification
+  subject_cleaned = gsub("Info:\\w+-(\\w+\\/)+", "", subject_cleaned) # remove Info:eu-repo/classification/
+  subject_cleaned = gsub("([A-Za-z]+:[A-Za-z0-9 \\/\\.-]+);?", "", subject_cleaned, perl=TRUE) # clean up annotations with prefix e.g. theme:annotation
+  if (!is.null(params$vis_type) && params$vis_type == "timeline") {
+    subject_cleaned = gsub("FOS ", "", subject_cleaned) # remove FOS classification tag, but keep classifcation name
+    arxiv_classification_string = "(cs|econ|eess|math|astro-ph|nlin|q-bio|q-fin|stat)\\.[A-Z]{2}|cond-mat\\.[a-z\\-]+|hep-(ex|lat|ph|th)|math-ph|nucl-(ex|th)|physics\\.[a-z\\-]+|(astro-ph|gr-qc|quant-ph|cond-mat)"
+    subject_cleaned = gsub(arxiv_classification_string, "", subject_cleaned, perl=TRUE) # remove arXiv classification short code, but keep classifcation name
+  } else {
+    subject_cleaned = gsub("FOS [A-Za-z ]+", "", subject_cleaned) # remove FOS classifications (Fields of Science and Technology)
+    arxiv_classification_string = "(([A-Za-z ]+ )?cond-mat\\.[a-z\\-]+)|([\\w ]+ )?(cs|econ|eess|math|astro-ph|nlin|q-bio|q-fin|stat)\\.[A-Z]{2}|cond-mat\\.[a-z\\-]+|hep-(ex|lat|ph|th)|math-ph|nucl-(ex|th)|physics\\.[a-z\\-]+|([\\w ]+ )(astro-ph|gr-qc|quant-ph|cond-mat)"
+    subject_cleaned = gsub(arxiv_classification_string, "", subject_cleaned, perl=TRUE) # remove arXiv classification, except on streamgraphs    
+  }
+  subject_cleaned = gsub("([A-Za-z]+:[A-Za-z0-9 \\/\\.]+);?", "", subject_cleaned, perl=TRUE) # clean up annotations with prefix e.g. theme:annotation
+  subject_cleaned = gsub("(wikidata)?\\.org/entity/[qQ]([\\d]+)?", "", subject_cleaned) # remove wikidata classification
   subject_cleaned = gsub("</keyword><keyword>", "", subject_cleaned) # remove </keyword><keyword>
   subject_cleaned = gsub("\\[No keyword\\]", "", subject_cleaned)
   subject_cleaned = gsub("\\[[^\\[]+\\][^\\;]+(;|$)?", "", subject_cleaned) # remove classification
   subject_cleaned = gsub("[0-9]{2,} [A-Z]+[^;]*(;|$)?", "", subject_cleaned) #remove classification
   subject_cleaned = gsub(" -- ", "; ", subject_cleaned) #replace inconsistent keyword separation
+  subject_cleaned = gsub("[-]{2,}", "; ", subject_cleaned) #replace inconsistent keyword separation
+  subject_cleaned = gsub("[A-Z]\\.\\d\\.\\d+", "", subject_cleaned) #replace inconsistent keyword separation
   subject_cleaned = gsub(" \\(  ", "; ", subject_cleaned) #replace inconsistent keyword separation
   subject_cleaned = gsub("(\\w* \\w*(\\.)( \\w* \\w*)?)", "; ", subject_cleaned) # remove overly broad keywords separated by .
   subject_cleaned = gsub("\\. ", "; ", subject_cleaned) # replace inconsistent keyword separation
   subject_cleaned = gsub(" ?\\d[:?-?]?(\\d+.)+", "", subject_cleaned) # replace residuals like 5:621.313.323 or '5-76.95'
-  subject_cleaned = gsub("\\w+:\\w+-(\\w+\\/)+", "", subject_cleaned) # replace residuals like Info:eu-repo/classification/
-  subject_cleaned = gsub("^; $", "", subject_cleaned) # replace residuals like Info:eu-repo/classification/
+  subject_cleaned = gsub(": ", "", subject_cleaned) # clean up keyword separation
+  subject_cleaned = gsub("^; $", "", subject_cleaned) # clean up keyword separation
+  subject_cleaned = gsub(";+", ";", subject_cleaned) # clean up keyword separation
+  subject_cleaned = gsub(",+", ",", subject_cleaned) # clean up keyword separation
   subject_cleaned = gsub(",", ", ", subject_cleaned) # clean up keyword separation
   subject_cleaned = gsub("\\s+", " ", subject_cleaned) # clean up keyword separation
-
+  subject_cleaned = stringi::stri_trim(subject_cleaned) # clean up keyword separation
   metadata$subject = subject_cleaned
 
   metadata$authors = check_metadata(res$dccreator)
@@ -177,39 +267,65 @@ get_papers <- function(query, params,
   metadata$url = metadata$id
   metadata$relevance = c(nrow(metadata):1)
   metadata$resulttype = lapply(res$dctypenorm, decode_dctypenorm)
+  metadata$type = check_metadata(res$dctype)
+  metadata$typenorm = check_metadata(res$dctypenorm)
   metadata$doi = unlist(lapply(metadata$link, find_dois))
+  metadata$lang = check_metadata(res$dclang)
+  metadata$language = check_metadata(res$dclanguage)
   metadata$content_provider = check_metadata(res$dcprovider)
+  metadata$coverage = check_metadata(res$dccoverage)
   if(repo=="fttriple" && non_public==TRUE) {
     metadata$content_provider <- "GoTriple"
   }
 
-  text = data.frame(matrix(nrow=length(res$dcdocid)))
-  text$id = metadata$id
-  # Add all keywords, including classification to text
-  text$content = paste(metadata$title, metadata$paper_abstract,
-                       subject_all, metadata$published_in, metadata$authors,
-                       sep=" ")
-
-  ret_val=list("metadata" = metadata, "text"=text)
-
-  end.time <- Sys.time()
-  time.taken <- end.time - start.time
-  blog$info(paste("vis_id:", .GlobalEnv$VIS_ID, "Time taken:", time.taken, sep=" "))
-
-  return(ret_val)
+  return (metadata)
 }
 
+
+preprocess_query <- function(query) {
+    # remove pluses between terms
+  query_wt_plus = gsub("(?!\\B\"[^\"]*)[\\+]+(?![^\"]*\"\\B)", " ", query, perl=T)
+  # remove multiple minuses and spaces after minuses
+  query_wt_multi_minus = gsub("(?!\\B\"[^\"]*)((^|\\s))[\\-]+[\\s]*(?![^\"]*\"\\B)", "\\1-", query_wt_plus, perl=T)
+  # remove multiple spaces inside the query
+  query_wt_multi_spaces = gsub("(?!\\B\"[^\"]*)[\\s]{2,}(?![^\"]*\"\\B)", " ", query_wt_multi_minus, perl=T)
+  # trim query, if needed
+  query_cleaned = gsub("^\\s+|\\s+$", "", query_wt_multi_spaces, perl=T)
+
+  # add "textus:" to each word/phrase to enable verbatim search
+  # make sure it is added after any opening parentheses to enable queries such as "(a and b) or (a and c)"
+  exact_query = gsub('([\"]+(.*?)[\"]+)|(?<=\\(\\b|\\+|-\\"\\b|\\s-\\b|^-\\b)|(?!or\\b|and\\b|[-]+[\\"\\(]*\\b)(?<!\\S)(?=\\S)(?!\\(|\\+)'
+                     , "textus:\\1", query_cleaned, perl=T)
+  return(exact_query)
+}
+
+
 get_raw_data <- function(limit, base_query, return_fields, sortby_string, filter, repo, coll, retry_opts, offset, non_public) {
-  (res_raw <- bs_search(hits=limit
-                      , fields = return_fields,
-                      , query = base_query
-                      , sortby = sortby_string
-                      , filter = filter
-                      , target = repo
-                      , coll = coll
-                      , retry = retry_opts
-                      , offset = offset
-                      , non_public = non_public))
+  t <- 0
+  while (t < retry_opts$times) {
+    res_raw <- try(
+      (bs_search(hits=limit
+                  , fields = return_fields,
+                  , query = base_query
+                  , sortby = sortby_string
+                  , filter = filter
+                  , target = repo
+                  , coll = coll
+                  , retry = retry_opts
+                  , offset = offset
+                  , non_public = non_public)))
+    if (inherits(res_raw, "try-error")) {
+      if (grepl("Timeout was reached: [api.base-search.net]", res_raw, fixed=TRUE)) {
+        t <- t + 1
+        Sys.sleep(2)
+        blog$info(paste("vis_id:", .GlobalEnv$VIS_ID, "BASE API Timeout retry attempt:", t, sep=" "))
+      } else {
+        stop("Timeout was reached: [api.base-search.net]")
+      }
+    } else {
+      break
+    }
+  }
   return(res_raw)
 }
 
@@ -233,57 +349,6 @@ decode_dctypenorm <- function(dctypestring) {
   typecodes <- unlist(unname(typecodes[[1]]))
   return(typecodes)
 }
-
-valid_langs <- list(
-    'afr'='afrikaans',
-    'akk'='akkadian',
-    'ara'='arabic',
-    'baq'='basque',
-    'bel'='belarusian',
-    'chi'='chinese',
-    'cze'='czech',
-    'dan'='danish',
-    'dut'='dutch',
-    'eng'='english',
-    'est'='estonian',
-    'fin'='finnish',
-    'fre'='french',
-    'geo'='georgian',
-    'ger'='german',
-    'gle'='irish',
-    'glg'='galician',
-    'grc'='greek',
-    'gre'='greek',
-    'heb'='hebrew',
-    'hrv'='croatian',
-    'hun'='hungarian',
-    'ice'='icelandic',
-    'ind'='indonesian',
-    'ita'='italian',
-    'jpn'='japanese',
-    'kor'='korean',
-    'lat'='latin',
-    'lit'='lithuanian',
-    'nau'='nauru',
-    'nob'='norwegian',
-    'nor'='norwegian',
-    'ota'='turkish',
-    'per'='persian',
-    'pol'='polish',
-    'por'='portuguese',
-    'rum'='romanian',
-    'rus'='russian',
-    'slo'='slovak',
-    'slv'='slovenian',
-    'spa'='spanish',
-    'srp'='serbian',
-    'sux'='sumerian',
-    'swe'='swedish',
-    'tha'='thai',
-    'tur'='turkish',
-    'ukr'='ukrainian',
-    'vie'='vietnamese'
-)
 
 dctypenorm_decoder <- list(
   "4"="Audio",
@@ -312,4 +377,27 @@ dctypenorm_decoder <- list(
   "181"="Thesis: bachelor",
   "183"="Thesis: doctoral and postdoctoral",
   "182"="Thesis: master"
+)
+
+fieldmapper <- list(
+  "relation"="dcrelation",
+  "identifier"="identifier",
+  "title"="dctitle",
+  "paper_abstract"="dcdescription",
+  "published_in"="dcsource",
+  "year"="dcdate",
+  "subject"="dcsubject",
+  "authors"="dccreator",
+  "link"="dclink",
+  "oa_state"="dcoa",
+  "url"="dcdocid",
+  "relevance"="relevance",
+  "resulttype"="dctypenorm",
+  "type"="dctype",
+  "typenorm"="dctypenorm",
+  "doi"="doi",
+  "lang"="dclang",
+  "language"="dclanguage",
+  "content_provider"="dcprovider",
+  "coverage"="dccoverage"
 )
