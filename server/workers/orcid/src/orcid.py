@@ -25,7 +25,7 @@ formatter = logging.Formatter(
 )
 
 
-class OrcidClient:
+class OrcidWorker:
     def __init__(
         self,
         redis_store: Redis = None,
@@ -59,13 +59,6 @@ class OrcidClient:
         logger.addHandler(handler)
         return logger
 
-    def authenticate(self):
-        if self.access_token is None:
-            orcid_auth = OrcidAuthentication(
-                client_id=self.ORCID_CLIENT_ID, client_secret=self.ORCID_CLIENT_SECRET
-            )
-            self.access_token = orcid_auth.get_public_access_token()
-
     def next_item(self) -> Tuple[str, Dict[str, str], str]:
         _, message = self.redis_store.blpop(self.service)
 
@@ -74,11 +67,11 @@ class OrcidClient:
         except (json.JSONDecodeError, AttributeError) as e:
             raise ValueError(f"Failed to decode message: {e}")
 
-        item_id = message_data.get("id")
+        request_id = message_data.get("id")
         params = message_data.get("params")
         params["service"] = self.service
         endpoint = message_data.get("endpoint")
-        return item_id, params, endpoint
+        return request_id, params, endpoint
 
     @error_logging_aspect(log_level=logging.ERROR)
     def run(self) -> None:
@@ -91,33 +84,44 @@ class OrcidClient:
 
         return: None
         """
-        # TODO: add retry mechanism
         while True:
             while self.rate_limiter.rate_limit_reached():
                 self.logger.debug("🛑 Request is limited")
                 time.sleep(0.1)
-            k, params, endpoint = self.next_item()
-            self.logger.debug(k)
+            request_id, params, endpoint = self.next_item()
+            self.logger.debug(request_id)
             self.logger.debug(params)
             if endpoint == "search":
-                self.handle_search(k, params)
-
-    def handle_search(self, k: str, params: dict) -> None:
+                self.handle_search(request_id, params)
+            
+    def handle_search(self, request_id: str, params: dict) -> None:
+        """
+        Transform the search request into a format that can be processed by the
+        execute_search function. The function will then execute the search and
+        store the results in the Redis queue.
+        """
         try:
             res = self.execute_search(params)
             self.logger.debug(res)
-            res["id"] = k
+            res["id"] = request_id
 
             if res.get("status") == "error" or params.get("raw") is True:
-                self.redis_store.set(k + "_output", json.dumps(res))
+                self.redis_store.set(request_id + "_output", json.dumps(res))
             else:
                 self.redis_store.rpush("input_data", json.dumps(res).encode("utf8"))
                 q_len = self.redis_store.llen("input_data")
-                self.logger.debug(f"Queue length: input_data {q_len} {k}")
+                self.logger.debug(f"Queue length: input_data {q_len} {request_id}")
         except Exception as e:
             self.logger.exception("Exception during data retrieval.")
             self.logger.error(params)
             self.logger.error(e)
+
+    def authenticate(self):
+        if self.access_token is None:
+            orcid_auth = OrcidAuthentication(
+                client_id=self.ORCID_CLIENT_ID, client_secret=self.ORCID_CLIENT_SECRET
+            )
+            self.access_token = orcid_auth.get_public_access_token()
 
     @error_logging_aspect(log_level=logging.ERROR)
     def execute_search(self, params: dict) -> dict:
@@ -290,8 +294,14 @@ class OrcidClient:
     
     def _retrieve_author_info_and_metadata(self, orcid: Orcid, limit: Optional[int]) -> Tuple[dict, pd.DataFrame]:
         self.authenticate()
-        author_info = extract_author_info(orcid)
-        metadata = retrieve_full_works_metadata(orcid, limit)
+        personal_details = orcid.personal_details()
+        author_info = extract_author_info(
+            orcid._orcid_id,
+            personal_details,
+
+        )
+        works_data = pd.DataFrame(orcid.works_full_metadata(limit=limit))
+        metadata = retrieve_full_works_metadata(works_data)
         return author_info, metadata
     
     def _process_metadata(self, metadata: pd.DataFrame, author_info: dict, params: dict) -> pd.DataFrame:

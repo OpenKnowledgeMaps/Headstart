@@ -2,7 +2,7 @@ import os
 
 import redis
 
-from orcid.src.orcid import OrcidClient
+from orcid.src.orcid import OrcidWorker
 
 
 if __name__ == "__main__":
@@ -15,5 +15,5 @@ if __name__ == "__main__":
     }
 
     redis_store = redis.StrictRedis(**redis_config)
-    wrapper = OrcidClient(redis_store, "english", os.environ.get("LOGLEVEL", "INFO"))
+    wrapper = OrcidWorker(redis_store, "english", os.environ.get("LOGLEVEL", "INFO"))
     wrapper.run()

@@ -3,7 +3,7 @@ from unittest.mock import patch, MagicMock, Mock
 import json
 import pandas as pd
 from redis import Redis
-from orcid.src.orcid import OrcidClient
+from orcid.src.orcid import OrcidWorker
 from pyorcid import errors as pyorcid_errors
 import requests
 
@@ -11,7 +11,7 @@ class TestOrcidClient(unittest.TestCase):
 
     def setUp(self):
         self.mock_redis = MagicMock(spec=Redis)
-        self.client = OrcidClient(redis_store=self.mock_redis)
+        self.client = OrcidWorker(redis_store=self.mock_redis)
 
         self.mock_author_info = {
             "author_name": "John Doe",
@@ -114,7 +114,7 @@ class TestOrcidClient(unittest.TestCase):
     @patch('orcid.src.orcid.OrcidClient._initialize_orcid')  # Adjust the path if necessary
     def test_initialize_orcid_mock(self, mock_initialize_orcid):
         mock_initialize_orcid.return_value = None
-        client = OrcidClient()
+        client = OrcidWorker()
         orcid = client._initialize_orcid("some_orcid_id")
         self.assertIsNone(orcid)
 
@@ -133,7 +133,7 @@ class TestOrcidClient(unittest.TestCase):
         mock_process_metadata_mock.return_value = self.mock_enriched_metadata
         
         params = {"orcid": "0000-0002-1825-0097", "limit": 1}
-        client = OrcidClient()
+        client = OrcidWorker()
         result = client.execute_search(params)
 
         # Assert the returned result structure
@@ -151,7 +151,7 @@ class TestOrcidClient(unittest.TestCase):
         mock_initialize_orcid.side_effect = pyorcid_errors.NotFound(response)
 
         # Prepare the client and the parameters
-        client = OrcidClient()
+        client = OrcidWorker()
         params = {"orcid": "invalid-orcid"}
 
         # Execute the method under test

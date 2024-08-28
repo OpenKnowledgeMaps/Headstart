@@ -5,22 +5,19 @@ import pandas as pd
 import numpy as np
 from common.decorators import error_logging_aspect
 from common.utils import get_nested_value
-from typing import List, Optional
+from typing import List, Optional, Any, Dict
 
 
 @error_logging_aspect(log_level=logging.ERROR)
-def extract_author_info(orcid: Orcid) -> dict:
+def extract_author_info(
+    orcid_id: str,
+    personal_details: Dict,
+    orcid: Orcid
+) -> dict:
     """
-    This function extracts the author information from the ORCID data.
-
-    Parameters:
-    - orcid (Orcid): The Orcid object containing the ORCID data.
-
-    Returns:
-    - dict: The author information extracted from the ORCID data.
+    
     """
-    personal_details = orcid.personal_details()
-    orcid_id = orcid._orcid_id
+    
     author_name = " ".join(
         [
             personal_details.get("name", {}).get("given-names", {}).get("value", ""),
@@ -115,18 +112,17 @@ def sanitize_metadata(metadata: pd.DataFrame) -> pd.DataFrame:
 
 
 @error_logging_aspect(log_level=logging.ERROR)
-def retrieve_full_works_metadata(orcid: Orcid, limit: Optional[int]) -> pd.DataFrame:
+def retrieve_full_works_metadata(works_data: pd.DataFrame) -> pd.DataFrame:
     """
-    This function retrieves the full works metadata from the ORCID data.
+    This function transforms the works data to extract the full metadata for each work.
 
     Parameters:
-    - orcid (Orcid): The Orcid object containing the ORCID data.
+    - works_data (pd.DataFrame): The works data DataFrame to transform.
 
     Returns:
-    - pd.DataFrame: The full works metadata retrieved from the ORCID data.
+    - pd.DataFrame: The transformed works data DataFrame with full metadata.
     """
-    works_data = pd.DataFrame(orcid.works_full_metadata(limit=limit))
-
+    
     new_works_data = pd.DataFrame()
 
     if works_data.empty:
