@@ -59,7 +59,6 @@ class OrcidService:
                 return self._handle_insufficient_results(params, orcid_id)
             
             metadata = self._process_metadata(metadata, author_info, params)
-
             return self._format_response(data=metadata, author_info=author_info, params=params)
         except (
             pyorcid_errors.Forbidden,
@@ -189,6 +188,7 @@ class OrcidService:
         return author_info
     
     def _initialize_orcid(self, orcid_id: str) -> Orcid:
+        self.logger.debug(f"Initializing ORCID {orcid_id} with access token {self.access_token}")
         return Orcid(
             orcid_id=orcid_id,
             orcid_access_token=self.access_token,
@@ -210,9 +210,13 @@ class OrcidService:
     def _process_metadata(self, metadata: pd.DataFrame, author_info: dict, params: dict) -> pd.DataFrame:
         metadata["authors"] = metadata["authors"].replace("", author_info["author_name"])
         metadata = sanitize_metadata(metadata)
+        self.logger.debug(f"sanitized metadata: {metadata}")
         metadata = self.enrich_metadata(params, metadata)
+        self.logger.debug(f"enrich metadata: {metadata}")
         author_info = self.enrich_author_info(author_info, metadata)
+        self.logger.debug(f"enrich author info: {author_info}")
         metadata = metadata.head(int(params.get("limit")))
+        self.logger.debug(f"metadata: {metadata}")
         return metadata
 
     def _format_response(self, data: pd.DataFrame, author_info: dict, params: dict) -> dict:

@@ -42,6 +42,8 @@ class MetricsClient(RWrapper):
             params.get('service')
         ]
 
+        self.logger.debug(f"Executing command: {command}")
+
         data = {
             "params": params,
             "metadata": metadata
@@ -96,6 +98,8 @@ class MetricsClient(RWrapper):
                 result["id"] = item_id
 
                 output_key = f"{item_id}_output"
+                self.logger.debug(f"Storing result in key: {output_key}")
+                self.logger.debug(f"Result: {result}")
                 self.redis_store.set(output_key, json.dumps(result))
 
             except Exception as e:
