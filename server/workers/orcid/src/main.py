@@ -4,7 +4,7 @@ import redis
 
 from config import LOGGING_CONFIG, REDIS_CONFIG, ORCID_CONFIG
 from common.rate_limiter import RateLimiter
-from services.orcid import OrcidService
+from orcid_service import OrcidService
 from worker import OrcidWorker
 
 def setup_logging():

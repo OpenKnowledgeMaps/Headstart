@@ -1,3 +1,4 @@
+from datetime import datetime
 import logging
 from dateutil.parser import parse
 from pyorcid import Orcid
@@ -12,26 +13,29 @@ from typing import List, Dict
 def extract_author_info(
     orcid_id: str,
     personal_details: Dict,
+    keywords: List[str],
+    education: List[Dict],
     orcid: Orcid
 ) -> dict:
     author_name = " ".join(
         [
-            personal_details.get("name", {}).get("given-names", {}).get("value", ""),
-            personal_details.get("name", {}).get("family-name", {}).get("value", ""),
+            get_nested_value(personal_details, ["name", "given-names", "value"], ""),
+            get_nested_value(personal_details, ["name", "family-name", "value"], ""),
         ]
     )
-    author_keywords = ", ".join(orcid.keywords()[0])
+    author_keywords = ", ".join(keywords)
     biography = (
-        personal_details.get("biography", {}).get("content", "")
+        get_nested_value(personal_details, ["biography", "content"], "")
         if (
-            personal_details.get("biography")
-            and personal_details.get("biography", {}).get("visibility") == "public"
+            get_nested_value(personal_details, ["biography", "visibility"], "") == "public"
         )
         else ""
     )
+    academic_age = calculate_academic_age(education)
     external_identifiers = extract_external_identifiers(orcid)
     countries = extract_countries(orcid)
     websites = extract_websites(orcid)
+    
     author_info = {
         "orcid_id": orcid_id,
         "author_name": author_name,
@@ -40,6 +44,7 @@ def extract_author_info(
         "websites": websites,
         "external_identifiers": external_identifiers,
         "country": countries,
+        "academic_age": academic_age,
     }
     return author_info
 
@@ -53,6 +58,34 @@ def extract_countries(orcid: Orcid) -> list:
     else:
         return []
 
+def calculate_academic_age(data):
+    # Possible terms for a PhD-equivalent role
+    doctoral_terms = [
+        "phd", "dphil", "doctorate", "doctoral", 
+        "edd", "dsc", "md-phd", "jd-phd", "dr.phil.", "dr.rer.nat.",
+        "doctor of science", "doctor of education", "doctor's degree"
+    ]
+
+    # Find the PhD-equivalent end date
+    phd_end_date = None
+    for entry in data:
+        # Check if the Role matches any PhD-equivalent term
+        if any(term in entry["Role"].lower() for term in doctoral_terms):
+            phd_end_date = entry["end-date"]
+            break
+
+    # If no PhD end date is found, return None
+    if not phd_end_date:
+        return None
+
+    # Convert PhD end date to a datetime object
+    phd_end_date = datetime.strptime(phd_end_date, "%m/%Y")
+
+    # Calculate the number of years since the PhD
+    current_date = datetime.now()
+    academic_age = current_date.year - phd_end_date.year - ((current_date.month, current_date.day) < (phd_end_date.month, 1))
+
+    return academic_age
 
 def extract_external_identifiers(orcid: Orcid) -> list:
     external_identifiers = pd.DataFrame(

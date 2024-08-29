@@ -5,13 +5,12 @@ import time
 from typing import Tuple, Dict
 from common.rate_limiter import RateLimiter
 from redis import Redis
-from services.orcid import OrcidService
+from orcid_service import OrcidService
 
 class OrcidWorker:
     service = "orcid"
 
     logger = logging.getLogger(__name__)
-
 
     def __init__(
         self,

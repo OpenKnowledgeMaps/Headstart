@@ -6,7 +6,9 @@ from flask import Flask, make_response
 from flask_restx import Api
 
 sys.path.append("workers/persistence/src")
-from persistence import persistence_ns
+import persistence as some_module
+
+print(some_module)
 
 
 def create_app(config_name):
@@ -21,7 +23,8 @@ def create_app(config_name):
     }
     app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://%(user)s:%(pw)s@%(host)s:%(port)s/%(db)s' % bind_params
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-    app.config['PORT'] = 5000
+    app.config['PORT'] = 80
+    app.config['HOST'] = '0.0.0.0'
     app.config['DEBUG'] = True
     app.config['TESTING'] = True
     app.config['ENV'] = 'development'
@@ -47,7 +50,7 @@ def create_app(config_name):
         
 
     api = Api(app)
-    api.add_namespace(persistence_ns, path='/api/stable/persistence')
+    # api.add_namespace(persistence_ns, path='/api/stable/persistence')
 
     handler = logging.StreamHandler(sys.stderr)
     handler.setLevel(logging.DEBUG)
@@ -57,3 +60,7 @@ def create_app(config_name):
     # app.logger.debug(app.url_map)
 
     return app
+
+if __name__ == '__main__':
+    app = create_app(config_name="testing")
+    app.run(host="0.0.0.0", port=5001, debug=True)

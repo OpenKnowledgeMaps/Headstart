@@ -94,7 +94,6 @@ class OrcidService:
         }
         self.redis_store.rpush("metrics", json.dumps(task_data))
         result = get_key(self.redis_store, request_id, 300)
-        self.logger.debug(f"Enriched metadata for request {request_id}")
         metadata = pd.DataFrame(json.loads(result["input_data"]))
         for c in [
             "citation_count",
@@ -167,23 +166,11 @@ class OrcidService:
         # Apply the function to extract the year
         metadata["publication_year"] = metadata["year"].apply(extract_year)
 
-        # Filter out rows where year could not be extracted
-        valid_years = metadata["publication_year"].dropna().astype(int)
-
-        if valid_years.empty:
-            # If no valid years are found, set academic age to 0 or some default value
-            academic_age = 0
-        else:
-            # Calculate academic age
-            current_year = pd.Timestamp.now().year
-            earliest_publication_year = valid_years.min()
-            academic_age = current_year - earliest_publication_year
-
-        author_info["academic_age"] = str(academic_age)
+        academic_age = author_info["academic_age"]
 
         # Calculate normalized h-index
         author_info["normalized_h_index"] = (
-            h_index / academic_age if academic_age > 0 else 0
+            h_index / academic_age if academic_age & academic_age > 0 else 0
         )
 
         return author_info
@@ -198,10 +185,16 @@ class OrcidService:
         )
     
     def _retrieve_author_info_and_metadata(self, orcid: Orcid, limit: Optional[int]) -> Tuple[dict, pd.DataFrame]:
+        # number_of_years_since_PhD
         personal_details = orcid.personal_details()
+        keywords, _ = orcid.keywords()
+        education, _ = orcid.educations()
+
         author_info = extract_author_info(
             orcid._orcid_id,
             personal_details,
+            keywords,
+            education,
             orcid,
         )
         works_data = pd.DataFrame(orcid.works_full_metadata(limit=limit))
@@ -211,13 +204,9 @@ class OrcidService:
     def _process_metadata(self, metadata: pd.DataFrame, author_info: dict, params: dict) -> pd.DataFrame:
         metadata["authors"] = metadata["authors"].replace("", author_info["author_name"])
         metadata = sanitize_metadata(metadata)
-        self.logger.debug(f"sanitized metadata: {metadata}")
         metadata = self.enrich_metadata(params, metadata)
-        self.logger.debug(f"enrich metadata: {metadata}")
         author_info = self.enrich_author_info(author_info, metadata)
-        self.logger.debug(f"enrich author info: {author_info}")
         metadata = metadata.head(int(params.get("limit")))
-        self.logger.debug(f"metadata: {metadata}")
         return metadata
 
     def _format_response(self, data: pd.DataFrame, author_info: dict, params: dict) -> dict:
@@ -245,5 +234,19 @@ class OrcidService:
 
     def _handle_error(self, params: dict, reason: str, exception: Exception) -> dict:
         self.logger.error(exception)
-        self.logger.error(params)
         return {"params": params, "status": "error", "reason": [reason]}
+    
+
+if __name__ == "__main__":
+    orcid_service = OrcidService.create(
+        orcid_client_id="APP-DL8ZAR72EZWW15NX",
+        orcid_client_secret="a3389b1a-19c0-4f78-857a-4aba19f5fa46",
+        sandbox=False,
+        redis_store=StrictRedis(host="localhost", port=6379, db=0, password="testredispassword"),
+    )
+    params = {
+        "orcid": "0000-0003-0444-7080",
+        "limit": 10,
+        "raw": False,
+    }
+    res = orcid_service.execute_search(params)
