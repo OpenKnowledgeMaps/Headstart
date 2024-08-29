@@ -59,6 +59,7 @@ class OrcidService:
                 return self._handle_insufficient_results(params, orcid_id)
             
             metadata = self._process_metadata(metadata, author_info, params)
+            
             return self._format_response(data=metadata, author_info=author_info, params=params)
         except (
             pyorcid_errors.Forbidden,
