@@ -9,7 +9,6 @@ import BaseInfo from "./infomodal/BaseInfo";
 import CovisInfo from "./infomodal/CovisInfo";
 import DefaultKMInfo from "./infomodal/DefaultKMInfo";
 import DefaultSGInfo from "./infomodal/DefaultSGInfo";
-import GsheetsInfo from "./infomodal/GsheetsInfo";
 import PubMedInfo from "./infomodal/PubMedInfo";
 import TripleKMInfo from "./infomodal/TripleKMInfo";
 import TripleSGInfo from "./infomodal/TripleSGInfo";

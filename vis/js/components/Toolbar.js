@@ -7,6 +7,8 @@ import { openInfoModal, openResearcherModal, scaleMap } from "../actions";
 const Toolbar = ({
   showScaleToolbar,
   scaleOptions,
+  scaleLabels,
+  scaleExplanations,
   scaleBaseUnit,
   scaleValue,
   showCredit,
@@ -27,6 +29,8 @@ const Toolbar = ({
       <div id="toolbar" className="toolbar">
         <ScaleToolbar
           options={scaleOptions}
+          labels={scaleLabels}
+          explanations={scaleExplanations}
           value={scaleValue}
           showCredit={showCredit}
           onInfoClick={onInfoClick}
@@ -43,6 +47,8 @@ const Toolbar = ({
 const mapStateToProps = (state) => ({
   showScaleToolbar: state.toolbar.showScaleToolbar,
   scaleOptions: state.toolbar.scaleOptions,
+  scaleLabels: state.toolbar.scaleLabels,
+  scaleExplanations: state.toolbar.scaleExplanations,
   scaleBaseUnit: state.toolbar.scaleBaseUnit,
   scaleValue: state.toolbar.scaleValue,
   showCredit: state.misc.showCreatedByViper,

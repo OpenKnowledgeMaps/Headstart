@@ -15,7 +15,7 @@ const ResearcherInfo = ({
         <h3>METRICS</h3>
         <p>
           Normalised h-index: <span>
-            {params.normalized_h_index}
+            {params.normalized_h_index?.toFixed(1)}
           </span>
         </p>
         <p>
