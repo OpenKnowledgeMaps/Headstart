@@ -19,8 +19,8 @@ class WorksRepository:
         - pd.DataFrame: The full metadata for all works associated with the ORCID.
         """
         
-        works_data, _ = self.orcid.works_full_metadata(limit=limit)
-        return self.transform_works_metadata(works_data)
+        works_data = self.orcid.works_full_metadata(limit=limit)
+        return self.transform_works_metadata(pd.DataFrame(works_data))
 
     def transform_works_metadata(self, works_data: pd.DataFrame) -> pd.DataFrame:
         new_works_data = pd.DataFrame()
@@ -49,7 +49,7 @@ class WorksRepository:
 
         return new_works_data
 
-    def get_authors(work) -> str:
+    def get_authors(self, work) -> str:
         contributors = get_nested_value(work, ["contributors", "contributor"], [])
 
         authors = []
@@ -62,25 +62,25 @@ class WorksRepository:
 
         return "; ".join(authors)
 
-    def get_title(work) -> str:
+    def get_title(self, work) -> str:
         return get_nested_value(work, ["title", "title", "value"], "")
 
-    def get_subtitle(work) -> str:
+    def get_subtitle(self, work) -> str:
         return get_nested_value(work, ["title", "subtitle", "value"], "")
 
-    def get_paper_abstract(work) -> str:
+    def get_paper_abstract(self, work) -> str:
         return get_nested_value(work, ["short-description"], "")
 
-    def get_resulttype(work) -> str:
+    def get_resulttype(self, work) -> str:
         return get_nested_value(work, ["type"], "")
 
-    def published_in(work) -> str:
+    def published_in(self, work) -> str:
         return get_nested_value(work, ["journal-title", "value"], "")
 
-    def get_put_code(work) -> str:
+    def get_put_code(self, work) -> str:
         return get_nested_value(work, ["put-code"], "")
 
-    def get_url(work) -> str:
+    def get_url(self, work) -> str:
         # Try to get the primary URL
         url = get_nested_value(work, ["url", "value"], "")
         if url:
@@ -96,13 +96,13 @@ class WorksRepository:
 
         return ""
 
-    def get_link(work) -> str:
+    def get_link(self, work) -> str:
         url = get_nested_value(work, ["url", "value"], "")
         if url.lower().endswith(".pdf"):
             return url
         return ""
 
-    def extract_dois(work: pd.DataFrame) -> str:
+    def extract_dois(self, work: pd.DataFrame) -> str:
         external_ids = get_nested_value(work, ["external-ids", "external-id"], [])
         
         if not isinstance(external_ids, list) or not external_ids:
@@ -116,7 +116,7 @@ class WorksRepository:
         
         return dois[0] if dois else ""
 
-    def get_publication_date(work) -> str:
+    def get_publication_date(self, work) -> str:
         year = get_nested_value(work, ["publication-date", "year", "value"], np.nan)
         month = get_nested_value(work, ["publication-date", "month", "value"], np.nan)
         day = get_nested_value(work, ["publication-date", "day", "value"], np.nan)

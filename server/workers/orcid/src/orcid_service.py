@@ -8,10 +8,11 @@ from pyorcid import Orcid, errors as pyorcid_errors
 from pyorcid.orcid_authentication import OrcidAuthentication
 from typing import Tuple
 from common.utils import get_key
-from author_info_repository import AuthorInfoRepository
-from works_repository import WorksRepository
+from repositories.author_info import AuthorInfoRepository
+from repositories.works import WorksRepository
 from redis import StrictRedis
 from typing import Dict
+from model import AuthorInfo
 
 class OrcidService:
     logger = logging.getLogger(__name__)
@@ -55,6 +56,7 @@ class OrcidService:
             if metadata.empty:
                 return self._handle_insufficient_results(params, orcid_id)
             
+
             metadata = self._process_metadata(metadata, author_info, params)
             
             return self._format_response(data=metadata, author_info=author_info, params=params)
@@ -104,7 +106,7 @@ class OrcidService:
                 metadata[c] = np.NaN
         return metadata
 
-    def enrich_author_info(self, author_info: Dict[str, str], metadata: pd.DataFrame) -> Dict[str, str]:
+    def enrich_author_info(self, author_info: AuthorInfo, metadata: pd.DataFrame) -> Dict[str, str]:
         """
         This function enriches the author information with additional information.
         Specifically, we extract and aggregate metrics data from the author's works,
@@ -119,17 +121,17 @@ class OrcidService:
         """
 
         # Total citations
-        author_info["total_citations"] = int(
+        author_info.total_citations = int(
             metadata["citation_count"].astype(float).sum()
         )
 
         # Total unique social media mentions
-        author_info["total_unique_social_media_mentions"] = int(
+        author_info.total_unique_social_media_mentions = int(
             metadata["cited_by_accounts_count"].astype(float).sum()
         )
 
         # Total NEPPR (non-academic references)
-        author_info["total_neppr"] = int(
+        author_info.total_neppr = int(
             metadata[
                 [
                     "cited_by_wikipedia_count",
@@ -148,7 +150,7 @@ class OrcidService:
             metadata["citation_count"].astype(float).sort_values(ascending=False).values
         )
         h_index = np.sum(citation_counts >= np.arange(1, len(citation_counts) + 1))
-        author_info["h_index"] = int(h_index)
+        author_info.h_index = int(h_index)
 
         def extract_year(value):
             try:
@@ -163,10 +165,10 @@ class OrcidService:
         # Apply the function to extract the year
         metadata["publication_year"] = metadata["year"].apply(extract_year)
 
-        academic_age = author_info["academic_age"]
+        academic_age = author_info.academic_age
 
         # Calculate normalized h-index
-        author_info["normalized_h_index"] = (
+        author_info.normalized_h_index = (
             h_index / academic_age if academic_age & academic_age > 0 else 0
         )
 
@@ -187,14 +189,14 @@ class OrcidService:
 
         return author_info, metadata
 
-    def _process_metadata(self, metadata: pd.DataFrame, author_info: Dict[str, str], params: Dict[str, str]) -> pd.DataFrame:
-        metadata["authors"] = metadata["authors"].replace("", author_info["author_name"])
+    def _process_metadata(self, metadata: pd.DataFrame, author_info: AuthorInfo, params: Dict[str, str]) -> pd.DataFrame:
+        metadata["authors"] = metadata["authors"].replace("", author_info.author_name)
         metadata = self.enrich_metadata(params, metadata)
         author_info = self.enrich_author_info(author_info, metadata)
         metadata = metadata.head(int(params.get("limit")))
         return metadata
 
-    def _format_response(self, data: pd.DataFrame, author_info: Dict[str, str], params: Dict[str, str]) -> Dict[str, str]:
+    def _format_response(self, data: pd.DataFrame, author_info: AuthorInfo, params: Dict[str, str]) -> Dict[str, str]:
         text = pd.concat([data.id, data[["title", "paper_abstract", "subtitle", "published_in", "authors"]]
                         .apply(lambda x: " ".join(x), axis=1)], axis=1)
         text.columns = ["id", "content"]
@@ -204,7 +206,8 @@ class OrcidService:
                 "metadata": data.to_json(orient='records'),
                 "text": text.to_json(orient='records')
             },
-            "author": author_info,
+            # TODO: consider to return model?
+            "author": author_info.__dict__,
             "params": params
         }
         return response

@@ -47,8 +47,8 @@ services:
       FLASK_ENV: "${FLASK_ENV}"
     volumes:
       - ./api_cache:/var/api_cache
-      - ./server/workers/api/src:/api
-      - ./server/workers/common:/api/common
+      - ./server/workers/api/src:/app/api/src
+      - ./server/workers/common:/app/common
     depends_on:
       - redis
       - base

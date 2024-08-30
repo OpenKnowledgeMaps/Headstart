@@ -1,5 +1,4 @@
 from datetime import datetime
-import logging
 from pyorcid import Orcid
 import pandas as pd
 from common.utils import get_nested_value
@@ -8,15 +7,13 @@ from model import AuthorInfo, ExternalIdentifier, Website
 
 
 class AuthorInfoRepository:
-    logger = logging.getLogger(__name__)
-
     def __init__(self, orcid: Orcid) -> None:
         self.orcid = orcid
 
     def extract_author_info(self) -> AuthorInfo:
-        author_info = AuthorInfo()
-
-        author_info.orcid_id = self.orcid._orcid_id
+        author_info = AuthorInfo(
+            orcid_id=self.orcid._orcid_id
+        )
 
         personal_details = self.orcid.personal_details()
         author_info.author_name = self.extract_author_name(personal_details)
@@ -39,7 +36,7 @@ class AuthorInfoRepository:
 
         return author_info
 
-    def extract_author_name(personal_details: Dict[str, str]) -> str:
+    def extract_author_name(self, personal_details: Dict[str, str]) -> str:
         return " ".join(
             [
                 get_nested_value(personal_details, ["name", "given-names", "value"], ""),
@@ -47,7 +44,7 @@ class AuthorInfoRepository:
             ]
         )
 
-    def extract_biography(personal_details: Dict[str, str]) -> str:
+    def extract_biography(self, personal_details: Dict[str, str]) -> str:
         return (
             get_nested_value(personal_details, ["biography", "content"], "")
             if (
@@ -56,7 +53,7 @@ class AuthorInfoRepository:
             else ""
         )
 
-    def extract_countries(addresses: List[Dict[str, str]]) -> List[str]:
+    def extract_countries(self, addresses: List[Dict[str, str]]) -> List[str]:
         countries = pd.DataFrame(addresses)
         if countries.empty:
             return []
@@ -65,7 +62,7 @@ class AuthorInfoRepository:
         countries = countries["country"]
         return countries.tolist()
 
-    def calculate_academic_age(data: List[Dict[str, str]]) -> int:
+    def calculate_academic_age(self, data: List[Dict[str, str]]) -> int:
         # Possible terms for a PhD-equivalent role
         doctoral_terms = [
             "phd", "dphil", "doctorate", "doctoral", 
@@ -95,6 +92,7 @@ class AuthorInfoRepository:
         return academic_age
 
     def extract_external_identifiers(
+        self,
         data: List[Dict[str, str]]
     ) -> List[ExternalIdentifier]:
         external_identifiers = pd.DataFrame(
@@ -120,7 +118,7 @@ class AuthorInfoRepository:
             ]
         ].to_dict(orient="records")
 
-    def extract_websites(researcher_urls: List[Dict[str, str]]) -> List[Website]:
+    def extract_websites(self, researcher_urls: List[Dict[str, str]]) -> List[Website]:
         urls = pd.DataFrame(researcher_urls)
 
         if urls.empty:
