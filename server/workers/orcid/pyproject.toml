@@ -1,4 +1,8 @@
 [tool.pytest.ini_options]
-testpaths = [
+pythonpath = [
     '.',
+    'src'
+]
+testpaths = [
+    'tests'
 ]

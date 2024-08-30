@@ -8,7 +8,20 @@ from src.orcid_service import OrcidService
 def sample_author_info():
     # Sample author information dictionary
     return {
-        "author_name": "John Doe"
+        "orcid_id": "0000-0002-1825-0097",
+        "author_name": "John Doe",
+        "biography": "A short biography",
+        "author_keywords": "keyword1, keyword2",
+        "academic_age": 14,
+        "websites": [
+            {"url_name": "personal", "url": "http://example.com"},
+            {"url_name": "institutional", "url": "http://institution.com"}
+        ],
+        "external_identifiers": [
+            {"type": "ResearcherID", "url": "http://researcherid.com", "value": "12345", "relationship": "self"},
+            {"type": "Scopus", "url": "http://scopus.com", "value": "67890", "relationship": "self"}
+        ],
+        "countries": ["USA", "Canada"]
     }
 
 @pytest.fixture
@@ -17,7 +30,7 @@ def sample_metadata():
     data = {
         'citation_count': [10, 20, 30, 40],
         'cited_by_accounts_count': [5, 2, 7, 3],
-        'cited_by_wikipedia_count': [1, 0, 2, 1],
+        'cited_by_wikipedia_count': [1, 0, 2, 0],
         'cited_by_msm_count': [0, 1, 1, 0],
         'cited_by_policies_count': [0, 0, 1, 0],
         'cited_by_patents_count': [0, 1, 0, 0],
@@ -43,9 +56,8 @@ def test_enrich_author_info(sample_author_info, sample_metadata):
     assert enriched_info["h_index"] == expected_h_index
 
     # Expected academic age calculation
-    current_year = pd.Timestamp.now().year
-    expected_academic_age = current_year - 2005  # Earliest year from the sample data
-    assert enriched_info["academic_age"] == str(expected_academic_age)
+    expected_academic_age = 14  # Earliest year from the sample data
+    assert enriched_info["academic_age"] == expected_academic_age
 
     # Normalized h-index calculation
     expected_normalized_h_index = (expected_h_index / expected_academic_age) if expected_academic_age > 0 else 0

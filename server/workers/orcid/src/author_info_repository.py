@@ -2,7 +2,6 @@ from datetime import datetime
 import logging
 from pyorcid import Orcid
 import pandas as pd
-from common.decorators import error_logging_aspect
 from common.utils import get_nested_value
 from typing import List, Dict
 from model import AuthorInfo, ExternalIdentifier, Website
@@ -14,7 +13,6 @@ class AuthorInfoRepository:
     def __init__(self, orcid: Orcid) -> None:
         self.orcid = orcid
 
-    @error_logging_aspect(log_level=logging.ERROR)
     def extract_author_info(self) -> AuthorInfo:
         author_info = AuthorInfo()
 
