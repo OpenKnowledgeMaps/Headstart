@@ -25,7 +25,7 @@ class OrcidWorker:
     def next_item(self) -> Tuple[str, Dict[str, str], str]:
         _, message = self.redis_store.blpop(self.service)
         try:
-            message_data: dict = json.loads(message.decode("utf-8"))
+            message_data: Dict[str, str] = json.loads(message.decode("utf-8"))
         except (json.JSONDecodeError, AttributeError) as e:
             raise ValueError(f"Failed to decode message: {e}")
 
@@ -47,7 +47,7 @@ class OrcidWorker:
             if endpoint == "search":
                 self.handle_search(request_id, params)
 
-    def handle_search(self, request_id: str, params: dict) -> None:
+    def handle_search(self, request_id: str, params: Dict[str, str]) -> None:
         try:
             res = self.data_retriever.execute_search(params)
             res["id"] = request_id

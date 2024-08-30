@@ -1,7 +1,7 @@
 import pytest
 import pandas as pd
 import numpy as np
-from src.services.orcid import OrcidService
+from src.orcid_service import OrcidService
 
 # Sample test data and expected outcomes
 @pytest.fixture

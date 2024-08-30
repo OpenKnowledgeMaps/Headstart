@@ -44,10 +44,10 @@ const ResearcherInfo = ({
         <p>{params.biography}</p>
         <h3>OTHER IDs</h3>
         <p>
-          {params.external_identifiers.map((id) => (
-            <p key={id["external-id-value"]}>
-              <a className="underline" href={id["external-id-url"]}>
-                {id["external-id-type"]}: {id["external-id-value"]}
+          {params.external_identifiers.map((external_id) => (
+            <p key={external_id["value"]}>
+              <a className="underline" href={external_id["url"]}>
+                {external_id["type"]}: {external_id["value"]}
               </a>
             </p>
           ))}

@@ -1,6 +1,5 @@
 import logging
 import json
-from typing import Optional
 import pandas as pd
 import uuid
 from common.decorators import error_logging_aspect
@@ -9,12 +8,10 @@ from pyorcid import Orcid, errors as pyorcid_errors
 from pyorcid.orcid_authentication import OrcidAuthentication
 from typing import Tuple
 from common.utils import get_key
-from transform import (
-    extract_author_info,
-    retrieve_full_works_metadata,
-    sanitize_metadata,
-)
+from author_info_repository import AuthorInfoRepository
+from works_repository import WorksRepository
 from redis import StrictRedis
+from typing import Dict
 
 class OrcidService:
     logger = logging.getLogger(__name__)
@@ -48,12 +45,12 @@ class OrcidService:
         )
 
     @error_logging_aspect(log_level=logging.ERROR)
-    def execute_search(self, params: dict) -> dict:
+    def execute_search(self, params: Dict[str, str]) -> Dict[str, str]:
         try:
             orcid_id = params.get("orcid")
-            limit = params.get("limit")
+            # limit = params.get("limit")
             orcid = self._initialize_orcid(orcid_id)
-            author_info, metadata = self._retrieve_author_info_and_metadata(orcid, limit)
+            author_info, metadata = self._retrieve_author_info_and_metadata(orcid)
 
             if metadata.empty:
                 return self._handle_insufficient_results(params, orcid_id)
@@ -70,7 +67,7 @@ class OrcidService:
         except (pyorcid_errors.Unauthorized, Exception) as e:
             return self._handle_error(params, "unexpected data processing error", e)
 
-    def enrich_metadata(self, params: dict, metadata: pd.DataFrame) -> pd.DataFrame:
+    def enrich_metadata(self, params: Dict[str, str], metadata: pd.DataFrame) -> pd.DataFrame:
         """
         This function enriches the metadata DataFrame with additional information
         from external sources, in this case crossref and altmetric.
@@ -107,7 +104,7 @@ class OrcidService:
                 metadata[c] = np.NaN
         return metadata
 
-    def enrich_author_info(self, author_info: dict, metadata: pd.DataFrame) -> dict:
+    def enrich_author_info(self, author_info: Dict[str, str], metadata: pd.DataFrame) -> Dict[str, str]:
         """
         This function enriches the author information with additional information.
         Specifically, we extract and aggregate metrics data from the author's works,
@@ -184,32 +181,20 @@ class OrcidService:
             sandbox=self.sandbox,
         )
     
-    def _retrieve_author_info_and_metadata(self, orcid: Orcid, limit: Optional[int]) -> Tuple[dict, pd.DataFrame]:
-        # number_of_years_since_PhD
-        personal_details = orcid.personal_details()
-        keywords, _ = orcid.keywords()
-        education, _ = orcid.educations()
+    def _retrieve_author_info_and_metadata(self, orcid: Orcid) -> Tuple[Dict[str, str], pd.DataFrame]:
+        author_info = AuthorInfoRepository(orcid).extract_author_info()
+        metadata = WorksRepository(orcid).get_full_works_metadata()
 
-        author_info = extract_author_info(
-            orcid._orcid_id,
-            personal_details,
-            keywords,
-            education,
-            orcid,
-        )
-        works_data = pd.DataFrame(orcid.works_full_metadata(limit=limit))
-        metadata = retrieve_full_works_metadata(works_data)
         return author_info, metadata
 
-    def _process_metadata(self, metadata: pd.DataFrame, author_info: dict, params: dict) -> pd.DataFrame:
+    def _process_metadata(self, metadata: pd.DataFrame, author_info: Dict[str, str], params: Dict[str, str]) -> pd.DataFrame:
         metadata["authors"] = metadata["authors"].replace("", author_info["author_name"])
-        metadata = sanitize_metadata(metadata)
         metadata = self.enrich_metadata(params, metadata)
         author_info = self.enrich_author_info(author_info, metadata)
         metadata = metadata.head(int(params.get("limit")))
         return metadata
 
-    def _format_response(self, data: pd.DataFrame, author_info: dict, params: dict) -> dict:
+    def _format_response(self, data: pd.DataFrame, author_info: Dict[str, str], params: Dict[str, str]) -> Dict[str, str]:
         text = pd.concat([data.id, data[["title", "paper_abstract", "subtitle", "published_in", "authors"]]
                         .apply(lambda x: " ".join(x), axis=1)], axis=1)
         text.columns = ["id", "content"]
@@ -224,7 +209,7 @@ class OrcidService:
         }
         return response
 
-    def _handle_insufficient_results(self, params: dict, orcid_id: str) -> dict:
+    def _handle_insufficient_results(self, params: Dict[str, str], orcid_id: str) -> Dict[str, str]:
         self.logger.debug(f"ORCID {orcid_id} has no works metadata.")
         return {
             "params": params,
@@ -232,21 +217,6 @@ class OrcidService:
             "reason": ["not enough results for orcid"],
         }
 
-    def _handle_error(self, params: dict, reason: str, exception: Exception) -> dict:
+    def _handle_error(self, params: Dict[str, str], reason: str, exception: Exception) -> Dict[str, str]:
         self.logger.error(exception)
         return {"params": params, "status": "error", "reason": [reason]}
-    
-
-if __name__ == "__main__":
-    orcid_service = OrcidService.create(
-        orcid_client_id="APP-DL8ZAR72EZWW15NX",
-        orcid_client_secret="a3389b1a-19c0-4f78-857a-4aba19f5fa46",
-        sandbox=False,
-        redis_store=StrictRedis(host="localhost", port=6379, db=0, password="testredispassword"),
-    )
-    params = {
-        "orcid": "0000-0003-0444-7080",
-        "limit": 10,
-        "raw": False,
-    }
-    res = orcid_service.execute_search(params)
