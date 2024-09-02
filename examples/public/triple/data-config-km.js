@@ -1,4 +1,4 @@
-var data_config = {
+var data_config_km = {
   tag: "visualization",
   mode: "local_files",
   input_format: "json",
@@ -54,4 +54,47 @@ var data_config = {
   show_cite_button: true,
 
   show_context_oa_number: false,
+
+  options: [
+    {
+      id: "year_range",
+      multiple: false,
+      name: "Time Range",
+      type: "dropdown",
+      fields: [
+        { id: "any-time-years", text: "All time" },
+        {
+          id: "user-defined",
+          text: "Custom range",
+          class: "user-defined",
+          inputs: [
+            { id: "from", label: "From: ", class: "time_input" },
+            { id: "to", label: "To: ", class: "time_input" },
+          ],
+        },
+      ],
+    },
+    {
+      id: "sorting",
+      multiple: false,
+      name: "Sorting",
+      type: "dropdown",
+      fields: [
+        { id: "most-relevant", text: "Most relevant" },
+        { id: "most-recent", text: "Most recent" },
+      ],
+    },
+    {
+      id: "language",
+      multiple: false,
+      name: "Language",
+      type: "dropdown",
+      fields: [
+        { id: "all", text: "All languages" },
+        { id: "en", text: "English" },
+        { id: "fr", text: "Fran\u00e7ais" },
+        { id: "es", text: "Espa\u00f1ol" },
+      ],
+    },
+  ],
 };

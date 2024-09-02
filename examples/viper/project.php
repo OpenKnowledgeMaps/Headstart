@@ -45,15 +45,16 @@ include 'config.php';
         	}];
                 data_config.server_url = window.location.href.replace(/[^/]*$/, '') + "<?php echo $HEADSTART_PATH; ?>server/";
         </script>
-        <script type="text/javascript" src="<?php echo $HEADSTART_PATH; ?>dist/headstart.js"></script>
-        <link type="text/css" rel="stylesheet" href="<?php echo $HEADSTART_PATH; ?>dist/headstart.css"></link>
+        <?php include "./headstart/dist/headstart.php"; ?>
         <?php if (isset($_GET['embed']) && $_GET['embed'] === 'true'){
             echo '<script>data_config.credit = true</script>';
         } else {
             include("footer_vis.php");
          } ?>
         <script type="text/javascript">
-            headstart.start();
+            $(document).ready(function () {
+                headstart.start();
+            });
         </script>
     </body>
 </html>
