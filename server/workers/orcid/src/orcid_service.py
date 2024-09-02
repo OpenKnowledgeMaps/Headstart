@@ -106,7 +106,7 @@ class OrcidService:
                 metadata[c] = np.NaN
         return metadata
 
-    def enrich_author_info(self, author_info: AuthorInfo, metadata: pd.DataFrame) -> Dict[str, str]:
+    def enrich_author_info(self, author_info: AuthorInfo, metadata: pd.DataFrame, params: Dict[str, str]) -> Dict[str, str]:
         """
         This function enriches the author information with additional information.
         Specifically, we extract and aggregate metrics data from the author's works,
@@ -166,6 +166,8 @@ class OrcidService:
         metadata["publication_year"] = metadata["year"].apply(extract_year)
 
         academic_age = author_info.academic_age
+        if academic_age & "academic_age_offset" in params:            
+            academic_age += int(params.get("academic_age_offset"))
 
         # Calculate normalized h-index
         author_info.normalized_h_index = (
@@ -192,7 +194,7 @@ class OrcidService:
     def _process_metadata(self, metadata: pd.DataFrame, author_info: AuthorInfo, params: Dict[str, str]) -> pd.DataFrame:
         metadata["authors"] = metadata["authors"].replace("", author_info.author_name)
         metadata = self.enrich_metadata(params, metadata)
-        author_info = self.enrich_author_info(author_info, metadata)
+        author_info = self.enrich_author_info(author_info, metadata, params)
         metadata = metadata.head(int(params.get("limit")))
         return metadata
 

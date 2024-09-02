@@ -34,6 +34,7 @@ class SearchParamSchema(Schema):
     list_size = fields.Int()
     custom_title = fields.Str()
     custom_clustering = fields.Str()
+    academic_age_offset = fields.Int()
 
 
     @pre_load
