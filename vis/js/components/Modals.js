@@ -8,6 +8,7 @@ import CitePaperModal from "../templates/modals/CitePaperModal";
 import EmbedModal from "../templates/modals/EmbedModal";
 import ExportPaperModal from "../templates/modals/ExportPaperModal";
 import InfoModal from "../templates/modals/InfoModal";
+import ResearcherInfoModal from "../templates/modals/ResearcherInfoModal";
 import PdfModal from "../templates/modals/PdfModal";
 import ViperEditModal from "../templates/modals/ViperEditModal";
 import LocalizationProvider from "./LocalizationProvider";
@@ -46,6 +47,7 @@ const Modals = ({
         />
       )}
       <InfoModal />
+      <ResearcherInfoModal />
       {showPDFPreview && (
         <PdfModal
           open={!!previewedPaper}

@@ -1,10 +1,11 @@
 {
-  "document_types":["121", "7", "13", "14", "15", "16", "17", "18", "6"],
+  "document_types":["4", "11", "111", "13", "16", "7", "5", "12", "121", "122", "17", "19", "3", "52", "2", "F", "1A", "14", "15", "6", "51", "1", "18", "181", "183", "182"],
   "from":"1665-01-01",
   "to":"2023-12-07",
   "sorting":"most-relevant",
   "vis_id": "TEST_ID",
-  "min_descsize": 300,
+  "min_descsize": 0,
   "limit": 120,
-  "list_size": 100
+  "list_size": 100,
+  "q_advanced": "(dcdoi:\"10.5281/zenodo.3999345\" OR dcdoi:\"10.5281/zenodo.3935964\" OR dcdoi:\"10.5281/zenodo.3935963\" OR dcdoi:\"10.1371/journal.pcbi.1007704\" OR dcdoi:\"10.5281/zenodo.4317253\" OR dcdoi:\"10.5281/zenodo.3641795\")"
 }

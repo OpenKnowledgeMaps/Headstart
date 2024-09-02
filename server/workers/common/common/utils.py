@@ -9,6 +9,7 @@ import redis
 import pandas as pd
 import pathlib
 
+
 redis_config = {
     "host": os.getenv("REDIS_HOST"),
     "port": os.getenv("REDIS_PORT"),
@@ -16,8 +17,10 @@ redis_config = {
     "password": os.getenv("REDIS_PASSWORD"),
     "client_name": "api"
 }
-redis_store = redis.StrictRedis(**redis_config)
 
+print("Connecting to Redis with config: ", redis_config)
+
+redis_store = redis.StrictRedis(**redis_config)
 
 def get_key(store, key, timeout=180):
     wait_s = 1
@@ -80,7 +83,7 @@ def get_or_create_contentprovider_lookup():
         k = str(uuid.uuid4())
         d = {"id": k, "params": {},"endpoint": "contentproviders"}
         redis_store.rpush("base", json.dumps(d))
-        result = get_key(redis_store, k)
+        result = get_key(redis_store, k, 10)
         if result.get("status") == "error":
             df = pd.read_json("contentproviders.json")
             df.set_index("internal_name", inplace=True)
@@ -100,4 +103,19 @@ def get_or_create_contentprovider_lookup():
         cp_dict = df.name.to_dict()
         return cp_dict
 
-contentprovider_lookup = get_or_create_contentprovider_lookup()
+def get_nested_value(data, keys, default=None):
+    """
+    Recursively retrieves a nested value from a dictionary.
+
+    :param data: Dictionary to retrieve the value from
+    :param keys: List of keys to follow in the dictionary
+    :param default: Default value to return if any key is not found
+    :return: The retrieved value or the default value
+    """
+    for key in keys:
+        if not hasattr(data, 'get'):
+            return default
+        data = data.get(key)
+        if data is None:
+            return default
+    return data

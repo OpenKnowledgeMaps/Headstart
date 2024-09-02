@@ -1,0 +1,30 @@
+{
+    "last-modified-date": {
+        "value": 1460763065672
+    },
+    "name": {
+        "created-date": {
+            "value": 1460763065672
+        },
+        "last-modified-date": {
+            "value": 1460763065672
+        },
+        "given-names": {
+            "value": "Chao"
+        },
+        "family-name": {
+            "value": "Xu"
+        },
+        "credit-name": null,
+        "source": null,
+        "visibility": "public",
+        "path": "0000-0003-0444-7080"
+    },
+    "other-names": {
+        "last-modified-date": null,
+        "other-name": [],
+        "path": "/0000-0003-0444-7080/other-names"
+    },
+    "biography": null,
+    "path": "/0000-0003-0444-7080/personal-details"
+}

@@ -1,0 +1,116 @@
+{
+    "last-modified-date": {
+        "value": 1680340041403
+    },
+    "external-identifier": [
+        {
+            "created-date": {
+                "value": 1431096210330
+            },
+            "last-modified-date": {
+                "value": 1517869567419
+            },
+            "source": {
+                "source-orcid": null,
+                "source-client-id": {
+                    "uri": "https://orcid.org/client/0000-0003-1377-5676",
+                    "path": "0000-0003-1377-5676",
+                    "host": "orcid.org"
+                },
+                "source-name": {
+                    "value": "ResearcherID"
+                },
+                "assertion-origin-orcid": {
+                    "uri": "https://orcid.org/0000-0003-0444-7080",
+                    "path": "0000-0003-0444-7080",
+                    "host": "orcid.org"
+                },
+                "assertion-origin-client-id": null,
+                "assertion-origin-name": {
+                    "value": "Chao Xu"
+                }
+            },
+            "external-id-type": "ResearcherID",
+            "external-id-value": "G-3885-2010",
+            "external-id-url": {
+                "value": "http://www.researcherid.com/rid/G-3885-2010"
+            },
+            "external-id-relationship": "self",
+            "visibility": "public",
+            "path": "/0000-0003-0444-7080/external-identifiers/269622",
+            "put-code": 269622,
+            "display-index": 0
+        },
+        {
+            "created-date": {
+                "value": 1445094120127
+            },
+            "last-modified-date": {
+                "value": 1445094120127
+            },
+            "source": {
+                "source-orcid": null,
+                "source-client-id": {
+                    "uri": "https://orcid.org/client/APP-4DPEW6SVSNQHKC8G",
+                    "path": "APP-4DPEW6SVSNQHKC8G",
+                    "host": "orcid.org"
+                },
+                "source-name": {
+                    "value": "Loop"
+                },
+                "assertion-origin-orcid": null,
+                "assertion-origin-client-id": null,
+                "assertion-origin-name": null
+            },
+            "external-id-type": "Loop profile",
+            "external-id-value": "285285",
+            "external-id-url": {
+                "value": "https://loop.frontiersin.org/people/285285"
+            },
+            "external-id-relationship": "self",
+            "visibility": "public",
+            "path": "/0000-0003-0444-7080/external-identifiers/351949",
+            "put-code": 351949,
+            "display-index": 0
+        },
+        {
+            "created-date": {
+                "value": 1680340041403
+            },
+            "last-modified-date": {
+                "value": 1680340041403
+            },
+            "source": {
+                "source-orcid": null,
+                "source-client-id": {
+                    "uri": "https://orcid.org/client/0000-0002-5982-8983",
+                    "path": "0000-0002-5982-8983",
+                    "host": "orcid.org"
+                },
+                "source-name": {
+                    "value": "Scopus - Elsevier"
+                },
+                "assertion-origin-orcid": {
+                    "uri": "https://orcid.org/0000-0003-0444-7080",
+                    "path": "0000-0003-0444-7080",
+                    "host": "orcid.org"
+                },
+                "assertion-origin-client-id": null,
+                "assertion-origin-name": {
+                    "value": "Chao Xu"
+                }
+            },
+            "external-id-type": "Scopus Author ID",
+            "external-id-value": "56182786200",
+            "external-id-url": {
+                "value": "http://www.scopus.com/inward/authorDetails.url?authorID=56182786200&partnerID=MN8TOARS"
+            },
+            "external-id-relationship": "self",
+            "visibility": "public",
+            "path": "/0000-0003-0444-7080/external-identifiers/2996962",
+            "put-code": 2996962,
+            "display-index": 0
+        }
+    ],
+    "path": "/0000-0003-0444-7080/external-identifiers"
+}

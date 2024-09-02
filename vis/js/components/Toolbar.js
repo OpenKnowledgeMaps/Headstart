@@ -2,7 +2,7 @@ import React from "react";
 import { connect } from "react-redux";
 import ScaleToolbar from "../templates/ScaleToolbar";
 
-import { openInfoModal, scaleMap } from "../actions";
+import { openInfoModal, openResearcherModal, scaleMap } from "../actions";
 
 const Toolbar = ({
   showScaleToolbar,
@@ -14,6 +14,7 @@ const Toolbar = ({
   showCredit,
   onInfoClick,
   onScaleChange,
+  onResearcherClick,
 }) => {
   if (showScaleToolbar) {
     const handleScaleChange = (newScaleBy) => {
@@ -33,6 +34,7 @@ const Toolbar = ({
           value={scaleValue}
           showCredit={showCredit}
           onInfoClick={onInfoClick}
+          onResearcherClick={onResearcherClick}
           onChange={handleScaleChange}
         />
       </div>
@@ -54,6 +56,7 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => ({
   onInfoClick: () => dispatch(openInfoModal()),
+  onResearcherClick: () => dispatch(openResearcherModal()),
   onScaleChange: (value, baseUnit, contentBased, sort) =>
     dispatch(scaleMap(value, baseUnit, contentBased, sort)),
 });

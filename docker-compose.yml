@@ -1,5 +1,3 @@
-version: '3.7'
-
 services:
 
   db:
@@ -29,7 +27,7 @@ services:
         - 'redis:/var/lib/redis/data'
         - ./local_dev/redis.conf:/etc/redis/redis.conf
     ports:
-     - "127.0.0.1:${REDIS_PORT}:6379"
+     - "127.0.0.1:${REDIS_PORT}:${REDIS_PORT}"
     networks:
       - headstart
 
@@ -47,15 +45,16 @@ services:
       BEHIND_PROXY: "${BEHIND_PROXY}"
       DEFAULT_DATABASE: "${DEFAULT_DATABASE}"
       FLASK_ENV: "${FLASK_ENV}"
-    command: ["python", "app.py"]
     volumes:
       - ./api_cache:/var/api_cache
-      - ./server/workers/api/src:/api
+      - ./server/workers/api/src:/app/api/src
+      - ./server/workers/common:/app/common
     depends_on:
       - redis
       - base
       - pubmed
       - openaire
+      - orcid
     networks:
       - headstart
 
@@ -191,6 +190,34 @@ services:
     build:
       context: server
       dockerfile: workers/openaire/Dockerfile
+    environment:
+      SERVICE_VERSION: "${SERVICE_VERSION}"
+      REDIS_HOST: "${REDIS_HOST}"
+      REDIS_PORT: "${REDIS_PORT}"
+      REDIS_DB: "${REDIS_DB}"
+      REDIS_PASSWORD: "${REDIS_PASSWORD}"
+      LOGLEVEL: "${LOGLEVEL}"
+      LOGFILE: "${LOGFILE}"
+      RENV_VERSION: 0.14.0-5
+      CRAN_REPOS: https://cran.wu.ac.at
+      LC_ALL: "en_US.UTF-8"
+      LANG: "en_US.UTF-8"
+      RENV_PATHS_CACHE: /renv/cache
+      PYTHONIOENCODING: "utf-8"
+    restart: unless-stopped
+    volumes:
+      - ./local_dev/renv/cache:/renv/cache
+      - /var/log/headstart:/var/log/headstart
+      - ./server/preprocessing/other-scripts:/headstart/other-scripts
+    depends_on:
+      - redis
+    networks:
+      - headstart
+
+  metrics:
+    build:
+      context: server
+      dockerfile: workers/metrics/Dockerfile
     environment:
       SERVICE_VERSION: "${SERVICE_VERSION}"
       REDIS_HOST: "${REDIS_HOST}"

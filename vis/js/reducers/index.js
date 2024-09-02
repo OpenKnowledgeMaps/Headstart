@@ -5,6 +5,7 @@ import { combineReducers } from "redux";
 
 import animation from "./animation";
 import areas from "./areas";
+import author from "./author";
 import bubbleOrder from "./bubbleOrder";
 import chart from "./chart";
 import chartType from "./chartType";
@@ -34,6 +35,7 @@ import modalInfoType from "./modalInfoType";
 export default combineReducers({
   animation,
   areas,
+  author,
   bubbleOrder,
   chart,
   chartType,
