@@ -83,12 +83,13 @@ class DataManager {
   __getPapersArray(backendData) {
     if (this.config.show_context) {
       if (typeof backendData.data === "string") {
-        return JSON.parse(backendData.data);
+        const data = JSON.parse(backendData.data);
+        return data.documents ? JSON.parse(data?.documents) : [];
       }
-      return backendData.data;
+      return backendData.data?.documents ?? [];
     }
     if (typeof backendData.data === "object") {
-      return backendData.data;
+      return backendData.data?.documents ?? [];
     }
 
     return backendData;
