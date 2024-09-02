@@ -1,0 +1,2 @@
+# Include the common package from the local file system
+-e ../common

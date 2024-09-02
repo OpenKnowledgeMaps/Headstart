@@ -31,6 +31,7 @@ const modals = (
         },
         openInfoModal:
           state.openInfoModal !== undefined && !!action.configObject.show_intro,
+        openResearcherModal: false,
         infoParams: action.contextObject
           ? {
               ...action.contextObject,
@@ -78,6 +79,16 @@ const modals = (
         ...state,
         openInfoModal: false,
       };
+    case "OPEN_RESEARCHER_MODAL":
+      return {
+        ...state,
+        openResearcherModal: true,
+      };
+    case "CLOSE_RESEARCHER_MODAL":
+      return {
+        ...state,
+        openResearcherModal: false,
+      };
     case "SHOW_PREVIEW":
       return {
         ...state,
@@ -123,6 +134,7 @@ const modals = (
       return {
         ...state,
         openInfoModal: false,
+        openResearcherModal: false,
         openEmbedModal: false,
         openViperEditModal: false,
         openCitationModal: false,

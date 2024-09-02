@@ -1,0 +1,11 @@
+.cache
+
+# python
+.venv
+__pycache__
+.pytest_cache
+*.ipynb
+.pynb_checkpoints
+
+# macOS
+.DS_Store

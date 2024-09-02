@@ -183,7 +183,6 @@ const KnowledgeMap = (props) => {
           hovered={hoveredBubble === bubble.area_uri}
           zoom={zoom}
           zoomed={zoomedBubbleUri === bubble.area_uri}
-          baseUnit={baseUnit}
           animation={animation}
           highlighted={highlightedBubbleUri === bubble.area_uri}
         />

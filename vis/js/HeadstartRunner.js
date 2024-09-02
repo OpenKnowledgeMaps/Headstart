@@ -119,7 +119,8 @@ class HeadstartRunner {
         width,
         height,
         list.height,
-        this.dataManager.scalingFactors
+        this.dataManager.scalingFactors,
+        this.dataManager.author
       )
     );
 

@@ -1,6 +1,6 @@
 FROM php:8.0-apache
 
-MAINTAINER Chris Kittel "christopher.kittel@openknowledgemaps.org"
+LABEL maintainer="Chris Kittel <christopher.kittel@openknowledgemaps.org>"
 
 RUN a2enmod rewrite
 RUN apt-get update && apt-get install -y curl libsqlite3-dev php7.4-sqlite libonig-dev libxml2-dev
