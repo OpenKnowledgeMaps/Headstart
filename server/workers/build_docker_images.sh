@@ -1,6 +1,6 @@
 #!/bin/bash
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
-services=("api" "persistence" "dataprocessing" "base" "pubmed" "openaire" "orcid")
+services=("api" "persistence" "dataprocessing" "base" "pubmed" "openaire" "orcid" "metrics")
 service_version="`git rev-parse HEAD`"
 echo ""
 echo "Building services with version $service_version"
