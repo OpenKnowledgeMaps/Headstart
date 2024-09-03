@@ -45,16 +45,18 @@ services:
       BEHIND_PROXY: "${BEHIND_PROXY}"
       DEFAULT_DATABASE: "${DEFAULT_DATABASE}"
       FLASK_ENV: "${FLASK_ENV}"
+    command: ["python", "app.py"]
     volumes:
       - ./api_cache:/var/api_cache
-      - ./server/workers/api/src:/app/api/src
-      - ./server/workers/common:/app/common
+      - ./server/workers/api/src:/api
+      - ./server/workers/common:/api/common
     depends_on:
       - redis
       - base
       - pubmed
       - openaire
       - orcid
+      - metrics
     networks:
       - headstart
 

@@ -14,5 +14,3 @@ COPY workers/common ../common
 COPY workers/persistence/requirements-e.txt ./
 RUN pip install --no-cache-dir -r requirements-e.txt
 COPY workers/persistence/src/ ./
-
-CMD ["python3", "app.py"]
