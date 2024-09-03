@@ -19,6 +19,7 @@ search_param_schema = SearchParamSchema()
 # Constants
 DEFAULT_LIMIT = 200
 REDIS_TIMEOUT = 300
+DEFAULT_ACADEMIC_AGE_OFFSET = 0
 
 # Model definition
 orcid_querymodel = orcid_ns.model(
@@ -74,6 +75,8 @@ class Search(Resource):
             del params["optradio"]
         if "limit" not in params:
             params["limit"] = DEFAULT_LIMIT
+        if "academic_age_offset" not in params:
+            params["academic_age_offset"] = DEFAULT_ACADEMIC_AGE_OFFSET
 
     def get_response_headers(self):
         headers = {}
