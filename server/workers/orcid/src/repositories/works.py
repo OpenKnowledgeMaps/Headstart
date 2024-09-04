@@ -19,7 +19,7 @@ class WorksRepository:
         - pd.DataFrame: The full metadata for all works associated with the ORCID.
         """
         
-        works_data = self.orcid.works_full_metadata(limit=limit)
+        works_data = self.orcid.works_full_metadata()
         return self.transform_works_metadata(pd.DataFrame(works_data))
 
     def transform_works_metadata(self, works_data: pd.DataFrame) -> pd.DataFrame:

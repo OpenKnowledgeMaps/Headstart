@@ -15,7 +15,7 @@ const Details = ({authors, source, isSelected}) => {
   );
 
   // console.log("Details.jsx: authorsString: ", authorsString);
-  console.log("Details.jsx: loc.default_authors: ", loc.default_authors);
+  // console.log("Details.jsx: loc.default_authors: ", loc.default_authors);
 
   return (
       // html template starts here

@@ -54,8 +54,6 @@ const StandardListEntry = ({
     !showMetrics &&
     (!!citations || parseInt(citations) === 0);
 
-  console.log(paper);
-
   return (
     // html template starts here
     <div id="list_holder" className="resulttype-paper">

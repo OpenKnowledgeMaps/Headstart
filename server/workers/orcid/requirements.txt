@@ -24,4 +24,4 @@ redis==4.3.6
 six==1.16.0
 typing-extensions==4.2.0
 zipp==3.6.0
-pyorcid @ git+https://github.com/OpenKnowledgeMaps/PyOrcid.git@main
+pyorcid @ git+https://github.com/OpenKnowledgeMaps/PyOrcid.git@3d8b30cbc95c2c7bb34369145866d2b252c677b8
