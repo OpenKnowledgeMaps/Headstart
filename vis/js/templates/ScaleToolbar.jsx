@@ -33,11 +33,12 @@ const ScaleToolbar = ({
           id="scale-menu"
           noCaret
           title={
-            <>
-              {localization.scale_by_label}{" "}
-              <span id="curr-filter-type">{labels[value]}</span>{" "}
-              <i className="fas fa-chevron-down chevron"></i>
-            </>
+            <div className="flex-container">
+              <span className="truncate-text">
+                {localization.scale_by_label} <span id="curr-filter-type">{labels[value]}</span>
+              </span>
+              <i className="fas fa-chevron-down chevron" style={{ marginLeft: "5px" }}></i>
+            </div>
           }
         >
           {options.map((key) => (

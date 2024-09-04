@@ -166,12 +166,13 @@ class OrcidService:
         metadata["publication_year"] = metadata["year"].apply(extract_year)
 
         academic_age = author_info.academic_age
-        if (academic_age and "academic_age_offset" in params):
+        if (academic_age is not None and "academic_age_offset" in params):
             academic_age += int(params.get("academic_age_offset"))
+        author_info.academic_age = academic_age
 
         # Calculate normalized h-index
         author_info.normalized_h_index = (
-            h_index / academic_age if academic_age and academic_age > 0 else 0
+            h_index / academic_age if academic_age and academic_age > 0 else None
         )
 
         return author_info

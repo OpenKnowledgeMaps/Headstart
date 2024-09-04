@@ -27,10 +27,15 @@ const FilterDropdown = ({
         id="filter_params"
         noCaret
         title={
-          <>
-            {label} <span id="curr-filter-type">{valueLabel}</span>{" "}
-            <i className="fas fa-chevron-down chevron"></i>
-          </>
+          <div className="flex-container">
+            <span className="truncate-text">
+              {label} <span id="curr-filter-type">{valueLabel}</span>
+            </span>
+            <i
+              className="fas fa-chevron-down chevron"
+              style={{ marginLeft: "5px" }}
+            ></i>
+          </div>
         }
       >
         {options.map((o) => (

@@ -909,3 +909,19 @@ img#preview_page {
         color: #cc3b6b;
     }
 }
+
+.dropdown-toggle {
+    .flex-container {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+}
+
+.truncate-text {
+    width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: inline-block;
+}

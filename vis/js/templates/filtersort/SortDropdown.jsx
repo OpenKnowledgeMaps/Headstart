@@ -24,10 +24,12 @@ const SortDropdown = ({ label, value, valueLabel, options, handleChange }) => {
         id="sort"
         noCaret
         title={
-          <>
-            {label} <span id="curr-sort-type">{valueLabel}</span>{" "}
-            <i className="fas fa-chevron-down chevron"></i>
-          </>
+          <div className="flex-container">
+            <span className="truncate-text">
+              {label} <span id="curr-sort-type">{valueLabel}</span>
+            </span>
+            <i className="fas fa-chevron-down chevron" style={{ marginLeft: '5px' }}></i>
+          </div>
         }
       >
         {options.map((o) => (
@@ -38,7 +40,9 @@ const SortDropdown = ({ label, value, valueLabel, options, handleChange }) => {
             onSelect={handleSortChange}
             active={o.id === value}
           >
-            {o.label}
+            <div className="truncate-text">
+              {o.label}
+            </div>
           </MenuItem>
         ))}
       </DropdownButton>

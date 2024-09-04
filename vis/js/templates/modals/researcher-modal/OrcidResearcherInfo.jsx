@@ -15,30 +15,30 @@ const ResearcherInfo = ({
         <h3>METRICS</h3>
         <p>
           Normalised h-index: <span>
-            {params.normalized_h_index?.toFixed(1)}
+            {params.normalized_h_index ? params.normalized_h_index?.toFixed(1) : "N/A"}
           </span>
         </p>
         <p>
           Academic age: <span>
-            {params.academic_age}
+            {params.academic_age ? params.academic_age : "N/A"}
           </span>
         </p>
         <p>
           h-index: <span>
-            {params.h_index}
+            {params.h_index ? params.h_index : "N/A"}
           </span>
         </p>
         <p>
-          Number of total citations: <span>{params.total_citations}</span>
+          Number of total citations: <span>{params.total_citations ? params.total_citations : 'N/A'}</span>
         </p>
         <h3>ALTMETRICS</h3>
         <p>
           Number of total unique social media mentions:{" "}
-          <span>{params.total_unique_social_media_mentions}</span>
+          <span>{params.total_unique_social_media_mentions ? params.total_unique_social_media_mentions : 'N/A'}</span>
         </p>
         <p>
           Number of total news encyclopaedia, patent and policy references:{" "}
-          <span>{params.total_neppr}</span>
+          <span>{params.total_neppr ? params.total_neppr : 'N/A'}</span>
         </p>
         <h3>NOTES ON METRICS</h3>
         <p>{params.biography}</p>
