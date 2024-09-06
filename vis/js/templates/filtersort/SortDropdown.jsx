@@ -1,6 +1,7 @@
 import React from "react";
 import { DropdownButton, MenuItem } from "react-bootstrap";
 import useMatomo from "../../utils/useMatomo";
+import HoverPopover from "../HoverPopover";
 
 const SortDropdown = ({ label, value, valueLabel, options, handleChange }) => {
   const { trackEvent } = useMatomo();
@@ -20,32 +21,42 @@ const SortDropdown = ({ label, value, valueLabel, options, handleChange }) => {
       id="sort_container"
       style={{ display: "inline-block" }}
     >
-      <DropdownButton
-        id="sort"
-        noCaret
-        title={
-          <div className="flex-container">
-            <span className="truncate-text">
-              {label} <span id="curr-sort-type">{valueLabel}</span>
-            </span>
-            <i className="fas fa-chevron-down chevron" style={{ marginLeft: '5px' }}></i>
-          </div>
+      <HoverPopover
+        id="sort-drop-down"
+        content={
+          <>
+            {label} <span id="curr-sort-type">{valueLabel}</span>
+          </>
         }
       >
-        {options.map((o) => (
-          <MenuItem
-            id={"sort_option_" + o.id}
-            key={o.id}
-            eventKey={o.id}
-            onSelect={handleSortChange}
-            active={o.id === value}
-          >
-            <div className="truncate-text">
-              {o.label}
+        <DropdownButton
+          id="sort"
+          noCaret
+          title={
+            <div className="flex-container">
+              <span className="truncate-text">
+                {label} <span id="curr-sort-type">{valueLabel}</span>
+              </span>
+              <i
+                className="fas fa-chevron-down chevron"
+                style={{ marginLeft: "5px" }}
+              ></i>
             </div>
-          </MenuItem>
-        ))}
-      </DropdownButton>
+          }
+        >
+          {options.map((o) => (
+            <MenuItem
+              id={"sort_option_" + o.id}
+              key={o.id}
+              eventKey={o.id}
+              onSelect={handleSortChange}
+              active={o.id === value}
+            >
+              <div className="truncate-text">{o.label}</div>
+            </MenuItem>
+          ))}
+        </DropdownButton>
+      </HoverPopover>
     </div>
   );
 };

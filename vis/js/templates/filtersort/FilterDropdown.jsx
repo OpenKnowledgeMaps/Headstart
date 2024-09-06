@@ -1,6 +1,7 @@
 import React from "react";
 import { DropdownButton, MenuItem } from "react-bootstrap";
 import useMatomo from "../../utils/useMatomo";
+import HoverPopover from "../HoverPopover";
 
 const FilterDropdown = ({
   label,
@@ -23,33 +24,42 @@ const FilterDropdown = ({
 
   return (
     <div className="dropdown" id="filter_parameter_container">
-      <DropdownButton
-        id="filter_params"
-        noCaret
-        title={
-          <div className="flex-container">
-            <span className="truncate-text">
-              {label} <span id="curr-filter-type">{valueLabel}</span>
-            </span>
-            <i
-              className="fas fa-chevron-down chevron"
-              style={{ marginLeft: "5px" }}
-            ></i>
-          </div>
+      <HoverPopover
+        id="sort-drop-down"
+        content={
+          <>
+            {label} <span id="curr-filter-type">{valueLabel}</span>
+          </>
         }
       >
-        {options.map((o) => (
-          <MenuItem
-            id={"filter_option_" + o.id}
-            key={o.id}
-            eventKey={o.id}
-            onSelect={handleFilterChange}
-            active={o.id === value}
-          >
-            {o.label}
-          </MenuItem>
-        ))}
-      </DropdownButton>
+        <DropdownButton
+          id="filter_params"
+          noCaret
+          title={
+            <div className="flex-container">
+              <span className="truncate-text">
+                {label} <span id="curr-filter-type">{valueLabel}</span>
+              </span>
+              <i
+                className="fas fa-chevron-down chevron"
+                style={{ marginLeft: "5px" }}
+              ></i>
+            </div>
+          }
+        >
+          {options.map((o) => (
+            <MenuItem
+              id={"filter_option_" + o.id}
+              key={o.id}
+              eventKey={o.id}
+              onSelect={handleFilterChange}
+              active={o.id === value}
+            >
+              {o.label}
+            </MenuItem>
+          ))}
+        </DropdownButton>
+      </HoverPopover>
     </div>
   );
 };

@@ -1,3 +1,4 @@
+import logging
 from datetime import datetime
 from pyorcid import Orcid
 import pandas as pd
@@ -7,6 +8,8 @@ from model import AuthorInfo, ExternalIdentifier, Website
 
 
 class AuthorInfoRepository:
+    logger = logging.getLogger(__name__)
+
     def __init__(self, orcid: Orcid) -> None:
         self.orcid = orcid
 
@@ -72,9 +75,10 @@ class AuthorInfoRepository:
 
         # Find the PhD-equivalent end date
         phd_end_date = None
-        for entry in data:
-            # Check if the Role matches any PhD-equivalent term
-            if any(term in entry["Role"].lower() for term in doctoral_terms):
+        for entry in reversed(data):
+            # Check if Role exists and is not None, and if it matches any PhD-equivalent term
+            role = entry.get("Role", "").lower() if entry.get("Role") else ""
+            if any(term in role for term in doctoral_terms):
                 phd_end_date = entry["end-date"]
                 break
 
@@ -83,7 +87,12 @@ class AuthorInfoRepository:
             return None
 
         # Convert PhD end date to a datetime object
-        phd_end_date = datetime.strptime(phd_end_date, "%m/%Y")
+        try:
+            # Try to parse using "month/year" format
+            phd_end_date = datetime.strptime(phd_end_date, "%m/%Y")
+        except ValueError:
+            # Fallback to parse using "year" format if the above fails
+            phd_end_date = datetime.strptime(phd_end_date, "%Y")
 
         # Calculate the number of years since the PhD
         current_date = datetime.now()
@@ -92,31 +101,36 @@ class AuthorInfoRepository:
         return academic_age
 
     def extract_external_identifiers(
-        self,
-        data: List[Dict[str, str]]
-    ) -> List[ExternalIdentifier]:
-        external_identifiers = pd.DataFrame(
-            data
-        )
+            self,
+            data: List[Dict[str, str]]
+        ) -> List[ExternalIdentifier]:
+            external_identifiers = pd.DataFrame(data)
 
-        if external_identifiers.empty:
-            return []
-        
-        external_identifiers = external_identifiers[
-            external_identifiers["visibility"] == "public"
-        ]
-        external_identifiers["external-id-url"] = external_identifiers[
-            "external-id-url"
-        ].apply(lambda x: x.get("value") if isinstance(x, dict) else "")
-        
-        return external_identifiers[
-            [
-                "external-id-type",
-                "external-id-url",
-                "external-id-value",
-                "external-id-relationship",
+            if external_identifiers.empty:
+                return []
+
+            # Filter the rows where visibility is 'public'
+            external_identifiers = external_identifiers[
+                external_identifiers["visibility"] == "public"
             ]
-        ].to_dict(orient="records")
+
+            # Handle the 'external-id-url' column
+            external_identifiers["external-id-url"] = external_identifiers[
+                "external-id-url"
+            ].apply(lambda x: x.get("value") if isinstance(x, dict) else "")
+
+            # Rename columns by removing the 'external-id-' prefix
+            external_identifiers.rename(columns=lambda x: x.replace("external-id-", ""), inplace=True)
+
+            # Return the required columns as a list of dictionaries
+            return external_identifiers[
+                [
+                    "type",
+                    "url",
+                    "value",
+                    "relationship",
+                ]
+            ].to_dict(orient="records")
 
     def extract_websites(self, researcher_urls: List[Dict[str, str]]) -> List[Website]:
         urls = pd.DataFrame(researcher_urls)

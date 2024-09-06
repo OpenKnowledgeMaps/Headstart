@@ -56,8 +56,9 @@ class OrcidService:
             if metadata.empty:
                 return self._handle_insufficient_results(params, orcid_id)
             
-
             metadata = self._process_metadata(metadata, author_info, params)
+
+            self.logger.debug('metadata processed inside of _process_metadata')
             
             return self._format_response(data=metadata, author_info=author_info, params=params)
         except (
@@ -200,9 +201,19 @@ class OrcidService:
         return metadata
 
     def _format_response(self, data: pd.DataFrame, author_info: AuthorInfo, params: Dict[str, str]) -> Dict[str, str]:
-        text = pd.concat([data.id, data[["title", "paper_abstract", "subtitle", "published_in", "authors"]]
-                        .apply(lambda x: " ".join(x), axis=1)], axis=1)
+        self.logger.debug(f"Formatting response for ORCID {params.get('orcid')}")
+        text = pd.concat(
+            [
+                data.id, 
+                data[["title", "paper_abstract", "subtitle", "published_in", "authors"]]
+                .fillna('')  # Replace NaN values with empty string
+                .apply(lambda x: " ".join(x.astype(str)), axis=1)  # Ensure all elements are strings before joining
+            ], 
+            axis=1
+        )
         text.columns = ["id", "content"]
+
+        self.logger.debug(f"Returning response for ORCID {params.get('orcid')} len {len(data)}")
 
         response = {
             "input_data": {

@@ -45,7 +45,7 @@ const DEFAULT_SCHEME = [
     name: "title",
     required: true,
     type: ["string"],
-    fallback: () => "",
+    fallback: (loc) => loc?.default_paper_title,
   },
   {
     name: "paper_abstract",
@@ -145,6 +145,7 @@ const DEFAULT_SCHEME = [
   },
   { name: "cluster_labels", required: true },
   { name: "file_hash", type: ["string"], fallback: (loc) => loc.default_hash },
+  { name: "citation_count", type: ["number"], fallback: () => 'n/a' },
 ];
 
 export default DEFAULT_SCHEME;

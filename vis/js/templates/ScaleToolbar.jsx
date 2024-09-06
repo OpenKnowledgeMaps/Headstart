@@ -3,6 +3,7 @@ import { DropdownButton, MenuItem } from "react-bootstrap";
 
 import { useLocalizationContext } from "../components/LocalizationProvider";
 import useMatomo from "../utils/useMatomo";
+import HoverPopover from "./HoverPopover";
 
 const ScaleToolbar = ({
   value,
@@ -29,30 +30,44 @@ const ScaleToolbar = ({
   return (
     <div className="scale-toolbar btn-group dropup">
       <div className="dropdown">
-        <DropdownButton
-          id="scale-menu"
-          noCaret
-          title={
-            <div className="flex-container">
-              <span className="truncate-text">
-                {localization.scale_by_label} <span id="curr-filter-type">{labels[value]}</span>
-              </span>
-              <i className="fas fa-chevron-down chevron" style={{ marginLeft: "5px" }}></i>
-            </div>
+        <HoverPopover
+          id="sort-drop-down"
+          content={
+            <>
+              {localization.scale_by_label}{" "}
+              <span id="curr-filter-type">{labels[value]}</span>
+            </>
           }
         >
-          {options.map((key) => (
-            <MenuItem
-              className="scale_item"
-              key={key}
-              eventKey={key}
-              onSelect={handleScaleChange}
-              active={key === value}
-            >
-              {labels[key]}
-            </MenuItem>
-          ))}
-        </DropdownButton>
+          <DropdownButton
+            id="scale-menu"
+            noCaret
+            title={
+              <div className="flex-container">
+                <span className="truncate-text">
+                  {localization.scale_by_label}{" "}
+                  <span id="curr-filter-type">{labels[value]}</span>
+                </span>
+                <i
+                  className="fas fa-chevron-down chevron"
+                  style={{ marginLeft: "5px" }}
+                ></i>
+              </div>
+            }
+          >
+            {options.map((key) => (
+              <MenuItem
+                className="scale_item"
+                key={key}
+                eventKey={key}
+                onSelect={handleScaleChange}
+                active={key === value}
+              >
+                {labels[key]}
+              </MenuItem>
+            ))}
+          </DropdownButton>
+        </HoverPopover>
       </div>
       <div className="context-scale-toolbar">
         <span id="curr-scale-explanation">{explanations[value]}</span>

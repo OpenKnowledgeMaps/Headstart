@@ -9,7 +9,7 @@ const Footer = ({service, timestamp, faqsUrl, faqsUrlStr, isStreamgraph}) => {
     return null;
   }
 
-  if (service.startsWith("triple") || ["base", "pubmed", "openaire"].includes(service)) {
+  if (service.startsWith("triple") || ["base", "pubmed", "openaire", "orcid"].includes(service)) {
     return <CreatedBy timestamp={timestamp} faqsUrl={isStreamgraph ? faqsUrlStr : faqsUrl}/>;
   }
 
