@@ -49,7 +49,8 @@ class WorksRepository:
         new_works_data["doi"] = works_data.apply(self.extract_doi, axis=1)
         new_works_data["url"] = works_data.apply(self.get_url, axis=1)
         new_works_data["link"] = works_data.apply(self.get_link, axis=1)
-        new_works_data["oa_state"] = new_works_data.link.map(lambda x: 1 if x else 2)
+        #new_works_data["oa_state"] = new_works_data.link.map(lambda x: 1 if x else 2)
+        new_works_data["oa_state"] = 2
 
         return new_works_data
 
