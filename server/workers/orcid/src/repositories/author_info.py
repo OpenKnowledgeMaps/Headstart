@@ -70,7 +70,8 @@ class AuthorInfoRepository:
         doctoral_terms = [
             "phd", "dphil", "doctorate", "doctoral", 
             "edd", "dsc", "md-phd", "jd-phd", "dr.phil.", "dr.rer.nat.",
-            "doctor of science", "doctor of education", "doctor's degree"
+            "doctor of science", "doctor of education", "doctor's degree",
+            "ph.d"
         ]
 
         # Find the PhD-equivalent end date
