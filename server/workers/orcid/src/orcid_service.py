@@ -92,8 +92,10 @@ class OrcidService:
             "params": params,
             "metadata": metadata.to_json(orient="records"),
         }
+        self.logger.debug(f"enrich metadata task data: {task_data}")
         self.redis_store.rpush("metrics", json.dumps(task_data))
         result = get_key(self.redis_store, request_id, 300)
+        self.logger.debug(f"result: {result}")
         metadata = pd.DataFrame(json.loads(result["input_data"]))
         for c in [
             "citation_count",
@@ -195,20 +197,28 @@ class OrcidService:
 
     def _process_metadata(self, metadata: pd.DataFrame, author_info: AuthorInfo, params: Dict[str, str]) -> pd.DataFrame:
         metadata["authors"] = metadata["authors"].replace("", author_info.author_name)
+        self.logger.debug(f"Enriching metadata for ORCID {params.get('orcid')}")
         metadata = self.enrich_metadata(params, metadata)
+        self.logger.debug(f"Enriching author info for ORCID {params.get('orcid')}")
         author_info = self.enrich_author_info(author_info, metadata, params)
         metadata = metadata.head(int(params.get("limit")))
         return metadata
 
     def _format_response(self, data: pd.DataFrame, author_info: AuthorInfo, params: Dict[str, str]) -> Dict[str, str]:
         self.logger.debug(f"Formatting response for ORCID {params.get('orcid')}")
+        desired_columns = ["title", "paper_abstract", "subtitle", "published_in", "authors"]
+
+        # Filter the columns to only those that exist in the DataFrame
+        existing_columns = [col for col in desired_columns if col in data.columns]
+
+        # Proceed with the concatenation using only the existing columns
         text = pd.concat(
             [
-                data.id, 
-                data[["title", "paper_abstract", "subtitle", "published_in", "authors"]]
-                .fillna('')  # Replace NaN values with empty string
+                data.id,
+                data[existing_columns]  # Use only the existing columns
+                .fillna('')  # Replace NaN values with an empty string
                 .apply(lambda x: " ".join(x.astype(str)), axis=1)  # Ensure all elements are strings before joining
-            ], 
+            ],
             axis=1
         )
         text.columns = ["id", "content"]

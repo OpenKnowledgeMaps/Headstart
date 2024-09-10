@@ -8,6 +8,7 @@ import Paper from "../templates/Paper";
 
 import { mapDispatchToMapEntriesProps } from "../utils/eventhandlers";
 import { trackMatomoEvent } from "../utils/useMatomo";
+import { useLocalizationContext } from "./LocalizationProvider";
 
 const KnowledgeMap = (props) => {
   const { data, areas, zoom, animation } = props;
@@ -19,6 +20,7 @@ const KnowledgeMap = (props) => {
   const { hoveredBubble, bubbleOrder, changeBubbleOrder } = props;
   const { hoveredPaper, paperOrder, changePaperOrder } = props;
   const { trackMouseOver } = props;
+  const localization = useLocalizationContext();
 
   // bubble section
   const handleAreaMouseOver = (area) => {
@@ -131,7 +133,6 @@ const KnowledgeMap = (props) => {
       <Paper
         key={paper.safe_id}
         data={paper}
-        readersLabel={baseUnit}
         zoom={zoom}
         selected={selected}
         hovered={hoveredPaper === paper.safe_id}
@@ -141,6 +142,12 @@ const KnowledgeMap = (props) => {
         animation={animation}
         maxSize={height / 2.0}
         enlargeFactor={enlargeFactor}
+        baseUnit={baseUnit}
+        socialMediaLabel={localization.social_media_count_label}
+        referencesLabel={localization.references_count_label}
+        citationsLabel={localization.citations_count_label}
+        readersLabel={localization.readers_count_label}
+        tweetsLabel={localization.tweets_count_label}
       />
     );
   };

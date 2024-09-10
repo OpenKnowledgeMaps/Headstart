@@ -96,14 +96,17 @@ class Paper extends React.Component {
   }
 
   render() {
-    const { data, readersLabel, zoom, selected, hovered } = this.props;
+    const { data, zoom, selected, hovered } = this.props;
     const { maxSize, enlargeFactor } = this.props;
     const { onClick, onMouseOver, onMouseOut } = this.props;
 
     const {title, authors_string: authors, authors_list: authors_list, year, area} = data;
-    const { num_readers: readers, published_in: publisher } = data;
+    const { published_in: publisher  } = data;
     const { x, y, width: baseWidth, height: baseHeight } = this.state;
     const { path: basePath, dogEar: baseDogEar } = this.state;
+    
+    const { socialMediaLabel, referencesLabel, citationsLabel, readersLabel, tweetsLabel } = this.props;
+    const { num_readers: readers, tweets, citations, social, references  } = data;
 
     let { width: realWidth, height: realHeight } =
       this.getCoordinatesAndDimensions();
@@ -260,6 +263,46 @@ class Paper extends React.Component {
                     <p id="readers" className={sizeModifierClass}>
                       <span id="num-readers">{readers} </span>
                       <span className="readers_entity">{readersLabel}</span>
+                    </p>
+                  </div>
+                )}
+              {!!socialMediaLabel &&
+                typeof readers !== "undefined" &&
+                readers !== null && (
+                  <div className="readers">
+                    <p id="readers" className={sizeModifierClass}>
+                      <span id="num-readers">{social} </span>
+                      <span className="readers_entity">{socialMediaLabel}</span>
+                    </p>
+                  </div>
+                )}
+              {!!citationsLabel &&
+                typeof readers !== "undefined" &&
+                readers !== null && (
+                  <div className="readers">
+                    <p id="readers" className={sizeModifierClass}>
+                      <span id="num-readers">{citations} </span>
+                      <span className="readers_entity">{citationsLabel}</span>
+                    </p>
+                  </div>
+                )}
+              {!!referencesLabel &&
+                typeof readers !== "undefined" &&
+                readers !== null && (
+                  <div className="readers">
+                    <p id="readers" className={sizeModifierClass}>
+                      <span id="num-readers">{references} </span>
+                      <span className="readers_entity">{referencesLabel}</span>
+                    </p>
+                  </div>
+                )}
+              {!!tweetsLabel &&
+                typeof readers !== "undefined" &&
+                readers !== null && (
+                  <div className="readers">
+                    <p id="readers" className={sizeModifierClass}>
+                      <span id="num-readers">{tweets} </span>
+                      <span className="readers_entity">{tweetsLabel}</span>
                     </p>
                   </div>
                 )}
