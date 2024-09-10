@@ -59,6 +59,8 @@ class MetricsClient(RWrapper):
             )
             stdout, stderr = proc.communicate(json.dumps(data))
 
+            self.logger.debug(f"Stdout: {stdout}")
+
             output = [line for line in stdout.split('\n') if line]
             errors = [line for line in stderr.split('\n') if line]
 
@@ -66,6 +68,8 @@ class MetricsClient(RWrapper):
                 raise ValueError("No output received from the subprocess")
 
             raw_metadata = json.loads(output[-2])[0]
+
+            self.logger.debug(f"Raw metadata: {raw_metadata}")
 
             if isinstance(raw_metadata, dict) and raw_metadata.get('status') == "error":
                 return raw_metadata

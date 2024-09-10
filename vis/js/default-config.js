@@ -600,6 +600,7 @@ var config = {
             please_note: "Please note",
             citation_warning: "we were not able to verify whether this citation is formatted correctly based on the metadata received. Please check before reuse.",
             time_frame_context_sg: "Please note that we remove time intervals with only a few associated papers during the computation of your streamgraph to increase its readability. As a result the time on the x-axis may not align with the time range you selected.",
+            // metrics
             citations_count_label: "citations",
             social_media_count_label: "social media mentions",
             references_count_label: "references outside academia",

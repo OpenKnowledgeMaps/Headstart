@@ -39,6 +39,9 @@ class SearchParamSchema(Schema):
 
     @pre_load
     def fix_years(self, in_data, **kwargs):
+        if not in_data:
+            in_data = {}
+
         from_date = in_data.get('from')
         to_date = in_data.get('to')
         if from_date and len(from_date) == 4:
@@ -64,11 +67,15 @@ class SearchParamSchema(Schema):
 
     @pre_load
     def lang_id_empty_fallback(self, in_data, **kwargs):
+        if in_data is None:
+            in_data = {}  # Define in_data as an empty dictionary
+        
         lang_id = in_data.get("lang_id")
         if lang_id:
             lang_id = list(filter(lambda x: x != "", lang_id))
             if len(lang_id) == 0:
                 in_data["lang_id"] = ["all-lang"]
+        
         return in_data
 
     @validates('from_')

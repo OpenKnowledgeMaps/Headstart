@@ -5,6 +5,7 @@ import pandas as pd
 import numpy as np
 from common.utils import get_nested_value
 from typing import Optional
+import calendar
 
 class WorksRepository:
     logger = logging.getLogger(__name__)
@@ -39,9 +40,9 @@ class WorksRepository:
         new_works_data["authors"] = works_data.apply(self.get_authors, axis=1)
         new_works_data["paper_abstract"] = works_data.apply(
             self.get_paper_abstract, axis=1
-        ).astype(str)
+        )
         new_works_data["year"] = works_data.apply(self.get_publication_date, axis=1)
-        new_works_data["published_in"] = works_data.apply(self.published_in, axis=1).astype(str)
+        new_works_data["published_in"] = works_data.apply(self.published_in, axis=1)
         new_works_data["resulttype"] = works_data.apply(self.get_resulttype, axis=1).map(
             lambda x: doc_type_mapping.get(x, "")
         )
@@ -110,7 +111,7 @@ class WorksRepository:
                     return f"https://books.google.pl/books?vid=ISBN{external_id_value}&redir_esc=y&hl=en"
                 if external_id_type == "arxiv":
                     return f"https://arxiv.org/abs/{external_id_value}"
-                self.logger.warning(f"Unknown external id type: {external_id_type}")
+                self.logger.warning(f"Unknown external id type: {external_id_type}. {id}")
 
         return None
 
@@ -137,21 +138,28 @@ class WorksRepository:
         month = get_nested_value(work, ["publication-date", "month", "value"], np.nan)
         day = get_nested_value(work, ["publication-date", "day", "value"], np.nan)
 
-        publication_date = ""
-        parsed_publication_date = publication_date
-        if year is not np.nan:
-            publication_date += str(int(year))
-            parsed_publication_date = publication_date
-        if month is not np.nan and month != "00":
-            publication_date += "-" + str(int(month))
-            date_obj = parse(publication_date)
-            parsed_publication_date = date_obj.strftime("%Y-%m")
-        if day is not np.nan:
-            publication_date += "-" + str(int(day))
-            date_obj = parse(publication_date)
-            parsed_publication_date = date_obj.strftime("%Y-%m-%d")
-        return parsed_publication_date
+        if year is np.nan or not (1 <= int(year) <= 9999):
+            return None
 
+        year = int(year)
+        result_date = str(year)
+
+        if month is not np.nan:
+            month = int(month)
+            if 1 <= month <= 12:
+                result_date += f"-{month:02d}"
+
+                if day is not np.nan:
+                    day = int(day)
+                    max_day = calendar.monthrange(year, month)[1]
+                    if 1 <= day <= max_day:
+                        result_date += f"-{day:02d}" 
+                        return result_date
+                return result_date 
+            else:
+                return str(year)
+        else:
+            return str(year) 
 
 doc_type_mapping = {
     "book": "Book",
