@@ -40,9 +40,9 @@ class WorksRepository:
         new_works_data["authors"] = works_data.apply(self.get_authors, axis=1)
         new_works_data["paper_abstract"] = works_data.apply(
             self.get_paper_abstract, axis=1
-        ).astype(str)
+        )
         new_works_data["year"] = works_data.apply(self.get_publication_date, axis=1)
-        new_works_data["published_in"] = works_data.apply(self.published_in, axis=1).astype(str)
+        new_works_data["published_in"] = works_data.apply(self.published_in, axis=1)
         new_works_data["resulttype"] = works_data.apply(self.get_resulttype, axis=1).map(
             lambda x: doc_type_mapping.get(x, "")
         )
