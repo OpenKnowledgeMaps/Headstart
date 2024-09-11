@@ -261,8 +261,8 @@ class Paper extends React.Component {
                 readers !== null && (
                   <div className="readers">
                     <p id="readers" className={sizeModifierClass}>
-                      <span id="num-readers">{readers} </span>
-                      <span className="readers_entity">{readersLabel || 'n/a'}</span>
+                      <span id="num-readers">{readers || 'n/a'} </span>
+                      <span className="readers_entity">{readersLabel}</span>
                     </p>
                   </div>
                 )}
@@ -271,8 +271,8 @@ class Paper extends React.Component {
                 readers !== null && (
                   <div className="readers">
                     <p id="readers" className={sizeModifierClass}>
-                      <span id="num-readers">{social} </span>
-                      <span className="readers_entity">{socialMediaLabel || 'n/a'}</span>
+                      <span id="num-readers">{social || 'n/a'} </span>
+                      <span className="readers_entity">{socialMediaLabel}</span>
                     </p>
                   </div>
                 )}
@@ -281,8 +281,8 @@ class Paper extends React.Component {
                 readers !== null && (
                   <div className="readers">
                     <p id="readers" className={sizeModifierClass}>
-                      <span id="num-readers">{citations} </span>
-                      <span className="readers_entity">{citationsLabel || 'n/a'}</span>
+                      <span id="num-readers">{citations || 'n/a'} </span>
+                      <span className="readers_entity">{citationsLabel}</span>
                     </p>
                   </div>
                 )}
@@ -291,8 +291,8 @@ class Paper extends React.Component {
                 readers !== null && (
                   <div className="readers">
                     <p id="readers" className={sizeModifierClass}>
-                      <span id="num-readers">{references} </span>
-                      <span className="readers_entity">{referencesLabel || 'n/a'}</span>
+                      <span id="num-readers">{references || 'n/a'} </span>
+                      <span className="readers_entity">{referencesLabel}</span>
                     </p>
                   </div>
                 )}
@@ -301,8 +301,8 @@ class Paper extends React.Component {
                 readers !== null && (
                   <div className="readers">
                     <p id="readers" className={sizeModifierClass}>
-                      <span id="num-readers">{tweets} </span>
-                      <span className="readers_entity">{tweetsLabel || 'n/a'}</span>
+                      <span id="num-readers">{tweets || 'n/a'} </span>
+                      <span className="readers_entity">{tweetsLabel}</span>
                     </p>
                   </div>
                 )}
