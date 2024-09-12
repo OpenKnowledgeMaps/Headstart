@@ -67,7 +67,7 @@ class MetricsClient(RWrapper):
             if not output:
                 raise ValueError("No output received from the subprocess")
 
-            raw_metadata = json.loads(output[-2])[0]
+            raw_metadata = json.loads(output[-2])
 
             self.logger.debug(f"Raw metadata: {raw_metadata}")
 

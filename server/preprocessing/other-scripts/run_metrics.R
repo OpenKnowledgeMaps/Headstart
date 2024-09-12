@@ -29,7 +29,7 @@ if (DEBUG==TRUE){
 }
 
 
-tslog <- getLogger('ts')
+mlog <- getLogger('metrics_runner')
 
 f <- file("stdin")
 open(f)
@@ -47,7 +47,6 @@ if (!is.null(params$lang_id)) {
   lang_id <- 'all'
 }
 
-source("utils.R")
 source('metrics.R')
 
 registerDoParallel(detectCores(all.tests = FALSE, logical = TRUE)-1)
@@ -55,18 +54,22 @@ registerDoParallel(detectCores(all.tests = FALSE, logical = TRUE)-1)
 
 failed <- list(params=params)
 tryCatch({
-  metadata <- enrich_metadata_metrics(metadata)
+  if ("doi" %in% names(metadata)) {
+    # only enrich metadata with metrics if at least one DOI is present
+    if (!all(is.na(metadata$doi))) {
+      output <- enrich_metadata_metrics(metadata)
+    }
+  } else {
+    mlog$warn("No DOIs found in metadata")
+  }
 }, error=function(err){
-  tslog$error(gsub("\n", " ", paste("Metric enrichment failed", service, paste(params, collapse=" "), err, sep="||")))
-  failed$query <<- params$q
-  failed$query_reason <<- err$message
+  mlog$error(gsub("\n", " ", paste("Metric enrichment failed", service, paste(params, collapse=" "), err, sep="||")))
 })
 
-if (exists('metadata')) {
-  print(toJSON(metadata))
-  print(toJSON(metadata))
+if (exists('output')) {
+  print(toJSON(output))
+  print(toJSON(output))
 } else {
-  output_json <- detect_error(failed, service, params)
-  print(output_json)
-  print(output_json)
+  print(toJSON(metadata))
+  print(toJSON(metadata))
 }

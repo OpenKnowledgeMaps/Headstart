@@ -61,11 +61,15 @@ class Dataprocessing(object):
         data["params"] = params
         cmd = [self.command, self.hs, self.wd,
                q, service]
+        self.logger.debug(f"Executing command: {cmd}")
+        self.logger.debug(f"Input data: {data}")
         proc = subprocess.Popen(cmd, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
                                 encoding="utf-8")
         stdout, stderr = proc.communicate(json.dumps(data))
+        self.logger.debug(f"Stdout: {stdout}")
         output = [o for o in stdout.split('\n') if len(o) > 0]
         error = [o.encode('ascii', errors='replace').decode() for o in stderr.split('\n') if len(o) > 0]
+        self.logger.debug(f"Raw output: {output}")
         self.logger.debug(error)
         try:
             res = pd.DataFrame(json.loads(output[-1])).to_json(orient="records")

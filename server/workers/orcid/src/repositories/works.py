@@ -69,13 +69,13 @@ class WorksRepository:
         return "; ".join(authors)
 
     def get_title(self, work) -> str:
-        return get_nested_value(work, ["title", "title", "value"], None)
+        return get_nested_value(work, ["title", "title", "value"], "")
 
     def get_subtitle(self, work) -> str:
         return get_nested_value(work, ["title", "subtitle", "value"], None)
 
     def get_paper_abstract(self, work) -> str:
-        return get_nested_value(work, ["short-description"], None)
+        return get_nested_value(work, ["short-description"], "")
 
     def get_resulttype(self, work) -> str:
         return get_nested_value(work, ["type"], None)
