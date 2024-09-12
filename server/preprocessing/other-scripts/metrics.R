@@ -2,7 +2,7 @@ library("rAltmetric")
 library("rcrossref")
 library("plyr")
 
-alog <- getLogger("metrics")
+mlog <- getLogger("metrics")
 
 
 enrich_metadata_metrics <- function(metadata) {
@@ -34,7 +34,7 @@ enrich_metadata_metrics <- function(metadata) {
     for (metric in requested_metrics) {
       metadata[[metric]] <- NA
     }
-    alog$info("No altmetrics found for any paper in this dataset.")
+    mlog$info("No altmetrics found for any paper in this dataset.")
     output <- metadata
   }
   output <- add_citations(output)
@@ -42,13 +42,11 @@ enrich_metadata_metrics <- function(metadata) {
   # Remove duplicate lines - TODO: check for root of this problem
   output <- unique(output)
 
-  output_json <- toJSON(output)
-
   end.time <- Sys.time()
   time.taken <- end.time - start.time
-  alog$info(paste("vis_id:", .GlobalEnv$VIS_ID, "Time taken:", time.taken, sep = " "))
+  mlog$info(paste("vis_id:", .GlobalEnv$VIS_ID, "Time taken:", time.taken, sep = " "))
 
-  return(output_json)
+  return(output)
 }
 
 get_altmetrics <- function(dois) {
@@ -61,7 +59,7 @@ get_altmetrics <- function(dois) {
         results <- rbind.fill(results, metrics)
       },
       error = function(err) {
-        alog$debug(gsub("[\r\n]", "", paste(err, doi, sep = " ")))
+        mlog$debug(gsub("[\r\n]", "", paste(err, doi, sep = " ")))
       }
     )
   }
@@ -77,7 +75,7 @@ add_citations <- function(output) {
       cr_citation_count(doi = valid_dois, async = TRUE)
     },
     error = function(err) {
-      alog$debug(gsub("[\r\n]", "", paste(err, doi, sep = " ")))
+      mlog$debug(gsub("[\r\n]", "", paste(err, doi, sep = " ")))
       return(list(doi = dois, count = NA))
     }
   )

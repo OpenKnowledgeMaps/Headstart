@@ -96,7 +96,7 @@ class OrcidService:
         self.redis_store.rpush("metrics", json.dumps(task_data))
         result = get_key(self.redis_store, request_id, 300)
         self.logger.debug(f"result: {result}")
-        metadata = pd.DataFrame(json.loads(result["input_data"]))
+        metadata = pd.DataFrame(result["input_data"])
         for c in [
             "citation_count",
             "cited_by_wikipedia_count",
