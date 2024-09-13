@@ -1,5 +1,4 @@
 import logging
-from dateutil.parser import parse
 from pyorcid import Orcid
 import pandas as pd
 import numpy as np

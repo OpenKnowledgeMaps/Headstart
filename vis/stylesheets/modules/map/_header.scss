@@ -1,7 +1,12 @@
-#subdiscipline_title {
-    margin: 0px;
+#title_context {
+    display: flex;
+    align-items: center;
     padding-top: 15px;
     padding-left: 50px;
+}
+
+#subdiscipline_title {
+    margin: 0px;
     font-family: $base-font-family;
     min-height: 54px;
 
@@ -313,6 +318,14 @@
     margin-right: 1%;
     height: 15px;
     margin-bottom: 6px;
+
+    &.overflow-ellipsis {
+        text-overflow: ellipsis;
+        max-width: 65px;
+        overflow: hidden;
+        white-space: nowrap;
+        vertical-align: bottom;
+    }
 }
 
 //.context_metadata_high {

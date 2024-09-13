@@ -13,6 +13,7 @@ from repositories.works import WorksRepository
 from redis import StrictRedis
 from typing import Dict
 from model import AuthorInfo
+from dataclasses import asdict
 
 class OrcidService:
     logger = logging.getLogger(__name__)
@@ -49,7 +50,8 @@ class OrcidService:
     def execute_search(self, params: Dict[str, str]) -> Dict[str, str]:
         try:
             orcid_id = params.get("orcid")
-            # limit = params.get("limit")
+            if not orcid_id:
+                raise ValueError("ORCID ID is required.")
             orcid = self._initialize_orcid(orcid_id)
             author_info, metadata = self._retrieve_author_info_and_metadata(orcid)
 
@@ -109,7 +111,7 @@ class OrcidService:
                 metadata[c] = np.NaN
         return metadata
 
-    def enrich_author_info(self, author_info: AuthorInfo, metadata: pd.DataFrame, params: Dict[str, str]) -> Dict[str, str]:
+    def enrich_author_info(self, author_info: AuthorInfo, metadata: pd.DataFrame, params: Dict[str, str]) -> AuthorInfo:
         """
         This function enriches the author information with additional information.
         Specifically, we extract and aggregate metrics data from the author's works,
@@ -189,7 +191,7 @@ class OrcidService:
             sandbox=self.sandbox,
         )
     
-    def _retrieve_author_info_and_metadata(self, orcid: Orcid) -> Tuple[Dict[str, str], pd.DataFrame]:
+    def _retrieve_author_info_and_metadata(self, orcid: Orcid) -> Tuple[AuthorInfo, pd.DataFrame]:
         author_info = AuthorInfoRepository(orcid).extract_author_info()
         metadata = WorksRepository(orcid).get_full_works_metadata()
 
@@ -231,7 +233,7 @@ class OrcidService:
                 "text": text.to_json(orient='records')
             },
             # TODO: consider to return model?
-            "author": author_info.__dict__,
+            "author": asdict(author_info),
             "params": params
         }
         return response

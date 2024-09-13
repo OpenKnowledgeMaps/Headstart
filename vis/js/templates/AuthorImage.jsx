@@ -4,7 +4,7 @@ import defaultImage from "../../images/author_default.png";
 
 const AuthorImage = ({ url = "" }) => {
   let link = defaultImage;
-  if (url !== "") {
+  if (url) {
     link = url;
   }
 

@@ -203,6 +203,7 @@ var config = {
                         , openaire: "OpenAIRE"
                         , triple_km: "GoTriple"
                         , triple_sg: "GoTriple"
+                        , orcid: 'ORCID'
                     },
 
     localization: {
@@ -211,7 +212,7 @@ var config = {
             search_placeholder: "Search within visualization...",
             show_list: "Show list",
             hide_list: "Hide list",
-            intro_label: "More information",
+            intro_label: "About the map",
             readers: "readers",
             year: "date",
             authors: "authors",
@@ -289,7 +290,7 @@ var config = {
             search_placeholder: "Suche in der Liste...",
             show_list: "Liste ausklappen",
             hide_list: "Liste einklappen",
-            intro_label: "Mehr Informationen",
+            intro_label: "Over de kaart",
             readers: "Leser",
             year: "Jahr",
             authors: "Autor",
@@ -365,7 +366,7 @@ var config = {
             search_placeholder: "Suche in der Liste...",
             show_list: "Liste ausklappen",
             hide_list: "Liste einklappen",
-            intro_label: "Mehr Informationen",
+            intro_label: "Over de kaart",
             readers: "Leser",
             year: "Jahr",
             authors: "Autor",
@@ -444,7 +445,7 @@ var config = {
             search_placeholder: "Search within visualization...",
             show_list: "Show list",
             hide_list: "Hide list",
-            intro_label: "More information",
+            intro_label: "About the map",
             readers: "views",
             year: "date",
             authors: "authors",
@@ -514,7 +515,7 @@ var config = {
             search_placeholder: "Search within visualization...",
             show_list: "Show list",
             hide_list: "Hide list",
-            intro_label: "More information",
+            intro_label: "About the map",
             relevance: "relevance",
             readers: "citations",
             year: "year",
@@ -609,6 +610,7 @@ var config = {
             references: "references outside academia",
             scale_by_infolink_label: 'Find out more',
             metrics_label: "Metrics",
+            researcher_details_label: "Researcher details",
             scale_by_label: "Scale map by:",
             scale_by_explanation: "The size of the bubbles is relative to the number of documents related to them.",
             scale_label: {
@@ -626,7 +628,7 @@ var config = {
             search_placeholder: "Search within visualization...",
             show_list: "Show list",
             hide_list: "Hide list",
-            intro_label: "More information",
+            intro_label: "About the map",
             relevance: "relevance",
             readers: "readers",
             tweets: "tweets",

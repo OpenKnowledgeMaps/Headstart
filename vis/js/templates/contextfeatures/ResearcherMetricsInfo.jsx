@@ -5,7 +5,7 @@ import useMatomo from "../../utils/useMatomo";
 import { useLocalizationContext } from "../../components/LocalizationProvider";
 import { openResearcherMetricsModal } from "../../actions";
 
-const ResearcherInfo = ({ onClick }) => {
+const ResearcherMetricsInfo = ({ onClick }) => {
   const loc = useLocalizationContext();
   const { trackEvent } = useMatomo();
 
@@ -14,20 +14,20 @@ const ResearcherInfo = ({ onClick }) => {
 
     trackEvent(
       "Title & Context line",
-      "Open researcher modal",
-      "More researcher info button"
+      "Open researcher metrics modal",
+      "More researcher metrics info button"
     );
   };
 
   return (
     // html template starts here
     <span
-      id="researcher-link"
+      id="researcher-metrics-link"
       className="context_item"
-      title={loc.researcher_details_label}
+      title="Metrics"
     >
       <span onClick={handleClick} className="context_moreinfo infolink">
-        <i className="fas fa-user"></i> {loc.researcher_details_label}
+        <i className="fas fa-chart-line"></i> {loc.metrics_label}
       </span>
     </span>
 
@@ -39,4 +39,4 @@ const mapDispatchToProps = (dispatch) => ({
   onClick: () => dispatch(openResearcherMetricsModal()),
 });
 
-export default connect(null, mapDispatchToProps)(ResearcherInfo);
+export default connect(null, mapDispatchToProps)(ResearcherMetricsInfo);

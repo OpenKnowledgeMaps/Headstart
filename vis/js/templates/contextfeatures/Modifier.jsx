@@ -16,7 +16,7 @@ const Modifier = ({ popoverContainer, modifier, isStreamgraph }) => {
       <>
         <span id="modifier" className="modifier">
           {localization.most_recent_label}
-        </span>{" "}
+        </span>
       </>
     );
   }

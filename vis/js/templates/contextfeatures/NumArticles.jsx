@@ -4,17 +4,31 @@ const NumArticles = ({
   articlesCount,
   articlesCountLabel,
   openAccessArticlesCount = null,
+  service,
   children,
-}) => (
-  // html template starts here
-  <span id="num_articles" className="context_item">
-    {articlesCount} {children}
-    {articlesCountLabel}{" "}
-    {openAccessArticlesCount !== null && (
-      <>({openAccessArticlesCount} open access)</>
-    )}
-  </span>
-  // html template ends here
-);
+}) => {
+  let displayText = `${articlesCount} ${articlesCountLabel}`;
+  
+  if (service === 'orcid') {
+    if (articlesCount > 200) {
+      displayText = `200 ${children} works`;
+    }
+  }
+  
+  if (service === 'pubmed' || service === 'base') {
+    if ((service === 'base' || service === 'pubmed') && articlesCount > 100) {
+      displayText = `100 ${children} ${articlesCountLabel}`;
+    }
+  }
+
+  return (
+    <span id="num_articles" className="context_item">
+      {displayText}{" "}
+      {openAccessArticlesCount !== null && (
+        <>({openAccessArticlesCount} open access)</>
+      )}
+    </span>
+  );
+};
 
 export default NumArticles;

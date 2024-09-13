@@ -2,10 +2,12 @@ import logging
 from datetime import datetime
 from pyorcid import Orcid
 import pandas as pd
+import numpy as np
 from common.utils import get_nested_value
 from typing import List, Dict
-from model import AuthorInfo, ExternalIdentifier, Website
-
+from model import AuthorInfo, ExternalIdentifier, Website, Employment, Funding, Education, Membership, PeerReview
+from typing import Optional, Any
+import calendar
 
 class AuthorInfoRepository:
     logger = logging.getLogger(__name__)
@@ -26,6 +28,7 @@ class AuthorInfoRepository:
         author_info.author_keywords = ", ".join(keywords)
 
         education, _ = self.orcid.educations()
+        author_info.educations = self.extract_educations(education)
         author_info.academic_age = self.calculate_academic_age(education)
 
         external_identifiers = self.orcid.external_identifiers()["external-identifier"]
@@ -37,21 +40,125 @@ class AuthorInfoRepository:
         researcher_urls = self.orcid.researcher_urls()["researcher-url"]
         author_info.websites = self.extract_websites(researcher_urls)
 
+        employments, _ = self.orcid.employments()
+        if employments:
+            author_info.employment = self.extract_employment(employments)
+            author_info.employments = self.extract_employments(employments)
+
+        memberships, _ = self.orcid.memberships()
+        if memberships:
+            author_info.memberships = self.extract_memberships(memberships)
+
+        grants, _ = self.orcid.fundings()
+        if grants:
+            author_info.funds = self.extract_funds(grants)
+
+        peer_reviews = self.orcid.peer_reviews()
+        if peer_reviews:
+            author_info.peer_reviews = self.extract_peer_reviews(peer_reviews)
+
         return author_info
+    
+    def extract_peer_reviews(self, peer_reviews: Any) -> List[PeerReview]:
+        peer_review_list = []
+
+        peer_review_groups = peer_reviews.get('group', [])
+
+        for peer_review_group in peer_review_groups:
+            peer_reviews = peer_review_group.get('peer-review-group', [])
+            for peer_review in peer_reviews:
+                summary = peer_review.get('peer-review-summary', {})
+                organization_name = get_nested_value(summary, ["convening-organization", "name"], None)
+                organization_address = get_nested_value(summary, ["convening-organization", "address"], {})
+                organization_address_str = f"{organization_address.get('city', '')}, {organization_address.get('region', '')}, {organization_address.get('country', '')}"
+
+
+                peer_review_list.append(PeerReview(
+                    role=summary.get('reviewer-role', None),
+                    type=summary.get('review-type', None),
+                    url=summary.get('review-url', None),
+                    completion_date=self.get_completion_date(summary),
+                    organization=organization_name,
+                    organization_address=organization_address_str
+                ))
+            
+        return peer_review_list
+
+    def extract_memberships(self, memberships: List[Dict[str, str]]) -> List[Membership]:
+        return [
+            Membership(
+                organization=membership.get("organization", ""),
+                organization_address=membership.get("organization-address", ""),
+                department=membership.get("Department", ""),
+                role=membership.get("Role", ""),
+                start_date=membership.get("start-date", ""),
+                end_date=membership.get("end-date", ""),
+            )
+            for membership in memberships
+        ]
+    
+    def extract_educations(self, educations: List[Dict[str, str]]) -> List[Education]:
+        return [
+            Education(
+                department=education.get("Department", None),
+                role=education.get("Role", None),
+                start_date=education.get("start-date", ""),
+                end_date=education.get("end-date", ""),
+                organization=education.get("organization", ""),
+                organization_address=education.get("organization-address", ""),
+                url=education.get("url", "")
+            )
+            for education in educations]
+    
+    def extract_funds(self, funds: List[Dict[str, str]]) -> List[Funding]:
+        return [
+            Funding(
+                title=funding.get("title", ""),
+                type=funding.get("type", ""),
+                start_date=funding.get("start-date", ""),
+                end_date=funding.get("end-date", ""),
+                organization=funding.get("organization", ""),
+                organization_address=funding.get("organization-address", ""),
+                url=funding.get("url", "")
+            )
+            for funding in funds
+        ]
+
+    def extract_employment(self, employments: List[Dict[str, str]]) -> Optional[Employment]:
+        employment = employments[0] if employments else None
+        return Employment(
+            organization=employment.get("organization", None),
+            organization_address=employment.get("organization-address", None),
+            department=employment.get("department", None),
+            role=employment.get("Role", None),
+            start_date=employment.get("start-date", ""),
+            end_date=employment.get("end-date", "")
+        ) if employment else None
+    
+    def extract_employments(self, employments: List[Dict[str, str]]) -> List[Employment]:
+        return [
+            Employment(
+                organization=employment.get("organization", None),
+                department=employment.get("department", None),
+                role=employment.get("Role", None),
+                start_date=employment.get("start-date", ""),
+                end_date=employment.get("end-date", "")
+            ) for employment in employments
+        ]
 
     def extract_author_name(self, personal_details: Dict[str, str]) -> str:
         return " ".join(
             [
-                get_nested_value(personal_details, ["name", "given-names", "value"], ""),
-                get_nested_value(personal_details, ["name", "family-name", "value"], ""),
+                str(get_nested_value(personal_details, ["name", "given-names", "value"], "")),
+                str(get_nested_value(personal_details, ["name", "family-name", "value"], ""))
             ]
         )
 
     def extract_biography(self, personal_details: Dict[str, str]) -> str:
         return (
-            get_nested_value(personal_details, ["biography", "content"], "")
+            str(get_nested_value(personal_details, ["biography", "content"], ""))
             if (
-                get_nested_value(personal_details, ["biography", "visibility"], "") == "public"
+                str(get_nested_value(personal_details, ["biography", "visibility"], "")) == "public"
             )
             else ""
         )
@@ -65,7 +172,7 @@ class AuthorInfoRepository:
         countries = countries["country"]
         return countries.tolist()
 
-    def calculate_academic_age(self, data: List[Dict[str, str]]) -> int:
+    def calculate_academic_age(self, data: List[Dict[str, str]]) -> Optional[int]:
         # Possible terms for a PhD-equivalent role
         doctoral_terms = [
             "phd", "dphil", "doctorate", "doctoral", 
@@ -131,7 +238,7 @@ class AuthorInfoRepository:
                     "value",
                     "relationship",
                 ]
-            ].to_dict(orient="records")
+            ].to_dict(orient="records") # type: ignore
 
     def extract_websites(self, researcher_urls: List[Dict[str, str]]) -> List[Website]:
         urls = pd.DataFrame(researcher_urls)
@@ -142,4 +249,32 @@ class AuthorInfoRepository:
         urls = urls[urls["visibility"] == "public"]
         urls["url"] = urls["url"].apply(lambda x: x.get("value"))
         urls = urls[["url-name", "url"]]
-        return urls.to_dict(orient="records")
+        return urls.to_dict(orient="records") # type: ignore
+
+    def get_completion_date(self, summary) -> Optional[str]:
+        year = get_nested_value(summary, ["completion-date", "year", "value"], np.nan)
+        month = get_nested_value(summary, ["completion-date", "month", "value"], np.nan)
+        day = get_nested_value(summary, ["completion-date", "day", "value"], np.nan)
+
+        if year is np.nan or not (1 <= int(year) <= 9999):
+            return None
+
+        year = int(year)
+        result_date = str(year)
+
+        if month is not np.nan:
+            month = int(month)
+            if 1 <= month <= 12:
+                result_date += f"-{month:02d}"
+
+                if day is not np.nan:
+                    day = int(day)
+                    max_day = calendar.monthrange(year, month)[1]
+                    if 1 <= day <= max_day:
+                        result_date += f"-{day:02d}" 
+                        return result_date
+                return result_date 
+            else:
+                return str(year)
+        else:
+            return str(year) 

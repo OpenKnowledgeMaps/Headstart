@@ -19,6 +19,8 @@ import MoreInfoLink from "../templates/contextfeatures/MoreInfoLink";
 import MetadataQuality from "../templates/contextfeatures/MetadataQuality";
 import ContextTimeFrame from "../templates/contextfeatures/ContextTimeFrame";
 import DocumentLang from "../templates/contextfeatures/DocumentLang";
+import ResearcherMetricsInfo from "../templates/contextfeatures/ResearcherMetricsInfo";
+import { Employment } from "./Employment";
 import ResearcherInfo from "../templates/contextfeatures/ResearcherInfo";
 
 const defined = (param) => param !== undefined && param !== null;
@@ -28,10 +30,9 @@ const defined = (param) => param !== undefined && param !== null;
  *
  * It has to be a class component because of the popovers (they use 'this').
  */
-class ContextLine extends React.Component {
-  render() {
-    const { params, localization, hidden, service } = this.props;
-    const { popoverContainer } = this.props;
+export const ContextLine = (props) => {
+    const { author, params, localization, hidden, service } = props;
+    const { popoverContainer } = props;
 
     if (hidden) {
       return null;
@@ -44,21 +45,24 @@ class ContextLine extends React.Component {
             bioLabel={localization.bio_link}
             livingDates={params.author.livingDates}
             link={"https://d-nb.info/gnd/" + params.author.id}
+            author={author}
           />
         )}
         <NumArticles
           articlesCount={params.articlesCount}
           openAccessArticlesCount={params.openAccessCount}
           articlesCountLabel={localization.articles_label}
+          service={service}
         >
           <Modifier popoverContainer={popoverContainer} />
         </NumArticles>
+        <Employment author={author} />
         {defined(params.dataSource) && (
           <DataSource
             label={localization.source_label}
             source={params.dataSource}
             contentProvider={params.contentProvider}
-            popoverContainer={this.props.popoverContainer}
+            popoverContainer={props.popoverContainer}
           />
         )}
         {defined(params.timespan) && (
@@ -112,10 +116,10 @@ class ContextLine extends React.Component {
           <SearchLang>{params.searchLanguage}</SearchLang>
         )}
         <ResearcherInfo />
+        <ResearcherMetricsInfo />
         <MoreInfoLink />
       </ContextLineTemplate>
     );
-  }
 }
 
 const mapStateToProps = (state) => ({
@@ -126,6 +130,7 @@ const mapStateToProps = (state) => ({
   },
   service: state.service,
   localization: state.localization,
+  author: state.author,
 });
 
 export default connect(mapStateToProps)(ContextLine);

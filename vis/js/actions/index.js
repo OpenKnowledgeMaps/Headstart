@@ -155,6 +155,9 @@ export const closeInfoModal = () => ({ type: "CLOSE_INFO_MODAL" });
 export const openResearcherModal = () => ({ type: "OPEN_RESEARCHER_MODAL" });
 export const closeResearcherModal = () => ({ type: "CLOSE_RESEARCHER_MODAL" });
 
+export const openResearcherMetricsModal = () => ({ type: "OPEN_RESEARCHER_METRICS_MODAL" });
+export const closeResearcherMetricsModal = () => ({ type: "CLOSE_RESEARCHER_METRICS_MODAL" });
+
 export const scaleMap = (value, baseUnit, contentBased, sort) => ({
   type: "SCALE",
   value,

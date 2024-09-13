@@ -19,53 +19,47 @@ const contextLine = (state = {}, action) => {
         openAccessCount: config.show_context_oa_number
           ? papers.filter((p) => p.oa).length
           : null,
-        showAuthor:
-          !!config.is_authorview &&
-          !!context.params &&
-          exists(context.params.author_id) &&
-          exists(context.params.living_dates) &&
-          exists(context.params.image_link),
+        showAuthor: !!config.is_authorview,
         author: {
-          id:
-              context.params && context.params.author_id
-                  ? String(context.params.author_id).replace(/\([^)]*\)/, "")
-                  : null,
-          livingDates: context.params ? context.params.living_dates : null,
-          imageLink: context.params ? context.params.image_link : null,
+          id: context?.params?.author_id
+            ? String(context.params.author_id).replace(/\([^)]*\)/, "")
+            : null,
+          livingDates: context?.params?.living_dates ?? null,
+          imageLink: context?.params?.image_link ?? null,
         },
         documentTypes: getDocumentTypes(config, context),
         dataSource:
-            typeof config.service_name !== "undefined"
-                ? config.service_name
-                : config.service_names[context.service],
+          typeof config.service_name !== "undefined"
+            ? config.service_name
+            : config.service_names[context.service],
         contentProvider: context.params ? context.params.repo_name : null,
         paperCount:
-            config.create_title_from_context_style === "viper"
-                ? papers.filter((p) => p.resulttype.includes("publication")).length
-                : null,
+          config.create_title_from_context_style === "viper"
+            ? papers.filter((p) => p.resulttype.includes("publication")).length
+            : null,
         datasetCount:
-            config.create_title_from_context_style === "viper"
-                ? papers.filter((p) => p.resulttype.includes("dataset")).length
-                : null,
+          config.create_title_from_context_style === "viper"
+            ? papers.filter((p) => p.resulttype.includes("dataset")).length
+            : null,
         funder:
-            config.create_title_from_context_style === "viper" && context.params
-                ? context.params.funder
-                : null,
+          config.create_title_from_context_style === "viper" && context.params
+            ? context.params.funder
+            : null,
         projectRuntime: getProjectRuntime(config, context),
         // probably deprecated, used in base in the past
         legacySearchLanguage: getLegacySearchLanguage(config, context),
         // new language version, used in triple
         searchLanguage:
-            context.params && context.params.language
-                ? context.params.language
-                : null,
+          context.params && context.params.language
+            ? context.params.language
+            : null,
         timestamp: getTimestamp(config, context),
         metadataQuality: getMetadataQuality(config, context),
         // documents language used in new search box
         documentLang:
-            context.params && context.params.lang_id
-                ? getDocumentLanguage(config, context)
-                : null,
+          context.params && context.params.lang_id
+            ? getDocumentLanguage(config, context)
+            : null,
       };
     default:
       return state;
@@ -205,10 +199,7 @@ const getMetadataQuality = (config, context) => {
 
 // get documents language from context parameters (from response)
 const getDocumentLanguage = (config, context) => {
-  if (
-      !context.params ||
-      !context.params.lang_id
-  ) {
+  if (!context.params || !context.params.lang_id) {
     return null;
   }
 

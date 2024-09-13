@@ -19,7 +19,13 @@ const author = (state = null, action) => {
         websites: action.author?.websites,
         h_index: action.author?.h_index,
         academic_age: action.author?.academic_age,
-        normalized_h_index: action.author?.normalized_h_index
+        normalized_h_index: action.author?.normalized_h_index,
+        // TODO: consider to remove employment?
+        employment: action.author?.employment,
+        employments: action.author?.employments,
+        funds: action.author?.funds,
+        educations: action.author?.educations,
+        memberships: action.author?.memberships,
       };
     default:
       return state;

@@ -5,18 +5,18 @@ import { Modal } from "react-bootstrap";
 import { closeResearcherModal } from "../../actions";
 import { STREAMGRAPH_MODE } from "../../reducers/chartType";
 
-import ResearcherInfo from "./researcher-modal/OrcidResearcherInfo";
+import ResearcherMetricsInfo from "./researcher-modal/OrcidResearcherMetricsInfo";
 
 const getResearcherInfoTemplate = (service, isStreamgraph, modalType) => {
   switch (service) {
     case "orcid":
-      return ResearcherInfo;
+      return ResearcherMetricsInfo;
     default:
       return null;  
   }
 };
 
-const ResearcherInfoModal = ({open, onClose, params, service, isStreamgraph, modalInfoType}) => {
+const ResearcherMetricsInfoModal = ({open, onClose, params, service, isStreamgraph, modalInfoType}) => {
   const ResearcherInfoTemplate = getResearcherInfoTemplate(service, isStreamgraph, modalInfoType);
 
   return (
@@ -30,7 +30,7 @@ const ResearcherInfoModal = ({open, onClose, params, service, isStreamgraph, mod
 
 
 const mapStateToProps = (state) => ({
-  open: state.modals.openResearcherMetricsModal,
+  open: state.modals.openResearcherModal,
   params: {
     ...state.modals.infoParams,
     query: state.query.text,
@@ -62,4 +62,4 @@ const mapDispatchToProps = (dispatch) => ({
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(ResearcherInfoModal);
+)(ResearcherMetricsInfoModal);

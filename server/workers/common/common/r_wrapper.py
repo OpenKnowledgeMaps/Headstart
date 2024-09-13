@@ -3,6 +3,8 @@ import sys
 import copy
 import json
 import logging
+from typing import Optional
+from redis import StrictRedis
 
 
 formatter = logging.Formatter(fmt='%(asctime)s %(levelname)-8s %(message)s',
@@ -11,10 +13,14 @@ formatter = logging.Formatter(fmt='%(asctime)s %(levelname)-8s %(message)s',
 
 class RWrapper(object):
 
-    def __init__(self, wd="./", script="", redis_store=None,
+    def __init__(self, wd="./", script="", redis_store: Optional[StrictRedis] = None,
                  language=None,
                  loglevel="INFO"):
+        
         # path should be to where in the docker container the Rscript are
+        if not redis_store:
+            raise ValueError("Redis store is required")
+
         self.wd = wd
         self.command = 'Rscript'
         self.runner = os.path.abspath(os.path.join(self.wd, script))

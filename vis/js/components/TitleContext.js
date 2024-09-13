@@ -6,7 +6,7 @@ import AuthorImage from "../templates/AuthorImage";
 
 const TitleContext = ({ showAuthor, authorImage }) => {
   return (
-    <div id="titlecontext" style={{ minHeight: 54 }}>
+    <div id="title_context" style={{ minHeight: 54 }}>
       {showAuthor && <AuthorImage url={authorImage} />}
       <SubdisciplineTitle />
     </div>
