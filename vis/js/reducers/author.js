@@ -26,6 +26,7 @@ const author = (state = null, action) => {
         funds: action.author?.funds,
         educations: action.author?.educations,
         memberships: action.author?.memberships,
+        distinctions: action.author?.distinctions,
       };
     default:
       return state;

@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 
 import useMatomo from "../../utils/useMatomo";
 import { useLocalizationContext } from "../../components/LocalizationProvider";
-import { openResearcherMetricsModal } from "../../actions";
+import { openResearcherModal } from "../../actions";
 
 const ResearcherInfo = ({ onClick }) => {
   const loc = useLocalizationContext();
@@ -36,7 +36,7 @@ const ResearcherInfo = ({ onClick }) => {
 };
 
 const mapDispatchToProps = (dispatch) => ({
-  onClick: () => dispatch(openResearcherMetricsModal()),
+  onClick: () => dispatch(openResearcherModal()),
 });
 
 export default connect(null, mapDispatchToProps)(ResearcherInfo);

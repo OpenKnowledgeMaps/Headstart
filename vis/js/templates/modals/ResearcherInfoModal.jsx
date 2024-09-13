@@ -30,7 +30,7 @@ const ResearcherInfoModal = ({open, onClose, params, service, isStreamgraph, mod
 
 
 const mapStateToProps = (state) => ({
-  open: state.modals.openResearcherMetricsModal,
+  open: state.modals.openResearcherModal,
   params: {
     ...state.modals.infoParams,
     query: state.query.text,

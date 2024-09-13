@@ -5,9 +5,18 @@ import pandas as pd
 import numpy as np
 from common.utils import get_nested_value
 from typing import List, Dict
-from model import AuthorInfo, ExternalIdentifier, Website, Employment, Funding, Education, Membership, PeerReview
+from model import AuthorInfo, ExternalIdentifier, Website, Employment, Funding, Education, Membership, PeerReview, Distinction
 from typing import Optional, Any
 import calendar
+
+import hashlib
+import time
+
+
+def unique_id():
+    unique_string = str(time.time()).encode()  # Encode a unique string (e.g., timestamp)
+    short_unique_id = hashlib.md5(unique_string).hexdigest()[:8]  # Get first 8 characters of the hash
+    return short_unique_id
 
 class AuthorInfoRepository:
     logger = logging.getLogger(__name__)
@@ -57,6 +66,10 @@ class AuthorInfoRepository:
         if peer_reviews:
             author_info.peer_reviews = self.extract_peer_reviews(peer_reviews)
 
+        distinctions, _ = self.orcid.distinctions()
+        if distinctions:
+            author_info.distinctions = self.extract_distinctions(distinctions)
+
         return author_info
     
     def extract_peer_reviews(self, peer_reviews: Any) -> List[PeerReview]:
@@ -74,6 +87,7 @@ class AuthorInfoRepository:
 
 
                 peer_review_list.append(PeerReview(
+                    id=unique_id(),
                     role=summary.get('reviewer-role', None),
                     type=summary.get('review-type', None),
                     url=summary.get('review-url', None),
@@ -87,6 +101,7 @@ class AuthorInfoRepository:
     def extract_memberships(self, memberships: List[Dict[str, str]]) -> List[Membership]:
         return [
             Membership(
+                id=unique_id(),
                 organization=membership.get("organization", ""),
                 organization_address=membership.get("organization-address", ""),
                 department=membership.get("Department", ""),
@@ -100,6 +115,7 @@ class AuthorInfoRepository:
     def extract_educations(self, educations: List[Dict[str, str]]) -> List[Education]:
         return [
             Education(
+                id=unique_id(),
                 department=education.get("Department", None),
                 role=education.get("Role", None),
                 start_date=education.get("start-date", ""),
@@ -110,9 +126,24 @@ class AuthorInfoRepository:
             )
             for education in educations]
     
+    def extract_distinctions(self, distinctions: List[Dict[str, str]]) -> List[Distinction]:
+        return [
+            Distinction(
+                id=unique_id(),
+                department=education.get("Department", None),
+                role=education.get("Role", None),
+                start_date=education.get("start-date", ""),
+                end_date=education.get("end-date", ""),
+                organization=education.get("organization", ""),
+                organization_address=education.get("organization-address", ""),
+                url=education.get("url", "")
+            )
+            for education in distinctions]
+    
     def extract_funds(self, funds: List[Dict[str, str]]) -> List[Funding]:
         return [
             Funding(
+                id=unique_id(),
                 title=funding.get("title", ""),
                 type=funding.get("type", ""),
                 start_date=funding.get("start-date", ""),
@@ -127,6 +158,7 @@ class AuthorInfoRepository:
     def extract_employment(self, employments: List[Dict[str, str]]) -> Optional[Employment]:
         employment = employments[0] if employments else None
         return Employment(
+            id=unique_id(),
             organization=employment.get("organization", None),
             organization_address=employment.get("organization-address", None),
             department=employment.get("department", None),
@@ -138,6 +170,7 @@ class AuthorInfoRepository:
     def extract_employments(self, employments: List[Dict[str, str]]) -> List[Employment]:
         return [
             Employment(
+                id=unique_id(),
                 organization=employment.get("organization", None),
                 department=employment.get("department", None),
                 role=employment.get("Role", None),

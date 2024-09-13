@@ -23,7 +23,7 @@ const ResearcherInfo = ({
             {education.role} / {education.start_date} - {education.end_date} / {education.organization} / {education.organization_address}
           </p>
         ))}
-        <h3>GRANTS ({params.funds?.length})</h3>
+        <h3>GRANTS ({params.funds?.length || 0})</h3>
         {params.funds?.map((fund) => (
           <p key={fund.id}>
             {fund.title} / {fund.start_date} - {fund.end_date} / Funder: {fund.organization} / Amount: {fund.amount?.value} {fund.amount?.currency}
@@ -33,20 +33,26 @@ const ResearcherInfo = ({
         <p>
           {params.external_identifiers.map((external_id) => (
             <p key={external_id["value"]}>
+              <i className="fas fa-solid fa-link" style={{ paddingRight: '3px'}}></i>
               <a className="underline" href={external_id["url"]}>
                 {external_id["type"]}: {external_id["value"]}
               </a>
             </p>
           ))}
         </p>
-        <h3>DISTINCTIONS / AWARDS</h3>
-        <h3>MEMBERSHIPS</h3>
+        <h3>DISTINCTIONS / AWARDS ({params.distinctions?.length || 0})</h3>
+        {params.distinctions?.map((distinction) => (
+          <p key={distinction.id}>
+            {distinction.title} / {distinction.start_date} - {distinction.end_date} / {distinction.organization} / {distinction.organization_address}
+          </p>
+        ))}
+        <h3>MEMBERSHIPS ({params.memberships?.length || 0})</h3>
         {params.memberships?.map((membership) => (
           <p key={membership.id}>
             {membership.role} / {membership.start_date} - {membership.end_date} / {membership.organization} / {membership.organization_address}
           </p>
         ))}
-        <h3>PEER REVIEWS</h3>
+        <h3>PEER REVIEWS ({params.peer_reviews?.length || 0})</h3>
         {params.peer_reviews?.map((peer_review) => (
           <p key={peer_review.id}>
             {peer_review.role} / {peer_review.completion_date} / {peer_review.organization} / {peer_review.organization_address}
@@ -66,6 +72,7 @@ const mapStateToProps = (state) => {
       educations: state.author.educations,
       employments: state.author.employments,
       memberships: state.author.memberships,
+      distinctions: state.author.distinctions,
     },
   };
 };

@@ -19,6 +19,7 @@ class ExternalIdentifier(TypedDict):
 
 @dataclass
 class Employment:
+    id: str
     organization: Optional[str] = None
     organization_address: Optional[str] = None
     department: Optional[str] = None
@@ -27,7 +28,19 @@ class Employment:
     end_date: Optional[str] = None
 
 @dataclass
+class Distinction:
+    id: str
+    organization: Optional[str] = None
+    organization_address: Optional[str] = None
+    department: Optional[str] = None
+    role: Optional[str] = None
+    start_date: Optional[str] = None
+    end_date: Optional[str] = None
+    url: Optional[str] = None
+
+@dataclass
 class Membership:
+    id: str
     organization: Optional[str] = None
     organization_address: Optional[str] = None
     department: Optional[str] = None
@@ -42,6 +55,7 @@ class Amount:
 
 @dataclass
 class Funding:
+    id: str
     title: str
     type: str
     start_date: str
@@ -53,6 +67,7 @@ class Funding:
 
 @dataclass
 class Education:
+    id: str
     department: Optional[str] = None
     role: Optional[str] = None
     start_date: Optional[str] = None
@@ -61,10 +76,9 @@ class Education:
     organization_address: Optional[str] = None
     url: Optional[str] = None
 
-# @data
-
 @dataclass
 class PeerReview:
+    id: str
     type: Optional[str] = None
     role: Optional[str] = None
     url: Optional[str] = None
@@ -100,6 +114,7 @@ class AuthorInfo:
     educations: List[Education] = field(default_factory=list)
     memberships: List[Membership] = field(default_factory=list)
     peer_reviews: List[PeerReview] = field(default_factory=list)
+    distinctions: List[Distinction] = field(default_factory=list)
 
 @dataclass
 class Work:

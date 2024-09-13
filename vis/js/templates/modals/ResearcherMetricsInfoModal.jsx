@@ -2,7 +2,7 @@ import React from "react";
 import { connect } from "react-redux";
 import { Modal } from "react-bootstrap";
 
-import { closeResearcherModal } from "../../actions";
+import { closeResearcherMetricsModal } from "../../actions";
 import { STREAMGRAPH_MODE } from "../../reducers/chartType";
 
 import ResearcherMetricsInfo from "./researcher-modal/OrcidResearcherMetricsInfo";
@@ -30,7 +30,7 @@ const ResearcherMetricsInfoModal = ({open, onClose, params, service, isStreamgra
 
 
 const mapStateToProps = (state) => ({
-  open: state.modals.openResearcherModal,
+  open: state.modals.openResearcherMetricsModal,
   params: {
     ...state.modals.infoParams,
     query: state.query.text,
@@ -56,7 +56,7 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  onClose: () => dispatch(closeResearcherModal()),
+  onClose: () => dispatch(closeResearcherMetricsModal()),
 });
 
 export default connect(
