@@ -32,7 +32,7 @@ const defined = (param) => param !== undefined && param !== null;
  */
 export const ContextLine = (props) => {
     const { author, params, localization, hidden, service } = props;
-    const { popoverContainer } = props;
+    const { popoverContainer, showLanguage } = props;
 
     if (hidden) {
       return null;
@@ -112,7 +112,7 @@ export const ContextLine = (props) => {
           service={service}
           popoverContainer={popoverContainer}
         />
-        {defined(params.searchLanguage) && (
+        {showLanguage && defined(params.searchLanguage)  && (
           <SearchLang>{params.searchLanguage}</SearchLang>
         )}
         <ResearcherInfo />
@@ -123,6 +123,7 @@ export const ContextLine = (props) => {
 }
 
 const mapStateToProps = (state) => ({
+  showLanguage: state.config.showLanguage,
   hidden: state.zoom || !state.contextLine.show,
   params: {
     ...state.contextLine,

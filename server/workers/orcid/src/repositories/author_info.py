@@ -58,9 +58,9 @@ class AuthorInfoRepository:
         if memberships:
             author_info.memberships = self.extract_memberships(memberships)
 
-        grants, _ = self.orcid.fundings()
-        if grants:
-            author_info.funds = self.extract_funds(grants)
+        funds, _ = self.orcid.funds_enriched()
+        if funds:
+            author_info.funds = self.extract_funds(funds)
 
         peer_reviews = self.orcid.peer_reviews()
         if peer_reviews:
