@@ -130,15 +130,15 @@ class AuthorInfoRepository:
         return [
             Distinction(
                 id=unique_id(),
-                department=education.get("Department", None),
-                role=education.get("Role", None),
-                start_date=education.get("start-date", ""),
-                end_date=education.get("end-date", ""),
-                organization=education.get("organization", ""),
-                organization_address=education.get("organization-address", ""),
-                url=education.get("url", "")
+                department=distinction.get("Department", None),
+                role=distinction.get("Role", None),
+                start_date=distinction.get("start-date", ""),
+                end_date=distinction.get("end-date", ""),
+                organization=distinction.get("organization", ""),
+                organization_address=distinction.get("organization-address", ""),
+                url=distinction.get("url", "")
             )
-            for education in distinctions]
+            for distinction in distinctions]
     
     def extract_funds(self, funds: List[Dict[str, str]]) -> List[Funding]:
         return [
@@ -157,6 +157,10 @@ class AuthorInfoRepository:
 
     def extract_employment(self, employments: List[Dict[str, str]]) -> Optional[Employment]:
         employment = employments[0] if employments else None
+
+        if not employment:
+            return None
+
         return Employment(
             id=unique_id(),
             organization=employment.get("organization", None),
