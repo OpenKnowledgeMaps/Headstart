@@ -40,6 +40,7 @@ const setup = (overrideStore = {}) => {
         streamgraph_label: "Sample streamgraph keywords label",
         custom_title_explanation: "Sample explanation",
       },
+      q_advanced: {}
     },
     overrideStore
   );

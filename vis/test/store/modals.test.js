@@ -42,6 +42,8 @@ describe("modals state", () => {
       openEmbedModal: false,
       openViperEditModal: false,
       openCitationModal: false,
+      openResearcherMetricsModal: false,
+      openResearcherModal: false,
       previewedPaper: null,
       citedPaper: null,
       exportedPaper: null,

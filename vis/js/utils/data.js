@@ -539,7 +539,7 @@ export const commentsSanitizer = (value) => {
 
 export const queryConcatenator = (terms) => {
   let filtered_terms = terms.filter(element => {
-    return element !== '' && element !== null;
+    return element !== '' && element !== null && element !== undefined
   });
   let concatenatedQueries = filtered_terms.join(" and ");
   return concatenatedQueries

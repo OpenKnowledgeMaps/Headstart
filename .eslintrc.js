@@ -13,8 +13,9 @@ module.exports = {
     "eslint:recommended",
     "plugin:react/recommended",
     "plugin:flowtype/recommended",
+    'plugin:jest/recommended',
   ],
-  plugins: ["react", "react-hooks"],
+  plugins: ["react", "react-hooks", 'jest'],
   rules: {
     // we don't use prop-types
     "react/prop-types": 0,
@@ -27,6 +28,7 @@ module.exports = {
     browser: true,
     node: true,
     es6: true,
+    jest: true
   },
   settings: {
     react: {

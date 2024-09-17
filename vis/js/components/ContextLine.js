@@ -123,7 +123,7 @@ export const ContextLine = (props) => {
 }
 
 const mapStateToProps = (state) => ({
-  showLanguage: state.config.showLanguage,
+  showLanguage: state.contextLine.showLanguage,
   hidden: state.zoom || !state.contextLine.show,
   params: {
     ...state.contextLine,
