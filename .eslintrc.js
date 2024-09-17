@@ -1,4 +1,5 @@
-module.exports = {
+/** @type {import('jest').Config} */
+const config = {
   parser: "@babel/eslint-parser",
   parserOptions: {
     requireConfigFile: false,
@@ -12,7 +13,6 @@ module.exports = {
   extends: [
     "eslint:recommended",
     "plugin:react/recommended",
-    "plugin:flowtype/recommended",
     'plugin:jest/recommended',
   ],
   plugins: ["react", "react-hooks", 'jest'],
@@ -36,3 +36,5 @@ module.exports = {
     },
   },
 };
+
+module.exports = config;
