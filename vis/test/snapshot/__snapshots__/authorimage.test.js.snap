@@ -15,7 +15,7 @@ exports[`Author image component snapshot matches as author image snapshot 1`] = 
       className="authorimage"
       id="author_image"
       style={
-        Object {
+        {
           "backgroundImage": "url(https://example.com/12345)",
         }
       }

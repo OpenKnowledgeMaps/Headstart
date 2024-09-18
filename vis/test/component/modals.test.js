@@ -77,6 +77,8 @@ const setup = (overrideModalsObject = {}, overrideStoreObject = {}) => {
         cite_paper: "Cite this paper",
         export_paper: "Export this paper",
       },
+      q_advanced: {},
+      author: {}
     },
     overrideStoreObject
   );
@@ -898,7 +900,7 @@ describe("Modals component", () => {
       });
 
       expect(navigator.clipboard.writeText).toHaveBeenCalledWith(
-        '<iframe width="1260" height="756" src="http://localhost/?embed=true"></iframe>'
+        `<iframe width="1260" height="756" src="http://localhost/?embed=true" allow="clipboard-write; self https://openknowledgemaps.org/;"></iframe>`
       );
 
       await act(() => promise);
