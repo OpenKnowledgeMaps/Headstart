@@ -6,6 +6,7 @@ from typing import Tuple, Dict
 from common.rate_limiter import RateLimiter
 from redis import Redis
 from orcid_service import OrcidService
+from typing import Optional
 
 class OrcidWorker:
     service = "orcid"
@@ -22,7 +23,7 @@ class OrcidWorker:
         self.data_retriever = data_retriever
         self.rate_limiter = rate_limiter
 
-    def next_item(self) -> Tuple[str, Dict[str, str], str]:
+    def next_item(self) -> Tuple[Optional[str], Optional[Dict[str, str]], Optional[str]]:
         _, message = self.redis_store.blpop(self.service)
         try:
             message_data: Dict[str, str] = json.loads(message.decode("utf-8"))

@@ -203,10 +203,10 @@ class DataManager {
     for (const field in paper) {
       if (typeof paper[field] === "string") {
         paper[field] = $("<textarea/>").html(paper[field]).val();
-        if (!protectedProps.has(field)) {
-          paper[field] = paper[field].replace(/</g, "&lt;");
-          paper[field] = paper[field].replace(/>/g, "&gt;");
-        }
+        // if (!protectedProps.has(field)) {
+        //   paper[field] = paper[field].replace(/</g, "&lt;");
+        //   paper[field] = paper[field].replace(/>/g, "&gt;");
+        // }
       }
     }
   }

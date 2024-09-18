@@ -900,8 +900,7 @@ describe("Modals component", () => {
       });
 
       expect(navigator.clipboard.writeText).toHaveBeenCalledWith(
-        `<iframe width="1260" height="756" src="http://localhost/?embed=true" 
-                                allow="clipboard-write; self https://openknowledgemaps.org/;"></iframe>`
+        `<iframe width="1260" height="756" src="http://localhost/?embed=true" allow="clipboard-write; self https://openknowledgemaps.org/;"></iframe>`
       );
 
       await act(() => promise);

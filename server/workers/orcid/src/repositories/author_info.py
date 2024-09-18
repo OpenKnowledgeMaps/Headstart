@@ -79,21 +79,21 @@ class AuthorInfoRepository:
         for peer_review_group in peer_review_groups:
             peer_reviews = peer_review_group.get('peer-review-group', [])
             for peer_review in peer_reviews:
-                summary = peer_review.get('peer-review-summary', {})
-                organization_name = get_nested_value(summary, ["convening-organization", "name"], None)
-                organization_address = get_nested_value(summary, ["convening-organization", "address"], {})
-                organization_address_str = f"{organization_address.get('city', '')}, {organization_address.get('region', '')}, {organization_address.get('country', '')}"
+                summaries = peer_review.get('peer-review-summary', [])
+                for summary in summaries:
+                    organization_name = get_nested_value(summary, ["convening-organization", "name"], None)
+                    organization_address = get_nested_value(summary, ["convening-organization", "address"], {})
+                    organization_address_str = f"{organization_address.get('city', '')}, {organization_address.get('region', '')}, {organization_address.get('country', '')}"
 
-
-                peer_review_list.append(PeerReview(
-                    id=unique_id(),
-                    role=summary.get('reviewer-role', None),
-                    type=summary.get('review-type', None),
-                    url=summary.get('review-url', None),
-                    completion_date=self.get_completion_date(summary),
-                    organization=organization_name,
-                    organization_address=organization_address_str
-                ))
+                    peer_review_list.append(PeerReview(
+                        id=unique_id(),
+                        role=summary.get('reviewer-role', None),
+                        type=summary.get('review-type', None),
+                        url=summary.get('review-url', None),
+                        completion_date=self.get_completion_date(summary),
+                        organization=organization_name,
+                        organization_address=organization_address_str
+                    ))
             
         return peer_review_list
 
