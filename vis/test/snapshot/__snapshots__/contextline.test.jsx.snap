@@ -1,7 +1,8 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`Context line component snapshot matches a covis snapshot 1`] = `
+exports[`Context line component snapshot > matches a covis snapshot 1`] = `
 <p
+  data-testid="context"
   id="context"
 >
   <span
@@ -25,7 +26,7 @@ exports[`Context line component snapshot matches a covis snapshot 1`] = `
   />
   <span
     className="context_item"
-    id="document_types"
+    id="document_lang"
     onMouseEnter={[Function]}
   >
     <span
@@ -94,8 +95,9 @@ exports[`Context line component snapshot matches a covis snapshot 1`] = `
 </p>
 `;
 
-exports[`Context line component snapshot matches a linkedcat authorview snapshot 1`] = `
+exports[`Context line component snapshot > matches a linkedcat authorview snapshot 1`] = `
 <p
+  data-testid="context"
   id="context"
 >
   <span
@@ -135,7 +137,7 @@ exports[`Context line component snapshot matches a linkedcat authorview snapshot
   />
   <span
     className="context_item"
-    id="document_types"
+    id="document_lang"
     onMouseEnter={[Function]}
   >
     <span
@@ -196,8 +198,9 @@ exports[`Context line component snapshot matches a linkedcat authorview snapshot
 </p>
 `;
 
-exports[`Context line component snapshot matches a linkedcat keywordview snapshot 1`] = `
+exports[`Context line component snapshot > matches a linkedcat keywordview snapshot 1`] = `
 <p
+  data-testid="context"
   id="context"
 >
   <span
@@ -240,7 +243,7 @@ exports[`Context line component snapshot matches a linkedcat keywordview snapsho
   </span>
   <span
     className="context_item"
-    id="document_types"
+    id="document_lang"
     onMouseEnter={[Function]}
   >
     <span
@@ -301,8 +304,9 @@ exports[`Context line component snapshot matches a linkedcat keywordview snapsho
 </p>
 `;
 
-exports[`Context line component snapshot matches a project website (base low quality) snapshot 1`] = `
+exports[`Context line component snapshot > matches a project website (base low quality) snapshot 1`] = `
 <p
+  data-testid="context"
   id="context"
 >
   <span
@@ -348,7 +352,7 @@ exports[`Context line component snapshot matches a project website (base low qua
   </span>
   <span
     className="context_item"
-    id="document_types"
+    id="document_lang"
     onMouseEnter={[Function]}
   >
     <span
@@ -425,8 +429,9 @@ exports[`Context line component snapshot matches a project website (base low qua
 </p>
 `;
 
-exports[`Context line component snapshot matches a project website (pubmed high quality) snapshot 1`] = `
+exports[`Context line component snapshot > matches a project website (pubmed high quality) snapshot 1`] = `
 <p
+  data-testid="context"
   id="context"
 >
   <span
@@ -472,7 +477,7 @@ exports[`Context line component snapshot matches a project website (pubmed high 
   </span>
   <span
     className="context_item"
-    id="document_types"
+    id="document_lang"
     onMouseEnter={[Function]}
   >
     <span
@@ -549,8 +554,9 @@ exports[`Context line component snapshot matches a project website (pubmed high 
 </p>
 `;
 
-exports[`Context line component snapshot matches a viper snapshot 1`] = `
+exports[`Context line component snapshot > matches a viper snapshot 1`] = `
 <p
+  data-testid="context"
   id="context"
 >
   <span
@@ -574,7 +580,7 @@ exports[`Context line component snapshot matches a viper snapshot 1`] = `
   />
   <span
     className="context_item"
-    id="document_types"
+    id="document_lang"
     onMouseEnter={[Function]}
   >
     <span

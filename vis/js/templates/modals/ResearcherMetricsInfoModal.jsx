@@ -12,17 +12,22 @@ const getResearcherInfoTemplate = (service, isStreamgraph, modalType) => {
     case "orcid":
       return ResearcherMetricsInfo;
     default:
+      console.log(`${service} is not a valid service for the ResearcherInfoModal`);
       return null;  
   }
 };
 
 const ResearcherMetricsInfoModal = ({open, onClose, params, service, isStreamgraph, modalInfoType}) => {
-  const ResearcherInfoTemplate = getResearcherInfoTemplate(service, isStreamgraph, modalInfoType);
+  const ResearcherMetricsInfoTemplate = getResearcherInfoTemplate(service, isStreamgraph, modalInfoType);
+
+  if (!ResearcherMetricsInfoTemplate) {
+    return null;
+  }
 
   return (
     // html template starts here
     <Modal id="info_modal" show={open} onHide={onClose} animation>
-      <ResearcherInfoTemplate params={params} isStreamgraph={isStreamgraph} />
+      <ResearcherMetricsInfoTemplate params={params} isStreamgraph={isStreamgraph} />
     </Modal>
     // html template ends here
   );

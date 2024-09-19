@@ -1,20 +1,16 @@
+import { expect, describe, it } from 'vitest';
+
 import React from "react";
 import { Provider } from "react-redux";
-import { render, unmountComponentAtNode } from "react-dom";
-import ReactTestUtils from "react-dom/test-utils";
-import { act } from "react-dom/test-utils";
+import { render } from "@testing-library/react";
 
 import configureStore from "redux-mock-store";
 
-import {} from "../../js/actions";
 
 import KnowledgeMap from "../../js/components/KnowledgeMap";
 
 import initialTestData, { initialTestAreas } from "../data/simple";
-import covisData from "../data/covis";
-import localData from "../data/local-files";
-import pubmedData from "../data/pubmed";
-import viperData from "../data/viper";
+import LocalizationProvider from "../../js/components/LocalizationProvider";
 
 
 const mockStore = configureStore([]);
@@ -68,32 +64,21 @@ const setup = (overrideStoreObject = {}) => {
 };
 
 describe("Knowledge map component", () => {
-  let container = null;
-  beforeEach(() => {
-    container = document.createElement("div");
-    document.body.appendChild(container);
-  });
-
-  afterEach(() => {
-    unmountComponentAtNode(container);
-    container.remove();
-    container = null;
-  });
-
   it("renders zoomed out", () => {
     const storeObject = setup();
     const store = mockStore(storeObject);
+    const localization = {}
 
-    act(() => {
-      render(
+
+      const result = render(
         <Provider store={store}>
-          <KnowledgeMap />
-        </Provider>,
-        container
+          <LocalizationProvider localization={localization}>
+            <KnowledgeMap />
+          </LocalizationProvider>
+        </Provider>
       );
-    });
 
-    expect(container.querySelector("#chart-svg")).not.toBe(null);
+    expect(result.container.querySelector("#chart-svg")).not.toBe(null);
   });
 
   it("renders zoomed in", () => {
@@ -106,16 +91,13 @@ describe("Knowledge map component", () => {
     });
     const store = mockStore(storeObject);
 
-    act(() => {
-      render(
-        <Provider store={store}>
-          <KnowledgeMap />
-        </Provider>,
-        container
-      );
-    });
+    const result = render(
+      <Provider store={store}>
+        <KnowledgeMap />
+      </Provider>
+    );
 
-    expect(container.querySelector("#chart-svg")).not.toBe(null);
+    expect(result.container.querySelector("#chart-svg")).not.toBe(null);
   });
 
   /*
@@ -125,17 +107,15 @@ describe("Knowledge map component", () => {
       const storeObject = setup({ searchValue: SEARCH_TEXT });
       const store = mockStore(storeObject);
 
-      act(() => {
-        render(
+        const result = render(
           <Provider store={store}>
             <FilterSort />
           </Provider>,
           container
         );
-      });
 
       expect(
-        container.querySelector("#filter_input").getAttribute("value")
+        result.container.querySelector("#filter_input").getAttribute("value")
       ).toEqual(SEARCH_TEXT);
     });
   });

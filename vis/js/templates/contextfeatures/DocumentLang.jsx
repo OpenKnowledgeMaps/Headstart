@@ -59,7 +59,7 @@ const DocumentLang = ({value, popoverContainer}) => {
             {popoverText
                 // if multiple languages were selected, then show popover
                 ? <span
-                    id="document_types"
+                    id="document_lang"
                     className="context_item"
                     onMouseEnter={trackMouseEnter}
                 >

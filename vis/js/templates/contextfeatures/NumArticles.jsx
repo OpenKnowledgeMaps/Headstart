@@ -11,13 +11,13 @@ const NumArticles = ({
   
   if (service === 'orcid') {
     if (articlesCount > 200) {
-      displayText = `200 ${children} works`;
+      displayText = <>200 {children} works</>;
     }
   }
   
   if (service === 'pubmed' || service === 'base') {
-    if ((service === 'base' || service === 'pubmed') && articlesCount > 100) {
-      displayText = `100 ${children} ${articlesCountLabel}`;
+    if (articlesCount > 100) {
+      displayText = <>100 {children} {articlesCountLabel}</>;
     }
   }
 

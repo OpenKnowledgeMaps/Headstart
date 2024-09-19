@@ -1,6 +1,6 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`List filter component snapshot matches a snapshot 1`] = `
+exports[`List filter component snapshot > matches a snapshot 1`] = `
 <div
   className="row"
   id="explorer_options"

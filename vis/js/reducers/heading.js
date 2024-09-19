@@ -17,7 +17,7 @@ const context = (state = {}, action) => {
             : undefined,
         presetTitle: action.configObject.title,
         // Todo: set titleStyle = "custom" if custom_title exists
-        titleStyle: action.contextObject.params.custom_title ? 'custom' : getTitleStyle(action.configObject),
+        titleStyle: action.contextObject.custom_title ? 'custom' : getTitleStyle(action.configObject),
         titleLabelType: getTitleLabelType(action.configObject),
         customTitle: action.configObject.custom_title ? action.configObject.custom_title : action.contextObject.params.custom_title,
       };

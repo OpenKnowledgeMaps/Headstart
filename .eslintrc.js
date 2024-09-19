@@ -1,4 +1,3 @@
-/** @type {import('jest').Config} */
 const config = {
   parser: "@babel/eslint-parser",
   parserOptions: {
@@ -12,10 +11,9 @@ const config = {
   },
   extends: [
     "eslint:recommended",
-    "plugin:react/recommended",
-    'plugin:jest/recommended',
+    "plugin:react/recommended"
   ],
-  plugins: ["react", "react-hooks", 'jest'],
+  plugins: ["react", "react-hooks"],
   rules: {
     // we don't use prop-types
     "react/prop-types": 0,
@@ -28,7 +26,6 @@ const config = {
     browser: true,
     node: true,
     es6: true,
-    jest: true
   },
   settings: {
     react: {

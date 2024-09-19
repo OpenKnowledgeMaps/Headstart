@@ -64,7 +64,8 @@ const CitationModal = ({
           className="cite-modal-title"
           style={{ fontSize: 20 }}
         >
-          {isStreamgraph ? loc.cite_title_sg : loc.cite_title_km}
+          {open.toString()} and 
+          {/* {isStreamgraph ? loc.cite_title_sg : loc.cite_title_km} */}
         </Modal.Title>
       </Modal.Header>
       <Modal.Body id="cite-body" className="modal-body">

@@ -1,11 +1,11 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-in, paper selected) 1`] = `
+exports[`List entries component snapshot (BASE) > matches a snapshot (zoomed-in, paper selected) 1`] = `
 <div
   className="list-col"
   id="list-col"
   style={
-    Object {
+    {
       "width": undefined,
     }
   }
@@ -69,7 +69,7 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-in, p
           className="row"
           id="explorer_options"
           style={
-            Object {
+            {
               "borderBottom": "",
             }
           }
@@ -106,22 +106,38 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-in, p
                 className="dropdown-toggle btn btn-default"
                 disabled={false}
                 id="filter_params"
+                onBlur={[Function]}
                 onClick={[Function]}
+                onFocus={[Function]}
                 onKeyDown={[Function]}
+                onMouseOut={[Function]}
+                onMouseOver={[Function]}
                 role="button"
                 type="button"
               >
-                show: 
-                 
-                <span
-                  id="curr-filter-type"
+                <div
+                  className="flex-container"
                 >
-                  Any
-                </span>
-                 
-                <i
-                  className="fas fa-chevron-down chevron"
-                />
+                  <span
+                    className="truncate-text"
+                  >
+                    show: 
+                     
+                    <span
+                      id="curr-filter-type"
+                    >
+                      Any
+                    </span>
+                  </span>
+                  <i
+                    className="fas fa-chevron-down chevron"
+                    style={
+                      {
+                        "marginLeft": "5px",
+                      }
+                    }
+                  />
+                </div>
               </button>
               <ul
                 aria-labelledby="filter_params"
@@ -165,7 +181,7 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-in, p
             className="dropdown"
             id="sort_container"
             style={
-              Object {
+              {
                 "display": "inline-block",
               }
             }
@@ -179,22 +195,38 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-in, p
                 className="dropdown-toggle btn btn-default"
                 disabled={false}
                 id="sort"
+                onBlur={[Function]}
                 onClick={[Function]}
+                onFocus={[Function]}
                 onKeyDown={[Function]}
+                onMouseOut={[Function]}
+                onMouseOver={[Function]}
                 role="button"
                 type="button"
               >
-                sort by:
-                 
-                <span
-                  id="curr-sort-type"
+                <div
+                  className="flex-container"
                 >
-                  Relevance
-                </span>
-                 
-                <i
-                  className="fas fa-chevron-down chevron"
-                />
+                  <span
+                    className="truncate-text"
+                  >
+                    sort by:
+                     
+                    <span
+                      id="curr-sort-type"
+                    >
+                      Relevance
+                    </span>
+                  </span>
+                  <i
+                    className="fas fa-chevron-down chevron"
+                    style={
+                      {
+                        "marginLeft": "5px",
+                      }
+                    }
+                  />
+                </div>
               </button>
               <ul
                 aria-labelledby="sort"
@@ -213,7 +245,11 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-in, p
                     role="menuitem"
                     tabIndex="-1"
                   >
-                    Relevance
+                    <div
+                      className="truncate-text"
+                    >
+                      Relevance
+                    </div>
                   </a>
                 </li>
                 <li
@@ -228,7 +264,11 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-in, p
                     role="menuitem"
                     tabIndex="-1"
                   >
-                    Title
+                    <div
+                      className="truncate-text"
+                    >
+                      Title
+                    </div>
                   </a>
                 </li>
                 <li
@@ -243,7 +283,11 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-in, p
                     role="menuitem"
                     tabIndex="-1"
                   >
-                    Authors
+                    <div
+                      className="truncate-text"
+                    >
+                      Authors
+                    </div>
                   </a>
                 </li>
                 <li
@@ -258,7 +302,11 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-in, p
                     role="menuitem"
                     tabIndex="-1"
                   >
-                    Year
+                    <div
+                      className="truncate-text"
+                    >
+                      Year
+                    </div>
                   </a>
                 </li>
               </ul>
@@ -269,7 +317,7 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-in, p
           className="col-xs-12"
           id="papers_list"
           style={
-            Object {
+            {
               "display": "block",
               "height": 800,
             }
@@ -348,7 +396,7 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-in, p
                       <span
                         className=""
                       >
-                        K. Nowacki, I. Stępniak, T. Machałowski, M. Wysokowski, I. Petrenko, C. Schimpf, D. Rafaja, E. Langer, A. Richter, J. Ziętek, S. Pantović, A. Voronkina, V. Kovalchuk, V. Ivanenko, Y. Khrunyk, R. Galli, Y. Joseph, M. Gelinsky, T. Jesionowski, H. Ehrlich
+                        K. Nowacki, I. Stępniak, T. Machałowski, M. Wysokowski, I. Petrenko, C. Schimpf, D. Rafaja, E. Langer, A. Richter, J. Ziętek, S. Pantović, A. Voronkina, V. Kovalchuk, V. Ivanenko, ... H. Ehrlich
                       </span>
                     </span>
                   </div>
@@ -400,7 +448,7 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-in, p
                   </span>
                   <span
                     className="query_term_highlight "
-                    style={Object {}}
+                    style={{}}
                   >
                     Education
                   </span>
@@ -495,12 +543,12 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-in, p
 </div>
 `;
 
-exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 1`] = `
+exports[`List entries component snapshot (BASE) > matches a snapshot (zoomed-out) 1`] = `
 <div
   className="list-col"
   id="list-col"
   style={
-    Object {
+    {
       "width": undefined,
     }
   }
@@ -564,7 +612,7 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
           className="row"
           id="explorer_options"
           style={
-            Object {
+            {
               "borderBottom": "",
             }
           }
@@ -601,22 +649,38 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                 className="dropdown-toggle btn btn-default"
                 disabled={false}
                 id="filter_params"
+                onBlur={[Function]}
                 onClick={[Function]}
+                onFocus={[Function]}
                 onKeyDown={[Function]}
+                onMouseOut={[Function]}
+                onMouseOver={[Function]}
                 role="button"
                 type="button"
               >
-                show: 
-                 
-                <span
-                  id="curr-filter-type"
+                <div
+                  className="flex-container"
                 >
-                  Any
-                </span>
-                 
-                <i
-                  className="fas fa-chevron-down chevron"
-                />
+                  <span
+                    className="truncate-text"
+                  >
+                    show: 
+                     
+                    <span
+                      id="curr-filter-type"
+                    >
+                      Any
+                    </span>
+                  </span>
+                  <i
+                    className="fas fa-chevron-down chevron"
+                    style={
+                      {
+                        "marginLeft": "5px",
+                      }
+                    }
+                  />
+                </div>
               </button>
               <ul
                 aria-labelledby="filter_params"
@@ -660,7 +724,7 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
             className="dropdown"
             id="sort_container"
             style={
-              Object {
+              {
                 "display": "inline-block",
               }
             }
@@ -674,22 +738,38 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                 className="dropdown-toggle btn btn-default"
                 disabled={false}
                 id="sort"
+                onBlur={[Function]}
                 onClick={[Function]}
+                onFocus={[Function]}
                 onKeyDown={[Function]}
+                onMouseOut={[Function]}
+                onMouseOver={[Function]}
                 role="button"
                 type="button"
               >
-                sort by:
-                 
-                <span
-                  id="curr-sort-type"
+                <div
+                  className="flex-container"
                 >
-                  Relevance
-                </span>
-                 
-                <i
-                  className="fas fa-chevron-down chevron"
-                />
+                  <span
+                    className="truncate-text"
+                  >
+                    sort by:
+                     
+                    <span
+                      id="curr-sort-type"
+                    >
+                      Relevance
+                    </span>
+                  </span>
+                  <i
+                    className="fas fa-chevron-down chevron"
+                    style={
+                      {
+                        "marginLeft": "5px",
+                      }
+                    }
+                  />
+                </div>
               </button>
               <ul
                 aria-labelledby="sort"
@@ -708,7 +788,11 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                     role="menuitem"
                     tabIndex="-1"
                   >
-                    Relevance
+                    <div
+                      className="truncate-text"
+                    >
+                      Relevance
+                    </div>
                   </a>
                 </li>
                 <li
@@ -723,7 +807,11 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                     role="menuitem"
                     tabIndex="-1"
                   >
-                    Title
+                    <div
+                      className="truncate-text"
+                    >
+                      Title
+                    </div>
                   </a>
                 </li>
                 <li
@@ -738,7 +826,11 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                     role="menuitem"
                     tabIndex="-1"
                   >
-                    Authors
+                    <div
+                      className="truncate-text"
+                    >
+                      Authors
+                    </div>
                   </a>
                 </li>
                 <li
@@ -753,7 +845,11 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                     role="menuitem"
                     tabIndex="-1"
                   >
-                    Year
+                    <div
+                      className="truncate-text"
+                    >
+                      Year
+                    </div>
                   </a>
                 </li>
               </ul>
@@ -764,7 +860,7 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
           className="col-xs-12"
           id="papers_list"
           style={
-            Object {
+            {
               "display": "block",
               "height": 800,
             }
@@ -843,7 +939,7 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                       <span
                         className=""
                       >
-                        K. Nowacki, I. Stępniak, T. Machałowski, M. Wysokowski, I. Petrenko, C. Schimpf, D. Rafaja...
+                        K. Nowacki, I. Stępniak, T. Machałowski, M. Wysokowski, I. Petrenko, C. Schimpf, D. Rafaja, E. Langer, A. Richter, J. Ziętek, S. Pantović, A. Voronkina, V. Kovalchuk, V. Ivanenko, ... H. Ehrlich
                       </span>
                     </span>
                   </div>
@@ -896,7 +992,7 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                   </span>
                   <span
                     className="query_term_highlight "
-                    style={Object {}}
+                    style={{}}
                   >
                     Education
                   </span>
@@ -3446,7 +3542,7 @@ exports[`List entries component snapshot (BASE) matches a snapshot (zoomed-out) 
                         </span>
                         <span
                           className="query_term_highlight "
-                          style={Object {}}
+                          style={{}}
                         >
                           Digital
                         </span>

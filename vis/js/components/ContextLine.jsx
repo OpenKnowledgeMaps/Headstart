@@ -73,10 +73,10 @@ export const ContextLine = (props) => {
             />
           </Timespan>
         )}
-        <DocumentTypes
+        {defined(params.documentTypes) && <DocumentTypes
           documentTypes={params.documentTypes}
           popoverContainer={popoverContainer}
-        />
+        />}
         {/* was an issue to left "All Languages" as default value in the context if no lang_id in parameters */}
         <DocumentLang
           value={params.documentLang}

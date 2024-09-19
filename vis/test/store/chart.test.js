@@ -1,3 +1,5 @@
+import { expect, describe, it } from 'vitest';
+
 import { initializeStore, updateDimensions } from "../../js/actions";
 
 import reducer from "../../js/reducers/chart";

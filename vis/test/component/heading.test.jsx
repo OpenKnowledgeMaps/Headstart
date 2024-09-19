@@ -1,6 +1,7 @@
+import { expect, describe, it } from 'vitest';
+
 import React from "react";
-import { render, unmountComponentAtNode } from "react-dom";
-import { act } from "react-dom/test-utils";
+import { render } from "@testing-library/react";
 import { Provider } from "react-redux";
 
 import configureStore from "redux-mock-store";
@@ -51,33 +52,18 @@ const setup = (overrideStore = {}) => {
 };
 
 describe("Heading component", () => {
-  let container = null;
-  beforeEach(() => {
-    container = document.createElement("div");
-    document.body.appendChild(container);
-  });
-
-  afterEach(() => {
-    unmountComponentAtNode(container);
-    container.remove();
-    container = null;
-  });
-
   /**
    * Basic render test
    */
   it("renders", () => {
     const { store } = setup({ zoom: true });
-    act(() => {
-      render(
-        <Provider store={store}>
-          <Heading />
-        </Provider>,
-        container
-      );
-    });
+    const result = render(
+      <Provider store={store}>
+        <Heading />
+      </Provider>
+    );
 
-    expect(container.childNodes.length).toBe(1);
+    expect(result.container.childNodes.length).toBe(1);
   });
 
   /**
@@ -94,16 +80,13 @@ describe("Heading component", () => {
       storeObject.localization.area = LABEL;
       const store = mockStore(storeObject);
 
-      act(() => {
-        render(
-          <Provider store={store}>
-            <Heading />
-          </Provider>,
-          container
-        );
-      });
+      const result = render(
+        <Provider store={store}>
+          <Heading />
+        </Provider>
+      );
 
-      expect(container.querySelector("#area-bold").textContent).toContain(
+      expect(result.container.querySelector("#area-bold").textContent).toContain(
         LABEL
       );
     });
@@ -112,16 +95,13 @@ describe("Heading component", () => {
       const TITLE = "Special Test Title";
       const { store } = setup({ zoom: true, selectedBubble: { title: TITLE } });
 
-      act(() => {
-        render(
-          <Provider store={store}>
-            <Heading />
-          </Provider>,
-          container
-        );
-      });
+      const result = render(
+        <Provider store={store}>
+          <Heading />
+        </Provider>
+      );
 
-      expect(container.querySelector("#area-not-bold").textContent).toEqual(
+      expect(result.container.querySelector("#area-not-bold").textContent).toEqual(
         TITLE
       );
     });
@@ -134,16 +114,13 @@ describe("Heading component", () => {
         selectedBubble: { title: TITLE },
       });
 
-      act(() => {
-        render(
-          <Provider store={store}>
-            <Heading />
-          </Provider>,
-          container
-        );
-      });
+      const result = render(
+        <Provider store={store}>
+          <Heading />
+        </Provider>
+      );
 
-      expect(container.querySelector("#area-not-bold").textContent).toEqual(
+      expect(result.container.querySelector("#area-not-bold").textContent).toEqual(
         TITLE
       );
     });
@@ -158,16 +135,13 @@ describe("Heading component", () => {
         storeObject.localization.default_title = TITLE;
         const store = mockStore(storeObject);
 
-        act(() => {
-          render(
-            <Provider store={store}>
-              <Heading />
-            </Provider>,
-            container
-          );
-        });
+        const result = render(
+          <Provider store={store}>
+            <Heading />
+          </Provider>
+        );
 
-        expect(container.querySelector("h4").textContent).toContain(TITLE);
+        expect(result.container.querySelector("h4").textContent).toContain(TITLE);
       });
 
       it("renders with correct title taken from config", () => {
@@ -176,16 +150,13 @@ describe("Heading component", () => {
         storeObject.heading.presetTitle = TITLE;
         const store = mockStore(storeObject);
 
-        act(() => {
-          render(
-            <Provider store={store}>
-              <Heading />
-            </Provider>,
-            container
-          );
-        });
+        const result = render(
+          <Provider store={store}>
+            <Heading />
+          </Provider>
+        );
 
-        expect(container.querySelector("h4").textContent).toContain(TITLE);
+        expect(result.container.querySelector("h4").textContent).toContain(TITLE);
       });
 
       describe("viper", () => {
@@ -205,17 +176,14 @@ describe("Heading component", () => {
           storeObject.heading.title = TITLE;
           const store = mockStore(storeObject);
 
-          act(() => {
-            render(
-              <Provider store={store}>
-                <Heading />
-              </Provider>,
-              container
-            );
-          });
+          const result = render(
+            <Provider store={store}>
+              <Heading />
+            </Provider>
+          );
 
           expect(
-            container.querySelector("span.truncated-project-title").textContent
+            result.container.querySelector("span.truncated-project-title").textContent
           ).toContain(TITLE);
         });
 
@@ -226,17 +194,14 @@ describe("Heading component", () => {
           storeObject.heading.title = TITLE;
           const store = mockStore(storeObject);
 
-          act(() => {
-            render(
-              <Provider store={store}>
-                <Heading />
-              </Provider>,
-              container
-            );
-          });
+          const result = render(
+            <Provider store={store}>
+              <Heading />
+            </Provider>
+          );
 
           expect(
-            container
+            result.container
               .querySelector("span.truncated-project-title")
               .getAttribute("title")
           ).toContain(TITLE);
@@ -249,17 +214,14 @@ describe("Heading component", () => {
           storeObject.heading.acronym = ACRONYM;
           const store = mockStore(storeObject);
 
-          act(() => {
-            render(
-              <Provider store={store}>
-                <Heading />
-              </Provider>,
-              container
-            );
-          });
+          const result = render(
+            <Provider store={store}>
+              <Heading />
+            </Provider>
+          );
 
           expect(
-            container.querySelector("span.truncated-project-title").textContent
+            result.container.querySelector("span.truncated-project-title").textContent
           ).toContain(ACRONYM);
         });
 
@@ -271,17 +233,14 @@ describe("Heading component", () => {
           delete storeObject.heading.acronym;
           const store = mockStore(storeObject);
 
-          act(() => {
-            render(
-              <Provider store={store}>
-                <Heading />
-              </Provider>,
-              container
-            );
-          });
+          const result = render(
+            <Provider store={store}>
+              <Heading />
+            </Provider>
+          );
 
           expect(
-            container.querySelector("span.truncated-project-title").textContent
+            result.container.querySelector("span.truncated-project-title").textContent
           ).toEqual(TITLE);
         });
 
@@ -292,17 +251,14 @@ describe("Heading component", () => {
           storeObject.heading.projectId = ID;
           const store = mockStore(storeObject);
 
-          act(() => {
-            render(
-              <Provider store={store}>
-                <Heading />
-              </Provider>,
-              container
-            );
-          });
+          const result = render(
+            <Provider store={store}>
+              <Heading />
+            </Provider>
+          );
 
           expect(
-            container.querySelector("span.project-id").textContent
+            result.container.querySelector("span.project-id").textContent
           ).toEqual(`(${ID})`);
         });
 
@@ -313,17 +269,14 @@ describe("Heading component", () => {
           storeObject.heading.title = TITLE;
           const store = mockStore(storeObject);
 
-          act(() => {
-            render(
-              <Provider store={store}>
-                <Heading />
-              </Provider>,
-              container
-            );
-          });
+          const result = render(
+            <Provider store={store}>
+              <Heading />
+            </Provider>
+          );
 
           expect(
-            container.querySelector("span.truncated-project-title").textContent
+            result.container.querySelector("span.truncated-project-title").textContent
           ).toContain("...");
         });
 
@@ -334,17 +287,14 @@ describe("Heading component", () => {
           storeObject.heading.title = TITLE;
           const store = mockStore(storeObject);
 
-          act(() => {
-            render(
-              <Provider store={store}>
-                <Heading />
-              </Provider>,
-              container
-            );
-          });
+          const result = render(
+            <Provider store={store}>
+              <Heading />
+            </Provider>
+          );
 
           expect(
-            container
+            result.container
               .querySelector("span.truncated-project-title")
               .getAttribute("title")
           ).toContain(TITLE);
@@ -375,17 +325,14 @@ describe("Heading component", () => {
 
           const store = mockStore(storeObject);
 
-          act(() => {
-            render(
-              <Provider store={store}>
-                <Heading />
-              </Provider>,
-              container
-            );
-          });
+          const result = render(
+            <Provider store={store}>
+              <Heading />
+            </Provider>
+          );
 
           expect(
-            container.querySelector("#search-term-unique").textContent
+            result.container.querySelector("#search-term-unique").textContent
           ).toEqual(TITLE);
         });
 
@@ -397,21 +344,18 @@ describe("Heading component", () => {
 
           const store = mockStore(storeObject);
 
-          act(() => {
-            render(
-              <Provider store={store}>
-                <Heading />
-              </Provider>,
-              container
-            );
-          });
+          const result = render(
+            <Provider store={store}>
+              <Heading />
+            </Provider>
+          );
 
           expect(
-            container.querySelector("#search-term-unique").textContent
+            result.container.querySelector("#search-term-unique").textContent
           ).toContain(TITLE);
 
           expect(
-            container.querySelector("#search-term-unique").textContent
+            result.container.querySelector("#search-term-unique").textContent
           ).toContain("...");
         });
 
@@ -423,17 +367,14 @@ describe("Heading component", () => {
 
           const store = mockStore(storeObject);
 
-          act(() => {
-            render(
-              <Provider store={store}>
-                <Heading />
-              </Provider>,
-              container
-            );
-          });
+          const result = render(
+            <Provider store={store}>
+              <Heading />
+            </Provider>
+          );
 
           expect(
-            container.querySelector("#search-term-unique").getAttribute("title")
+            result.container.querySelector("#search-term-unique").getAttribute("title")
           ).toContain(EXPLANATION);
         });
 
@@ -442,17 +383,14 @@ describe("Heading component", () => {
 
           const { store } = setupCustom({ query: { text: QUERY } });
 
-          act(() => {
-            render(
-              <Provider store={store}>
-                <Heading />
-              </Provider>,
-              container
-            );
-          });
+          const result = render(
+            <Provider store={store}>
+              <Heading />
+            </Provider>
+          );
 
           expect(
-            container.querySelector("#search-term-unique").getAttribute("title")
+            result.container.querySelector("#search-term-unique").getAttribute("title")
           ).toContain(QUERY);
         });
 
@@ -466,17 +404,14 @@ describe("Heading component", () => {
 
           const store = mockStore(storeObject);
 
-          act(() => {
-            render(
-              <Provider store={store}>
-                <Heading />
-              </Provider>,
-              container
-            );
-          });
+          const result = render(
+            <Provider store={store}>
+              <Heading />
+            </Provider>
+          );
 
           expect(
-            container.querySelector("#search-term-unique").textContent
+            result.container.querySelector("#search-term-unique").textContent
           ).toEqual(ESCAPED_TITLE);
         });
       });
@@ -496,17 +431,14 @@ describe("Heading component", () => {
 
           const { store } = setupStandard({ query: { text: QUERY } });
 
-          act(() => {
-            render(
-              <Provider store={store}>
-                <Heading />
-              </Provider>,
-              container
-            );
-          });
+          const result = render(
+            <Provider store={store}>
+              <Heading />
+            </Provider>
+          );
 
           expect(
-            container.querySelector("#search-term-unique").textContent
+            result.container.querySelector("#search-term-unique").textContent
           ).toEqual(QUERY);
         });
 
@@ -515,17 +447,14 @@ describe("Heading component", () => {
 
           const { store } = setupStandard({ query: { text: QUERY } });
 
-          act(() => {
-            render(
-              <Provider store={store}>
-                <Heading />
-              </Provider>,
-              container
-            );
-          });
+          const result = render(
+            <Provider store={store}>
+              <Heading />
+            </Provider>
+          );
 
           expect(
-            container.querySelector("#search-term-unique").getAttribute("title")
+            result.container.querySelector("#search-term-unique").getAttribute("title")
           ).toEqual(QUERY);
         });
       });

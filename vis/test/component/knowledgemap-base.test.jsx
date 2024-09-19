@@ -1,9 +1,9 @@
+import { expect, describe, it, vitest } from "vitest";
+import { fireEvent, render, screen } from "@testing-library/react";
 import React from "react";
 import { Provider } from "react-redux";
 import { createStore } from "redux";
-import { render, unmountComponentAtNode } from "react-dom";
-import ReactTestUtils from "react-dom/test-utils";
-import { act } from "react-dom/test-utils";
+import { unmountComponentAtNode } from "react-dom";
 
 import configureStore from "redux-mock-store";
 
@@ -27,6 +27,7 @@ import data, {
 } from "../data/base";
 
 import { applyForce } from "../../js/utils/force";
+import LocalizationProvider from "../../js/components/LocalizationProvider";
 
 const FORCE_LAYOUT_PARAMS = {
   areasAlpha: config.area_force_alpha,
@@ -84,16 +85,15 @@ describe("Knowledge map component - special BASE tests", () => {
     const realStore = setup();
     const store = mockStore(realStore.getState());
 
-    act(() => {
-      render(
-        <Provider store={store}>
-          <KnowledgeMap />
-        </Provider>,
-        container
-      );
-    });
+    const result = render(
+      <Provider store={store}>
+        <LocalizationProvider localization={{}}>
+        <KnowledgeMap />
+        </LocalizationProvider>
+      </Provider>
+    );
 
-    expect(container.querySelector("#chart-svg")).not.toBe(null);
+    expect(result.container.querySelector("#chart-svg")).not.toBe(null);
   });
 
   it("renders with a paper order and a hovered paper", () => {
@@ -111,16 +111,15 @@ describe("Knowledge map component - special BASE tests", () => {
     };
     const store = mockStore(state);
 
-    act(() => {
-      render(
-        <Provider store={store}>
+    const result = render(
+      <Provider store={store}>
+        <LocalizationProvider localization={{}}>
           <KnowledgeMap />
-        </Provider>,
-        container
-      );
-    });
+        </LocalizationProvider>
+      </Provider>
+    );
 
-    expect(container.querySelector(".larger")).not.toBe(null);
+    expect(result.container.querySelector(".larger")).not.toBe(null);
   });
 
   it("renders with a highlighted bubble", () => {
@@ -129,16 +128,15 @@ describe("Knowledge map component - special BASE tests", () => {
     state.highlightedBubble = state.areas.list[0].area_uri;
     const store = mockStore(state);
 
-    act(() => {
-      render(
-        <Provider store={store}>
+    const result = render(
+      <Provider store={store}>
+        <LocalizationProvider localization={{}}>
           <KnowledgeMap />
-        </Provider>,
-        container
-      );
-    });
+        </LocalizationProvider>
+      </Provider>
+    );
 
-    expect(container.querySelector(".highlight-bubble")).not.toBe(null);
+    expect(result.container.querySelector(".highlight-bubble")).not.toBe(null);
   });
 
   describe("events", () => {
@@ -146,19 +144,16 @@ describe("Knowledge map component - special BASE tests", () => {
       const realStore = setup();
       const store = mockStore(realStore.getState());
 
-      act(() => {
-        render(
-          <Provider store={store}>
+      const result = render(
+        <Provider store={store}>
+          <LocalizationProvider localization={{}}>
             <KnowledgeMap />
-          </Provider>,
-          container
-        );
-      });
+          </LocalizationProvider>
+        </Provider>
+      );
 
-      const bubble = container.querySelector(".bubble_frame");
-      act(() => {
-        ReactTestUtils.Simulate.mouseOver(bubble);
-      });
+      const bubble = result.container.querySelector(".bubble_frame");
+      fireEvent.mouseOver(bubble);
 
       const actions = store.getActions();
 
@@ -171,19 +166,16 @@ describe("Knowledge map component - special BASE tests", () => {
       realStore.dispatch(hoverBubble(3));
       const store = mockStore(realStore.getState());
 
-      act(() => {
-        render(
-          <Provider store={store}>
+      const result = render(
+        <Provider store={store}>
+          <LocalizationProvider localization={{}}>
             <KnowledgeMap />
-          </Provider>,
-          container
-        );
-      });
+          </LocalizationProvider>
+        </Provider>
+      );
 
-      const allBubbles = container.querySelectorAll(".bubble_frame");
-      act(() => {
-        ReactTestUtils.Simulate.mouseOver(allBubbles[allBubbles.length - 1]);
-      });
+      const allBubbles = result.container.querySelectorAll(".bubble_frame");
+      fireEvent.mouseOver(allBubbles[allBubbles.length - 1]);
 
       const actions = store.getActions();
 
@@ -195,19 +187,16 @@ describe("Knowledge map component - special BASE tests", () => {
       const realStore = setup();
       const store = mockStore(realStore.getState());
 
-      act(() => {
-        render(
-          <Provider store={store}>
+      const result = render(
+        <Provider store={store}>
+          <LocalizationProvider localization={{}}>
             <KnowledgeMap />
-          </Provider>,
-          container
-        );
-      });
+          </LocalizationProvider>
+        </Provider>
+      );
 
-      const bubble = container.querySelector(".bubble_frame");
-      act(() => {
-        ReactTestUtils.Simulate.click(bubble);
-      });
+      const bubble = result.container.querySelector(".bubble_frame");
+      fireEvent.click(bubble);
 
       const actions = store.getActions();
 
@@ -224,19 +213,16 @@ describe("Knowledge map component - special BASE tests", () => {
       };
       const store = mockStore(state);
 
-      act(() => {
-        render(
-          <Provider store={store}>
-            <KnowledgeMap />
-          </Provider>,
-          container
-        );
-      });
+      const result = render(
+        <Provider store={store}>
+          <LocalizationProvider localization={{}}>
+          <KnowledgeMap />
+          </LocalizationProvider>
+        </Provider>
+      );
 
-      const bubble = container.querySelector(".bubble_frame");
-      act(() => {
-        ReactTestUtils.Simulate.click(bubble);
-      });
+      const bubble = result.container.querySelector(".bubble_frame");
+      fireEvent.click(bubble);
 
       const actions = store.getActions();
 
@@ -248,19 +234,16 @@ describe("Knowledge map component - special BASE tests", () => {
       const realStore = setup();
       const store = mockStore(realStore.getState());
 
-      act(() => {
-        render(
-          <Provider store={store}>
+      const result = render(
+        <Provider store={store}>
+          <LocalizationProvider localization={{}}>
             <KnowledgeMap />
-          </Provider>,
-          container
-        );
-      });
+          </LocalizationProvider>
+        </Provider>
+      );
 
-      const paper = container.querySelector(".paper");
-      act(() => {
-        ReactTestUtils.Simulate.click(paper);
-      });
+      const paper = result.container.querySelector(".paper");
+      fireEvent.click(paper);
 
       const actions = store.getActions();
 
@@ -277,19 +260,16 @@ describe("Knowledge map component - special BASE tests", () => {
       };
       const store = mockStore(state);
 
-      act(() => {
-        render(
-          <Provider store={store}>
+      const result = render(
+        <Provider store={store}>
+          <LocalizationProvider localization={{}}>
             <KnowledgeMap />
-          </Provider>,
-          container
-        );
-      });
+          </LocalizationProvider>
+        </Provider>
+      );
 
-      const papers = container.querySelectorAll(".paper");
-      act(() => {
-        ReactTestUtils.Simulate.mouseOver(papers[papers.length - 1]);
-      });
+      const papers = result.container.querySelectorAll(".paper");
+      fireEvent.mouseOver(papers[papers.length - 1]);
 
       const actions = store.getActions();
 
@@ -306,19 +286,16 @@ describe("Knowledge map component - special BASE tests", () => {
       };
       const store = mockStore(state);
 
-      act(() => {
-        render(
-          <Provider store={store}>
+      const result = render(
+        <Provider store={store}>
+          <LocalizationProvider localization={{}}>
             <KnowledgeMap />
-          </Provider>,
-          container
-        );
-      });
+          </LocalizationProvider>
+        </Provider>
+      );
 
-      const papers = container.querySelectorAll(".paper");
-      act(() => {
-        ReactTestUtils.Simulate.mouseOut(papers[papers.length - 1]);
-      });
+      const papers = result.container.querySelectorAll(".paper");
+      fireEvent.mouseOver(papers[papers.length - 1]);
 
       const actions = store.getActions();
 
@@ -335,19 +312,16 @@ describe("Knowledge map component - special BASE tests", () => {
       };
       const store = mockStore(state);
 
-      act(() => {
-        render(
-          <Provider store={store}>
+      const result = render(
+        <Provider store={store}>
+          <LocalizationProvider localization={{}}>
             <KnowledgeMap />
-          </Provider>,
-          container
-        );
-      });
+          </LocalizationProvider>
+        </Provider>
+      );
 
-      const papers = container.querySelectorAll(".paper");
-      act(() => {
-        ReactTestUtils.Simulate.click(papers[papers.length - 1]);
-      });
+      const papers = result.container.querySelectorAll(".paper");
+      fireEvent.click(papers[papers.length - 1]);
 
       const actions = store.getActions();
 
@@ -368,19 +342,16 @@ describe("Knowledge map component - special BASE tests", () => {
       };
       const store = mockStore(state);
 
-      act(() => {
-        render(
-          <Provider store={store}>
+      const result = render(
+        <Provider store={store}>
+          <LocalizationProvider localization={{}}>
             <KnowledgeMap />
-          </Provider>,
-          container
-        );
-      });
+          </LocalizationProvider>
+        </Provider>
+      );
 
-      const papers = container.querySelectorAll(".paper");
-      act(() => {
-        ReactTestUtils.Simulate.click(papers[papers.length - 1]);
-      });
+      const papers = result.container.querySelectorAll(".paper");
+      fireEvent.click(papers[papers.length - 1]);
 
       const actions = store.getActions();
 
