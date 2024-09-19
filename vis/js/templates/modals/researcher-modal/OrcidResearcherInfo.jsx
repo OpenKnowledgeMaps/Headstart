@@ -2,6 +2,8 @@ import React from "react";
 import { Modal } from "react-bootstrap";
 import { connect } from "react-redux";
 
+const DEFAULT_FALLBACK = 'not available';
+
 const ResearcherInfo = ({
   params
 }) => {
