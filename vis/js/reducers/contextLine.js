@@ -13,6 +13,7 @@ const contextLine = (state = {}, action) => {
   switch (action.type) {
     case "INITIALIZE":
       return {
+        showLanguage: action.configObject.showLanguage,
         show: !!config.show_context && !!context.params,
         articlesCount: papers.length,
         modifier: getModifier(config, context, papers.length),

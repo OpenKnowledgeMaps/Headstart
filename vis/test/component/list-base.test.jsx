@@ -1,9 +1,8 @@
+import { expect, describe, it } from 'vitest';
 import React from "react";
 import { Provider } from "react-redux";
 import { createStore } from "redux";
-import { render, unmountComponentAtNode } from "react-dom";
-import ReactTestUtils from "react-dom/test-utils";
-import { act } from "react-dom/test-utils";
+import { fireEvent, render } from "@testing-library/react";
 
 import configureStore from "redux-mock-store";
 
@@ -53,33 +52,18 @@ const localization = config.localization.eng_pubmed;
  * This file tests only the interactions. The structure is tested by snapshot test.
  */
 describe("List entries component - special BASE tests", () => {
-  let container = null;
-  beforeEach(() => {
-    container = document.createElement("div");
-    document.body.appendChild(container);
-  });
-
-  afterEach(() => {
-    unmountComponentAtNode(container);
-    container.remove();
-    container = null;
-  });
-
   it("renders", () => {
     const store = setup();
 
-    act(() => {
-      render(
-        <Provider store={store}>
-          <LocalizationProvider localization={localization}>
-            <List />
-          </LocalizationProvider>
-        </Provider>,
-        container
-      );
-    });
+    const result = render(
+      <Provider store={store}>
+        <LocalizationProvider localization={localization}>
+          <List />
+        </LocalizationProvider>
+      </Provider>
+    );
 
-    expect(container.querySelector(".list_metadata")).not.toBe(null);
+    expect(result.container.querySelector(".list_metadata")).not.toBe(null);
   });
 
   describe("events", () => {
@@ -87,21 +71,16 @@ describe("List entries component - special BASE tests", () => {
       const realStore = setup();
       const store = mockStore(realStore.getState());
 
-      act(() => {
-        render(
-          <Provider store={store}>
-            <LocalizationProvider localization={localization}>
-              <List />
-            </LocalizationProvider>
-          </Provider>,
-          container
-        );
-      });
+      const result = render(
+        <Provider store={store}>
+          <LocalizationProvider localization={localization}>
+            <List />
+          </LocalizationProvider>
+        </Provider>
+      );
 
-      const title = container.querySelector(".list_title");
-      act(() => {
-        ReactTestUtils.Simulate.click(title);
-      });
+      const title = result.container.querySelector(".list_title");
+      fireEvent.click(title);
 
       const actions = store.getActions();
 
@@ -113,21 +92,16 @@ describe("List entries component - special BASE tests", () => {
       const realStore = setup();
       const store = mockStore(realStore.getState());
 
-      act(() => {
-        render(
-          <Provider store={store}>
-            <LocalizationProvider localization={localization}>
-              <List />
-            </LocalizationProvider>
-          </Provider>,
-          container
-        );
-      });
+      const result = render(
+        <Provider store={store}>
+          <LocalizationProvider localization={localization}>
+            <List />
+          </LocalizationProvider>
+        </Provider>
+      );
 
-      const area = container.querySelector(".list_area");
-      act(() => {
-        ReactTestUtils.Simulate.click(area);
-      });
+      const area = result.container.querySelector(".list_area");
+      fireEvent.click(area);
 
       const actions = store.getActions();
 
@@ -139,21 +113,16 @@ describe("List entries component - special BASE tests", () => {
       const realStore = setup();
       const store = mockStore(realStore.getState());
 
-      act(() => {
-        render(
-          <Provider store={store}>
-            <LocalizationProvider localization={localization}>
-              <List />
-            </LocalizationProvider>
-          </Provider>,
-          container
-        );
-      });
+      const result = render(
+        <Provider store={store}>
+          <LocalizationProvider localization={localization}>
+            <List />
+          </LocalizationProvider>
+        </Provider>
+      );
 
-      const area = container.querySelector(".list_area");
-      act(() => {
-        ReactTestUtils.Simulate.mouseOver(area);
-      });
+      const area = result.container.querySelector(".list_area");
+      fireEvent.mouseOver(area);
 
       const actions = store.getActions();
 
@@ -173,21 +142,16 @@ describe("List entries component - special BASE tests", () => {
       const realStore = setup();
       const store = mockStore(realStore.getState());
 
-      act(() => {
-        render(
-          <Provider store={store}>
-            <LocalizationProvider localization={localization}>
-              <List />
-            </LocalizationProvider>
-          </Provider>,
-          container
-        );
-      });
+      const result = render(
+        <Provider store={store}>
+          <LocalizationProvider localization={localization}>
+            <List />
+          </LocalizationProvider>
+        </Provider>
+      );
 
-      const area = container.querySelector(".list_area");
-      act(() => {
-        ReactTestUtils.Simulate.mouseOut(area);
-      });
+      const area = result.container.querySelector(".list_area");
+      fireEvent.mouseOut(area);
 
       const actions = store.getActions();
 
@@ -199,21 +163,16 @@ describe("List entries component - special BASE tests", () => {
       const realStore = setup();
       const store = mockStore(realStore.getState());
 
-      act(() => {
-        render(
-          <Provider store={store}>
-            <LocalizationProvider localization={localization}>
-              <List />
-            </LocalizationProvider>
-          </Provider>,
-          container
-        );
-      });
+      const result = render(
+        <Provider store={store}>
+          <LocalizationProvider localization={localization}>
+            <List />
+          </LocalizationProvider>
+        </Provider>
+      );
 
-      const pdfPreview = container.querySelector(".paper_button");
-      act(() => {
-        ReactTestUtils.Simulate.click(pdfPreview);
-      });
+      const pdfPreview = result.container.querySelector(".paper_button");
+      fireEvent.click(pdfPreview);
 
       const actions = store.getActions();
 
@@ -234,22 +193,17 @@ describe("List entries component - special BASE tests", () => {
     it("searches the list for 'calcium homeostasis'", () => {
       const store = setup();
 
-      act(() => {
-        render(
-          <Provider store={store}>
-            <LocalizationProvider localization={localization}>
-              <List />
-            </LocalizationProvider>
-          </Provider>,
-          container
-        );
-      });
+      const result = render(
+        <Provider store={store}>
+          <LocalizationProvider localization={localization}>
+            <List />
+          </LocalizationProvider>
+        </Provider>
+      );
 
-      act(() => {
-        store.dispatch(search("calcium homeostasis"));
-      });
+      store.dispatch(search("calcium homeostasis"));
 
-      const papers = container.querySelectorAll(".list_entry");
+      const papers = result.container.querySelectorAll(".list_entry");
 
       expect(papers.length).toEqual(1);
     });
@@ -257,22 +211,17 @@ describe("List entries component - special BASE tests", () => {
     it("filters the list for open access papers only", () => {
       const store = setup();
 
-      act(() => {
-        render(
-          <Provider store={store}>
-            <LocalizationProvider localization={localization}>
-              <List />
-            </LocalizationProvider>
-          </Provider>,
-          container
-        );
-      });
+      const result = render(
+        <Provider store={store}>
+          <LocalizationProvider localization={localization}>
+            <List />
+          </LocalizationProvider>
+        </Provider>
+      );
 
-      act(() => {
-        store.dispatch(filter("open_access"));
-      });
+      store.dispatch(filter("open_access"));
 
-      const papers = container.querySelectorAll(".list_entry");
+      const papers = result.container.querySelectorAll(".list_entry");
 
       expect(papers.length).toEqual(6);
     });
@@ -280,22 +229,17 @@ describe("List entries component - special BASE tests", () => {
     it("sorts the list by year", () => {
       const store = setup();
 
-      act(() => {
-        render(
-          <Provider store={store}>
-            <LocalizationProvider localization={localization}>
-              <List />
-            </LocalizationProvider>
-          </Provider>,
-          container
-        );
-      });
+      const result = render(
+        <Provider store={store}>
+          <LocalizationProvider localization={localization}>
+            <List />
+          </LocalizationProvider>
+        </Provider>
+      );
 
-      act(() => {
-        store.dispatch(sort("year"));
-      });
+      store.dispatch(sort("year"));
 
-      const papers = container.querySelectorAll(".list_entry");
+      const papers = result.container.querySelectorAll(".list_entry");
 
       const regexp = /\((?<year>\d{4})/;
 
@@ -317,36 +261,27 @@ describe("List entries component - special BASE tests", () => {
 
       const SEARCH_TEXT = "calcium silicate";
 
-      act(() => {
-        render(
-          <Provider store={store}>
-            <LocalizationProvider localization={localization}>
-              <List />
-            </LocalizationProvider>
-          </Provider>,
-          container
-        );
-      });
+      const result = render(
+        <Provider store={store}>
+          <LocalizationProvider localization={localization}>
+            <List />
+          </LocalizationProvider>
+        </Provider>
+      );
 
-      act(() => {
-        store.dispatch(search(SEARCH_TEXT));
-      });
+      store.dispatch(search(SEARCH_TEXT));
 
-      let papers = container.querySelectorAll(".list_entry");
+      let papers = result.container.querySelectorAll(".list_entry");
       expect(papers.length).toEqual(4);
 
-      act(() => {
-        store.dispatch(filter("open_access"));
-      });
+      store.dispatch(filter("open_access"));
 
-      papers = container.querySelectorAll(".list_entry");
+      papers = result.container.querySelectorAll(".list_entry");
       expect(papers.length).toEqual(2);
 
-      act(() => {
-        store.dispatch(sort("title"));
-      });
+      store.dispatch(sort("title"));
 
-      papers = container.querySelectorAll(".list_entry");
+      papers = result.container.querySelectorAll(".list_entry");
 
       let titles = [...papers].map(
         (e) => e.querySelector(".list_title").textContent

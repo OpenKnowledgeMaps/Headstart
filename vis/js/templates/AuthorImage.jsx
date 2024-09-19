@@ -9,17 +9,23 @@ const AuthorImage = ({ url = "" }) => {
   }
 
   return (
-    // html template starts here
     <div id="title_image" className="titleimage">
-      <a id="author_image_link" href={link} target="_blank" rel="noreferrer">
+      <a
+        id="author_image_link"
+        href={link}
+        target="_blank"
+        rel="noreferrer"
+        aria-label="author image"
+      >
         <div
           id="author_image"
           className="authorimage"
           style={{ backgroundImage: `url(${link})` }}
+          role="img"
+          aria-label="author image"
         ></div>
       </a>
     </div>
-    // html template ends here
   );
 };
 

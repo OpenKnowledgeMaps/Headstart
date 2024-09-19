@@ -1,3 +1,5 @@
+import { expect, describe, it, vitest } from 'vitest';
+
 import { getQueryTermMatcher } from "../../js/components/Highlight";
 
 /**

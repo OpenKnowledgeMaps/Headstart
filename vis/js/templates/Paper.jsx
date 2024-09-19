@@ -174,7 +174,7 @@ class Paper extends React.Component {
 
     // function returns a string of authors with conditionals if the list is too long, it's cut off and an ellipsis is added
     // if less than maxLength authors, the full list is returned
-    function cutAuthors(authorsList, maxLength) {
+    function cutAuthors(authorsList = [], maxLength) {
       if (authorsList.length > maxLength) {
         const firstAuthors = authorsList.slice(0, maxLength - 1).join(', ');
         const lastAuthor = authorsList[authorsList.length - 1];

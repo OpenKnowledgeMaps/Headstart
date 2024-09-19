@@ -20,8 +20,7 @@ const CitationModal = ({
   query,
   customTitle,
   timestamp,
-  q_advanced,
-                         titleStyle,
+  q_advanced
 }) => {
   const loc = useLocalizationContext();
   const { trackEvent } = useMatomo();
@@ -65,7 +64,8 @@ const CitationModal = ({
           className="cite-modal-title"
           style={{ fontSize: 20 }}
         >
-          {isStreamgraph ? loc.cite_title_sg : loc.cite_title_km}
+          {open.toString()} and 
+          {/* {isStreamgraph ? loc.cite_title_sg : loc.cite_title_km} */}
         </Modal.Title>
       </Modal.Header>
       <Modal.Body id="cite-body" className="modal-body">
@@ -85,7 +85,7 @@ const CitationModal = ({
   );
 };
 
-const mapStateToProps = (state) => ({
+const mapStateToProps = (state) => (console.log('state here', state),{
   open: state.modals.openCitationModal,
   isStreamgraph: state.chartType === STREAMGRAPH_MODE,
   query: state.query.text,

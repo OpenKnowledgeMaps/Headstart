@@ -1,3 +1,5 @@
+import { expect, describe, it } from 'vitest';
+
 import { zoomIn, zoomOut } from "../../js/actions";
 
 import zoomReducer from "../../js/reducers/zoom";

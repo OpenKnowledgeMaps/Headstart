@@ -1,3 +1,5 @@
+import { expect, describe, it } from 'vitest';
+
 import { isNonTextDocument } from "../../js/templates/Paper";
 
 describe("Paper utility functions", () => {

@@ -5,7 +5,7 @@ import React from "react";
 const ContextLine = ({ children }) => {
   return (
     // html template starts here
-    <p id="context">{children}</p>
+    <p id="context" data-testid="context">{children}</p>
     // html template ends here
   );
 };

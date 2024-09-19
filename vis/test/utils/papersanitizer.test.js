@@ -1,3 +1,5 @@
+import { expect, describe, it, vitest } from 'vitest';
+
 import PaperSanitizer from "../../js/utils/PaperSanitizer";
 
 const CONFIG = {
@@ -13,7 +15,7 @@ const CONFIG = {
 describe("PaperSanitizer class tests", () => {
   let mockWarn = null;
   beforeEach(() => {
-    mockWarn = jest.fn();
+    mockWarn = vitest.fn();
     global.console = { ...global.console, warn: mockWarn };
   });
 

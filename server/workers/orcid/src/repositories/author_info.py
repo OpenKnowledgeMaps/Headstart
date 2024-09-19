@@ -1,5 +1,5 @@
 import logging
-from datetime import datetime
+from datetime import datetime, timedelta
 from pyorcid import Orcid
 import pandas as pd
 import numpy as np
@@ -8,7 +8,6 @@ from typing import List, Dict
 from model import AuthorInfo, ExternalIdentifier, Website, Employment, Funding, Education, Membership, PeerReview, Distinction
 from typing import Optional, Any
 import calendar
-
 import hashlib
 import time
 
@@ -58,9 +57,9 @@ class AuthorInfoRepository:
         if memberships:
             author_info.memberships = self.extract_memberships(memberships)
 
-        grants, _ = self.orcid.fundings()
-        if grants:
-            author_info.funds = self.extract_funds(grants)
+        funds, _ = self.orcid.funds_enriched()
+        if funds:
+            author_info.funds = self.extract_funds(funds)
 
         peer_reviews = self.orcid.peer_reviews()
         if peer_reviews:
@@ -130,15 +129,15 @@ class AuthorInfoRepository:
         return [
             Distinction(
                 id=unique_id(),
-                department=education.get("Department", None),
-                role=education.get("Role", None),
-                start_date=education.get("start-date", ""),
-                end_date=education.get("end-date", ""),
-                organization=education.get("organization", ""),
-                organization_address=education.get("organization-address", ""),
-                url=education.get("url", "")
+                department=distinction.get("Department", None),
+                role=distinction.get("Role", None),
+                start_date=distinction.get("start-date", ""),
+                end_date=distinction.get("end-date", ""),
+                organization=distinction.get("organization", ""),
+                organization_address=distinction.get("organization-address", ""),
+                url=distinction.get("url", "")
             )
-            for education in distinctions]
+            for distinction in distinctions]
     
     def extract_funds(self, funds: List[Dict[str, str]]) -> List[Funding]:
         return [
@@ -154,9 +153,37 @@ class AuthorInfoRepository:
             )
             for funding in funds
         ]
+    
+    def parse_date(self, date_str: str) -> Optional[datetime]:
+        """Attempts to parse a date string in 'YYYY' or 'MM/YYYY' format."""
+        try:
+            # Try to parse in 'MM/YYYY' format
+            if "/" in date_str:
+                return datetime.strptime(date_str, "%m/%Y")
+            # Try to parse in 'YYYY' format
+            return datetime.strptime(date_str, "%Y")
+        except ValueError:
+            # If parsing fails, return None
+            return None
 
     def extract_employment(self, employments: List[Dict[str, str]]) -> Optional[Employment]:
         employment = employments[0] if employments else None
+
+        if not employment:
+            return None
+
+        end_date_str = employment.get("end-date", "")
+
+        if end_date_str:  # Only proceed if end_date is not an empty string
+            end_date = self.parse_date(end_date_str)
+            if not end_date:  # If end_date couldn't be parsed, return None
+                return None
+            
+            # Check if end_date is more than half a year from now
+            half_year_from_now = datetime.now() + timedelta(days=182)
+            if end_date > half_year_from_now:
+                return None
+
         return Employment(
             id=unique_id(),
             organization=employment.get("organization", None),
@@ -164,8 +191,8 @@ class AuthorInfoRepository:
             department=employment.get("department", None),
             role=employment.get("Role", None),
             start_date=employment.get("start-date", ""),
-            end_date=employment.get("end-date", "")
-        ) if employment else None
+            end_date=end_date_str
+        )
     
     def extract_employments(self, employments: List[Dict[str, str]]) -> List[Employment]:
         return [

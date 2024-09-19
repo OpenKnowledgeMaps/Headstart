@@ -1,6 +1,6 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`Backlink component snapshot matches as knowledgeMap snapshot 1`] = `
+exports[`Backlink component snapshot > matches as knowledgeMap snapshot 1`] = `
 <p
   className="backlink"
   id="backlink"
@@ -14,7 +14,7 @@ exports[`Backlink component snapshot matches as knowledgeMap snapshot 1`] = `
 </p>
 `;
 
-exports[`Backlink component snapshot matches as streamgraph snapshot 1`] = `
+exports[`Backlink component snapshot > matches as streamgraph snapshot 1`] = `
 <p
   className="backlink backlink-streamgraph"
   id="backlink"

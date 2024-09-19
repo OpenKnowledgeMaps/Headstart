@@ -32,7 +32,7 @@ const defined = (param) => param !== undefined && param !== null;
  */
 export const ContextLine = (props) => {
     const { author, params, localization, hidden, service } = props;
-    const { popoverContainer } = props;
+    const { popoverContainer, showLanguage } = props;
 
     if (hidden) {
       return null;
@@ -73,10 +73,10 @@ export const ContextLine = (props) => {
             />
           </Timespan>
         )}
-        <DocumentTypes
+        {defined(params.documentTypes) && <DocumentTypes
           documentTypes={params.documentTypes}
           popoverContainer={popoverContainer}
-        />
+        />}
         {/* was an issue to left "All Languages" as default value in the context if no lang_id in parameters */}
         <DocumentLang
           value={params.documentLang}
@@ -112,7 +112,7 @@ export const ContextLine = (props) => {
           service={service}
           popoverContainer={popoverContainer}
         />
-        {defined(params.searchLanguage) && (
+        {showLanguage && defined(params.searchLanguage)  && (
           <SearchLang>{params.searchLanguage}</SearchLang>
         )}
         <ResearcherInfo />
@@ -123,6 +123,7 @@ export const ContextLine = (props) => {
 }
 
 const mapStateToProps = (state) => ({
+  showLanguage: state.contextLine.showLanguage,
   hidden: state.zoom || !state.contextLine.show,
   params: {
     ...state.contextLine,

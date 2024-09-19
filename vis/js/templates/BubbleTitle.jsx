@@ -1,8 +1,12 @@
 import React from "react";
 import { connect } from "react-redux";
 import $ from "jquery";
+import jQuery from 'jquery';
 
-import "hypher";
+window.jQuery = jQuery;
+window.$ = $;
+
+require("hypher/dist/jquery.hypher.js");
 import "lib/en.js";
 import "lib/de.js";
 
@@ -24,6 +28,7 @@ import { parseSearchText } from "../utils/data";
  * some constraints on them. That's why we decided to use d3 and jQuery to
  * recreate them.
  */
+
 class BubbleTitle extends React.Component {
   constructor(props) {
     super(props);

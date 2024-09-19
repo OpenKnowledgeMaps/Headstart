@@ -1,4 +1,4 @@
-module.exports = {
+const config = {
   parser: "@babel/eslint-parser",
   parserOptions: {
     requireConfigFile: false,
@@ -11,8 +11,7 @@ module.exports = {
   },
   extends: [
     "eslint:recommended",
-    "plugin:react/recommended",
-    "plugin:flowtype/recommended",
+    "plugin:react/recommended"
   ],
   plugins: ["react", "react-hooks"],
   rules: {
@@ -34,3 +33,5 @@ module.exports = {
     },
   },
 };
+
+module.exports = config;

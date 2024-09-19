@@ -1,3 +1,5 @@
+import { expect, describe, it } from 'vitest';
+
 import { zoomOut, selectPaper, deselectPaper } from "../../js/actions";
 
 import selectedPaperReducer from "../../js/reducers/selectedPaper";
