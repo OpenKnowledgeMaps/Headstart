@@ -78,10 +78,12 @@ export const ContextLine = (props) => {
           popoverContainer={popoverContainer}
         />}
         {/* was an issue to left "All Languages" as default value in the context if no lang_id in parameters */}
-        <DocumentLang
-          value={params.documentLang}
-          popoverContainer={popoverContainer}
-        />
+        {showLanguage && (
+          <DocumentLang
+            value={params.documentLang}
+            popoverContainer={popoverContainer}
+          />
+        )}
         {defined(params.paperCount) && (
           <PaperCount
             value={params.paperCount}
@@ -112,7 +114,7 @@ export const ContextLine = (props) => {
           service={service}
           popoverContainer={popoverContainer}
         />
-        {showLanguage && defined(params.searchLanguage)  && (
+        {defined(params.searchLanguage)  && (
           <SearchLang>{params.searchLanguage}</SearchLang>
         )}
         <ResearcherInfo />

@@ -7,6 +7,7 @@ window.jQuery = jQuery;
 window.$ = $;
 
 require("hypher/dist/jquery.hypher.js");
+import 'hypher';
 import "lib/en.js";
 import "lib/de.js";
 
