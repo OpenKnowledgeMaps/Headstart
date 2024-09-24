@@ -65,6 +65,7 @@
 #context {
     font-size: 12px;
     color: $black;
+    
     .context_moreinfo {
         border-bottom: 1px solid $link-gray;
         cursor: help;
@@ -80,10 +81,34 @@
             border-bottom-color: $infolink;
         }
     }
+
+    .overflow-ellipsis {
+        text-overflow: ellipsis;
+        max-width: 65px;
+        overflow-x: hidden;
+        white-space: nowrap;
+        vertical-align: text-bottom;
+    }
+
+    .underscore {
+        display: inline-block;
+        text-underline-offset: 4px;
+        text-decoration: underline;
+        vertical-align: middle;
+        height: 21px;
+
+        &:hover {
+            cursor: pointer;
+            text-decoration-thickness: 2px;
+        }
+    }
+
     .modifier {
         margin-right: 0;
     }
 }
+
+
 
 #area-bold {
     font-weight: $fontweight700;
@@ -318,14 +343,6 @@
     margin-right: 1%;
     height: 15px;
     margin-bottom: 6px;
-
-    &.overflow-ellipsis {
-        text-overflow: ellipsis;
-        max-width: 65px;
-        overflow: hidden;
-        white-space: nowrap;
-        vertical-align: bottom;
-    }
 }
 
 //.context_metadata_high {

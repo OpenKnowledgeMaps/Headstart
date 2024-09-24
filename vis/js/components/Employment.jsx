@@ -11,7 +11,7 @@ export function Employment({ author }) {
         >
           <span
             id="author_role"
-            className="context_item overflow-ellipsis context_moreinfo"
+            className="overflow-ellipsis underscore"
           >
             {author.employment.role}
           </span>
@@ -25,7 +25,7 @@ export function Employment({ author }) {
         >
           <span
             id="author_organization"
-            className="context_item overflow-ellipsis context_moreinfo"
+            className="overflow-ellipsis underscore"
           >
             {author.employment.organization}
           </span>
