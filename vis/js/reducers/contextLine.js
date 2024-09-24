@@ -20,6 +20,7 @@ const contextLine = (state = {}, action) => {
         openAccessCount: config.show_context_oa_number
           ? papers.filter((p) => p.oa).length
           : null,
+        showDataSource: !!config.showDataSource,
         showAuthor: !!config.is_authorview,
         author: {
           id: context?.params?.author_id

@@ -31,7 +31,7 @@ const defined = (param) => param !== undefined && param !== null;
  * It has to be a class component because of the popovers (they use 'this').
  */
 export const ContextLine = (props) => {
-    const { author, params, localization, hidden, service } = props;
+    const { author, params, localization, hidden, service, showDataSource } = props;
     const { popoverContainer, showLanguage } = props;
 
     if (hidden) {
@@ -57,7 +57,7 @@ export const ContextLine = (props) => {
           <Modifier popoverContainer={popoverContainer} />
         </NumArticles>
         <Employment author={author} />
-        {defined(params.dataSource) && (
+        {showDataSource && defined(params.dataSource) && (
           <DataSource
             label={localization.source_label}
             source={params.dataSource}
@@ -126,6 +126,7 @@ export const ContextLine = (props) => {
 
 const mapStateToProps = (state) => ({
   showLanguage: state.contextLine.showLanguage,
+  showDataSource: state.contextLine.showDataSource,
   hidden: state.zoom || !state.contextLine.show,
   params: {
     ...state.contextLine,
