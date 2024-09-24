@@ -83,24 +83,12 @@
     }
 
     .overflow-ellipsis {
+        display: inline-block;
         text-overflow: ellipsis;
         max-width: 65px;
         overflow-x: hidden;
         white-space: nowrap;
-        vertical-align: text-bottom;
-    }
-
-    .underscore {
-        display: inline-block;
-        text-underline-offset: 4px;
-        text-decoration: underline;
-        vertical-align: middle;
-        height: 21px;
-
-        &:hover {
-            cursor: pointer;
-            text-decoration-thickness: 2px;
-        }
+        vertical-align: text-top;
     }
 
     .modifier {

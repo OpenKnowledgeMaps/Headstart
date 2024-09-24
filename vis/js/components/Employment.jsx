@@ -11,9 +11,11 @@ export function Employment({ author }) {
         >
           <span
             id="author_role"
-            className="overflow-ellipsis underscore"
+            className="context_item"
           >
-            {author.employment.role}
+            <span className="context_moreinfo overflow-ellipsis">
+              {author.employment.role}
+            </span>
           </span>
         </HoverPopover>
       ) : null}
@@ -25,9 +27,11 @@ export function Employment({ author }) {
         >
           <span
             id="author_organization"
-            className="overflow-ellipsis underscore"
+            className="context_item"
           >
-            {author.employment.organization}
+            <span className="context_moreinfo overflow-ellipsis">
+              {author.employment.organization}
+            </span>
           </span>
         </HoverPopover>
       ) : null}
