@@ -77,6 +77,10 @@ const contextLine = (state = {}, action) => {
  * @returns {string} either most-recent, most-relevant or null
  */
 export const getModifier = (config, context, numOfPapers) => {
+  if (context.service === "orcid") {
+    return "most-recent";
+  }
+
   if (
     !context.params ||
     !exists(context.params.sorting) ||
@@ -140,7 +144,7 @@ const getProjectRuntime = (config, context) => {
 
   return `${context.params.start_date.slice(
     0,
-    4
+    4,
   )}–${context.params.end_date.slice(0, 4)}`;
 };
 
@@ -155,7 +159,7 @@ const getLegacySearchLanguage = (config, context) => {
   }
 
   const lang = config.options.languages.find(
-    (lang) => lang.code === context.params.lang_id
+    (lang) => lang.code === context.params.lang_id,
   );
 
   if (!lang) {

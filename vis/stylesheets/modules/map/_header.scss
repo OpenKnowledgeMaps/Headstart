@@ -1,12 +1,15 @@
 #title_context {
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     padding-top: 15px;
     padding-left: 50px;
 }
 
 #subdiscipline_title {
     margin: 0px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
     font-family: $base-font-family;
     min-height: 54px;
 
@@ -23,7 +26,7 @@
         position: relative;
         z-index: 3;
     }
-    
+
     #area-not-bold {
         .query_term_highlight {
             background-color: transparent;
@@ -32,7 +35,7 @@
 
     .backlink {
         position: relative;
-        z-index: 3; 
+        z-index: 3;
         font-size: 12px;
         cursor: pointer;
         height: 21px;
@@ -65,7 +68,8 @@
 #context {
     font-size: 12px;
     color: $black;
-    
+    padding: 0px;
+
     .context_moreinfo {
         border-bottom: 1px solid $link-gray;
         cursor: help;
@@ -152,8 +156,8 @@
 }
 
 .authorimage {
-    width: 50px;
-    height: 50px;
+    width: 45px;
+    height: 45px;
     border-radius: 50%;
     -webkit-border-radius: 50%;
     -moz-border-radius: 50%;
@@ -166,10 +170,8 @@
     display: inline-block;
     /*max-width: 80px;*/
     vertical-align: middle;
-    margin: 10px 4px 10px 10px; /*former margin-right*/
-    /*margin-top: 15px;
-    margin-left: 50px;*/
-    padding-right: 3px;
+    margin: 0px; /*former margin-right*/
+    padding-right: 8px;
 }
 
 #author_bio a {
@@ -190,7 +192,7 @@
             font-size: 14px;
         }
     }
-    
+
     #context {
         font-size: 11px;
     }
@@ -234,7 +236,7 @@
     #title_image + #subdiscipline_title {
         display: inline-block;
         width: 80%;
-        vertical-align: middle; 
+        vertical-align: middle;
         padding-left: 0px;
         padding-top: 0px !important;
     }
@@ -273,7 +275,7 @@
 
     .backlink {
         position: relative;
-        z-index: 3; 
+        z-index: 3;
         font-size: 12px;
         cursor: pointer;
 
@@ -328,7 +330,7 @@
 
 .context_item {
     display: inline-block;
-    margin-right: 1%;
+    margin-right: 1rem;
     height: 15px;
     margin-bottom: 6px;
 }

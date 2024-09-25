@@ -229,7 +229,7 @@
         text-overflow: ellipsis;
         display: -webkit-box;
         -webkit-line-clamp: 3;
-                line-clamp: 3; 
+                line-clamp: 3;
         -webkit-box-orient: vertical;
     }
 
@@ -352,7 +352,7 @@ s.resulttype {
     display: block;
 }
 
-.preview_thumbnail { 
+.preview_thumbnail {
     max-width: 100%;
     display: block;
     margin-right: 0px;
@@ -360,7 +360,7 @@ s.resulttype {
 
 .tryout-button {
     border: 2px solid #f29e00;
-    color: white; 
+    color: white;
     background-color: #f29e00;
     padding:5px;
     border-radius: 5px;
@@ -372,7 +372,7 @@ s.resulttype {
 }
 
 .tryout-button:hover, .tryout-button:active, .tryout-button:focus {
-    color: #f29e00; 
+    color: #f29e00;
     background-color: transparent;
     text-decoration: none;
 }
@@ -507,7 +507,7 @@ img#preview_page {
     font-size: 12px;
 
     &:hover, &:focus, &:active {
-        border-bottom: 3px solid $okm-modal-btn; 
+        border-bottom: 3px solid $okm-modal-btn;
     }
 }
 
@@ -619,7 +619,7 @@ img#preview_page {
             max-width: 100%;
             display: block;
             color: $list_metadata_title_paper;
-            font-weight: $fontweight600;   
+            font-weight: $fontweight600;
         }
 
         .legend {
@@ -705,7 +705,7 @@ img#preview_page {
         padding-right: 5px;
 
         .list_readers_entity {
-            font-size: 11px; 
+            font-size: 11px;
             font-family: $link-font-family;
             font-weight: $fontweight400;
         }
@@ -717,7 +717,7 @@ img#preview_page {
 
     .level2 .list_subentry {
         margin-left: 15px;
-        border-left: 1px solid $list_show_hide_button; 
+        border-left: 1px solid $list_show_hide_button;
         padding-left: 5px;
     }
 
@@ -919,7 +919,6 @@ img#preview_page {
 }
 
 .truncate-text {
-    width: 100%;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;

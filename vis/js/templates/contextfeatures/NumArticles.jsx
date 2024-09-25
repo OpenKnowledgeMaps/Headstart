@@ -8,16 +8,20 @@ const NumArticles = ({
   children,
 }) => {
   let displayText = `${articlesCount} ${articlesCountLabel}`;
-  
-  if (service === 'orcid') {
-    if (articlesCount > 200) {
+
+  if (service === "orcid") {
+    if (articlesCount >= 200) {
       displayText = <>200 {children} works</>;
     }
   }
-  
-  if (service === 'pubmed' || service === 'base') {
-    if (articlesCount > 100) {
-      displayText = <>100 {children} {articlesCountLabel}</>;
+
+  if (service === "pubmed" || service === "base") {
+    if (articlesCount >= 100) {
+      displayText = (
+        <>
+          100 {children} {articlesCountLabel}
+        </>
+      );
     }
   }
 
