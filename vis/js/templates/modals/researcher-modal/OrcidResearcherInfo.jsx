@@ -120,20 +120,13 @@ const formatDistinction = (distinction) => {
   );
 };
 
-const LinksSection = ({ links }) => (
-  <div>
-    <h3>LINKS {links?.length ? `(${links.length})` : ""}</h3>
-    {links?.length ? (
-      <>
-        <i className="fas fa-solid fa-link" style={{ paddingRight: "3px" }}></i>
-        <a href={links[0].url} target="_blank" rel="noopener noreferrer">
-          {links[0].type}: {links[0].value}
-        </a>
-      </>
-    ) : (
-      <p>{noDataAvailable}</p>
-    )}
-  </div>
+const formatLink = (link) => (
+  <p key={link.value}>
+    <i className="fas fa-solid fa-link" style={{ paddingRight: "3px" }}></i>
+    <a href={link.url} target="_blank" rel="noopener noreferrer">
+      {link.type}: {link.value}
+    </a>
+  </p>
 );
 
 const ResearcherInfo = ({ params }) => {
@@ -142,6 +135,7 @@ const ResearcherInfo = ({ params }) => {
     educations: false,
     funds: false,
     distinctions: false,
+    links: false,
   });
 
   const handleShowMore = (section) => {
@@ -173,7 +167,13 @@ const ResearcherInfo = ({ params }) => {
           showMore={showMore.funds}
           handleShowMore={() => handleShowMore("funds")}
         />
-        <LinksSection links={params.external_identifiers} />
+        <Section
+          title="LINKS"
+          items={params.external_identifiers}
+          formatItem={formatLink}
+          showMore={showMore.links}
+          handleShowMore={() => handleShowMore("links")}
+        />
         <Section
           title="DISTINCTIONS / AWARDS"
           items={params.distinctions}
