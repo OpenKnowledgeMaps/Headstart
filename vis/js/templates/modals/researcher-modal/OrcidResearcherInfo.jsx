@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Modal } from "react-bootstrap";
 import { connect } from "react-redux";
 
@@ -6,6 +6,21 @@ const DEFAULT_FALLBACK = "not available";
 
 const ResearcherInfo = ({ params }) => {
   const noDataAvailable = "No data available";
+  const [showMore, setShowMore] = useState({
+    employments: false,
+    educations: false,
+    funds: false,
+    distinctions: false,
+  });
+
+  const handleShowMore = (section) => {
+    setShowMore({ ...showMore, [section]: !showMore[section] });
+  };
+
+  const formatEmployment = (employment) => {
+    const endDate = employment.end_date ? employment.end_date : "present";
+    return `${employment.start_date} - ${endDate} / ${employment.role} / ${employment.organization} / ${employment.organization_address || DEFAULT_FALLBACK}`;
+  };
 
   return (
     <>
@@ -13,86 +28,123 @@ const ResearcherInfo = ({ params }) => {
         <Modal.Title id="info-title">Researcher details</Modal.Title>
       </Modal.Header>
       <Modal.Body id="info-body">
-        <h3>
-          EMPLOYMENT{" "}
-          {params.employments?.length ? `(${params.employments?.length})` : nul}
-        </h3>
+        {/* Employment Section */}
+        <h3>EMPLOYMENT ({params.employments?.length || 0})</h3>
+        {params.employments?.length ? (
+          <>
+            <p>{formatEmployment(params.employments[0])}</p>
+            {params.employments.length > 1 && (
+              <>
+                {showMore.employments &&
+                  params.employments
+                    .slice(1)
+                    .map((employment) => (
+                      <p key={employment.id}>{formatEmployment(employment)}</p>
+                    ))}
+                <button onClick={() => handleShowMore("employments")}>
+                  <i
+                    className={`fas fa-${showMore.employments ? "chevron-up" : "chevron-down"}`}
+                  ></i>
+                  {showMore.employments ? "Show Less" : "Show More"}
+                </button>
+              </>
+            )}
+          </>
+        ) : (
+          <p>{noDataAvailable}</p>
+        )}
 
-        {!!params.employments?.length ? noDataAvailable : null}
-        {params.employments?.map((employment) => (
-          <p key={employment.id}>
-            {[
-              `${employment.start_date} - ${employment.end_date}`,
-              employment.role,
-              employment.organization,
-              // TODO: is it possible somehow split address to city and country? I noticed, that orcid data does not have it
-              employment.organization_address,
-            ].join(" / ")}
-          </p>
-        ))}
+        {/* Education Section */}
+        <h3>EDUCATION & QUALIFICATIONS ({params.educations?.length || 0})</h3>
+        {params.educations?.length ? (
+          <>
+            <p>{`${params.educations[0].start_date} - ${params.educations[0].end_date || "present"} / ${params.educations[0].role} / ${params.educations[0].organization} / ${params.educations[0].organization_address || DEFAULT_FALLBACK}`}</p>
+            {params.educations.length > 1 && (
+              <>
+                {showMore.educations &&
+                  params.educations
+                    .slice(1)
+                    .map((education) => (
+                      <p
+                        key={education.id}
+                      >{`${education.start_date} - ${education.end_date || "present"} / ${education.role} / ${education.organization} / ${education.organization_address || DEFAULT_FALLBACK}`}</p>
+                    ))}
+                <button onClick={() => handleShowMore("educations")}>
+                  <i
+                    className={`fas fa-${showMore.educations ? "chevron-up" : "chevron-down"}`}
+                  ></i>
+                  {showMore.educations ? "Show Less" : "Show More"}
+                </button>
+              </>
+            )}
+          </>
+        ) : (
+          <p>{noDataAvailable}</p>
+        )}
 
-        <h3>EDUCATION & QUALIFICATION</h3>
-        {!!params.educations?.length ? noDataAvailable : null}
-        {params.educations?.map((education) => (
-          <p key={education.id}>
-            {education.role} / {education.start_date} - {education.end_date} /{" "}
-            {education.organization} / {education.organization_address}
-          </p>
-        ))}
-
-        <h3>GRANTS ({params.funds?.length || 0})</h3>
-        {!!params.funds?.length ? noDataAvailable : null}
-        {params.funds?.map((fund) => (
-          <p key={fund.id}>
-            {fund.title} / {fund.start_date} - {fund.end_date} / Funder:{" "}
-            {fund.organization} / Amount: {fund.amount?.value}{" "}
-            {fund.amount?.currency}
-          </p>
-        ))}
-
-        <h3>LINKS</h3>
-        <p>
-          {!!params.external_identifiers?.length ? noDataAvailable : null}
-          {params.external_identifiers?.map((external_id) => (
-            <p key={external_id["value"]}>
-              <i
-                className="fas fa-solid fa-link"
-                style={{ paddingRight: "3px" }}
-              ></i>
-              <a className="underline" href={external_id["url"]}>
-                {external_id["type"]}: {external_id["value"]}
-              </a>
+        {/* Funding Section */}
+        <h3>FUNDING ({params.funds?.length || 0})</h3>
+        {params.funds?.length ? (
+          <>
+            <p>
+              {params.funds[0].title} / {params.funds[0].start_date} -{" "}
+              {params.funds[0].end_date} / Funder:{" "}
+              {params.funds[0].organization} / Amount:{" "}
+              {params.funds[0].amount?.value} {params.funds[0].amount?.currency}
             </p>
-          ))}
-        </p>
+          </>
+        ) : (
+          <p>{noDataAvailable}</p>
+        )}
 
+        {/* Links Section */}
+        <h3>LINKS</h3>
+        {params.external_identifiers?.length ? (
+          <>
+            <i
+              className="fas fa-solid fa-link"
+              style={{ paddingRight: "3px" }}
+            ></i>
+            <a
+              href={params.external_identifiers[0].url}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              {params.external_identifiers[0].type}:{" "}
+              {params.external_identifiers[0].value}
+            </a>
+          </>
+        ) : (
+          <p>{noDataAvailable}</p>
+        )}
+
+        {/* Distinctions Section */}
         <h3>DISTINCTIONS / AWARDS ({params.distinctions?.length || 0})</h3>
-        {!!params.distinctions?.length ? noDataAvailable : null}
-        {params.distinctions?.map((distinction) => (
-          <p key={distinction.id}>
-            {distinction.title} / {distinction.start_date} -{" "}
-            {distinction.end_date} / {distinction.organization} /{" "}
-            {distinction.organization_address}
-          </p>
-        ))}
-
-        <h3>MEMBERSHIPS ({params.memberships?.length || 0})</h3>
-        {!!params.memberships?.length ? noDataAvailable : null}
-        {params.memberships?.map((membership) => (
-          <p key={membership.id}>
-            {membership.role} / {membership.start_date} - {membership.end_date}{" "}
-            / {membership.organization} / {membership.organization_address}
-          </p>
-        ))}
-
-        <h3>PEER REVIEWS ({params.peer_reviews?.length || 0})</h3>
-        {!!params.peer_reviews?.length ? noDataAvailable : null}
-        {params.peer_reviews?.map((peer_review) => (
-          <p key={peer_review.id}>
-            {peer_review.role} / {peer_review.completion_date} /{" "}
-            {peer_review.organization} / {peer_review.organization_address}
-          </p>
-        ))}
+        {params.distinctions?.length ? (
+          <>
+            <p>{`${params.distinctions[0].start_date || "Unknown"} / ${params.distinctions[0].title}`}</p>
+            {params.distinctions.length > 1 && (
+              <>
+                {showMore.distinctions &&
+                  params.distinctions
+                    .slice(1)
+                    .map((distinction) => (
+                      <p
+                        key={distinction.id}
+                      >{`${distinction.start_date || "Unknown"} / ${distinction.title}`}</p>
+                    ))}
+                <button onClick={() => handleShowMore("distinctions")}>
+                  <i
+                    className={`fas fa-${showMore.distinctions ? "chevron-up" : "chevron-down"}`}
+                  ></i>
+                  {showMore.distinctions ? "Show Less" : "Show More"}
+                </button>
+              </>
+            )}
+          </>
+        ) : (
+          <p>{noDataAvailable}</p>
+        )}
       </Modal.Body>
     </>
   );
