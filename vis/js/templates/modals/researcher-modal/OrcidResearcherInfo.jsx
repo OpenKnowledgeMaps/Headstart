@@ -23,8 +23,40 @@ const ResearcherInfo = ({ params }) => {
       employment.organization,
       employment.organization_address // Only displays if it exists.
     ]
-      .filter(Boolean) // Filters out any missing data.
+      .filter(Boolean)
       .join(" / ");
+  };
+
+  const formatFunding = (fund) => {
+    const endDate = fund.end_date ? fund.end_date : "present";
+
+    return (
+      <>
+        {/* Title with link or plain text */}
+        <p>
+          {fund.url ? (
+            <a href={fund.url} target="_blank" rel="noopener noreferrer">
+              <i className="fas fa-solid fa-link" style={{ paddingRight: "3px" }}></i>
+              {fund.title}
+            </a>
+          ) : (
+            fund.title
+          )}
+        </p>
+
+        {/* Funding metadata */}
+        <p>
+          {[
+            `${fund.start_date} - ${endDate}`, // Start and end dates
+            fund.type, // Type of funding
+            fund.organization ? `Funder: ${fund.organization}` : null, // Funder (if available)
+            fund.amount?.value && fund.amount?.currency ? `Amount: ${fund.amount.value} ${fund.amount.currency}` : null, // Amount (if available)
+          ]
+            .filter(Boolean)
+            .join(" / ")}
+        </p>
+      </>
+    );
   };
 
   return (
@@ -99,12 +131,20 @@ const ResearcherInfo = ({ params }) => {
         </h3>
         {params.funds?.length ? (
           <>
-            <p>{[
-              params.funds[0].title,
-              `${params.funds[0].start_date} - ${params.funds[0].end_date}`,
-              `Funder: ${params.funds[0].organization}`,
-              `Amount: ${params.funds[0].amount?.value} ${params.funds[0].amount?.currency}`
-            ].filter(Boolean).join(" / ")}</p>
+            {formatFunding(params.funds[0])}
+            {params.funds.length > 1 && (
+              <>
+                {showMore.funds && params.funds.slice(1).map((fund) => (
+                  <div key={fund.id}>
+                    {formatFunding(fund)}
+                  </div>
+                ))}
+                <button onClick={() => handleShowMore("funds")}>
+                  <i className={`fas fa-${showMore.funds ? "chevron-up" : "chevron-down"}`}></i>
+                  {showMore.funds ? "Show Less" : "Show More"}
+                </button>
+              </>
+            )}
           </>
         ) : (
           <p>{noDataAvailable}</p>
