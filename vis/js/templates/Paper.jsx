@@ -100,13 +100,31 @@ class Paper extends React.Component {
     const { maxSize, enlargeFactor } = this.props;
     const { onClick, onMouseOver, onMouseOut } = this.props;
 
-    const {title, authors_string: authors, authors_list: authors_list, year, area} = data;
-    const { published_in: publisher  } = data;
+    const {
+      title,
+      authors_string: authors,
+      authors_list: authors_list,
+      year,
+      area,
+    } = data;
+    const { published_in: publisher } = data;
     const { x, y, width: baseWidth, height: baseHeight } = this.state;
     const { path: basePath, dogEar: baseDogEar } = this.state;
-    
-    const { socialMediaLabel, referencesLabel, citationsLabel, readersLabel, tweetsLabel } = this.props;
-    const { num_readers: readers, tweets, citations, social, references  } = data;
+
+    const {
+      socialMediaLabel,
+      referencesLabel,
+      citationsLabel,
+      readersLabel,
+      tweetsLabel,
+    } = this.props;
+    const {
+      num_readers: readers,
+      tweets,
+      citations,
+      social,
+      references,
+    } = data;
 
     let { width: realWidth, height: realHeight } =
       this.getCoordinatesAndDimensions();
@@ -171,16 +189,15 @@ class Paper extends React.Component {
       eventHandlers.onMouseOut = handleMouseOut;
     }
 
-
     // function returns a string of authors with conditionals if the list is too long, it's cut off and an ellipsis is added
     // if less than maxLength authors, the full list is returned
     function cutAuthors(authorsList = [], maxLength) {
       if (authorsList.length > maxLength) {
-        const firstAuthors = authorsList.slice(0, maxLength - 1).join(', ');
+        const firstAuthors = authorsList.slice(0, maxLength - 1).join(", ");
         const lastAuthor = authorsList[authorsList.length - 1];
         return `${firstAuthors}, ... ${lastAuthor}`;
       } else {
-        return authors
+        return authors;
       }
     }
 
@@ -217,7 +234,15 @@ class Paper extends React.Component {
               <div
                 className="metadata"
                 style={{
-                  height: getMetadataHeight(realHeight, !!readersLabel + !!socialMediaLabel + !!citationsLabel + !!referencesLabel + !!tweetsLabel, zoom),
+                  height: getMetadataHeight(
+                    realHeight,
+                    !!readersLabel +
+                      !!socialMediaLabel +
+                      !!citationsLabel +
+                      !!referencesLabel +
+                      !!tweetsLabel,
+                    zoom
+                  ),
                   width: (1 - DOGEAR_WIDTH) * realWidth,
                 }}
                 ref={this.metadataRef}
@@ -256,12 +281,22 @@ class Paper extends React.Component {
                   )}
                 </p>
               </div>
+              {!!citationsLabel &&
+                typeof readers !== "undefined" &&
+                readers !== null && (
+                  <div className="readers">
+                    <p id="readers" className={sizeModifierClass}>
+                      <span id="num-readers">{citations || "n/a"} </span>
+                      <span className="readers_entity">{citationsLabel}</span>
+                    </p>
+                  </div>
+                )}
               {!!readersLabel &&
                 typeof readers !== "undefined" &&
                 readers !== null && (
                   <div className="readers">
                     <p id="readers" className={sizeModifierClass}>
-                      <span id="num-readers">{readers || 'n/a'} </span>
+                      <span id="num-readers">{readers || "n/a"} </span>
                       <span className="readers_entity">{readersLabel}</span>
                     </p>
                   </div>
@@ -271,18 +306,8 @@ class Paper extends React.Component {
                 readers !== null && (
                   <div className="readers">
                     <p id="readers" className={sizeModifierClass}>
-                      <span id="num-readers">{social || 'n/a'} </span>
+                      <span id="num-readers">{social || "n/a"} </span>
                       <span className="readers_entity">{socialMediaLabel}</span>
-                    </p>
-                  </div>
-                )}
-              {!!citationsLabel &&
-                typeof readers !== "undefined" &&
-                readers !== null && (
-                  <div className="readers">
-                    <p id="readers" className={sizeModifierClass}>
-                      <span id="num-readers">{citations || 'n/a'} </span>
-                      <span className="readers_entity">{citationsLabel}</span>
                     </p>
                   </div>
                 )}
@@ -291,7 +316,7 @@ class Paper extends React.Component {
                 readers !== null && (
                   <div className="readers">
                     <p id="readers" className={sizeModifierClass}>
-                      <span id="num-readers">{references || 'n/a'} </span>
+                      <span id="num-readers">{references || "n/a"} </span>
                       <span className="readers_entity">{referencesLabel}</span>
                     </p>
                   </div>
@@ -301,7 +326,7 @@ class Paper extends React.Component {
                 readers !== null && (
                   <div className="readers">
                     <p id="readers" className={sizeModifierClass}>
-                      <span id="num-readers">{tweets || 'n/a'} </span>
+                      <span id="num-readers">{tweets || "n/a"} </span>
                       <span className="readers_entity">{tweetsLabel}</span>
                     </p>
                   </div>
@@ -492,7 +517,7 @@ const getEnlargeFactor = (offsetWidth, scrollHeight) => {
 const getMetadataHeight = (realHeight, numOfLabels, isZoomed) => {
   let readersHeight = 12;
   if (numOfLabels && isZoomed) {
-      readersHeight =+ numOfLabels * 15;
+    readersHeight = +numOfLabels * 15;
   }
 
   const height = realHeight - readersHeight;
@@ -530,7 +555,9 @@ export const isNonTextDocument = (paper) => {
     return paper.resulttype.some(isNonTextDocType);
   }
 
-  const knownTypes = paper.resulttype.filter((t) => t.toLowerCase() !== UNKNOWN_TYPE);
+  const knownTypes = paper.resulttype.filter(
+    (t) => t.toLowerCase() !== UNKNOWN_TYPE
+  );
 
   // the only type is unknown
   if (knownTypes.length === 0) {

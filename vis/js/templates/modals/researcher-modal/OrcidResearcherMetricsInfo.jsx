@@ -48,7 +48,7 @@ const ResearcherMetricsInfo = ({
         <p>
           {params.external_identifiers.map((external_id) => (
             <p key={external_id["value"]}>
-              <a className="underline" href={external_id["url"]}>
+              <a className="underline" href={external_id["url"]} target="_blank" rel="noopener noreferrer">
                 {external_id["type"]}: {external_id["value"]}
               </a>
             </p>
