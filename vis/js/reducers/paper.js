@@ -1,0 +1,22 @@
+const paper = (state = {}, action) => {
+  if (action.canceled) {
+    return state;
+  }
+
+  const { configObject } = action;
+
+  switch (action.type) {
+    case "INITIALIZE":
+      return {
+        showSocialMedia: !!configObject?.paper?.showSocialMedia,
+        showReferences: !!configObject?.paper?.showReferences,
+        showCitations: !!configObject?.paper?.showCitations,
+        showReaders: !!configObject?.paper?.showReaders,
+        showTweets: !!configObject?.paper?.showTweets,
+      };
+    default:
+      return state;
+  }
+};
+
+export default paper;

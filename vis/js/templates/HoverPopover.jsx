@@ -11,7 +11,7 @@ const HoverPopover = ({
   placement = "bottom",
 }) => {
   const popover = (
-    <Popover id={id} bsClass={(size ? size + " " : "") + "popover"}>
+    <Popover id={id} bsClass={(size ? size + " " : "") + "popover"} placement={placement}>
       {content}
     </Popover>
   );

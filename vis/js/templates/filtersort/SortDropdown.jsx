@@ -2,9 +2,12 @@ import React from "react";
 import { DropdownButton, MenuItem } from "react-bootstrap";
 import useMatomo from "../../utils/useMatomo";
 import HoverPopover from "../HoverPopover";
+import { useLocalizationContext } from "../../components/LocalizationProvider";
 
 const SortDropdown = ({ label, value, valueLabel, options, handleChange }) => {
   const { trackEvent } = useMatomo();
+  const localization = useLocalizationContext();
+
   const handleSortChange = (id) => {
     handleChange(id);
     const selectedOption = options.find((o) => o.id === id);
@@ -24,9 +27,7 @@ const SortDropdown = ({ label, value, valueLabel, options, handleChange }) => {
       <HoverPopover
         id="sort-drop-down"
         content={
-          <>
-            {label} <span id="curr-sort-type">{valueLabel}</span>
-          </>
+          `${label} ${valueLabel}`
         }
       >
         <DropdownButton
@@ -35,7 +36,7 @@ const SortDropdown = ({ label, value, valueLabel, options, handleChange }) => {
           title={
             <div className="flex-container">
               <span className="truncate-text">
-                {label} <span id="curr-sort-type">{valueLabel}</span>
+                {localization.sort_by_label} <span id="curr-sort-type">{valueLabel}</span>
               </span>
               <i
                 className="fas fa-chevron-down chevron"

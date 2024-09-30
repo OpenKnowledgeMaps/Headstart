@@ -31,6 +31,7 @@ import tracking from "./tracking";
 import zoom from "./zoom";
 import q_advanced from "./q_advanced";
 import modalInfoType from "./modalInfoType";
+import paper from "./paper";
 
 export default combineReducers({
   animation,
@@ -54,6 +55,7 @@ export default combineReducers({
   selectedBubble,
   selectedPaper,
   service,
+  paper,
   streamgraph,
   timespan,
   toolbar,
@@ -67,6 +69,8 @@ export const getInitialState = (config) => {
   // TODO where possible, move the config values from INITIALIZE to here
   return {
     localization: {
+      // TODO: right now eng localization is enabled by default
+      ...config.localization.eng,
       ...config.localization[config.language],
     },
     misc: {

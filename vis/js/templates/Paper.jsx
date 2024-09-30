@@ -112,10 +112,15 @@ class Paper extends React.Component {
     const { path: basePath, dogEar: baseDogEar } = this.state;
 
     const {
+      showSocialMedia,
       socialMediaLabel,
+      showReferences,
       referencesLabel,
+      showCitations,
       citationsLabel,
+      showReaders,
       readersLabel,
+      showTweets,
       tweetsLabel,
     } = this.props;
     const {
@@ -236,11 +241,11 @@ class Paper extends React.Component {
                 style={{
                   height: getMetadataHeight(
                     realHeight,
-                    !!readersLabel +
-                      !!socialMediaLabel +
-                      !!citationsLabel +
-                      !!referencesLabel +
-                      !!tweetsLabel,
+                    !!showReaders +
+                      !!showSocialMedia +
+                      !!showCitations +
+                      !!showReferences +
+                      !!showTweets,
                     zoom
                   ),
                   width: (1 - DOGEAR_WIDTH) * realWidth,
@@ -281,9 +286,9 @@ class Paper extends React.Component {
                   )}
                 </p>
               </div>
-              {!!citationsLabel &&
-                typeof readers !== "undefined" &&
-                readers !== null && (
+              {!!showCitations &&
+                typeof citations !== "undefined" &&
+                citations !== null && (
                   <div className="readers">
                     <p id="readers" className={sizeModifierClass}>
                       <span id="num-readers">{citations || "n/a"} </span>
@@ -291,7 +296,7 @@ class Paper extends React.Component {
                     </p>
                   </div>
                 )}
-              {!!readersLabel &&
+              {!!showReaders &&
                 typeof readers !== "undefined" &&
                 readers !== null && (
                   <div className="readers">
@@ -302,8 +307,8 @@ class Paper extends React.Component {
                   </div>
                 )}
               {!!socialMediaLabel &&
-                typeof readers !== "undefined" &&
-                readers !== null && (
+                typeof social !== "undefined" &&
+                social !== null && (
                   <div className="readers">
                     <p id="readers" className={sizeModifierClass}>
                       <span id="num-readers">{social || "n/a"} </span>
@@ -311,9 +316,9 @@ class Paper extends React.Component {
                     </p>
                   </div>
                 )}
-              {!!referencesLabel &&
-                typeof readers !== "undefined" &&
-                readers !== null && (
+              {!!showReferences &&
+                typeof references !== "undefined" &&
+                references !== null && (
                   <div className="readers">
                     <p id="readers" className={sizeModifierClass}>
                       <span id="num-readers">{references || "n/a"} </span>
@@ -321,9 +326,9 @@ class Paper extends React.Component {
                     </p>
                   </div>
                 )}
-              {!!tweetsLabel &&
-                typeof readers !== "undefined" &&
-                readers !== null && (
+              {!!showTweets &&
+                typeof tweets !== "undefined" &&
+                tweets !== null && (
                   <div className="readers">
                     <p id="readers" className={sizeModifierClass}>
                       <span id="num-readers">{tweets || "n/a"} </span>
