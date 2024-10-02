@@ -1,16 +1,17 @@
 import React, { useState } from "react";
 import { Modal } from "react-bootstrap";
 import { connect } from "react-redux";
-
-const noDataAvailable = "No data available";
+import { useLocalizationContext } from "../../../components/LocalizationProvider";
 
 const FundingSection = ({ funds, showMore, handleShowMore }) => {
+  const localization = useLocalizationContext();
+  
   const formatFunding = (fund) => {
     const endDate = fund.end_date ? fund.end_date : "present";
 
     return (
-      <div key={fund.id}>
-        <p>
+      <p key={fund.id}>
+        <div>
           {fund.url ? (
             <a href={fund.url} target="_blank" rel="noopener noreferrer">
               <i className="fas fa-solid fa-link" style={{ paddingRight: "3px" }}></i>
@@ -19,8 +20,8 @@ const FundingSection = ({ funds, showMore, handleShowMore }) => {
           ) : (
             fund.title
           )}
-        </p>
-        <p>
+        </div>
+        <div>
           {[
             `${fund.start_date} - ${endDate}`,
             fund.type,
@@ -29,8 +30,8 @@ const FundingSection = ({ funds, showMore, handleShowMore }) => {
           ]
             .filter(Boolean)
             .join(" / ")}
-        </p>
-      </div>
+        </div>
+      </p>
     );
   };
 
@@ -43,9 +44,11 @@ const FundingSection = ({ funds, showMore, handleShowMore }) => {
           {funds.length > 1 && (
             <>
               {showMore && funds.slice(1).map(formatFunding)}
-              <button onClick={handleShowMore}>
-                <i className={`fas fa-${showMore ? "chevron-up" : "chevron-down"}`}></i>
-                {showMore ? "Show Less" : "Show More"}
+              <button className="underlined_button" onClick={handleShowMore}>
+                <i className={`fas fa-${showMore ? "chevron-up" : "chevron-down"}`} style={{
+                  paddingRight: "3px"
+                }}></i>
+                {showMore ? localization.showLess : localization.showMore}
               </button>
             </>
           )}
@@ -58,6 +61,8 @@ const FundingSection = ({ funds, showMore, handleShowMore }) => {
 };
 
 const Section = ({ title, items, formatItem, showMore, handleShowMore }) => {
+  const localization = useLocalizationContext();
+
   return (
     <div>
       <h3>{title} {items?.length ? `(${items.length})` : ""}</h3>
@@ -67,15 +72,17 @@ const Section = ({ title, items, formatItem, showMore, handleShowMore }) => {
           {items.length > 1 && (
             <>
               {showMore && items.slice(1).map(formatItem)}
-              <button onClick={handleShowMore}>
-                <i className={`fas fa-${showMore ? "chevron-up" : "chevron-down"}`}></i>
+              <button className="underlined_button" onClick={handleShowMore}>
+                <i className={`fas fa-${showMore ? "chevron-up" : "chevron-down"}`} style={{
+                  paddingRight: "3px"
+                }}></i>
                 {showMore ? "Show Less" : "Show More"}
               </button>
             </>
           )}
         </>
       ) : (
-        <p>{noDataAvailable}</p>
+        <p>{localization.noDataAvailable}</p>
       )}
     </div>
   );
@@ -110,11 +117,13 @@ const formatEducation = (education) => {
 };
 
 const formatDistinction = (distinction) => {
+  const end_date = distinction.end_date;
+
   return (
     <p key={distinction.id}>
       {[
-        distinction.start_date,
-        distinction.title
+        `${distinction.start_date} ${end_date ? `- ${end_date}` : ""}`,
+        distinction.role
       ].filter(Boolean).join(" / ")}
     </p>
   );

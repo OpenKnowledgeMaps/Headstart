@@ -13,10 +13,13 @@ const contextLine = (state = {}, action) => {
   switch (action.type) {
     case "INITIALIZE":
       return {
+        isResearcherDetailsEnabled: action.configObject.isResearcherDetailsEnabled,
+        isResearcherMetricsEnabled: action.configObject.isResearcherMetricsEnabled,
         showLanguage: action.configObject.showLanguage,
         show: !!config.show_context && !!context.params,
         articlesCount: papers.length,
         modifier: getModifier(config, context, papers.length),
+        modifierLimit: context.params ? context.params.limit : null,
         openAccessCount: config.show_context_oa_number
           ? papers.filter((p) => p.oa).length
           : null,

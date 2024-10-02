@@ -215,6 +215,9 @@ var config = {
     localization: {
         eng: {
             loading: "Loading...",
+            noDataAvailable: "No data available",
+            showMore: "Show more",
+            showLess: "Show less",
             search_placeholder: "Search within visualization...",
             intro_label: "About the map",
             readers: "readers",
@@ -296,6 +299,9 @@ var config = {
         },
         ger: {
             loading: "Wird geladen...",
+            noDataAvailable: "Keine Daten verfügbar",
+            showMore: "Mehr anzeigen",
+            showLess: "Weniger anzeigen",
             search_placeholder: "Suche in der Liste...",
             intro_label: "Over de kaart",
             // TODO: consider to rename it?

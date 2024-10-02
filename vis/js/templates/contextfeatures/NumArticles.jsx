@@ -6,12 +6,13 @@ const NumArticles = ({
   openAccessArticlesCount = null,
   service,
   children,
+  modifierLimit,
 }) => {
   let displayText = `${articlesCount} ${articlesCountLabel}`;
 
   if (service === "orcid") {
-    if (articlesCount >= 200) {
-      displayText = <>200 {children} works</>;
+    if (articlesCount >= modifierLimit) {
+      displayText = <>{modifierLimit} {children} works</>;
     }
   }
 

@@ -69,8 +69,7 @@ export const getInitialState = (config) => {
   // TODO where possible, move the config values from INITIALIZE to here
   return {
     localization: {
-      // TODO: right now eng localization is enabled by default
-      ...config.localization.eng,
+      ...config.localization[config.language === 'ger_linkedcat' ? 'ger' : 'eng'],
       ...config.localization[config.language],
     },
     misc: {

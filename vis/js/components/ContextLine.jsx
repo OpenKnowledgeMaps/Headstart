@@ -34,6 +34,8 @@ export const ContextLine = (props) => {
     const { author, params, localization, hidden, service, showDataSource } = props;
     const { popoverContainer, showLanguage } = props;
 
+    const { isResearcherDetailsEnabled, isResearcherMetricsEnabled } = props;
+
     if (hidden) {
       return null;
     }
@@ -53,6 +55,7 @@ export const ContextLine = (props) => {
           openAccessArticlesCount={params.openAccessCount}
           articlesCountLabel={localization.articles_label}
           service={service}
+          modifierLimit={params.modifierLimit}
         >
           <Modifier popoverContainer={popoverContainer} />
         </NumArticles>
@@ -117,14 +120,20 @@ export const ContextLine = (props) => {
         {defined(params.searchLanguage)  && (
           <SearchLang>{params.searchLanguage}</SearchLang>
         )}
-        <ResearcherInfo />
-        <ResearcherMetricsInfo />
+        {isResearcherDetailsEnabled && (
+          <ResearcherInfo />
+        )}
+        {isResearcherMetricsEnabled && (
+          <ResearcherMetricsInfo />
+        )}
         <MoreInfoLink />
       </ContextLineTemplate>
     );
 }
 
 const mapStateToProps = (state) => ({
+  isResearcherDetailsEnabled: state.contextLine.isResearcherDetailsEnabled,
+  isResearcherMetricsEnabled: state.contextLine.isResearcherMetricsEnabled,
   showLanguage: state.contextLine.showLanguage,
   showDataSource: state.contextLine.showDataSource,
   hidden: state.zoom || !state.contextLine.show,

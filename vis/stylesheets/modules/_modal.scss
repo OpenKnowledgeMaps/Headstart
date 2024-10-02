@@ -94,6 +94,21 @@
     }
 }
 
+.underlined_button {
+    border-left: 0px;
+    border-right: 0px;
+    border-top: 0px;
+    background-color: transparent;
+    
+    border-bottom: 1px solid $link-gray;
+    color: $link-gray;
+
+    &:hover {
+        border-bottom-width: 2px;
+        margin-bottom: -1px;
+    }
+}
+
 .modal-title {
     color: $modal-title;
     font-size: 20px;
