@@ -11,6 +11,7 @@ const author = (state = null, action) => {
         biography: action.author?.biography,
         country: action.author?.country,
         external_identifiers: action.author?.external_identifiers,
+        researcher_urls: action.author?.researcher_urls,
         orcid_id: action.author?.orcid_id,
         total_citations: action.author?.total_citations,
         total_neppr: action.author?.total_neppr,

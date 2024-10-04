@@ -23,7 +23,7 @@ const FundingSection = ({ funds, showMore, handleShowMore }) => {
         </div>
         <div>
           {[
-            `${fund.start_date} - ${endDate}`,
+            fund.start_date ? `${fund.start_date} - ${endDate}` : null,
             fund.type,
             fund.organization && `Funder: ${fund.organization}`,
             fund.amount?.value && fund.amount?.currency && `Amount: ${fund.amount.value} ${fund.amount.currency}`
@@ -54,7 +54,7 @@ const FundingSection = ({ funds, showMore, handleShowMore }) => {
           )}
         </>
       ) : (
-        <p>{noDataAvailable}</p>
+        <p>{localization.noDataAvailable}</p>
       )}
     </div>
   );
@@ -130,10 +130,10 @@ const formatDistinction = (distinction) => {
 };
 
 const formatLink = (link) => (
-  <p key={link.value}>
+  <p key={link.id}>
     <i className="fas fa-solid fa-link" style={{ paddingRight: "3px" }}></i>
     <a href={link.url} target="_blank" rel="noopener noreferrer">
-      {link.type}: {link.value}
+      {link.url_name}
     </a>
   </p>
 );
@@ -178,7 +178,7 @@ const ResearcherInfo = ({ params }) => {
         />
         <Section
           title="LINKS"
-          items={params.external_identifiers}
+          items={params.researcher_urls}
           formatItem={formatLink}
           showMore={showMore.links}
           handleShowMore={() => handleShowMore("links")}
@@ -200,6 +200,7 @@ const mapStateToProps = (state) => {
     params: {
       orcid_id: state.author.orcid_id,
       external_identifiers: state.author.external_identifiers,
+      researcher_urls: state.author.researcher_urls,
       funds: state.author.funds,
       educations: state.author.educations,
       employments: state.author.employments,

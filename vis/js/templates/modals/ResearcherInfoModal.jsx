@@ -45,6 +45,7 @@ const mapStateToProps = (state) => ({
     biography: state.author.biography,
     country: state.author.country,
     external_identifiers: state.author.external_identifiers,
+    researcher_urls: state.author.researcher_urls,
     orcid_id: state.author.orcid_id,
     total_citations: state.author.total_citations,
     total_neppr: state.author.total_neppr,

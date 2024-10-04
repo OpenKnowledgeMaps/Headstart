@@ -8,6 +8,7 @@ from typing import List, Dict
 from model import (
     AuthorInfo,
     ExternalIdentifier,
+    ResearcherUrl,
     Website,
     Employment,
     Funding,
@@ -52,9 +53,9 @@ class AuthorInfoRepository:
         author_info.educations = self.extract_educations(education)
         author_info.academic_age = self.calculate_academic_age(education)
 
-        external_identifiers = self.orcid.external_identifiers()["external-identifier"]
-        author_info.external_identifiers = self.extract_external_identifiers(
-            external_identifiers
+        researcher_urls = self.orcid.researcher_urls()
+        author_info.researcher_urls = self.extract_researcher_urls(
+            researcher_urls
         )
 
         addresses = self.orcid.address()["address"]
@@ -85,6 +86,16 @@ class AuthorInfoRepository:
             author_info.distinctions = self.extract_distinctions(distinctions)
 
         return author_info
+    
+    def extract_researcher_urls(self, researcher_urls: Dict[str, Dict[str, str]]) -> List[ResearcherUrl]:
+        return [
+            ResearcherUrl(
+                id=unique_id(),
+                url=get_nested_value(url, ["url", "value"], None), # type: ignore
+                url_name=get_nested_value(url, ["url-name"], None), # type: ignore
+            )
+            for url in researcher_urls.get('researcher-url', [])
+        ]
 
     def extract_peer_reviews(self, peer_reviews: Any) -> List[PeerReview]:
         peer_review_list = []

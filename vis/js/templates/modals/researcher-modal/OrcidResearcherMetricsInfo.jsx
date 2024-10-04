@@ -1,12 +1,15 @@
 import React from "react";
 import { Modal } from "react-bootstrap";
 import { connect } from "react-redux";
+import { useLocalizationContext } from "../../../components/LocalizationProvider";
 
 const DEFAULT_FALLBACK = 'not available';
 
 const ResearcherMetricsInfo = ({
   params
 }) => {
+  const localization = useLocalizationContext();
+
   return (
     // html template starts here
     <>
@@ -45,6 +48,9 @@ const ResearcherMetricsInfo = ({
         <h3>NOTES ON METRICS</h3>
         <p>{params.biography}</p>
         <h3>OTHER IDs</h3>
+        {/* <p>
+          {DEFAULT_FALLBACK}
+        </p> */}
         <p>
           {params.external_identifiers.map((external_id) => (
             <p key={external_id["value"]}>
