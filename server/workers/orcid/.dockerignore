@@ -1,5 +1,6 @@
 renv
 __pycache__
+.venv
 .cache
 .pytest_cache
 .Rproj.user
