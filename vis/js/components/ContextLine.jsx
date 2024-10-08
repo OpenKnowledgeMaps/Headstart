@@ -46,7 +46,7 @@ export const ContextLine = (props) => {
           <Author
             bioLabel={localization.bio_link}
             livingDates={params.author.livingDates}
-            link={"https://d-nb.info/gnd/" + params.author.id}
+            // link={"https://d-nb.info/gnd/" + params.author.id}
             author={author}
           />
         )}
@@ -59,7 +59,7 @@ export const ContextLine = (props) => {
         >
           <Modifier popoverContainer={popoverContainer} />
         </NumArticles>
-        <Employment author={author} />
+        <Employment author={author} popoverContainer={popoverContainer} />
         {showDataSource && defined(params.dataSource) && (
           <DataSource
             label={localization.source_label}

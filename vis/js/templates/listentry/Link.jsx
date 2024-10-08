@@ -27,7 +27,7 @@ const Link = ({ address, isDoi }) => {
             {address}
           </a>
         ) : (
-          localization.not_available
+          localization.notAvailable
         )}
       </span>
     </div>

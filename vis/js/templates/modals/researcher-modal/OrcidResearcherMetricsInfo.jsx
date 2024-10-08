@@ -3,8 +3,6 @@ import { Modal } from "react-bootstrap";
 import { connect } from "react-redux";
 import { useLocalizationContext } from "../../../components/LocalizationProvider";
 
-const DEFAULT_FALLBACK = 'not available';
-
 const ResearcherMetricsInfo = ({
   params
 }) => {
@@ -20,37 +18,35 @@ const ResearcherMetricsInfo = ({
         <h3>METRICS</h3>
         <p>
           Normalised h-index: <span>
-            {params.normalized_h_index ? params.normalized_h_index?.toFixed(1) : DEFAULT_FALLBACK}
+            {params.normalized_h_index ? params.normalized_h_index?.toFixed(1) : localization.notAvailable}
           </span>
         </p>
         <p>
           Academic age: <span>
-            {params.academic_age ? params.academic_age : DEFAULT_FALLBACK}
+            {params.academic_age ? params.academic_age : localization.notAvailable}
           </span>
         </p>
         <p>
           h-index: <span>
-            {params.h_index ? params.h_index : DEFAULT_FALLBACK}
+            {params.h_index ? params.h_index : localization.notAvailable}
           </span>
         </p>
         <p>
-          Number of total citations: <span>{params.total_citations ? params.total_citations : DEFAULT_FALLBACK}</span>
+          Number of total citations: <span>{params.total_citations ? params.total_citations : localization.notAvailable}</span>
         </p>
         <h3>ALTMETRICS</h3>
         <p>
           Number of total unique social media mentions:{" "}
-          <span>{params.total_unique_social_media_mentions ? params.total_unique_social_media_mentions : DEFAULT_FALLBACK}</span>
+          <span>{params.total_unique_social_media_mentions ? params.total_unique_social_media_mentions : localization.notAvailable}</span>
         </p>
         <p>
           Number of total news encyclopaedia, patent and policy references:{" "}
-          <span>{params.total_neppr ? params.total_neppr : DEFAULT_FALLBACK}</span>
+          <span>{params.total_neppr ? params.total_neppr : localization.notAvailable}</span>
         </p>
         <h3>NOTES ON METRICS</h3>
-        <p>{params.biography}</p>
-        <h3>OTHER IDs</h3>
-        {/* <p>
-          {DEFAULT_FALLBACK}
-        </p> */}
+        <p>
+          Lorem ipsum dolor sit, amet consectetur adipisicing elit. Neque dolorum laudantium cupiditate ratione dignissimos rem nesciunt numquam cumque aliquid quis, incidunt impedit dolore amet nemo odio dolores atque. Deserunt fugit quibusdam nemo mollitia nobis id quos deleniti eaque velit dignissimos!
+        </p>
         <p>
           {params.external_identifiers.map((external_id) => (
             <p key={external_id["value"]}>

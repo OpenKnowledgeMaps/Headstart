@@ -1,7 +1,6 @@
 import React from "react";
 import { DropdownButton, MenuItem } from "react-bootstrap";
 import useMatomo from "../../utils/useMatomo";
-import HoverPopover from "../HoverPopover";
 
 const FilterDropdown = ({
   label,
@@ -24,42 +23,32 @@ const FilterDropdown = ({
 
   return (
     <div className="dropdown" id="filter_parameter_container">
-      <HoverPopover
-        id="sort-drop-down"
-        content={
+      <DropdownButton
+        id="filter_params"
+        noCaret
+        className="truncate-text"
+        title={
           <>
-            {label} <span id="curr-filter-type">{valueLabel}</span>
+            {label}
+            <span id="curr-filter-type">{valueLabel}</span>
+            <i className="fas fa-chevron-down chevron" style={{
+              marginLeft: "3px"
+            }}></i>
           </>
         }
       >
-        <DropdownButton
-          id="filter_params"
-          noCaret
-          title={
-            <div className="flex-container">
-              <span className="truncate-text">
-                {label} <span id="curr-filter-type">{valueLabel}</span>
-              </span>
-              <i
-                className="fas fa-chevron-down chevron"
-                style={{ marginLeft: "5px" }}
-              ></i>
-            </div>
-          }
-        >
-          {options.map((o) => (
-            <MenuItem
-              id={"filter_option_" + o.id}
-              key={o.id}
-              eventKey={o.id}
-              onSelect={handleFilterChange}
-              active={o.id === value}
-            >
-              {o.label}
-            </MenuItem>
-          ))}
-        </DropdownButton>
-      </HoverPopover>
+        {options.map((o) => (
+          <MenuItem
+            id={"filter_option_" + o.id}
+            key={o.id}
+            eventKey={o.id}
+            onSelect={handleFilterChange}
+            active={o.id === value}
+          >
+            {o.label}
+          </MenuItem>
+        ))}
+      </DropdownButton>
     </div>
   );
 };
