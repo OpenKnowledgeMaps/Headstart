@@ -146,7 +146,13 @@ class AuthorInfoRepository:
         ]
 
         sorted_result = sorted(
-            result, key=lambda mem: self.parse_date_or_max(mem.start_date), reverse=True
+            result,
+            key=lambda edu: (
+                self.parse_date_or_min(edu.end_date)
+                if edu.end_date
+                else (datetime.max if edu.start_date else datetime.min),
+            ),
+            reverse=True
         )
 
         return sorted_result
@@ -167,7 +173,13 @@ class AuthorInfoRepository:
         ]
 
         sorted_result = sorted(
-            result, key=lambda edu: self.parse_date_or_max(edu.start_date), reverse=True
+            result,
+            key=lambda edu: (
+                self.parse_date_or_min(edu.end_date)
+                if edu.end_date
+                else (datetime.max if edu.start_date else datetime.min),
+            ),
+            reverse=True
         )
 
         return sorted_result
@@ -190,7 +202,13 @@ class AuthorInfoRepository:
         ]
 
         sorted_result = sorted(
-            result, key=lambda dist: self.parse_date_or_max(dist.start_date), reverse=True
+            result,
+            key=lambda edu: (
+                self.parse_date_or_min(edu.end_date)
+                if edu.end_date
+                else (datetime.max if edu.start_date else datetime.min),
+            ),
+            reverse=True
         )
 
         return sorted_result
@@ -211,7 +229,13 @@ class AuthorInfoRepository:
         ]
 
         sorted_result = sorted(
-            result, key=lambda fund: self.parse_date_or_max(fund.start_date), reverse=True
+            result,
+            key=lambda edu: (
+                self.parse_date_or_min(edu.end_date)
+                if edu.end_date
+                else (datetime.max if edu.start_date else datetime.min),
+            ),
+            reverse=True
         )
 
         return sorted_result
@@ -301,7 +325,13 @@ class AuthorInfoRepository:
         ]
 
         sorted_result = sorted(
-            result, key=lambda emp: self.parse_date_or_max(emp.start_date), reverse=True
+            result,
+            key=lambda edu: (
+                self.parse_date_or_min(edu.end_date)
+                if edu.end_date
+                else (datetime.max if edu.start_date else datetime.min),
+            ),
+            reverse=True
         )
 
         return sorted_result

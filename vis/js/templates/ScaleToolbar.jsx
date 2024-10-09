@@ -30,44 +30,33 @@ const ScaleToolbar = ({
   return (
     <div className="scale-toolbar btn-group dropup">
       <div className="dropdown">
-        <HoverPopover
-          id="sort-drop-down"
-          content={
+        <DropdownButton
+          id="scale-menu"
+          noCaret
+          className="truncate-text"
+          title={
             <>
-              {localization.scale_by_label}{" "}
+              {localization.scale_by_label}
               <span id="curr-filter-type">{labels[value]}</span>
+              <i
+                className="fas fa-chevron-down chevron"
+                style={{ marginLeft: "3px" }}
+              ></i>
             </>
           }
         >
-          <DropdownButton
-            id="scale-menu"
-            noCaret
-            title={
-              <div className="flex-container">
-                <span className="truncate-text">
-                  {localization.scale_by_label}{" "}
-                  <span id="curr-filter-type">{labels[value]}</span>
-                </span>
-                <i
-                  className="fas fa-chevron-down chevron"
-                  style={{ marginLeft: "5px" }}
-                ></i>
-              </div>
-            }
-          >
-            {options.map((key) => (
-              <MenuItem
-                className="scale_item"
-                key={key}
-                eventKey={key}
-                onSelect={handleScaleChange}
-                active={key === value}
-              >
-                {labels[key]}
-              </MenuItem>
-            ))}
-          </DropdownButton>
-        </HoverPopover>
+          {options.map((key) => (
+            <MenuItem
+              className="scale_item"
+              key={key}
+              eventKey={key}
+              onSelect={handleScaleChange}
+              active={key === value}
+            >
+              {labels[key]}
+            </MenuItem>
+          ))}
+        </DropdownButton>
       </div>
       <div className="context-scale-toolbar">
         <span id="curr-scale-explanation">{explanations[value]}</span>
