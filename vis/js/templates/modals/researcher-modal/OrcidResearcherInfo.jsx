@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Modal } from "react-bootstrap";
 import { connect } from "react-redux";
 import { useLocalizationContext } from "../../../components/LocalizationProvider";
+import { capitalize } from "../../../utils/string";
 
 const FundingSection = ({ funds, showMore, handleShowMore }) => {
   const localization = useLocalizationContext();
@@ -24,7 +25,7 @@ const FundingSection = ({ funds, showMore, handleShowMore }) => {
         <div>
           {[
             fund.start_date ? `${fund.start_date} - ${endDate}` : null,
-            fund.type,
+            fund.type ? capitalize(fund.type) : null,
             fund.organization && `Funder: ${fund.organization}`,
             fund.amount?.value && fund.amount?.currency && `Amount: ${fund.amount.value} ${fund.amount.currency}`
           ]
