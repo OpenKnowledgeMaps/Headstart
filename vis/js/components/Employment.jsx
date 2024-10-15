@@ -1,13 +1,13 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import HoverPopover from "../templates/HoverPopover";
 
 export function Employment({ author, popoverContainer }) {
   const authorRoleId = "author-role";
   const authorOrganizationId = "author-organization";
 
-  const authorRoleTextRef = React.createRef();
+  const authorRoleTextRef = useRef();
   const [authorRoleHasOverflow, setAuthorRoleHasOverflow] = useState(false);
-  const authorOrganizationTextRef = React.createRef();
+  const authorOrganizationTextRef = useRef();
   const [authorOrganizationHasOverflow, setAuthorOrganizationHasOverflow] =
     useState(false);
 
@@ -16,11 +16,9 @@ export function Employment({ author, popoverContainer }) {
       const authorRoleText = authorRoleTextRef.current;
 
       if (authorRoleText.scrollWidth > authorRoleText.clientWidth) {
-        authorRoleText.classList.add("has-overflow");
         setAuthorRoleHasOverflow(true);
       } else {
         setAuthorRoleHasOverflow(false);
-        authorRoleText.classList.remove("has-overflow");
       }
 
       const authorOrganizationText = authorOrganizationTextRef.current;
@@ -56,7 +54,7 @@ export function Employment({ author, popoverContainer }) {
             >
               <span
                 ref={authorRoleTextRef}
-                className="context_moreinfo overflow-ellipsis"
+                className={`context_moreinfo overflow-ellipsis ${authorRoleHasOverflow ? 'has-overflow' : ''}`}
               >
                 {author.employment.role}
               </span>
@@ -82,7 +80,7 @@ export function Employment({ author, popoverContainer }) {
             >
               <span
                 ref={authorOrganizationTextRef}
-                className="context_moreinfo overflow-ellipsis"
+                className={`context_moreinfo overflow-ellipsis ${authorOrganizationHasOverflow ? 'has-overflow' : ''}`}
               >
                 {author.employment.organization}
               </span>
