@@ -19,7 +19,8 @@ const contextLine = (state = {}, action) => {
         show: !!config.show_context && !!context.params,
         articlesCount: papers.length,
         modifier: getModifier(config, context, papers.length),
-        modifierLimit: context.params ? context.params.limit : null,
+        // ? should it be defined 200 by default?
+        modifierLimit: context.params?.limit ? context.params.limit : 200,
         openAccessCount: config.show_context_oa_number
           ? papers.filter((p) => p.oa).length
           : null,

@@ -267,7 +267,7 @@ var config = {
             default_year: "",
             embed_button_text: 'Copy',
             copied_button_text: 'Copied',
-            sort_by_label: 'sort by:',
+            sort_by_label: 'sort by: ',
             comment_by_label: "by",
             pdf_not_loaded: "Sorry, we were not able to retrieve the PDF for this publication. You can get it directly from",
             pdf_not_loaded_linktext: "this website",
@@ -295,6 +295,7 @@ var config = {
             export_paper: "Export this document",
             download: "Download",
             please_note: "Please note",
+            scale_by_label: "Scale map by: ",
             citation_warning: "we were not able to verify whether this citation is formatted correctly based on the metadata received. Please check before reuse.",
         },
         ger: {
@@ -377,6 +378,7 @@ var config = {
             please_note: "Please note",
             citation_warning: "we were not able to verify whether this citation is formatted correctly based on the metadata received. Please check before reuse.",
             lang_all: "Alle Sprachen",
+            scale_by_label: "Skalierung: ",
             default_authors: "No authors available",
         },
         ger_linkedcat: {
@@ -455,7 +457,6 @@ var config = {
             scale_by_infolink_label: 'Find out more',
             metrics_label: "Metrics",
             researcher_details_label: "Researcher details",
-            scale_by_label: "Scale map by:",
             scale_by_explanation: "The size of the bubbles is relative to the number of documents related to them.",
             scale_label: {
                 content_based: 'Documents',
@@ -506,7 +507,6 @@ var config = {
             scale_by_infolink_label: 'Find out more',
             metrics_label: "Metrics",
             researcher_details_label: "Researcher details",
-            scale_by_label: "Scale map by:",
             scale_by_explanation: "The size of the bubbles is relative to the number of documents related to them.",
             scale_label: {
                 content_based: 'Documents',
@@ -549,7 +549,6 @@ var config = {
             publication: "papers",
             dataset: "datasets",
             items: "items",
-            scale_by_label: 'Scale map by:',
             scale_by_infolink_label: 'notes on use of metrics',
             // citations_count_label: "citations",
             social_media_count_label: " social media mentions",

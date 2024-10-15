@@ -253,7 +253,7 @@ class Paper extends React.Component {
                 ref={this.metadataRef}
               >
                 <Icons paper={data} iconClasses={sizeModifierClass} />
-                <p className={"title " + sizeModifierClass}>
+                <p className={`title ${sizeModifierClass}`}>
                   <Hyphenate>
                     <Highlight hyphenated queryHighlight>
                       {title}
@@ -286,56 +286,47 @@ class Paper extends React.Component {
                   )}
                 </p>
               </div>
-              {!!showCitations &&
-                typeof citations !== "undefined" &&
-                citations !== null && (
-                  <div className="readers">
-                    <p id="readers" className={sizeModifierClass}>
-                      <span id="num-readers">{citations || "n/a"} </span>
-                      <span className="readers_entity">{citationsLabel}</span>
+              {[
+                {
+                  id: "citations",
+                  show: showCitations,
+                  value: citations,
+                  label: citationsLabel,
+                },
+                {
+                  id: "readers",
+                  show: showReaders,
+                  value: readers,
+                  label: readersLabel,
+                },
+                {
+                  id: "social",
+                  show: showSocialMedia,
+                  value: social,
+                  label: socialMediaLabel,
+                },
+                {
+                  id: "references",
+                  show: showReferences,
+                  value: references,
+                  label: referencesLabel,
+                },
+                {
+                  id: "tweets",
+                  show: showTweets,
+                  value: tweets,
+                  label: tweetsLabel,
+                },
+              ].map(({ show, value, label, id }) =>
+                show ? (
+                  <div key={id} className="stat">
+                    <p className={`stat ${sizeModifierClass}`}>
+                      <span className="num-stat">{value || value === 0 ? value : "n/a"} </span>
+                      <span>{label}</span>
                     </p>
                   </div>
-                )}
-              {!!showReaders &&
-                typeof readers !== "undefined" &&
-                readers !== null && (
-                  <div className="readers">
-                    <p id="readers" className={sizeModifierClass}>
-                      <span id="num-readers">{readers || "n/a"} </span>
-                      <span className="readers_entity">{readersLabel}</span>
-                    </p>
-                  </div>
-                )}
-              {!!socialMediaLabel &&
-                typeof social !== "undefined" &&
-                social !== null && (
-                  <div className="readers">
-                    <p id="readers" className={sizeModifierClass}>
-                      <span id="num-readers">{social || "n/a"} </span>
-                      <span className="readers_entity">{socialMediaLabel}</span>
-                    </p>
-                  </div>
-                )}
-              {!!showReferences &&
-                typeof references !== "undefined" &&
-                references !== null && (
-                  <div className="readers">
-                    <p id="readers" className={sizeModifierClass}>
-                      <span id="num-readers">{references || "n/a"} </span>
-                      <span className="readers_entity">{referencesLabel}</span>
-                    </p>
-                  </div>
-                )}
-              {!!showTweets &&
-                typeof tweets !== "undefined" &&
-                tweets !== null && (
-                  <div className="readers">
-                    <p id="readers" className={sizeModifierClass}>
-                      <span id="num-readers">{tweets || "n/a"} </span>
-                      <span className="readers_entity">{tweetsLabel}</span>
-                    </p>
-                  </div>
-                )}
+                ) : null
+              )}
             </div>
           </div>
         </foreignObject>
@@ -522,7 +513,7 @@ const getEnlargeFactor = (offsetWidth, scrollHeight) => {
 const getMetadataHeight = (realHeight, numOfLabels, isZoomed) => {
   let readersHeight = 12;
   if (numOfLabels && isZoomed) {
-    readersHeight = +numOfLabels * 15;
+    readersHeight = +numOfLabels * 20;
   }
 
   const height = realHeight - readersHeight;

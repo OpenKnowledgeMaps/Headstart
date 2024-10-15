@@ -10,7 +10,7 @@ const DataSource = ({ label, source, contentProvider, popoverContainer }) => {
 
     return (
       // html template starts here
-      <span id="source" className="context_item">
+      <span id="source" className="context_item shrinkable">
         {label}:{" "}
         <HoverPopover
           id="doctypes-popover"

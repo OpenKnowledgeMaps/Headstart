@@ -16,6 +16,7 @@ from model import (
     Membership,
     PeerReview,
     Distinction,
+    Amount
 )
 from typing import Optional, Any
 import calendar
@@ -224,6 +225,10 @@ class AuthorInfoRepository:
                 organization=funding.get("organization", ""),
                 organization_address=funding.get("organization-address", ""),
                 url=funding.get("url", ""),
+                amount=Amount(
+                    currency=get_nested_value(funding, ["amount", "currency"], ""), # type: ignore
+                    value=get_nested_value(funding, ["amount", "value"], ""), # type: ignore
+                ),
             )
             for funding in funds
         ]
