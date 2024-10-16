@@ -14,17 +14,21 @@ export function Employment({ author, popoverContainer }) {
   useEffect(() => {
     const checkOverflow = () => {
       const authorRoleText = authorRoleTextRef.current;
-
-      if (authorRoleText.scrollWidth > authorRoleText.clientWidth) {
+      
+      if (!authorRoleText) {
+        return;
+      }
+      
+      if (authorRoleText && authorRoleText.scrollWidth > authorRoleText.clientWidth) {
         setAuthorRoleHasOverflow(true);
       } else {
         setAuthorRoleHasOverflow(false);
       }
-
+      
       const authorOrganizationText = authorOrganizationTextRef.current;
 
       if (
-        authorOrganizationText.scrollWidth > authorOrganizationText.clientWidth
+        authorOrganizationText && authorOrganizationText.scrollWidth > authorOrganizationText.clientWidth
       ) {
         setAuthorOrganizationHasOverflow(true);
       } else {
