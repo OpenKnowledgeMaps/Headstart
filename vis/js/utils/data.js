@@ -131,7 +131,7 @@ const getWordFilterFunction = (searchedKeywords) => {
 };
 
 const getPropertyOrEmptyString = (object, property) => {
-  if (Object.prototype.hasOwnProperty.call(object, property)) {
+  if (Object.prototype.hasOwnProperty.call(object, property) && object[property] !== null && object[property] !== undefined) {
     return object[property].toString().toLowerCase().trim();
   }
 
