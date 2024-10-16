@@ -15,10 +15,6 @@ export function Employment({ author, popoverContainer }) {
     const checkOverflow = () => {
       const authorRoleText = authorRoleTextRef.current;
       
-      if (!authorRoleText) {
-        return;
-      }
-      
       if (authorRoleText && authorRoleText.scrollWidth > authorRoleText.clientWidth) {
         setAuthorRoleHasOverflow(true);
       } else {
