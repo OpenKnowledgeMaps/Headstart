@@ -8,3 +8,4 @@ __pycache__
 *.Rproj
 .pynb_checkpoints
 *.ipynb
+.venv

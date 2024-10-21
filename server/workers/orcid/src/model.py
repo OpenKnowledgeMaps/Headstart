@@ -16,6 +16,11 @@ class ExternalIdentifier(TypedDict):
     value: str
     relationship: str
 
+@dataclass
+class ResearcherUrl:
+    id: str
+    url_name: Optional[str] = None
+    url: Optional[str] = None
 
 @dataclass
 class Employment:
@@ -102,6 +107,7 @@ class AuthorInfo:
     academic_age: Optional[int] = None
     websites: List['Website'] = field(default_factory=list)
     external_identifiers: List[ExternalIdentifier] = field(default_factory=list)
+    researcher_urls: List[ResearcherUrl] = field(default_factory=list)
     countries: List[str] = field(default_factory=list)
     total_citations: Optional[int] = None
     total_unique_social_media_mentions: Optional[int] = None

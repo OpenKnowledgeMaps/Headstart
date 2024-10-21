@@ -1,14 +1,19 @@
 #title_context {
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     padding-top: 15px;
     padding-left: 50px;
 }
 
 #subdiscipline_title {
+    position: relative;
     margin: 0px;
-    font-family: $base-font-family;
+    display: flex;
+    flex-grow: 1;
+    flex-direction: column;
+    justify-content: center;
     min-height: 54px;
+    font-family: $base-font-family;
 
     h4 {
         margin-bottom: 0px;
@@ -23,7 +28,7 @@
         position: relative;
         z-index: 3;
     }
-    
+
     #area-not-bold {
         .query_term_highlight {
             background-color: transparent;
@@ -32,7 +37,7 @@
 
     .backlink {
         position: relative;
-        z-index: 3; 
+        z-index: 3;
         font-size: 12px;
         cursor: pointer;
         height: 21px;
@@ -63,27 +68,66 @@
 }
 
 #context {
+    display: flex;
+    flex-wrap: nowrap;
     font-size: 12px;
     color: $black;
-    .context_moreinfo {
-        border-bottom: 1px solid $link-gray;
-        cursor: help;
-        color: $link-gray;
+    padding: 0px;
 
-        &:hover {
-            border-bottom-width: 2px;
+    .context_item {
+        display: inline-block;
+        flex-shrink: 0;
+        margin-right: 1rem;
+        height: 15px;
+        margin-bottom: 6px;
+        
+        &.shrinkable {
+            min-width: 0px;
+            flex-shrink: 1;
+
+            .context_moreinfo {
+                border-bottom: none;
+                cursor: initial;
+            }
+    
+            .has-overflow {
+                border-bottom: 1px solid $link-gray;
+                cursor: help;
+            }
         }
-
-        &.infolink {
-            cursor: pointer;
-            color: $infolink;
-            border-bottom-color: $infolink;
+        
+        .context_moreinfo {
+            border-bottom: 1px solid $link-gray;
+            cursor: help;
+            color: $link-gray;
+    
+            &:hover {
+                border-bottom-width: 2px;
+            }
+    
+            &.infolink {
+                cursor: pointer;
+                color: $infolink;
+                border-bottom-color: $infolink;
+            }
         }
     }
+
+    .overflow-ellipsis {
+        display: inline-block;
+        max-width: 100%;
+        text-overflow: ellipsis;
+        overflow-x: hidden;
+        white-space: nowrap;
+        vertical-align: text-top;
+    }
+
     .modifier {
         margin-right: 0;
     }
 }
+
+
 
 #area-bold {
     font-weight: $fontweight700;
@@ -139,8 +183,8 @@
 }
 
 .authorimage {
-    width: 50px;
-    height: 50px;
+    width: 45px;
+    height: 45px;
     border-radius: 50%;
     -webkit-border-radius: 50%;
     -moz-border-radius: 50%;
@@ -153,10 +197,8 @@
     display: inline-block;
     /*max-width: 80px;*/
     vertical-align: middle;
-    margin: 10px 4px 10px 10px; /*former margin-right*/
-    /*margin-top: 15px;
-    margin-left: 50px;*/
-    padding-right: 3px;
+    margin: 0px; /*former margin-right*/
+    padding-right: 8px;
 }
 
 #author_bio a {
@@ -177,7 +219,7 @@
             font-size: 14px;
         }
     }
-    
+
     #context {
         font-size: 11px;
     }
@@ -221,7 +263,7 @@
     #title_image + #subdiscipline_title {
         display: inline-block;
         width: 80%;
-        vertical-align: middle; 
+        vertical-align: middle;
         padding-left: 0px;
         padding-top: 0px !important;
     }
@@ -260,7 +302,7 @@
 
     .backlink {
         position: relative;
-        z-index: 3; 
+        z-index: 3;
         font-size: 12px;
         cursor: pointer;
 
@@ -313,20 +355,6 @@
     }
 }
 
-.context_item {
-    display: inline-block;
-    margin-right: 1%;
-    height: 15px;
-    margin-bottom: 6px;
-
-    &.overflow-ellipsis {
-        text-overflow: ellipsis;
-        max-width: 65px;
-        overflow: hidden;
-        white-space: nowrap;
-        vertical-align: bottom;
-    }
-}
 
 //.context_metadata_high {
     //color: $okm-green !important;
