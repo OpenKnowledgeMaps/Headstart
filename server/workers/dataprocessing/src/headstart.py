@@ -47,11 +47,11 @@ class Dataprocessing(object):
     def next_item(self):
         queue, msg = self.redis_store.blpop("input_data")
         msg = json.loads(msg.decode('utf-8'))
-        k = msg.get('id')
+        request_id = msg.get('id')
         params = self.add_default_params(msg.get('params'))
         input_data = msg.get('input_data')
         author = msg.get('author')
-        return k, params, input_data, author
+        return request_id, params, input_data, author
 
     def execute_search(self, params, input_data):
         q = params.get('q')

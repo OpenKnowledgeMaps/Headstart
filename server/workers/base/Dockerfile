@@ -134,7 +134,7 @@ RUN apt update && apt full-upgrade -y && \
   ln -s /usr/share/zoneinfo/Europe/Vienna /etc/localtime && \
   dpkg --configure -a
 
-RUN apt-get -y install python3 python3-pip
+RUN apt-get -y install python3.8 python3-pip
 
 RUN R -e 'options(repos="https://cran.wu.ac.at")' && \
  R -e 'install.packages("remotes")' && \
@@ -144,9 +144,9 @@ ENV PYTHONPATH="${PYTHONPATH}:/headstart/:/headstart/base/:/headstart/base/src/"
 
 WORKDIR /headstart
 COPY workers/base/requirements.txt .
-RUN pip3 install --no-cache-dir Cython
-RUN pip3 install --upgrade pip
-RUN pip3 install --no-cache-dir -r requirements.txt
+RUN python3.8 -m pip install --no-cache-dir Cython
+RUN python3.8 -m pip install --upgrade pip
+RUN python3.8 -m pip install --no-cache-dir -r requirements.txt
 
 COPY workers/base/renv.lock .
 COPY workers/base/activate.R .
@@ -156,7 +156,7 @@ RUN R -e 'renv::consent(provided = TRUE)' && \
 
 COPY workers/common ../common
 COPY workers/base/requirements-e.txt .
-RUN pip3 install --no-cache-dir -r requirements-e.txt
+RUN python3.8 -m pip install --no-cache-dir -r requirements-e.txt
 
 COPY workers/base ./base
 COPY preprocessing/resources ./resources
@@ -164,4 +164,4 @@ COPY preprocessing/other-scripts ./other-scripts
 RUN mkdir -p /var/log/headstart && touch /var/log/headstart/headstart.log
 
 COPY workers/base/*.py ./
-CMD ["python3", "run_base.py"]
+CMD ["python3.8", "run_base.py"]

@@ -49,8 +49,7 @@ class WorksRepository:
         new_works_data["doi"] = works_data.apply(self.extract_doi, axis=1)
         new_works_data["url"] = works_data.apply(self.get_url, axis=1)
         new_works_data["link"] = works_data.apply(self.get_link, axis=1)
-        #new_works_data["oa_state"] = new_works_data.link.map(lambda x: 1 if x else 2)
-        new_works_data["oa_state"] = 2
+        new_works_data["oa_state"] = new_works_data.link.map(lambda x: 1 if x else 2)
 
         return new_works_data
 
@@ -71,18 +70,18 @@ class WorksRepository:
         return get_nested_value(work, ["title", "title", "value"], "")
 
     def get_subtitle(self, work) -> str:
-        return get_nested_value(work, ["title", "subtitle", "value"], None)
+        return get_nested_value(work, ["title", "subtitle", "value"], None) # type: ignore
 
     def get_paper_abstract(self, work) -> str:
         return get_nested_value(work, ["short-description"], "")
 
     def get_resulttype(self, work) -> str:
-        return get_nested_value(work, ["type"], None)
+        return get_nested_value(work, ["type"], None) # type: ignore
 
     def published_in(self, work) -> str:
-        return get_nested_value(work, ["journal-title", "value"], None)
+        return get_nested_value(work, ["journal-title", "value"], None) # type: ignore
 
-    def get_put_code(self, work) -> str:
+    def get_put_code(self, work) -> Optional[str]:
         put_code = get_nested_value(work, ["put-code"], None)
         return str(put_code) if put_code else None
     
@@ -114,7 +113,7 @@ class WorksRepository:
 
         return None
 
-    def get_link(self, work) -> str:
+    def get_link(self, work) -> Optional[str]:
         url = get_nested_value(work, ["url", "value"], "")
         if url.lower().endswith(".pdf"):
             return url
@@ -132,7 +131,7 @@ class WorksRepository:
 
         return None
 
-    def get_publication_date(self, work) -> str:
+    def get_publication_date(self, work) -> Optional[str]:
         year = get_nested_value(work, ["publication-date", "year", "value"], np.nan)
         month = get_nested_value(work, ["publication-date", "month", "value"], np.nan)
         day = get_nested_value(work, ["publication-date", "day", "value"], np.nan)

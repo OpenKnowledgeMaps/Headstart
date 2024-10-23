@@ -96,7 +96,7 @@ const DEFAULT_SCHEME: SchemeObject[] = [
     required: true,
     type: ["string"],
     validator: (val) => val !== "",
-    fallback: (loc) => loc.no_keywords,
+    fallback: (loc) => loc?.no_keywords,
   },
   { name: "subject_cleaned", required: true, type: ["string"] },
   { name: "relevance", required: true, type: ["number"] },
@@ -104,7 +104,7 @@ const DEFAULT_SCHEME: SchemeObject[] = [
   {
     name: "published_in",
     type: ["string"],
-    fallback: (loc) => loc.default_published_in,
+    fallback: (loc) => loc?.default_published_in,
   },
   {
     name: "source",
@@ -121,7 +121,7 @@ const DEFAULT_SCHEME: SchemeObject[] = [
   {
     name: "url",
     type: ["string"],
-    fallback: (loc) => loc.default_url,
+    fallback: (loc) => loc?.default_url,
   },
   {
     name: "relation",
@@ -142,22 +142,22 @@ const DEFAULT_SCHEME: SchemeObject[] = [
     sanitizer: commentsSanitizer,
     fallback: () => [],
   },
-  { name: "readers", fallback: (loc) => loc.default_readers },
+  { name: "readers", fallback: (loc) => loc?.default_readers },
   { name: "tags", type: ["string"], fallback: () => "" },
   { name: "doi", type: ["string"] },
   {
     name: "x",
     type: ["string", "number"],
     required: true,
-    fallback: (loc) => loc.default_x,
+    fallback: (loc) => loc?.default_x,
   },
   {
     name: "y",
     type: ["string", "number"],
     required: true,
-    fallback: (loc) => loc.default_y,
+    fallback: (loc) => loc?.default_y,
   },
-  { name: "area", required: true, fallback: (loc) => loc.default_area },
+  { name: "area", required: true, fallback: (loc) => loc?.default_area },
   {
     name: "area_uri",
     type: ["string", "number"],
@@ -165,12 +165,12 @@ const DEFAULT_SCHEME: SchemeObject[] = [
     fallback: (l, paper) => paper.area,
   },
   { name: "cluster_labels", required: true },
-  { name: "file_hash", type: ["string"], fallback: (loc) => loc.default_hash },
+  { name: "file_hash", type: ["string"], fallback: (loc) => loc?.default_hash },
   { name: "citation_count", type: ["number"], fallback: () => 'n/a' },
-  { name: "tweets", fallback: (loc) => loc.default_readers },
-  { name: "social", fallback: (loc) => loc.default_readers },
-  { name: "references", fallback: (loc) => loc.default_readers },
-  { name: "citations", fallback: (loc) => loc.default_readers }
+  { name: "tweets", fallback: (loc) => loc?.default_readers },
+  { name: "social", fallback: (loc) => loc?.default_readers },
+  { name: "references", fallback: (loc) => loc?.default_readers },
+  { name: "citations", fallback: (loc) => loc?.default_readers }
 ];
 
 export default DEFAULT_SCHEME;

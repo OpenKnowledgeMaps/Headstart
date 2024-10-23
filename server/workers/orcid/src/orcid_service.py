@@ -7,12 +7,12 @@ import numpy as np
 from pyorcid import Orcid, errors as pyorcid_errors
 from pyorcid.orcid_authentication import OrcidAuthentication
 from typing import Tuple
-from common.utils import get_key
+from common.utils import get_key, get_nested_value
 from repositories.author_info import AuthorInfoRepository
 from repositories.works import WorksRepository
 from redis import StrictRedis
-from typing import Dict
-from model import AuthorInfo
+from typing import Dict, List, Union
+from model import AuthorInfo, SuccessResult, ErrorResult
 from dataclasses import asdict
 
 class OrcidService:
@@ -32,8 +32,8 @@ class OrcidService:
     def create(
         orcid_client_id: str,
         orcid_client_secret: str,
-        sandbox: bool = False,
-        redis_store: StrictRedis = None,
+        sandbox: bool,
+        redis_store: StrictRedis,
     ):
         orcid_auth = OrcidAuthentication(
             client_id=orcid_client_id, client_secret=orcid_client_secret
@@ -47,7 +47,7 @@ class OrcidService:
         )
 
     @error_logging_aspect(log_level=logging.ERROR)
-    def execute_search(self, params: Dict[str, str]) -> Dict[str, str]:
+    def execute_search(self, params: Dict[str, str]) -> Union[SuccessResult, ErrorResult]:
         try:
             orcid_id = params.get("orcid")
             if not orcid_id:
@@ -88,17 +88,21 @@ class OrcidService:
         Returns:
         - pd.DataFrame: The enriched metadata DataFrame.
         """
+
+        self.logger.debug(f"Enriching metadata for ORCID {params.get('orcid')}")
+        
         request_id = str(uuid.uuid4())
         task_data = {
             "id": request_id,
             "params": params,
             "metadata": metadata.to_json(orient="records"),
         }
-        self.logger.debug(f"enrich metadata task data: {task_data}")
+        
         self.redis_store.rpush("metrics", json.dumps(task_data))
         result = get_key(self.redis_store, request_id, 300)
-        self.logger.debug(f"result: {result}")
+        
         metadata = pd.DataFrame(result["input_data"])
+        
         for c in [
             "citation_count",
             "cited_by_wikipedia_count",
@@ -109,6 +113,77 @@ class OrcidService:
         ]:
             if c not in metadata.columns:
                 metadata[c] = np.NaN
+
+        return metadata
+    
+    def enrich_metadata_with_base(self, params: Dict[str, str], metadata: pd.DataFrame) -> pd.DataFrame:
+        self.logger.debug(f"Enriching metadata with base for ORCID {params.get('orcid')}")
+        # TODO: as not all metadata should be enriched with base, we should add some filtering here
+        # base enrichment should be used only for cases when the following data is missing oa_state
+            # subject_cleaned
+            # paper_abstract
+            # link
+        # when 
+
+        
+
+        raw_dois = metadata["doi"].tolist()
+
+        dois = [doi for doi in raw_dois if doi]
+
+        batch_size = 25
+
+        batches = [dois[i:i + batch_size] for i in range(0, len(dois), batch_size)]
+
+        base_metadata = pd.DataFrame()
+
+        for batch in batches:
+            q_advanced = " OR ".join([f"dcdoi:{doi}" for doi in batch if doi])
+
+            request_id = str(uuid.uuid4())
+
+            task_data = {
+                # https://dev.openknowledgemaps.org/visconnect-prototype/search?type=get&service=base&sorting=most-relevant&document_types%5B%5D=121&lang_id%5B%5D=all-lang&min_descsize=300&vis_type=timeline&q_advanced=(10.5281%2FZENODO.1196397)
+                # q_advanced: (dcdoi:ddd OR dcdoi:ddd OR dcdoi:ddd)
+                # 10.5281/ZENODO.1196397
+                
+                "id": request_id,
+                "params": {
+                    "q_advanced": q_advanced,
+                    "raw": True,
+                    'language': 'english', 
+                    'time_range': 'any-time', 
+                    'sorting': 'most-relevant', 
+                    'document_types': ['4', '11', '111', '13', '16', '7', '5', '12', '121', '122', '17', '19', '3', '52', '2', 'F', '1A', '14', '15', '6', '51', '1', '18', '181', '183', '182'], 
+                    'min_descsize': '0', 
+                    'from': '1665-01-01', 
+                    'to': '2024-10-21', 
+                    'q': '', 
+                    'today': '2024-10-21', 
+                    'unique_id': 'abf2625e2d84eb4367fb443e2cb6f4a1', 
+                    'service': 'base', 
+                    'embed': 'false', 
+                    'vis_id': 'abf2625e2d84eb4367fb443e2cb6f4a1', 
+                    'limit': 120, 
+                    'list_size': 100
+                },
+                "endpoint": "search"
+            }
+
+            self.redis_store.rpush("base", json.dumps(task_data))
+            result = get_key(self.redis_store, request_id, 300)
+
+            self.logger.debug(f"Result from base: {result}")
+
+            base_response: str = get_nested_value(result, ["input_data", "metadata"], '[]') # type: ignore
+
+            base_metadata = pd.concat([
+                base_metadata, 
+                pd.DataFrame(json.loads(base_response)        )
+            ], ignore_index=True)
+
+        print(base_metadata.columns)    
+        
         return metadata
 
     def enrich_author_info(self, author_info: AuthorInfo, metadata: pd.DataFrame, params: Dict[str, str]) -> AuthorInfo:
@@ -151,11 +226,18 @@ class OrcidService:
         )
 
         # Calculate h-index
-        citation_counts = (
-            metadata["citation_count"].astype(float).sort_values(ascending=False).values
+        citation_counts: List[float] = (
+            metadata["citation_count"].astype(float).sort_values(ascending=False).tolist()
         )
-        h_index = np.sum(citation_counts >= np.arange(1, len(citation_counts) + 1))
-        author_info.h_index = int(h_index)
+
+
+        # Calculate h-index
+        h_index = 0
+        for i, citation in enumerate(citation_counts, start=1):
+            if citation >= i:
+                h_index = i
+            else:
+                break
 
         def extract_year(value):
             try:
@@ -171,8 +253,10 @@ class OrcidService:
         metadata["publication_year"] = metadata["year"].apply(extract_year)
 
         academic_age = author_info.academic_age
-        if (academic_age is not None and "academic_age_offset" in params):
-            academic_age += int(params.get("academic_age_offset"))
+        if (academic_age is not None):
+            academic_age_offset = params.get("academic_age_offset")
+            if academic_age_offset:
+                academic_age += int(academic_age_offset)
         author_info.academic_age = academic_age
 
         # Calculate normalized h-index
@@ -199,14 +283,15 @@ class OrcidService:
 
     def _process_metadata(self, metadata: pd.DataFrame, author_info: AuthorInfo, params: Dict[str, str]) -> pd.DataFrame:
         metadata["authors"] = metadata["authors"].replace("", author_info.author_name)
-        self.logger.debug(f"Enriching metadata for ORCID {params.get('orcid')}")
         metadata = self.enrich_metadata(params, metadata)
+        metadata = self.enrich_metadata_with_base(params, metadata)
         self.logger.debug(f"Enriching author info for ORCID {params.get('orcid')}")
         author_info = self.enrich_author_info(author_info, metadata, params)
-        metadata = metadata.head(int(params.get("limit")))
+        limit = params.get("limit", '200')
+        metadata = metadata.head(int(limit))
         return metadata
 
-    def _format_response(self, data: pd.DataFrame, author_info: AuthorInfo, params: Dict[str, str]) -> Dict[str, str]:
+    def _format_response(self, data: pd.DataFrame, author_info: AuthorInfo, params: Dict[str, str]) -> SuccessResult:
         self.logger.debug(f"Formatting response for ORCID {params.get('orcid')}")
         desired_columns = ["title", "paper_abstract", "subtitle", "published_in", "authors"]
 
@@ -227,25 +312,25 @@ class OrcidService:
 
         self.logger.debug(f"Returning response for ORCID {params.get('orcid')} len {len(data)}")
 
-        response = {
-            "input_data": {
-                "metadata": data.to_json(orient='records'),
-                "text": text.to_json(orient='records')
-            },
-            # TODO: consider to return model?
-            "author": asdict(author_info),
-            "params": params
-        }
-        return response
-
-    def _handle_insufficient_results(self, params: Dict[str, str], orcid_id: str) -> Dict[str, str]:
-        self.logger.debug(f"ORCID {orcid_id} has no works metadata.")
         return {
-            "params": params,
+            'status': 'success',
+            'data': {
+                "input_data": {
+                    "metadata": data.to_json(orient='records'),
+                    "text": text.to_json(orient='records')
+                },
+                "author": asdict(author_info),
+                "params": params
+            },
+        }
+
+    def _handle_insufficient_results(self, params: Dict[str, str], orcid_id: str) -> ErrorResult:
+        self.logger.debug(f"ORCID {orcid_id} has no works metadata. Params: {params}")
+        return {
             "status": "error",
             "reason": ["not enough results for orcid"],
         }
 
-    def _handle_error(self, params: Dict[str, str], reason: str, exception: Exception) -> Dict[str, str]:
-        self.logger.error(exception)
-        return {"params": params, "status": "error", "reason": [reason]}
+    def _handle_error(self, params: Dict[str, str], reason: str, exception: Exception) -> ErrorResult:
+        self.logger.error(f"Error processing ORCID: {exception}. Params: {params}")
+        return {"status": "error", "reason": [reason]}
