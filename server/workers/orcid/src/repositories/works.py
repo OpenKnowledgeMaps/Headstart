@@ -103,12 +103,14 @@ class WorksRepository:
                 if external_id_value.startswith("http"):
                     return external_id_value
 
-                if external_id_type == "doi":
+                if external_id_type == "doi" and external_id_value:
                     return f"https://doi.org/{external_id_value}"
-                if external_id_type == "isbn":
+                if external_id_type == "isbn" and external_id_value:
                     return f"https://books.google.pl/books?vid=ISBN{external_id_value}&redir_esc=y&hl=en"
-                if external_id_type == "arxiv":
+                if external_id_type == "arxiv" and external_id_value:
                     return f"https://arxiv.org/abs/{external_id_value}"
+                if external_id_type == "issn" and external_id_value:
+                    return f"https://search.worldcat.org/search?q=n2:{external_id_value}"
                 self.logger.warning(f"Unknown external id type: {external_id_type}. {id}")
 
         return None

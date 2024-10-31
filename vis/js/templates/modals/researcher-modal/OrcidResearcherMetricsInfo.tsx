@@ -28,11 +28,13 @@ const ResearcherMetricsInfo = ({
             {params.academic_age ? params.academic_age : localization.notAvailable}
           </span>
         </p>
-        <p>
-          h-index: <span>
-            {params.h_index ? params.h_index : localization.notAvailable}
-          </span>
-        </p>
+        {params.show_h_index ? (
+          <p>
+            h-index: <span>
+              {params.h_index ? params.h_index : localization.notAvailable}
+            </span>
+          </p>
+        ) : null}
         <p>
           Number of total citations: <span>{params.total_citations ? params.total_citations : localization.notAvailable}</span>
         </p>
@@ -73,6 +75,7 @@ const mapStateToProps = (state) => {
         state.author.total_unique_social_media_mentions,
       total_neppr: state.author.total_neppr,
       external_identifiers: state.author.external_identifiers,
+      show_h_index: state.contextLine.showHIndex,
       h_index: state.author.h_index,
       academic_age: state.author.academic_age,
       normalized_h_index: state.author.normalized_h_index,

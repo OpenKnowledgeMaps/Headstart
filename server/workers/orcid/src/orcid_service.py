@@ -1,6 +1,7 @@
 import logging
 import json
 import pandas as pd
+import os
 import uuid
 from common.decorators import error_logging_aspect
 import numpy as np
@@ -14,6 +15,12 @@ from redis import StrictRedis
 from typing import Dict, List, Union
 from model import AuthorInfo, SuccessResult, ErrorResult
 from dataclasses import asdict
+import time
+
+def remove_doi_prefix(doi):
+    if pd.isna(doi) or doi == '':  # Handle NaN, None, or empty strings
+        return np.nan
+    return doi.replace('https://dx.doi.org/', '').replace('https://doi.org/', '')
 
 class OrcidService:
     logger = logging.getLogger(__name__)
@@ -116,37 +123,38 @@ class OrcidService:
 
         return metadata
     
-    def enrich_metadata_with_base(self, params: Dict[str, str], metadata: pd.DataFrame) -> pd.DataFrame:
-        self.logger.debug(f"Enriching metadata with base for ORCID {params.get('orcid')}")
-        # TODO: as not all metadata should be enriched with base, we should add some filtering here
-        # base enrichment should be used only for cases when the following data is missing oa_state
-            # subject_cleaned
-            # paper_abstract
-            # link
-        # when 
-
+    def log_datafram(self, df: pd.DataFrame, params: Dict[str, str], name: str, ):
+        orcid = params.get('orcid')
         
+        columns_to_print = ['id', 'title', 'doi', 'paper_abstract', 'link', 'subject', 'subject_orig', 'oa_state']
 
-        raw_dois = metadata["doi"].tolist()
+        transformed = df.copy().reindex(columns=columns_to_print)
+        
+        transformed = transformed.fillna(value='missing')
+        
+        # create folder
+        folder = f'./output/{orcid}'
+        if not os.path.exists(folder):
+            os.makedirs(folder)
+        file_path = f"{folder}/{name}.csv"
+        transformed.sort_values(by='doi', ascending=True).to_csv(file_path, index=False)
 
-        dois = [doi for doi in raw_dois if doi]
-
+    def request_base_metadata(self, dois: List[str], params: Dict[str, str]) -> pd.DataFrame:
+        orcid = params.get('orcid')
+        
         batch_size = 25
-
         batches = [dois[i:i + batch_size] for i in range(0, len(dois), batch_size)]
+        base_metadata = pd.DataFrame(dtype=object)
 
-        base_metadata = pd.DataFrame()
+        timing_data = []
 
         for batch in batches:
+            start_time = time.time()
             q_advanced = " OR ".join([f"dcdoi:{doi}" for doi in batch if doi])
 
             request_id = str(uuid.uuid4())
 
             task_data = {
-                # https://dev.openknowledgemaps.org/visconnect-prototype/search?type=get&service=base&sorting=most-relevant&document_types%5B%5D=121&lang_id%5B%5D=all-lang&min_descsize=300&vis_type=timeline&q_advanced=(10.5281%2FZENODO.1196397)
-                # q_advanced: (dcdoi:ddd OR dcdoi:ddd OR dcdoi:ddd)
-                # 10.5281/ZENODO.1196397
-                
                 "id": request_id,
                 "params": {
                     "q_advanced": q_advanced,
@@ -158,6 +166,7 @@ class OrcidService:
                     'min_descsize': '0', 
                     'from': '1665-01-01', 
                     'to': '2024-10-21', 
+                    # ? is that a good idea to pass here empty query?
                     'q': '', 
                     'today': '2024-10-21', 
                     'unique_id': 'abf2625e2d84eb4367fb443e2cb6f4a1', 
@@ -169,11 +178,18 @@ class OrcidService:
                 },
                 "endpoint": "search"
             }
-
+            
             self.redis_store.rpush("base", json.dumps(task_data))
             result = get_key(self.redis_store, request_id, 300)
-
-            self.logger.debug(f"Result from base: {result}")
+            
+            end_time = time.time()
+            duration = end_time - start_time
+            timing_data.append({
+                "request_id": request_id,
+                "batch_size": len(batch),
+                "duration": duration,
+                "timestamp": time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime(start_time))
+            })
 
             base_response: str = get_nested_value(result, ["input_data", "metadata"], '[]') # type: ignore
 
@@ -182,9 +198,113 @@ class OrcidService:
                 pd.DataFrame(json.loads(base_response)        )
             ], ignore_index=True)
 
-        print(base_metadata.columns)    
+        timing_df = pd.DataFrame(timing_data)
+        folder = f'./output/{orcid}'
+        if not os.path.exists(folder):
+            os.makedirs(folder)
+        timing_df.to_csv(f'{folder}/stat_base_requests.csv', index=False)
+
+        return base_metadata
+    
+    def enrich_metadata_with_base(self, params: Dict[str, str], metadata: pd.DataFrame) -> pd.DataFrame:
+        self.logger.debug(f"Enriching metadata with base for ORCID {params.get('orcid')}")
         
-        return metadata
+        original_columns = metadata.columns.to_list()
+        required_fields = ['id', 'identifier', 'relevance', 'relation', 'title', 'subtitle', 'doi', 
+                       'paper_abstract', 'link', 'subject', 'oa_state', 'subject_orig', 'published_in', 
+                       'year', 'authors', 'url', 'resulttype', 'type', 'typenorm', 'lang', 'language', 
+                       'content_provider', 'coverage', 'is_duplicate', 'has_dataset', 'sanitized_authors', 
+                       'relations', 'annotations', 'repo', 'source', 'volume', 'issue', 'page', 'issn', 
+                       'citation_count', 'cited_by_wikipedia_count', 'cited_by_msm_count', 'cited_by_policies_count', 
+                       'cited_by_patents_count', 'cited_by_accounts_count']
+        required_fields = list(set(required_fields + metadata.columns.to_list()))
+
+        self.logger.debug(f'fields to reindex: {required_fields}')
+        metadata = metadata.reindex(columns=required_fields)
+
+        self.logger.debug('metadata reindexed')
+        
+        # TEMPORAL
+        self.log_datafram(metadata, params, '_original')
+        # TEMPORAL
+
+        raw_dois = metadata["doi"].tolist()
+        dois = [doi for doi in raw_dois if doi and pd.notna(doi)]
+
+        self.logger.debug(f"Dois to search in base: {dois}")
+
+        base_metadata = self.request_base_metadata(dois, params)
+        base_metadata = base_metadata.reindex(columns=required_fields)
+        base_metadata.loc[:, 'doi'] = base_metadata['doi'].apply(remove_doi_prefix)
+
+        # Remove rows where 'doi' is pd.NaN
+        base_metadata = base_metadata[pd.notna(base_metadata['doi'])]
+        base_metadata = base_metadata[base_metadata['doi'].isin(dois)]
+        base_metadata = base_metadata.drop_duplicates(subset='doi', keep='first')
+
+        # TEMPORAL
+        self.log_datafram(base_metadata, params, '_base')
+        # TEMPORAL
+
+        # Select and rename relevant fields from base_metadata, including subject_orig
+        fields_to_merge = {
+            'oa_state': 'oa_state_base', 
+            'subject': 'subject_base', 
+            'subject_orig': 'subject_orig_base',  # Include subject_orig
+            'paper_abstract': 'paper_abstract_base', 
+            'link': 'link_base'
+        }
+
+        # Rename base metadata columns to avoid conflicts with original metadata
+        base_metadata = base_metadata.rename(columns=fields_to_merge)
+
+        # Merge base metadata into the original metadata
+        enriched_metadata = pd.merge(
+            metadata,
+            base_metadata[['doi'] + list(fields_to_merge.values())],  # Use renamed columns from base_metadata
+            on='doi',
+            how='left'
+        )
+
+        # Custom merging functions
+        def custom_merge(existing_value, new_value):
+            return existing_value if pd.notnull(existing_value) and existing_value  else new_value
+
+        def custom_merge_link_oa_state(row):
+            existing_link, existing_oa_state = row['link'], row['oa_state']
+            new_link, new_oa_state = row.get('link_base', None), row.get('oa_state_base', None)
+            if pd.isna(existing_link) and pd.notna(new_link):
+                return new_link, new_oa_state
+            return existing_link, existing_oa_state
+
+        enriched_metadata['paper_abstract'] = enriched_metadata.apply(
+            lambda row: custom_merge(row['paper_abstract'], row['paper_abstract_base']), axis=1
+        )
+        enriched_metadata['subject_orig'] = enriched_metadata.apply(
+            lambda row: custom_merge(row['subject_orig'], row['subject_orig_base']), axis=1
+        )
+        enriched_metadata['subject'] = enriched_metadata.apply(
+            lambda row: custom_merge(row['subject'], row['subject_base']), axis=1
+        )
+
+        self.logger.debug('assigned some fields')
+
+        # Apply custom logic for link and oa_state and assign results
+        link_oa_state_values = enriched_metadata.apply(custom_merge_link_oa_state, axis=1)
+        enriched_metadata['link'], enriched_metadata['oa_state'] = zip(*link_oa_state_values)
+
+        enriched_metadata.drop(columns=['paper_abstract_base', 'subject_orig_base', 'subject_base', 'oa_state_base', 'link_base'], inplace=True)
+        
+        # TEMPORAL
+        self.log_datafram(enriched_metadata, params, '_enriched')
+        # TEMPORAL
+
+        self.logger.debug(f"Enriched metadata using base for ORCID {params.get('orcid')}: {enriched_metadata[['id', 'link', 'oa_state']].head()}")
+
+        # temporal solution, for some reason if we have some undefined data, dataprocessing is failing
+        enriched_metadata = enriched_metadata.reindex(columns=list(set(original_columns + ['oa_state', 'subject', 'subject_orig', 'paper_abstract', 'link'])))
+        
+        return enriched_metadata
 
     def enrich_author_info(self, author_info: AuthorInfo, metadata: pd.DataFrame, params: Dict[str, str]) -> AuthorInfo:
         """
@@ -284,11 +404,13 @@ class OrcidService:
     def _process_metadata(self, metadata: pd.DataFrame, author_info: AuthorInfo, params: Dict[str, str]) -> pd.DataFrame:
         metadata["authors"] = metadata["authors"].replace("", author_info.author_name)
         metadata = self.enrich_metadata(params, metadata)
+        self.logger.debug(f'metadata shape after enrichment: {metadata.shape}')
         metadata = self.enrich_metadata_with_base(params, metadata)
-        self.logger.debug(f"Enriching author info for ORCID {params.get('orcid')}")
+        self.logger.debug(f'metadata shape after base enrichment: {metadata.shape}')
         author_info = self.enrich_author_info(author_info, metadata, params)
         limit = params.get("limit", '200')
         metadata = metadata.head(int(limit))
+        self.logger.debug(f'metadata shape after processing: {metadata.shape}')
         return metadata
 
     def _format_response(self, data: pd.DataFrame, author_info: AuthorInfo, params: Dict[str, str]) -> SuccessResult:
@@ -332,5 +454,6 @@ class OrcidService:
         }
 
     def _handle_error(self, params: Dict[str, str], reason: str, exception: Exception) -> ErrorResult:
-        self.logger.error(f"Error processing ORCID: {exception}. Params: {params}")
+        self.logger.debug(f"Error processing ORCID: {exception}. Params: {params}")
+        self.logger.debug(exception.__traceback__)
         return {"status": "error", "reason": [reason]}
