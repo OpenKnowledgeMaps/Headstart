@@ -107,12 +107,17 @@ function search($service, $dirty_query
       $repo_name = $res["repo_name"];
       $post_params["repo_name"] = $repo_name;
       $param_types[] = "repo_name";
-      // this is not duplicate code, the $params_json needs to be updated with the addition metadata
+      // this is not duplicate code, the $params_json needs to be updated with the additional metadata
       $params_json = packParamsJSON($param_types, $post_params);
     }
 
     if($retrieve_cached_map) {
       $last_version = $persistence->getLastVersion($unique_id, false, false);
+      //todo: log output of $last_version
+      // log to docker logs
+      error_log(message: "type of last_version: " . gettype($last_version));
+      error_log(message: "raw array of last_version: " . print_r($last_version, true));
+      error_log("last_version: " . json_encode($last_version));
       if ($last_version != null && $last_version != "null" && $last_version != false) {
           echo json_encode(array("query" => $query, "id" => $unique_id, "status" => "success"));
           return;

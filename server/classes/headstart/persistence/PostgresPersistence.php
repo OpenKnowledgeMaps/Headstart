@@ -64,14 +64,19 @@ class PostgresPersistence implements Persistence
             "details" => $details,
             "context" => $context));
         $res = $this->api_client->call_persistence("getLastVersion", $payload);
+        error_log(message: "raw result: " . print_r($res, true));
+        error_log(message: "result http code: " . $res["httpcode"]);
         if ($res["httpcode"] != 200) {
-            $data = $res;
+            $data = $res;            
           } else {
             $data = json_decode($res["result"], true);
           }
         if ($data != "null") {
             $data = array($data);
         }
+        //hypothesis: does not return a response that search.php can recognize as failed search/request
+        error_log("raw data: " . print_r($data, true));
+        error_log("data: " . json_encode($data));
         return $data;
     }
 

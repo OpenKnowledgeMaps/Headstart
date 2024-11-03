@@ -8,6 +8,7 @@ from flask_restx import Namespace, Resource, fields
 
 from models import Revisions, Visualizations
 from database import Session
+from sqlalchemy.exc import OperationalError
 
 
 persistence_ns = Namespace("persistence", description="OKMAps persistence operations")
@@ -252,7 +253,17 @@ class getLastVersion(Resource):
             return make_response(jsonify(result),
                                  200,
                                  headers)
+        # catch database connection error
+        except OperationalError as e:
+            # also log the stack trace
+            persistence_ns.logger.error("getLastVersion: %s" % str(e), exc_info=True)
+            result = {'success': False, 'reason': ["database connection error"]}
+            headers = {'ContentType': 'application/json'}
+            return make_response(jsonify(result),
+                                 500,
+                                 headers)
         except Exception as e:
+            persistence_ns.logger.error("getLastVersion: %s" % str(e), exc_info=True)
             result = {'success': False, 'reason': [str(e)]}
             headers = {'ContentType': 'application/json'}
             return make_response(jsonify(result),
@@ -290,7 +301,15 @@ class getContext(Resource):
             return make_response(jsonify(result),
                                  200,
                                  headers)
+        except OperationalError as e:
+            persistence_ns.logger.error("getContext: %s" % str(e), exc_info=True)
+            result = {'success': False, 'reason': ["database connection error"]}
+            headers = {'ContentType': 'application/json'}
+            return make_response(jsonify(result),
+                                 500,
+                                 headers)
         except Exception as e:
+            persistence_ns.logger.error("getContext: %s" % str(e), exc_info=True)
             result = {'success': False, 'reason': [str(e)]}
             headers = {'ContentType': 'application/json'}
             return make_response(jsonify(result),
