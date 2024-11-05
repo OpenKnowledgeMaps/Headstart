@@ -243,7 +243,7 @@ class OrcidService:
         base_metadata = base_metadata.drop_duplicates(subset='doi', keep='first')
 
         # TEMPORAL
-        self.log_datafram(base_metadata, params, '_base')
+        # self.log_datafram(base_metadata, params, '_base')
         # TEMPORAL
 
         # Select and rename relevant fields from base_metadata, including subject_orig
@@ -296,7 +296,7 @@ class OrcidService:
         enriched_metadata.drop(columns=['paper_abstract_base', 'subject_orig_base', 'subject_base', 'oa_state_base', 'link_base'], inplace=True)
         
         # TEMPORAL
-        self.log_datafram(enriched_metadata, params, '_enriched')
+        # self.log_datafram(enriched_metadata, params, '_enriched')
         # TEMPORAL
 
         self.logger.debug(f"Enriched metadata using base for ORCID {params.get('orcid')}: {enriched_metadata[['id', 'link', 'oa_state']].head()}")
@@ -350,7 +350,6 @@ class OrcidService:
             metadata["citation_count"].astype(float).sort_values(ascending=False).tolist()
         )
 
-
         # Calculate h-index
         h_index = 0
         for i, citation in enumerate(citation_counts, start=1):
@@ -358,6 +357,7 @@ class OrcidService:
                 h_index = i
             else:
                 break
+        author_info.h_index = h_index
 
         def extract_year(value):
             try:
@@ -404,12 +404,12 @@ class OrcidService:
     def _process_metadata(self, metadata: pd.DataFrame, author_info: AuthorInfo, params: Dict[str, str]) -> pd.DataFrame:
         metadata["authors"] = metadata["authors"].replace("", author_info.author_name)
         metadata = self.enrich_metadata(params, metadata)
-        self.logger.debug(f'metadata shape after enrichment: {metadata.shape}')
-        metadata = self.enrich_metadata_with_base(params, metadata)
         self.logger.debug(f'metadata shape after base enrichment: {metadata.shape}')
         author_info = self.enrich_author_info(author_info, metadata, params)
+        self.logger.debug(f'metadata shape after enrichment: {metadata.shape}')
         limit = params.get("limit", '200')
         metadata = metadata.head(int(limit))
+        metadata = self.enrich_metadata_with_base(params, metadata)
         self.logger.debug(f'metadata shape after processing: {metadata.shape}')
         return metadata
 
