@@ -123,7 +123,7 @@ class OrcidService:
 
         return metadata
     
-    def log_datafram(self, df: pd.DataFrame, params: Dict[str, str], name: str, ):
+    def log_dataframe(self, df: pd.DataFrame, params: Dict[str, str], name: str, ):
         orcid = params.get('orcid')
         
         columns_to_print = ['id', 'title', 'doi', 'paper_abstract', 'link', 'subject', 'subject_orig', 'oa_state']
@@ -225,7 +225,7 @@ class OrcidService:
         self.logger.debug('metadata reindexed')
         
         # TEMPORAL
-        self.log_datafram(metadata, params, '_original')
+        self.log_dataframe(metadata, params, '_original')
         # TEMPORAL
 
         raw_dois = metadata["doi"].tolist()
@@ -243,7 +243,7 @@ class OrcidService:
         base_metadata = base_metadata.drop_duplicates(subset='doi', keep='first')
 
         # TEMPORAL
-        self.log_datafram(base_metadata, params, '_base')
+        self.log_dataframe(base_metadata, params, '_base')
         # TEMPORAL
 
         # Select and rename relevant fields from base_metadata, including subject_orig
@@ -300,7 +300,7 @@ class OrcidService:
         enriched_metadata.drop(columns=['paper_abstract_base', 'subject_orig_base', 'subject_base', 'oa_state_base', 'link_base', 'relation_base'], inplace=True)
         
         # TEMPORAL
-        self.log_datafram(enriched_metadata, params, '_enriched')
+        self.log_dataframe(enriched_metadata, params, '_enriched')
         # TEMPORAL
 
         self.logger.debug(f"Enriched metadata using base for ORCID {params.get('orcid')}: {enriched_metadata[['id', 'link', 'oa_state']].head()}")
