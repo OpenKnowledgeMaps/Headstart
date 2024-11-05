@@ -252,7 +252,8 @@ class OrcidService:
             'subject': 'subject_base', 
             'subject_orig': 'subject_orig_base',  # Include subject_orig
             'paper_abstract': 'paper_abstract_base', 
-            'link': 'link_base'
+            'link': 'link_base',
+            'relation': 'relation_base'
         }
 
         # Rename base metadata columns to avoid conflicts with original metadata
@@ -286,6 +287,9 @@ class OrcidService:
         enriched_metadata['subject'] = enriched_metadata.apply(
             lambda row: custom_merge(row['subject'], row['subject_base']), axis=1
         )
+        enriched_metadata['relation'] = enriched_metadata.apply(
+            lambda row: custom_merge(row['relation'], row['relation_base']), axis=1
+        )
 
         self.logger.debug('assigned some fields')
 
@@ -293,7 +297,7 @@ class OrcidService:
         link_oa_state_values = enriched_metadata.apply(custom_merge_link_oa_state, axis=1)
         enriched_metadata['link'], enriched_metadata['oa_state'] = zip(*link_oa_state_values)
 
-        enriched_metadata.drop(columns=['paper_abstract_base', 'subject_orig_base', 'subject_base', 'oa_state_base', 'link_base'], inplace=True)
+        enriched_metadata.drop(columns=['paper_abstract_base', 'subject_orig_base', 'subject_base', 'oa_state_base', 'link_base', 'relation_base'], inplace=True)
         
         # TEMPORAL
         self.log_datafram(enriched_metadata, params, '_enriched')
@@ -302,7 +306,7 @@ class OrcidService:
         self.logger.debug(f"Enriched metadata using base for ORCID {params.get('orcid')}: {enriched_metadata[['id', 'link', 'oa_state']].head()}")
 
         # temporal solution, for some reason if we have some undefined data, dataprocessing is failing
-        enriched_metadata = enriched_metadata.reindex(columns=list(set(original_columns + ['oa_state', 'subject', 'subject_orig', 'paper_abstract', 'link'])))
+        enriched_metadata = enriched_metadata.reindex(columns=list(set(original_columns + ['oa_state', 'subject', 'subject_orig', 'paper_abstract', 'link', 'relation'])))
         
         return enriched_metadata
 
