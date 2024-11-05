@@ -75,7 +75,7 @@ const mapStateToProps = (state) => {
         state.author.total_unique_social_media_mentions,
       total_neppr: state.author.total_neppr,
       external_identifiers: state.author.external_identifiers,
-      show_h_index: state.contextLine.showHIndex,
+      show_h_index: state.contextLine.show_h_index,
       h_index: state.author.h_index,
       academic_age: state.author.academic_age,
       normalized_h_index: state.author.normalized_h_index,

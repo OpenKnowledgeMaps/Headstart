@@ -95,7 +95,7 @@ const DEFAULT_SCHEME: SchemeObject[] = [
     name: "subject_orig",
     required: true,
     type: ["string"],
-    // validator: (val) => val !== "",
+    validator: (val) => val !== "" && val,
     fallback: (loc) => loc?.no_keywords,
   },
   { name: "subject_cleaned", required: true, type: ["string"] },

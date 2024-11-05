@@ -50,6 +50,8 @@ class OrcidWorker:
 
     def handle_search(self, request_id: str, params: Dict[str, str]) -> None:
         try:
+            self.logger.debug(f"Handle search with request_id: {request_id} and params {params}")
+
             res = self.data_retriever.execute_search(params)
 
             if res.get("status") == "error" or params.get("raw") is True:
