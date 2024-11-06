@@ -225,7 +225,7 @@ class OrcidService:
         self.logger.debug('metadata reindexed')
         
         # TEMPORAL
-        self.log_dataframe(metadata, params, '_original')
+        #self.log_dataframe(metadata, params, '_original')
         # TEMPORAL
 
         raw_dois = metadata["doi"].tolist()
@@ -300,7 +300,7 @@ class OrcidService:
         enriched_metadata.drop(columns=['paper_abstract_base', 'subject_orig_base', 'subject_base', 'oa_state_base', 'link_base', 'relation_base'], inplace=True)
         
         # TEMPORAL
-        # self.log_dataframe(enriched_metadata, params, '_enriched')
+        #self.log_dataframe(enriched_metadata, params, '_enriched')
         # TEMPORAL
 
         self.logger.debug(f"Enriched metadata using base for ORCID {params.get('orcid')}: {enriched_metadata[['id', 'link', 'oa_state']].head()}")
@@ -419,7 +419,7 @@ class OrcidService:
 
     def _format_response(self, data: pd.DataFrame, author_info: AuthorInfo, params: Dict[str, str]) -> SuccessResult:
         self.logger.debug(f"Formatting response for ORCID {params.get('orcid')}")
-        desired_columns = ["title", "paper_abstract", "subtitle", "published_in", "authors"]
+        desired_columns = ["title", "paper_abstract", "subtitle", "published_in", "authors", "subject_orig"]
 
         # Filter the columns to only those that exist in the DataFrame
         existing_columns = [col for col in desired_columns if col in data.columns]
