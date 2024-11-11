@@ -93,22 +93,26 @@ const Section = ({ title, items, formatItem, showMore, handleShowMore }) => {
 const TextSection = ({ title, content, showMore, handleShowMore }) => {
   const localization = useLocalizationContext();
 
+  const MAX_LENGTH = 100;
+
+  const isLongContent = content && content.length > MAX_LENGTH;
+
+  const displayContent = showMore || !isLongContent ? content : `${content.slice(0, MAX_LENGTH)}...`;
+
   return (
     <div>
       <h3>{title}</h3>
       {content ? (
         <>
-          {content}
-          {true && (
-            <>
-              {/* {showMore && items.slice(1).map(formatItem)} */}
-              <button className="underlined_button" onClick={handleShowMore}>
-                <i className={`fas fa-${showMore ? "chevron-up" : "chevron-down"}`} style={{
-                  paddingRight: "3px"
-                }}></i>
-                {showMore ? "Show Less" : "Show More"}
-              </button>
-            </>
+          <p>{displayContent}</p>
+          {isLongContent && (
+            <button className="underlined_button" onClick={handleShowMore}>
+              <i
+                className={`fas fa-${showMore ? "chevron-up" : "chevron-down"}`}
+                style={{ paddingRight: "3px" }}
+              ></i>
+              {showMore ? localization.showLess : localization.showMore}
+            </button>
           )}
         </>
       ) : (
