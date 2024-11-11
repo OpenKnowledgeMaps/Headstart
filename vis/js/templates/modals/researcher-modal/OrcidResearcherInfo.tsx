@@ -94,31 +94,7 @@ const Section = ({ title, items, formatItem, showMore, handleShowMore }) => {
 const TextSection = ({ title, content }) => {
   const localization = useLocalizationContext();
   const containerRef = useRef(null);
-  const [displayText, setDisplayText] = useState(content);
   const [showFullText, setShowFullText] = useState(false);
-
-  useEffect(() => {
-    if (showFullText) {
-      // Show full content when expanded
-      setDisplayText(content);
-    } else if (containerRef.current) {
-      // Truncate content when not expanded
-      const containerWidth = containerRef.current.offsetWidth;
-      let truncatedText = content;
-
-      containerRef.current.innerText = truncatedText; // Set to full text to measure width
-
-      // Gradually truncate text until it fits within the container width
-      while (containerRef.current.scrollWidth > containerWidth && truncatedText.length > 0) {
-        truncatedText = truncatedText.slice(0, -1);
-        containerRef.current.innerText = `${truncatedText}...`;
-      }
-
-      // Set the truncated version with ellipsis
-      setDisplayText(`${truncatedText}...`);
-    }
-  }, [content, showFullText]);
-
   // Toggle between full text and truncated text
   const handleToggleShowMore = () => setShowFullText((prev) => !prev);
 
@@ -133,7 +109,7 @@ const TextSection = ({ title, content }) => {
           textOverflow: showFullText ? "clip" : "ellipsis",
         }}
       >
-        {displayText || localization.noDataAvailable}
+        {content || localization.noDataAvailable}
       </div>
       <button className="underlined_button" onClick={handleToggleShowMore}>
         <i className={`fas fa-${showFullText ? "chevron-up" : "chevron-down"}`} style={{ paddingRight: "3px" }}></i>
