@@ -1,5 +1,5 @@
 // @ts-nocheck
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Modal } from "react-bootstrap";
 import { connect } from "react-redux";
 import { useLocalizationContext } from "../../../components/LocalizationProvider";
@@ -90,33 +90,56 @@ const Section = ({ title, items, formatItem, showMore, handleShowMore }) => {
   );
 };
 
-const TextSection = ({ title, content, showMore, handleShowMore }) => {
+
+const TextSection = ({ title, content }) => {
   const localization = useLocalizationContext();
+  const containerRef = useRef(null);
+  const [displayText, setDisplayText] = useState(content);
+  const [isTruncated, setIsTruncated] = useState(false);
+  const [showFullText, setShowFullText] = useState(false);
 
-  const MAX_LENGTH = 100;
+  useEffect(() => {
+    const truncateText = () => {
+      if (containerRef.current && !showFullText) {
+        const containerWidth = containerRef.current.offsetWidth;
+        let text = content;
+        let truncatedText = text;
 
-  const isLongContent = content && content.length > MAX_LENGTH;
+        containerRef.current.innerText = truncatedText; // Temporarily set to full text to measure
 
-  const displayContent = showMore || !isLongContent ? content : `${content.slice(0, MAX_LENGTH)}...`;
+        // Gradually truncate text until it fits within the container width
+        while (containerRef.current.scrollWidth > containerWidth && truncatedText.length > 0) {
+          truncatedText = truncatedText.slice(0, -1);
+          containerRef.current.innerText = `${truncatedText}...`;
+        }
+
+        // Set truncated text and flag
+        setDisplayText(`${truncatedText}...`);
+        setIsTruncated(truncatedText.length < content.length);
+      } else {
+        setDisplayText(content); // Show full content if toggled or initially fits
+      }
+    };
+
+    truncateText();
+    window.addEventListener("resize", truncateText); // Recalculate on resize
+    return () => window.removeEventListener("resize", truncateText);
+  }, [content, showFullText]);
+
+  // Toggle show more / show less
+  const handleToggleShowMore = () => setShowFullText((prev) => !prev);
 
   return (
     <div>
       <h3>{title}</h3>
-      {content ? (
-        <>
-          <p>{displayContent}</p>
-          {isLongContent && (
-            <button className="underlined_button" onClick={handleShowMore}>
-              <i
-                className={`fas fa-${showMore ? "chevron-up" : "chevron-down"}`}
-                style={{ paddingRight: "3px" }}
-              ></i>
-              {showMore ? localization.showLess : localization.showMore}
-            </button>
-          )}
-        </>
-      ) : (
-        <p>{localization.noDataAvailable}</p>
+      <div ref={containerRef} style={{ whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
+        {displayText || localization.noDataAvailable}
+      </div>
+      {isTruncated && (
+        <button className="underlined_button" onClick={handleToggleShowMore}>
+          <i className={`fas fa-${showFullText ? "chevron-up" : "chevron-down"}`} style={{ paddingRight: "3px" }}></i>
+          {showFullText ? localization.showLess : localization.showMore}
+        </button>
       )}
     </div>
   );
