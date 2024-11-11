@@ -95,52 +95,50 @@ const TextSection = ({ title, content }) => {
   const localization = useLocalizationContext();
   const containerRef = useRef(null);
   const [displayText, setDisplayText] = useState(content);
-  const [isTruncated, setIsTruncated] = useState(false);
   const [showFullText, setShowFullText] = useState(false);
 
   useEffect(() => {
-    const truncateText = () => {
-      if (containerRef.current && !showFullText) {
-        const containerWidth = containerRef.current.offsetWidth;
-        let text = content;
-        let truncatedText = text;
+    if (showFullText) {
+      // Show full content when expanded
+      setDisplayText(content);
+    } else if (containerRef.current) {
+      // Truncate content when not expanded
+      const containerWidth = containerRef.current.offsetWidth;
+      let truncatedText = content;
 
-        containerRef.current.innerText = truncatedText; // Temporarily set to full text to measure
+      containerRef.current.innerText = truncatedText; // Set to full text to measure width
 
-        // Gradually truncate text until it fits within the container width
-        while (containerRef.current.scrollWidth > containerWidth && truncatedText.length > 0) {
-          truncatedText = truncatedText.slice(0, -1);
-          containerRef.current.innerText = `${truncatedText}...`;
-        }
-
-        // Set truncated text and flag
-        setDisplayText(`${truncatedText}...`);
-        setIsTruncated(truncatedText.length < content.length);
-      } else {
-        setDisplayText(content); // Show full content if toggled or initially fits
+      // Gradually truncate text until it fits within the container width
+      while (containerRef.current.scrollWidth > containerWidth && truncatedText.length > 0) {
+        truncatedText = truncatedText.slice(0, -1);
+        containerRef.current.innerText = `${truncatedText}...`;
       }
-    };
 
-    truncateText();
-    window.addEventListener("resize", truncateText); // Recalculate on resize
-    return () => window.removeEventListener("resize", truncateText);
+      // Set the truncated version with ellipsis
+      setDisplayText(`${truncatedText}...`);
+    }
   }, [content, showFullText]);
 
-  // Toggle show more / show less
+  // Toggle between full text and truncated text
   const handleToggleShowMore = () => setShowFullText((prev) => !prev);
 
   return (
     <div>
       <h3>{title}</h3>
-      <div ref={containerRef} style={{ whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
+      <div
+        ref={containerRef}
+        style={{
+          whiteSpace: showFullText ? "normal" : "nowrap",
+          overflow: showFullText ? "visible" : "hidden",
+          textOverflow: showFullText ? "clip" : "ellipsis",
+        }}
+      >
         {displayText || localization.noDataAvailable}
       </div>
-      {isTruncated && (
-        <button className="underlined_button" onClick={handleToggleShowMore}>
-          <i className={`fas fa-${showFullText ? "chevron-up" : "chevron-down"}`} style={{ paddingRight: "3px" }}></i>
-          {showFullText ? localization.showLess : localization.showMore}
-        </button>
-      )}
+      <button className="underlined_button" onClick={handleToggleShowMore}>
+        <i className={`fas fa-${showFullText ? "chevron-up" : "chevron-down"}`} style={{ paddingRight: "3px" }}></i>
+        {showFullText ? localization.showLess : localization.showMore}
+      </button>
     </div>
   );
 };
