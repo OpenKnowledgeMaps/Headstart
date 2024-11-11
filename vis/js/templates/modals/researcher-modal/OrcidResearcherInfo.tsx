@@ -90,6 +90,42 @@ const Section = ({ title, items, formatItem, showMore, handleShowMore }) => {
   );
 };
 
+const TextSection = ({ title, content, showMore, handleShowMore }) => {
+  const localization = useLocalizationContext();
+
+  return (
+    <div>
+      <h3>{title}</h3>
+      {content ? (
+        <>
+          {content}
+          {true && (
+            <>
+              {/* {showMore && items.slice(1).map(formatItem)} */}
+              <button className="underlined_button" onClick={handleShowMore}>
+                <i className={`fas fa-${showMore ? "chevron-up" : "chevron-down"}`} style={{
+                  paddingRight: "3px"
+                }}></i>
+                {showMore ? "Show Less" : "Show More"}
+              </button>
+            </>
+          )}
+        </>
+      ) : (
+        <p>{localization.noDataAvailable}</p>
+      )}
+    </div>
+  );
+};
+
+const formatBiography = (biography) => {
+  return (
+    <p key={biography}>
+      {biography}
+    </p>
+  );
+};
+
 const formatEmployment = (employment) => {
   const endDate = employment.end_date ? employment.end_date : "present";
   return (
@@ -142,6 +178,7 @@ const formatLink = (link) => (
 
 const ResearcherInfo = ({ params }) => {
   const [showMore, setShowMore] = useState({
+    biography: false,
     employments: false,
     educations: false,
     funds: false,
@@ -159,8 +196,21 @@ const ResearcherInfo = ({ params }) => {
         <Modal.Title id="info-title">Researcher details</Modal.Title>
       </Modal.Header>
       <Modal.Body id="info-body">
+        <TextSection
+          title="BIOGRAPHY"
+          content={params.biography}
+          showMore={showMore.biography}
+          handleShowMore={() => handleShowMore("biography")}
+        />
         <Section
           title="EMPLOYMENT"
+          items={params.employments}
+          formatItem={formatEmployment}
+          showMore={showMore.employments}
+          handleShowMore={() => handleShowMore("employments")}
+        />
+        <Section
+          title="PROFESSIONAL ACTIVITIES"
           items={params.employments}
           formatItem={formatEmployment}
           showMore={showMore.employments}
@@ -207,6 +257,7 @@ const mapStateToProps = (state) => {
       educations: state.author.educations,
       employments: state.author.employments,
       memberships: state.author.memberships,
+      biography: state.author.biography,
       distinctions: state.author.distinctions,
     },
   };
