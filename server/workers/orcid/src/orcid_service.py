@@ -106,7 +106,7 @@ class OrcidService:
         }
         
         self.redis_store.rpush("metrics", json.dumps(task_data))
-        result = get_key(self.redis_store, request_id, 300)
+        result = get_key(self.redis_store, request_id, 600)
         
         metadata = pd.DataFrame(result["input_data"])
         
@@ -180,7 +180,7 @@ class OrcidService:
             }
             
             self.redis_store.rpush("base", json.dumps(task_data))
-            result = get_key(self.redis_store, request_id, 300)
+            result = get_key(self.redis_store, request_id, 600)
             
             end_time = time.time()
             duration = end_time - start_time
