@@ -92,6 +92,15 @@ class PeerReview:
     organization_address: Optional[str] = None
     # organization_address
 
+@dataclass
+class ProfessionalActivity:
+    id: str
+    role: str
+    department: str
+    start_date: Optional[str] = None
+    end_date: Optional[str] = None
+    organization: Optional[str] = None
+    organization_address: Optional[str] = None
 
 @dataclass
 class AuthorInfo:
@@ -115,12 +124,17 @@ class AuthorInfo:
     h_index: Optional[int] = None
     normalized_h_index: Optional[int] = None
     employment: Optional[Employment] = None
+    total_supervised_phd_students: Optional[int] = None
+    total_supervised_master_students: Optional[int] = None
+    total_supervised_bachelor_students: Optional[int] = None
     employments: List[Employment] = field(default_factory=list)
     funds: List[Funding] = field(default_factory=list)
     educations: List[Education] = field(default_factory=list)
     memberships: List[Membership] = field(default_factory=list)
     peer_reviews: List[PeerReview] = field(default_factory=list)
     distinctions: List[Distinction] = field(default_factory=list)
+    services: List[ProfessionalActivity] = field(default_factory=list)
+    
 
 @dataclass
 class Work:

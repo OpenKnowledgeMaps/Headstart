@@ -16,12 +16,15 @@ from model import (
     Membership,
     PeerReview,
     Distinction,
-    Amount
+    Amount,
+    ProfessionalActivity
 )
+import re
 from typing import Optional, Any
 import calendar
 import hashlib
 import time
+from itertools import chain
 
 
 def unique_id():
@@ -86,7 +89,114 @@ class AuthorInfoRepository:
         if distinctions:
             author_info.distinctions = self.extract_distinctions(distinctions)
 
+        activities = self.orcid.activities()
+        if activities:
+            author_info.services = self.extract_professional_activities_services(activities)
+
+            # Calculate the total supervised students by degree level
+            author_info.total_supervised_phd_students = self.count_supervised_students(
+                author_info.services, degree="PhD"
+            )
+            author_info.total_supervised_master_students = self.count_supervised_students(
+                author_info.services, degree="Master"
+            )
+            author_info.total_supervised_bachelor_students = self.count_supervised_students(
+                author_info.services, degree="Bachelor"
+            )
+
+            # Metrics visibility settings (default hidden)
+            # author_info.metrics_visibility = {
+            #     "teaching": False,
+            #     "mentorship": False
+            # }
+
+        self.logger.debug(f"author_info.services: {author_info.services}")
+
         return author_info
+    
+    def count_supervised_students(self, services: List[ProfessionalActivity], degree: str) -> int:
+        """Counts supervised students for a specific degree based on keywords in the role,
+        handling variations in degree formatting and extracting the exact number of students."""
+        
+        # Define degree variations
+        degree_variants = {
+            "PhD": ["phd", "ph.d.", "p.h.d.", "ph.d", "p.h.d"],
+            "Master": ["master", "msc", "m.sc.", "m.a.", "ma"],
+            "Bachelor": ["bachelor", "bsc", "b.sc.", "ba", "bs", "b.a."]
+        }
+        
+        # Normalize the degree input to a known variant
+        degree_keywords = degree_variants.get(degree, [degree.lower()])
+
+        count = 0
+        for service in services:
+            role = service.role.lower()
+            
+            # Check for any variant of the degree within the role
+            for keyword in degree_keywords:
+                # Look for supervision/co-supervision followed by the degree keyword and "Number of students"
+                degree_pattern = re.compile(
+                    rf"(supervision|co-supervision|teaching):\s*{keyword}.*?number of students:\s*(\d+)",
+                    re.IGNORECASE
+                )
+                match = degree_pattern.search(role)
+                
+                if match:
+                    student_count = int(match.group(2))
+                    count += student_count
+                    break  # Stop if we find a matching degree variant
+
+        return count
+    
+    def extract_professional_activities_services(self, activities: List[Dict[str, Dict[str, str]]]) -> List[ProfessionalActivity]:
+        groups = get_nested_value(activities, ['services', 'affiliation-group'], [])
+        summaries = list(chain.from_iterable(get_nested_value(group, ["summaries"], []) for group in groups))
+
+        self.logger.debug(f'SUMMARIES FROM PROFESSIONAL ACTIVITIES {summaries}')
+        
+        professional_activities = []
+
+        def format_address(address: Dict[str, str]) -> str:
+            """Formats the address as 'City, Region, Country'."""
+            if not address:
+                return ""
+            return f"{address.get('city', '')}, {address.get('region', '')}, {address.get('country', '')}".strip(", ")
+
+        
+        for activity in summaries:
+            role = get_nested_value(activity, ['service-summary', 'role-title'], '')
+            department = get_nested_value(activity, ['service-summary', 'department-name'], '')
+            start_date = get_nested_value(activity, ['service-summary', 'start-date', 'year', 'value'], '')
+            end_date = get_nested_value(activity, ['service-summary', 'end-date', 'year', 'value'], '')
+            organization = get_nested_value(activity, ['service-summary', 'organization', 'name'], '')
+            
+            # Get the organization address and format it
+            organization_address_data = get_nested_value(activity, ['service-summary', 'organization', 'address'], {})
+            organization_address = format_address(organization_address_data) # type: ignore
+            
+            professional_activity = ProfessionalActivity(
+                id=unique_id(),
+                role=role, # type: ignore
+                department=department, # type: ignore
+                start_date=start_date, # type: ignore
+                end_date=end_date, # type: ignore
+                organization=organization, # type: ignore
+                organization_address=organization_address,
+            )
+            
+            professional_activities.append(professional_activity)
+
+        professional_activities = sorted(
+            professional_activities,
+            key=lambda activity: (
+                self.parse_date_or_min(activity.end_date)
+                if activity.end_date
+                else (datetime.max if activity.start_date else datetime.min),
+            ),
+            reverse=True
+        )
+        
+        return professional_activities
     
     def extract_researcher_urls(self, researcher_urls: Dict[str, Dict[str, str]]) -> List[ResearcherUrl]:
         return [

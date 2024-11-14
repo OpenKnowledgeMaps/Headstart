@@ -7,7 +7,7 @@ import { capitalize } from "../../../utils/string";
 
 const FundingSection = ({ funds, showMore, handleShowMore }) => {
   const localization = useLocalizationContext();
-  
+
   const formatFunding = (fund) => {
     const endDate = fund.end_date ? fund.end_date : "present";
 
@@ -62,12 +62,20 @@ const FundingSection = ({ funds, showMore, handleShowMore }) => {
   );
 };
 
-const Section = ({ title, items, formatItem, showMore, handleShowMore }) => {
+const Section = ({ title, subtitle, items, formatItem, showMore, handleShowMore }) => {
   const localization = useLocalizationContext();
+
+  const itemsLength = items?.length ? `(${items?.length})` : ""
 
   return (
     <div>
-      <h3>{title} {items?.length ? `(${items.length})` : ""}</h3>
+      <h3>{title} {!subtitle && itemsLength ? itemsLength : ""}</h3>
+      {subtitle ? <h4 style={{
+        fontWeight: '700',
+        marginTop: '0',
+        fontSize: '14px',
+        textTransform: 'none',
+      }}>{subtitle} {itemsLength ? itemsLength : ""}</h4> : null}
       {items?.length ? (
         <>
           {formatItem(items[0])}
@@ -101,7 +109,7 @@ const TextSection = ({ title, content }) => {
   return (
     <div>
       <h3>{title}</h3>
-      <div
+      <p
         ref={containerRef}
         style={{
           whiteSpace: showFullText ? "normal" : "nowrap",
@@ -110,7 +118,7 @@ const TextSection = ({ title, content }) => {
         }}
       >
         {content || localization.noDataAvailable}
-      </div>
+      </p>
       <button className="underlined_button" onClick={handleToggleShowMore}>
         <i className={`fas fa-${showFullText ? "chevron-up" : "chevron-down"}`} style={{ paddingRight: "3px" }}></i>
         {showFullText ? localization.showLess : localization.showMore}
@@ -136,6 +144,20 @@ const formatEmployment = (employment) => {
         employment.role,
         employment.organization,
         employment.organization_address
+      ].filter(Boolean).join(" / ")}
+    </p>
+  );
+};
+
+const formatService = (service) => {
+  const endDate = service.end_date ? service.end_date : "present";
+  return (
+    <p key={service.id}>
+      {[
+        `${service.start_date} - ${endDate}`,
+        service.role,
+        service.organization,
+        service.organization_address
       ].filter(Boolean).join(" / ")}
     </p>
   );
@@ -185,6 +207,7 @@ const ResearcherInfo = ({ params }) => {
     funds: false,
     distinctions: false,
     links: false,
+    services: false,
   });
 
   const handleShowMore = (section) => {
@@ -210,12 +233,14 @@ const ResearcherInfo = ({ params }) => {
           showMore={showMore.employments}
           handleShowMore={() => handleShowMore("employments")}
         />
+        {/* sorting ? */}
         <Section
           title="PROFESSIONAL ACTIVITIES"
-          items={params.employments}
-          formatItem={formatEmployment}
-          showMore={showMore.employments}
-          handleShowMore={() => handleShowMore("employments")}
+          subtitle="Services"
+          items={params.services}
+          formatItem={formatService}
+          showMore={showMore.services}
+          handleShowMore={() => handleShowMore("services")}
         />
         <Section
           title="EDUCATION & QUALIFICATIONS"
@@ -260,6 +285,7 @@ const mapStateToProps = (state) => {
       memberships: state.author.memberships,
       biography: state.author.biography,
       distinctions: state.author.distinctions,
+      services: state.author.services,
     },
   };
 };

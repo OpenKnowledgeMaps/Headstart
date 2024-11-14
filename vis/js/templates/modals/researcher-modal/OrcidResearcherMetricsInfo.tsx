@@ -5,6 +5,15 @@ import { Modal } from "react-bootstrap";
 import { connect } from "react-redux";
 import { useLocalizationContext } from "../../../components/LocalizationProvider";
 
+const NotesOnMetrics = () => {
+  return (
+    <p>
+      <b>Notes on metrics</b>
+      Lorem ipsum dolor sit, amet consectetur adipisicing elit. Neque dolorum laudantium cupiditate ratione dignissimos rem
+    </p>
+  )
+}
+
 const ResearcherMetricsInfo = ({
   params
 }) => {
@@ -17,7 +26,7 @@ const ResearcherMetricsInfo = ({
         <Modal.Title id="info-title">Metrics</Modal.Title>
       </Modal.Header>
       <Modal.Body id="info-body">
-        <h3>METRICS</h3>
+        <h3>TRADITIONAL METRICS</h3>
         <p>
           Normalised h-index: <span>
             {params.normalized_h_index ? params.normalized_h_index?.toFixed(1) : localization.notAvailable}
@@ -36,6 +45,8 @@ const ResearcherMetricsInfo = ({
         <p>
           Number of total citations: <span>{params.total_citations ? params.total_citations : localization.notAvailable}</span>
         </p>
+        <NotesOnMetrics />
+
         <h3>ALTMETRICS</h3>
         <p>
           Number of total unique social media mentions:{" "}
@@ -45,11 +56,28 @@ const ResearcherMetricsInfo = ({
           Number of total news encyclopaedia, patent and policy references:{" "}
           <span>{params.total_neppr ? params.total_neppr : localization.notAvailable}</span>
         </p>
-        <h3>NOTES ON METRICS</h3>
-        <p>
-          Lorem ipsum dolor sit, amet consectetur adipisicing elit. Neque dolorum laudantium cupiditate ratione dignissimos rem nesciunt numquam cumque aliquid quis, incidunt impedit dolore amet nemo odio dolores atque. Deserunt fugit quibusdam nemo mollitia nobis id quos deleniti eaque velit dignissimos!
-        </p>
-        <p>
+        <NotesOnMetrics />
+
+{/* TODO: remove it params.enable_teaching_mentorship */}
+        {true ? (
+          <>
+            <h3>TEACHING & MENTORSHIP</h3>
+            <p>
+              Number of total supervised PHD students:{" "}
+              <span>{params.total_supervised_phd_students ? params.total_supervised_phd_students : localization.notAvailable}</span>
+            </p>
+            <p>
+              Number of total supervised master students:{" "}
+              <span>{params.total_supervised_master_students ? params.total_supervised_master_students : localization.notAvailable}</span>
+            </p>
+            <p>
+              Number of total supervised bachelor students:{" "}
+              <span>{params.total_supervised_bachelor_students ? params.total_supervised_bachelor_students : localization.notAvailable}</span>
+            </p>
+            <NotesOnMetrics />
+          </>
+        ) : null}
+        {/* <p>
           {params.external_identifiers.map((external_id) => (
             <p key={external_id["value"]}>
               <a className="underline" href={external_id["url"]} target="_blank" rel="noopener noreferrer">
@@ -57,7 +85,7 @@ const ResearcherMetricsInfo = ({
               </a>
             </p>
           ))}
-        </p>
+        </p> */}
       </Modal.Body>
     </>
     // html template ends here
@@ -76,6 +104,10 @@ const mapStateToProps = (state) => {
       h_index: state.author.h_index,
       academic_age: state.author.academic_age,
       normalized_h_index: state.author.normalized_h_index,
+      total_supervised_bachelor_students: state.author.total_supervised_bachelor_students,
+      total_supervised_master_students: state.author.total_supervised_master_students,
+      total_supervised_phd_students: state.author.total_supervised_phd_students,
+      enable_teaching_mentorship: state.author.enable_teaching_mentorship,
     },
   };
 };
