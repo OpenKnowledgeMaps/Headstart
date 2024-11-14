@@ -136,14 +136,16 @@ class AuthorInfoRepository:
             for keyword in degree_keywords:
                 # Look for supervision/co-supervision followed by the degree keyword and "Number of students"
                 degree_pattern = re.compile(
-                    rf"(supervision|co-supervision|teaching):\s*{keyword}.*?number of students:\s*(\d+)",
+                    rf"(supervision|co-supervision|cosupervision):\s*{keyword}",
+                    # rf"(supervision|co-supervision|teaching):\s*{keyword}.*?number of students:\s*(\d+)",
                     re.IGNORECASE
                 )
                 match = degree_pattern.search(role)
                 
                 if match:
-                    student_count = int(match.group(2))
-                    count += student_count
+                    # student_count = int(match.group(2))
+                    # count += student_count
+                    count += 1
                     break  # Stop if we find a matching degree variant
 
         return count

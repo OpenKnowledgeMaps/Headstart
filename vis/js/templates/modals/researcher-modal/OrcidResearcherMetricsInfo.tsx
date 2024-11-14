@@ -8,7 +8,7 @@ import { useLocalizationContext } from "../../../components/LocalizationProvider
 const NotesOnMetrics = () => {
   return (
     <p>
-      <b>Notes on metrics</b>
+      <b>Notes on metrics:</b>{" "}
       Lorem ipsum dolor sit, amet consectetur adipisicing elit. Neque dolorum laudantium cupiditate ratione dignissimos rem
     </p>
   )
