@@ -60,8 +60,7 @@ const ResearcherMetricsInfo = ({
         </p>
         <NotesOnMetrics />
 
-{/* TODO: remove it params.enable_teaching_mentorship */}
-        {true ? (
+        {params.enable_teaching_mentorship ? (
           <>
             <h3>TEACHING & MENTORSHIP</h3>
             <p>
@@ -79,15 +78,6 @@ const ResearcherMetricsInfo = ({
             <NotesOnMetrics />
           </>
         ) : null}
-        {/* <p>
-          {params.external_identifiers.map((external_id) => (
-            <p key={external_id["value"]}>
-              <a className="underline" href={external_id["url"]} target="_blank" rel="noopener noreferrer">
-                {external_id["type"]}: {external_id["value"]}
-              </a>
-            </p>
-          ))}
-        </p> */}
       </Modal.Body>
     </>
     // html template ends here
