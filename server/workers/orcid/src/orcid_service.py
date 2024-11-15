@@ -105,7 +105,8 @@ class OrcidService:
             "metadata": metadata.to_json(orient="records"),
         }
         self.redis_store.rpush("metrics", json.dumps(task_data))
-        result = get_key(self.redis_store, request_id, 300)
+        result = get_key(self.redis_store, request_id, 600)
+        
         metadata = pd.DataFrame(result["input_data"])
         
         for c in [
@@ -121,7 +122,7 @@ class OrcidService:
 
         return metadata
     
-    def log_datafram(self, df: pd.DataFrame, params: Dict[str, str], name: str, ):
+    def log_dataframe(self, df: pd.DataFrame, params: Dict[str, str], name: str, ):
         orcid = params.get('orcid')
         
         columns_to_print = ['id', 'title', 'doi', 'paper_abstract', 'link', 'subject', 'subject_orig', 'oa_state']
@@ -178,7 +179,7 @@ class OrcidService:
             }
             
             self.redis_store.rpush("base", json.dumps(task_data))
-            result = get_key(self.redis_store, request_id, 300)
+            result = get_key(self.redis_store, request_id, 600)
             
             end_time = time.time()
             duration = end_time - start_time
@@ -223,7 +224,7 @@ class OrcidService:
         self.logger.debug('metadata reindexed')
         
         # TEMPORAL
-        self.log_datafram(metadata, params, '_original')
+        #self.log_dataframe(metadata, params, '_original')
         # TEMPORAL
 
         raw_dois = metadata["doi"].tolist()
@@ -241,7 +242,7 @@ class OrcidService:
         base_metadata = base_metadata.drop_duplicates(subset='doi', keep='first')
 
         # TEMPORAL
-        # self.log_datafram(base_metadata, params, '_base')
+        # self.log_dataframe(base_metadata, params, '_base')
         # TEMPORAL
 
         # Select and rename relevant fields from base_metadata, including subject_orig
@@ -250,7 +251,8 @@ class OrcidService:
             'subject': 'subject_base', 
             'subject_orig': 'subject_orig_base',  # Include subject_orig
             'paper_abstract': 'paper_abstract_base', 
-            'link': 'link_base'
+            'link': 'link_base',
+            'relation': 'relation_base'
         }
 
         # Rename base metadata columns to avoid conflicts with original metadata
@@ -284,6 +286,9 @@ class OrcidService:
         enriched_metadata['subject'] = enriched_metadata.apply(
             lambda row: custom_merge(row['subject'], row['subject_base']), axis=1
         )
+        enriched_metadata['relation'] = enriched_metadata.apply(
+            lambda row: custom_merge(row['relation'], row['relation_base']), axis=1
+        )
 
         self.logger.debug('assigned some fields')
 
@@ -291,16 +296,16 @@ class OrcidService:
         link_oa_state_values = enriched_metadata.apply(custom_merge_link_oa_state, axis=1)
         enriched_metadata['link'], enriched_metadata['oa_state'] = zip(*link_oa_state_values)
 
-        enriched_metadata.drop(columns=['paper_abstract_base', 'subject_orig_base', 'subject_base', 'oa_state_base', 'link_base'], inplace=True)
+        enriched_metadata.drop(columns=['paper_abstract_base', 'subject_orig_base', 'subject_base', 'oa_state_base', 'link_base', 'relation_base'], inplace=True)
         
         # TEMPORAL
-        # self.log_datafram(enriched_metadata, params, '_enriched')
+        #self.log_dataframe(enriched_metadata, params, '_enriched')
         # TEMPORAL
 
         self.logger.debug(f"Enriched metadata using base for ORCID {params.get('orcid')}: {enriched_metadata[['id', 'link', 'oa_state']].head()}")
 
         # temporal solution, for some reason if we have some undefined data, dataprocessing is failing
-        enriched_metadata = enriched_metadata.reindex(columns=list(set(original_columns + ['oa_state', 'subject', 'subject_orig', 'paper_abstract', 'link'])))
+        enriched_metadata = enriched_metadata.reindex(columns=list(set(original_columns + ['oa_state', 'subject', 'subject_orig', 'paper_abstract', 'link', 'relation'])))
         
         return enriched_metadata
 
@@ -416,7 +421,7 @@ class OrcidService:
 
     def _format_response(self, data: pd.DataFrame, author_info: AuthorInfo, params: Dict[str, str]) -> SuccessResult:
         self.logger.debug(f"Formatting response for ORCID {params.get('orcid')}")
-        desired_columns = ["title", "paper_abstract", "subtitle", "published_in", "authors"]
+        desired_columns = ["title", "paper_abstract", "subtitle", "published_in", "authors", "subject_orig"]
 
         # Filter the columns to only those that exist in the DataFrame
         existing_columns = [col for col in desired_columns if col in data.columns]

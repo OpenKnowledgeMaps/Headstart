@@ -18,7 +18,7 @@ search_param_schema = SearchParamSchema()
 
 # Constants
 DEFAULT_LIMIT = 200
-REDIS_TIMEOUT = 300
+REDIS_TIMEOUT = 600
 DEFAULT_ACADEMIC_AGE_OFFSET = 0
 
 # Model definition
