@@ -9,8 +9,15 @@ const FundingSection = ({ funds, showMore, handleShowMore }) => {
   const localization = useLocalizationContext();
 
   const formatFunding = (fund) => {
+    const startDate = fund.start_date;
     const endDate = fund.end_date ? fund.end_date : "present";
-
+    const dateRange =
+      startDate && startDate === endDate
+        ? endDate
+        : startDate
+        ? `${startDate} - ${endDate}`
+        : endDate;
+  
     return (
       <p key={fund.id}>
         <div>
@@ -25,7 +32,7 @@ const FundingSection = ({ funds, showMore, handleShowMore }) => {
         </div>
         <div>
           {[
-            fund.start_date ? `${fund.start_date} - ${endDate}` : null,
+            dateRange,
             fund.type ? capitalize(fund.type) : null,
             fund.organization && `Funder: ${fund.organization}`,
             fund.amount?.value && fund.amount?.currency && `Amount: ${fund.amount.value} ${fund.amount.currency}`
@@ -136,11 +143,19 @@ const formatBiography = (biography) => {
 };
 
 const formatEmployment = (employment) => {
+  const startDate = employment.start_date;
   const endDate = employment.end_date ? employment.end_date : "present";
+  const dateRange =
+    startDate && startDate === endDate
+      ? endDate
+      : startDate
+      ? `${startDate} - ${endDate}`
+      : endDate;
+
   return (
     <p key={employment.id}>
       {[
-        `${employment.start_date} - ${endDate}`,
+        dateRange,
         employment.role,
         employment.organization,
         employment.organization_address
@@ -150,11 +165,19 @@ const formatEmployment = (employment) => {
 };
 
 const formatService = (service) => {
+  const startDate = service.start_date;
   const endDate = service.end_date ? service.end_date : "present";
+  const dateRange =
+    startDate && startDate === endDate
+      ? endDate
+      : startDate
+      ? `${startDate} - ${endDate}`
+      : endDate;
+
   return (
     <p key={service.id}>
       {[
-        `${service.start_date} - ${endDate}`,
+        dateRange,
         service.role,
         service.organization,
         service.organization_address
@@ -164,11 +187,19 @@ const formatService = (service) => {
 };
 
 const formatEducation = (education) => {
+  const startDate = education.start_date;
   const endDate = education.end_date ? education.end_date : "present";
+  const dateRange =
+    startDate && startDate === endDate
+      ? endDate
+      : startDate
+      ? `${startDate} - ${endDate}`
+      : endDate;
+
   return (
     <p key={education.id}>
       {[
-        `${education.start_date} - ${endDate}`,
+        dateRange,
         education.role,
         education.organization,
         education.organization_address
@@ -178,12 +209,19 @@ const formatEducation = (education) => {
 };
 
 const formatDistinction = (distinction) => {
-  const end_date = distinction.end_date;
+  const startDate = distinction.start_date;
+  const endDate = distinction.end_date;
+  const dateRange =
+    startDate && startDate === endDate
+      ? endDate
+      : startDate
+      ? `${startDate} ${endDate ? `- ${endDate}` : ""}`
+      : endDate;
 
   return (
     <p key={distinction.id}>
       {[
-        `${distinction.start_date} ${end_date ? `- ${end_date}` : ""}`,
+        dateRange,
         distinction.role
       ].filter(Boolean).join(" / ")}
     </p>

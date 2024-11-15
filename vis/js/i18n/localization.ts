@@ -44,7 +44,7 @@ export interface Localization {
   default_authors: string;
   default_published_in: string;
 
-  default_readers: number;
+  // default_readers: number;
   default_url: string;
   default_x: number;
   default_y: number;
@@ -183,7 +183,7 @@ export const localization: {
     default_authors: "No authors available",
     default_published_in: "",
     // ? consider to remove it from here?
-    default_readers: 0,
+    // default_readers: 0,
     default_url: "",
     default_x: 1,
     default_y: 1,
@@ -272,7 +272,7 @@ export const localization: {
     default_abstract: "Kein Abstract vorhanden",
     default_paper_title: "Kein Titel",
     default_published_in: "",
-    default_readers: 0,
+    // default_readers: 0,
     default_url: "",
     default_x: 1,
     default_y: 1,
