@@ -368,7 +368,10 @@ class OrcidService:
                 return None
 
         # Apply the function to extract the year
-        metadata["publication_year"] = metadata["year"].apply(extract_year)
+        if "year" in metadata.columns:
+            metadata["publication_year"] = metadata["year"].apply(extract_year)
+        else:
+            metadata["publication_year"] = None  # Or assign a default value
 
         academic_age = author_info.academic_age
         if (academic_age is not None):
