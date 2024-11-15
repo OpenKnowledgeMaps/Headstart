@@ -12,7 +12,7 @@ $dirty_query = trim(library\CommUtils::getParameter($_POST, "orcid"));
 $precomputed_id = $_POST["unique_id"] ?? null;
 
 $params_array = array("orcid", "today");
-$optional_get_params = array("limit", "academic_age_offset");
+$optional_get_params = array("limit", "academic_age_offset", "enable_h_index");
 
 function filterEmptyString($value)
 {

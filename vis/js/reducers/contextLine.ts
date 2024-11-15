@@ -20,6 +20,7 @@ const contextLine = (state = {}, action: any) => {
         isResearcherDetailsEnabled: action.configObject.isResearcherDetailsEnabled,
         isResearcherMetricsEnabled: action.configObject.isResearcherMetricsEnabled,
         showLanguage: action.configObject.showLanguage,
+        show_h_index: context?.params?.enable_h_index === 'true',
         show: !!config.show_context && !!context.params,
         articlesCount: papers.length,
         modifier: getModifier(config, context, papers.length),

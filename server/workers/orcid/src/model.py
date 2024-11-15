@@ -1,7 +1,19 @@
 
 from dataclasses import dataclass, field
-from typing import TypedDict, List, Optional
+from typing import Any, TypedDict, List, Optional
 
+class SuccessResult(TypedDict):
+    status: str
+    data: Any
+
+class ErrorResult(TypedDict):
+    status: str
+    reason: List[str]
+
+@dataclass
+class Params(TypedDict):
+    orcid: str
+    limit: str
 
 @dataclass
 class Website(TypedDict):
@@ -122,7 +134,7 @@ class AuthorInfo:
     total_unique_social_media_mentions: Optional[int] = None
     total_neppr: Optional[int] = None
     h_index: Optional[int] = None
-    normalized_h_index: Optional[int] = None
+    normalized_h_index: Optional[float] = None
     employment: Optional[Employment] = None
     total_supervised_phd_students: Optional[int] = None
     total_supervised_master_students: Optional[int] = None

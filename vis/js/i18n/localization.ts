@@ -269,7 +269,7 @@ export const localization: {
     default_author: "",
     default_id: "defaultid",
     default_hash: "hashHash",
-    default_abstract: "",
+    default_abstract: "Kein Abstract vorhanden",
     default_paper_title: "Kein Titel",
     default_published_in: "",
     default_readers: 0,

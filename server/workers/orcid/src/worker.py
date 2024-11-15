@@ -50,12 +50,15 @@ class OrcidWorker:
 
     def handle_search(self, request_id: str, params: Dict[str, str]) -> None:
         try:
+            self.logger.debug(f"Handle search with request_id: {request_id} and params {params}")
+
             res = self.data_retriever.execute_search(params)
-            res["id"] = request_id
 
             if res.get("status") == "error" or params.get("raw") is True:
                 self.redis_store.set(request_id + "_output", json.dumps(res))
             else:
+                res = res.get('data') 
+                res["id"] = request_id # type: ignore
                 self.redis_store.rpush("input_data", json.dumps(res).encode("utf8"))
                 queue_length = self.redis_store.llen("input_data")
                 self.logger.debug(f"Queue length: input_data {queue_length} {request_id}")

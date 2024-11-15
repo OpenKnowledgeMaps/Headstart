@@ -53,7 +53,10 @@ class PaperSanitizer {
    * @returns sanitized papers array
    */
   sanitizeProps(papers, scheme) {
-    const loc = this.config.localization[this.config.language];
+    const loc = {
+      ...this.config.localization[this.config.language === 'ger_linkedcat' ? 'ger' : 'eng'],
+      ...this.config.localization[this.config.language]
+    };
 
     const wrongTypes = new Set();
     const wrongData = new Set();
