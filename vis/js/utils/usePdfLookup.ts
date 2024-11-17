@@ -36,7 +36,7 @@ const usePdfLookup = (paper: Paper, serverUrl: string, service: string) => {
       const articleUrl = encodeURIComponent(paper.oa_link);
       let possiblePDFs = "";
       let fallbackUrl = "";
-      if (service === "base") {
+      if (service === "base" || service === "orcid") {
         possiblePDFs =
           encodeURIComponent(paper.link) +
           ";" +
