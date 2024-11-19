@@ -158,12 +158,23 @@ class AuthorInfoRepository:
         
         professional_activities = []
 
-        def format_address(address: Dict[str, str]) -> str:
-            """Formats the address as 'City, Region, Country'."""
-            if not address:
-                return ""
-            return f"{address.get('city', '')}, {address.get('region', '')}, {address.get('country', '')}".strip(", ")
+        def format_address(address: Optional[Dict[str, str]]) -> str:
+            """
+            Safely formats the address as 'City, Region, Country', accounting for missing properties.
 
+            :param address: A dictionary containing address properties (city, region, country)
+            :return: A formatted address string or an empty string if the address is invalid/missing
+            """
+            if not isinstance(address, dict):
+                return ""
+
+            city = address.get("city", "").strip() if address.get("city") else ""
+            region = address.get("region", "").strip() if address.get("region") else ""
+            country = address.get("country", "").strip() if address.get("country") else ""
+
+            # Join non-empty parts with a comma, skipping missing ones
+            formatted_address = ", ".join(filter(None, [city, region, country]))
+            return formatted_address
         
         for activity in summaries:
             role = get_nested_value(activity, ['service-summary', 'role-title'], '')
@@ -215,6 +226,24 @@ class AuthorInfoRepository:
 
         peer_review_groups = peer_reviews.get("group", [])
 
+        def format_address(address: Optional[Dict[str, str]]) -> str:
+            """
+            Safely formats the address as 'City, Region, Country', accounting for missing properties.
+
+            :param address: A dictionary containing address properties (city, region, country)
+            :return: A formatted address string or an empty string if the address is invalid/missing
+            """
+            if not isinstance(address, dict):
+                return ""
+
+            city = address.get("city", "").strip() if address.get("city") else ""
+            region = address.get("region", "").strip() if address.get("region") else ""
+            country = address.get("country", "").strip() if address.get("country") else ""
+
+            # Join non-empty parts with a comma, skipping missing ones
+            formatted_address = ", ".join(filter(None, [city, region, country]))
+            return formatted_address
+
         for peer_review_group in peer_review_groups:
             peer_reviews = peer_review_group.get("peer-review-group", [])
             for peer_review in peer_reviews:
@@ -226,7 +255,7 @@ class AuthorInfoRepository:
                     organization_address = get_nested_value(
                         summary, ["convening-organization", "address"], {}
                     )
-                    organization_address_str = f"{organization_address.get('city', '')}, {organization_address.get('region', '')}, {organization_address.get('country', '')}"
+                    organization_address_str = format_address(organization_address)
 
                     peer_review_list.append(
                         PeerReview(

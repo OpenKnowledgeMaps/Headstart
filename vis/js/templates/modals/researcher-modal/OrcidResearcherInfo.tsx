@@ -109,7 +109,9 @@ const Section = ({ title, subtitle, items, formatItem, showMore, handleShowMore 
 const TextSection = ({ title, content }) => {
   const localization = useLocalizationContext();
   const containerRef = useRef(null);
+  
   const [showFullText, setShowFullText] = useState(false);
+  const [showButton, setShowButton] = useState(false)
   // Toggle between full text and truncated text
   const handleToggleShowMore = () => setShowFullText((prev) => !prev);
 
@@ -119,7 +121,7 @@ const TextSection = ({ title, content }) => {
       <p
         ref={containerRef}
         style={{
-          whiteSpace: showFullText ? "normal" : "nowrap",
+          whiteSpace: showFullText ? "pre-line" : "nowrap",
           overflow: showFullText ? "visible" : "hidden",
           textOverflow: showFullText ? "clip" : "ellipsis",
         }}
@@ -179,6 +181,7 @@ const formatService = (service) => {
       {[
         dateRange,
         service.role,
+        service.department,
         service.organization,
         service.organization_address
       ].filter(Boolean).join(" / ")}
