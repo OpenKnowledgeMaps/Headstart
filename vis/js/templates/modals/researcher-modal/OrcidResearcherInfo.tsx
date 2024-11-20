@@ -109,11 +109,34 @@ const Section = ({ title, subtitle, items, formatItem, showMore, handleShowMore 
 const TextSection = ({ title, content }) => {
   const localization = useLocalizationContext();
   const containerRef = useRef(null);
-  
+
   const [showFullText, setShowFullText] = useState(false);
-  const [showButton, setShowButton] = useState(false)
-  // Toggle between full text and truncated text
+  const [showButton, setShowButton] = useState(false);
+
   const handleToggleShowMore = () => setShowFullText((prev) => !prev);
+
+  const checkMultiLine = () => {
+    const container = containerRef.current;
+    if (container) {
+      // Temporarily set styles to measure actual lines
+      const previousStyle = container.style.whiteSpace;
+      container.style.whiteSpace = "pre-wrap"; // Allow natural wrapping for measurement
+
+      // Calculate if content exceeds a single line
+      const isMultiLine = container.scrollHeight > container.offsetHeight;
+
+      // Restore original style
+      container.style.whiteSpace = previousStyle;
+
+      setShowButton(isMultiLine);
+    }
+  };
+
+  useEffect(() => {
+    checkMultiLine(); // Check on mount and when content changes
+    window.addEventListener("resize", checkMultiLine);
+    return () => window.removeEventListener("resize", checkMultiLine);
+  }, [content]);
 
   return (
     <div>
@@ -121,17 +144,25 @@ const TextSection = ({ title, content }) => {
       <p
         ref={containerRef}
         style={{
-          whiteSpace: showFullText ? "pre-line" : "nowrap",
-          overflow: showFullText ? "visible" : "hidden",
-          textOverflow: showFullText ? "clip" : "ellipsis",
+          whiteSpace: showFullText ? "pre-wrap" : "nowrap",
+          overflow: "hidden",
+          textOverflow: "ellipsis",
+          display: "-webkit-box",
+          WebkitLineClamp: showFullText ? "none" : 2,
+          WebkitBoxOrient: "vertical",
         }}
       >
         {content || localization.noDataAvailable}
       </p>
-      <button className="underlined_button" onClick={handleToggleShowMore}>
-        <i className={`fas fa-${showFullText ? "chevron-up" : "chevron-down"}`} style={{ paddingRight: "3px" }}></i>
-        {showFullText ? localization.showLess : localization.showMore}
-      </button>
+      {showButton && (
+        <button className="underlined_button" onClick={handleToggleShowMore}>
+          <i
+            className={`fas fa-${showFullText ? "chevron-up" : "chevron-down"}`}
+            style={{ paddingRight: "3px" }}
+          ></i>
+          {showFullText ? localization.showLess : localization.showMore}
+        </button>
+      )}
     </div>
   );
 };
@@ -181,7 +212,6 @@ const formatService = (service) => {
       {[
         dateRange,
         service.role,
-        service.department,
         service.organization,
         service.organization_address
       ].filter(Boolean).join(" / ")}
