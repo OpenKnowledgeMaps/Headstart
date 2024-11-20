@@ -117,6 +117,7 @@ class DataManager {
     if (this.config.show_context) {
       if (typeof backendData.data === "string") {
         const data = JSON.parse(backendData.data);
+        if (Array.isArray(data)) return data
         // typeof data.documents === "string" is temporal fix, consider to migrate to json instead of json in json
         return data.documents && typeof data.documents === "string" ? JSON.parse(data?.documents) : data.documents ?? [];
       }
