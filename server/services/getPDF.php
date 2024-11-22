@@ -19,7 +19,7 @@ $service = library\CommUtils::getParameter($_GET, "service");
 $pdf_urls = library\CommUtils::getParameter($_GET, "pdf_urls");
 $images_path = $ini_array["general"]["images_path"];
 
-if ($service == "base" || $service == "openaire") {
+if ($service == "base" || $service == "openaire" || $service == "orcid") {
   $pdf_link = getPDFLinkforBASE($pdf_urls);
   if($pdf_link != false) {
       getPDFAndDownload($pdf_link, $images_path, $filename);
