@@ -54,7 +54,8 @@ class AuthorInfoRepository:
         author_info.author_keywords = ", ".join(keywords)
 
         education, _ = self.orcid.educations()
-        author_info.educations = self.extract_educations(education)
+        qualification, _ = self.orcid.qualifications()
+        author_info.educations = self.extract_educations(education + qualification)
         author_info.academic_age = self.calculate_academic_age(education)
 
         researcher_urls = self.orcid.researcher_urls()
@@ -462,6 +463,7 @@ class AuthorInfoRepository:
             Employment(
                 id=unique_id(),
                 organization=employment.get("organization", None),
+                organization_address=employment.get("organization-address", None),
                 department=employment.get("department", None),
                 role=employment.get("Role", None),
                 start_date=employment.get("start-date", ""),

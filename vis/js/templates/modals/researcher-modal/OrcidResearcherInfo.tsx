@@ -183,7 +183,7 @@ const formatEmployment = (employment) => {
       ? endDate
       : startDate
       ? `${startDate} - ${endDate}`
-      : endDate;
+      : endDate === 'present' ? undefined : endDate;
 
   return (
     <p key={employment.id}>
@@ -205,7 +205,7 @@ const formatService = (service) => {
       ? endDate
       : startDate
       ? `${startDate} - ${endDate}`
-      : endDate;
+      : endDate === 'present' ? undefined : endDate;
 
   return (
     <p key={service.id}>
@@ -227,7 +227,7 @@ const formatEducation = (education) => {
       ? endDate
       : startDate
       ? `${startDate} - ${endDate}`
-      : endDate;
+      : endDate === 'present' ? undefined : endDate;
 
   return (
     <p key={education.id}>
@@ -249,7 +249,7 @@ const formatDistinction = (distinction) => {
       ? endDate
       : startDate
       ? `${startDate} ${endDate ? `- ${endDate}` : ""}`
-      : endDate;
+      : endDate === 'present' ? undefined : endDate;
 
   return (
     <p key={distinction.id}>
