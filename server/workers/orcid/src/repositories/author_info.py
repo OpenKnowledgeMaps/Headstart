@@ -538,6 +538,9 @@ class AuthorInfoRepository:
             "doctor of education",
             "doctor's degree",
             "ph.d",
+            "dr.",
+            "doctor",
+            "d.phil"
         ]
 
         # Find the PhD-equivalent end date

@@ -5,11 +5,11 @@ import { Modal } from "react-bootstrap";
 import { connect } from "react-redux";
 import { useLocalizationContext } from "../../../components/LocalizationProvider";
 
-const NotesOnMetrics = () => {
+const NotesOnMetrics = (props) => {
   return (
     <p>
-      <b>Notes on metrics:</b>{" "}
-      Lorem ipsum dolor sit, amet consectetur adipisicing elit. Neque dolorum laudantium cupiditate ratione dignissimos rem
+      <strong className="hs-strong">Notes on metrics:</strong>
+      {props.notes}
     </p>
   )
 }
@@ -47,7 +47,7 @@ const ResearcherMetricsInfo = ({
         <p>
           Number of total citations: <span>{params.total_citations ? params.total_citations : localization.notAvailable}</span>
         </p>
-        <NotesOnMetrics />
+        <NotesOnMetrics notes={'Metrics are based on citation data provided by Crossref and information supplied by the researcher on their ORCID profile. Results may be impacted by accuracy and completeness of this data.'} />
 
         <h3>ALTMETRICS</h3>
         <p>
@@ -58,7 +58,7 @@ const ResearcherMetricsInfo = ({
           Number of total news encyclopaedia, patent and policy references:{" "}
           <span>{params.total_neppr ? params.total_neppr : localization.notAvailable}</span>
         </p>
-        <NotesOnMetrics />
+        <NotesOnMetrics notes={'Metrics are based on data provided by Altmetric and information supplied by the researcher on their ORCID profile. Results may be impacted by accuracy and completeness of this data.'} />
 
         {params.enable_teaching_mentorship ? (
           <>
@@ -75,7 +75,7 @@ const ResearcherMetricsInfo = ({
               Number of total supervised bachelor students:{" "}
               <span>{params.total_supervised_bachelor_students ? params.total_supervised_bachelor_students : localization.notAvailable}</span>
             </p>
-            <NotesOnMetrics />
+            <NotesOnMetrics notes={'Metrics are based on information supplied by the researcher on their ORCID profile. Entries titled “Supervision” and “Co-supervision” are counted for each degree. Results may be impacted by accuracy and completeness of this data.'} />
           </>
         ) : null}
       </Modal.Body>

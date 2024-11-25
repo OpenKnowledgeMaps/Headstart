@@ -157,7 +157,12 @@ const DEFAULT_SCHEME: SchemeObject[] = [
     required: true,
     fallback: (loc) => loc?.default_y,
   },
-  { name: "area", required: true, fallback: (loc) => loc?.default_area },
+  { 
+    name: "area", 
+    required: true, 
+    validator: (val) => val,
+    fallback: (loc) => loc?.default_area 
+  },
   {
     name: "area_uri",
     type: ["string", "number"],
