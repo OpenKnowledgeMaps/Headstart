@@ -8,7 +8,7 @@ import { useLocalizationContext } from "../../../components/LocalizationProvider
 const NotesOnMetrics = (props) => {
   return (
     <p>
-      <strong className="hs-strong">Notes on metrics:</strong>
+      <strong className="hs-strong">Notes on metrics:</strong>{' '}
       {props.notes}
     </p>
   )

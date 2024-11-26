@@ -56,7 +56,7 @@ class AuthorInfoRepository:
         education, _ = self.orcid.educations()
         qualification, _ = self.orcid.qualifications()
         author_info.educations = self.extract_educations(education + qualification)
-        author_info.academic_age = self.calculate_academic_age(education)
+        author_info.academic_age = self.calculate_academic_age(education + qualification)
 
         researcher_urls = self.orcid.researcher_urls()
         author_info.researcher_urls = self.extract_researcher_urls(

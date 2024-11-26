@@ -355,6 +355,7 @@ class OrcidService:
         )
 
         # Calculate h-index
+        self.logger.debug('citation counts', citation_counts)
         h_index = 0
         for i, citation in enumerate(citation_counts, start=1):
             if citation >= i:
@@ -362,6 +363,8 @@ class OrcidService:
             else:
                 break
         author_info.h_index = h_index
+
+        self.logger.debug(f"h_index after {author_info.h_index}")
 
         def extract_year(value):
             try:
@@ -379,6 +382,7 @@ class OrcidService:
         else:
             metadata["publication_year"] = None  # Or assign a default value
 
+        self.logger.debug(f"author_info {author_info}")
         academic_age = author_info.academic_age
         if (academic_age is not None):
             academic_age_offset = params.get("academic_age_offset")

@@ -16,6 +16,7 @@ import TripleKMInfo from "./infomodal/TripleKMInfo";
 import TripleSGInfo from "./infomodal/TripleSGInfo";
 import ViperInfo from "./infomodal/ViperInfo";
 import OpenAireInfo from "./infomodal/OpenAireInfo";
+import OrcidInfo from "./infomodal/OrcidInfo";
 
 
 const getInfoTemplate = (service: string, isStreamgraph: boolean, modalType: string) => {
@@ -37,6 +38,8 @@ const getInfoTemplate = (service: string, isStreamgraph: boolean, modalType: str
       return TripleSGInfo;
     case "covis":
       return CovisInfo;
+    case "orcid":
+      return OrcidInfo;
     default:
       return isStreamgraph ? DefaultSGInfo : DefaultKMInfo;
   }
@@ -62,6 +65,7 @@ const mapStateToProps = (state) => ({
     query: state.query.text,
     customTitle: state.heading.customTitle,
     q_advanced: state.q_advanced.text,
+    author: state.author,
   },
   service: state.isCovis ? "covis" : state.service,
   isStreamgraph: state.chartType === STREAMGRAPH_MODE,
