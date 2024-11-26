@@ -40,7 +40,7 @@ const OrcidInfo = ({
     // html template starts here
     <>
       <Modal.Header closeButton>
-        <Modal.Title id="info-title">What's this?</Modal.Title>
+        <Modal.Title id="info-title">ABOUT THE MAP</Modal.Title>
       </Modal.Header>
       <Modal.Body id="info-body">
         <p>
