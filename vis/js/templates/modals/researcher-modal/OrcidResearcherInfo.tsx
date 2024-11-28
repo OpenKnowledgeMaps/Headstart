@@ -265,7 +265,7 @@ const formatLink = (link) => (
   <p key={link.id}>
     <i className="fas fa-solid fa-link" style={{ paddingRight: "3px" }}></i>
     <a href={link.url} target="_blank" rel="noopener noreferrer">
-      {link.url_name}
+      {link.url_name || link.url}
     </a>
   </p>
 );
