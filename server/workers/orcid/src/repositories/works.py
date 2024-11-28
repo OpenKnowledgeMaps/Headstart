@@ -5,6 +5,9 @@ import numpy as np
 from common.utils import get_nested_value
 from typing import Optional
 import calendar
+from constants import (
+    doc_type_mapping
+)
 
 class WorksRepository:
     logger = logging.getLogger(__name__)
@@ -161,50 +164,3 @@ class WorksRepository:
         else:
             return str(year) 
 
-doc_type_mapping = {
-    "book": "Book",
-    "book-chapter": "Book chapter",
-    "book-review": "Book review",
-    "dictionary-entry": "Dictionary entry",
-    "dissertation": "Dissertation",
-    "dissertation-thesis": "Dissertation thesis",
-    "enyclopaedia-entry": "Encyclopedia entry",
-    "edited-book": "Edited book",
-    "journal-article": "Journal article",
-    "journal-issue": "Journal issue",
-    "magazine-article": "Magazine article",
-    "manual": "Manual",
-    "online-resource": "Online resource",
-    "newsletter-article": "Newsletter article",
-    "newspaper-article": "Newspaper article",
-    "preprint": "Preprint",
-    "report": "Report",
-    "review": "Review",
-    "research-tool": "Research tool",
-    "supervised-student-publication": "Supervised student publication",
-    "test": "Test",
-    "translation": "Translation",
-    "website": "Website",
-    "working-paper": "Working paper",
-    "conference-abstract": "Conference abstract",
-    "conference-paper": "Conference paper",
-    "conference-poster": "Conference poster",
-    "disclosure": "Disclosure",
-    "license": "License",
-    "patent": "Patent",
-    "registered-copyright": "Registered copyright",
-    "trademark": "Trademark",
-    "annotation": "Annotation",
-    "artistic-performance": "Artistic performance",
-    "data-management-plan": "Data management plan",
-    "data-set": "Dataset",
-    "invention": "Invention",
-    "lecture-speech": "Lecture speech",
-    "physical-object": "Physical object",
-    "research-technique": "Research technique",
-    "software": "Software",
-    "spin-off-company": "Spin-off company",
-    "standards-and-policy": "Standards and policy",
-    "technical-standard": "Technical standard",
-    "other": "Other",
-}
