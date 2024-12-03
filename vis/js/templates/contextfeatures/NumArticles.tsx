@@ -15,6 +15,8 @@ const NumArticles = ({
   if (service === "orcid") {
     if (articlesCount >= modifierLimit) {
       displayText = <>{modifierLimit} {children} works</>;
+    } else {
+      displayText = <>{articlesCount} works</>
     }
   }
 

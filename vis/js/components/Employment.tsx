@@ -1,6 +1,9 @@
 import React, { useEffect, useRef, useState } from "react";
 import HoverPopover from "../templates/HoverPopover";
 import { Author } from "../@types/author";
+import { shorten } from "../utils/string";
+
+const MAX_ROLE_LENGTH = 18;
 
 export function Employment({ author, popoverContainer }: {
   author: Author,
@@ -8,43 +11,15 @@ export function Employment({ author, popoverContainer }: {
 }) {
   const authorRoleId = "author-role";
   const authorOrganizationId = "author-organization";
+  
 
-  const authorRoleTextRef = useRef<any>();
-  const [authorRoleHasOverflow, setAuthorRoleHasOverflow] = useState(false);
-  const authorOrganizationTextRef = useRef<any>();
-  const [authorOrganizationHasOverflow, setAuthorOrganizationHasOverflow] =
-    useState(false);
-
-  useEffect(() => {
-    const checkOverflow = () => {
-      const authorRoleText = authorRoleTextRef.current;
-      
-      if (authorRoleText && authorRoleText.scrollWidth > authorRoleText.clientWidth) {
-        setAuthorRoleHasOverflow(true);
-      } else {
-        setAuthorRoleHasOverflow(false);
-      }
-      
-      const authorOrganizationText = authorOrganizationTextRef.current;
-
-      if (
-        authorOrganizationText && authorOrganizationText.scrollWidth > authorOrganizationText.clientWidth
-      ) {
-        setAuthorOrganizationHasOverflow(true);
-      } else {
-        setAuthorOrganizationHasOverflow(false);
-      }
-    };
-
-    // Check for overflow on load and on window resize
-    checkOverflow();
-    window.addEventListener("resize", checkOverflow);
-
-    // Clean up event listener on component unmount
-    return () => {
-      window.removeEventListener("resize", checkOverflow);
-    };
-  }, []);
+  const role = author?.employment?.role || '';
+  const shortenedRole = shorten(role, MAX_ROLE_LENGTH);
+  const authorRoleHasOverflow = shortenedRole && shortenedRole !== author?.employment?.role;
+  
+  const organization = author?.employment?.organization || '';
+  const shortenedOrganization = shorten(organization, MAX_ROLE_LENGTH);
+  const authorOrganizationHasOverflow = shortenedOrganization && shortenedOrganization !== author?.employment?.organization;
 
   return (
     <>
@@ -55,48 +30,44 @@ export function Employment({ author, popoverContainer }: {
             <HoverPopover
               id={`${authorRoleId}-popover`}
               container={popoverContainer}
-              content={author.employment.role}
+              content={role}
             >
               <span
-                ref={authorRoleTextRef}
                 className={`context_moreinfo overflow-ellipsis ${authorRoleHasOverflow ? 'has-overflow' : ''}`}
               >
-                {author.employment.role}
+                {shortenedRole}
               </span>
             </HoverPopover>
           ) : (
             <span
-              ref={authorRoleTextRef}
               className="context_moreinfo overflow-ellipsis"
             >
-              {author.employment.role}
+              {shortenedRole}
             </span>
           )}
         </span>
       ) : null}
 
-      {author?.employment?.organization ? (
+      {shortenedOrganization ? (
         <span id={authorOrganizationId} className="context_item shrinkable">
           {authorOrganizationHasOverflow ? (
             // @ts-ignore
             <HoverPopover
               id={`${authorOrganizationId}-popover`}
               container={popoverContainer}
-              content={author.employment.organization}
+              content={organization}
             >
               <span
-                ref={authorOrganizationTextRef}
                 className={`context_moreinfo overflow-ellipsis ${authorOrganizationHasOverflow ? 'has-overflow' : ''}`}
               >
-                {author.employment.organization}
+                {shortenedOrganization}
               </span>
             </HoverPopover>
           ) : (
             <span
-              ref={authorOrganizationTextRef}
               className="context_moreinfo overflow-ellipsis"
             >
-              {author.employment.organization}
+              {shortenedOrganization}
             </span>
           )}
         </span>

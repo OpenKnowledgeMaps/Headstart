@@ -73,6 +73,7 @@ export default connect(mapStateToProps)(Heading);
 // This should probably make its way to a more global config
 const MAX_LENGTH_VIPER = 47;
 const MAX_LENGTH_CUSTOM = 100;
+const MAX_LENGTH_ORCID = 85;
 
 /**
  * Renders the title for the correct setup.
@@ -115,15 +116,8 @@ const renderTitle = (localization, query, headingParams, author, service) => {
       }
     }
 
-    if (service === 'ORCID') {
-      if (author?.author_name && author?.orcid_id) {
-        return (
-          <StandardTitle
-            label={label}
-            title={`${author.author_name} (${author.orcid_id})`}
-          />
-        );
-      }
+    if (service === 'ORCID' && (author?.orcid_id || author?.author_name)) {
+      return renderOrcidTitle(author.orcid_id, author.author_name, label)
     }
 
     return <StandardTitle label={label} title={query} />;
@@ -131,6 +125,18 @@ const renderTitle = (localization, query, headingParams, author, service) => {
 
   return <BasicTitle title={localization.default_title} />;
 };
+
+const renderOrcidTitle = (orcidId: string, authorName: string, label: string) => {
+  const orcidTitle = [authorName, orcidId ? `(${orcidId})` : null].join(' ')
+  const shortTitle = sliceText(orcidTitle, MAX_LENGTH_ORCID);
+
+  return (
+    <StandardTitle
+      label={label}
+      title={shortTitle}
+    />
+  );
+}
 
 const renderViperTitle = (title, acronym, projectId) => {
   let titleText = title;

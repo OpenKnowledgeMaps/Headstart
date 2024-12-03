@@ -8,12 +8,10 @@
 #subdiscipline_title {
     position: relative;
     margin: 0px;
-    display: flex;
     flex-grow: 1;
-    flex-direction: column;
-    justify-content: center;
     min-height: 54px;
     font-family: $base-font-family;
+    min-width: 0;
 
     h4 {
         margin-bottom: 0px;
@@ -68,8 +66,6 @@
 }
 
 #context {
-    display: flex;
-    flex-wrap: nowrap;
     font-size: 12px;
     color: $black;
     padding: 0px;
