@@ -98,9 +98,7 @@ class Paper extends React.Component {
   }
 
   render() {
-    const { data, zoom, selected, hovered } = this.props;
-    const { maxSize, enlargeFactor } = this.props;
-    const { onClick, onMouseOver, onMouseOut } = this.props;
+    const { data, zoom, selected, hovered, maxSize, enlargeFactor, onClick, onMouseOver, onMouseOut } = this.props;
 
     const {
       title,
@@ -108,10 +106,10 @@ class Paper extends React.Component {
       authors_list: authors_list,
       year,
       area,
+      published_in: publisher
     } = data;
-    const { published_in: publisher } = data;
-    const { x, y, width: baseWidth, height: baseHeight } = this.state;
-    const { path: basePath, dogEar: baseDogEar } = this.state;
+
+    const { x, y, width: baseWidth, height: baseHeight, path: basePath, dogEar: baseDogEar } = this.state;
 
     const {
       showSocialMedia,
@@ -125,6 +123,7 @@ class Paper extends React.Component {
       showTweets,
       tweetsLabel,
     } = this.props;
+
     const {
       num_readers: readers,
       tweets,
@@ -208,6 +207,64 @@ class Paper extends React.Component {
       }
     }
 
+    const stats = [
+      {
+        id: "citations",
+        show: showCitations,
+        value: citations,
+        label: citationsLabel,
+      },
+      {
+        id: "readers",
+        show: showReaders,
+        value: readers,
+        label: readersLabel,
+      },
+      {
+        id: "social",
+        show: showSocialMedia,
+        value: social,
+        label: socialMediaLabel,
+      },
+      {
+        id: "references",
+        show: showReferences,
+        value: references,
+        label: referencesLabel,
+      },
+      {
+        id: "tweets",
+        show: showTweets,
+        value: tweets,
+        label: tweetsLabel,
+      },
+    ].filter(stat => stat.show)
+
+    let sortedStats = stats;
+
+    if (this.props.service === "orcid" && this.props.scaleValue) {
+      const { scaleValue } = this.props;
+    
+      const dynamicPriorityMap = {
+        citations: ["citations", "content_based", "references", "readers", "social", "tweets"],
+        cited_by_accounts_count: ["social", "citations", "references", "readers", "tweets"],
+        references: ["references", "citations", "readers", "social", "tweets"],
+        content_based: ["content_based", "citations", "references", "readers", "social", "tweets"],
+      };
+    
+      const priorityOrder = dynamicPriorityMap[scaleValue] || [];
+    
+      sortedStats = [...stats].sort((a, b) => {
+        const priorityA = priorityOrder.indexOf(a.id);
+        const priorityB = priorityOrder.indexOf(b.id);
+    
+        const adjustedPriorityA = priorityA === -1 ? Number.MAX_VALUE : priorityA;
+        const adjustedPriorityB = priorityB === -1 ? Number.MAX_VALUE : priorityB;
+    
+        return adjustedPriorityA - adjustedPriorityB;
+      });
+    }
+
     return (
       // html template starts here
       <g className={gClass} {...eventHandlers}>
@@ -244,7 +301,7 @@ class Paper extends React.Component {
                   height: getMetadataHeight(
                     realHeight,
                     !!showReaders +
-                      !!showSocialMedia +
+                      (!!showSocialMedia ? 2 : 0) +
                       !!showCitations +
                       !!showReferences +
                       !!showTweets,
@@ -270,7 +327,6 @@ class Paper extends React.Component {
                 <p id="details" className={sizeModifierClass}>
                   <Hyphenate>
                     <Highlight hyphenated queryHighlight>
-                      {/*{authors}*/}
                       {cutAuthors(authors_list, 15)}
                     </Highlight>
                   </Hyphenate>
@@ -288,47 +344,14 @@ class Paper extends React.Component {
                   )}
                 </p>
               </div>
-              {[
-                {
-                  id: "citations",
-                  show: showCitations,
-                  value: citations,
-                  label: citationsLabel,
-                },
-                {
-                  id: "readers",
-                  show: showReaders,
-                  value: readers,
-                  label: readersLabel,
-                },
-                {
-                  id: "social",
-                  show: showSocialMedia,
-                  value: social,
-                  label: socialMediaLabel,
-                },
-                {
-                  id: "references",
-                  show: showReferences,
-                  value: references,
-                  label: referencesLabel,
-                },
-                {
-                  id: "tweets",
-                  show: showTweets,
-                  value: tweets,
-                  label: tweetsLabel,
-                },
-              ].map(({ show, value, label, id }) =>
-                show ? (
-                  <div key={id} className="stat">
-                    <p className={`stat ${sizeModifierClass}`}>
-                      <span className="num-stat">{value || value === 0 ? value : "n/a"} </span>
-                      <span>{label}</span>
-                    </p>
-                  </div>
-                ) : null
-              )}
+              {sortedStats.map(({ value, label, id }) => (
+                <div key={id} className="stat">
+                  <p className={`stat ${sizeModifierClass}`}>
+                    <span className="num-stat">{value || value === 0 ? value : "n/a"} </span>
+                    <span>{label}</span>
+                  </p>
+                </div>
+              ))}
             </div>
           </div>
         </foreignObject>
