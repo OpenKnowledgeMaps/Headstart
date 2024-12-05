@@ -176,3 +176,10 @@ class Work:
     cited_by_msm_count: int
     cited_by_policies_count: int
     cited_by_patents_count: int
+    cited_by_fbwalls_count: int
+    cited_by_feeds_count: int
+    cited_by_gplus_count: int
+    cited_by_rdts_count: int
+    cited_by_qna_count: int
+    cited_by_tweeters_count: int
+    cited_by_videos_count: int

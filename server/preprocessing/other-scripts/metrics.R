@@ -14,7 +14,14 @@ enrich_metadata_metrics <- function(metadata) {
     "cited_by_msm_count",
     "cited_by_policies_count",
     "cited_by_patents_count",
-    "cited_by_accounts_count"
+    "cited_by_accounts_count",
+    "cited_by_fbwalls_count",
+    "cited_by_feeds_count",
+    "cited_by_gplus_count",
+    "cited_by_rdts_count",
+    "cited_by_qna_count",
+    "cited_by_tweeters_count",
+    "cited_by_videos_count"
   )
 
   if (nrow(results) > 0) {

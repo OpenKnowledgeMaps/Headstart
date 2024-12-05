@@ -116,6 +116,13 @@ class OrcidService:
             "cited_by_policies_count",
             "cited_by_patents_count",
             "cited_by_accounts_count",
+            "cited_by_fbwalls_count",
+            "cited_by_feeds_count",
+            "cited_by_gplus_count",
+            "cited_by_rdts_count",
+            "cited_by_qna_count",
+            "cited_by_tweeters_count",
+            "cited_by_videos_count"
         ]:
             if c not in metadata.columns:
                 metadata[c] = np.NaN
@@ -216,7 +223,13 @@ class OrcidService:
                        'content_provider', 'coverage', 'is_duplicate', 'has_dataset', 'sanitized_authors', 
                        'relations', 'annotations', 'repo', 'source', 'volume', 'issue', 'page', 'issn', 
                        'citation_count', 'cited_by_wikipedia_count', 'cited_by_msm_count', 'cited_by_policies_count', 
-                       'cited_by_patents_count', 'cited_by_accounts_count']
+                       'cited_by_patents_count', 'cited_by_accounts_count', 'cited_by_fbwalls_count',
+                        'cited_by_feeds_count',
+                        'cited_by_gplus_count',
+                        'cited_by_rdts_count',
+                        'cited_by_qna_count',
+                        'cited_by_tweeters_count',
+                        'cited_by_videos_count']
         required_fields = list(set(required_fields + metadata.columns.to_list()))
 
         self.logger.debug(f'fields to reindex: {required_fields}')
@@ -331,7 +344,17 @@ class OrcidService:
 
         # Total unique social media mentions
         author_info.total_unique_social_media_mentions = int(
-            metadata["cited_by_accounts_count"].astype(float).sum()
+            metadata[
+                [
+                    "cited_by_fbwalls_count",
+                    "cited_by_feeds_count",
+                    "cited_by_gplus_count",
+                    "cited_by_rdts_count",
+                    "cited_by_qna_count",
+                    "cited_by_tweeters_count",
+                    "cited_by_videos_count"
+                ]
+            ].astype(float).sum().sum()
         )
 
         # Total NEPPR (non-academic references)
