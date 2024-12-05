@@ -162,6 +162,7 @@ describe("Context line component", () => {
       const DATA_SOURCE = "Custom data source";
       const storeObject = setup();
       storeObject.contextLine.dataSource = DATA_SOURCE;
+      storeObject.contextLine.showDataSource = true;
 
       const store = mockStore(storeObject);
 
@@ -183,6 +184,7 @@ describe("Context line component", () => {
         '<span class="backlink"><a href="data" class="underline" target="_blank" >CoVis database</a></span>';
       const storeObject = setup();
       storeObject.contextLine.dataSource = DATA_SOURCE;
+      storeObject.contextLine.showDataSource = true;
 
       const store = mockStore(storeObject);
 

@@ -146,15 +146,15 @@ const KnowledgeMap = (props) => {
         enlargeFactor={enlargeFactor}
         baseUnit={baseUnit}
         
-        showSocialMedia={props.paper.showSocialMedia}
+        showSocialMedia={props.paper?.showSocialMedia}
         socialMediaLabel={localization.social_media_count_label}
-        showReferences={props.paper.showReferences}
+        showReferences={props.paper?.showReferences}
         referencesLabel={localization.references_count_label}
-        showCitations={props.paper.showCitations}
+        showCitations={props.paper?.showCitations}
         citationsLabel={localization.citations_count_label}
-        showReaders={props.paper.showReaders}
+        showReaders={props.paper?.showReaders}
         readersLabel={localization.readers_count_label}
-        showTweets={props.paper.showTweets}
+        showTweets={props.paper?.showTweets}
         tweetsLabel={localization.tweets_count_label}
       />
     );
