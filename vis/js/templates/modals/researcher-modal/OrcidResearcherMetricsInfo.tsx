@@ -55,7 +55,7 @@ const ResearcherMetricsInfo = ({
           <span>{params.total_unique_social_media_mentions ? params.total_unique_social_media_mentions : localization.notAvailable}</span>
         </p>
         <p>
-          Number of total news encyclopaedia, patent and policy references:{" "}
+          Number of total news, encyclopaedia, patent and policy references:{" "}
           <span>{params.total_neppr ? params.total_neppr : localization.notAvailable}</span>
         </p>
         <NotesOnMetrics notes={'Metrics are based on data provided by Altmetric and information supplied by the researcher on their ORCID profile. Results may be impacted by accuracy and completeness of this data.'} />
