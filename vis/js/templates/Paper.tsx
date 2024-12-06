@@ -208,6 +208,8 @@ class Paper extends React.Component {
       }
     }
 
+    console.log()
+
     return (
       // html template starts here
       <g className={gClass} {...eventHandlers}>
