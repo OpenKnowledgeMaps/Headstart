@@ -11,18 +11,18 @@ class ErrorResult(TypedDict):
     reason: List[str]
 
 @dataclass
-class Params(TypedDict):
+class Params:
     orcid: str
     limit: str
 
 @dataclass
-class Website(TypedDict):
+class Website:
     url_name: str
     url: str
 
 
 @dataclass
-class ExternalIdentifier(TypedDict):
+class ExternalIdentifier:
     type: str
     url: str
     value: str
