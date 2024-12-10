@@ -31,4 +31,17 @@ export interface Paper {
 
     area_uri: string;
     area: string;
+
+    // data from backend
+    cited_by_fbwalls_count?: number;
+    cited_by_feeds_count?: number;
+    cited_by_gplus_count?: number;
+    cited_by_rdts_count?: number;
+    cited_by_qna_count?: number;
+    cited_by_tweeters_count?: number;
+    cited_by_videos_count?: number;
+
+    // data manager
+    // calculated values
+    social?: string | number;
 }

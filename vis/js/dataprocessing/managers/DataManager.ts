@@ -25,6 +25,7 @@ import { transformData } from "../../utils/streamgraph";
 import DEFAULT_SCHEME, { SchemeObject } from "../schemes/defaultScheme";
 import PaperSanitizer from "../../utils/PaperSanitizer";
 import { Config } from "../../default-config";
+import { Paper } from "../../@types/paper";
 
 const GOLDEN_RATIO = 2.6;
 
@@ -241,7 +242,7 @@ class DataManager {
       .join(" ");
   }
 
-  __countMetrics(paper: any) {
+  __countMetrics(paper: Paper) {
     const config = this.config;
 
     paper.num_readers = 0;
@@ -252,7 +253,36 @@ class DataManager {
     paper.citations = getVisibleMetric(paper, "citation_count");
     paper.readers = getVisibleMetric(paper, "readers.mendeley");
 
-    paper.social = getVisibleMetric(paper, "cited_by_accounts_count");
+    if ([
+      paper.cited_by_fbwalls_count,
+      paper.cited_by_feeds_count,
+      paper.cited_by_gplus_count,
+      paper.cited_by_rdts_count,
+      paper.cited_by_qna_count,
+      paper.cited_by_tweeters_count,
+      paper.cited_by_videos_count].every(item => item === undefined)
+    ) {
+      paper.social = 'n/a'
+    } else {
+      paper.social = [
+        paper.cited_by_fbwalls_count,
+        paper.cited_by_feeds_count,
+        paper.cited_by_gplus_count,
+        paper.cited_by_rdts_count,
+        paper.cited_by_qna_count,
+        paper.cited_by_tweeters_count,
+        paper.cited_by_videos_count,
+      ].reduce((acc, val) => {
+        if (typeof val === "string" || typeof val === "number") {
+          return (acc ?? 0) + +val;
+        } else if (val === undefined || val === null) {
+          return acc;
+        }
+      }, null)
+    }
+
+
+    // getVisibleMetric(paper, "cited_by_accounts_count");
     paper.references = [
       paper.cited_by_wikipedia_count,
       paper.cited_by_msm_count,
