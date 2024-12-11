@@ -58,7 +58,7 @@ const ResearcherMetricsInfo = ({
           Number of total news encyclopaedia, patent and policy references:{" "}
           <span>{params.total_neppr ? params.total_neppr : localization.notAvailable}</span>
         </p>
-        <NotesOnMetrics notes={'Metrics are based on data provided by Altmetric and information supplied by the researcher on their ORCID profile. Results may be impacted by accuracy and completeness of this data.'} />
+        <NotesOnMetrics notes={'Metrics are based on data provided by Altmetric and information supplied by the researcher on their ORCID profile. Results may be impacted by accuracy and completeness of this data. Social media mentions include the following: Facebook, blog posts, Google+, Reddit, X, Youtube, Q&A forums and Stack Exchange.'} />
 
         {params.enable_teaching_mentorship ? (
           <>
