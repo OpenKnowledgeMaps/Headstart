@@ -246,10 +246,10 @@ class Paper extends React.Component {
       const { scaleValue } = this.props;
     
       const dynamicPriorityMap = {
-        citations: ["citations", "social", "references", "readers", "tweets", "content_based"],
-        cited_by_accounts_count: ["social", "citations", "references", "readers", "tweets"],
-        references: ["references", "citations", "readers", "social", "tweets"],
-        content_based: ["content_based", "citations", "references", "readers", "social", "tweets"],
+        content_based: ["content_based", "citations", "social", "references", "readers", "tweets"],
+        citations: ["content_based", "citations", "social", "references", "readers", "tweets"],
+        cited_by_accounts_count: ["content_based", "social", "citations", "references", "readers", "tweets"],
+        references: ["content_based", "references", "citations", "social", "readers", "tweets"],
       };
     
       const priorityOrder = dynamicPriorityMap[scaleValue] || [];
