@@ -8,7 +8,7 @@ import { select } from "d3-selection";
 import { formatPaperDate } from "./listentry/Title";
 import Icons from "./paper/Icons";
 
-
+// right now
 const orderPriorityMap = {
   content_based: "content_based",
   citations: "citations",
@@ -252,7 +252,7 @@ class Paper extends React.Component {
 
     let sortedStats = stats;
 
-    if (this.props.service === "orcid" && this.props.scaleValue) {
+    if (this.props.scaleValue) {
       const { scaleValue } = this.props;
 
 
