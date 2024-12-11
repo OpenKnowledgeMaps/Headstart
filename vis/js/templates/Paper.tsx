@@ -8,6 +8,16 @@ import { select } from "d3-selection";
 import { formatPaperDate } from "./listentry/Title";
 import Icons from "./paper/Icons";
 
+// right now
+const orderPriorityMap = {
+  content_based: "content_based",
+  citations: "citations",
+  cited_by_accounts_count: "social",
+  references: "references",
+  readers: "readers",
+  tweets: "tweets"
+}
+
 class Paper extends React.Component {
   constructor(props) {
     super(props);
@@ -242,27 +252,22 @@ class Paper extends React.Component {
 
     let sortedStats = stats;
 
-    if (this.props.service === "orcid" && this.props.scaleValue) {
+    if (this.props.scaleValue) {
       const { scaleValue } = this.props;
-    
-      const dynamicPriorityMap = {
-        citations: ["citations", "social", "references", "readers", "tweets", "content_based"],
-        cited_by_accounts_count: ["social", "citations", "references", "readers", "tweets"],
-        references: ["references", "citations", "readers", "social", "tweets"],
-        content_based: ["content_based", "citations", "references", "readers", "social", "tweets"],
-      };
-    
-      const priorityOrder = dynamicPriorityMap[scaleValue] || [];
-    
-      sortedStats = [...stats].sort((a, b) => {
-        const priorityA = priorityOrder.indexOf(a.id);
-        const priorityB = priorityOrder.indexOf(b.id);
-    
-        const adjustedPriorityA = priorityA === -1 ? Number.MAX_VALUE : priorityA;
-        const adjustedPriorityB = priorityB === -1 ? Number.MAX_VALUE : priorityB;
-    
-        return adjustedPriorityA - adjustedPriorityB;
-      });
+
+
+      const tagPreference = orderPriorityMap[scaleValue]
+
+      sortedStats = tagPreference
+        ? [...stats].sort((a, b) => {
+            // Assign priorities based on whether the current item's ID matches the tagPreference
+            const priorityA = a.id === tagPreference ? 1 : 0;
+            const priorityB = b.id === tagPreference ? 1 : 0;
+
+            // Sort by priority in descending order (preferred items come first)
+            return priorityB - priorityA;
+          })
+        : stats;
     }
 
     return (
@@ -301,10 +306,10 @@ class Paper extends React.Component {
                   height: getMetadataHeight(
                     realHeight,
                     !!showReaders +
-                      (!!showSocialMedia ? 2 : 0) +
-                      !!showCitations +
-                      !!showReferences +
-                      !!showTweets,
+                    (!!showSocialMedia ? 2 : 0) +
+                    !!showCitations +
+                    !!showReferences +
+                    !!showTweets,
                     zoom
                   ),
                   width: (1 - DOGEAR_WIDTH) * realWidth,
@@ -490,9 +495,8 @@ const DOGEAR_WIDTH = 0.15;
 const DOGEAR_HEIGHT = 0.15;
 
 const getDogEar = ({ x, y, width: w, height: h }) => {
-  return `M ${x + (1 - DOGEAR_WIDTH) * w} ${y} v ${DOGEAR_HEIGHT * h} h ${
-    DOGEAR_WIDTH * w
-  }`;
+  return `M ${x + (1 - DOGEAR_WIDTH) * w} ${y} v ${DOGEAR_HEIGHT * h} h ${DOGEAR_WIDTH * w
+    }`;
 };
 
 const getRoundedPath = ({ x, y, width, height }) => {
@@ -512,9 +516,8 @@ const getRoundedPath = ({ x, y, width, height }) => {
 };
 
 const getSquarePath = ({ x, y, width: w, height: h }) => {
-  return `M ${x} ${y} h ${(1 - DOGEAR_WIDTH) * w} l ${DOGEAR_HEIGHT * w} ${
-    DOGEAR_WIDTH * h
-  } v ${(1 - DOGEAR_HEIGHT) * h} h ${-w} v ${-h}`;
+  return `M ${x} ${y} h ${(1 - DOGEAR_WIDTH) * w} l ${DOGEAR_HEIGHT * w} ${DOGEAR_WIDTH * h
+    } v ${(1 - DOGEAR_HEIGHT) * h} h ${-w} v ${-h}`;
 };
 
 const getEnlargeFactor = (offsetWidth, scrollHeight) => {
