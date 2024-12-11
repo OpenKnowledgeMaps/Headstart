@@ -112,12 +112,20 @@ function search($service, $dirty_query
     }
 
     if($retrieve_cached_map) {
-      $last_version = $persistence->getLastVersion($unique_id, false, false);
+      $last_version = $persistence->getLastVersion($unique_id, false, false)[0];
       //todo: log output of $last_version
       // log to docker logs
-      error_log(message: "type of last_version: " . gettype($last_version));
-      error_log(message: "raw array of last_version: " . print_r($last_version, true));
-      error_log("last_version: " . json_encode($last_version));
+
+      error_log(message: "search.php: type of last_version: " . gettype($last_version));
+      error_log(message: "search.php: keys of last_version: " . print_r(array_keys($last_version), true));
+      error_log(message: "search.php: raw array of last_version: " . print_r($last_version, true));
+      error_log(message: "search.php: raw array of last_version: " . print_r($last_version["result"], true));
+      error_log("search.php: last_version: " . json_decode($last_version["result"], true));
+      // check if success-status of last_version call is false
+      if ($last_version["httpcode"] != 200) {
+        return json_encode($last_version["result"]);
+      }
+
       if ($last_version != null && $last_version != "null" && $last_version != false) {
           echo json_encode(array("query" => $query, "id" => $unique_id, "status" => "success"));
           return;

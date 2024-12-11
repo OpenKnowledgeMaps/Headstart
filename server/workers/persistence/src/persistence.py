@@ -156,6 +156,9 @@ def get_context(database, vis_id, revision_context=False):
     except TypeError:
         persistence_ns.logger.debug("get_context: Vis ID not found: %s in database %s" % (vis_id, database))
         res = [False]
+    except OperationalError as e:
+        persistence_ns.logger.error("get_context: %s" % str(e), exc_info=True)
+        res = {"status": "error", 'reason': ["database connection error"]}
     session.close()
     return res
 
@@ -197,13 +200,13 @@ class createVisualization(Resource):
             create_visualization(database,
                                  vis_id, vis_title, data,
                                  vis_clean_query, vis_query, vis_params)
-            result = {'success': True}
+            result = {'status': "success"}
             headers = {'ContentType': 'application/json'}
             return make_response(jsonify(result),
                                  200,
                                  headers)
         except Exception as e:
-            result = {'success': False, 'reason': [str(e)]}
+            result = {'status': "error", 'reason': [str(e)]}
             headers = {'ContentType': 'application/json'}
             return make_response(jsonify(result),
                                  500,
@@ -222,11 +225,11 @@ class writeRevision(Resource):
             data = payload.get("data")
             # persistence_ns.logger.debug(data)
             write_revision(database, vis_id, data)
-            result = {'success': True}
+            result = {'status': "success"}
             headers = {'ContentType': 'application/json'}
             return make_response(jsonify(result), 200, headers)
         except Exception as e:
-            result = {'success': False, 'reason': [str(e)]}
+            result = {'status': "error", 'reason': [str(e)]}
             headers = {'ContentType': 'application/json'}
             return make_response(jsonify(result), 500, headers)
 
@@ -257,14 +260,14 @@ class getLastVersion(Resource):
         except OperationalError as e:
             # also log the stack trace
             persistence_ns.logger.error("getLastVersion: %s" % str(e), exc_info=True)
-            result = {'success': False, 'reason': ["database connection error"]}
+            result = {'status': "error", 'reason': ["database connection error"]}
             headers = {'ContentType': 'application/json'}
             return make_response(jsonify(result),
                                  500,
                                  headers)
         except Exception as e:
             persistence_ns.logger.error("getLastVersion: %s" % str(e), exc_info=True)
-            result = {'success': False, 'reason': [str(e)]}
+            result = {'status': "error", 'reason': [str(e)]}
             headers = {'ContentType': 'application/json'}
             return make_response(jsonify(result),
                                  500,
