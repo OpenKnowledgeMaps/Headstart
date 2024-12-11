@@ -64,15 +64,15 @@ const ResearcherMetricsInfo = ({
           <>
             <h3>TEACHING & MENTORSHIP</h3>
             <p>
-              Number of total supervised PHD students:{" "}
+              Number of total supervised PhD students:{" "}
               <span>{params.total_supervised_phd_students ? params.total_supervised_phd_students : localization.notAvailable}</span>
             </p>
             <p>
-              Number of total supervised master students:{" "}
+              Number of total supervised Master students:{" "}
               <span>{params.total_supervised_master_students ? params.total_supervised_master_students : localization.notAvailable}</span>
             </p>
             <p>
-              Number of total supervised bachelor students:{" "}
+              Number of total supervised Bachelor students:{" "}
               <span>{params.total_supervised_bachelor_students ? params.total_supervised_bachelor_students : localization.notAvailable}</span>
             </p>
             <NotesOnMetrics notes={'Metrics are based on information supplied by the researcher on their ORCID profile. Entries titled “Supervision” and “Co-supervision” are counted for each degree. Results may be impacted by accuracy and completeness of this data.'} />
