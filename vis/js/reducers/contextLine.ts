@@ -71,6 +71,7 @@ const contextLine = (state = {}, action: any) => {
           context.params && context.params.lang_id
             ? getDocumentLanguage(config, context)
             : null,
+        service: context.service
       };
     default:
       return state;

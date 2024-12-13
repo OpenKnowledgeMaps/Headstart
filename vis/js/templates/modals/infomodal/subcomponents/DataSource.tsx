@@ -1,8 +1,13 @@
-// @ts-nocheck
-
 import React from "react";
 
-const DataSource = ({ source, contentProvider, description, logo }) => {
+interface DataSourceProps {
+  source: string;
+  contentProvider: string;
+  description: string;
+  logo: string;
+}
+
+const DataSource = ({ source, contentProvider, description, logo }: DataSourceProps) => {
   const getDataSource = () => {
     if (!contentProvider) {
       return <strong className="hs-strong">{source}</strong>;

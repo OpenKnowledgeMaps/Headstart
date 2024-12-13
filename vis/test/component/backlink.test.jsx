@@ -4,9 +4,9 @@ import { Provider } from 'react-redux';
 import configureStore from 'redux-mock-store';
 import { expect, describe, it, vi, afterEach } from 'vitest';
 
-import BacklinkContainer from '../../js/components/Backlink';
-import BacklinkTemplate from '../../js/templates/Backlink';
-import { Backlink } from '../../js/components/Backlink';
+import BackLinkContainer from '../../js/components/Backlink';
+import BackLinkTemplate from '../../js/templates/Backlink';
+import { BackLink } from '../../js/components/Backlink';
 import { zoomOut } from '../../js/actions';
 
 // Setup function for Backlink component tests
@@ -20,7 +20,7 @@ const setup = (overrideProps = {}) => {
     ...overrideProps,
   };
 
-  render(<Backlink {...props} />);
+  render(<BackLink {...props} />);
   return { props };
 };
 
@@ -90,7 +90,7 @@ describe('Backlink component', () => {
 
         render(
           <Provider store={store}>
-            <BacklinkContainer />
+            <BackLinkContainer />
           </Provider>
         );
 
@@ -114,7 +114,7 @@ describe('Backlink template', () => {
   });
 
   it('renders with the default classname', () => {
-    render(<BacklinkTemplate label="sample text" onClick={vi.fn()} />);
+    render(<BackLinkTemplate label="sample text" onClick={vi.fn()} />);
     expect(screen.getByText('sample text')).toBeInTheDocument();
   });
 });

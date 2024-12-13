@@ -1,9 +1,13 @@
-// @ts-nocheck
-
 import React from "react";
 import { getIcon } from "../listentry/Tags";
+import { Paper } from "../../@types/paper";
 
-const Icons = ({ paper, iconClasses }) => {
+interface IconsProps {
+  paper: Paper;
+  iconClasses: string
+}
+
+const Icons = ({ paper, iconClasses }: IconsProps) => {
   const { oa: isOpenAccess, free_access: isFreeAccess } = paper;
 
   const doctypeIcons = paper.resulttype

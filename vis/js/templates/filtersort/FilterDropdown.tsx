@@ -36,13 +36,21 @@ const FilterDropdown = ({
         noCaret
         className="truncate-text"
         title={
-          <>
-            {label}
-            <span id="curr-filter-type">{valueLabel}</span>
+          <span style={{
+            maxWidth: '100%',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center'
+          }}>
+            <span>{label}</span>
+            <span id="curr-filter-type" className="truncate-text" style={{
+              minWidth: '0px',
+              marginLeft: "3px"
+            }}>{valueLabel}</span>
             <i className="fas fa-chevron-down chevron" style={{
               marginLeft: "3px"
-            }}></i>
-          </>
+            }}/>
+          </span>
         }
       >
         {options.map((o) => (

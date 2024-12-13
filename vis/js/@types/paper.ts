@@ -21,7 +21,7 @@ export interface Paper {
     page: number;
     issn: number;
 
-    resulttype: string;
+    resulttype: string[];
 
     x?: number;
     y?: number;
@@ -31,6 +31,9 @@ export interface Paper {
 
     area_uri: string;
     area: string;
+
+    free_access: boolean;
+    oa: boolean;
 
     // data from backend
     cited_by_fbwalls_count?: number;
