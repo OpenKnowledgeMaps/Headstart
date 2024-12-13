@@ -55,7 +55,7 @@ const ResearcherMetricsInfo = ({
           <span>{params.total_unique_social_media_mentions ? params.total_unique_social_media_mentions : localization.notAvailable}</span>
         </p>
         <p>
-          Number of total news encyclopaedia, patent and policy references:{" "}
+          Number of total news, encyclopaedia, patent and policy references:{" "}
           <span>{params.total_neppr ? params.total_neppr : localization.notAvailable}</span>
         </p>
         <NotesOnMetrics notes={'Metrics are based on data provided by Altmetric and information supplied by the researcher on their ORCID profile. Results may be impacted by accuracy and completeness of this data. Social media mentions include the following: Facebook, blog posts, Google+, Reddit, X, Youtube, Q&A forums and Stack Exchange.'} />
@@ -64,15 +64,15 @@ const ResearcherMetricsInfo = ({
           <>
             <h3>TEACHING & MENTORSHIP</h3>
             <p>
-              Number of total supervised PHD students:{" "}
+              Number of total supervised PhD students:{" "}
               <span>{params.total_supervised_phd_students ? params.total_supervised_phd_students : localization.notAvailable}</span>
             </p>
             <p>
-              Number of total supervised master students:{" "}
+              Number of total supervised Master students:{" "}
               <span>{params.total_supervised_master_students ? params.total_supervised_master_students : localization.notAvailable}</span>
             </p>
             <p>
-              Number of total supervised bachelor students:{" "}
+              Number of total supervised Bachelor students:{" "}
               <span>{params.total_supervised_bachelor_students ? params.total_supervised_bachelor_students : localization.notAvailable}</span>
             </p>
             <NotesOnMetrics notes={'Metrics are based on information supplied by the researcher on their ORCID profile. Entries titled “Supervision” and “Co-supervision” are counted for each degree. Results may be impacted by accuracy and completeness of this data.'} />
