@@ -115,18 +115,16 @@ function search($service, $dirty_query
       $last_version = $persistence->getLastVersion($unique_id, false, false)[0];
       //todo: log output of $last_version
       // log to docker logs
-
-      error_log(message: "search.php: type of last_version: " . gettype($last_version));
-      error_log(message: "search.php: keys of last_version: " . print_r(array_keys($last_version), true));
-      error_log(message: "search.php: raw array of last_version: " . print_r($last_version, true));
-      error_log(message: "search.php: raw array of last_version: " . print_r($last_version["result"], true));
-      error_log("search.php: last_version: " . json_decode($last_version["result"], true));
+     
       // check if success-status of last_version call is false
       if ($last_version["httpcode"] != 200) {
-        return json_encode($last_version["result"]);
+        error_log("search.php: last_version call failed with http code " . $last_version["httpcode"]);
+        error_log("search.php: last_version call failed with result " . $last_version["result"]);
+        return $last_version["result"];
       }
 
       if ($last_version != null && $last_version != "null" && $last_version != false) {
+          // for example, non-existant vis_id is handled here, which looks like [False]
           echo json_encode(array("query" => $query, "id" => $unique_id, "status" => "success"));
           return;
       }

@@ -128,7 +128,7 @@ def get_revision(database, vis_id, rev_id, details=False, context=False):
                 res = rev.rev_data
     except TypeError:
         persistence_ns.logger.debug("get_revision: Vis ID not found: %s in database %s" % (vis_id, database))
-        res = "null"    
+        res = "null"
     session.close()
     return res
 
@@ -156,9 +156,7 @@ def get_context(database, vis_id, revision_context=False):
     except TypeError:
         persistence_ns.logger.debug("get_context: Vis ID not found: %s in database %s" % (vis_id, database))
         res = [False]
-    except OperationalError as e:
-        persistence_ns.logger.error("get_context: %s" % str(e), exc_info=True)
-        res = {"status": "error", 'reason': ["database connection error"]}
+        # 
     session.close()
     return res
 
@@ -263,7 +261,7 @@ class getLastVersion(Resource):
             result = {'status': "error", 'reason': ["database connection error"]}
             headers = {'ContentType': 'application/json'}
             return make_response(jsonify(result),
-                                 500,
+                                 503,
                                  headers)
         except Exception as e:
             persistence_ns.logger.error("getLastVersion: %s" % str(e), exc_info=True)
@@ -299,12 +297,14 @@ class getContext(Resource):
             vis_id = payload.get('vis_id')
             revision_context = payload.get('revision_context', False)
             result = get_context(database, vis_id, revision_context)
+            # when error, then result is a list [False]
             persistence_ns.logger.debug(result)
             headers = {'ContentType': 'application/json'}
             return make_response(jsonify(result),
                                  200,
                                  headers)
         except OperationalError as e:
+            # this is not yet working, in the sense the search flow does not react to it
             persistence_ns.logger.error("getContext: %s" % str(e), exc_info=True)
             result = {'success': False, 'reason': ["database connection error"]}
             headers = {'ContentType': 'application/json'}
