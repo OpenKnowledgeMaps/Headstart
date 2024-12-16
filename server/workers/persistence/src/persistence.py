@@ -156,7 +156,6 @@ def get_context(database, vis_id, revision_context=False):
     except TypeError:
         persistence_ns.logger.debug("get_context: Vis ID not found: %s in database %s" % (vis_id, database))
         res = [False]
-        # 
     session.close()
     return res
 
@@ -198,13 +197,15 @@ class createVisualization(Resource):
             create_visualization(database,
                                  vis_id, vis_title, data,
                                  vis_clean_query, vis_query, vis_params)
-            result = {'status': "success"}
+            # result = {'status': "success"}
+            result = {'success': True}
             headers = {'ContentType': 'application/json'}
             return make_response(jsonify(result),
                                  200,
                                  headers)
         except Exception as e:
-            result = {'status': "error", 'reason': [str(e)]}
+            result = {'success': False, 'reason': [str(e)]}
+            # result = {'status': "error", 'reason': [str(e)]}
             headers = {'ContentType': 'application/json'}
             return make_response(jsonify(result),
                                  500,
@@ -223,11 +224,13 @@ class writeRevision(Resource):
             data = payload.get("data")
             # persistence_ns.logger.debug(data)
             write_revision(database, vis_id, data)
-            result = {'status': "success"}
+            result = {'success': True}
+            # result = {'status': "success"}
             headers = {'ContentType': 'application/json'}
             return make_response(jsonify(result), 200, headers)
         except Exception as e:
-            result = {'status': "error", 'reason': [str(e)]}
+            result = {'success': False, 'reason': [str(e)]}
+            # result = {'status': "error", 'reason': [str(e)]}
             headers = {'ContentType': 'application/json'}
             return make_response(jsonify(result), 500, headers)
 
@@ -265,7 +268,10 @@ class getLastVersion(Resource):
                                  headers)
         except Exception as e:
             persistence_ns.logger.error("getLastVersion: %s" % str(e), exc_info=True)
-            result = {'status': "error", 'reason': [str(e)]}
+            # it says success because function executeSearchRequest() in search.js expects it
+            # and does an output.status === "success" check against it
+            result = {'success': False, 'reason': [str(e)]}
+            # result = {'status': "error", 'reason': [str(e)]}
             headers = {'ContentType': 'application/json'}
             return make_response(jsonify(result),
                                  500,

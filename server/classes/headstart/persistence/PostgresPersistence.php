@@ -64,9 +64,9 @@ class PostgresPersistence implements Persistence
             "details" => $details,
             "context" => $context));
         $res = $this->api_client->call_persistence("getLastVersion", $payload);
-        error_log(message: "PostgresPersistence.php: raw result: " . print_r($res, true));
+        // error_log(message: "PostgresPersistence.php: raw result: " . print_r($res, true));
         // this sometimes looks like array("result" => "null", "httpcode" => 200)
-        error_log(message: "PostgresPersistence.php: result http code: " . $res["httpcode"]);
+        // error_log(message: "PostgresPersistence.php: result http code: " . $res["httpcode"]);
         if ($res["httpcode"] != 200) {
             // we could throw here and then handle the error in the calling function, e.g. getLastVersion.php
             $data = $res;            
@@ -79,8 +79,8 @@ class PostgresPersistence implements Persistence
             $data = array($data);
         }
         //hypothesis: does not return a response that search.php can recognize as failed search/request
-        error_log("PostgresPersistence.php: raw data: " . print_r($data, true));
-        error_log("PostgresPersistence.php: data: " . json_encode($data));
+        // error_log("PostgresPersistence.php: raw data: " . print_r($data, true));
+        // error_log("PostgresPersistence.php: data: " . json_encode($data));
         return $data;
     }
 

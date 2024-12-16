@@ -112,7 +112,13 @@ function search($service, $dirty_query
     }
 
     if($retrieve_cached_map) {
-      $last_version = $persistence->getLastVersion($unique_id, false, false)[0];
+      $last_version = $persistence->getLastVersion($unique_id, false, false);
+      if ($last_version != null && $last_version != "null" && $last_version != false) {
+          error_log("search.php: last_version call returned " . print_r($last_version, true));
+          // for example, non-existant vis_id is handled here, which looks like [False]
+          echo json_encode(array("query" => $query, "id" => $unique_id, "status" => "success"));
+          return;
+      }
       //todo: log output of $last_version
       // log to docker logs
      
@@ -121,12 +127,6 @@ function search($service, $dirty_query
         error_log("search.php: last_version call failed with http code " . $last_version["httpcode"]);
         error_log("search.php: last_version call failed with result " . $last_version["result"]);
         return $last_version["result"];
-      }
-
-      if ($last_version != null && $last_version != "null" && $last_version != false) {
-          // for example, non-existant vis_id is handled here, which looks like [False]
-          echo json_encode(array("query" => $query, "id" => $unique_id, "status" => "success"));
-          return;
       }
     }
 
