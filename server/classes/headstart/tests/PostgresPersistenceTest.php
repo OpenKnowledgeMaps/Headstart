@@ -16,45 +16,41 @@ use PHPUnit\Framework\TestCase;
 class PostgresPersistenceTest extends TestCase
 {
     public function testThatInSuccesfulConditionsReturnsAResponseObjectWeCanHandle(): void {
-        $apiclient = $this->createMock(APIClient::class);
-        $jsonFilePath = __DIR__ . "/test_data/successfulGetContextResponse.json";
-        $jsonStringFromApi = file_get_contents($jsonFilePath); // returns string
-        $mockResponse = [
-            "result" => $jsonStringFromApi,
-            "httpcode" => 200
-        ];
-        $apiclient->method("call_persistence")->willReturn($mockResponse);
+        $apiclient = $this->getMockedApiclient("successfulGetContextResponse.json", 200);
         $persistence = new PostgresPersistence($apiclient);
+        $vis_id = "asdfasdf";
         $response = $persistence->getContext($vis_id);
+
         $this->assertIsArray($response);
     }
 
     public function testWhenDBMissingReturnsAResponseObjectWeCanHandle(): void {
-        $apiclient = $this->createMock(APIClient::class);
-        $jsonFilePath = __DIR__ . "/test_data/unsuccessfulGetContextDBHostCannotBeResolved.json";
-        $jsonStringFromApi = file_get_contents($jsonFilePath); // returns string
-        $mockResponse = [
-            "result" => $jsonStringFromApi,
-            "httpcode" => 503
-        ];
-        $apiclient->method("call_persistence")->willReturn($mockResponse);
+        $apiclient = $this->getMockedApiclient("unsuccessfulGetContextDBHostCannotBeResolved.json", 503);
         $persistence = new PostgresPersistence($apiclient);
+        $vis_id = "asdfasdf";
         $response = $persistence->getContext($vis_id);
-        var_dump($response);
+
         $this->assertIsArray($response);
     }
 
     public function testWhenVisIDNotInDBReturnsAResponseObjectWeCanHandle(): void {
+        $apiclient = $this->getMockedApiclient("unsuccessfulgetContextResponseVisIdNotInDB.json", 200);
+        $persistence = new PostgresPersistence($apiclient);
+        $vis_id = "asdfasdf";
+        $response = $persistence->getContext($vis_id);
+
+        $this->assertIsArray($response);
+    }
+
+    private function getMockedApiclient(string $jsonFileName, int $statusCode): Apiclient {
         $apiclient = $this->createMock(APIClient::class);
-        $jsonFilePath = __DIR__ . "/test_data/unsuccessfulgetContextResponseVisIdNotInDB.json";
-        $jsonStringFromApi = file_get_contents($jsonFilePath); // returns string
+        $jsonFilePath = __DIR__ . "/test_data/" . $jsonFileName;
+        $jsonStringFromApi = file_get_contents($jsonFilePath);
         $mockResponse = [
             "result" => $jsonStringFromApi,
-            "httpcode" => 200
+            "httpcode" => $statusCode
         ];
         $apiclient->method("call_persistence")->willReturn($mockResponse);
-        $persistence = new PostgresPersistence($apiclient);
-        $response = $persistence->getContext($vis_id);
-        $this->assertIsArray($response);
+        return $apiclient;
     }
 }
