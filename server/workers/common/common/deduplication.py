@@ -46,7 +46,7 @@ def mark_duplicate_links(df):
 def identify_relations(df):
     for udoi in df.unversioned_doi.unique():
         if udoi:
-            tmp = df[df.identifier.str.contains(udoi)]
+            tmp = df[df.identifier.str.contains(udoi, regex=False)]
             if len(tmp) > 1:
                 relations = tmp.id
                 r = pd.Series([relations.values.tolist()]*len(tmp), index=relations.index)
