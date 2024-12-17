@@ -292,6 +292,7 @@ class getRevision(Resource):
 
 
 @persistence_ns.route('/getContext/<database>')
+# this should be a GET request instead
 class getContext(Resource):
 
     @persistence_ns.produces(["application/json"])
@@ -315,10 +316,12 @@ class getContext(Resource):
             result = {'success': False, 'reason': ["database connection error"]}
             headers = {'ContentType': 'application/json'}
             return make_response(jsonify(result),
-                                 500,
+                                 503,
                                  headers)
         except Exception as e:
             persistence_ns.logger.error("getContext: %s" % str(e), exc_info=True)
+            # do we want to changes result reason to be more generic, but not open ended?
+            # at least we could map it to a specific error code/message on the fail page
             result = {'success': False, 'reason': [str(e)]}
             headers = {'ContentType': 'application/json'}
             return make_response(jsonify(result),

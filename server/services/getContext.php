@@ -7,6 +7,7 @@ require_once dirname(__FILE__) . '/../classes/headstart/persistence/DispatchingP
 require_once dirname(__FILE__) . '/../classes/headstart/library/CommUtils.php';
 require_once dirname(__FILE__) . '/../classes/headstart/library/Toolkit.php';
 require_once dirname(__FILE__) . '/../classes/headstart/library/APIClient.php';
+require_once dirname(__FILE__) . '/../classes/headstart/library/getContextResultBuilder.php';
 
 use headstart\library;
 
@@ -23,11 +24,13 @@ $persistence = new \headstart\persistence\PostgresPersistence($apiclient);
 // Remove the calls to this getContext on the persistence object. Replace instead with a getContextResultBuilder that returns a result object
 // This should contain the httpStatusCode to pass to the client, the result in string form (some json encoded string) and it should never throw.
 
+$getContextResultBuilder = new \headstart\library\getContextResultBuilder($persistence);
 
 // [thing that formats the response for the user] - [thing that parses responses from the persistence api] - [thing that makes requests to persisent api and handles the network calls etc.]
 
 // Err... why is the only caller of this having to unpack the array to take the first result? Is someone wrapping this reponse in an array unecessarily?
-$data = $persistence->getContext($vis_id)[0];
+// $data = $persistence->getContext($vis_id)[0];
+$result = $getContextResultBuilder->getContext($vis_id);
 
 /*
 It it works
@@ -39,14 +42,16 @@ It it works
   "vis_title": "base"
 }
 */
-$return_data = array("id" => $data["rev_vis"],
-                      "query" => $data["vis_query"],
-                      "service" => $data["vis_title"],
-                      "timestamp" => $data["rev_timestamp"],
-                      "params" => $data["vis_params"]);
-if (array_key_exists("additional_context", $data)) {
-  $return_data = array_merge($return_data, $data["additional_context"]);
-}
-$jsonData = json_encode($return_data);
+// $return_data = array("id" => $data["rev_vis"],
+//                       "query" => $data["vis_query"],
+//                       "service" => $data["vis_title"],
+//                       "timestamp" => $data["rev_timestamp"],
+//                       "params" => $data["vis_params"]);
+// if (array_key_exists("additional_context", $data)) {
+//   $return_data = array_merge($return_data, $data["additional_context"]);
+// }
+// $jsonData = json_encode($return_data);
 // To investigate: is anyone needing the callback version of this??
-library\CommUtils::echoOrCallback($jsonData, $_GET);
+// meaning, can this be simplified to just echo $result;
+// library\CommUtils::echoOrCallback($result, $_GET);
+echo $result;

@@ -73,8 +73,8 @@ function search($service, $dirty_query
         ? (cleanQuery($dirty_query, $transform_query_tolowercase, $add_slashes))
         : ($dirty_query);
 
-    $postgresPersistence = new \headstart\persistence\PostgresPersistence($apiclient);
-    $persistence = new \headstart\persistence\DispatchingPersistence($postgresPersistence);
+    $persistence = new \headstart\persistence\PostgresPersistence($apiclient);
+    // $persistence = new \headstart\persistence\DispatchingPersistence($postgresPersistence);
 
     // todo: move back into own function once error handling is refactored
     if ($service == "openaire") {
@@ -113,8 +113,17 @@ function search($service, $dirty_query
 
     if($retrieve_cached_map) {
       $last_version = $persistence->getLastVersion($unique_id, false, false);
+      error_log("search.php: last_version call returned " . print_r($last_version, true));
+      // check if last_version call has httpcode, this is not always the case for return values
+      // then check if success-status of last_version call is false      
+      if (isset($last_version["result"]["httpcode"]) && $last_version["result"]["httpcode"] != 200) {
+        error_log("search.php: last_version call failed with http code " . $last_version["result"]["httpcode"]);
+        error_log("search.php: last_version call failed with result " . $last_version["result"]);
+        echo json_encode($last_version["result"]);
+        return;
+      }
+
       if ($last_version != null && $last_version != "null" && $last_version != false) {
-          error_log("search.php: last_version call returned " . print_r($last_version, true));
           // for example, non-existant vis_id is handled here, which looks like [False]
           echo json_encode(array("query" => $query, "id" => $unique_id, "status" => "success"));
           return;
@@ -122,12 +131,6 @@ function search($service, $dirty_query
       //todo: log output of $last_version
       // log to docker logs
      
-      // check if success-status of last_version call is false
-      if ($last_version["httpcode"] != 200) {
-        error_log("search.php: last_version call failed with http code " . $last_version["httpcode"]);
-        error_log("search.php: last_version call failed with result " . $last_version["result"]);
-        return $last_version["result"];
-      }
     }
 
     $payload = json_encode($post_params);
