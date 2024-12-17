@@ -76,7 +76,7 @@ class APIClient {
         if ($res["httpcode"] == 503) {
             // we had a 503 for the database connection error
             // this implementation actively suppresses the reason by resetting to an empty array
-            $res["reason"] = array();
+            // $res["reason"] = array();
         }
         if (!array_key_exists("reason", $res)) {
             $res["reason"] = array();

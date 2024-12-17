@@ -115,14 +115,20 @@ function search($service, $dirty_query
       $last_version = $persistence->getLastVersion($unique_id, false, false);
       error_log("search.php: last_version call returned " . print_r($last_version, true));
       // check if last_version call has httpcode, this is not always the case for return values
-      // then check if success-status of last_version call is false      
-      if (isset($last_version["result"]["httpcode"]) && $last_version["result"]["httpcode"] != 200) {
-        error_log("search.php: last_version call failed with http code " . $last_version["result"]["httpcode"]);
-        error_log("search.php: last_version call failed with result " . $last_version["result"]);
-        echo json_encode($last_version["result"]);
-        return;
+      // then check if success-status of last_version call is false
+      if (is_array($last_version) && is_array(($last_version[0]))) {
+        $last_version = $last_version[0];
+        if (array_key_exists("httpcode", $last_version) && $last_version["httpcode"] != 200) {
+          $result = json_decode($last_version["result"], true);
+          $httpcode = $last_version["httpcode"];
+          error_log("search.php: last_version call failed with http code " . $httpcode);
+          error_log("search.php: last_version call failed with result " . print_r($result, true));
+          echo json_encode($result);
+          return;
+        }
       }
-
+      // TODO: This and the previous if are not mutually exclusive, so the second if should be an else if
+      // and also it should be refactored to a function that returns the result or throws an exception
       if ($last_version != null && $last_version != "null" && $last_version != false) {
           // for example, non-existant vis_id is handled here, which looks like [False]
           echo json_encode(array("query" => $query, "id" => $unique_id, "status" => "success"));

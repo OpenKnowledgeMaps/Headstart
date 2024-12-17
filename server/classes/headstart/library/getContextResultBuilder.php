@@ -21,7 +21,8 @@ class getContextResultBuilder {
     }
 
     public function getContext($vis_id) {
-        $data = $this->persistence->getContext($vis_id);
+        // TODO: remove the [0] unpacking from array
+        $data = $this->persistence->getContext($vis_id)[0];
         $return_data = array("id" => $data["rev_vis"],
                       "query" => $data["vis_query"],
                       "service" => $data["vis_title"],
