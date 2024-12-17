@@ -23,6 +23,10 @@ $persistence = new \headstart\persistence\DispatchingPersistence($postgresPersis
 
 
 $data = $persistence->getContext($vis_id)[0];
+// if e.g. the db host is missing, error handling should happen here
+// we should return a JSON with an error message instead
+error_log("Data in getContext.php: " . print_r($data, true));
+// is the database connection error maybe swallowed here? No, but it is not handled either
 $return_data = array("id" => $data["rev_vis"],
                       "query" => $data["vis_query"],
                       "service" => $data["vis_title"],
@@ -32,4 +36,5 @@ if (array_key_exists("additional_context", $data)) {
   $return_data = array_merge($return_data, $data["additional_context"]);
 }
 $jsonData = json_encode($return_data);
+// in case of db host missing error, it returns HTML from the warnings, and a JSON with null values
 library\CommUtils::echoOrCallback($jsonData, $_GET);
