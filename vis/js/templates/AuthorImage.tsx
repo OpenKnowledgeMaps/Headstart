@@ -17,18 +17,24 @@ const AuthorImage = ({ service, url = "", orcidId }: AuthorImageProps) => {
     link = url;
   }
 
+  let href = "";
+
   if (service === ServiceType.ORCID) {
-    link = `https://orcid.org/${orcidId}`
+    href = `https://orcid.org/${orcidId}`
+  } else {
+    href = link;
   }
 
   return (
     <div id="title_image" className="titleimage">
       <a
         id="author_image_link"
-        href={link}
+        href={href}
         target="_blank"
         rel="noreferrer"
         aria-label="author image"
+        // if href is empty, then the link is not clickable
+        style={{ pointerEvents: href ? "auto" : "none" }}
       >
         <div
           id="author_image"
