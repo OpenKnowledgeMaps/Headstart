@@ -63,7 +63,7 @@ const ScaleToolbar = ({
               onSelect={handleScaleChange}
               active={key === value}
             >
-              {labels[key]}
+              <div className="wrap">{labels[key]}</div>
             </MenuItem>
           ))}
         </DropdownButton>
