@@ -69,7 +69,7 @@ const SortDropdown = ({ label, value, valueLabel, options, handleChange }: SortD
             onSelect={handleSortChange}
             active={o.id === value}
           >
-            <div className="truncate-text">{o.label}</div>
+            <div className="wrap">{o.label}</div>
           </MenuItem>
         ))}
       </DropdownButton>

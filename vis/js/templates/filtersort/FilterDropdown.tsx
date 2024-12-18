@@ -61,7 +61,7 @@ const FilterDropdown = ({
             onSelect={handleFilterChange}
             active={o.id === value}
           >
-            {o.label}
+            <div className="wrap">{o.label}</div>
           </MenuItem>
         ))}
       </DropdownButton>
