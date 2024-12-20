@@ -1,0 +1,152 @@
+name: CI Backend
+
+on:
+  push:
+  pull_request:
+    types: [synchronize, opened]
+  workflow_dispatch:
+
+jobs:
+  # Frontend job as before
+  # build_frontend:
+  #   name: Build and lint frontend
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Checkout repository
+  #       uses: actions/checkout@v4
+
+  #     - name: Set up Node.js 20.x
+  #       uses: actions/setup-node@v4
+  #       with:
+  #         node-version: 20.x
+
+  #     - name: Install dependencies
+  #       run: npm install
+
+  #     - name: Copy config file
+  #       run: cp config.example.js config.js
+
+  #     - name: Lint code
+  #       run: npm run lint
+
+  #     - name: Build project
+  #       run: npx webpack
+
+  # Python ORCID worker job
+  test_orcid_worker:
+    name: Lint, Test and Build ORCID Worker
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.9
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+
+      - name: Install Python dependencies
+        run: |
+          cd server/workers/orcid
+          pip install --upgrade pip
+          # Install main dependencies
+          pip install --no-cache-dir -r requirements.txt
+          # Install dev dependencies (linters, tests, formatters)
+          pip install --no-cache-dir -r requirements-e.txt
+          # Install dev dependencies (linters, tests, formatters)
+          pip install --no-cache-dir -r requirements-dev.txt
+
+      # - name: Lint and format check
+      #   run: |
+      #     cd server/workers/orcid
+      #     # Check formatting with black:
+      #     black --check src
+      #     # Check import sorting:
+      #     isort --check-only src
+      #     # Linting with flake8
+      #     flake8 src
+
+      # - name: Static type checking (mypy)
+      #   run: |
+      #     cd server/workers/orcid
+      #     mypy src
+
+      - name: Run tests with coverage
+        run: |
+          cd server/workers/orcid
+          pytest --maxfail=1 --disable-warnings -v --cov=src --cov-report=xml test
+
+      - name: Build Docker image for ORCID worker
+        # Build the image with the same context as in your docker-compose
+        run: |
+          docker build -f server/workers/orcid/Dockerfile -t your-org/orcid-worker:latest server
+      
+      - name: Build Docker image for ORCID worker
+        # Build the image with the same context as in your docker-compose
+        run: |
+          docker build -f server/workers/orcid/Dockerfile -t your-org/orcid-worker:latest server
+
+      # - name: Build Docker image for DATAPROCESSING worker
+      #   # Build the image with the same context as in your docker-compose
+      #   run: |
+      #     docker build -f server/workers/dataprocessing/Dockerfile -t your-org/dataprocessing-worker:latest server
+      
+      # - name: Build Docker image for METRICS worker
+      #   # Build the image with the same context as in your docker-compose
+      #   run: |
+      #     docker build -f server/workers/metrics/Dockerfile -t your-org/metrics-worker:latest server
+      
+      # - name: Build Docker image for OPENAIRE worker
+      #   # Build the image with the same context as in your docker-compose
+      #   run: |
+      #     docker build -f server/workers/openaire/Dockerfile -t your-org/openaire-worker:latest server
+
+      # - name: Build Docker image for PUBMED worker
+      #   # Build the image with the same context as in your docker-compose
+      #   run: |
+      #     docker build -f server/workers/pubmed/Dockerfile -t your-org/pubmed-worker:latest server
+
+      # - name: Build Docker image for PERSISTENCE worker
+      #   # Build the image with the same context as in your docker-compose
+      #   run: |
+      #     docker build -f server/workers/persistence/Dockerfile -t your-org/persistence-worker:latest server
+  
+  ci_api_worker:
+    name: Lint, Test and Build API Worker
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Build Docker image for API worker
+        # Build the image with the same context as in your docker-compose
+        run: |
+          docker build -f server/workers/api/Dockerfile -t your-org/api-worker:latest server
+
+  ci_base_worker:
+    name: Lint, Test and Build BASE Worker
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Build Docker image for BASE worker
+        # Build the image with the same context as in your docker-compose
+        run: |
+          docker build -f server/workers/base/Dockerfile -t your-org/base-worker:latest server
+
+  # ci_base_worker:
+  #   name: Lint, Test and Build BASE Worker
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Build Docker image for BASE worker
+  #       # Build the image with the same context as in your docker-compose
+  #       run: |
+  #         docker build -f server/workers/base/Dockerfile -t your-org/base-worker:latest server
+
+      # If you need to push the image to a registry, you can add authorization and push steps
+      # - name: Log in to registry
+      #   run: echo ${{ secrets.DOCKER_REGISTRY_PASSWORD }} | docker login -u ${{ secrets.DOCKER_REGISTRY_USERNAME }} --password-stdin your-registry.com
+      #
+      # - name: Push Docker image
+      #   run: docker push your-org/orcid-worker:latest
