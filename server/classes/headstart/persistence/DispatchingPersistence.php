@@ -4,6 +4,7 @@ namespace headstart\persistence;
 
 /**
  * This class implements the PersistenceInterface and provides methods to interact with the database.
+ * Deprecated, this should now be removed.
  */
 class DispatchingPersistence implements Persistence
 {

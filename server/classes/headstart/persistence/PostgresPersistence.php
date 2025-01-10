@@ -4,6 +4,7 @@ namespace headstart\persistence;
 use headstart\library\APIClient;
 
 require_once 'Persistence.php';
+require_once 'VisualizationContext.php';
 
 /**
  * This class implements the PersistenceInterface and provides methods to interact with the database.
@@ -96,6 +97,15 @@ class PostgresPersistence implements Persistence
         $res = $this->api_client->call_persistence("getContext", $payload);
         $data = json_decode($res["result"], true);
         return array($data);
+    }
+
+    public function getVisualizationContext($vis_id): VisualizationContext
+    {
+        $payload = json_encode(array("vis_id" => $vis_id));
+        $res = $this->api_client->call_persistence("getContext", $payload);
+        $data = json_decode($res["result"], true);
+        $httpcode = $res["httpcode"];
+        return new VisualizationContext($data, $httpcode);
     }
 
     public function createID($string_array, $payload): string

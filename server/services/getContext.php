@@ -24,16 +24,18 @@ $persistence = new \headstart\persistence\PostgresPersistence($apiclient);
 // Remove the calls to this getContext on the persistence object. Replace instead with a getContextResultBuilder that returns a result object
 // This should contain the httpStatusCode to pass to the client, the result in string form (some json encoded string) and it should never throw.
 
-$getContextResultBuilder = new \headstart\library\getContextResultBuilder($persistence);
+$getContextResultBuilder = new \headstart\library\getContextResultBuilder();
 
 // [thing that formats the response for the user] - [thing that parses responses from the persistence api] - [thing that makes requests to persisent api and handles the network calls etc.]
 
 // Err... why is the only caller of this having to unpack the array to take the first result? Is someone wrapping this reponse in an array unecessarily?
 // $data = $persistence->getContext($vis_id)[0];
-$result = $getContextResultBuilder->getContext($vis_id);
+// $result = $getContextResultBuilder->getContext($vis_id);
+$visualizationContext = $persistence->getVisualizationContext($vis_id);
+http_response_code($visualizationContext->httpcode);
 
 /*
-It it works
+If it works
 {
   "rev_timestamp": "Thu, 12 Sep 2024 10:23:47 GMT",
   "rev_vis": "d161dba364a1e8c0468b9c74407e3575",
@@ -54,4 +56,4 @@ It it works
 // To investigate: is anyone needing the callback version of this??
 // meaning, can this be simplified to just echo $result;
 // library\CommUtils::echoOrCallback($result, $_GET);
-echo $result;
+echo $getContextResultBuilder->getContext($visualizationContext);
