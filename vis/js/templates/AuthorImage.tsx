@@ -29,6 +29,7 @@ const AuthorImage = ({ service, url = "", orcidId }: AuthorImageProps) => {
     <div id="title_image" className="titleimage">
       <a
         id="author_image_link"
+        title="Open link to ORCID profile in a new tab"
         href={href}
         target="_blank"
         rel="noreferrer"
