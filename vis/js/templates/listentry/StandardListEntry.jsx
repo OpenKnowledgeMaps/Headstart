@@ -18,6 +18,7 @@ import Keywords from "./Keywords";
 import Link from "./Link";
 import Metrics from "./Metrics";
 import Title from "./Title";
+import Coordinates from "./Coordinates";
 
 /**
  * Standard list entry template used in project website, CoVis and Viper.
@@ -37,7 +38,7 @@ const StandardListEntry = ({
   showDocTags,
   showAllDocTypes,
   // event handlers
-  handleBacklinkClick,
+  handleBacklinkClick
 }) => {
   const backlink = {
     show: showBacklink,
@@ -51,7 +52,6 @@ const StandardListEntry = ({
     !!baseUnit &&
     !showMetrics &&
     (!!citations || parseInt(citations) === 0);
-
   return (
     // html template starts here
     <div id="list_holder" className="resulttype-paper">
@@ -66,6 +66,7 @@ const StandardListEntry = ({
             isDoi={paper.list_link.isDoi}
           />
         </div>
+        <Coordinates x={paper.x} y={paper.y} />
         {showDocumentType && paper.resulttype.length > 0 && (
           <DocumentType type={paper.resulttype[0]} />
         )}
