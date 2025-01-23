@@ -56,6 +56,8 @@ const setup = (overrideStoreObject = {}) => {
       },
       tracking: {},
       localization: {},
+      toolbar: {},
+      paper: {},
     },
     overrideStoreObject
   );

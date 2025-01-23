@@ -3,7 +3,7 @@ import { Config } from "../default-config";
 
 const exists = (param: any) => {
   return typeof param !== "undefined" && param !== "null" && param !== null;
-}
+};
 
 const contextLine = (state = {}, action: any) => {
   if (action.canceled) {
@@ -17,10 +17,12 @@ const contextLine = (state = {}, action: any) => {
   switch (action.type) {
     case "INITIALIZE":
       return {
-        isResearcherDetailsEnabled: action.configObject.isResearcherDetailsEnabled,
-        isResearcherMetricsEnabled: action.configObject.isResearcherMetricsEnabled,
+        isResearcherDetailsEnabled:
+          action.configObject.isResearcherDetailsEnabled,
+        isResearcherMetricsEnabled:
+          action.configObject.isResearcherMetricsEnabled,
         showLanguage: action.configObject.showLanguage,
-        show_h_index: context?.params?.enable_h_index === 'true',
+        show_h_index: context?.params?.enable_h_index === "true",
         show: !!config.show_context && !!context.params,
         articlesCount: papers.length,
         modifier: getModifier(config, context, papers.length),
@@ -44,9 +46,11 @@ const contextLine = (state = {}, action: any) => {
             ? config.service_name
             : config.service_names[context.service],
         contentProvider: context.params ? context.params.repo_name : null,
+        // ! TODO
         paperCount:
           config.create_title_from_context_style === "viper"
-            ? papers.filter((p: any) => p.resulttype.includes("publication")).length
+            ? papers.filter((p: any) => p.resulttype.includes("publication"))
+                .length
             : null,
         datasetCount:
           config.create_title_from_context_style === "viper"
@@ -71,6 +75,7 @@ const contextLine = (state = {}, action: any) => {
           context.params && context.params.lang_id
             ? getDocumentLanguage(config, context)
             : null,
+        service: context.service,
       };
     default:
       return state;
@@ -85,7 +90,11 @@ const contextLine = (state = {}, action: any) => {
  *
  * @returns {string} either most-recent, most-relevant or null
  */
-export const getModifier = (config: Config, context: any, numOfPapers: number) => {
+export const getModifier = (
+  config: Config,
+  context: any,
+  numOfPapers: number
+) => {
   if (context.service === "orcid") {
     return "most-recent";
   }
@@ -116,7 +125,9 @@ const getDocumentTypes = (config: Config, context: any) => {
 
   const documentTypesArray: string[] = [];
   // @ts-ignore
-  const documentTypeObj = config.options?.find((obj: any) => obj.id === propName);
+  const documentTypeObj = config.options?.find(
+    (obj: any) => obj.id === propName
+  );
 
   context.params[propName].forEach((type: any) => {
     const typeObj = documentTypeObj.fields.find((obj: any) => obj.id == type);
@@ -154,7 +165,7 @@ const getProjectRuntime = (config: Config, context: any) => {
 
   return `${context.params.start_date.slice(
     0,
-    4,
+    4
   )}–${context.params.end_date.slice(0, 4)}`;
 };
 
@@ -169,7 +180,7 @@ const getLegacySearchLanguage = (config: Config, context: Context) => {
   }
 
   const lang = config.options.languages.find(
-    (lang) => lang.code === context.params.lang_id,
+    (lang) => lang.code === context.params.lang_id
   );
 
   if (!lang) {
@@ -188,11 +199,18 @@ const getTimestamp = (config: Config, context: Context) => {
 };
 
 const getMetadataQuality = (config: Config, context: Context) => {
-  if (!context.params || !context.params.min_descsize || isNaN(parseInt(context.params.min_descsize))) {
+  if (
+    !context.params ||
+    !context.params.min_descsize ||
+    isNaN(parseInt(context.params.min_descsize))
+  ) {
     return null;
   }
 
-  let minDescSize = typeof context.params.min_descsize === 'string' ? parseInt(context.params.min_descsize) : context.params.min_descsize;
+  let minDescSize =
+    typeof context.params.min_descsize === "string"
+      ? parseInt(context.params.min_descsize)
+      : context.params.min_descsize;
 
   if (context.service === "base") {
     if (minDescSize < 300) {

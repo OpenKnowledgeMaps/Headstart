@@ -84,7 +84,11 @@ exports[`List filter component snapshot > matches a snapshot 1`] = `
             role="menuitem"
             tabIndex="-1"
           >
-            All
+            <div
+              className="wrap"
+            >
+              All
+            </div>
           </a>
         </li>
         <li
@@ -99,7 +103,11 @@ exports[`List filter component snapshot > matches a snapshot 1`] = `
             role="menuitem"
             tabIndex="-1"
           >
-            Open access
+            <div
+              className="wrap"
+            >
+              Open access
+            </div>
           </a>
         </li>
       </ul>
@@ -161,7 +169,7 @@ exports[`List filter component snapshot > matches a snapshot 1`] = `
             tabIndex="-1"
           >
             <div
-              className="truncate-text"
+              className="wrap"
             >
               Relevance
             </div>
@@ -180,7 +188,7 @@ exports[`List filter component snapshot > matches a snapshot 1`] = `
             tabIndex="-1"
           >
             <div
-              className="truncate-text"
+              className="wrap"
             >
               Year
             </div>

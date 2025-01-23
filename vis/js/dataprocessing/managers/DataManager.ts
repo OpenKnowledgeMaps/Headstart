@@ -42,9 +42,9 @@ class DataManager {
     citations: "citations",
     references: "references",
     cited_by_accounts_count: "social",
-    citation_count: 'citations',
-    cited_by_tweeters_count: 'tweets',
-    'readers.mendeley': 'readers'
+    citation_count: "citations",
+    cited_by_tweeters_count: "tweets",
+    "readers.mendeley": "readers",
   };
 
   constructor(config: Config, scheme = DEFAULT_SCHEME) {
@@ -117,9 +117,11 @@ class DataManager {
     if (this.config.show_context) {
       if (typeof backendData.data === "string") {
         const data = JSON.parse(backendData.data);
-        if (Array.isArray(data)) return data
+        if (Array.isArray(data)) return data;
         // typeof data.documents === "string" is temporal fix, consider to migrate to json instead of json in json
-        return data.documents && typeof data.documents === "string" ? JSON.parse(data?.documents) : data.documents ?? [];
+        return data.documents && typeof data.documents === "string"
+          ? JSON.parse(data?.documents)
+          : data.documents ?? [];
       }
       return backendData.data?.documents ?? [];
     }
@@ -390,10 +392,14 @@ class DataManager {
       const papers = areas[areaUri].papers;
 
       const x =
-        papers.map((e: any) => parseFloat(e.x)).reduce((a: any, b: any) => a + b, 0) /
+        papers
+          .map((e: any) => parseFloat(e.x))
+          .reduce((a: any, b: any) => a + b, 0) /
         (1.0 * papers.length);
       const y =
-        papers.map((e: any) => -parseFloat(e.y)).reduce((a: any, b: any) => a + b, 0) /
+        papers
+          .map((e: any) => -parseFloat(e.y))
+          .reduce((a: any, b: any) => a + b, 0) /
         (1.0 * papers.length);
 
       areas[areaUri].origX = x;
@@ -443,13 +449,11 @@ class DataManager {
     const parsedData = JSON.parse(backendData.streamgraph);
     const transformedData = transformData(parsedData);
 
-    // ! TODO
     // @ts-ignore
     const nest = d3.nest().key((d) => d.key);
 
     const nestedEntries = nest.entries(transformedData);
 
-    // ! TODO
     // @ts-ignore
     const stack = d3.layout
       .stack()

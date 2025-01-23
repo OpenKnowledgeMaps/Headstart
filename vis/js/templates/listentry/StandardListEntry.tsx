@@ -70,12 +70,14 @@ const StandardListEntry = ({
             isDoi={paper.list_link.isDoi}
           />
         </div>
+        {/* // ! TODO */}
         {showDocumentType && paper.resulttype.length > 0 && (
           <DocumentType type={paper.resulttype[0]} />
         )}
         <Abstract text={paper.paper_abstract} />
         {paper.comments.length > 0 && <Comments items={paper.comments} />}
         {showKeywords && <Keywords>{paper.keywords}</Keywords>}
+        {/* // ! TODO */}
         {showAllDocTypes && <DocTypesRow types={paper.resulttype} />}
 
         {service !== "orcid" && showMetrics && (

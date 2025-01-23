@@ -1,7 +1,6 @@
 name: CI Backend
 
 on:
-  # ! TODO
   # push:
   # pull_request:
   #   types: [synchronize, opened]
@@ -19,7 +18,7 @@ jobs:
       - name: Set up Python 3.9
         uses: actions/setup-python@v4
         with:
-          python-version: '3.9'
+          python-version: "3.9"
 
       - name: Install Python dependencies
         run: |
@@ -56,7 +55,7 @@ jobs:
         # Build the image with the same context as in your docker-compose
         run: |
           docker build -f server/workers/orcid/Dockerfile -t your-org/orcid-worker:latest server
-      
+
       - name: Build Docker image for ORCID worker
         # Build the image with the same context as in your docker-compose
         run: |
@@ -66,12 +65,12 @@ jobs:
       #   # Build the image with the same context as in your docker-compose
       #   run: |
       #     docker build -f server/workers/dataprocessing/Dockerfile -t your-org/dataprocessing-worker:latest server
-      
+
       # - name: Build Docker image for METRICS worker
       #   # Build the image with the same context as in your docker-compose
       #   run: |
       #     docker build -f server/workers/metrics/Dockerfile -t your-org/metrics-worker:latest server
-      
+
       # - name: Build Docker image for OPENAIRE worker
       #   # Build the image with the same context as in your docker-compose
       #   run: |
@@ -86,7 +85,7 @@ jobs:
       #   # Build the image with the same context as in your docker-compose
       #   run: |
       #     docker build -f server/workers/persistence/Dockerfile -t your-org/persistence-worker:latest server
-  
+
   ci_api_worker:
     name: Lint, Test and Build API Worker
     runs-on: ubuntu-latest
@@ -120,9 +119,9 @@ jobs:
   #       run: |
   #         docker build -f server/workers/base/Dockerfile -t your-org/base-worker:latest server
 
-      # If you need to push the image to a registry, you can add authorization and push steps
-      # - name: Log in to registry
-      #   run: echo ${{ secrets.DOCKER_REGISTRY_PASSWORD }} | docker login -u ${{ secrets.DOCKER_REGISTRY_USERNAME }} --password-stdin your-registry.com
-      #
-      # - name: Push Docker image
-      #   run: docker push your-org/orcid-worker:latest
+  # If you need to push the image to a registry, you can add authorization and push steps
+  # - name: Log in to registry
+  #   run: echo ${{ secrets.DOCKER_REGISTRY_PASSWORD }} | docker login -u ${{ secrets.DOCKER_REGISTRY_USERNAME }} --password-stdin your-registry.com
+  #
+  # - name: Push Docker image
+  #   run: docker push your-org/orcid-worker:latest
