@@ -1,37 +1,13 @@
 name: CI Backend
 
 on:
-  push:
-  pull_request:
-    types: [synchronize, opened]
+  # ! TODO
+  # push:
+  # pull_request:
+  #   types: [synchronize, opened]
   workflow_dispatch:
 
 jobs:
-  # Frontend job as before
-  # build_frontend:
-  #   name: Build and lint frontend
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - name: Checkout repository
-  #       uses: actions/checkout@v4
-
-  #     - name: Set up Node.js 20.x
-  #       uses: actions/setup-node@v4
-  #       with:
-  #         node-version: 20.x
-
-  #     - name: Install dependencies
-  #       run: npm install
-
-  #     - name: Copy config file
-  #       run: cp config.example.js config.js
-
-  #     - name: Lint code
-  #       run: npm run lint
-
-  #     - name: Build project
-  #       run: npx webpack
-
   # Python ORCID worker job
   test_orcid_worker:
     name: Lint, Test and Build ORCID Worker
