@@ -21,6 +21,6 @@ profile = "black"
 known_first_party = ["mycorp"]  # see package configuration below
 
 [tool.pyright]
-extraPaths = ["./server/workers/"]
+extraPaths = ["server/workers/api"]
 reportMissingTypeArgument = true  # Report generic classes used without type arguments
 strictListInference = true  # Use union types when inferring types of lists elements, instead of Any
