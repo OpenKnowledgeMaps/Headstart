@@ -53,6 +53,7 @@ class Search(Resource):
         if "optradio" in params:
             del params["optradio"]
         errors = search_param_schema.validate(params, partial=True)
+        params = sanitize_params(params)
         params["limit"] = 100
         params["list_size"] = 100
         pubmed_ns.logger.debug(errors)
@@ -92,3 +93,10 @@ class ServiceVersion(Resource):
     def get(self):
         result = {"service_version": os.getenv("SERVICE_VERSION")}
         return make_response(result, 200, {"Content-Type": "application/json"})
+    
+def sanitize_params(params):
+    article_types = params.get("article_types")
+    if article_types:
+        [at.replace("\&#39;", "'") for at in article_types]
+    return params
+            
