@@ -98,5 +98,6 @@ def sanitize_params(params):
     article_types = params.get("article_types")
     if article_types:
         [at.replace("\&#39;", "'") for at in article_types]
+        params["article_types"] = article_types
     return params
             
