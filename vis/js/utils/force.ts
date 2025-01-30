@@ -1,7 +1,7 @@
 // @ts-nocheck
 import d3 from "d3";
-import { Config } from "../default-config";
 import { Paper } from "../@types/paper";
+import { Config } from "../@types/config";
 
 /**
  * Applies force layout on the knowledge map bubbles and papers.

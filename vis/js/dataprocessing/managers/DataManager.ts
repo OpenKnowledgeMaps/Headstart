@@ -24,8 +24,8 @@ import { transformData } from "../../utils/streamgraph";
 
 import DEFAULT_SCHEME, { SchemeObject } from "../schemes/defaultScheme";
 import PaperSanitizer from "../../utils/PaperSanitizer";
-import { Config } from "../../default-config";
 import { Paper } from "../../@types/paper";
+import { Config } from "../../@types/config";
 
 const GOLDEN_RATIO = 2.6;
 
@@ -473,13 +473,11 @@ class DataManager {
     const parsedData = JSON.parse(backendData.streamgraph);
     const transformedData = transformData(parsedData);
 
-    // ! TODO
     // @ts-ignore
     const nest = d3.nest().key((d) => d.key);
 
     const nestedEntries = nest.entries(transformedData);
 
-    // ! TODO
     // @ts-ignore
     const stack = d3.layout
       .stack()

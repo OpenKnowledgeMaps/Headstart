@@ -1,5 +1,5 @@
+import { Config } from "../@types/config";
 import { Paper } from "../@types/paper";
-import { Config } from "../default-config";
 
 /**
  * All actions in this array are not delayed when the map is animated.

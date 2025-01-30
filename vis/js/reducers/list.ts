@@ -1,5 +1,5 @@
+import { Config } from "../@types/config";
 import { Context } from "../@types/context";
-import { Config } from "../default-config";
 
 const list = (
   state = {
@@ -28,7 +28,8 @@ const list = (
     return state;
   }
 
-  const { configObject: config, contextObject: context } = action;
+  const { contextObject: context } = action;
+  const config = action.configObject as Config;
 
   switch (action.type) {
     case "INITIALIZE":

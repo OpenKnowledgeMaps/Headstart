@@ -1,5 +1,5 @@
+import { Config } from "../@types/config";
 import { Context } from "../@types/context";
-import { Config } from "../default-config";
 
 const exists = (param: any) => {
   return typeof param !== "undefined" && param !== "null" && param !== null;
@@ -10,12 +10,14 @@ const contextLine = (state = {}, action: any) => {
     return state;
   }
 
-  const config = action.configObject;
+  const config = action.configObject as Config;
   const context = action.contextObject;
   const papers = action.papers;
 
   switch (action.type) {
     case "INITIALIZE":
+      debugger
+      // service_name in config?
       return {
         isResearcherDetailsEnabled: action.configObject.isResearcherDetailsEnabled,
         isResearcherMetricsEnabled: action.configObject.isResearcherMetricsEnabled,
@@ -39,10 +41,7 @@ const contextLine = (state = {}, action: any) => {
           imageLink: context?.params?.image_link ?? null,
         },
         documentTypes: getDocumentTypes(config, context),
-        dataSource:
-          typeof config.service_name !== "undefined"
-            ? config.service_name
-            : config.service_names[context.service],
+        dataSource: config.service_names?.[context.service],
         contentProvider: context.params ? context.params.repo_name : null,
         paperCount:
           config.create_title_from_context_style === "viper"
@@ -56,6 +55,7 @@ const contextLine = (state = {}, action: any) => {
           config.create_title_from_context_style === "viper" && context.params
             ? context.params.funder
             : null,
+          
         projectRuntime: getProjectRuntime(config, context),
         // probably deprecated, used in base in the past
         legacySearchLanguage: getLegacySearchLanguage(config, context),

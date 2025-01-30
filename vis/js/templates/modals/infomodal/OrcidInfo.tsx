@@ -7,24 +7,6 @@ import DataSource from "./subcomponents/DataSource";
 import { queryConcatenator } from "../../../utils/data";
 import { unescapeHTML } from "../../../utils/unescapeHTMLentities";
 
-
-const fieldmapper = {
-  relation: "relation",
-  identifier: "identifier",
-  title: "title",
-  paper_abstract: "description",
-  published_in: "publisher",
-  year: "date",
-  authors: "creator",
-  link: "link",
-  oa_state: "open access",
-  resulttype: "type",
-  language: "language",
-  content_provider: "provider",
-  coverage: "coverage"
-}
-
-
 const OrcidInfo = ({
   serviceName,
   serviceDesc,

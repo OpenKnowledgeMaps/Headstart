@@ -18,8 +18,9 @@ const Tags = ({ values }) => {
 
 export default Tags;
 
+// ! TODO: B to D
 export const getIcon = (tag) => {
-  if (tag.toLowerCase() === "audio") {
+  if (tag.toLowerCase() === "audio" || tag.toLowerCase) {
     return "fas fa-music";
   }
 
