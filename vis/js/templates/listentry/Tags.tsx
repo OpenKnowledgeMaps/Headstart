@@ -18,7 +18,8 @@ const Tags = ({ values }) => {
 
 export default Tags;
 
-// ! TODO: B to D
+// column B to D
+// https://docs.google.com/spreadsheets/d/112Anbf-sJYkehyFvjuxr1DuMih-fPB9nt3E8ll19Iyc/edit?gid=2080652987#gid=2080652987
 export const getIcon = (tag) => {
   if (tag.toLowerCase() === "audio" || tag.toLowerCase) {
     return "fas fa-music";
