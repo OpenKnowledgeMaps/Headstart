@@ -3,7 +3,7 @@ import React from "react";
 import { shorten } from "../../utils/string";
 import HoverPopover from "../HoverPopover";
 
-const MAX_CONTENT_PROVIDER_LENGTH = 3;
+const MAX_CONTENT_PROVIDER_LENGTH = 6;
 
 type DataSourceProps = {
   label: string;
