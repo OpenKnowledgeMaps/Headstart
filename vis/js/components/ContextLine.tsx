@@ -23,6 +23,7 @@ import DocumentLang from "../templates/contextfeatures/DocumentLang";
 import ResearcherMetricsInfo from "../templates/contextfeatures/ResearcherMetricsInfo";
 import { Employment } from "./Employment";
 import ResearcherInfo from "../templates/contextfeatures/ResearcherInfo";
+import { STREAMGRAPH_MODE } from "../reducers/chartType";
 
 const defined = (param) => param !== undefined && param !== null;
 
@@ -57,6 +58,7 @@ export const ContextLine = (props) => {
           articlesCountLabel={localization.articles_label}
           service={service}
           modifierLimit={params.modifierLimit}
+          isStreamgraph={params.isStreamgraph}
         >
           <Modifier popoverContainer={popoverContainer} />
         </NumArticles>
@@ -141,6 +143,7 @@ const mapStateToProps = (state) => ({
   params: {
     ...state.contextLine,
     timespan: state.timespan,
+    isStreamgraph: state.chartType === STREAMGRAPH_MODE,
   },
   service: state.service,
   localization: state.localization,
