@@ -35,7 +35,7 @@ const NumArticles = ({
     if (articlesCount >= 100 && !isStreamgraph) {
       displayText = (
         <>
-          100 {children} 
+          100 {children} {articlesCountLabel}
         </>
       );
     } else {
