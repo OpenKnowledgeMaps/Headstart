@@ -24,6 +24,7 @@ $last_version = $persistence->getLastVersion($vis_id, false, false);
 
 
 if ($last_version != null && $last_version != "null" && $last_version != false) {
+    //this logic no longer works with the new postgres database
     echo json_encode(array("status" => "success", "last_version" => $last_version));
 } else {
     echo json_encode(array("status" => "error"));

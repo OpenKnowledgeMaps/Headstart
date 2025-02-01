@@ -8,5 +8,4 @@ WORKDIR /persistence
 COPY workers/persistence/requirements.txt .
 RUN pip install --upgrade pip
 RUN pip install --no-cache-dir -r requirements.txt
-RUN pip install git+https://github.com/python-restx/flask-restx
 COPY workers/persistence/src/ ./
