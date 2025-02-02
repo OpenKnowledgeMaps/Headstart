@@ -16,7 +16,6 @@ const contextLine = (state = {}, action: any) => {
 
   switch (action.type) {
     case "INITIALIZE":
-      debugger
       // service_name in config?
       return {
         isResearcherDetailsEnabled: action.configObject.isResearcherDetailsEnabled,
