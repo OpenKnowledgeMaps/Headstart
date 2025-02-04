@@ -35,8 +35,7 @@ $result = search(
     $post_params,
     $params_array,
     true,
-    // TODO: set back to true before deployment
-    false,
+    true,
     null,
     $precomputed_id,
     false
