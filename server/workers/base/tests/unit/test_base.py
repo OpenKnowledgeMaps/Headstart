@@ -106,15 +106,23 @@ def test_execute_search(client_base, monkeypatch):
             return (self._stdout, self._stderr)
     
     def dummy_popen(cmd, stdin, stdout, stderr, encoding):
-        # Simulate output with several lines. Ensure that the second-to-last line
-        # is valid JSON.
-        dummy_stdout = "irrelevant line\n" + json.dumps({"data": "search result"}) + "\nextra line\n"
+        # Simulate output with several lines.
+        # Return a list of dictionaries containing required columns.
+        dummy_row = {
+            "id": "row1",
+            "title": "Test Title",
+            "paper_abstract": "Abstract",
+            "subject_orig": "Subject",
+            "published_in": "Journal",
+            "sanitized_authors": "Author"
+        }
+        dummy_stdout = "irrelevant line\n" + json.dumps([dummy_row]) + "\nextra line\n"
         dummy_stderr = ""
         return DummyProcess(dummy_stdout, dummy_stderr)
     
     monkeypatch.setattr(subprocess, "Popen", dummy_popen)
     
-    # For simplicity, patch methods used inside execute_search.
+    # Patch methods used inside execute_search.
     monkeypatch.setattr(client_base, "sanitize_metadata", lambda df: df)
     monkeypatch.setattr("base.filter_duplicates", lambda df: df)
     monkeypatch.setattr("base.parse_annotations_for_all", lambda metadata, field: 
@@ -173,15 +181,16 @@ def test_get_contentproviders(client_base, monkeypatch):
 # --- Tests for parser functions ---
 
 def test_filter_duplicates():
-    # Create a dummy DataFrame that simulates duplicate entries.
+    # Create a dummy DataFrame simulating duplicate entries.
     df = pd.DataFrame({
-        "id": [1, 1, 2],
+        "id": ["1", "1", "2"],  # id as strings
         "duplicates": ["1,1", "1,1", ""],
         "doi": ["doi1", "doi1", "doi2"],
         "typenorm": ["7", "7", "non7"],
         "is_duplicate": [False, False, False],
+        "link": ["", "", ""]  # Provide a link column to avoid KeyError
     })
-    # Add columns that filter_duplicates is supposed to drop.
+    # Add extra columns that filter_duplicates is supposed to drop.
     df["doi_duplicate"] = False
     df["link_duplicate"] = False
     df["is_latest"] = True

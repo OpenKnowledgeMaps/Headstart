@@ -64,7 +64,7 @@ def test_parse_ftccsdartic_partial():
     assert result["published_in"] == input_str
     # And at least one of the parsed fields should not be NaN.
     # (Exact expected values depend on the regex behavior.)
-    assert not (np.isnan(result["source"]) and np.isnan(result["volume"]) and np.isnan(result["issue"]) and np.isnan(result["page"]))
+    assert not (pd.isna(result["source"]) and np.isnan(result["volume"]) and np.isnan(result["issue"]) and np.isnan(result["page"]))
 
 # -----------------------
 # Tests for parse_ftdoajarticles
