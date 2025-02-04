@@ -1,4 +1,13 @@
 [project]
-name = "api"
+name = "base"
 version = "0.1.0"
-description = "API microservice."
+description = "BASE microservice."
+
+[tool.pytest.ini_options]
+pythonpath = [
+    '.',
+    'src'
+]
+testpaths = [
+    'tests'
+]
