@@ -11,6 +11,7 @@ const paper = (state = {}, action: any) => {
         showSocialMedia: !!configObject?.paper?.showSocialMedia,
         showReferences: !!configObject?.paper?.showReferences,
         showCitations: !!configObject?.paper?.showCitations,
+        showPubmedCitations: !!configObject?.paper?.showPubmedCitations,
         showReaders: !!configObject?.paper?.showReaders,
         showTweets: !!configObject?.paper?.showTweets,
       };

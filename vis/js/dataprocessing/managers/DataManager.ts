@@ -248,10 +248,12 @@ class DataManager {
     paper.num_readers = 0;
     paper.internal_readers = 1;
 
-    paper.readers = paper.num_readers;
+    // ? should we use numb_readers in some cases?
+    // paper.readers = paper.num_readers;
     paper.tweets = getVisibleMetric(paper, "cited_by_tweeters_count");
     paper.citations = getVisibleMetric(paper, "citation_count");
-    paper.readers = getVisibleMetric(paper, "readers.mendeley");
+    // ? should we use readers.mendeley in some cases?
+    // paper.readers = getVisibleMetric(paper, "readers.mendeley");
 
     if ([
       paper.cited_by_fbwalls_count,

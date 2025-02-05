@@ -150,6 +150,7 @@ const KnowledgeMap = (props) => {
         socialMediaLabel={localization.social_media_count_label}
         showReferences={props.paper.showReferences}
         referencesLabel={localization.references_count_label}
+        showPubmedCitations={props.paper.showPubmedCitations}
         showCitations={props.paper.showCitations}
         citationsLabel={localization.citations_count_label}
         showReaders={props.paper.showReaders}

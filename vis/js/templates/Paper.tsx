@@ -127,6 +127,7 @@ class Paper extends React.Component {
       showReferences,
       referencesLabel,
       showCitations,
+      showPubmedCitations,
       citationsLabel,
       showReaders,
       readersLabel,
@@ -135,7 +136,8 @@ class Paper extends React.Component {
     } = this.props;
 
     const {
-      num_readers: readers,
+      // num_readers: 
+      readers,
       tweets,
       citations,
       social,
@@ -224,6 +226,13 @@ class Paper extends React.Component {
         value: citations,
         label: citationsLabel,
       },
+      // consider to refactor and retrieve correct data from the backend side instead of doing this hack with citations for pubmed
+      {
+        id: "citations pubmed",
+        show: showPubmedCitations,
+        value: readers,
+        label: citationsLabel,
+      },
       {
         id: "readers",
         show: showReaders,
@@ -308,6 +317,7 @@ class Paper extends React.Component {
                     !!showReaders +
                     (!!showSocialMedia ? 2 : 0) +
                     !!showCitations +
+                    !! showPubmedCitations +
                     !!showReferences +
                     !!showTweets,
                     zoom
@@ -540,6 +550,7 @@ const getEnlargeFactor = (offsetWidth, scrollHeight) => {
 
 const getMetadataHeight = (realHeight, numOfLabels, isZoomed) => {
   let readersHeight = 12;
+  
   if (numOfLabels && isZoomed) {
     readersHeight = +numOfLabels * 20;
   }

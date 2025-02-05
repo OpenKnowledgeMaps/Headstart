@@ -161,6 +161,7 @@ export const localization: {
     source_label: "Data source",
     resulttype_label: "Document type",
     documenttypes_label: "Document types",
+    readers_count_label: "readers",
     documenttypes_tooltip:
       "The following document types were taken into consideration in the creation of this visualization (not all of them may appear in the visualization):",
     area: "Area",
@@ -493,7 +494,6 @@ export const localization: {
             OpenAIRE page for`,
     viper_edit_button_text: "continue to openaire",
     tweets_count_label: " tweets",
-    readers_count_label: " readers (Mendeley)",
     citations_count_label: " citations (Crossref)",
     all: "any",
     open_access: "Open Access",

@@ -77,6 +77,10 @@ class Search(Resource):
             params["limit"] = DEFAULT_LIMIT
         if "academic_age_offset" not in params:
             params["academic_age_offset"] = DEFAULT_ACADEMIC_AGE_OFFSET
+        if "orcid" in params:
+            params["orcid"] = params["orcid"].strip()
+        if "q" in params:
+            params["q"] = params["q"].strip()
 
     def get_response_headers(self):
         headers = {}

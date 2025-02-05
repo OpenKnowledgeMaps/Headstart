@@ -6,6 +6,7 @@ type PaperSettings = {
     showCitations: boolean;
     showReaders: boolean;
     showTweets: boolean;
+    showPubmedCitations: boolean;
   };
   
   type ServiceNames = {
