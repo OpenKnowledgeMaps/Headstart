@@ -196,6 +196,7 @@ var config: Config = {
     showSocialMedia: false,
     showReferences: false,
     showCitations: false,
+    showPubmedCitations: false,
     showReaders: false,
     showTweets: false,
   },
