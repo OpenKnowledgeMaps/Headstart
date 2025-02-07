@@ -42,7 +42,7 @@ class DummyProcess:
     def communicate(self, input=None):
         return (self._stdout, self._stderr)
 
-# --- Fixtures ---
+# --- Fixture for Dataprocessing instance ---
 
 @pytest.fixture
 def dummy_redis():
@@ -50,16 +50,14 @@ def dummy_redis():
 
 @pytest.fixture
 def dataprocessing_client(dummy_redis, monkeypatch):
-    # To avoid issues in __init__, override get_contentproviders to return a dummy list.
-    def dummy_get_contentproviders():
-        return {"contentproviders": json.dumps([{"name": "cp1", "internal_name": "DummyProvider"}])}
-    
-    # Create an instance of Dataprocessing with dummy parameters.
+    # Create an instance of Dataprocessing.
     dp = Dataprocessing(wd="./dummy", script="dummy_script.R", redis_store=dummy_redis,
                         language="english", loglevel="DEBUG")
-    monkeypatch.setattr(dp, "get_contentproviders", dummy_get_contentproviders)
-    # Re-run initialization logic if needed.
-    dp.__init__(dp.wd, "dummy_script.R", dummy_redis, "english", "DEBUG")
+    # Since Dataprocessing doesn't implement get_contentproviders, add a dummy one.
+    dp.get_contentproviders = lambda: {"contentproviders": json.dumps(
+        [{"name": "cp1", "internal_name": "DummyProvider"}]
+    )}
+    # Optionally, reinitialize if needed (or simply patch the method)
     return dp
 
 # --- Tests for helper methods ---
@@ -90,7 +88,7 @@ def test_next_item(dataprocessing_client, dummy_redis):
     dummy_redis.queue.append(json.dumps(message).encode("utf-8"))
     req_id, params, input_data, author = dp.next_item()
     assert req_id == "req123"
-    # The returned params should have been merged with defaults.
+    # The returned params should be merged with defaults.
     assert params["q"] == "search term"
     assert params["MAX_CLUSTERS"] == 15
     assert input_data == "dummy input"
@@ -104,8 +102,8 @@ def test_execute_search(dataprocessing_client, monkeypatch):
     
     # Patch subprocess.Popen to simulate a process returning controlled output.
     def dummy_popen(cmd, stdin, stdout, stderr, encoding):
-        # We simulate stdout with several lines;
-        # the second-to-last non-empty line is valid JSON representing a list of rows.
+        # Simulate output: header line, then a valid JSON list with one row,
+        # then a footer line.
         dummy_row = {
             "id": "row1",
             "title": "Test Title",
@@ -128,7 +126,6 @@ def test_execute_search(dataprocessing_client, monkeypatch):
         [df, pd.DataFrame({"enriched": ["yes"] * len(df)})], axis=1))
     
     res = dp.execute_search(params, input_data)
-    # Expected: pd.DataFrame([dummy_row]).to_json(orient="records")
     expected = pd.DataFrame([{
         "id": "row1",
         "title": "Test Title",
@@ -139,42 +136,33 @@ def test_execute_search(dataprocessing_client, monkeypatch):
     }]).to_json(orient="records")
     assert res == expected
 
-# --- Tests for the run method (timeline branch) ---
-# We simulate one iteration of the loop for vis_type "timeline".
 def test_run_timeline(dataprocessing_client, dummy_redis, monkeypatch):
     dp = dataprocessing_client
     # Patch next_item to return fixed values.
-    def fake_next_item():
-        return ("req_run", {"q": "test", "vis_type": "timeline", "top_n": 5, "sg_method": "count", "list_size": 100}, "dummy input", "author")
-    monkeypatch.setattr(dp, "next_item", fake_next_item)
-    
-    # Patch execute_search to return dummy metadata.
-    dummy_metadata = pd.DataFrame([{"a": 1}]).to_json(orient="records")
-    monkeypatch.setattr(dp, "execute_search", lambda params, inp: dummy_metadata)
-    
-    # Create a dummy Streamgraph with the two required methods.
-    class DummySG:
-        def get_streamgraph_data(self, metadata, q, top_n, sg_method):
-            return {"dummy_sg": True}
-        def reduce_metadata_set(self, metadata, sg_data):
-            return {"reduced": True}
-    # Patch the global sg variable used in run().
-    import headstart as headstart_module
-    monkeypatch.setattr(headstart_module, "sg", DummySG())
-    
-    # To break out of the infinite loop, simulate one iteration manually.
-    # Patch rate_limiter.rate_limit_reached to always return False.
-    monkeypatch.setattr(dp.rate_limiter, "rate_limit_reached", lambda: False)
-    
-    # Patch next_item to return a fixed tuple and then raise an exception to exit the loop.
     call_count = [0]
-    def fake_next_item_once():
+    def fake_next_item():
         if call_count[0] == 0:
             call_count[0] += 1
             return ("req_run", {"q": "test", "vis_type": "timeline", "top_n": 5, "sg_method": "count", "list_size": 100}, "dummy input", "author")
         else:
             raise KeyboardInterrupt("Stop run loop")
-    monkeyatch.setattr(dp, "next_item", fake_next_item_once)
+    monkeyatch = monkeypatch  # alias
+    monkeyatch.setattr(dp, "next_item", fake_next_item)
+    
+    # Patch execute_search to return dummy metadata.
+    dummy_metadata = pd.DataFrame([{"a": 1}]).to_json(orient="records")
+    monkeyatch.setattr(dp, "execute_search", lambda params, inp: dummy_metadata)
+    
+    # Create a dummy Streamgraph with the required methods.
+    class DummySG:
+        def get_streamgraph_data(self, metadata, q, top_n, sg_method):
+            return {"dummy_sg": True}
+        def reduce_metadata_set(self, metadata, sg_data):
+            return {"reduced": True}
+    monkeyatch.setattr(dp, "rate_limiter", type("DummyLimiter", (), {"rate_limit_reached": lambda self: False})())
+    # Patch the global streamgraph object used in run().
+    import headstart as headstart_module
+    monkeyatch.setattr(headstart_module, "sg", DummySG())
     
     # Capture output written to Redis.
     outputs = {}
@@ -185,7 +173,6 @@ def test_run_timeline(dataprocessing_client, dummy_redis, monkeypatch):
     with pytest.raises(KeyboardInterrupt):
         dp.run()
     
-    # Check that an output has been set.
     assert "req_run_output" in outputs
     out = json.loads(outputs["req_run_output"])
     assert out["status"] == "success"
