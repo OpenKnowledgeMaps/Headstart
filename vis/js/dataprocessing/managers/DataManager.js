@@ -83,12 +83,16 @@ class DataManager {
   __getPapersArray(backendData) {
     if (this.config.show_context) {
       if (typeof backendData.data === "string") {
-        return JSON.parse(backendData.data);
+        const data = JSON.parse(backendData.data);
+        // temporal fix for old implementation
+        if (Array.isArray(data)) return data;
+        // typeof data.documents === "string" is temporal fix, consider to migrate to json instead of json in json
+        return data.documents && typeof data.documents === "string" ? JSON.parse(data?.documents) : data.documents ?? [];
       }
-      return backendData.data;
+      return backendData.data?.documents ?? [];
     }
     if (typeof backendData.data === "object") {
-      return backendData.data;
+      return backendData.data?.documents ?? [];
     }
 
     return backendData;
