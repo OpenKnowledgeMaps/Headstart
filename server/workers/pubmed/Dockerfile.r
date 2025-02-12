@@ -1,4 +1,4 @@
-FROM ubuntu:20.04
+FROM ubuntu:18.04
 
 LABEL maintainer="Chris Kittel <christopher.kittel@openknowledgemaps.org>"
 
@@ -26,7 +26,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     libpangocairo-1.0-0 \
     libpcre3 \
     libpng16-16 \
-    libreadline-dev \
+    libreadline7 \
     libtiff5 \
     liblzma5 \
     locales \
@@ -34,7 +34,6 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     unzip \
     zip \
     zlib1g && \
-    \
     BUILDDEPS="curl \
     default-jdk \
     libbz2-dev \
@@ -57,9 +56,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     xfonts-base \
     xvfb \
     zlib1g-dev" && \
-    apt-get install -y --no-install-recommends $BUILDDEPS
-
-RUN mkdir -p /tmp/build && cd /tmp/build && \
+    apt-get install -y --no-install-recommends $BUILDDEPS && \
+    mkdir -p tmp && cd tmp && \
     curl -O https://cran.r-project.org/src/base/R-3/R-${R_VERSION}.tar.gz && \
     tar -xf R-${R_VERSION}.tar.gz && cd R-${R_VERSION} && \
     R_PAPERSIZE=letter \
@@ -88,49 +86,30 @@ RUN mkdir -p /tmp/build && cd /tmp/build && \
     ln -s /usr/local/lib/R/site-library/littler/examples/install2.r /usr/local/bin/install2.r && \
     ln -s /usr/local/lib/R/site-library/littler/examples/installGithub.r /usr/local/bin/installGithub.r && \
     ln -s /usr/local/lib/R/site-library/littler/bin/r /usr/local/bin/r && \
-    cd / && rm -rf /tmp/build && \
-    apt-get remove --purge -y $BUILDDEPS && \
-    apt-get autoremove -y && \
-    apt-get autoclean -y && \
-    rm -rf /var/lib/apt/lists/*
+    cd / && rm -rf tmp && \
+    apt-get remove --purge -y $BUILDDEPS && apt-get autoremove -y && apt-get autoclean -y && rm -rf /var/lib/apt/lists/*
 
-RUN locale-gen en_US.UTF-8 && \
-    update-locale LANG=en_US.UTF-8 LC_ALL=en_US.UTF-8 && \
-    dpkg-reconfigure locales
+RUN locale-gen en_US.UTF-8 && update-locale LANG=en_US.UTF-8 LC_ALL=en_US.UTF-8 && dpkg-reconfigure locales
 
 RUN apt update && apt full-upgrade -y && \
-    apt install -y \
-    links \
-    curl \
-    vim \
-    libcurl4-openssl-dev \
-    libxml2-dev \
-    libz-dev \
-    libpoppler-cpp-dev \
-    libopenmpi-dev \
-    libzmq3-dev \
-    build-essential \
-    python3-dev \
-    libssl1.1 \
-    libssl-dev && \
+    apt install -y links curl vim libcurl4-openssl-dev \
+    libxml2-dev libz-dev libpoppler-cpp-dev \
+    libopenmpi-dev libzmq3-dev build-essential python3-dev \
+    libssl1.1 libssl-dev && \
     apt clean && \
     rm -f /etc/localtime && \
     ln -s /usr/share/zoneinfo/Europe/Vienna /etc/localtime && \
     dpkg --configure -a
 
-RUN apt-get -y install automake && \
-    R -e 'options(repos="https://cran.wu.ac.at")' && \
+RUN apt-get -y install python3 python3-pip
+
+RUN R -e 'options(repos="https://cran.wu.ac.at")' && \
     R -e 'install.packages("remotes")' && \
     R -e 'install.packages("renv", version="0.14.0-5")'
 
 WORKDIR /headstart
-COPY workers/metrics/renv.lock .
-COPY workers/metrics/activate.R .
 
-RUN R -e 'renv::consent(provided = TRUE)' && \
-    R -e 'setwd("/headstart"); renv::activate(); renv::restore(lockfile = "renv.lock")'
-
-COPY workers/metrics/test_r_packages.R /usr/local/bin/test_r_packages.R
+COPY workers/pubmed/test_r_packages.R /usr/local/bin/test_r_packages.R
 RUN chmod +x /usr/local/bin/test_r_packages.R
 
 CMD ["R", "--version"]
