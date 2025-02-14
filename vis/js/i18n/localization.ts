@@ -115,7 +115,7 @@ export interface Localization {
     citation_count: string;
     cited_by_tweeters_count: string;
     "readers.mendeley": string;
-  }
+  };
   tweets: string;
   dataset_count_label: string;
   paper_count_label: string;
@@ -129,7 +129,6 @@ export interface Localization {
   dataset: string;
 }
 
-
 export const localization: {
   [key: string]: Partial<Localization>;
 } = {
@@ -139,7 +138,7 @@ export const localization: {
     showMore: "Show more",
     showLess: "Show less",
     search_placeholder: "Search within visualization...",
-    intro_label: "About the map",
+    intro_label: "More information",
     readers: "readers",
     year: "date",
     authors: "authors",
@@ -234,7 +233,7 @@ export const localization: {
     showMore: "Mehr anzeigen",
     showLess: "Weniger anzeigen",
     search_placeholder: "Suche in der Liste...",
-    intro_label: "Over de kaart",
+    intro_label: "Mehr Informationen",
     // TODO: consider to rename it?
     readers: "Leser",
     year: "Jahr",
@@ -419,6 +418,7 @@ export const localization: {
     relevance: "relevance",
     readers: "citations",
     year: "year",
+    intro_label: "About the map",
     authors: "authors",
     title: "title",
     backlink: "← Back to overview",

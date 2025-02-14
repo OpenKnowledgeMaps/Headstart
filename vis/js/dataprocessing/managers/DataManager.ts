@@ -43,9 +43,9 @@ class DataManager {
     citations: "citations",
     references: "references",
     cited_by_accounts_count: "social",
-    citation_count: 'citations',
-    cited_by_tweeters_count: 'tweets',
-    'readers.mendeley': 'readers'
+    citation_count: "citations",
+    cited_by_tweeters_count: "tweets",
+    "readers.mendeley": "readers",
   };
 
   constructor(config: Config, scheme = DEFAULT_SCHEME) {
@@ -118,9 +118,11 @@ class DataManager {
     if (this.config.show_context) {
       if (typeof backendData.data === "string") {
         const data = JSON.parse(backendData.data);
-        if (Array.isArray(data)) return data
+        if (Array.isArray(data)) return data;
         // typeof data.documents === "string" is temporal fix, consider to migrate to json instead of json in json
-        return data.documents && typeof data.documents === "string" ? JSON.parse(data?.documents) : data.documents ?? [];
+        return data.documents && typeof data.documents === "string"
+          ? JSON.parse(data?.documents)
+          : data.documents ?? [];
       }
       return backendData.data?.documents ?? [];
     }
@@ -249,22 +251,24 @@ class DataManager {
     paper.internal_readers = 1;
 
     // ? should we use numb_readers in some cases?
-    // paper.readers = paper.num_readers;
+    paper.num_readers = paper.readers;
     paper.tweets = getVisibleMetric(paper, "cited_by_tweeters_count");
     paper.citations = getVisibleMetric(paper, "citation_count");
     // ? should we use readers.mendeley in some cases?
     // paper.readers = getVisibleMetric(paper, "readers.mendeley");
 
-    if ([
-      paper.cited_by_fbwalls_count,
-      paper.cited_by_feeds_count,
-      paper.cited_by_gplus_count,
-      paper.cited_by_rdts_count,
-      paper.cited_by_qna_count,
-      paper.cited_by_tweeters_count,
-      paper.cited_by_videos_count].every(item => item === undefined)
+    if (
+      [
+        paper.cited_by_fbwalls_count,
+        paper.cited_by_feeds_count,
+        paper.cited_by_gplus_count,
+        paper.cited_by_rdts_count,
+        paper.cited_by_qna_count,
+        paper.cited_by_tweeters_count,
+        paper.cited_by_videos_count,
+      ].every((item) => item === undefined)
     ) {
-      paper.social = 'n/a'
+      paper.social = "n/a";
     } else {
       paper.social = [
         paper.cited_by_fbwalls_count,
@@ -280,9 +284,8 @@ class DataManager {
         } else if (val === undefined || val === null) {
           return acc;
         }
-      }, null)
+      }, null);
     }
-
 
     // getVisibleMetric(paper, "cited_by_accounts_count");
     paper.references = [
@@ -422,10 +425,14 @@ class DataManager {
       const papers = areas[areaUri].papers;
 
       const x =
-        papers.map((e: any) => parseFloat(e.x)).reduce((a: any, b: any) => a + b, 0) /
+        papers
+          .map((e: any) => parseFloat(e.x))
+          .reduce((a: any, b: any) => a + b, 0) /
         (1.0 * papers.length);
       const y =
-        papers.map((e: any) => -parseFloat(e.y)).reduce((a: any, b: any) => a + b, 0) /
+        papers
+          .map((e: any) => -parseFloat(e.y))
+          .reduce((a: any, b: any) => a + b, 0) /
         (1.0 * papers.length);
 
       areas[areaUri].origX = x;
