@@ -2,12 +2,12 @@
 
 header('Content-type: application/json');
 
-require_once dirname(__FILE__) . '/../classes/headstart/library/CommUtils.php';
-require 'search.php';
+require_once dirname(__FILE__) . '/../classes/autoload.inc.php';
 
-use headstart\library;
+use \headstart\search\Search;
+use \headstart\library\CommUtils;
 
-$dirty_query = library\CommUtils::getParameter($_POST, "q");
+$dirty_query = CommUtils::getParameter($_POST, "q");
 $precomputed_id = (isset($_POST["unique_id"]))?($_POST["unique_id"]):(null);
 
 $params_array = array("document_types", "sorting", "min_descsize");
@@ -66,7 +66,7 @@ $params_array = $reordered_params;
 
 
 
-$result = search("base", $dirty_query
+$result = (new Search())->search("base", $dirty_query
                   , $post_params, $params_array
                   , true
                   , true, null
