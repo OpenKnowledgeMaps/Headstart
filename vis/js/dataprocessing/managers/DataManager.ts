@@ -251,7 +251,13 @@ class DataManager {
     paper.internal_readers = 1;
 
     // ? should we use numb_readers in some cases?
-    paper.num_readers = paper.readers;
+    function parseNumber(value, defaultValue = 0) {
+      const num = Number(value);
+      return isNaN(num) ? defaultValue : num;
+    }
+
+    paper.num_readers = parseNumber(paper.readers);
+    paper.readers = parseNumber(paper.readers);
     paper.tweets = getVisibleMetric(paper, "cited_by_tweeters_count");
     paper.citations = getVisibleMetric(paper, "citation_count");
     // ? should we use readers.mendeley in some cases?
