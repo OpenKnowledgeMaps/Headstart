@@ -49,7 +49,6 @@ const FilterDropdown = ({
             }}>{valueLabel}</span>
             <i className="fas fa-chevron-down chevron" style={{
               marginLeft: "3px",
-                marginTop: "1px"
             }}/>
           </span>
         }

@@ -360,10 +360,16 @@ class Paper extends React.Component {
                 </p>
               </div>
               {sortedStats.map(({ value, label, id }) => (
-                <div key={id} className="stat">
+                <div key={id} className="stat" style={{
+                  textWrap: 'nowrap'
+                }}>
                   <p className={`stat ${sizeModifierClass}`}>
-                    <span className="num-stat">{value || value === 0 ? value : "n/a"} </span>
-                    <span>{label}</span>
+                    <span style={{
+                      textWrap: 'nowrap'
+                    }} className="num-stat">{value || value === 0 ? value : "n/a"} </span>
+                    <span style={{
+                      textWrap: 'nowrap'
+                    }}>{label}</span>
                   </p>
                 </div>
               ))}
