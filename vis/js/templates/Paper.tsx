@@ -314,12 +314,7 @@ class Paper extends React.Component {
                 style={{
                   height: getMetadataHeight(
                     realHeight,
-                    !!showReaders +
-                    (!!showSocialMedia ? 2 : 0) +
-                    !!showCitations +
-                    !! showPubmedCitations +
-                    !!showReferences +
-                    !!showTweets,
+                    (hovered ? sortedStats : sortedStats.slice(0, 1)).length,
                     zoom
                   ),
                   width: (1 - DOGEAR_WIDTH) * realWidth,
@@ -359,7 +354,7 @@ class Paper extends React.Component {
                   )}
                 </p>
               </div>
-              {sortedStats.map(({ value, label, id }) => (
+              {(hovered ? sortedStats : sortedStats.slice(0, 1)).map(({ value, label, id }) => (
                 <div key={id} className="stat" style={{
                   textWrap: 'nowrap'
                 }}>
