@@ -13,10 +13,6 @@ $precomputed_id = (isset($_POST["unique_id"]))?($_POST["unique_id"]):(null);
 $params_array = array("document_types", "sorting", "min_descsize");
 $optional_get_params = ["repo", "coll", "vis_type", "q_advanced", "lang_id", "custom_title", "exclude_date_filters", "from", "to", "custom_clustering"];
 
-$params_array = array("document_types", "sorting", "min_descsize");
-$optional_get_params = ["repo", "coll", "vis_type", "q_advanced", "lang_id", "custom_title", "exclude_date_filters", "from", "to", "custom_clustering"];
-
-
 function filterEmptyString($value)
 {
     // Exclude empty strings

@@ -78,6 +78,8 @@ services:
     command: ["python", "app.py"]
     volumes:
       - ./server/workers/persistence/src:/api
+    depends_on:
+      - redis
     networks:
       - headstart
 
