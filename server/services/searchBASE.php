@@ -8,11 +8,11 @@ require 'search.php';
 use headstart\library;
 
 $dirty_query = library\CommUtils::getParameter($_POST, "q");
+$precomputed_id = (isset($_POST["unique_id"]))?($_POST["unique_id"]):(null);
 
-$precomputed_id = $_POST["unique_id"] ?? null;
+$params_array = array("document_types", "sorting", "min_descsize");
+$optional_get_params = ["repo", "coll", "vis_type", "q_advanced", "lang_id", "custom_title", "exclude_date_filters", "from", "to", "custom_clustering"];
 
-$params_array = ["from", "to", "document_types", "sorting", "min_descsize"];
-$optional_get_params = ["repo", "coll", "vis_type", "q_advanced", "lang_id", "custom_title", "custom_clustering"];
 
 function filterEmptyString($value)
 {
@@ -50,7 +50,9 @@ if (isset($post_params["exclude_date_filters"]) && $post_params["exclude_date_fi
 }
 
 // re-establish historic order for backwards ID compatibility
-$historic_params_order = array("from", "to", "document_types", "sorting", "min_descsize", "repo");
+// from, to, document_types, sorting, min_descsize, repo, coll, vis_type, lang_id, q_advanced, exclude_date_filters, custom_title, custom_clustering
+$historic_params_order = array("from", "to", "document_types", "sorting", "min_descsize", "repo",
+                               "coll", "vis_type", "lang_id", "q_advanced", "exclude_date_filters", "custom_title", "custom_clustering");
 $reordered_params = array();
 foreach($historic_params_order as $param) {
     if (isset($post_params[$param])) {
