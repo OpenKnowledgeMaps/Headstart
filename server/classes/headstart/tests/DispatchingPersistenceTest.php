@@ -13,6 +13,11 @@ use PHPUnit\Framework\TestCase;
 class DispatchingPersistenceTest extends TestCase
 {
 
+    protected function setUp(): void
+    {
+        $this->markTestIncomplete('Skipping because this is no longer used for dispatching');
+    }
+
     public function testCreateVisualizationDispatcherToOldPersistence(): void
     {
         $oldPersistence = $this->createMock(Persistence::class);

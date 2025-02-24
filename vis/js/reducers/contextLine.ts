@@ -70,6 +70,10 @@ const contextLine = (state = {}, action: any) => {
           context.params && context.params.lang_id
             ? getDocumentLanguage(config, context)
             : null,
+        //   exclude date filters parameter
+        excludeDateFilters: context.params && context.params.exclude_date_filters
+            ? context.params.exclude_date_filters
+            : null,
         service: context.service
       };
     default:
