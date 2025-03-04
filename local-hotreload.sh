@@ -1,9 +1,7 @@
 #!/bin/bash
 
-CONFIG_FILE="$(dirname "$0")/config.js"
-if [ ! -f "$CONFIG_FILE" ]; then
-    echo "\033[1;33m  Warning: config.js not found in the project root! See the config.example.js file.\033[0m"
-fi
+chmod a+x checks/config-js.sh
+source ./checks/config-js.sh
 
 npm run prod -- --mode=development
 docker compose --env-file ./local_dev/dev.env stop
