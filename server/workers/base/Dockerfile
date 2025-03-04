@@ -134,7 +134,7 @@ RUN apt update && apt full-upgrade -y && \
   ln -s /usr/share/zoneinfo/Europe/Vienna /etc/localtime && \
   dpkg --configure -a
 
-RUN apt-get -y install python3.8 python3-pip
+RUN apt-get -y install python3.8 python3.8-dev python3-pip
 
 RUN R -e 'options(repos="https://cran.wu.ac.at")' && \
  R -e 'install.packages("remotes")' && \
