@@ -16,23 +16,24 @@ RUN R -e "install.packages('renv', repos='https://cloud.r-project.org')"
 RUN R -e "install.packages('jsonlite', repos='https://cloud.r-project.org')"
 
 # install packages from lockfiles
+# currently still not working as expected
+# TODO: fix this
+# WORKDIR /headstart/workers/dataprocessing
+# RUN R -e 'renv::consent(provided = TRUE)' && \
+#     R -e 'setwd("/headstart/workers/dataprocessing"); renv::activate(); renv::restore()'
 
-WORKDIR /headstart/workers/dataprocessing
-RUN R -e 'renv::consent(provided = TRUE)' && \
-    R -e 'setwd("/headstart/workers/dataprocessing"); renv::activate(); renv::restore()'
+#     WORKDIR /headstart/workers/pubmed
+# RUN R -e 'renv::consent(provided = TRUE)' && \
+#     R -e 'setwd("/headstart/workers/pubmed"); renv::activate(); renv::restore()'
 
-    WORKDIR /headstart/workers/pubmed
-RUN R -e 'renv::consent(provided = TRUE)' && \
-    R -e 'setwd("/headstart/workers/pubmed"); renv::activate(); renv::restore()'
+# WORKDIR /headstart/workers/base
+# RUN R -e 'renv::consent(provided = TRUE)' && \
+#     R -e 'setwd("/headstart/workers/base"); renv::activate(); renv::restore()'
 
-WORKDIR /headstart/workers/base
-RUN R -e 'renv::consent(provided = TRUE)' && \
-    R -e 'setwd("/headstart/workers/base"); renv::activate(); renv::restore()'
+# WORKDIR /headstart/workers/openaire
+# RUN R -e 'renv::consent(provided = TRUE)' && \
+#     R -e 'setwd("/headstart/workers/openaire"); renv::activate(); renv::restore()'
 
-WORKDIR /headstart/workers/openaire
-RUN R -e 'renv::consent(provided = TRUE)' && \
-    R -e 'setwd("/headstart/workers/openaire"); renv::activate(); renv::restore()'
-
-WORKDIR /headstart/workers/metrics
-RUN R -e 'renv::consent(provided = TRUE)' && \
-    R -e 'setwd("/headstart/workers/metrics"); renv::activate(); renv::restore()'
+# WORKDIR /headstart/workers/metrics
+# RUN R -e 'renv::consent(provided = TRUE)' && \
+#     R -e 'setwd("/headstart/workers/metrics"); renv::activate(); renv::restore()'
