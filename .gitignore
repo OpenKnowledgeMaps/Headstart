@@ -71,6 +71,8 @@ server/preprocessing/other-scripts/renv
 
 # personal
 .vscode/settings.json
+.vscode/
+
 # temporal
 local_dev/config_local_headstart.ini
 local_dev/config_local_searchflow.ini
