@@ -49,7 +49,7 @@ const StandardListEntry = ({
     onClick: () => handleBacklinkClick(),
   };
 
-  const citations = paper.num_readers;
+  const citations = paper.readers;
   const showCitations =
     !isContentBased &&
     !!baseUnit &&

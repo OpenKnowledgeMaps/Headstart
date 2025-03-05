@@ -18,8 +18,10 @@ const Tags = ({ values }) => {
 
 export default Tags;
 
+// column B to D
+// https://docs.google.com/spreadsheets/d/112Anbf-sJYkehyFvjuxr1DuMih-fPB9nt3E8ll19Iyc/edit?gid=2080652987#gid=2080652987
 export const getIcon = (tag) => {
-  if (tag.toLowerCase() === "audio") {
+  if (tag.toLowerCase() === "audio" || tag === 'Sound') {
     return "fas fa-music";
   }
 
@@ -27,7 +29,7 @@ export const getIcon = (tag) => {
     return "fas fa-code";
   }
 
-  if (tag.toLowerCase() === "moving image/video") {
+  if (tag.toLowerCase() === "moving image/video" || tag === 'Moving image or video') {
     return "fas fa-video";
   }
 
@@ -35,15 +37,15 @@ export const getIcon = (tag) => {
     return "fas fa-photo-video";
   }
 
-  if (tag.toLowerCase() === "still image") {
+  if (tag.toLowerCase() === "still image" || tag === 'Image') {
     return "fas fa-image";
   }
 
-  if (tag.toLowerCase() === "map") {
+  if (tag.toLowerCase() === "map" || tag === 'Cartographic material') {
     return "fas fa-map";
   }
 
-  if (tag.toLowerCase() === "dataset") {
+  if (tag.toLowerCase() === "dataset" || tag === 'Dataset') {
     return "fas fa-database";
   }
 

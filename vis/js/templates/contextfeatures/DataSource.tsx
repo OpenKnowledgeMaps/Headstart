@@ -5,13 +5,19 @@ import HoverPopover from "../HoverPopover";
 
 const MAX_CONTENT_PROVIDER_LENGTH = 6;
 
-const DataSource = ({ label, source, contentProvider, popoverContainer }) => {
+type DataSourceProps = {
+  label: string;
+  source: string;
+  contentProvider: string;
+  popoverContainer: HTMLElement;
+};
+
+const DataSource = ({ label, source, contentProvider, popoverContainer }: DataSourceProps) => {
   if (contentProvider) {
     const content = shorten(contentProvider, MAX_CONTENT_PROVIDER_LENGTH);
 
     return (
-      // html template starts here
-      <span id="source" className="context_item shrinkable">
+      <span id="source" className="context_item">
         {label}:{" "}
         <HoverPopover
           id="doctypes-popover"
@@ -21,12 +27,10 @@ const DataSource = ({ label, source, contentProvider, popoverContainer }) => {
           <span className="context_moreinfo">{content}</span>
         </HoverPopover>
       </span>
-      // html template ends here
     );
   }
 
   return (
-    // html template starts here
     <span
       id="source"
       className="context_item"
@@ -34,7 +38,6 @@ const DataSource = ({ label, source, contentProvider, popoverContainer }) => {
         __html: `${label}: ${source}`,
       }}
     ></span>
-    // html template ends here
   );
 };
 

@@ -8,6 +8,7 @@ from flask_restx import Namespace, Resource, fields
 
 from models import Revisions, Visualizations
 from database import Session
+from sqlalchemy.exc import OperationalError
 
 
 persistence_ns = Namespace("persistence", description="OKMAps persistence operations")
@@ -127,7 +128,7 @@ def get_revision(database, vis_id, rev_id, details=False, context=False):
                 res = rev.rev_data
     except TypeError:
         persistence_ns.logger.debug("get_revision: Vis ID not found: %s in database %s" % (vis_id, database))
-        res = "null"    
+        res = "null"
     session.close()
     return res
 
@@ -196,6 +197,7 @@ class createVisualization(Resource):
             create_visualization(database,
                                  vis_id, vis_title, data,
                                  vis_clean_query, vis_query, vis_params)
+            # result = {'status': "success"}
             result = {'success': True}
             headers = {'ContentType': 'application/json'}
             return make_response(jsonify(result),
@@ -203,6 +205,7 @@ class createVisualization(Resource):
                                  headers)
         except Exception as e:
             result = {'success': False, 'reason': [str(e)]}
+            # result = {'status': "error", 'reason': [str(e)]}
             headers = {'ContentType': 'application/json'}
             return make_response(jsonify(result),
                                  500,
@@ -222,10 +225,12 @@ class writeRevision(Resource):
             # persistence_ns.logger.debug(data)
             write_revision(database, vis_id, data)
             result = {'success': True}
+            # result = {'status': "success"}
             headers = {'ContentType': 'application/json'}
             return make_response(jsonify(result), 200, headers)
         except Exception as e:
             result = {'success': False, 'reason': [str(e)]}
+            # result = {'status': "error", 'reason': [str(e)]}
             headers = {'ContentType': 'application/json'}
             return make_response(jsonify(result), 500, headers)
 
@@ -252,8 +257,21 @@ class getLastVersion(Resource):
             return make_response(jsonify(result),
                                  200,
                                  headers)
+        # catch database connection error
+        except OperationalError as e:
+            # also log the stack trace
+            persistence_ns.logger.error("getLastVersion: %s" % str(e), exc_info=True)
+            result = {'status': "error", 'reason': ["database connection error"]}
+            headers = {'ContentType': 'application/json'}
+            return make_response(jsonify(result),
+                                 503,
+                                 headers)
         except Exception as e:
+            persistence_ns.logger.error("getLastVersion: %s" % str(e), exc_info=True)
+            # it says success because function executeSearchRequest() in search.js expects it
+            # and does an output.status === "success" check against it
             result = {'success': False, 'reason': [str(e)]}
+            # result = {'status': "error", 'reason': [str(e)]}
             headers = {'ContentType': 'application/json'}
             return make_response(jsonify(result),
                                  500,
@@ -274,6 +292,7 @@ class getRevision(Resource):
 
 
 @persistence_ns.route('/getContext/<database>')
+# this should be a GET request instead
 class getContext(Resource):
 
     @persistence_ns.produces(["application/json"])
@@ -285,12 +304,24 @@ class getContext(Resource):
             vis_id = payload.get('vis_id')
             revision_context = payload.get('revision_context', False)
             result = get_context(database, vis_id, revision_context)
+            # when error, then result is a list [False]
             persistence_ns.logger.debug(result)
             headers = {'ContentType': 'application/json'}
             return make_response(jsonify(result),
                                  200,
                                  headers)
+        except OperationalError as e:
+            # this is not yet working, in the sense the search flow does not react to it
+            persistence_ns.logger.error("getContext: %s" % str(e), exc_info=True)
+            result = {'success': False, 'reason': ["database connection error"]}
+            headers = {'ContentType': 'application/json'}
+            return make_response(jsonify(result),
+                                 503,
+                                 headers)
         except Exception as e:
+            persistence_ns.logger.error("getContext: %s" % str(e), exc_info=True)
+            # do we want to changes result reason to be more generic, but not open ended?
+            # at least we could map it to a specific error code/message on the fail page
             result = {'success': False, 'reason': [str(e)]}
             headers = {'ContentType': 'application/json'}
             return make_response(jsonify(result),

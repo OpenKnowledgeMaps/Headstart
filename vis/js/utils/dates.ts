@@ -1,7 +1,6 @@
-// @ts-nocheck
 import dateFormat from "dateformat";
 
-export const getDateTimeFromTimestamp = (timestamp, { inUTC = false } = {}) => {
+export const getDateTimeFromTimestamp = (timestamp: string, { inUTC = false } = {}) => {
   if (typeof timestamp !== "string" || !timestamp) {
     return "";
   }
@@ -17,7 +16,7 @@ export const getDateTimeFromTimestamp = (timestamp, { inUTC = false } = {}) => {
 };
 
 export const getDateFromTimestamp = (
-  timestamp,
+  timestamp: string,
   { format = "d mmm yyyy", inUTC = false } = {}
 ) => {
   if (typeof timestamp !== "string" || !timestamp) {
@@ -25,6 +24,8 @@ export const getDateFromTimestamp = (
   }
 
   const date = parseTimestamp(timestamp);
+
+  if (!date) return ""
 
   try {
     return dateFormat(date, format, inUTC);
@@ -35,7 +36,7 @@ export const getDateFromTimestamp = (
 };
 
 export const getTimeFromTimestamp = (
-  timestamp,
+  timestamp: string,
   { format = "H:MM", inUTC = false } = {}
 ) => {
   if (typeof timestamp !== "string" || !timestamp) {
@@ -43,6 +44,8 @@ export const getTimeFromTimestamp = (
   }
 
   const date = parseTimestamp(timestamp);
+
+  if (!date) return ""
 
   try {
     return dateFormat(date, format, inUTC);
@@ -52,10 +55,13 @@ export const getTimeFromTimestamp = (
   }
 };
 
-const parseTimestamp = (timestamp) => {
-  if (isNaN(new Date(timestamp))) {
-    timestamp = timestamp.trim().replace(/\s+/, "T");
+const parseTimestamp = (timestamp: string): Date | null => {
+  let parsedTimestamp = new Date(timestamp);
+
+  if (isNaN(parsedTimestamp.getTime())) {
+    const sanitizedTimestamp = timestamp.trim().replace(/\s+/, "T");
+    parsedTimestamp = new Date(sanitizedTimestamp);
   }
 
-  return new Date(timestamp);
+  return isNaN(parsedTimestamp.getTime()) ? null : parsedTimestamp;
 };

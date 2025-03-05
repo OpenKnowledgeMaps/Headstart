@@ -83,8 +83,8 @@ function search(
     ? (cleanQuery($dirty_query, $transform_query_tolowercase, $add_slashes))
     : ($dirty_query);
 
-  $postgresPersistence = new \headstart\persistence\PostgresPersistence($apiclient);
-  $persistence = new \headstart\persistence\DispatchingPersistence($postgresPersistence);
+    $persistence = new \headstart\persistence\PostgresPersistence($apiclient);
+    // $persistence = new \headstart\persistence\DispatchingPersistence($postgresPersistence);
 
   // todo: move back into own function once error handling is refactored
   if ($service == "openaire") {
@@ -124,13 +124,33 @@ function search(
     $params_json = packParamsJSON($param_types, $post_params);
   }
 
-  if ($retrieve_cached_map) {
-    $last_version = $persistence->getLastVersion($unique_id, false, false);
-    if ($last_version != null && $last_version != "null" && $last_version != false) {
-      echo json_encode(array("query" => $query, "id" => $unique_id, "status" => "success"));
-      return;
+    if($retrieve_cached_map) {
+      $last_version = $persistence->getLastVersion($unique_id, false, false);
+      // error_log("search.php: last_version call returned " . print_r($last_version, true));
+      // check if last_version call has httpcode, this is not always the case for return values
+      // then check if success-status of last_version call is false
+      if (is_array($last_version) && is_array(($last_version[0]))) {
+        $last_version = $last_version[0];
+        if (array_key_exists("httpcode", $last_version) && $last_version["httpcode"] != 200) {
+          $result = json_decode($last_version["result"], true);
+          $httpcode = $last_version["httpcode"];
+          error_log("search.php: last_version call failed with http code " . $httpcode);
+          error_log("search.php: last_version call failed with result " . print_r($result, true));
+          echo json_encode($result);
+          return;
+        }
+      }
+      // TODO: This and the previous if are not mutually exclusive, so the second if should be an else if
+      // and also it should be refactored to a function that returns the result or throws an exception
+      if ($last_version != null && $last_version != "null" && $last_version != false) {
+          // for example, non-existant vis_id is handled here, which looks like [False]
+          echo json_encode(array("query" => $query, "id" => $unique_id, "status" => "success"));
+          return;
+      }
+      //todo: log output of $last_version
+      // log to docker logs
+     
     }
-  }
 
   // ? here we are making requests, should we restructure a little bit our requests to handle errors better?
   $payload = json_encode($post_params);

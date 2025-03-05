@@ -8,6 +8,16 @@ import { select } from "d3-selection";
 import { formatPaperDate } from "./listentry/Title";
 import Icons from "./paper/Icons";
 
+// right now
+const orderPriorityMap = {
+  content_based: "content_based",
+  citations: "citations",
+  cited_by_accounts_count: "social",
+  references: "references",
+  readers: "readers",
+  tweets: "tweets"
+}
+
 class Paper extends React.Component {
   constructor(props) {
     super(props);
@@ -98,9 +108,7 @@ class Paper extends React.Component {
   }
 
   render() {
-    const { data, zoom, selected, hovered } = this.props;
-    const { maxSize, enlargeFactor } = this.props;
-    const { onClick, onMouseOver, onMouseOut } = this.props;
+    const { data, zoom, selected, hovered, maxSize, enlargeFactor, onClick, onMouseOver, onMouseOut } = this.props;
 
     const {
       title,
@@ -108,10 +116,10 @@ class Paper extends React.Component {
       authors_list: authors_list,
       year,
       area,
+      published_in: publisher
     } = data;
-    const { published_in: publisher } = data;
-    const { x, y, width: baseWidth, height: baseHeight } = this.state;
-    const { path: basePath, dogEar: baseDogEar } = this.state;
+
+    const { x, y, width: baseWidth, height: baseHeight, path: basePath, dogEar: baseDogEar } = this.state;
 
     const {
       showSocialMedia,
@@ -119,14 +127,17 @@ class Paper extends React.Component {
       showReferences,
       referencesLabel,
       showCitations,
+      showPubmedCitations,
       citationsLabel,
       showReaders,
       readersLabel,
       showTweets,
       tweetsLabel,
     } = this.props;
+
     const {
-      num_readers: readers,
+      // num_readers: 
+      readers,
       tweets,
       citations,
       social,
@@ -208,7 +219,65 @@ class Paper extends React.Component {
       }
     }
 
-    console.log()
+    const stats = [
+      {
+        id: "citations",
+        show: showCitations,
+        value: citations,
+        label: citationsLabel,
+      },
+      // consider to refactor and retrieve correct data from the backend side instead of doing this hack with citations for pubmed
+      {
+        id: "citations pubmed",
+        show: showPubmedCitations,
+        value: readers,
+        label: citationsLabel,
+      },
+      {
+        id: "readers",
+        show: showReaders,
+        value: readers,
+        label: readersLabel,
+      },
+      {
+        id: "social",
+        show: showSocialMedia,
+        value: social,
+        label: socialMediaLabel,
+      },
+      {
+        id: "references",
+        show: showReferences,
+        value: references,
+        label: referencesLabel,
+      },
+      {
+        id: "tweets",
+        show: showTweets,
+        value: tweets,
+        label: tweetsLabel,
+      },
+    ].filter(stat => stat.show)
+
+    let sortedStats = stats;
+
+    if (this.props.scaleValue) {
+      const { scaleValue } = this.props;
+
+
+      const tagPreference = orderPriorityMap[scaleValue]
+
+      sortedStats = tagPreference
+        ? [...stats].sort((a, b) => {
+            // Assign priorities based on whether the current item's ID matches the tagPreference
+            const priorityA = a.id === tagPreference ? 1 : 0;
+            const priorityB = b.id === tagPreference ? 1 : 0;
+
+            // Sort by priority in descending order (preferred items come first)
+            return priorityB - priorityA;
+          })
+        : stats;
+    }
 
     return (
       // html template starts here
@@ -245,11 +314,7 @@ class Paper extends React.Component {
                 style={{
                   height: getMetadataHeight(
                     realHeight,
-                    !!showReaders +
-                      !!showSocialMedia +
-                      !!showCitations +
-                      !!showReferences +
-                      !!showTweets,
+                    (hovered ? sortedStats : sortedStats.slice(0, 1)).length,
                     zoom
                   ),
                   width: (1 - DOGEAR_WIDTH) * realWidth,
@@ -272,7 +337,6 @@ class Paper extends React.Component {
                 <p id="details" className={sizeModifierClass}>
                   <Hyphenate>
                     <Highlight hyphenated queryHighlight>
-                      {/*{authors}*/}
                       {cutAuthors(authors_list, 15)}
                     </Highlight>
                   </Hyphenate>
@@ -290,47 +354,20 @@ class Paper extends React.Component {
                   )}
                 </p>
               </div>
-              {[
-                {
-                  id: "citations",
-                  show: showCitations,
-                  value: citations,
-                  label: citationsLabel,
-                },
-                {
-                  id: "readers",
-                  show: showReaders,
-                  value: readers,
-                  label: readersLabel,
-                },
-                {
-                  id: "social",
-                  show: showSocialMedia,
-                  value: social,
-                  label: socialMediaLabel,
-                },
-                {
-                  id: "references",
-                  show: showReferences,
-                  value: references,
-                  label: referencesLabel,
-                },
-                {
-                  id: "tweets",
-                  show: showTweets,
-                  value: tweets,
-                  label: tweetsLabel,
-                },
-              ].map(({ show, value, label, id }) =>
-                show ? (
-                  <div key={id} className="stat">
-                    <p className={`stat ${sizeModifierClass}`}>
-                      <span className="num-stat">{value || value === 0 ? value : "n/a"} </span>
-                      <span>{label}</span>
-                    </p>
-                  </div>
-                ) : null
-              )}
+              {(hovered ? sortedStats : sortedStats.slice(0, 1)).map(({ value, label, id }) => (
+                <div key={id} className="stat" style={{
+                  textWrap: 'nowrap'
+                }}>
+                  <p className={`stat ${sizeModifierClass}`}>
+                    <span style={{
+                      textWrap: 'nowrap'
+                    }} className="num-stat">{value || value === 0 ? value : "n/a"} </span>
+                    <span style={{
+                      textWrap: 'nowrap'
+                    }}>{label}</span>
+                  </p>
+                </div>
+              ))}
             </div>
           </div>
         </foreignObject>
@@ -469,9 +506,8 @@ const DOGEAR_WIDTH = 0.15;
 const DOGEAR_HEIGHT = 0.15;
 
 const getDogEar = ({ x, y, width: w, height: h }) => {
-  return `M ${x + (1 - DOGEAR_WIDTH) * w} ${y} v ${DOGEAR_HEIGHT * h} h ${
-    DOGEAR_WIDTH * w
-  }`;
+  return `M ${x + (1 - DOGEAR_WIDTH) * w} ${y} v ${DOGEAR_HEIGHT * h} h ${DOGEAR_WIDTH * w
+    }`;
 };
 
 const getRoundedPath = ({ x, y, width, height }) => {
@@ -491,9 +527,8 @@ const getRoundedPath = ({ x, y, width, height }) => {
 };
 
 const getSquarePath = ({ x, y, width: w, height: h }) => {
-  return `M ${x} ${y} h ${(1 - DOGEAR_WIDTH) * w} l ${DOGEAR_HEIGHT * w} ${
-    DOGEAR_WIDTH * h
-  } v ${(1 - DOGEAR_HEIGHT) * h} h ${-w} v ${-h}`;
+  return `M ${x} ${y} h ${(1 - DOGEAR_WIDTH) * w} l ${DOGEAR_HEIGHT * w} ${DOGEAR_WIDTH * h
+    } v ${(1 - DOGEAR_HEIGHT) * h} h ${-w} v ${-h}`;
 };
 
 const getEnlargeFactor = (offsetWidth, scrollHeight) => {
@@ -516,8 +551,9 @@ const getEnlargeFactor = (offsetWidth, scrollHeight) => {
 
 const getMetadataHeight = (realHeight, numOfLabels, isZoomed) => {
   let readersHeight = 12;
+  
   if (numOfLabels && isZoomed) {
-    readersHeight = +numOfLabels * 20;
+    readersHeight += numOfLabels * 12;
   }
 
   const height = realHeight - readersHeight;

@@ -1,7 +1,7 @@
 import React from "react";
 
 import Heading from "../components/Heading";
-import Backlink from "../components/Backlink";
+import BackLink from "../components/Backlink";
 import ContextLine from "../components/ContextLine";
 
 class SubdisciplineTitle extends React.Component {
@@ -10,7 +10,7 @@ class SubdisciplineTitle extends React.Component {
       <>
         <div id="subdiscipline_title">
           <Heading />
-          <Backlink />
+          <BackLink />
           <ContextLine popoverContainer={this} />
         </div>
       </>

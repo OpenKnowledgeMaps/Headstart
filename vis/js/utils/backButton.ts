@@ -1,6 +1,6 @@
+import { Config } from "../@types/config";
 import { deselectPaper, selectPaper, zoomIn, zoomOut } from "../actions";
 import DataManager from "../dataprocessing/managers/DataManager";
-import { Config } from "../default-config";
 import { createAnimationCallback } from "./eventhandlers";
 
 /**

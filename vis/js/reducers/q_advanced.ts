@@ -73,7 +73,7 @@ const q_advanced = (state = { text: "", parsedTerms: [] }, action: any) => {
       .map((x) => x.replace(/[\\:]/g, ""))
       .filter((x) => x !== "");
   
-    phraseArray = [...new Set(phraseArray)];
+    phraseArray = Array.from(new Set(phraseArray));
   
     return phraseArray;
   };

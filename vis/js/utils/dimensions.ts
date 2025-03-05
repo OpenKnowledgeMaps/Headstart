@@ -1,7 +1,7 @@
 // @ts-nocheck
 
 import $ from "jquery";
-import { Config } from "../default-config";
+import { Config } from "../@types/config";
 
 // ?: fix scaling here?
 

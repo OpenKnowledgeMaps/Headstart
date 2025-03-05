@@ -142,7 +142,7 @@ const DEFAULT_SCHEME: SchemeObject[] = [
     sanitizer: commentsSanitizer,
     fallback: () => [],
   },
-  { name: "readers", fallback: (loc) => loc?.default_readers },
+  
   { name: "tags", type: ["string"], fallback: () => "" },
   { name: "doi", type: ["string"] },
   {
@@ -172,10 +172,11 @@ const DEFAULT_SCHEME: SchemeObject[] = [
   { name: "cluster_labels", required: true },
   { name: "file_hash", type: ["string"], fallback: (loc) => loc?.default_hash },
   { name: "citation_count", type: ["number"], fallback: () => 'n/a' },
-  { name: "tweets", fallback: (loc) => loc?.default_readers },
-  { name: "social", fallback: (loc) => loc?.default_readers },
-  { name: "references", fallback: (loc) => loc?.default_readers },
-  { name: "citations", fallback: (loc) => loc?.default_readers }
+  { name: "tweets", fallback: (loc) => 'n/a' },
+  { name: "social", fallback: (loc) => 'n/a' },
+  { name: "references", fallback: (loc) => 'n/a' },
+  { name: "citations", fallback: (loc) => 'n/a' },
+  { name: "readers", fallback: (loc) => 'n/a' },
 ];
 
 export default DEFAULT_SCHEME;

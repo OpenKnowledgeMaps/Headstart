@@ -113,29 +113,39 @@ const TextSection = ({ title, content }) => {
   const [showFullText, setShowFullText] = useState(false);
   const [showButton, setShowButton] = useState(false);
 
-  const handleToggleShowMore = () => setShowFullText((prev) => !prev);
+  const handleToggleShowMore = () => {
+    setShowFullText((prev) => !prev);
+  };
 
-  const checkMultiLine = () => {
+  /**
+   * Checks if content does NOT fit in a single line by comparing scrollWidth vs clientWidth.
+   */
+  const checkSingleLineOverflow = () => {
     const container = containerRef.current;
-    if (container) {
-      // Temporarily set styles to measure actual lines
-      const previousStyle = container.style.whiteSpace;
-      container.style.whiteSpace = "pre-wrap"; // Allow natural wrapping for measurement
+    if (!container) return;
 
-      // Calculate if content exceeds a single line
-      const isMultiLine = container.scrollHeight > container.offsetHeight;
+    // Store the current whiteSpace so we can restore it later
+    const previousWhiteSpace = container.style.whiteSpace;
 
-      // Restore original style
-      container.style.whiteSpace = previousStyle;
+    // Force single line for measuring
+    container.style.whiteSpace = "nowrap";
 
-      setShowButton(isMultiLine);
-    }
+    // If the text is overflowing horizontally, then it doesn't fit in one line
+    const isOverflowing = container.scrollWidth > container.clientWidth;
+
+    // Restore the original style
+    container.style.whiteSpace = previousWhiteSpace;
+
+    setShowButton(isOverflowing);
   };
 
   useEffect(() => {
-    checkMultiLine(); // Check on mount and when content changes
-    window.addEventListener("resize", checkMultiLine);
-    return () => window.removeEventListener("resize", checkMultiLine);
+    // Check immediately (on mount) and also whenever content changes
+    checkSingleLineOverflow();
+
+    // Re-check on window resize
+    window.addEventListener("resize", checkSingleLineOverflow);
+    return () => window.removeEventListener("resize", checkSingleLineOverflow);
   }, [content]);
 
   return (
@@ -147,13 +157,11 @@ const TextSection = ({ title, content }) => {
           whiteSpace: showFullText ? "pre-wrap" : "nowrap",
           overflow: "hidden",
           textOverflow: "ellipsis",
-          display: "-webkit-box",
-          WebkitLineClamp: showFullText ? "none" : 2,
-          WebkitBoxOrient: "vertical",
         }}
       >
         {content || localization.noDataAvailable}
       </p>
+
       {showButton && (
         <button className="underlined_button" onClick={handleToggleShowMore}>
           <i

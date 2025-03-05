@@ -1,4 +1,4 @@
-import { Config } from "../default-config";
+import { Config } from "../@types/config";
 
 const context = (state = {}, action: any) => {
   if (action.canceled) {

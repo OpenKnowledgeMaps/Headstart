@@ -5,11 +5,14 @@ import React from "react";
 import { useLocalizationContext } from "../../components/LocalizationProvider";
 import Highlight from "../../components/Highlight";
 
-const DocumentType = ({ type }) => {
+interface DocumentTypeProps {
+  type: string;
+}
+
+const DocumentType = ({ type }: DocumentTypeProps) => {
   const localization = useLocalizationContext();
 
   return (
-    // html template starts here
     <div id="list_resulttype" className="resulttype">
       <span id="resulttype_tag" className="resulttype_tag">
         {localization.resulttype_label}:{" "}
@@ -18,7 +21,6 @@ const DocumentType = ({ type }) => {
         <Highlight>{type}</Highlight>
       </span>
     </div>
-    // html template ends here
   );
 };
 

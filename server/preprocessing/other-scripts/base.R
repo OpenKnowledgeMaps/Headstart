@@ -52,21 +52,31 @@ get_papers <- function(query, params,
 
   blog$info(paste("vis_id:", .GlobalEnv$VIS_ID, "exact query:", exact_query))
 
-  year_from = params$from
-  year_to = params$to
   limit = params$limit
 
   # prepare query fields
-  date_string = paste0("dcdate:[", params$from, " TO ", params$to , "]")
   document_types = paste("dctypenorm:", "(", paste(params$document_types, collapse=" OR "), ")", sep="")
   
   sortby_string = ifelse(params$sorting == "most-recent", "dcyear desc", "")
   return_fields <- "dcdocid,dctitle,dcdescription,dcsource,dcdate,dcsubject,dccreator,dclink,dcoa,dcidentifier,dcrelation,dctype,dctypenorm,dcprovider,dclang,dclanguage,dccoverage"
 
   if (!is.null(exact_query) && exact_query != '') {
-    base_query <- paste(paste0("(",exact_query,")"), date_string, document_types, collapse=" ")
+    base_query <- paste(paste0("(",exact_query,")"), document_types, collapse=" ")
   } else {
-    base_query <- paste(date_string, document_types, collapse=" ")
+    base_query <- paste(document_types, collapse=" ")
+  }
+
+  if (!is.null(params$vis_type) && params$vis_type == "timeline") {
+    if (!is.null(params$exclude_date_filters)) {
+      params$exclude_date_filters <- NULL
+    }
+  }
+
+  if (!is.null(params$exclude_date_filters)
+      && (params$exclude_date_filters == TRUE || params$exclude_date_filters == "true")) {
+  } else {
+    date_string = paste0("dcdate:[", params$from, " TO ", params$to , "]")
+    base_query <- paste(date_string, base_query)
   }
 
   # apply language filter if parameter is set

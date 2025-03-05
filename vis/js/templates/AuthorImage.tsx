@@ -1,26 +1,41 @@
-// @ts-nocheck
-
 import React from "react";
 
+// @ts-ignore
 import defaultImage from "../../images/author_default.png";
+import { ServiceType } from "../@types/service";
 
-const AuthorImage = ({ url = "" }) => {
-  let link = url || defaultImage;
+export interface AuthorImageProps {
+  service: ServiceType;
+  url: string;
+  orcidId: string;
+}
 
-  const handleClick = (e) => {
-    // for now we are disabling this behaviour, since we decided to not redirect users
-    e.preventDefault(); // Prevents navigation
-  };
+const AuthorImage = ({ service, url = "", orcidId }: AuthorImageProps) => {
+  let link = defaultImage;
+  
+  if (url) {
+    link = url;
+  }
+
+  let href = "";
+
+  if (service === ServiceType.ORCID) {
+    href = `https://orcid.org/${orcidId}`
+  } else {
+    href = link;
+  }
 
   return (
     <div id="title_image" className="titleimage">
       <a
         id="author_image_link"
-        href={link}
+        title="Open link to ORCID profile in a new tab"
+        href={href}
         target="_blank"
         rel="noreferrer"
         aria-label="author image"
-        onClick={handleClick}
+        // if href is empty, then the link is not clickable
+        style={{ pointerEvents: href ? "auto" : "none" }}
       >
         <div
           id="author_image"
