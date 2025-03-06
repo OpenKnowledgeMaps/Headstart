@@ -1,5 +1,4 @@
 services:
-
   end2endtest:
     build:
       context: ./server/workers/tests
@@ -9,11 +8,9 @@ services:
     environment:
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-      POSTGRES_HOST: ${POSTGRES_HOST}
-      POSTGRES_PORT: ${POSTGRES_PORT}
-      POSTGRES_HOSTS: ${POSTGRES_HOST}
-      POSTGRES_PORTS: ${POSTGRES_PORT}
-      DEFAULT_DATABASE: ${POSTGRES_DATABASE}
+      POSTGRES_HOSTS: ${POSTGRES_HOSTS}
+      POSTGRES_PORTS: ${POSTGRES_PORTS}
+      DEFAULT_DATABASE: ${POSTGRES_DB}
       SERVICE_VERSION: "test_version"
     ports:
       - "7575:80"
@@ -23,46 +20,54 @@ services:
       - db
       - backend
     restart: "no"
-    entrypoint: ["pytest", '/app/workers/tests/test_end2end.py', '-s', '-rfA']
+    entrypoint: ["pytest", "/app/workers/tests/test_end2end.py", "-s", "-rfA"]
     networks:
       - test
 
   db:
-    container_name: ${POSTGRES_HOST}
-    image: 'postgres:12.2-alpine'
+    container_name: ${POSTGRES_HOSTS}
+    image: "postgres:12.2-alpine"
     restart: "no"
-    hostname: ${POSTGRES_HOST}
+    hostname: ${POSTGRES_HOSTS}
     environment:
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-      POSTGRES_PORT: ${POSTGRES_PORT}
-      DEFAULT_DATABASE: ${POSTGRES_DATABASE}
+      POSTGRES_PORT: ${POSTGRES_PORTS}
+      DEFAULT_DATABASE: ${POSTGRES_DB}
     command: postgres -c config_file=/etc/postgresql.conf -c hba_file=/etc/pg_hba.conf
     volumes:
       - ./server/workers/tests/test_data/pg_hba_test_local.conf:/etc/pg_hba.conf
       - ./server/workers/tests/test_data/postgresql_test_local.conf:/etc/postgresql.conf
     ports:
-      - "${POSTGRES_PORT}:${POSTGRES_PORT}"
+      - "${POSTGRES_PORTS}:${POSTGRES_PORTS}"
     networks:
       - test
 
   redis:
-      image: 'redis:6.0-alpine'
-      restart: unless-stopped
-      hostname: "${REDIS_HOST}"
-      # container_name: "${REDIS_HOST}"
-      environment:
-        REDIS_HOST: "${REDIS_HOST}"
-        REDIS_PORT: "${REDIS_PORT}"
-        REDIS_PASSWORD: "${REDIS_PASSWORD}"
-      command: ["redis-server", "/etc/redis/redis.conf", "--bind", "${REDIS_HOST}", "--port", "${REDIS_PORT}"]
-      volumes:
-          - 'redis:/var/lib/redis/data'
-          - ./local_dev/redis.conf:/etc/redis/redis.conf
-      ports:
+    image: "redis:6.0-alpine"
+    restart: unless-stopped
+    hostname: "${REDIS_HOST}"
+    # container_name: "${REDIS_HOST}"
+    environment:
+      REDIS_HOST: "${REDIS_HOST}"
+      REDIS_PORT: "${REDIS_PORT}"
+      REDIS_PASSWORD: "${REDIS_PASSWORD}"
+    command:
+      [
+        "redis-server",
+        "/etc/redis/redis.conf",
+        "--bind",
+        "${REDIS_HOST}",
+        "--port",
+        "${REDIS_PORT}",
+      ]
+    volumes:
+      - "redis:/var/lib/redis/data"
+      - ./local_dev/redis.conf:/etc/redis/redis.conf
+    ports:
       - "127.0.0.1:${REDIS_PORT}:${REDIS_PORT}"
-      networks:
-        - test
+    networks:
+      - test
 
   api:
     build:
@@ -81,13 +86,13 @@ services:
       FLASK_ENV: "${FLASK_ENV}"
       POSTGRES_USER: "${POSTGRES_USER}"
       POSTGRES_PASSWORD: "${POSTGRES_PASSWORD}"
-      POSTGRES_HOST: "${POSTGRES_HOST}"
-      DEFAULT_DATABASE: "${POSTGRES_DATABASE}"
+      POSTGRES_HOST: "${POSTGRES_HOSTS}"
+      DEFAULT_DATABASE: "${POSTGRES_DB}"
     command: ["python", "api/tests/mock_app.py"]
     depends_on:
       - redis
       - db
-    networks: 
+    networks:
       - test
 
   persistence:
@@ -101,11 +106,11 @@ services:
       SERVICE_VERSION: "test"
       BEHIND_PROXY: "false"
       FLASK_ENV: "development"
-      POSTGRES_HOSTS: ${POSTGRES_HOST}
-      POSTGRES_PORTS: ${POSTGRES_PORT}
+      POSTGRES_HOSTS: ${POSTGRES_HOSTS}
+      POSTGRES_PORTS: ${POSTGRES_PORTS}
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-      DEFAULT_DATABASE: ${POSTGRES_DATABASE}
+      DEFAULT_DATABASE: ${POSTGRES_DB}
     volumes:
       - ./server/workers/tests/mock_app.py:/persistence/mock_app.py
     command: ["python", "mock_app.py"]
