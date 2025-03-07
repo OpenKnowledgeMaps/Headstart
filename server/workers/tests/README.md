@@ -2,7 +2,7 @@
 
 ## Prepare local configs:
 
-* Adapt the following settings in `server/preprocessing/conf/config_local.ini`:
+- Adapt the following settings in `server/preprocessing/conf/config_local.ini`:
 
 ```
 
@@ -18,7 +18,7 @@ vis_path = "headstart"
 # Relative path to the client REST services. Needs to be in the public_html/www directory.
 services_path = "server/services/"
 # URL to OKMaps API
-api_url = "http://end2endtest/api/"
+api_url = "http://integration_tests/api/"
 # flavor of API, default: stable
 api_flavor = "stable"
 # The persistence backend to use - either api or legacy
@@ -35,23 +35,24 @@ database = "testdb"
 
 ```
 
-* Duplicate the postgres config files `pg_hba_test.conf` and `postgresql_test.conf` in `tests/test_data` and rename the duplicates to `pg_hba_test_local.conf` and `postgresql_test_local.conf`
+- Duplicate the postgres config files `pg_hba_test.conf` and `postgresql_test.conf` in `tests/test_data` and rename the duplicates to `pg_hba_test_local.conf` and `postgresql_test_local.conf`
 
-* Make sure that the postgres container is correctly referred to in `docker-compose-end2endtest.yml` and `postgresql_test_local.conf`:
+- Make sure that the postgres container is correctly referred to in `docker-compose-integration-tests.yml` and `postgresql_test_local.conf`:
 
-In `docker-compose-end2endtest.yml`, the POSTGRES_HOST should be the name of the db container as assigned by your local Docker, this could be either `headstart_db_1` or `headstart-db-1`, depending on your Docker system and OS.
+In `docker-compose-integration-tests.yml`, the POSTGRES_HOST should be the name of the db container as assigned by your local Docker, this could be either `headstart_db_1` or `headstart-db-1`, depending on your Docker system and OS.
 
 ```
-  end2endtest:
+  integration_tests:
     build:
       context: ./server/workers/tests
       dockerfile: ./Dockerfile.tests
-    hostname: "end2endtest"
+    hostname: "integration_tests"
     environment:
       POSTGRES_USER: "testuser"
       POSTGRES_PASSWORD: "testpassword"
       POSTGRES_HOST: "headstart_db_1"
 ```
+
 In `postgresql_test_local.conf` the `listen_addresses` should include the correct name of the db container as well:
 
 ```
@@ -61,18 +62,18 @@ listen_addresses = 'localhost,headstart_db_1,headstart-db-1'
 Run tests
 
 ```
-docker compose -f docker-compose-end2endtest.yml --env-file .docker.test.env run end2endtest
+docker compose -f docker-compose-integration-tests.yml --env-file .docker.test.env run integration_tests
 ```
 
 ## Notes about the end-to-end test setup
 
-The test is designed to test functionality of search.php and data retrieval endpoints, e.g. getLatestRevision.php . 
+The test is designed to test functionality of search.php and data retrieval endpoints, e.g. getLatestRevision.php .
 
 It consists of multiple containers which replicate a production setup:
 
-* A testrunner, which also includes a mock dataprocessing API as a fixture
-* A backend-container with a Apache2/PHP environment for running the server/services endpoints
-* A database container
+- A testrunner, which also includes a mock dataprocessing API as a fixture
+- A backend-container with a Apache2/PHP environment for running the server/services endpoints
+- A database container
 
 During a test, the following routing within the docker-network of the test containers happens:
 
@@ -83,10 +84,7 @@ During a test, the following routing within the docker-network of the test conta
 1. The test performs its assertions
 1. The testrunner proceeds to the next test
 
-
-
 ## Legacy tests (without docker)
-
 
 Currently, some tests require the dockerized backend to run when testing e.g. data clients or the dataprocessing. This is because the R-parts of the backend are not easily integrated into the current testing framework.
 

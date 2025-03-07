@@ -1,10 +1,10 @@
 services:
-  end2endtest:
+  integration_tests:
     build:
       context: ./server/workers/tests
       dockerfile: ./Dockerfile.tests
-    container_name: end2endtest
-    hostname: "end2endtest"
+    container_name: integration_tests
+    hostname: "integration_tests"
     environment:
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
@@ -20,7 +20,8 @@ services:
       - db
       - backend
     restart: "no"
-    entrypoint: ["pytest", "/app/workers/tests/test_end2end.py", "-s", "-rfA"]
+    entrypoint:
+      ["pytest", "/app/workers/tests/integration-tests.py", "-s", "-rfA"]
     networks:
       - test
 
