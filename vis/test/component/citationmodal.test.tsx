@@ -18,7 +18,7 @@ const getMockStoreData = (isStreamgraph: boolean) => {
       openCitationModal: true,
     },
     query: {
-      text: 'climate change and impact'
+      text: "climate change and impact",
     },
     heading: {
       titleStyle: null,
@@ -30,31 +30,35 @@ const getMockStoreData = (isStreamgraph: boolean) => {
       text: null,
     },
     localization: {
-      "cite_title_km": "Cite this knowledge map",
-      "cite_title_sg": "Cite this streamgraph",
-      "citation_template": "Open Knowledge Maps (${year}). ${type} for research on ${query}. Retrieved from ${source} [${date}].",
-    }
-  }
-}
+      cite_title_km: "Cite this knowledge map",
+      cite_title_sg: "Cite this streamgraph",
+      citation_template:
+        "Open Knowledge Maps (${year}). ${type} for research on ${query}. Retrieved from ${source} [${date}].",
+    },
+  };
+};
 
 // Creating formatted citation text that will be also displayed in the component
 const getCitationText = (isStreamgraph: boolean) => {
-  const mockStoreData = getMockStoreData(isStreamgraph)
+  const mockStoreData = getMockStoreData(isStreamgraph);
   const citationTemplate = mockStoreData.localization.citation_template;
   const mockCitationStringData = {
     year: "2025",
     type: isStreamgraph ? "Streamgraph" : "Knowledge Map",
     query: "climate change and impact",
     source: "http://localhost:3000/",
-    date: ""
+    date: "",
   };
 
-  return formatString(citationTemplate, mockCitationStringData).replace(" [].", ".");
-}
+  return formatString(citationTemplate, mockCitationStringData).replace(
+    " [].",
+    "."
+  );
+};
 
 // Setup function for the CitationModal component tests
 const setup = (isStreamgraph: boolean) => {
-  const mockStoreData = getMockStoreData(isStreamgraph)
+  const mockStoreData = getMockStoreData(isStreamgraph);
   const store = mockStore(mockStoreData);
 
   render(
@@ -67,26 +71,26 @@ const setup = (isStreamgraph: boolean) => {
 };
 
 // Test cases
-describe('CitationModal component', () => {
-  it('Renders with correct title for a knowledge map', () => {
+describe("CitationModal component", () => {
+  it("Renders with correct title for a knowledge map", () => {
     setup(false);
-    expect(screen.getByText('Cite this knowledge map')).toBeInTheDocument();
+    expect(screen.getByText("Cite this knowledge map")).toBeInTheDocument();
   });
 
-  it('Renders with correct title for a streamgraph', () => {
+  it("Renders with correct title for a streamgraph", () => {
     setup(true);
-    expect(screen.getByText('Cite this streamgraph')).toBeInTheDocument();
-  })
+    expect(screen.getByText("Cite this streamgraph")).toBeInTheDocument();
+  });
 
-  it('Renders with a correct citation text for a knowledge map', () => {
+  it("Renders with a correct citation text for a knowledge map", () => {
     setup(false);
-    const citationText = getCitationText(false)
+    const citationText = getCitationText(false);
     expect(screen.getByText(citationText)).toBeInTheDocument();
-  })
+  });
 
-  it('Renders with a correct citation text for a streamgraph', () => {
+  it("Renders with a correct citation text for a streamgraph", () => {
     setup(true);
-    const citationText = getCitationText(true)
+    const citationText = getCitationText(true);
     expect(screen.getByText(citationText)).toBeInTheDocument();
-  })
+  });
 });
