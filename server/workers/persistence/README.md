@@ -11,7 +11,7 @@ Running the tests locally will install all the necessary dependencies on your ma
 1. In the root of the project there is a `tests_runners` folder, which contains folders for running tests. Each folder contains two shell-scripts. Since we want to run the script locally, we need to call the script `locally.sh`:
 
    ```
-     tests_runners/persistence/locally.sh
+     sh tests_runners/persistence/locally.sh
    ```
 
 2. After running the script above, all dependencies will be installed on your computer and the tests should run successfully.
@@ -32,7 +32,7 @@ With this approach, dependencies will not be installed directly on your computer
 1. In the root of the project there is a tests_runners folder, which contains folders for running tests. Each folder contains two shell-scripts. Since we want to run the script in a Docker container, we need to call the script `dockerized.sh`:
 
    ```
-     tests_runners/persistence/dockerized.sh
+     sh tests_runners/persistence/dockerized.sh
    ```
 
 2. After the previous command, a Docker container will be launched, in which all the tests will run. Test results will be visible both in the container logs and in your terminal.
