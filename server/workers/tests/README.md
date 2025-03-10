@@ -1,6 +1,14 @@
-# How to run end-to-end test with docker
+# How to run test
 
-## Prepare local configs:
+## Running unit tests
+
+Unit tests can be run locally or in a Docker container. It is also interesting to note that tests can be run directly from the directory in which they are stored or from the top level (root). Such tests are written for each separate part of the server, so they are not in this folder. For example, they can be found at the path: `server/workers/persistence`. There will be a folder with the source code, tests and `README.md` file where you can find more information about unit tests.
+
+## Running end2end tests with Docker
+
+This approach is outdated. Unit tests are used instead.
+
+### Prepare local configs:
 
 - Adapt the following settings in `server/preprocessing/conf/config_local.ini`:
 
@@ -65,7 +73,7 @@ Run tests
 docker compose -f docker-compose-integration-tests.yml --env-file .docker.test.env run integration_tests
 ```
 
-## Notes about the end-to-end test setup
+### Notes about the end-to-end test setup
 
 The test is designed to test functionality of search.php and data retrieval endpoints, e.g. getLatestRevision.php .
 
@@ -84,7 +92,7 @@ During a test, the following routing within the docker-network of the test conta
 1. The test performs its assertions
 1. The testrunner proceeds to the next test
 
-## Legacy tests (without docker)
+### Legacy tests (without docker)
 
 Currently, some tests require the dockerized backend to run when testing e.g. data clients or the dataprocessing. This is because the R-parts of the backend are not easily integrated into the current testing framework.
 
