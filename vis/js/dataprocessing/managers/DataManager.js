@@ -83,12 +83,19 @@ class DataManager {
   __getPapersArray(backendData) {
     if (this.config.show_context) {
       if (typeof backendData.data === "string") {
-        return JSON.parse(backendData.data);
+        const data = JSON.parse(backendData.data);
+
+        if (Array.isArray(data)) return data;
+
+        return data.documents && typeof data.documents === "string"
+          ? JSON.parse(data?.documents)
+          : data.documents ?? [];
       }
-      return backendData.data;
+      return backendData.data?.documents ?? [];
     }
+
     if (typeof backendData.data === "object") {
-      return backendData.data;
+      return backendData.data?.documents ?? [];
     }
 
     return backendData;
@@ -143,8 +150,8 @@ class DataManager {
   __parseAuthors(paper) {
     paper.authors_objects = extractAuthors(paper.authors);
     paper.authors_list = getAuthorsList(
-        paper.authors,
-        this.config.convert_author_names
+      paper.authors,
+      this.config.convert_author_names
     );
 
     // old variable with all authors_string
