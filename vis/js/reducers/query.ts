@@ -72,8 +72,7 @@ const getQueryTerms = (context: Context): string[] => {
     .map((x) => x.replace(/[\\:]/g, ""))
     .filter((x) => x !== "");
 
-  // @ts-ignore
-  phraseArray = [...new Set(phraseArray)];
+    phraseArray = Array.from(new Set(phraseArray));
 
   return phraseArray;
 };

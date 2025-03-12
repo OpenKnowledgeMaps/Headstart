@@ -150,12 +150,15 @@ const KnowledgeMap = (props) => {
         socialMediaLabel={localization.social_media_count_label}
         showReferences={props.paper?.showReferences}
         referencesLabel={localization.references_count_label}
+        showPubmedCitations={props.paper.showPubmedCitations}
         showCitations={props.paper?.showCitations}
         citationsLabel={localization.citations_count_label}
         showReaders={props.paper?.showReaders}
         readersLabel={localization.readers_count_label}
         showTweets={props.paper?.showTweets}
         tweetsLabel={localization.tweets_count_label}
+        scaleValue={props.scaleValue}
+        service={props.service}
       />
     );
   };
@@ -236,6 +239,8 @@ const mapStateToProps = (state) => ({
   enlargeFactor: state.paperOrder.enlargeFactor,
   trackMouseOver: state.tracking.trackMouseOver,
   paper: state.paper,
+  scaleValue: state.toolbar.scaleValue,
+  service: state.service,
 });
 
 export default connect(

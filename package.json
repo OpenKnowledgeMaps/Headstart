@@ -61,6 +61,7 @@
     "@testing-library/jest-dom": "^6.5.0",
     "@testing-library/react": "^12.1.5",
     "@types/d3": "^7.4.3",
+    "@types/dateformat": "^5.0.2",
     "@types/jest": "^29.5.13",
     "@types/jquery": "^3.5.31",
     "@types/node": "^22.7.7",

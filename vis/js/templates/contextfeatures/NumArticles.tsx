@@ -2,6 +2,16 @@
 
 import React from "react";
 
+type NumArticlesProps = {
+  articlesCount: number;
+  articlesCountLabel: string;
+  openAccessArticlesCount?: number;
+  service: string;
+  children: string;
+  modifierLimit: number;
+  isStreamgraph?: boolean;
+};
+
 const NumArticles = ({
   articlesCount,
   articlesCountLabel,
@@ -9,7 +19,8 @@ const NumArticles = ({
   service,
   children,
   modifierLimit,
-}) => {
+  isStreamgraph
+}: NumArticlesProps) => {
   let displayText = `${articlesCount} ${articlesCountLabel}`;
 
   if (service === "orcid") {
@@ -21,12 +32,14 @@ const NumArticles = ({
   }
 
   if (service === "pubmed" || service === "base") {
-    if (articlesCount >= 100) {
+    if (articlesCount >= 100 && !isStreamgraph) {
       displayText = (
         <>
           100 {children} {articlesCountLabel}
         </>
       );
+    } else {
+      displayText = <>{articlesCount} {children} {articlesCountLabel}</>
     }
   }
 

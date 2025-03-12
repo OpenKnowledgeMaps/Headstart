@@ -34,15 +34,23 @@ const ScaleToolbar = ({
         <DropdownButton
           id="scale-menu"
           noCaret
-          className="truncate-text"
           title={
             <>
-              {localization.scale_by_label}
-              <span id="curr-filter-type">{labels[value]}</span>
-              <i
-                className="fas fa-chevron-down chevron"
-                style={{ marginLeft: "3px" }}
-              ></i>
+              <span style={{
+                maxWidth: '100%',
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center'
+              }}>
+                <span>{localization.scale_by_label}</span>
+                <span id="curr-filter-type" className="truncate-text" style={{
+                  minWidth: '0px',
+                  marginLeft: "3px"
+                }}>{labels[value]}</span>
+                <i className="fas fa-chevron-down chevron" style={{
+                  marginLeft: "3px",
+                }}/>
+              </span>
             </>
           }
         >
@@ -54,7 +62,7 @@ const ScaleToolbar = ({
               onSelect={handleScaleChange}
               active={key === value}
             >
-              {labels[key]}
+              <div className="wrap">{labels[key]}</div>
             </MenuItem>
           ))}
         </DropdownButton>

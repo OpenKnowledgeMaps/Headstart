@@ -923,4 +923,11 @@ img#preview_page {
     overflow: hidden;
     text-overflow: ellipsis;
     display: inline-block;
+    max-width: 100%;
+}
+
+.wrap {
+    white-space: normal;
+    overflow: visible;
+    text-overflow: unset;
 }

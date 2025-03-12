@@ -5,7 +5,13 @@ import { connect } from "react-redux";
 import StandardFilterSort from "../templates/filtersort/StandardFilterSort";
 import BasicFilterSort from "../templates/filtersort/BasicFilterSort";
 
-const FilterSort = ({ showList, showFilter, color }) => {
+export interface FilterSortProps {
+  showList: boolean;
+  showFilter: boolean;
+  color: string;
+}
+
+const FilterSort = ({ showList, showFilter, color }: FilterSortProps) => {
   if (showFilter) {
     return <StandardFilterSort displaySort={showList} color={color} />;
   }

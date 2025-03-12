@@ -32,7 +32,7 @@ import zoom from "./zoom";
 import q_advanced from "./q_advanced";
 import modalInfoType from "./modalInfoType";
 import paper from "./paper";
-import { Config } from "../default-config";
+import { Config } from "../@types/config";
 
 export default combineReducers({
   animation,

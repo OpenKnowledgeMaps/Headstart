@@ -30,6 +30,7 @@ class APIClient {
             return $res;
         }
         catch (Exception $e) {
+            error_log("Error in APIClient: " . $e);
             $res = array("status"=>"error",
                          "httpcode"=>500,
                          "reason"=>array("unexpected data processing error"));
@@ -50,6 +51,9 @@ class APIClient {
             return $res;
         }
         catch (Exception $e) {
+            // what happens here is instead of bubbling the error up,
+            // it is caught and we fake a response that looks like an error
+            // because of the hardcoded reason we loose the original error information
             $res = array("status"=>"error",
                          "httpcode"=>500,
                          "reason"=>array("unexpected data processing error"));
@@ -65,9 +69,12 @@ class APIClient {
         //         $res = array("status"=>"error", reason=>array());
         //     }
         // }
+        error_log(("Trying to handle API errors: " . print_r($res, true)));
         $res["status"] = "error";
         if ($res["httpcode"] == 503) {
-            $res["reason"] = array();
+            // we had a 503 for the database connection error
+            // this implementation actively suppresses the reason by resetting to an empty array
+            // $res["reason"] = array();
         }
         if (!array_key_exists("reason", $res)) {
             $res["reason"] = array();
@@ -75,6 +82,7 @@ class APIClient {
         if (count($res["reason"])==0) {
             array_push($res["reason"], "unexpected data processing error");
         }
+        error_log(("Trying to handle API errors: " . print_r($res, true)));
         return $res;
     }
 

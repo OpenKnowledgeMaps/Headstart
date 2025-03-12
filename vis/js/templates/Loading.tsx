@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React from "react";
 
 import { useLocalizationContext } from "../components/LocalizationProvider";
@@ -7,7 +6,6 @@ const Loading = () => {
   const localization = useLocalizationContext();
 
   return (
-    // html template starts here
     <div id="map-loading-screen" className="loading-screen">
       <div id="loading-text" className="loading-text">
         {localization.loading}
@@ -19,7 +17,6 @@ const Loading = () => {
         ></span>
       </div>
     </div>
-    // html template ends here
   );
 };
 

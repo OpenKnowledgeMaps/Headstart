@@ -2,12 +2,13 @@ import React from "react";
 
 import { CHART_MARGIN } from "../utils/streamgraph";
 
-const StreamgraphChart = ({ width, height }: {
+export interface StreamgraphChartProps {
   width: number;
   height: number;
-}) => {
+}
+
+const StreamgraphChart = ({ width, height }: StreamgraphChartProps) => {
   return (
-    // html template starts here
     <div id="headstart-chart">
       <svg
         width={width}
@@ -22,7 +23,6 @@ const StreamgraphChart = ({ width, height }: {
         ></g>
       </svg>
     </div>
-    // html template ends here
   );
 };
 

@@ -115,7 +115,7 @@ export interface Localization {
     citation_count: string;
     cited_by_tweeters_count: string;
     "readers.mendeley": string;
-  }
+  };
   tweets: string;
   dataset_count_label: string;
   paper_count_label: string;
@@ -129,7 +129,6 @@ export interface Localization {
   dataset: string;
 }
 
-
 export const localization: {
   [key: string]: Partial<Localization>;
 } = {
@@ -139,7 +138,7 @@ export const localization: {
     showMore: "Show more",
     showLess: "Show less",
     search_placeholder: "Search within visualization...",
-    intro_label: "About the map",
+    intro_label: "More information",
     readers: "readers",
     year: "date",
     authors: "authors",
@@ -161,6 +160,7 @@ export const localization: {
     source_label: "Data source",
     resulttype_label: "Document type",
     documenttypes_label: "Document types",
+    readers_count_label: "readers",
     documenttypes_tooltip:
       "The following document types were taken into consideration in the creation of this visualization (not all of them may appear in the visualization):",
     area: "Area",
@@ -233,7 +233,7 @@ export const localization: {
     showMore: "Mehr anzeigen",
     showLess: "Weniger anzeigen",
     search_placeholder: "Suche in der Liste...",
-    intro_label: "Over de kaart",
+    intro_label: "Mehr Informationen",
     // TODO: consider to rename it?
     readers: "Leser",
     year: "Jahr",
@@ -418,6 +418,7 @@ export const localization: {
     relevance: "relevance",
     readers: "citations",
     year: "year",
+    intro_label: "About the map",
     authors: "authors",
     title: "title",
     backlink: "← Back to overview",
@@ -493,7 +494,6 @@ export const localization: {
             OpenAIRE page for`,
     viper_edit_button_text: "continue to openaire",
     tweets_count_label: " tweets",
-    readers_count_label: " readers (Mendeley)",
     citations_count_label: " citations (Crossref)",
     all: "any",
     open_access: "Open Access",

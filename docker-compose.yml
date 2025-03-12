@@ -78,6 +78,8 @@ services:
     command: ["python", "app.py"]
     volumes:
       - ./server/workers/persistence/src:/api
+    depends_on:
+      - redis
     networks:
       - headstart
 
@@ -248,7 +250,7 @@ services:
     build: local_dev/searchflow-container
     volumes:
       - ../project-website:/var/www/html
-      - ./local_dev/config_local_projectwebsite.php:/var/www/html/config_local.php
+      - ./local_dev/config_local_projectwebsite.php:/var/www/html/config.php
       - ../search-flow/:/var/www/html/search-flow
       - ./local_dev/config_local_searchflow.ini:/var/www/html/search-flow/config_local.ini
       - ../Headstart:/var/www/html/headstart

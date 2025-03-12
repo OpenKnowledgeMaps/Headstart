@@ -5,10 +5,12 @@ import { shorten } from "../utils/string";
 
 const MAX_ROLE_LENGTH = 18;
 
-export function Employment({ author, popoverContainer }: {
+export interface EmploymentProps {
   author: Author,
   popoverContainer: HTMLElement
-}) {
+}
+
+export function Employment({ author, popoverContainer }: EmploymentProps) {
   const authorRoleId = "author-role";
   const authorOrganizationId = "author-organization";
   

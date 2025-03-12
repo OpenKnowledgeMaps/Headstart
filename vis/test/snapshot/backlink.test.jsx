@@ -3,7 +3,7 @@ import { Provider } from "react-redux";
 import renderer from "react-test-renderer";
 import configureStore from "redux-mock-store";
 
-import Backlink from "../../js/components/Backlink";
+import BackLink from "../../js/components/Backlink";
 
 import { STREAMGRAPH_MODE } from "../../js/reducers/chartType";
 
@@ -21,7 +21,7 @@ describe("Backlink component snapshot", () => {
     const tree = renderer
       .create(
         <Provider store={store}>
-          <Backlink />
+          <BackLink />
         </Provider>
       )
       .toJSON();
@@ -39,7 +39,7 @@ describe("Backlink component snapshot", () => {
     const tree = renderer
       .create(
         <Provider store={store}>
-          <Backlink />
+          <BackLink />
         </Provider>
       )
       .toJSON();

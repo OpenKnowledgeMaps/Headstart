@@ -32,7 +32,7 @@ orcid_querymodel = orcid_ns.model(
         ),
         "orcid": fields.String(
             example='1234-5678-9012-3456',
-            description='ORCiD iD',
+            description='ORCID iD',
             required=True
         )
     }
@@ -46,7 +46,7 @@ class Search(Resource):
     @orcid_ns.produces(["application/json", "text/csv"])
     def post(self):
         """
-        Perform a search query using ORCiD API.
+        Perform a search query using ORCID API.
         """
         try:
             params = request.get_json()
@@ -77,6 +77,10 @@ class Search(Resource):
             params["limit"] = DEFAULT_LIMIT
         if "academic_age_offset" not in params:
             params["academic_age_offset"] = DEFAULT_ACADEMIC_AGE_OFFSET
+        if "orcid" in params:
+            params["orcid"] = params["orcid"].strip()
+        if "q" in params:
+            params["q"] = params["q"].strip()
 
     def get_response_headers(self):
         headers = {}

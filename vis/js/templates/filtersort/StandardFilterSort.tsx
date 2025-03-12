@@ -1,10 +1,14 @@
-// @ts-nocheck
 import React from "react";
 import FilterDropdown from "../../components/filtersort/FilterDropdown";
 import SearchBox from "../../components/filtersort/SearchBox";
 import SortDropdown from "../../components/filtersort/SortDropdown";
 
-const StandardFilterSort = ({ displaySort, color }) => {
+export interface StandardFilterSortProps {
+  displaySort: boolean;
+  color: string;
+}
+
+const StandardFilterSort = ({ displaySort, color }: StandardFilterSortProps) => {
   return (
     // html template starts here
     <div

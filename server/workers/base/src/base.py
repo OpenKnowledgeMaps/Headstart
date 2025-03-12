@@ -22,6 +22,10 @@ from common.deduplication import (
 import re
 import time
 from parsers import improved_df_parsing
+
+from datetime import datetime
+import dateparser
+import sys
 from common.rate_limiter import RateLimiter
 
 
@@ -136,9 +140,12 @@ class BaseClient(RWrapper):
             raise
 
     def sanitize_metadata(self, metadata):
+
         metadata["sanitized_authors"] = metadata["authors"].map(
             lambda x: sanitize_authors(x)
         )
+        metadata["year"] = metadata["year"].map(lambda x: sanitize_year(x))
+
         return metadata
 
     def enrich_metadata(self, metadata):
@@ -297,6 +304,8 @@ def parse_annotations(field):
         return {}
 
 
+
+
 def parse_annotations_for_all(metadata, field_name):
     parsed_annotations = pd.DataFrame(
         metadata[field_name].map(lambda x: parse_annotations(x))
@@ -315,3 +324,24 @@ def sanitize_authors(authors, n=15):
     if len(authors) > n:
         authors = authors[: n - 1] + authors[-1:]
     return "; ".join(authors)
+
+
+def sanitize_year(year_str):
+
+    sanitized_year = ''
+    date_formats = ["%Y-%m-%d", "%Y-%m", "%Y-%m-%dT%H:%M:%SZ", "%Y %b %d"]
+
+    for fmt in date_formats:
+        try:
+            #date_time_obj = datetime.strptime(year_str, fmt)
+            dateparser.parse(year_str)
+            sanitized_year = year_str  # here we keep the original string
+            break
+        except ValueError:
+            continue
+
+    # Handle formats like "2019"
+    if year_str.isdigit() and not sanitized_year:  # check sanitized_year to avoid overwriting
+        sanitized_year = year_str  # here we keep the original string
+
+    return sanitized_year

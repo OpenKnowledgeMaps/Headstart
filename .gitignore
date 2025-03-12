@@ -30,6 +30,7 @@ server/workers/tests/*.csv
 server/workers/tests/*.txt
 server/workers/tests/testutils/
 local_dev/renv/*
+local_dev/dev.env
 
 # php files
 /server/classes/headstart/vendor
