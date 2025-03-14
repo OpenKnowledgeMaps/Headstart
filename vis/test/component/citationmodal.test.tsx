@@ -6,6 +6,7 @@ import { Provider } from "react-redux";
 import LocalizationProvider from "../../js/components/LocalizationProvider";
 import { STREAMGRAPH_MODE } from "../../js/reducers/chartType";
 import { formatString } from "../../js/utils/string";
+import { Localization } from "../../js/i18n/localization";
 
 // Configuring the mock Redux store
 const mockStore = configureStore([]);
@@ -60,10 +61,11 @@ const getCitationText = (isStreamgraph: boolean) => {
 const setup = (isStreamgraph: boolean) => {
   const mockStoreData = getMockStoreData(isStreamgraph);
   const store = mockStore(mockStoreData);
+  const localization = mockStoreData.localization as Localization;
 
   render(
     <Provider store={store}>
-      <LocalizationProvider localization={mockStoreData.localization}>
+      <LocalizationProvider localization={localization}>
         <CitationModal />
       </LocalizationProvider>
     </Provider>
