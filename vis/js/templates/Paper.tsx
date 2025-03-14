@@ -550,10 +550,13 @@ const getEnlargeFactor = (offsetWidth, scrollHeight) => {
 };
 
 const getMetadataHeight = (realHeight, numOfLabels, isZoomed) => {
-  let readersHeight = 12;
+  let readersHeight = 0;
   
   if (numOfLabels && isZoomed) {
-    readersHeight += numOfLabels * 12;
+    readersHeight += numOfLabels * 12 + 12;
+  }
+  if (numOfLabels && !isZoomed) {
+    readersHeight += 12;
   }
 
   const height = realHeight - readersHeight;
