@@ -1,17 +1,9 @@
-#title_context {
-    display: flex;
-    align-items: flex-start;
+#subdiscipline_title {
+    margin: 0px;
     padding-top: 15px;
     padding-left: 50px;
-}
-
-#subdiscipline_title {
-    position: relative;
-    margin: 0px;
-    flex-grow: 1;
-    min-height: 54px;
     font-family: $base-font-family;
-    min-width: 0;
+    min-height: 54px;
 
     h4 {
         margin-bottom: 0px;
