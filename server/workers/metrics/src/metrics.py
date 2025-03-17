@@ -34,15 +34,15 @@ class MetricsClient(RWrapper):
 
     @error_logging_aspect(log_level=logging.ERROR)
     def execute_search(self, params: dict, metadata: str) -> dict:
+        self.logger.debug(f"execute_search function running in metrics.py")
+
         command = [
-            self.command, 
-            self.runner, 
-            self.wd, 
-            params.get('q'), 
+            self.command,
+            self.runner,
+            self.wd,
+            params.get('q'),
             params.get('service')
         ]
-
-        self.logger.debug(f"Executing command: {command}")
 
         data = {
             "params": params,
@@ -59,10 +59,18 @@ class MetricsClient(RWrapper):
             )
             stdout, stderr = proc.communicate(json.dumps(data))
 
-            self.logger.debug(f"Stdout: {stdout}")
+            # TODO: Remove after development
+            self.logger.debug(f"Raw stdout: {stdout}")
+            self.logger.debug(f"Raw stderr: {stderr}")
 
             output = [line for line in stdout.split('\n') if line]
             errors = [line for line in stderr.split('\n') if line]
+
+            # TODO: Remove after development
+            if not output:
+                raise ValueError("No output received from the subprocess")
+            if len(output) < 2:
+                raise ValueError(f"Unexpected output format: {output}")
 
             if not output:
                 raise ValueError("No output received from the subprocess")
