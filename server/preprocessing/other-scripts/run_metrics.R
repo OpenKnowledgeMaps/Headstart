@@ -47,6 +47,12 @@ if (!is.null(params$lang_id)) {
   lang_id <- 'all'
 }
 
+if (!is.null(params$metrics_sources)) {
+  metrics_sources <- params$metrics_sources
+} else {
+  metrics_sources <- 'all'
+}
+
 source('metrics.R')
 
 registerDoParallel(detectCores(all.tests = FALSE, logical = TRUE)-1)
@@ -57,7 +63,7 @@ tryCatch({
   if ("doi" %in% names(metadata)) {
     # only enrich metadata with metrics if at least one DOI is present
     if (!all(is.na(metadata$doi))) {
-      output <- enrich_metadata_metrics(metadata)
+      output <- enrich_metadata_metrics(metadata, metrics_sources)
     }
   } else {
     mlog$warn("No DOIs found in metadata")

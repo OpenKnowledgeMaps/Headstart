@@ -5,8 +5,44 @@ library("plyr")
 mlog <- getLogger("metrics")
 
 
-enrich_metadata_metrics <- function(metadata) {
+enrich_metadata_metrics <- function(metadata, metrics_sources=("altmetric", "crossref")) {
   start.time <- Sys.time()
+
+  if ("altmetric" %in% metrics_sources) {
+    metadata <- add_altmetrics(metadata)
+  }
+  if ("crossref" %in% metrics_sources) {
+    output <- add_citations(output)
+  }
+
+  # Remove duplicate lines - TODO: check for root of this problem
+  output <- unique(output)
+
+  end.time <- Sys.time()
+  time.taken <- end.time - start.time
+  mlog$info(paste("vis_id:", .GlobalEnv$VIS_ID, "Time taken:", time.taken, sep = " "))
+
+  return(output)
+}
+
+get_altmetrics <- function(dois) {
+  valid_dois <- unique(dois[which(dois != "")])
+  results <- data.frame()
+  for (doi in valid_dois) {
+    tryCatch(
+      {
+        metrics <- altmetric_data(altmetrics(doi = doi, apikey = ""))
+        results <- rbind.fill(results, metrics)
+      },
+      error = function(err) {
+        mlog$debug(gsub("[\r\n]", "", paste(err, doi, sep = " ")))
+      }
+    )
+  }
+  return(results)
+}
+
+add_altmetrics <- function(metadata) {
 
   results <- get_altmetrics(metadata$doi)
   requested_metrics <- c(
@@ -44,33 +80,6 @@ enrich_metadata_metrics <- function(metadata) {
     mlog$info("No altmetrics found for any paper in this dataset.")
     output <- metadata
   }
-  output <- add_citations(output)
-
-  # Remove duplicate lines - TODO: check for root of this problem
-  output <- unique(output)
-
-  end.time <- Sys.time()
-  time.taken <- end.time - start.time
-  mlog$info(paste("vis_id:", .GlobalEnv$VIS_ID, "Time taken:", time.taken, sep = " "))
-
-  return(output)
-}
-
-get_altmetrics <- function(dois) {
-  valid_dois <- unique(dois[which(dois != "")])
-  results <- data.frame()
-  for (doi in valid_dois) {
-    tryCatch(
-      {
-        metrics <- altmetric_data(altmetrics(doi = doi, apikey = ""))
-        results <- rbind.fill(results, metrics)
-      },
-      error = function(err) {
-        mlog$debug(gsub("[\r\n]", "", paste(err, doi, sep = " ")))
-      }
-    )
-  }
-  return(results)
 }
 
 add_citations <- function(output) {
