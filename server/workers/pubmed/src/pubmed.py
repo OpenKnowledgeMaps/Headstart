@@ -41,8 +41,9 @@ class PubMedClient(RWrapper):
                 return raw_metadata
 
             metadata = pd.DataFrame(raw_metadata)
+            source_for_metadata_enrichment = "crossref"
 
-            metadata = enrich_metadata(self.redis_store, params, metadata)
+            metadata = enrich_metadata(self.redis_store, params, metadata, source_for_metadata_enrichment)
             for index, row in metadata.iterrows():
                 self.logger.debug(f"Title: {row['title']}, DOI: {row['doi']}, Citations: {row.get('citation_count', 'N/A')}")
 
