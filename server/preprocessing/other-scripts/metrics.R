@@ -12,17 +12,17 @@ enrich_metadata_metrics <- function(metadata, metrics_sources=c("altmetric", "cr
     metadata <- add_altmetrics(metadata)
   }
   if ("crossref" %in% metrics_sources) {
-    output <- add_citations(output)
+    metadata <- add_citations(metadata)
   }
 
   # Remove duplicate lines - TODO: check for root of this problem
-  output <- unique(output)
+  metadata <- unique(metadata)
 
   end.time <- Sys.time()
   time.taken <- end.time - start.time
   mlog$info(paste("vis_id:", .GlobalEnv$VIS_ID, "Time taken:", time.taken, sep = " "))
 
-  return(output)
+  return(metadata)
 }
 
 get_altmetrics <- function(dois) {
@@ -72,18 +72,19 @@ add_altmetrics <- function(metadata) {
     # merge the metadata with the results of the altmetrics
     # don't remove any rows from the metadata, just add the altmetrics to the
     # output
-    output <- merge(x = metadata, y = results, by = "doi", all.x = TRUE, all.y = FALSE)
+    result <- merge(x = metadata, y = results, by = "doi", all.x = TRUE, all.y = FALSE)
   } else {
     for (metric in requested_metrics) {
       metadata[[metric]] <- NA
     }
     mlog$info("No altmetrics found for any paper in this dataset.")
-    output <- metadata
+    result <- metadata
   }
+  return(result)
 }
 
-add_citations <- function(output) {
-  dois <- output$doi
+add_citations <- function(metadata) {
+  dois <- metadata$doi
   valid_dois <- unique(dois[which(dois != "")])
 
   cc <- tryCatch(
@@ -96,6 +97,6 @@ add_citations <- function(output) {
     }
   )
   names(cc)[names(cc) == "count"] <- "citation_count"
-  output <- merge(x = output, y = cc, by = "doi", all.x = TRUE)
-  return(output)
+  result <- merge(x = metadata, y = cc, by = "doi", all.x = TRUE)
+  return(result)
 }
