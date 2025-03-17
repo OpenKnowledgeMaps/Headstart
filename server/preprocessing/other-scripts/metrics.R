@@ -5,7 +5,7 @@ library("plyr")
 mlog <- getLogger("metrics")
 
 
-enrich_metadata_metrics <- function(metadata, metrics_sources=("altmetric", "crossref")) {
+enrich_metadata_metrics <- function(metadata, metrics_sources=c("altmetric", "crossref")) {
   start.time <- Sys.time()
 
   if ("altmetric" %in% metrics_sources) {
