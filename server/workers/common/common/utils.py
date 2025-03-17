@@ -1,13 +1,14 @@
+import re
 import os
 import json
 import time
 import uuid
-from dateutil.parser import parse
-from datetime import timedelta
-import re
 import redis
-import pandas as pd
 import pathlib
+import numpy as np
+import pandas as pd
+from datetime import timedelta
+from dateutil.parser import parse
 
 
 redis_config = {
@@ -119,3 +120,91 @@ def get_nested_value(data, keys, default=None):
         if data is None:
             return default
     return data
+
+
+def push_metadata_to_queue(redis_store, params, metadata):
+    """
+    Sending metadata for processing into Redis queue and returning the request_id.
+
+    :param redis_store: Object of the Redis store.
+    :param params: Request params.
+    :param metadata: DataFrame with default metadata.
+    :return: request_id for the receiving of the request result.
+    """
+
+    request_id = str(uuid.uuid4())
+    params["metrics_sources"] = ["crossref"]
+    task_data = json.dumps({
+        "id": request_id,
+        "params": params,
+        "metadata": metadata.to_json(orient="records"),
+    })
+
+    redis_store.rpush("metrics", task_data)
+    return request_id
+
+
+def fetch_enriched_metadata(redis_store, request_id, timeout = 600):
+    """
+    Getting enriched metadata from Redis.
+
+    :param redis_store: Object of the Redis store.
+    :param request_id: Unique indemnificator of the request.
+    :param timeout: Results waiting time (default - 600 seconds).
+    :return: Enriched DataFrame with metadata.
+    """
+    result = get_key(redis_store, request_id, timeout)
+    return pd.DataFrame(result["input_data"])
+
+
+def ensure_required_columns(metadata: pd.DataFrame) -> pd.DataFrame:
+    """
+    Checks that all necessary columns are available or adding them with NaN value.
+
+    :param metadata: DataFrame with metadata.
+    :return: Updated DataFrame.
+    """
+    REQUIRED_METADATA_COLUMNS = [
+        "citation_count",
+        "cited_by_wikipedia_count",
+        "cited_by_msm_count",
+        "cited_by_policies_count",
+        "cited_by_patents_count",
+        "cited_by_accounts_count",
+        "cited_by_fbwalls_count",
+        "cited_by_feeds_count",
+        "cited_by_gplus_count",
+        "cited_by_rdts_count",
+        "cited_by_qna_count",
+        "cited_by_tweeters_count",
+        "cited_by_videos_count"
+    ]
+
+    for column in REQUIRED_METADATA_COLUMNS:
+        if column not in metadata.columns:
+            metadata[column] = np.NaN
+
+    return metadata
+
+
+def enrich_metadata(redis_store, params, metadata: pd.DataFrame) -> pd.DataFrame:
+    """
+    Enriching metadata - adding information about citations from Redis.
+
+    :param redis_store: store object of Redis.
+    :param params: params of the request.
+    :param metadata: DataFrame with default metadata.
+
+    :return: Enriched DataFrame with metadata.
+    """
+
+    # Creates a request to metrics for metadata enrichment
+    # and returns request_id for receiving the result later
+    request_id = push_metadata_to_queue(redis_store, params, metadata)
+
+    # Getting the result after metadata enrichment at metrics
+    enriched_metadata = fetch_enriched_metadata(redis_store, request_id)
+
+    # Checks that all necessary columns are available or adding them with NaN value
+    enriched_metadata = ensure_required_columns(enriched_metadata)
+    return enriched_metadata

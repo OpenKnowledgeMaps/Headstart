@@ -50,7 +50,7 @@ if (!is.null(params$lang_id)) {
 if (!is.null(params$metrics_sources)) {
   metrics_sources <- params$metrics_sources
 } else {
-  metrics_sources <- 'all'
+  metrics_sources <- c("altmetric", "crossref")
 }
 
 source('metrics.R')
