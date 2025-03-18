@@ -19,7 +19,7 @@ import EntryBacklink from "./EntryBacklink";
 import Keywords from "./Keywords";
 import Link from "./Link";
 import Metrics from "./Metrics";
-import OrcidMetrics from './OrcidMetrics';
+import OrcidMetrics from "./OrcidMetrics";
 import Title from "./Title";
 
 /**
@@ -49,7 +49,7 @@ const StandardListEntry = ({
     onClick: () => handleBacklinkClick(),
   };
 
-  const citations = paper.readers;
+  const citations = paper.citation_count;
   const showCitations =
     !isContentBased &&
     !!baseUnit &&
@@ -122,7 +122,9 @@ const mapStateToProps = (state) => ({
   showBacklink: state.chartType === STREAMGRAPH_MODE && !!state.selectedPaper,
   isInStreamBacklink: !!state.selectedBubble,
   showDocTags: state.service === "base" || state.service === "orcid",
-  showAllDocTypes: (state.service === "base" || state.service === "orcid") && !!state.selectedPaper,
+  showAllDocTypes:
+    (state.service === "base" || state.service === "orcid") &&
+    !!state.selectedPaper,
   service: state.service,
 });
 
