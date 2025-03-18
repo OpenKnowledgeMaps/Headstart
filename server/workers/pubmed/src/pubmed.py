@@ -1,7 +1,7 @@
 import json
+import logging
 import subprocess
 import pandas as pd
-import logging
 from common.r_wrapper import RWrapper
 from common.utils import enrich_metadata
 
@@ -44,8 +44,6 @@ class PubMedClient(RWrapper):
             source_for_metadata_enrichment = "crossref"
 
             metadata = enrich_metadata(self.redis_store, params, metadata, source_for_metadata_enrichment)
-            for index, row in metadata.iterrows():
-                self.logger.debug(f"Title: {row['title']}, DOI: {row['doi']}, Citations: {row.get('citation_count', 'N/A')}")
 
             text = pd.DataFrame(raw_text)
 
@@ -64,8 +62,6 @@ class PubMedClient(RWrapper):
     def run(self):
         while True:
             k, params, endpoint = self.next_item()
-            self.logger.debug(k)
-            self.logger.debug(params)
             if endpoint == "search":
                 try:
                     res = self.execute_search(params)
