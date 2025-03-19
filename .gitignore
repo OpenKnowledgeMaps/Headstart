@@ -10,6 +10,7 @@ dist/
 /config.js
 .cache
 coverage/
+.vscode/
 
 # local deployment files
 /deploy.sh
