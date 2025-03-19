@@ -165,41 +165,46 @@ def fetch_enriched_metadata(redis_store: redis.Redis, request_id: str, timeout: 
     return pd.DataFrame(result["input_data"])
 
 
-def ensure_required_columns(metadata: pd.DataFrame, source: Literal["crossref", "altmetric"]) -> pd.DataFrame:
+def get_metadata_columns_for_integration(integration: Literal["pubmed", "orcid"]):
+    """
+    Returning required metadata columns for different integrations.
+
+    :param integration: integration service.
+    :return: array with required metadata columns.
+    """
+
+    if integration == 'pubmed':
+        return ["citation_count"]
+    elif integration == 'orcid':
+        return [
+            "citation_count",
+            "cited_by_wikipedia_count",
+            "cited_by_msm_count",
+            "cited_by_policies_count",
+            "cited_by_patents_count",
+            "cited_by_accounts_count",
+            "cited_by_fbwalls_count",
+            "cited_by_feeds_count",
+            "cited_by_gplus_count",
+            "cited_by_rdts_count",
+            "cited_by_qna_count",
+            "cited_by_tweeters_count",
+            "cited_by_videos_count"
+        ]
+
+    return []
+
+
+def ensure_required_columns(metadata: pd.DataFrame, integration: Literal["pubmed", "orcid"]) -> pd.DataFrame:
     """
     Checks that all necessary columns are available or adding them with NaN value.
 
     :param metadata: DataFrame with metadata.
-    :param source: define from which service additional metadata was received.
+    :param integration: integration service.
     :return: Updated DataFrame.
     """
-    REQUIRED_METADATA_COLUMNS_FOR_CROSSREF: List[str] = [
-        "citation_count"
-    ]
 
-    REQUIRED_METADATA_COLUMNS_FOR_ALTMETRIC: List[str] = [
-        "cited_by_wikipedia_count",
-        "cited_by_msm_count",
-        "cited_by_policies_count",
-        "cited_by_patents_count",
-        "cited_by_accounts_count",
-        "cited_by_fbwalls_count",
-        "cited_by_feeds_count",
-        "cited_by_gplus_count",
-        "cited_by_rdts_count",
-        "cited_by_qna_count",
-        "cited_by_tweeters_count",
-        "cited_by_videos_count"
-    ]
-
-    columns = None
-    if source == 'crossref':
-        columns = REQUIRED_METADATA_COLUMNS_FOR_CROSSREF
-    elif source == 'altmetric':
-        columns = REQUIRED_METADATA_COLUMNS_FOR_ALTMETRIC
-    else:
-        columns = [*REQUIRED_METADATA_COLUMNS_FOR_CROSSREF, *REQUIRED_METADATA_COLUMNS_FOR_ALTMETRIC]
-
+    columns = get_metadata_columns_for_integration(integration)
     for column in columns:
         if column not in metadata.columns:
             metadata[column] = np.NaN
@@ -211,7 +216,8 @@ def enrich_metadata(
     redis: redis.Redis,
     params: Dict[str, Union[str, List[str]]],
     metadata: pd.DataFrame,
-    source: Literal["crossref", "altmetric"]
+    source: Literal["crossref", "altmetric"],
+    integration: Literal["pubmed", "orcid"]
 ) -> pd.DataFrame:
     """
     Enriching metadata - adding information about citations from Redis.
@@ -231,5 +237,5 @@ def enrich_metadata(
     enriched_metadata = fetch_enriched_metadata(redis, request_id)
 
     # Checks that all necessary columns are available or adding them with NaN value
-    enriched_metadata = ensure_required_columns(enriched_metadata, source)
+    enriched_metadata = ensure_required_columns(enriched_metadata, integration)
     return enriched_metadata

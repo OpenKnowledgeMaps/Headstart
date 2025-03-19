@@ -389,7 +389,8 @@ class OrcidService:
     def _process_metadata(self, metadata: pd.DataFrame, author_info: AuthorInfo, params: Dict[str, str]) -> pd.DataFrame:
         metadata["authors"] = metadata["authors"].replace("", author_info.author_name)
         source_for_metadata_enrichment = "crossref"
-        metadata = enrich_metadata(self.redis_store, params, metadata, source_for_metadata_enrichment)
+        integration = 'orcid'
+        metadata = enrich_metadata(self.redis_store, params, metadata, source_for_metadata_enrichment, integration)
         self.logger.debug(f'metadata shape after base enrichment: {metadata.shape}')
         author_info = self.enrich_author_info(author_info, metadata, params)
         self.logger.debug(f'metadata shape after enrichment: {metadata.shape}')
