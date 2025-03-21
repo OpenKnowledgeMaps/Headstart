@@ -113,7 +113,7 @@ function search($service, $dirty_query
 
     if($retrieve_cached_map) {
       $last_version = $persistence->getLastVersion($unique_id, false, false);
-      error_log("search.php: last_version call returned " . print_r($last_version, true));
+      // error_log("search.php: last_version call returned " . print_r($last_version, true));
       // check if last_version call has httpcode, this is not always the case for return values
       // then check if success-status of last_version call is false
       if (is_array($last_version) && is_array(($last_version[0]))) {
