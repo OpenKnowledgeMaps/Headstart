@@ -8,6 +8,8 @@ mlog <- getLogger("metrics")
 enrich_metadata_metrics <- function(metadata, metrics_sources=c("altmetric", "crossref")) {
   start.time <- Sys.time()
 
+  original_sorting <- metadata$id
+
   if ("altmetric" %in% metrics_sources) {
     metadata <- add_altmetrics(metadata)
   }
@@ -17,6 +19,9 @@ enrich_metadata_metrics <- function(metadata, metrics_sources=c("altmetric", "cr
 
   # Remove duplicate lines - TODO: check for root of this problem
   metadata <- unique(metadata)
+
+  # restore original sorting
+  metadata <- metadata[match(original_sorting, metadata$id), ]
 
   end.time <- Sys.time()
   time.taken <- end.time - start.time
