@@ -553,7 +553,7 @@ const getMetadataHeight = (realHeight, numOfLabels, isZoomed) => {
   let readersHeight = 0;
   
   if (numOfLabels && isZoomed) {
-    readersHeight += numOfLabels * 12 + 12;
+    readersHeight += numOfLabels * 12 + 10;
   }
   if (numOfLabels && !isZoomed) {
     readersHeight += 12;
