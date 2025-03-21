@@ -358,7 +358,7 @@ class Paper extends React.Component {
                 <div key={id} className="stat" style={{
                   textWrap: 'nowrap'
                 }}>
-                  <p className={`stat ${sizeModifierClass}`}>
+                  <p id="stat" className={sizeModifierClass}>
                     <span style={{
                       textWrap: 'nowrap'
                     }} className="num-stat">{value || value === 0 ? value : "n/a"} </span>
