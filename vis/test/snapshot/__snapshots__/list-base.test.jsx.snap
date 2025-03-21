@@ -111,20 +111,40 @@ exports[`List entries component snapshot (BASE) > matches a snapshot (zoomed-in,
                 role="button"
                 type="button"
               >
-                show: 
                 <span
-                  id="curr-filter-type"
-                >
-                  Any
-                </span>
-                <i
-                  className="fas fa-chevron-down chevron"
                   style={
                     {
-                      "marginLeft": "3px",
+                      "alignItems": "center",
+                      "display": "flex",
+                      "justifyContent": "center",
+                      "maxWidth": "100%",
                     }
                   }
-                />
+                >
+                  <span>
+                    show: 
+                  </span>
+                  <span
+                    className="truncate-text"
+                    id="curr-filter-type"
+                    style={
+                      {
+                        "marginLeft": "3px",
+                        "minWidth": "0px",
+                      }
+                    }
+                  >
+                    Any
+                  </span>
+                  <i
+                    className="fas fa-chevron-down chevron"
+                    style={
+                      {
+                        "marginLeft": "3px",
+                      }
+                    }
+                  />
+                </span>
               </button>
               <ul
                 aria-labelledby="filter_params"
@@ -195,20 +215,40 @@ exports[`List entries component snapshot (BASE) > matches a snapshot (zoomed-in,
                 role="button"
                 type="button"
               >
-                sort by:
                 <span
-                  id="curr-sort-type"
-                >
-                  Relevance
-                </span>
-                <i
-                  className="fas fa-chevron-down chevron"
                   style={
                     {
-                      "marginLeft": "3px",
+                      "alignItems": "center",
+                      "display": "flex",
+                      "justifyContent": "center",
+                      "maxWidth": "100%",
                     }
                   }
-                />
+                >
+                  <span>
+                    sort by:
+                  </span>
+                  <span
+                    className="truncate-text"
+                    id="curr-filter-type"
+                    style={
+                      {
+                        "marginLeft": "3px",
+                        "minWidth": "0px",
+                      }
+                    }
+                  >
+                    Relevance
+                  </span>
+                  <i
+                    className="fas fa-chevron-down chevron"
+                    style={
+                      {
+                        "marginLeft": "3px",
+                      }
+                    }
+                  />
+                </span>
               </button>
               <ul
                 aria-labelledby="sort"
@@ -636,20 +676,40 @@ exports[`List entries component snapshot (BASE) > matches a snapshot (zoomed-out
                 role="button"
                 type="button"
               >
-                show: 
                 <span
-                  id="curr-filter-type"
-                >
-                  Any
-                </span>
-                <i
-                  className="fas fa-chevron-down chevron"
                   style={
                     {
-                      "marginLeft": "3px",
+                      "alignItems": "center",
+                      "display": "flex",
+                      "justifyContent": "center",
+                      "maxWidth": "100%",
                     }
                   }
-                />
+                >
+                  <span>
+                    show: 
+                  </span>
+                  <span
+                    className="truncate-text"
+                    id="curr-filter-type"
+                    style={
+                      {
+                        "marginLeft": "3px",
+                        "minWidth": "0px",
+                      }
+                    }
+                  >
+                    Any
+                  </span>
+                  <i
+                    className="fas fa-chevron-down chevron"
+                    style={
+                      {
+                        "marginLeft": "3px",
+                      }
+                    }
+                  />
+                </span>
               </button>
               <ul
                 aria-labelledby="filter_params"
@@ -720,20 +780,40 @@ exports[`List entries component snapshot (BASE) > matches a snapshot (zoomed-out
                 role="button"
                 type="button"
               >
-                sort by:
                 <span
-                  id="curr-sort-type"
-                >
-                  Relevance
-                </span>
-                <i
-                  className="fas fa-chevron-down chevron"
                   style={
                     {
-                      "marginLeft": "3px",
+                      "alignItems": "center",
+                      "display": "flex",
+                      "justifyContent": "center",
+                      "maxWidth": "100%",
                     }
                   }
-                />
+                >
+                  <span>
+                    sort by:
+                  </span>
+                  <span
+                    className="truncate-text"
+                    id="curr-filter-type"
+                    style={
+                      {
+                        "marginLeft": "3px",
+                        "minWidth": "0px",
+                      }
+                    }
+                  >
+                    Relevance
+                  </span>
+                  <i
+                    className="fas fa-chevron-down chevron"
+                    style={
+                      {
+                        "marginLeft": "3px",
+                      }
+                    }
+                  />
+                </span>
               </button>
               <ul
                 aria-labelledby="sort"
