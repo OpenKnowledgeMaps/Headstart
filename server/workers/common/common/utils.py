@@ -128,7 +128,7 @@ def push_metadata_to_queue(
     redis_store: redis.Redis,
     params: Dict[str, Union[str, List[str]]],
     metadata: pd.DataFrame,
-    source: Literal["crossref", "altmetric"]
+    source_list: List[str]
 ) -> str:
     """
     Sending metadata for processing into Redis queue and returning the request_id.
@@ -136,20 +136,39 @@ def push_metadata_to_queue(
     :param redis_store: Object of the Redis store.
     :param params: Request params.
     :param metadata: DataFrame with default metadata.
-    :param source: define from which service additional metadata will be received.
+    :param source_list: define from which service additional metadata will be received (available values: "crossref", "altmetric").
     :return: request_id for the receiving of the request result.
     """
+    # Checks that valid values are specified in the source array
+    check_metadata_enrichment_source(source_list)
 
+    # Creates a new unique request identifier that will then be used to retrieve the result
     request_id = str(uuid.uuid4())
-    params["metrics_sources"] = [source]
+
+    # Specifies from which sources to obtain information
+    params["metrics_sources"] = source_list
+
+    # Payload object creation
     task_data = json.dumps({
         "id": request_id,
         "params": params,
         "metadata": metadata.to_json(orient="records"),
     })
 
+    # Pushing request to Redis and returning request id
     redis_store.rpush("metrics", task_data)
     return request_id
+
+
+def check_metadata_enrichment_source(source_list: List[str]) -> None:
+    """
+    Checks that valid values are specified in the source array.
+
+    :param source_list: List of sources from where metadata will be enriched.
+    :return: None.
+    """
+    if not all(source in ("crossref", "altmetric") for source in source_list):
+        raise ValueError("Source list must contain only 'crossref' or 'altmetric'")
 
 
 def fetch_enriched_metadata(redis_store: redis.Redis, request_id: str, timeout: int = 600) -> pd.DataFrame:
@@ -161,23 +180,29 @@ def fetch_enriched_metadata(redis_store: redis.Redis, request_id: str, timeout: 
     :param timeout: Results waiting time (default - 600 seconds).
     :return: Enriched DataFrame with metadata.
     """
+    # Getting result of metadata enrichment from Redis
     result = get_key(redis_store, request_id, timeout)
     return pd.DataFrame(result["input_data"])
 
 
-def get_metadata_columns_for_integration(integration: Literal["pubmed", "orcid"]):
+def get_metadata_columns_for_source(source_list: List[str]) -> List[str]:
     """
-    Returning required metadata columns for different integrations.
+    Returning required metadata columns for different sources.
 
-    :param integration: integration service.
+    :param source_list: List of sources from where metadata received.
     :return: array with required metadata columns.
     """
+    # Checks that valid values are specified in the source array
+    check_metadata_enrichment_source(source_list)
 
-    if integration == 'pubmed':
-        return ["citation_count"]
-    elif integration == 'orcid':
-        return [
-            "citation_count",
+    # Define required metadata columns for different sources and return them
+    result = []
+
+    if "crossref" in source_list:
+        result.extend(["citation_count"])
+
+    if "altmetric" in source_list:
+        result.extend([
             "cited_by_wikipedia_count",
             "cited_by_msm_count",
             "cited_by_policies_count",
@@ -190,21 +215,24 @@ def get_metadata_columns_for_integration(integration: Literal["pubmed", "orcid"]
             "cited_by_qna_count",
             "cited_by_tweeters_count",
             "cited_by_videos_count"
-        ]
+        ])
 
-    return []
+    return result
 
 
-def ensure_required_columns(metadata: pd.DataFrame, integration: Literal["pubmed", "orcid"]) -> pd.DataFrame:
+def ensure_required_columns(metadata: pd.DataFrame, source_list: List[str]) -> pd.DataFrame:
     """
     Checks that all necessary columns are available or adding them with NaN value.
 
     :param metadata: DataFrame with metadata.
-    :param integration: integration service.
+    :param source_list: List of sources from where metadata received.
     :return: Updated DataFrame.
     """
+    # Checks that valid values are specified in the source array
+    check_metadata_enrichment_source(source_list)
 
-    columns = get_metadata_columns_for_integration(integration)
+    # Gets metadata columns that must be received from source(-s)
+    columns = get_metadata_columns_for_source(source_list)
     for column in columns:
         if column not in metadata.columns:
             metadata[column] = np.NaN
@@ -216,8 +244,7 @@ def enrich_metadata(
     redis: redis.Redis,
     params: Dict[str, Union[str, List[str]]],
     metadata: pd.DataFrame,
-    source: Literal["crossref", "altmetric"],
-    integration: Literal["pubmed", "orcid"]
+    source_list: List[str],
 ) -> pd.DataFrame:
     """
     Enriching metadata - adding information about citations from Redis.
@@ -225,17 +252,19 @@ def enrich_metadata(
     :param redis: store object of Redis.
     :param params: params of the request.
     :param metadata: DataFrame with default metadata.
-    :param source: define from which service additional metadata will be received.
+    :param source: define from which service additional metadata will be received (available values: "crossref", "altmetric").
     :return: Enriched DataFrame with metadata.
     """
+    # Checks that valid values are specified in the source array
+    check_metadata_enrichment_source(source_list)
 
     # Creates a request to metrics for metadata enrichment
     # and returns request_id for receiving the result later
-    request_id = push_metadata_to_queue(redis, params, metadata, source)
+    request_id = push_metadata_to_queue(redis, params, metadata, source_list)
 
     # Getting the result after metadata enrichment at metrics
     enriched_metadata = fetch_enriched_metadata(redis, request_id)
 
     # Checks that all necessary columns are available or adding them with NaN value
-    enriched_metadata = ensure_required_columns(enriched_metadata, integration)
+    enriched_metadata = ensure_required_columns(enriched_metadata, source_list)
     return enriched_metadata
