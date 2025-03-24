@@ -42,9 +42,8 @@ class PubMedClient(RWrapper):
 
             metadata = pd.DataFrame(raw_metadata)
 
-            integration = 'pubmed'
             source_for_metadata_enrichment = ["crossref"]
-            metadata = enrich_metadata(self.redis_store, params, metadata, source_for_metadata_enrichment, integration)
+            metadata = enrich_metadata(self.redis_store, params, metadata, source_for_metadata_enrichment)
 
             text = pd.DataFrame(raw_text)
 
