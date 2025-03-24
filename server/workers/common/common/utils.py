@@ -128,7 +128,7 @@ def push_metadata_to_queue(
     redis_store: redis.Redis,
     params: Dict[str, Union[str, List[str]]],
     metadata: pd.DataFrame,
-    source: Literal["crossref", "altmetric"]
+    source_list: List[str]
 ) -> str:
     """
     Sending metadata for processing into Redis queue and returning the request_id.
@@ -136,12 +136,13 @@ def push_metadata_to_queue(
     :param redis_store: Object of the Redis store.
     :param params: Request params.
     :param metadata: DataFrame with default metadata.
-    :param source: define from which service additional metadata will be received.
+    :param source_list: define from which service additional metadata will be received (available values: "crossref", "altmetric").
     :return: request_id for the receiving of the request result.
     """
+    check_metadata_enrichment_source(source_list)
 
     request_id = str(uuid.uuid4())
-    params["metrics_sources"] = [source]
+    params["metrics_sources"] = source_list
     task_data = json.dumps({
         "id": request_id,
         "params": params,
@@ -150,6 +151,17 @@ def push_metadata_to_queue(
 
     redis_store.rpush("metrics", task_data)
     return request_id
+
+
+def check_metadata_enrichment_source(source_list: List[str]) -> None:
+    """
+    Checks that source for metadata enrichment contains correct values.
+
+    :param source_list: List of sources from where metadata will be enriched.
+    :return: None.
+    """
+    if not all(source in ("crossref", "altmetric") for source in source_list):
+        raise ValueError("Source list must contain only 'crossref' or 'altmetric'")
 
 
 def fetch_enriched_metadata(redis_store: redis.Redis, request_id: str, timeout: int = 600) -> pd.DataFrame:
@@ -216,7 +228,7 @@ def enrich_metadata(
     redis: redis.Redis,
     params: Dict[str, Union[str, List[str]]],
     metadata: pd.DataFrame,
-    source: Literal["crossref", "altmetric"],
+    source_list: List[str],
     integration: Literal["pubmed", "orcid"]
 ) -> pd.DataFrame:
     """
@@ -225,13 +237,15 @@ def enrich_metadata(
     :param redis: store object of Redis.
     :param params: params of the request.
     :param metadata: DataFrame with default metadata.
-    :param source: define from which service additional metadata will be received.
+    :param source: define from which service additional metadata will be received (available values: "crossref", "altmetric").
     :return: Enriched DataFrame with metadata.
     """
+    # Checks that source list contains valid values
+    check_metadata_enrichment_source(source_list)
 
     # Creates a request to metrics for metadata enrichment
     # and returns request_id for receiving the result later
-    request_id = push_metadata_to_queue(redis, params, metadata, source)
+    request_id = push_metadata_to_queue(redis, params, metadata, source_list)
 
     # Getting the result after metadata enrichment at metrics
     enriched_metadata = fetch_enriched_metadata(redis, request_id)
