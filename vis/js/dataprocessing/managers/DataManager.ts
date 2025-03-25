@@ -2,7 +2,6 @@
 
 import $ from "jquery";
 import d3 from "d3";
-
 import {
   getDiameterScale,
   getInitialCoordsScale,
@@ -19,6 +18,7 @@ import {
   getVisibleMetric,
   isOpenAccess,
   parseCoordinate,
+  getValueOrZero,
 } from "../../utils/data";
 import { transformData } from "../../utils/streamgraph";
 
@@ -250,14 +250,8 @@ class DataManager {
     paper.num_readers = 0;
     paper.internal_readers = 1;
 
-    // ? should we use numb_readers in some cases?
-    function parseNumber(value, defaultValue = 0) {
-      const num = Number(value);
-      return isNaN(num) ? defaultValue : num;
-    }
-
-    paper.num_readers = parseNumber(paper.readers);
-    paper.readers = parseNumber(paper.readers);
+    paper.num_readers = getValueOrZero(paper.readers);
+    paper.readers = getValueOrZero(paper.readers);
     paper.tweets = getVisibleMetric(paper, "cited_by_tweeters_count");
     paper.citations = getVisibleMetric(paper, "citation_count");
     // ? should we use readers.mendeley in some cases?
