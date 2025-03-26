@@ -19,7 +19,7 @@ import { applyForce } from "./utils/force";
 import { getChartSize, getListSize } from "./utils/dimensions";
 import Headstart from "./components/Headstart";
 import { removeQueryParams } from "./utils/url";
-import debounce from "./utils/debounce";
+import { debounce } from "./utils/debounce";
 import DataManager from "./dataprocessing/managers/DataManager";
 import FetcherFactory from "./dataprocessing/fetchers/FetcherFactory";
 import handleZoomSelectQuery from "./utils/backButton";
@@ -93,7 +93,7 @@ class HeadstartRunner {
       handleZoomSelectQuery(this.dataManager, this.store, this.config);
     };
 
-    window.addEventListener("popstate", debounce(handleBackButtonClick, 300));
+    window.addEventListener("popstate", debounce(handleBackButtonClick));
   }
 
   async fetchData() {
@@ -160,10 +160,7 @@ class HeadstartRunner {
   addWindowResizeListener() {
     window.addEventListener("resize", () => {
       const chart = getChartSize(this.config);
-      const list = getListSize(
-        this.config,
-        chart.size
-      );
+      const list = getListSize(this.config, chart.size);
       this.store.dispatch(updateDimensions(chart, list));
     });
   }
@@ -195,7 +192,12 @@ class HeadstartRunner {
     elem?.dispatchEvent(event);
   }
 
-  rescaleMap(scaleBy: string, baseUnit: string, isContentBased: boolean, initialSort: string) {
+  rescaleMap(
+    scaleBy: string,
+    baseUnit: string,
+    isContentBased: boolean,
+    initialSort: string
+  ) {
     this.config.scale_by = scaleBy;
     this.config.base_unit = baseUnit;
     this.config.content_based = isContentBased;

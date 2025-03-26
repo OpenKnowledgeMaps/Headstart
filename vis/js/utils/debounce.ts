@@ -1,22 +1,29 @@
-// @ts-nocheck
+export const debounce = <T extends (...args: unknown[]) => void>(
+  func: T,
+  delay = 300,
+  immediate = false
+): ((...args: Parameters<T>) => void) => {
+  let timeoutId: ReturnType<typeof setTimeout> | null = null;
 
-/**
- * Debounce any function
- * 
- * Copied from helpers.js
- */
-export default function debounce(func, wait, immediate) {
-  var timeout;
-  return function () {
-    let context = this,
-      args = arguments;
-    let later = function () {
-      timeout = null;
-      if (!immediate) func.apply(context, args);
+  return function (...args: Parameters<T>) {
+    const context = this;
+    const isCallNow = immediate && !timeoutId;
+
+    const later = () => {
+      timeoutId = null;
+      if (!immediate) {
+        func.apply(context, args);
+      }
     };
-    let callNow = immediate && !timeout;
-    clearTimeout(timeout);
-    timeout = setTimeout(later, wait);
-    if (callNow) func.apply(context, args);
+
+    if (timeoutId) {
+      clearTimeout(timeoutId);
+    }
+
+    timeoutId = setTimeout(later, delay);
+
+    if (isCallNow) {
+      func.apply(context, args);
+    }
   };
-}
+};
