@@ -101,8 +101,7 @@ describe("Debounce function", () => {
 
     // Mocking callback function to check
     // how many times it would be called
-    const mockFunc = vi.fn(function () {
-      // @ts-ignore
+    const mockFunc = vi.fn(function (this: { value: number }) {
       return this.value;
     });
 
