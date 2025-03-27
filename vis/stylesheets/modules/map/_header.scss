@@ -1,13 +1,13 @@
 #title_context {
     display: flex;
     align-items: flex-start;
-    padding-top: 15px;
     padding-left: 50px;
 }
 
 #subdiscipline_title {
     position: relative;
     margin: 0px;
+    padding-top: 15px;
     flex-grow: 1;
     min-height: 54px;
     font-family: $base-font-family;
@@ -195,6 +195,7 @@
     vertical-align: middle;
     margin: 0px; /*former margin-right*/
     padding-right: 8px;
+    padding-top: 15px;
 }
 
 #author_bio a {
@@ -207,6 +208,10 @@
 }
 
 @media screen and (max-width: 640px) {
+    #title_context {
+        padding-left: 0px;
+    }
+
     #subdiscipline_title {
         padding-left: 20px;
         font-size: 14px;
@@ -214,6 +219,10 @@
         h4 {
             font-size: 14px;
         }
+    }
+
+    #title_image {
+        padding-left: 50px;
     }
 
     #context {
