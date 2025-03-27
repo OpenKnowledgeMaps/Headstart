@@ -126,6 +126,7 @@ class DataManager {
       }
       return backendData.data?.documents ?? [];
     }
+
     if (typeof backendData.data === "object") {
       return backendData.data?.documents ?? [];
     }
@@ -182,6 +183,8 @@ class DataManager {
   __parseAuthors(paper: any) {
     paper.authors_objects = extractAuthors(paper.authors);
     paper.authors_list = getAuthorsList(
+      paper.authors,
+      this.config.convert_author_names
       paper.authors,
       this.config.convert_author_names
     );
