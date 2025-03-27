@@ -1,0 +1,172 @@
+{
+    "created-date": {
+        "value": 1633613405001
+    },
+    "last-modified-date": {
+        "value": 1674531292361
+    },
+    "source": {
+        "source-orcid": null,
+        "source-client-id": {
+            "uri": "https://orcid.org/client/0000-0001-9884-1913",
+            "path": "0000-0001-9884-1913",
+            "host": "orcid.org"
+        },
+        "source-name": {
+            "value": "Crossref"
+        },
+        "assertion-origin-orcid": null,
+        "assertion-origin-client-id": null,
+        "assertion-origin-name": null
+    },
+    "put-code": 101107018,
+    "path": "/0000-0002-2499-6696/work/101107018",
+    "title": {
+        "title": {
+            "value": "Aquatic ecosystem responses to environmental and climatic changes in NE China since the last deglaciation (\\u223c17, 500\\u00a0cal\\u00a0yr BP) tracked by diatom assemblages from Lake Moon"
+        },
+        "subtitle": null,
+        "translated-title": null
+    },
+    "journal-title": {
+        "value": "Quaternary Science Reviews"
+    },
+    "short-description": null,
+    "citation": null,
+    "type": "journal-article",
+    "publication-date": {
+        "year": {
+            "value": "2021"
+        },
+        "month": {
+            "value": "11"
+        },
+        "day": null
+    },
+    "external-ids": {
+        "external-id": [
+            {
+                "external-id-type": "doi",
+                "external-id-value": "10.1016/j.quascirev.2021.107218",
+                "external-id-normalized": {
+                    "value": "10.1016/j.quascirev.2021.107218",
+                    "transient": true
+                },
+                "external-id-normalized-error": null,
+                "external-id-url": {
+                    "value": "https://doi.org/10.1016/j.quascirev.2021.107218"
+                },
+                "external-id-relationship": "self"
+            }
+        ]
+    },
+    "url": {
+        "value": "https://doi.org/10.1016/j.quascirev.2021.107218"
+    },
+    "contributors": {
+        "contributor": [
+            {
+                "contributor-orcid": null,
+                "credit-name": {
+                    "value": "Jie Chen"
+                },
+                "contributor-email": null,
+                "contributor-attributes": {
+                    "contributor-sequence": null,
+                    "contributor-role": "author"
+                }
+            },
+            {
+                "contributor-orcid": null,
+                "credit-name": {
+                    "value": "Jianbao Liu"
+                },
+                "contributor-email": null,
+                "contributor-attributes": {
+                    "contributor-sequence": null,
+                    "contributor-role": "author"
+                }
+            },
+            {
+                "contributor-orcid": null,
+                "credit-name": {
+                    "value": "Kathleen M. R\\u00fchland"
+                },
+                "contributor-email": null,
+                "contributor-attributes": {
+                    "contributor-sequence": null,
+                    "contributor-role": "author"
+                }
+            },
+            {
+                "contributor-orcid": null,
+                "credit-name": {
+                    "value": "John P. Smol"
+                },
+                "contributor-email": null,
+                "contributor-attributes": {
+                    "contributor-sequence": null,
+                    "contributor-role": "author"
+                }
+            },
+            {
+                "contributor-orcid": null,
+                "credit-name": {
+                    "value": "Xiaosen Zhang"
+                },
+                "contributor-email": null,
+                "contributor-attributes": {
+                    "contributor-sequence": null,
+                    "contributor-role": "author"
+                }
+            },
+            {
+                "contributor-orcid": null,
+                "credit-name": {
+                    "value": "Zhiping Zhang"
+                },
+                "contributor-email": null,
+                "contributor-attributes": {
+                    "contributor-sequence": null,
+                    "contributor-role": "author"
+                }
+            },
+            {
+                "contributor-orcid": null,
+                "credit-name": {
+                    "value": "Aifeng Zhou"
+                },
+                "contributor-email": null,
+                "contributor-attributes": {
+                    "contributor-sequence": null,
+                    "contributor-role": "author"
+                }
+            },
+            {
+                "contributor-orcid": null,
+                "credit-name": {
+                    "value": "Zhongwei Shen"
+                },
+                "contributor-email": null,
+                "contributor-attributes": {
+                    "contributor-sequence": null,
+                    "contributor-role": "author"
+                }
+            },
+            {
+                "contributor-orcid": null,
+                "credit-name": {
+                    "value": "Fahu Chen"
+                },
+                "contributor-email": null,
+                "contributor-attributes": {
+                    "contributor-sequence": null,
+                    "contributor-role": "author"
+                }
+            }
+        ]
+    },
+    "language-code": null,
+    "country": null,
+    "visibility": "public"
+}

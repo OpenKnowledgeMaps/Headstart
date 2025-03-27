@@ -1,6 +1,3 @@
-# docker-compose-phptest.yml
-
-version: '3.7'
 services:
   composer:
     image: composer:2.5.8

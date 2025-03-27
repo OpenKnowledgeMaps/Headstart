@@ -1,3 +1,5 @@
+import { describe, it, expect, vitest } from "vitest";
+
 import DataManager from "../../js/dataprocessing/managers/DataManager";
 
 import {
@@ -25,7 +27,7 @@ describe("default data manager", () => {
   });
 
   describe("real BASE map data", () => {
-    console.warn = jest.fn();
+    console.warn = vitest.fn();
 
     it("parses correct number of documents", () => {
       const EXPECTED_PAPERS_LENGTH = 2;

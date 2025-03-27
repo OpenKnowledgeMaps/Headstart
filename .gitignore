@@ -45,7 +45,6 @@ server/preprocessing/other-scripts/renv
 /*.Rproj
 .Rproj.user
 
-
 # python files
 *.pyc
 *.pkl
@@ -55,6 +54,7 @@ server/preprocessing/other-scripts/renv
 /server/nbproject/private/
 .pytest_cache
 *__pycache__*
+.venv
 
 # python files
 *.pyc
@@ -64,4 +64,17 @@ server/preprocessing/other-scripts/renv
 /nbproject/private/
 /server/nbproject/private/
 .pytest_cache
+*.egg-info/
 *__pycache__*
+
+# Mac files
+.DS_Store
+
+# personal
+.vscode/settings.json
+# temporal
+local_dev/config_local_headstart.ini
+local_dev/config_local_searchflow.ini
+
+# mac os
+.DS_Store

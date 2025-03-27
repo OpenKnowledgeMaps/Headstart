@@ -15,10 +15,8 @@ class APIClient {
         $this->settings = $this->ini_array["general"];
         $this->database = $this->ini_array["connection"]["database"];
         $api_url = $this->ini_array["general"]["api_url"];
-        $api_flavor = isset($this->ini_array["general"]["api_flavor"])
-                                ? ($this->ini_array["general"]["api_flavor"])
-                                : "stable";
-        $this->base_route = $api_url . $api_flavor . "/";
+        $api_flavor = $this->ini_array["general"]["api_flavor"] ?? "";
+        $this->base_route = $api_url . ($api_flavor ? $api_flavor . "/" : "");
     }
 
     public function call_api($endpoint, $payload) {

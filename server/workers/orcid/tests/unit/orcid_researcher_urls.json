@@ -1,0 +1,38 @@
+{
+    "last-modified-date": {
+        "value": 1512458209207
+    },
+    "researcher-url": [
+        {
+            "created-date": {
+                "value": 1512458209206
+            },
+            "last-modified-date": {
+                "value": 1512458209207
+            },
+            "source": {
+                "source-orcid": {
+                    "uri": "https://orcid.org/0000-0003-0444-7080",
+                    "path": "0000-0003-0444-7080",
+                    "host": "orcid.org"
+                },
+                "source-client-id": null,
+                "source-name": {
+                    "value": "Chao Xu"
+                },
+                "assertion-origin-orcid": null,
+                "assertion-origin-client-id": null,
+                "assertion-origin-name": null
+            },
+            "url-name": "google scholar website",
+            "url": {
+                "value": "https://scholar.google.com/citations?user=-2P6PfoAAAAJ&hl=en"
+            },
+            "visibility": "public",
+            "path": "/0000-0003-0444-7080/researcher-urls/1307414",
+            "put-code": 1307414,
+            "display-index": 1
+        }
+    ],
+    "path": "/0000-0003-0444-7080/researcher-urls"
+}

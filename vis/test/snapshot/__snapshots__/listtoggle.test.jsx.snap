@@ -1,0 +1,51 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`List toggle component snapshot > matches a snapshot 1`] = `
+<div
+  className="row"
+  id="show_hide_button"
+  onClick={[Function]}
+  title="Hide list"
+>
+  <div
+    className="col-xs-2"
+  >
+    <i
+      className="fas fa-chevron-down chevron"
+    />
+  </div>
+  <div
+    className="col-xs-8"
+    id="show_hide_button_label"
+  >
+    <span
+      id="show_hide_label"
+    >
+      <span>
+        Overview
+         
+        <span
+          id="list_item_banner"
+        >
+          (
+          <span
+            id="list_item_count"
+          >
+            13
+          </span>
+           
+          documents
+          )
+        </span>
+      </span>
+    </span>
+  </div>
+  <div
+    className="col-xs-2 text-right"
+  >
+    <i
+      className="fas fa-chevron-down chevron"
+    />
+  </div>
+</div>
+`;

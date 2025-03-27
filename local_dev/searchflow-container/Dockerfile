@@ -1,6 +1,6 @@
 FROM php:8.0-apache
 
-MAINTAINER Chris Kittel "christopher.kittel@openknowledgemaps.org"
+LABEL maintainer="Chris Kittel <christopher.kittel@openknowledgemaps.org>"
 
 RUN a2enmod rewrite
 
@@ -19,7 +19,12 @@ ENV NVM_DIR /usr/local/nvm
 RUN mkdir -p $NVM_DIR && curl -fsSL https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.4/install.sh | bash
 
 ENV NODE_VERSION 10.17.0
-RUN bash -c 'source $NVM_DIR/nvm.sh && nvm install $NODE_VERSION && nvm alias default $NODE_VERSION && nvm use default'
+RUN export NVM_DIR="$NVM_DIR" && mkdir -p $NVM_DIR \
+    && curl https://raw.githubusercontent.com/creationix/nvm/v0.39.7/install.sh | bash  \
+    && . $NVM_DIR/nvm.sh \
+    && nvm install $NODE_VERSION \
+    && nvm alias default $NODE_VERSION \
+    && nvm use default
 
 ENV NODE_PATH $NVM_DIR/versions/node/v$NODE_VERSION/lib/node_modules
 ENV PATH      $NVM_DIR/versions/node/v$NODE_VERSION/bin:$PATH

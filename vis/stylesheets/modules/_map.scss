@@ -79,6 +79,10 @@ text {
     background-color: $okm-clouds;
     display:block;
     font-family: $link-font-family;
+
+    > div {
+        display: inline-block;
+    }
 }
 
 .scale-toolbar .dropdown-menu > li > a, #explorer_options .dropdown-menu > li > a {
