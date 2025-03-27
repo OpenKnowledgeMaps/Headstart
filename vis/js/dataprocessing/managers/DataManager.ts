@@ -185,8 +185,6 @@ class DataManager {
     paper.authors_list = getAuthorsList(
       paper.authors,
       this.config.convert_author_names
-      paper.authors,
-      this.config.convert_author_names
     );
 
     // old variable with all authors_string
