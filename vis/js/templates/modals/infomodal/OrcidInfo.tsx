@@ -77,6 +77,15 @@ const OrcidInfo = ({
           </a>, and
           the information supplied by the researcher on their ORCID profile.
           Results may be impacted by accuracy and completeness of this data.
+          Please note that the data provided by Altmetric ("social media 
+          mentions" and "references outside of academia") are protected by 
+          copyright and other proprietary rights, as outlined in their <a
+            target="_blank"
+            rel="noreferrer"
+            href="https://www.altmetric.com/terms-of-use/"
+          >
+            Terms of Use
+          </a>.
         </p>
 
         <AboutSoftware />
