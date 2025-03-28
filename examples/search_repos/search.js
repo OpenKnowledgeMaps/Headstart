@@ -30,6 +30,12 @@ switch (data_config.service) {
         service_name = "OpenAire";
         options = options_base;
         break;
+    
+    case 'orcid':
+        service_url = data_config.server_url + "services/searchORCID.php"
+        service_name = "ORCiD";
+        options = options_base;
+        break;
 }
 
 $(window).bind("pageshow", function () {

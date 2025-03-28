@@ -12,7 +12,7 @@ class SearchParamSchema(Schema):
     from_ = fields.Date(data_key="from",
                         format="%Y-%m-%d")
     to = fields.Date(format="%Y-%m-%d")
-    vis_type = fields.Str(require=True)
+    vis_type = fields.Str(required=True)
     limit = fields.Int()
     year_range = fields.Str()
     today = fields.Str()
@@ -37,6 +37,9 @@ class SearchParamSchema(Schema):
     custom_title = fields.Str()
     exclude_date_filters = fields.Boolean()
     custom_clustering = fields.Str()
+    academic_age_offset = fields.Int()
+    enable_h_index = fields.Bool()
+    enable_teaching_mentorship = fields.Bool()
 
 
     @pre_load
@@ -67,11 +70,15 @@ class SearchParamSchema(Schema):
 
     @pre_load
     def lang_id_empty_fallback(self, in_data, **kwargs):
+        if in_data is None:
+            in_data = {}  # Define in_data as an empty dictionary
+        
         lang_id = in_data.get("lang_id")
         if lang_id:
             lang_id = list(filter(lambda x: x != "", lang_id))
             if len(lang_id) == 0:
                 in_data["lang_id"] = ["all-lang"]
+        
         return in_data
 
     @validates('from_')

@@ -1,0 +1,7 @@
+library(rAltmetric)
+library(rcrossref)
+library(logging)
+library(jsonlite)
+library(doParallel)
+library(dplyr)
+library(stringdist)

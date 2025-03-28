@@ -1,0 +1,48 @@
+const bubbleOrder = (state = { hoveredBubble: null, order: [] }, action: any) => {
+  if (action.canceled || action.isStreamgraph) {
+    return state;
+  }
+  switch (action.type) {
+    case "HOVER_BUBBLE":
+      return {
+        ...state,
+        hoveredBubble: action.uri,
+        order: getBubbleOrder(action.uri, state.order),
+      };
+    case "ZOOM_IN":
+      return {
+        ...state,
+        hoveredBubble: action.selectedAreaData.uri,
+        order: getBubbleOrder(action.selectedAreaData.uri, state.order),
+      };
+    case "ZOOM_OUT":
+      return {
+        ...state,
+        hoveredBubble: null,
+      };
+    case "INITIALIZE":
+      return {
+        ...state,
+        hoveredBubble: null,
+      };
+    case "SCALE":
+      return {
+        ...state,
+        hoveredBubble: null,
+      };
+    default:
+      return state;
+  }
+};
+
+export default bubbleOrder;
+
+const getBubbleOrder = (areaUri: string, previousOrder: string[]) => {
+  if (!areaUri) {
+    return previousOrder;
+  }
+  const newBubbleOrder = previousOrder.filter((uri) => uri !== areaUri);
+  newBubbleOrder.push(areaUri);
+
+  return newBubbleOrder;
+};

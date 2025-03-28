@@ -1,11 +1,10 @@
 {
-  "document_types":["121", "7", "13", "14", "15", "16", "17", "18", "6"],
+  "document_types":["121"],
   "from":"1665-01-01",
   "to":"2023-12-07",
   "sorting":"most-relevant",
   "vis_id": "TEST_ID",
-  "min_descsize": 300,
+  "min_descsize": 0,
   "limit": 120,
-  "list_size": 100,
-  "exclude_date_filters": "true"
+  "list_size": 100
 }

@@ -1,3 +1,5 @@
+import { expect, describe, it, vitest } from 'vitest';
+
 import {
   getDateTimeFromTimestamp,
   getDateFromTimestamp,
@@ -5,7 +7,7 @@ import {
 } from "../../js/utils/dates";
 
 describe("Dates utility functions", () => {
-  const mockWarn = jest.fn();
+  const mockWarn = vitest.fn();
 
   global.console = {
     log: console.log,

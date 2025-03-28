@@ -1,3 +1,5 @@
+import { expect, describe, it } from 'vitest';
+
 import { highlightArea } from "../../js/actions";
 
 import reducer from "../../js/reducers/highlightedBubble";

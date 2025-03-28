@@ -1,4 +1,5 @@
 import { stopAnimation, zoomIn, zoomOut } from "../../js/actions";
+import { expect, describe, it, vitest } from 'vitest';
 
 import reducer from "../../js/reducers/animation";
 
@@ -14,7 +15,7 @@ describe("animation state", () => {
 
     it("should return the zoom in animation", () => {
       const INITIAL_STATE = null;
-      const F = jest.fn();
+      const F = vitest.fn();
 
       const result = reducer(INITIAL_STATE, zoomIn({}, F, false));
 
@@ -29,7 +30,7 @@ describe("animation state", () => {
 
     it("should return the zoom out animation", () => {
       const INITIAL_STATE = null;
-      const F = jest.fn();
+      const F = vitest.fn();
 
       const result = reducer(INITIAL_STATE, zoomOut(F));
 

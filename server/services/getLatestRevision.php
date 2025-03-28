@@ -19,10 +19,18 @@ $persistence = new \headstart\persistence\DispatchingPersistence($postgresPersis
 
 
 $vis_id = library\CommUtils::getParameter($_GET, "vis_id");
-$context = filter_input(INPUT_GET, "context", FILTER_VALIDATE_BOOLEAN,
-    array("flags" => FILTER_NULL_ON_FAILURE));
-$streamgraph = filter_input(INPUT_GET, "streamgraph", FILTER_VALIDATE_BOOLEAN,
-    array("flags" => FILTER_NULL_ON_FAILURE));
+$context = filter_input(
+  INPUT_GET,
+  "context",
+  FILTER_VALIDATE_BOOLEAN,
+  array("flags" => FILTER_NULL_ON_FAILURE)
+);
+$streamgraph = filter_input(
+  INPUT_GET,
+  "streamgraph",
+  FILTER_VALIDATE_BOOLEAN,
+  array("flags" => FILTER_NULL_ON_FAILURE)
+);
 
 # get data depending on context parameter
 if ($context === true) {
@@ -32,22 +40,38 @@ if ($context === true) {
   # transform data depending on streamgraph parameter and return transformed data
   if ($streamgraph === true) {
     $packed_data = json_decode($data["rev_data"], true);
-    $return_data = array("context" => array("id" => $data["rev_vis"], "query" => $data["vis_query"], "service" => $data["vis_title"]
-                            , "timestamp" => $data["rev_timestamp"], "params" => $data["vis_params"]),
-                        "data" => $packed_data["data"],
-                        "streamgraph" => $packed_data["streamgraph"]);
+    $return_data = array(
+      "context" => array(
+        "id" => $data["rev_vis"],
+        "query" => $data["vis_query"],
+        "service" => $data["vis_title"]
+        ,
+        "timestamp" => $data["rev_timestamp"],
+        "params" => $data["vis_params"]
+      ),
+      "data" => $packed_data["data"],
+      "streamgraph" => $packed_data["streamgraph"]
+    );
     $jsonData = json_encode($return_data);
     library\CommUtils::echoOrCallback($jsonData, $_GET);
-    } else {
-    $return_data = array("context" => array("id" => $data["rev_vis"], "query" => $data["vis_query"], "service" => $data["vis_title"]
-                              , "timestamp" => $data["rev_timestamp"], "params" => $data["vis_params"]),
-                          "data" => $data["rev_data"]);
+  } else {
+    $return_data = array(
+      "context" => array(
+        "id" => $data["rev_vis"],
+        "query" => $data["vis_query"],
+        "service" => $data["vis_title"]
+        ,
+        "timestamp" => $data["rev_timestamp"],
+        "params" => $data["vis_params"]
+      ),
+      "data" => $data["rev_data"]
+    );
     $jsonData = json_encode($return_data);
     library\CommUtils::echoOrCallback($jsonData, $_GET);
   }
 
   # context data true end
-  } else {
+} else {
   # return data without context from legacy
   $jsonData = $persistence->getLastVersion($vis_id, false, false);
   library\CommUtils::echoOrCallback($jsonData[0], $_GET);

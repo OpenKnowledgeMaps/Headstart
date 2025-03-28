@@ -25,7 +25,7 @@ module.exports = (env) => {
 
   return {
     devtool: "eval-source-map",
-    entry: "./vis/entrypoint.js",
+    entry: "./vis/index.ts",
 
     output: {
       path: path.resolve(__dirname, "dist"),
@@ -46,6 +46,7 @@ module.exports = (env) => {
     },
 
     resolve: {
+      extensions: ['.*', '.js', '.jsx', '.ts', '.tsx'],
       alias: {
         //
         hypher: "hypher/dist/jquery.hypher.js",
@@ -58,10 +59,7 @@ module.exports = (env) => {
         styles: path.resolve(__dirname, "vis/stylesheets"),
 
         // modules
-        config: path.resolve(__dirname, "vis/js/default-config.js"),
         headstart: path.resolve(__dirname, "vis/js/headstart.js"),
-        mediator: path.resolve(__dirname, "vis/js/mediator.js"),
-        io: path.resolve(__dirname, "vis/js/io.js"),
 
         // building
         process: "process/browser",
@@ -87,6 +85,11 @@ module.exports = (env) => {
     ],
     module: {
       rules: [
+        {
+          test: /\.tsx?$/,
+          use: 'ts-loader',
+          exclude: /node_modules/,
+        },
         {
           test: require.resolve("hypher/dist/jquery.hypher.js"),
           use: [
