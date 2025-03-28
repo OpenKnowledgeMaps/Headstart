@@ -83,7 +83,7 @@ def get_or_create_contentprovider_lookup():
         k = str(uuid.uuid4())
         d = {"id": k, "params": {},"endpoint": "contentproviders"}
         redis_store.rpush("base", json.dumps(d))
-        result = get_key(redis_store, k, 10)
+        result = get_key(redis_store, k, 100)
         if result.get("status") == "error":
             df = pd.read_json("contentproviders.json")
             df.set_index("internal_name", inplace=True)
