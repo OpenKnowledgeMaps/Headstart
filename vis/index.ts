@@ -1,2 +1,1 @@
-import { start } from "./app";
-export { start };
+export { start } from "./app";
