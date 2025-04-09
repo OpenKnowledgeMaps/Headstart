@@ -12,7 +12,7 @@ class SearchParamSchema(Schema):
     from_ = fields.Date(data_key="from",
                         format="%Y-%m-%d")
     to = fields.Date(format="%Y-%m-%d")
-    vis_type = fields.Str(require=True)
+    vis_type = fields.Str(required=True)
     limit = fields.Int()
     year_range = fields.Str()
     today = fields.Str()
@@ -37,6 +37,9 @@ class SearchParamSchema(Schema):
     custom_title = fields.Str()
     exclude_date_filters = fields.Boolean()
     custom_clustering = fields.Str()
+    academic_age_offset = fields.Int(allow_none=True)
+    enable_h_index = fields.Boolean(allow_none=True)
+    enable_teaching_mentorship = fields.Boolean(allow_none=True)
 
 
     @pre_load
@@ -67,11 +70,42 @@ class SearchParamSchema(Schema):
 
     @pre_load
     def lang_id_empty_fallback(self, in_data, **kwargs):
+        if in_data is None:
+            in_data = {}  # Define in_data as an empty dictionary
+        
         lang_id = in_data.get("lang_id")
         if lang_id:
             lang_id = list(filter(lambda x: x != "", lang_id))
             if len(lang_id) == 0:
                 in_data["lang_id"] = ["all-lang"]
+        
+        return in_data
+
+    @pre_load
+    def fix_academic_age_offset(self, in_data, **kwargs):
+        try:
+            if "academic_age_offset" in in_data:
+                in_data["academic_age_offset"] = int(in_data["academic_age_offset"])
+        except (ValueError, TypeError):
+            in_data["academic_age_offset"] = 0
+        return in_data
+
+    @pre_load
+    def fix_enable_h_index(self, in_data, **kwargs):
+        try:
+            if "enable_h_index" in in_data:
+                in_data["enable_h_index"] = in_data["enable_h_index"].lower().capitalize() == "True"
+        except Exception:
+            pass
+        return in_data
+    
+    @pre_load
+    def fix_enable_teaching_mentorship(self, in_data, **kwargs):
+        try:
+            if "enable_teaching_mentorship" in in_data:
+                in_data["enable_teaching_mentorship"] = in_data["enable_teaching_mentorship"].lower().capitalize() == "True"
+        except Exception:
+            pass
         return in_data
 
     @validates('from_')

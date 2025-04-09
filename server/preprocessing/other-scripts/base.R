@@ -151,31 +151,37 @@ get_papers <- function(query, params,
       has_custom_clustering_annotation <- unlist(lapply(metadata$subject_orig, function(x) grepl(paste0(cc, ":"), x, fixed=TRUE)))
       metadata <- metadata[has_custom_clustering_annotation,]
   }}
-  while (nrow(metadata) - sum(metadata$is_duplicate) < limit && attr(res_raw, "numFound") > offset+120 && r < req_limit) {
-    offset <- offset+120
-    res_raw <- get_raw_data(limit,
-                            base_query,
-                            return_fields,
-                            sortby_string,
-                            filter,
-                            repo,
-                            coll,
-                            retry_opts,
-                            offset,
-                            non_public)
-    res <- bind_rows(res, res_raw$docs)
-    metadata <- etl(res, repo, non_public)
-    metadata <- unique(metadata, by = "id")
-    metadata <- sanitize_abstract(metadata)
-    metadata <- mark_duplicates(metadata)
-    metadata$has_dataset <- unlist(lapply(metadata$resulttype, function(x) "Dataset" %in% x))
-    # check if custom clustering annotation param is in metadata
-    if (!is.null(cc)) {
-      if (!(cc %in% names(fieldmapper))) {
-        has_custom_clustering_annotation <- unlist(lapply(metadata$subject_orig, function(x) grepl(paste0(cc, ":"), x, fixed=TRUE)))
-        metadata <- metadata[has_custom_clustering_annotation,]
-    }}
-    r <- r+1
+  # don't deduplicate if params$deduplicate_base is set to FALSE
+  if (!is.null(params$deduplicate_base) && params$deduplicate_base != FALSE) {
+    # log to skip deduplication
+    blog$info(paste("vis_id:", .GlobalEnv$VIS_ID, "Deduplication skipped"))
+  } else {
+    while (nrow(metadata) - sum(metadata$is_duplicate) < limit && attr(res_raw, "numFound") > offset+120 && r < req_limit) {
+      offset <- offset+120
+      res_raw <- get_raw_data(limit,
+                              base_query,
+                              return_fields,
+                              sortby_string,
+                              filter,
+                              repo,
+                              coll,
+                              retry_opts,
+                              offset,
+                              non_public)
+      res <- bind_rows(res, res_raw$docs)
+      metadata <- etl(res, repo, non_public)
+      metadata <- unique(metadata, by = "id")
+      metadata <- sanitize_abstract(metadata)
+      metadata <- mark_duplicates(metadata)
+      metadata$has_dataset <- unlist(lapply(metadata$resulttype, function(x) "Dataset" %in% x))
+      # check if custom clustering annotation param is in metadata
+      if (!is.null(cc)) {
+        if (!(cc %in% names(fieldmapper))) {
+          has_custom_clustering_annotation <- unlist(lapply(metadata$subject_orig, function(x) grepl(paste0(cc, ":"), x, fixed=TRUE)))
+          metadata <- metadata[has_custom_clustering_annotation,]
+      }}
+      r <- r+1
+    }
   }
   # check if custom clustering annotation param is in metadata
   if (!is.null(cc)) {

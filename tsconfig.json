@@ -1,0 +1,15 @@
+{
+    "compilerOptions": {
+        "target": "es5",
+        "allowJs": true,
+        "lib": ["ES2021", "DOM"],
+        "jsx": "react",
+        "moduleResolution": "node",
+        "outDir": "./dist",
+        "strict": true,
+        "esModuleInterop": true,
+    },
+    "include": [
+        "vis/**/*"
+    ]
+}

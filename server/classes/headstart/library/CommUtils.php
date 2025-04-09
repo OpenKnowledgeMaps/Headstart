@@ -53,6 +53,7 @@ class CommUtils {
         curl_close($ch);
         $httpcode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
         if ($result === false) 
+            // in this case, the curl call result is false and $result is a string with the CURL error
             $result = curl_error($ch);
         return array("result" => $result, "httpcode" => $httpcode);
     }

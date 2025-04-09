@@ -30,6 +30,7 @@ server/workers/tests/*.csv
 server/workers/tests/*.txt
 server/workers/tests/testutils/
 local_dev/renv/*
+local_dev/dev.env
 
 # php files
 /server/classes/headstart/vendor
@@ -44,7 +45,6 @@ server/preprocessing/other-scripts/renv
 /*.Rproj
 .Rproj.user
 
-
 # python files
 *.pyc
 *.pkl
@@ -54,16 +54,26 @@ server/preprocessing/other-scripts/renv
 /server/nbproject/private/
 .pytest_cache
 *__pycache__*
-
-# python files
-*.pyc
-*.pkl
-.ipynb_checkpoints
-*.ipynb
-/nbproject/private/
-/server/nbproject/private/
-.pytest_cache
-*__pycache__*
-
 .venv
+
+# python files
+*.pyc
+*.pkl
+.ipynb_checkpoints
+*.ipynb
+/nbproject/private/
+/server/nbproject/private/
+.pytest_cache
+*__pycache__*
+.venv
+*.egg-info/
+
+# personal
+.vscode/settings.json
+
+# temporal
+local_dev/config_local_headstart.ini
+local_dev/config_local_searchflow.ini
+
+# mac os
 .DS_Store

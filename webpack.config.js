@@ -49,7 +49,7 @@ module.exports = (env) => {
     devtool: "eval-source-map",
 
     entry: {
-      headstart: "./vis/entrypoint.js",
+      headstart: "./vis/index.ts",
     },
 
     output: {
@@ -73,7 +73,7 @@ module.exports = (env) => {
     },
 
     resolve: {
-      // TODO clean up the aliases once the old modules are refactored
+      extensions: [".*", ".js", ".jsx", ".ts", ".tsx"],
       alias: {
         //
         hypher: "hypher/dist/jquery.hypher.js",
@@ -107,7 +107,23 @@ module.exports = (env) => {
     module: {
       rules: [
         {
+          test: /\.tsx?$/,
+          use: "ts-loader",
+          exclude: /node_modules/,
+        },
+        {
           test: [require.resolve("hypher/dist/jquery.hypher.js"), /lib\/*.js/],
+          use: [
+            {
+              loader: "imports-loader",
+              options: {
+                imports: ["default jquery $", "default jquery jQuery"],
+              },
+            },
+          ],
+        },
+        {
+          test: /lib\/*.js/,
           use: [
             {
               loader: "imports-loader",

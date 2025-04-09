@@ -16,4 +16,4 @@ server {
             proxy_pass http://dev-persistence-1:5001/api/persistence/;
         }
     }
-}
+}   

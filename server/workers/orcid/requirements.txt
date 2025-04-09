@@ -1,0 +1,27 @@
+aioredis==2.0.1
+aniso8601==9.0.1
+async-timeout==4.0.2
+attrs==22.2.0
+click==8.1.3
+dataclasses>=0.6
+hiredis==2.0.0
+importlib-metadata==4.8.3
+importlib-resources==5.4.0
+itsdangerous==2.1.2
+jsonschema==3.2.0
+MarkupSafe==2.1.3
+Levenshtein==0.21.1
+mistune==2.0.5
+numpy==1.24.4
+packaging==21.3
+pandas==1.3.5
+pyparsing==3.1.1
+pyrsistent==0.18.0
+python-dateutil==2.8.2
+pytz==2023.3.post1
+PyYAML==6.0.1
+redis==4.3.6
+six==1.16.0
+typing-extensions==4.2.0
+zipp==3.6.0
+pyorcid @ git+https://github.com/OpenKnowledgeMaps/PyOrcid.git@979c7733664df0936b2aef3b899f2d8de10b4315

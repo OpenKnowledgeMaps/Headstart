@@ -1,3 +1,5 @@
+import { expect, describe, it } from 'vitest';
+
 import { hoverBubble, initializeStore, zoomIn, zoomOut } from "../../js/actions";
 
 import reducer from "../../js/reducers/bubbleOrder";

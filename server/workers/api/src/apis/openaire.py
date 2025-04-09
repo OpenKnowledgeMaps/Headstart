@@ -6,37 +6,54 @@ import pandas as pd
 from flask import Blueprint, request, make_response, jsonify, abort
 from flask_restx import Namespace, Resource, fields
 from .request_validators import SearchParamSchema
-from apis.utils import get_key, redis_store
+from common.utils import get_key, redis_store
 
 
 openaire_ns = Namespace("openaire", description="OpenAIRE API operations")
 search_param_schema = SearchParamSchema()
 
 
-search_query = openaire_ns.model("SearchQuery",
-                               {"q": fields.String(example='feminicide',
-                                                   description='query string',
-                                                   required=True),
-                                "sorting": fields.String(example='most-recent',
-                                                         description='most-relevant or most-recent',
-                                                         required=True),
-                                "from": fields.String(example='2019-01-01',
-                                                      description='yyyy-MM-dd',
-                                                      required=True),
-                                "to": fields.String(example='2019-12-31',
-                                                    description='yyyy-MM-dd',
-                                                    required=True),
-                                "vis_type": fields.String(example='overview',
-                                                          description='overview or timeline',
-                                                          required=True),
-                                "limit": fields.Integer(example=100,
-                                                        description='max. number of results'),
-                                "language": fields.String(example='en',
-                                                          description='language code, optional',
-                                                          required=False),
-                                "raw": fields.Boolean(example="false",
-                                                      description='raw results from ElasticSearch')})
+search_query = openaire_ns.model(
+    "SearchQuery",
+    {
+        "q": fields.String(
+            example="feminicide", description="query string", required=True
+        ),
+        "sorting": fields.String(
+            example="most-recent",
+            description="most-relevant or most-recent",
+            required=True,
+        ),
+        "from": fields.String(
+            example="2019-01-01", description="yyyy-MM-dd", required=True
+        ),
+        "to": fields.String(
+            example="2019-12-31", description="yyyy-MM-dd", required=True
+        ),
+        "vis_type": fields.String(
+            example="overview", description="overview or timeline", required=True
+        ),
+        "limit": fields.Integer(example=100, description="max. number of results"),
+        "language": fields.String(
+            example="en", description="language code, optional", required=False
+        ),
+        "raw": fields.Boolean(
+            example="false", description="raw results from ElasticSearch"
+        ),
+    },
+)
 
+
+# Utility function to set response headers
+def set_response_headers(accept_header, is_raw, result, filename):
+    headers = {}
+    if accept_header == "application/json":
+        headers["Content-Type"] = "application/json"
+    elif accept_header == "text/csv":
+        result = pd.read_json(json.loads(result)).to_csv() if is_raw else pd.read_json(json.loads(result)).to_csv()
+        headers["Content-Type"] = "text/csv"
+        headers["Content-Disposition"] = f"attachment; filename={filename}.csv"
+    return result, headers
 
 @openaire_ns.route('/search')
 class Search(Resource):
@@ -49,12 +66,12 @@ class Search(Resource):
         """
         params = request.get_json()
         openaire_ns.logger.debug(params)
-        #errors = search_param_schema.validate(params, partial=True)
-        params["limit"] = 100
-        params["list_size"] = -1
+        # errors = search_param_schema.validate(params, partial=True)
         # openaire_ns.logger.debug(errors)
         # if errors:
         #     abort(400, str(errors))
+        params["limit"] = 100
+        params["list_size"] = -1
         k = str(uuid.uuid4())
         d = {"id": k, "params": params,
              "endpoint": "search"}
@@ -64,13 +81,14 @@ class Search(Resource):
         openaire_ns.logger.debug("Queue length: %s %d %s" %("openaire", q_len, k))
         result = get_key(redis_store, k, 300)
         try:
+            result, headers = set_response_headers(request.headers["Accept"], params.get("raw"), result, k)
+
             headers = {}
             if request.headers["Accept"] == "application/json":
                 headers["Content-Type"] = "application/json"
             if request.headers["Accept"] == "text/csv":
                 if params.get("raw") is True:
-                    df = pd.read_json(json.loads(result))
-                    result = df.to_csv()
+                    result = pd.read_json(json.loads(result)).to_csv()
                 else:
                     result = pd.read_json(json.loads(result)).to_csv()
                 headers["Content-Type"] = "text/csv"

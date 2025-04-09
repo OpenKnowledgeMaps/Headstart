@@ -20,7 +20,7 @@ if (DEBUG==TRUE){
 tslog <- getLogger('ts')
 
 source(paste("../other-scripts/vis_layout.R", sep=""))
-source('../other-scripts/altmetrics.R')
+source('../other-scripts/metrics.R')
 
 
 if(!is.null(params_file) && !is.na(params_file)) {
@@ -94,7 +94,7 @@ if(exists('input_data')) {
 if (!exists('output_json')) {
   output_json <- detect_error(failed, service, params)
 } else if (service=='openaire' && exists('output_json')) {
-  output_json <- enrich_output_json(output_json)
+  output_json <- enrich_metadata_metrics(output_json)
 }
 
 print(output_json)
