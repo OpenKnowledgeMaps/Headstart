@@ -55,21 +55,10 @@ server/preprocessing/other-scripts/renv
 .pytest_cache
 *__pycache__*
 .venv
-
-# python files
-*.pyc
-*.pkl
-.ipynb_checkpoints
-*.ipynb
-/nbproject/private/
-/server/nbproject/private/
-.pytest_cache
-*__pycache__*
-.venv
 *.egg-info/
 
 # personal
-.vscode/settings.json
+.vscode/
 
 # temporal
 local_dev/config_local_headstart.ini
