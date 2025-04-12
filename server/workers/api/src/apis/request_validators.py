@@ -37,9 +37,9 @@ class SearchParamSchema(Schema):
     custom_title = fields.Str()
     exclude_date_filters = fields.Boolean()
     custom_clustering = fields.Str()
-    academic_age_offset = fields.Int()
-    enable_h_index = fields.Bool()
-    enable_teaching_mentorship = fields.Bool()
+    academic_age_offset = fields.Int(allow_none=True)
+    enable_h_index = fields.Boolean(allow_none=True)
+    enable_teaching_mentorship = fields.Boolean(allow_none=True)
 
 
     @pre_load
@@ -79,6 +79,33 @@ class SearchParamSchema(Schema):
             if len(lang_id) == 0:
                 in_data["lang_id"] = ["all-lang"]
         
+        return in_data
+
+    @pre_load
+    def fix_academic_age_offset(self, in_data, **kwargs):
+        try:
+            if "academic_age_offset" in in_data:
+                in_data["academic_age_offset"] = int(in_data["academic_age_offset"])
+        except (ValueError, TypeError):
+            in_data["academic_age_offset"] = 0
+        return in_data
+
+    @pre_load
+    def fix_enable_h_index(self, in_data, **kwargs):
+        try:
+            if "enable_h_index" in in_data:
+                in_data["enable_h_index"] = in_data["enable_h_index"].lower().capitalize() == "True"
+        except Exception:
+            pass
+        return in_data
+    
+    @pre_load
+    def fix_enable_teaching_mentorship(self, in_data, **kwargs):
+        try:
+            if "enable_teaching_mentorship" in in_data:
+                in_data["enable_teaching_mentorship"] = in_data["enable_teaching_mentorship"].lower().capitalize() == "True"
+        except Exception:
+            pass
         return in_data
 
     @validates('from_')

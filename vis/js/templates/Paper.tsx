@@ -358,7 +358,7 @@ class Paper extends React.Component {
                 <div key={id} className="stat" style={{
                   textWrap: 'nowrap'
                 }}>
-                  <p className={`stat ${sizeModifierClass}`}>
+                  <p id="stat" className={sizeModifierClass}>
                     <span style={{
                       textWrap: 'nowrap'
                     }} className="num-stat">{value || value === 0 ? value : "n/a"} </span>
@@ -550,10 +550,13 @@ const getEnlargeFactor = (offsetWidth, scrollHeight) => {
 };
 
 const getMetadataHeight = (realHeight, numOfLabels, isZoomed) => {
-  let readersHeight = 12;
+  let readersHeight = 0;
   
   if (numOfLabels && isZoomed) {
-    readersHeight += numOfLabels * 12;
+    readersHeight += numOfLabels * 12 + 10;
+  }
+  if (numOfLabels && !isZoomed) {
+    readersHeight += 12;
   }
 
   const height = realHeight - readersHeight;

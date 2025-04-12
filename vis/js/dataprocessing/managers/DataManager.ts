@@ -126,6 +126,7 @@ class DataManager {
       }
       return backendData.data?.documents ?? [];
     }
+
     if (typeof backendData.data === "object") {
       return backendData.data?.documents ?? [];
     }
