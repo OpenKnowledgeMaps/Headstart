@@ -7,21 +7,21 @@ import { Paper } from "../@types/paper";
 const usePdfLookup = (paper: Paper, serverUrl: string, service: string) => {
   const [url, setUrl] = useState<string | null>(null);
   const [backupUrl, setBackupUrl] = useState<string | null>(null);
-  
+
   const resetUrls = () => {
     setUrl(null);
     setBackupUrl(null);
-  }
-  
+  };
+
   const handleSuccess = (successUrl: string) => {
     setUrl(successUrl);
     setBackupUrl("");
-  }
-  
+  };
+
   const handleError = (errorUrl: string) => {
     setUrl("");
     setBackupUrl(errorUrl);
-  }
+  };
 
   useEffect(() => {
     const loadPDF = () => {
@@ -84,7 +84,13 @@ const usePdfLookup = (paper: Paper, serverUrl: string, service: string) => {
 
 export default usePdfLookup;
 
-const requestPdfLookup = (server: string, article: string, file: string, service: string, pdfs: string) => {
+const requestPdfLookup = (
+  server: string,
+  article: string,
+  file: string,
+  service: string,
+  pdfs: string
+) => {
   return $.getJSON(
     `${server}services/getPDF.php?url=${article}&filename=${file}&service=${service}&pdf_urls=${pdfs}`
   );
