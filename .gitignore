@@ -32,6 +32,7 @@ server/workers/tests/*.txt
 server/workers/tests/testutils/
 local_dev/renv/*
 local_dev/dev.env
+local_dev/paper_preview
 
 # php files
 /server/classes/headstart/vendor
