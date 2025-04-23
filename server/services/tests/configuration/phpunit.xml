@@ -6,7 +6,6 @@
     displayDetailsOnTestsThatTriggerNotices="true"
     displayDetailsOnTestsThatTriggerErrors="true"
     displayDetailsOnPhpunitDeprecations="true">
-
     <testsuites>
         <testsuite name="getPDF Tests">
             <directory>../../</directory>

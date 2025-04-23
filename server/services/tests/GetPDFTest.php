@@ -26,7 +26,7 @@ class GetPDFTest extends TestCase {
     // Make preparations before a test
     private function prepareGetPDFFunction(): string {
         ob_start();
-        include __DIR__ . '/../getPDF.php';
+        require_once __DIR__ . '/../getPDF.php';
         return ob_get_clean();
     }
 
@@ -90,9 +90,6 @@ class GetPDFTest extends TestCase {
 
 
     // >>> Tests for the the getPDF.php <<<
-    /**
-        * @runInSeparateProcess
-    */
     public function testFullScriptWorksSuccessfully() {
         // Mocking environment
         $this->setValidMockForGET();
@@ -110,9 +107,6 @@ class GetPDFTest extends TestCase {
         );
     }
 
-    /**
-        * @runInSeparateProcess
-    */
     // !!! Important: This test is not working because if we using exit() in the getPDF.php
     // and it is ending process ending unexpectedly for the PHPUnit. Possible
     // solution: stop using exit() or try to cling to the state before the
@@ -137,9 +131,6 @@ class GetPDFTest extends TestCase {
 
 
     // >>> Tests for the startsWith function from the getPDF.php <<<
-    /**
-        * @runInSeparateProcess
-    */
     public function testStartsWithReturnsTrue() {
         // Mocking environment
         $this->setValidMockForGET();
@@ -151,9 +142,6 @@ class GetPDFTest extends TestCase {
         $this->assertTrue(startsWith("hello.pdf", "hello"));
     }
 
-    /**
-        * @runInSeparateProcess
-    */
     public function testStartsWithReturnsFalse() {
         // Mocking environment
         $this->setValidMockForGET();
@@ -165,9 +153,6 @@ class GetPDFTest extends TestCase {
         $this->assertFalse(startsWith("hello.pdf", "world"));
     }
 
-    /**
-        * @runInSeparateProcess
-    */
     public function testStartsWithEmptyNeedle() {
         // Mocking environment
         $this->setValidMockForGET();
@@ -179,9 +164,6 @@ class GetPDFTest extends TestCase {
         $this->assertTrue(startsWith("abc", ""));
     }
 
-    /**
-        * @runInSeparateProcess
-    */
     public function testStartsWithEmptyHaystack() {
         // Mocking environment
         $this->setValidMockForGET();
@@ -196,9 +178,6 @@ class GetPDFTest extends TestCase {
 
 
     // >>> Tests for the parsePDFLink function from the getPDF.php <<<
-    /**
-        * @runInSeparateProcess
-    */
     public function testParsePDFLinkWithDirectPDFHeader() {
         // Mocking environment
         $this->setValidMockForGET();
@@ -213,9 +192,6 @@ class GetPDFTest extends TestCase {
         $this->assertEquals("https://example.com/some.pdf", parsePDFLink("%PDF something here", $url));
     }
 
-    /**
-        * @runInSeparateProcess
-    */
     public function testParsePDFLinkWithBarePDFUrl() {
         // Mocking environment
         $this->setValidMockForGET();
@@ -241,9 +217,6 @@ class GetPDFTest extends TestCase {
         $this->assertEquals("https://example.com/articlessomething.pdf", $result);
     }
 
-    /**
-        * @runInSeparateProcess
-    */
     public function testParsePDFLinkWithFullPDFUrl() {
         // Mocking environment
         $this->setValidMockForGET();
@@ -268,9 +241,6 @@ class GetPDFTest extends TestCase {
         $this->assertEquals("https://cdn.example.com/final.pdf", $result);
     }
 
-    /**
-        * @runInSeparateProcess
-    */
     public function testParsePDFLinkNoMatchReturnsFalse() {
         // Mocking environment
         $this->setValidMockForGET();
@@ -322,37 +292,37 @@ class GetPDFTest extends TestCase {
     /**
         * @runInSeparateProcess
     */
-public function testGetRedirectURLWithMockedGetContentFromURL() {
-    if (!function_exists('getContentFromURL')) {
-        function getContentFromURL($link) {
-            return [
-                '<meta name="citation_pdf_url" content="https://example.com/final.pdf">',
-                'https://example.com/source.html'
-            ];
+    public function testGetRedirectURLWithMockedGetContentFromURL() {
+        if (!function_exists('getContentFromURL')) {
+            function getContentFromURL($link) {
+                return [
+                    '<meta name="citation_pdf_url" content="https://example.com/final.pdf">',
+                    'https://example.com/source.html'
+                ];
+            }
         }
-    }
 
-    // Mocking the startsWith function
-    $this->defineStartsWithIfNeeded();
+        // Mocking the startsWith function
+        $this->defineStartsWithIfNeeded();
 
-    if (!function_exists('parsePDFLink')) {
-        function parsePDFLink($source, $url) {
-            preg_match('/citation_pdf_url" content="([^"]+)"/', $source, $matches);
-            return $matches[1] ?? false;
+        if (!function_exists('parsePDFLink')) {
+            function parsePDFLink($source, $url) {
+                preg_match('/citation_pdf_url" content="([^"]+)"/', $source, $matches);
+                return $matches[1] ?? false;
+            }
         }
-    }
 
-    if (!function_exists('getRedirectURL')) {
-        function getRedirectURL($link) {
-            $response = getContentFromURL($link);
-            return parsePDFLink($response[0], $response[1]);
+        if (!function_exists('getRedirectURL')) {
+            function getRedirectURL($link) {
+                $response = getContentFromURL($link);
+                return parsePDFLink($response[0], $response[1]);
+            }
         }
+
+        $result = getRedirectURL('https://irrelevant.url.com');
+
+        $this->assertEquals('https://example.com/final.pdf', $result);
     }
-
-    $result = getRedirectURL('https://irrelevant.url.com');
-
-    $this->assertEquals('https://example.com/final.pdf', $result);
-}
     // >>> End of tests for the getRedirectURL function from the getPDF.php <<<
 
 
