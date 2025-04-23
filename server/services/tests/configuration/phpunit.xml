@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <phpunit
-    bootstrap="tests/bootstrap.php"
     colors="true"
     displayDetailsOnTestsThatTriggerDeprecations="true"
-    displayDetailsOnTestsThatTriggerErrors="true"
-    displayDetailsOnTestsThatTriggerNotices="true"
     displayDetailsOnTestsThatTriggerWarnings="true"
+    displayDetailsOnTestsThatTriggerNotices="true"
+    displayDetailsOnTestsThatTriggerErrors="true"
     displayDetailsOnPhpunitDeprecations="true">
+
     <testsuites>
         <testsuite name="getPDF Tests">
-            <directory>tests</directory>
+            <directory>../../</directory>
         </testsuite>
     </testsuites>
 </phpunit>
