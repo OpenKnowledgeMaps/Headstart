@@ -23,6 +23,12 @@ const usePdfLookup = (paper: Paper, serverUrl: string, service: string) => {
     setBackupUrl(errorUrl);
   };
 
+  const getVisualizationIdFromURL = (): string | null => {
+    const pathname = window.location.pathname;
+    const visualizationId = pathname.split("/").at(2) ?? null;
+    return visualizationId;
+  };
+
   useEffect(() => {
     const loadPDF = () => {
       const filename = `${paper.id.replace(/\/|:/g, "__")}.PDF`;
@@ -55,7 +61,16 @@ const usePdfLookup = (paper: Paper, serverUrl: string, service: string) => {
         fallbackUrl = paper.outlink;
       }
 
-      requestPdfLookup(serverUrl, articleUrl, filename, service, possiblePDFs)
+      const visualizationId = getVisualizationIdFromURL();
+
+      requestPdfLookup(
+        serverUrl,
+        articleUrl,
+        filename,
+        service,
+        possiblePDFs,
+        visualizationId
+      )
         .done((data) => {
           if (data.status === "success") {
             handleSuccess(localUrl);
@@ -84,14 +99,40 @@ const usePdfLookup = (paper: Paper, serverUrl: string, service: string) => {
 
 export default usePdfLookup;
 
+const ensureThatURLStartsWithHTTP = (url: string): string => {
+  let formattedURL = url;
+
+  if (!/^https?:\/\//i.test(url)) {
+    formattedURL = "http:" + url;
+  }
+
+  return formattedURL;
+};
+
 const requestPdfLookup = (
   server: string,
-  article: string,
-  file: string,
+  url: string,
+  filename: string,
   service: string,
-  pdfs: string
+  pdfURLs: string,
+  visualizationId: string | null
 ) => {
-  return $.getJSON(
-    `${server}services/getPDF.php?url=${article}&filename=${file}&service=${service}&pdf_urls=${pdfs}`
-  );
+  const SCRIPT_PATH_ON_SERVER = "services/getPDF.php";
+
+  const serverURL = ensureThatURLStartsWithHTTP(server);
+  const requestURL = new URL(SCRIPT_PATH_ON_SERVER, serverURL);
+
+  const requestParameters = new URLSearchParams({
+    url,
+    filename,
+    service,
+    pdf_urls: pdfURLs,
+  });
+
+  if (visualizationId) {
+    requestParameters.append("vis_id", visualizationId);
+  }
+
+  requestURL.search = requestParameters.toString();
+  return $.getJSON(requestURL.toString());
 };
