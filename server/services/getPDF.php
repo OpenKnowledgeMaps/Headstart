@@ -17,6 +17,9 @@ $service = library\CommUtils::getParameter($_GET, "service");
 $pdf_urls = library\CommUtils::getParameter($_GET, "pdf_urls");
 $images_path = $ini_array["general"]["images_path"];
 
+error_log("getPDF.php: url: " . $url);
+error_log("getPDF.php: filename: " . $filename);
+
 if ($service == "base" || $service == "openaire") {
     $pdf_link = getPDFLinkforBASE($pdf_urls);
     if($pdf_link != false) {
