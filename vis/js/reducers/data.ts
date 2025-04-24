@@ -2,7 +2,10 @@ import d3 from "d3";
 
 import { getDiameterScale, getResizedScale } from "../utils/scale";
 
-const data = (state = { list: [], options: {}, size: null } as any, action: any) => {
+const data = (
+  state = { list: [], options: {}, size: null } as any,
+  action: any
+) => {
   if (action.canceled) {
     return state;
   }
@@ -18,6 +21,7 @@ const data = (state = { list: [], options: {}, size: null } as any, action: any)
         paperWidthFactor: action.configObject.paper_width_factor,
         paperHeightFactor: action.configObject.paper_height_factor,
         isStreamgraph: action.configObject.is_streamgraph,
+        visualizationId: action.contextObject.id,
       };
 
       return { list: action.papers, options, size: action.chartSize };
@@ -48,8 +52,12 @@ const data = (state = { list: [], options: {}, size: null } as any, action: any)
 
 export default data;
 
-
-const resizePapers = (papers: any[], currentSize: number, newSize: number, options: any) => {
+const resizePapers = (
+  papers: any[],
+  currentSize: number,
+  newSize: number,
+  options: any
+) => {
   const resizedPapers = papers.slice(0);
 
   let coordsScale = getResizedScale(currentSize, newSize);

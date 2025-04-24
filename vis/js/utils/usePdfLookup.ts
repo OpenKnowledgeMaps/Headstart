@@ -3,10 +3,16 @@ import $ from "jquery";
 
 import { isFileAvailable } from "./data";
 import { Paper } from "../@types/paper";
+import { useSelector } from "react-redux";
+
+const getVisualizationIdFromStore = (state: any) => {
+  return state.data.options.visualizationId;
+};
 
 const usePdfLookup = (paper: Paper, serverUrl: string, service: string) => {
   const [url, setUrl] = useState<string | null>(null);
   const [backupUrl, setBackupUrl] = useState<string | null>(null);
+  const visualizationId = useSelector(getVisualizationIdFromStore);
 
   const resetUrls = () => {
     setUrl(null);
@@ -21,12 +27,6 @@ const usePdfLookup = (paper: Paper, serverUrl: string, service: string) => {
   const handleError = (errorUrl: string) => {
     setUrl("");
     setBackupUrl(errorUrl);
-  };
-
-  const getVisualizationIdFromURL = (): string | null => {
-    const pathname = window.location.pathname;
-    const visualizationId = pathname.split("/").at(2) ?? null;
-    return visualizationId;
   };
 
   useEffect(() => {
@@ -61,8 +61,6 @@ const usePdfLookup = (paper: Paper, serverUrl: string, service: string) => {
         fallbackUrl = paper.outlink;
       }
 
-      const visualizationId = getVisualizationIdFromURL();
-
       requestPdfLookup(
         serverUrl,
         articleUrl,
@@ -92,7 +90,7 @@ const usePdfLookup = (paper: Paper, serverUrl: string, service: string) => {
     if (paper) {
       loadPDF();
     }
-  }, [paper, serverUrl, service, setUrl, setBackupUrl]);
+  }, [paper, serverUrl, service, visualizationId, setUrl, setBackupUrl]);
 
   return [url, backupUrl];
 };
@@ -115,7 +113,7 @@ const requestPdfLookup = (
   filename: string,
   service: string,
   pdfURLs: string,
-  visualizationId: string | null
+  visualizationId: string
 ) => {
   const SCRIPT_PATH_ON_SERVER = "services/getPDF.php";
 
@@ -127,11 +125,8 @@ const requestPdfLookup = (
     filename,
     service,
     pdf_urls: pdfURLs,
+    vis_id: visualizationId,
   });
-
-  if (visualizationId) {
-    requestParameters.append("vis_id", visualizationId);
-  }
 
   requestURL.search = requestParameters.toString();
   return $.getJSON(requestURL.toString());
