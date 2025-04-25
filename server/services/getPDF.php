@@ -20,7 +20,7 @@ $paper_id = library\CommUtils::getParameter($_GET, "paper_id");
 $images_path = $ini_array["general"]["images_path"];
 
 if (isServiceWithPDFList($service)) {
-    handleMultiPdfService($vis_id, $paper_id, $images_path, $filename);
+    handleMultiPdfService($vis_id, $paper_id, $images_path, $filename, $url);
 } else {
     handleSingleUrlService($vis_id, $paper_id, $url, $images_path, $filename);
 }
@@ -31,7 +31,7 @@ function isServiceWithPDFList(string $service): bool {
     return in_array($service, ["base", "openaire"]);
 }
 
-function handleMultiPdfService(string $vis_id, string $paper_id, string $images_path, string $filename): void {
+function handleMultiPdfService(string $vis_id, string $paper_id, string $images_path, string $filename, string $url): void {
     $valid_pdf_urls = getValidURLs($vis_id, $paper_id);
     $filtered_urls_string = implode(";", $valid_pdf_urls);
     $pdf_link = getPDFLinkForBASE($filtered_urls_string);
@@ -46,11 +46,14 @@ function handleMultiPdfService(string $vis_id, string $paper_id, string $images_
 function handleSingleUrlService(string $vis_id, string $paper_id, string $url, string $images_path, string $filename): void {
     $valid_pdf_urls = getValidURLs($vis_id, $paper_id);
 
-    if (!in_array($url, $valid_pdf_urls)) {
+    $decoded_input_url = urldecode($url);
+    $normalized_valid_urls = array_map('urldecode', $valid_pdf_urls);
+
+    if (!in_array($decoded_input_url, $normalized_valid_urls, true)) {
         returnError("Provided URL not found in valid paper links");
     }
 
-    getPDFAndDownload($url, $images_path, $filename);
+    getPDFAndDownload($decoded_input_url, $images_path, $filename);
 }
 
 function getValidURLs(string $vis_id, string $paper_id) {
@@ -93,6 +96,12 @@ function extractValidPdfUrls(array $revision_data, string $paper_id): array {
     $inner_data = json_decode($revision_data["data"], true);
     $documents_raw = $inner_data["documents"] ?? null;
     $documents = json_decode($documents_raw, true);
+
+    if (is_array($inner_data) && array_key_exists("data", $inner_data)) {
+        $inner_data = json_decode($inner_data["data"]);
+        $documents_raw = json_encode($inner_data);
+        $documents = json_decode($documents_raw, true);
+    }
 
     if (!is_array($documents)) {
         error_log("Invalid or missing documents array: " . json_encode($documents_raw));
