@@ -9,7 +9,9 @@ class GetPDFTest extends TestCase {
             'url' => 'https://dx.doi.org/10.6084/m9.figshare.14124389',
             'filename' => 'test-file.pdf',
             'service' => 'base',
-            'pdf_urls' => 'https://dx.doi.org/10.6084/m9.figshare.14124389;https://dx.doi.org/10.6084/m9.figshare.14124389; https://figshare.com/articles/online_resource/Overview_of_the_Digital_Education_Action_Plan_2021-2027/14124389;'
+            'pdf_urls' => 'https://dx.doi.org/10.6084/m9.figshare.14124389;https://dx.doi.org/10.6084/m9.figshare.14124389; https://figshare.com/articles/online_resource/Overview_of_the_Digital_Education_Action_Plan_2021-2027/14124389;',
+            'vis_id' => 'paste_here_existing_vis_id',
+            'paper_id' => 'paste_here_existing_paper_id'
         ];
     }
 
@@ -19,7 +21,9 @@ class GetPDFTest extends TestCase {
             'url' => 'https://invalid.com',
             'filename' => 'test-file.pdf',
             'service' => 'pubmed',
-            'pdf_urls' => 'https://dx.doi.org/10.6084/m9.figshare.14124389;https://dx.doi.org/10.6084/m9.figshare.14124389; https://figshare.com/articles/online_resource/Overview_of_the_Digital_Education_Action_Plan_2021-2027/14124389;'
+            'pdf_urls' => 'https://dx.doi.org/10.6084/m9.figshare.14124389;https://dx.doi.org/10.6084/m9.figshare.14124389; https://figshare.com/articles/online_resource/Overview_of_the_Digital_Education_Action_Plan_2021-2027/14124389;',
+            'vis_id' => 'some_vis_id',
+            'paper_id' => 'some_paper_id'
         ];
     }
 
