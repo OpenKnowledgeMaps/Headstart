@@ -20,7 +20,7 @@ $paper_id = library\CommUtils::getParameter($_GET, "paper_id");
 $images_path = $ini_array["general"]["images_path"];
 
 if (isServiceWithPDFList($service)) {
-    handleMultiPdfService($vis_id, $paper_id, $images_path, $filename, $url);
+    handleMultiPdfService($vis_id, $paper_id, $images_path, $filename);
 } else {
     handleSingleUrlService($vis_id, $paper_id, $url, $images_path, $filename);
 }
@@ -31,7 +31,7 @@ function isServiceWithPDFList(string $service): bool {
     return in_array($service, ["base", "openaire"]);
 }
 
-function handleMultiPdfService(string $vis_id, string $paper_id, string $images_path, string $filename, string $url): void {
+function handleMultiPdfService(string $vis_id, string $paper_id, string $images_path, string $filename): void {
     $valid_pdf_urls = getValidURLs($vis_id, $paper_id);
     $filtered_urls_string = implode(";", $valid_pdf_urls);
     $pdf_link = getPDFLinkForBASE($filtered_urls_string);
