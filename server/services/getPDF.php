@@ -15,26 +15,117 @@ $url = library\CommUtils::getParameter($_GET, "url");
 $filename = library\CommUtils::getParameter($_GET, "filename");
 $service = library\CommUtils::getParameter($_GET, "service");
 $pdf_urls = library\CommUtils::getParameter($_GET, "pdf_urls");
+$vis_id = library\CommUtils::getParameter($_GET, "vis_id");
+$paper_id = library\CommUtils::getParameter($_GET, "paper_id");
 $images_path = $ini_array["general"]["images_path"];
 
-error_log("getPDF.php: url: " . $url);
-error_log("getPDF.php: filename: " . $filename);
-
-if ($service == "base" || $service == "openaire") {
-    $pdf_link = getPDFLinkforBASE($pdf_urls);
-    if($pdf_link != false) {
-        getPDFAndDownload($pdf_link, $images_path, $filename);
-    } else {
-        library\CommUtils::echoOrCallback(json_encode(array("status" => "error")), $_GET);
-        exit();
-    }
+if (isServiceWithPDFList($service)) {
+    handleMultiPdfService($vis_id, $paper_id, $images_path, $filename);
 } else {
-    getPDFAndDownload($url, $images_path, $filename);
+    handleSingleUrlService($vis_id, $paper_id, $url, $images_path, $filename);
 }
 
 library\CommUtils::echoOrCallback(json_encode(array("status" => "success", "file" => $filename)), $_GET);
 
-function getPDFLinkforBASE($url) {
+function isServiceWithPDFList(string $service): bool {
+    return in_array($service, ["base", "openaire"]);
+}
+
+function handleMultiPdfService(string $vis_id, string $paper_id, string $images_path, string $filename): void {
+    $valid_pdf_urls = getValidURLs($vis_id, $paper_id);
+    $filtered_urls_string = implode(";", $valid_pdf_urls);
+    $pdf_link = getPDFLinkForBASE($filtered_urls_string);
+
+    if (!$pdf_link) {
+        returnError("No valid PDF link could be resolved from filtered URLs.");
+    }
+
+    getPDFAndDownload($pdf_link, $images_path, $filename);
+}
+
+function handleSingleUrlService(string $vis_id, string $paper_id, string $url, string $images_path, string $filename): void {
+    $valid_pdf_urls = getValidURLs($vis_id, $paper_id);
+
+    if (!in_array($url, $valid_pdf_urls)) {
+        returnError("Provided URL not found in valid paper links");
+    }
+
+    getPDFAndDownload($url, $images_path, $filename);
+}
+
+function getValidURLs(string $vis_id, string $paper_id) {
+    $revision_data = fetchLatestRevision($vis_id);
+
+    if (!$revision_data) {
+        returnError("There are no revision data for such visualization id");
+    }
+
+    $valid_pdf_urls = extractValidPdfUrls($revision_data, $paper_id);
+
+    if (empty($valid_pdf_urls)) {
+        returnError("There are no valid PDF URLs from revision");
+    }
+
+    return $valid_pdf_urls;
+}
+
+function fetchLatestRevision(string $vis_id): ?array {
+    $latest_url = "http://" . $_SERVER['SERVER_NAME'] . dirname($_SERVER['REQUEST_URI']) . "/getLatestRevision.php?vis_id=" . urlencode($vis_id) . "&context=true";
+
+    $revision_json = @file_get_contents($latest_url);
+    if ($revision_json === false) {
+        error_log("Failed to fetch metadata from getLatestRevision.php");
+        return null;
+    }
+
+    $revision_data = json_decode($revision_json, true);
+    if (!is_array($revision_data)) {
+        error_log("Invalid JSON returned from getLatestRevision.php");
+        return null;
+    }
+
+    return $revision_data;
+}
+
+function extractValidPdfUrls(array $revision_data, string $paper_id): array {
+    $valid_urls = [];
+
+    $inner_data = json_decode($revision_data["data"], true);
+    $documents_raw = $inner_data["documents"] ?? null;
+    $documents = json_decode($documents_raw, true);
+
+    if (!is_array($documents)) {
+        error_log("Invalid or missing documents array: " . json_encode($documents_raw));
+        return [];
+    }
+
+    $url_fields = ['link', 'oa_link', 'identifier', 'relation', 'fulltext'];
+
+    foreach ($documents as $entry) {
+        if (($entry["id"] ?? null) !== $paper_id) {
+            continue;
+        }
+
+        foreach ($url_fields as $field) {
+            if (!isset($entry[$field])) {
+                continue;
+            }
+
+            $urls = is_array($entry[$field]) ? $entry[$field] : explode(";", $entry[$field]);
+
+            foreach ($urls as $url) {
+                $url = trim($url);
+                if (filter_var($url, FILTER_VALIDATE_URL)) {
+                    $valid_urls[] = $url;
+                }
+            }
+        }
+    }
+
+    return array_unique($valid_urls);
+}
+
+function getPDFLinkForBASE($url) {
     $link_list = preg_split("/;/", $url);
 
     $matches_pdf = array_filter($link_list, function($item) { return substr($item, -strlen(".pdf")) === ".pdf"; }); 
@@ -136,27 +227,26 @@ function startsWith($haystack, $needle) {
 
 function getPDFAndDownload($url, $images_path, $filename) {
     $output_path = $images_path . $filename;
-
     $pdf = getContentFromURL($url)[0];
 
     if ($pdf !== false) {
         file_put_contents($output_path, $pdf);
     } else {
-        library\CommUtils::echoOrCallback(json_encode(array("status" => "error")), $_GET);
-        exit();
+        returnError("Unable to get PDF from the URL");
     }
 
     $finfo = finfo_open(FILEINFO_MIME_TYPE);
-
     $mime_type = finfo_file($finfo, $output_path);
-
     finfo_close($finfo);
 
     if (strtolower($mime_type) != "application/pdf") {
         unlink($output_path);
-        library\CommUtils::echoOrCallback(json_encode(array("status" => "error")), $_GET);
-        exit();
+        returnError("MIME type is not application/pdf");
     }
 }
 
-
+function returnError(string $reason): void {
+    error_log("Error: " . $reason);
+    library\CommUtils::echoOrCallback(json_encode(["status" => "error"]), $_GET);
+    exit();
+}
