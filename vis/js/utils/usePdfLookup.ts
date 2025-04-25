@@ -67,7 +67,8 @@ const usePdfLookup = (paper: Paper, serverUrl: string, service: string) => {
         filename,
         service,
         possiblePDFs,
-        visualizationId
+        visualizationId,
+        paper.id
       )
         .done((data) => {
           if (data.status === "success") {
@@ -113,7 +114,8 @@ const requestPdfLookup = (
   filename: string,
   service: string,
   pdfURLs: string,
-  visualizationId: string
+  visualizationId: string,
+  paperId: string
 ) => {
   const SCRIPT_PATH_ON_SERVER = "services/getPDF.php";
 
@@ -126,6 +128,7 @@ const requestPdfLookup = (
     service,
     pdf_urls: pdfURLs,
     vis_id: visualizationId,
+    paper_id: paperId,
   });
 
   requestURL.search = requestParameters.toString();
