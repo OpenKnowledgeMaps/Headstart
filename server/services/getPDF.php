@@ -32,7 +32,13 @@ function isServiceWithPDFList(string $service): bool {
     return in_array($service, ["base", "openaire"]);
 }
 
-function handleMultiPdfService(string $vis_id, string $paper_id, string $images_path, string $filename, bool $is_streamgraph): void {
+function handleMultiPdfService(
+    string $vis_id,
+    string $paper_id,
+    string $images_path,
+    string $filename,
+    bool $is_streamgraph
+): void {
     $valid_pdf_urls = getValidURLs($vis_id, $paper_id, $is_streamgraph);
     $filtered_urls_string = implode(";", $valid_pdf_urls);
     $pdf_link = getPDFLinkForBASE($filtered_urls_string);
@@ -44,7 +50,14 @@ function handleMultiPdfService(string $vis_id, string $paper_id, string $images_
     getPDFAndDownload($pdf_link, $images_path, $filename);
 }
 
-function handleSingleUrlService(string $vis_id, string $paper_id, string $url, string $images_path, string $filename, bool $is_streamgraph): void {
+function handleSingleUrlService(
+    string $vis_id,
+    string $paper_id,
+    string $url,
+    string $images_path,
+    string $filename,
+    bool $is_streamgraph
+): void {
     $valid_pdf_urls = getValidURLs($vis_id, $paper_id, $is_streamgraph);
 
     $decoded_input_url = urldecode($url);
@@ -98,10 +111,7 @@ function extractValidPdfUrls(array $revision_data, string $paper_id, bool $is_st
     $documents_raw = $inner_data["documents"] ?? null;
     $documents = json_decode($documents_raw, true);
 
-    error_log('$is_streamgraph:' . $is_streamgraph);
-
     if ($is_streamgraph) {
-        error_log('Worked');
         $inner_data = json_decode($inner_data["data"]);
         $documents_raw = json_encode($inner_data);
         $documents = json_decode($documents_raw, true);
