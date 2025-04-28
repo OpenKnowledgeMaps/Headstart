@@ -5,14 +5,20 @@ import { isFileAvailable } from "./data";
 import { Paper } from "../@types/paper";
 import { useSelector } from "react-redux";
 
-const getVisualizationIdFromStore = (state: any) => {
+const getVisualizationIdFromStore = (state: any): string => {
   return state.data.options.visualizationId;
+};
+
+const getVisualizationTypeFromStore = (state: any): boolean => {
+  return state.data.options.isStreamgraph;
 };
 
 const usePdfLookup = (paper: Paper, serverUrl: string, service: string) => {
   const [url, setUrl] = useState<string | null>(null);
   const [backupUrl, setBackupUrl] = useState<string | null>(null);
+
   const visualizationId = useSelector(getVisualizationIdFromStore);
+  const isStreamgraph = useSelector(getVisualizationTypeFromStore);
 
   const resetUrls = () => {
     setUrl(null);
@@ -68,7 +74,8 @@ const usePdfLookup = (paper: Paper, serverUrl: string, service: string) => {
         service,
         possiblePDFs,
         visualizationId,
-        paper.id
+        paper.id,
+        isStreamgraph
       )
         .done((data) => {
           if (data.status === "success") {
@@ -115,7 +122,8 @@ const requestPdfLookup = (
   service: string,
   pdfURLs: string,
   visualizationId: string,
-  paperId: string
+  paperId: string,
+  isStreamgraph: boolean
 ) => {
   const SCRIPT_PATH_ON_SERVER = "services/getPDF.php";
 
@@ -129,6 +137,7 @@ const requestPdfLookup = (
     pdf_urls: pdfURLs,
     vis_id: visualizationId,
     paper_id: paperId,
+    is_streamgraph: String(isStreamgraph),
   });
 
   requestURL.search = requestParameters.toString();
