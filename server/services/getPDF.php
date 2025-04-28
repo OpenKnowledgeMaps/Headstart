@@ -17,12 +17,13 @@ $service = library\CommUtils::getParameter($_GET, "service");
 $pdf_urls = library\CommUtils::getParameter($_GET, "pdf_urls");
 $vis_id = library\CommUtils::getParameter($_GET, "vis_id");
 $paper_id = library\CommUtils::getParameter($_GET, "paper_id");
+$is_streamgraph = strtolower(library\CommUtils::getParameter($_GET, "is_streamgraph")) === 'true';
 $images_path = $ini_array["general"]["images_path"];
 
 if (isServiceWithPDFList($service)) {
-    handleMultiPdfService($vis_id, $paper_id, $images_path, $filename);
+    handleMultiPdfService($vis_id, $paper_id, $images_path, $filename, $is_streamgraph);
 } else {
-    handleSingleUrlService($vis_id, $paper_id, $url, $images_path, $filename);
+    handleSingleUrlService($vis_id, $paper_id, $url, $images_path, $filename, $is_streamgraph);
 }
 
 library\CommUtils::echoOrCallback(json_encode(array("status" => "success", "file" => $filename)), $_GET);
@@ -31,8 +32,8 @@ function isServiceWithPDFList(string $service): bool {
     return in_array($service, ["base", "openaire"]);
 }
 
-function handleMultiPdfService(string $vis_id, string $paper_id, string $images_path, string $filename): void {
-    $valid_pdf_urls = getValidURLs($vis_id, $paper_id);
+function handleMultiPdfService(string $vis_id, string $paper_id, string $images_path, string $filename, bool $is_streamgraph): void {
+    $valid_pdf_urls = getValidURLs($vis_id, $paper_id, $is_streamgraph);
     $filtered_urls_string = implode(";", $valid_pdf_urls);
     $pdf_link = getPDFLinkForBASE($filtered_urls_string);
 
@@ -43,8 +44,8 @@ function handleMultiPdfService(string $vis_id, string $paper_id, string $images_
     getPDFAndDownload($pdf_link, $images_path, $filename);
 }
 
-function handleSingleUrlService(string $vis_id, string $paper_id, string $url, string $images_path, string $filename): void {
-    $valid_pdf_urls = getValidURLs($vis_id, $paper_id);
+function handleSingleUrlService(string $vis_id, string $paper_id, string $url, string $images_path, string $filename, bool $is_streamgraph): void {
+    $valid_pdf_urls = getValidURLs($vis_id, $paper_id, $is_streamgraph);
 
     $decoded_input_url = urldecode($url);
     $normalized_valid_urls = array_map('urldecode', $valid_pdf_urls);
@@ -56,14 +57,14 @@ function handleSingleUrlService(string $vis_id, string $paper_id, string $url, s
     getPDFAndDownload($decoded_input_url, $images_path, $filename);
 }
 
-function getValidURLs(string $vis_id, string $paper_id) {
+function getValidURLs(string $vis_id, string $paper_id, bool $is_streamgraph) {
     $revision_data = fetchLatestRevision($vis_id);
 
     if (!$revision_data) {
         returnError("There are no revision data for such visualization id");
     }
 
-    $valid_pdf_urls = extractValidPdfUrls($revision_data, $paper_id);
+    $valid_pdf_urls = extractValidPdfUrls($revision_data, $paper_id, $is_streamgraph);
 
     if (empty($valid_pdf_urls)) {
         returnError("There are no valid PDF URLs from revision");
@@ -90,14 +91,17 @@ function fetchLatestRevision(string $vis_id): ?array {
     return $revision_data;
 }
 
-function extractValidPdfUrls(array $revision_data, string $paper_id): array {
+function extractValidPdfUrls(array $revision_data, string $paper_id, bool $is_streamgraph): array {
     $valid_urls = [];
 
     $inner_data = json_decode($revision_data["data"], true);
     $documents_raw = $inner_data["documents"] ?? null;
     $documents = json_decode($documents_raw, true);
 
-    if (is_array($inner_data) && array_key_exists("data", $inner_data)) {
+    error_log('$is_streamgraph:' . $is_streamgraph);
+
+    if ($is_streamgraph) {
+        error_log('Worked');
         $inner_data = json_decode($inner_data["data"]);
         $documents_raw = json_encode($inner_data);
         $documents = json_decode($documents_raw, true);
