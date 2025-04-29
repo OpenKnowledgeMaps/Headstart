@@ -130,7 +130,7 @@ const requestPdfLookup = (
     url,
     filename,
     service,
-    pdf_urls: pdfURLs,
+    pdf_urls: pdfURLs, // TODO: This parameter is not longer used on server
     paper_id: paperId,
     vis_id: visualizationId,
     vis_type: visualizationType,
