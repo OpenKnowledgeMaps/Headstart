@@ -5,6 +5,7 @@ import { isFileAvailable } from "./data";
 import { Paper } from "../@types/paper";
 import { useSelector } from "react-redux";
 import { ensureThatURLStartsWithHTTP } from "./url";
+import { VisualizationTypes } from "../@types/visualization-types";
 
 const getVisualizationIdFromStore = (state: any): string => {
   return state.data.options.visualizationId;
@@ -68,6 +69,10 @@ const usePdfLookup = (paper: Paper, serverUrl: string, service: string) => {
         fallbackUrl = paper.outlink;
       }
 
+      const visualizationType: VisualizationTypes = isStreamgraph
+        ? "timeline"
+        : "overview";
+
       requestPdfLookup(
         serverUrl,
         articleUrl,
@@ -76,7 +81,7 @@ const usePdfLookup = (paper: Paper, serverUrl: string, service: string) => {
         possiblePDFs,
         visualizationId,
         paper.id,
-        isStreamgraph
+        visualizationType
       )
         .done((data) => {
           if (data.status === "success") {
@@ -114,7 +119,7 @@ const requestPdfLookup = (
   pdfURLs: string,
   visualizationId: string,
   paperId: string,
-  isStreamgraph: boolean
+  visualizationType: VisualizationTypes
 ) => {
   const SCRIPT_PATH_ON_SERVER = "services/getPDF.php";
 
@@ -126,9 +131,9 @@ const requestPdfLookup = (
     filename,
     service,
     pdf_urls: pdfURLs,
-    vis_id: visualizationId,
     paper_id: paperId,
-    is_streamgraph: String(isStreamgraph),
+    vis_id: visualizationId,
+    vis_type: visualizationType,
   });
 
   requestURL.search = requestParameters.toString();
