@@ -14,7 +14,6 @@ $ini_array = library\Toolkit::loadIni($INI_DIR);
 $url = library\CommUtils::getParameter($_GET, "url");
 $filename = library\CommUtils::getParameter($_GET, "filename");
 $service = library\CommUtils::getParameter($_GET, "service");
-$pdf_urls = library\CommUtils::getParameter($_GET, "pdf_urls");
 $paper_id = library\CommUtils::getParameter($_GET, "paper_id");
 $vis_id = library\CommUtils::getParameter($_GET, "vis_id");
 $vis_type = library\CommUtils::getParameter($_GET, "vis_type");
