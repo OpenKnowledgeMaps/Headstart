@@ -17,7 +17,7 @@ $service = library\CommUtils::getParameter($_GET, "service");
 $pdf_urls = library\CommUtils::getParameter($_GET, "pdf_urls");
 $vis_id = library\CommUtils::getParameter($_GET, "vis_id");
 $paper_id = library\CommUtils::getParameter($_GET, "paper_id");
-$is_streamgraph = strtolower(library\CommUtils::getParameter($_GET, "is_streamgraph")) === 'true';
+$is_streamgraph = strtolower(library\CommUtils::getParameter($_GET, "vis_type")) === 'timeline';
 $images_path = $ini_array["general"]["images_path"];
 
 if (isServiceWithPDFList($service)) {
