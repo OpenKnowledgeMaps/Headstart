@@ -21,14 +21,11 @@ $is_streamgraph = strtolower(library\CommUtils::getParameter($_GET, "is_streamgr
 $images_path = $ini_array["general"]["images_path"];
 
 if (isServiceWithPDFList($service)) {
-    error_log('This is the service with multi pdf service');
     handleMultiPdfService($vis_id, $paper_id, $images_path, $filename, $is_streamgraph);
 } else {
-    error_log('This is the service with single url service');
     handleSingleUrlService($vis_id, $paper_id, $url, $images_path, $filename, $is_streamgraph);
 }
 
-error_log('Returning the filename:' . $filename);
 library\CommUtils::echoOrCallback(json_encode(array("status" => "success", "file" => $filename)), $_GET);
 
 function isServiceWithPDFList(string $service): bool {
@@ -147,8 +144,6 @@ function extractValidPdfUrls(array $revision_data, string $paper_id, bool $is_st
             }
         }
     }
-
-    error_log('This is the valid urls:' . json_encode($valid_urls));
 
     return array_unique($valid_urls);
 }
