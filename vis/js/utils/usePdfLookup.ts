@@ -4,6 +4,7 @@ import $ from "jquery";
 import { isFileAvailable } from "./data";
 import { Paper } from "../@types/paper";
 import { useSelector } from "react-redux";
+import { ensureThatURLStartsWithHTTP } from "./url";
 
 const getVisualizationIdFromStore = (state: any): string => {
   return state.data.options.visualizationId;
@@ -104,16 +105,6 @@ const usePdfLookup = (paper: Paper, serverUrl: string, service: string) => {
 };
 
 export default usePdfLookup;
-
-const ensureThatURLStartsWithHTTP = (url: string): string => {
-  let formattedURL = url;
-
-  if (!/^https?:\/\//i.test(url)) {
-    formattedURL = "https:" + url;
-  }
-
-  return formattedURL;
-};
 
 const requestPdfLookup = (
   server: string,
