@@ -102,11 +102,19 @@ const handleSelectPaper = (action: any) => {
 
 const handleDeselectPaper = () => removeQueryParams("paper");
 
+export const checkIsCurrentHostIsLocalhost = (): boolean => {
+  const currentHost: string = window.location.host;
+  return currentHost.startsWith("localhost");
+};
+
 export const ensureThatURLStartsWithHTTP = (url: string): string => {
   let formattedURL = url;
 
+  const isCurrentHostIsLocalhost = checkIsCurrentHostIsLocalhost();
+  const protocolToBeAdded = isCurrentHostIsLocalhost ? "http" : "https";
+
   if (!/^https?:\/\//i.test(url)) {
-    formattedURL = "https:" + url;
+    formattedURL = `${protocolToBeAdded}:${url}`;
   }
 
   return formattedURL;
