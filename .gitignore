@@ -10,6 +10,7 @@ dist/
 /config.js
 .cache
 coverage/
+local_dev/paper_preview/
 
 # local deployment files
 /deploy.sh
@@ -72,6 +73,7 @@ server/preprocessing/other-scripts/renv
 
 # personal
 .vscode/settings.json
+
 # temporal
 local_dev/config_local_headstart.ini
 local_dev/config_local_searchflow.ini
