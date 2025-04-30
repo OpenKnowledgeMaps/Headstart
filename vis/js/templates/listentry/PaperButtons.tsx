@@ -1,4 +1,4 @@
-import React from "react";
+import React, { FC } from "react";
 import { connect } from "react-redux";
 
 import useMatomo from "../../utils/useMatomo";
@@ -6,8 +6,20 @@ import { getPaperPDFClickHandler } from "../../utils/data";
 import { mapDispatchToListEntriesProps } from "../../utils/eventhandlers";
 import Highlight from "../../components/Highlight";
 import { isNonTextDocument } from "../Paper";
+import { Paper } from "../../@types/paper";
 
-const PaperButtons: React.FC<any> = ({
+// TODO: Update type for paper with new ones after merge (using union type)
+interface PaperButtonsProps {
+  paper: Paper;
+  showCiteButton: boolean;
+  showExportButton: boolean;
+  noCitationDoctypes: string[];
+  handlePDFClick: (paper: Paper) => void;
+  handleCiteClick: (paper: Paper) => void;
+  handleExportClick: (paper: Paper) => void;
+}
+
+const PaperButtons: FC<PaperButtonsProps> = ({
   paper,
   showCiteButton,
   noCitationDoctypes,
