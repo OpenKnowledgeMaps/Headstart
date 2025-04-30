@@ -150,6 +150,8 @@ function extractValidPdfUrls(array $revision_data, string $paper_id, string $vis
 
 function getPDFLinkForBASE($url) {
     $link_list = preg_split("/;/", $url);
+    $link_list = array_map('trim', $link_list);
+    $link_list = array_filter($link_list);
 
     $matches_pdf = array_filter($link_list, function($item) { return substr($item, -strlen(".pdf")) === ".pdf"; }); 
     if(count($matches_pdf) != 0) {
@@ -170,6 +172,13 @@ function getPDFLinkForBASE($url) {
             //Remove all DOAJ entries and all entries that are not URLs
             $link_list = array_filter($link_list, function($item) { return !strpos($item, "doaj.org"); });
             $link_list = array_filter($link_list, function($item) { return filter_var($item, FILTER_VALIDATE_URL); });
+        }
+    }
+
+    foreach ($link_list as $fallback_url) {
+        $resolved = getRedirectURL($fallback_url);
+        if ($resolved) {
+            return $resolved;
         }
     }
 
