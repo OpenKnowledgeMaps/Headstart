@@ -2,7 +2,7 @@
 import React from "react";
 import { Glyphicon } from "react-bootstrap";
 
-import debounce from "../../utils/debounce";
+import { debounce } from "../../utils/debounce";
 import { trackMatomoEvent } from "../../utils/useMatomo";
 
 // inspired by
@@ -15,7 +15,7 @@ class DebouncedSearchBox extends React.Component {
     };
 
     this.onChange = props.handleChange;
-    this.onChangeDebounced = debounce(props.handleChange, 300);
+    this.onChangeDebounced = debounce(props.handleChange);
     this.handleChange = this.handleChange.bind(this);
   }
 
