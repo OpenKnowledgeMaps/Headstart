@@ -31,7 +31,7 @@ function packParamsJSON($params_array, $post_params)
 function utf8_converter($array)
 {
   array_walk_recursive($array, function (&$item, $key) {
-    if (!mb_detect_encoding($item, 'utf-8', true)) {
+    if ($item !== null && !mb_detect_encoding($item, 'utf-8', true)) {
       $item = utf8_encode($item);
     }
   });
@@ -177,6 +177,7 @@ function search(
     return json_encode(array("query" => $query, "id" => $unique_id, "status" => "success"));
   }
 
+  error_log('result before converter:' . print_r($result, true));
   $input_json = json_encode(utf8_converter($result));
   $input_json = preg_replace("/\<U\+(.*?)>/", "&#x$1;", $input_json);
 

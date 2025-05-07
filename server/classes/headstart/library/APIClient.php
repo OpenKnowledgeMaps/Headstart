@@ -1,16 +1,20 @@
 <?php
 
 namespace headstart\library;
+use Exception;
 require_once dirname(__FILE__) . '/CommUtils.php';
 
 class APIClient {
+    private array $ini_array;
+    private string $database;
+    private string $base_route;
+    private array $settings;
 
     public function __construct($ini_array) {
-
         $this->load_configs($ini_array);
     }
 
-    public function load_configs($ini_array) {
+    public function load_configs(array $ini_array): void {
         $this->ini_array = $ini_array;
         $this->settings = $this->ini_array["general"];
         $this->database = $this->ini_array["connection"]["database"];
@@ -21,46 +25,44 @@ class APIClient {
 
     public function call_api($endpoint, $payload) {
         $route = $this->base_route . $endpoint;
+
         try {
             $res = CommUtils::call_api($route, $payload);
+
             if ($res["httpcode"] != 200) {
                 $res["route"] = $route;
                 $res = $this->handle_api_errors($res);
             }
+
             return $res;
         }
         catch (Exception $e) {
             error_log("Error in APIClient: " . $e);
-            $res = array("status"=>"error",
-                         "httpcode"=>500,
-                         "reason"=>array("unexpected data processing error"));
+            $res = array("status"=>"error", "httpcode"=>500, "reason"=>array("unexpected data processing error"));
             return $res;
         }
-        finally {
-        }        
     }
 
     public function call_persistence($endpoint, $payload) {
         $route = $this->base_route . "persistence/" . $endpoint . "/" . $this->database;
+
         try {
             $res = CommUtils::call_api($route, $payload);
+
             if ($res["httpcode"] != 200) {
                 $res["route"] = $route;
                 $res = $this->handle_api_errors($res);
             }
+
             return $res;
         }
         catch (Exception $e) {
             // what happens here is instead of bubbling the error up,
-            // it is caught and we fake a response that looks like an error
+            // fake a response that looks like an error
             // because of the hardcoded reason we loose the original error information
-            $res = array("status"=>"error",
-                         "httpcode"=>500,
-                         "reason"=>array("unexpected data processing error"));
+            $res = array("status"=>"error", "httpcode"=>500, "reason"=>array("unexpected data processing error"));
             return $res;
         }
-        finally {
-        }        
     }
 
     public function handle_api_errors($res) {
@@ -85,5 +87,4 @@ class APIClient {
         error_log(("Trying to handle API errors: " . print_r($res, true)));
         return $res;
     }
-
 }
