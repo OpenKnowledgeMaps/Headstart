@@ -32,3 +32,5 @@ ENV NPM_PATH  $NVM_DIR/versions/node/v$NODE_VERSION/bin/npm
 RUN $NPM_PATH install -g puppeteer@^2.0.0 --unsafe-perm=true --allow-root
 
 RUN sed -i 's#AllowOverride [Nn]one#AllowOverride All#' /etc/apache2/apache2.conf
+COPY local_dev.ini /usr/local/etc/php/conf.d/local_dev.ini
+RUN chown root:root /usr/local/etc/php/conf.d/local_dev.ini
