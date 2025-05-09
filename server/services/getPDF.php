@@ -63,15 +63,9 @@ function handleSingleUrlService(
     string $filename,
     string $vis_type
 ): void {
-    error_log("handleSingleUrlService: URL: " . $url);
-    error_log("handleSingleUrlService: Paper ID: " . $paper_id);
     $valid_pdf_urls = getValidURLs($vis_id, $paper_id, $vis_type);
-    error_log("handleSingleUrlService: Valid PDF URLs: " . json_encode($valid_pdf_urls));
-
     $decoded_input_url = urldecode($url);
-    error_log("handleSingleUrlService: Decoded input URL: " . $decoded_input_url);
     $normalized_valid_urls = array_map('urldecode', $valid_pdf_urls);
-    error_log("handleSingleUrlService: Normalized valid URLs: " . json_encode($normalized_valid_urls));
 
     if (!in_array($decoded_input_url, $normalized_valid_urls, true)) {
         returnError("Provided URL not found in valid paper links");
@@ -93,8 +87,8 @@ function handlePubmedPdfService(
     if (!$revision_data) {
         returnError("There are no revision data for such visualization id");
     }
-    error_log("handleSingleUrlService: URL: " . $url);
-    error_log("handleSingleUrlService: Paper ID: " . $paper_id);
+    error_log("handlePubmedPdfService: URL: " . $url);
+    error_log("handlePubmedPdfService: Paper ID: " . $paper_id);
 
     $inner_data = json_decode($revision_data["data"], true);
     $documents_raw = $inner_data["documents"] ?? null;
@@ -107,10 +101,13 @@ function handlePubmedPdfService(
     $pmcid = $entry["pmcid"] ?? null;
 
     $pubmed_url = "http://www.ncbi.nlm.nih.gov/pmc/articles/" . $pmcid . "/". "pdf/";
-    error_log("getValidURLs: PubMed URL: " . $pubmed_url);
-    $pubmed_redirect_url = getRedirectURL($pubmed_url);
-    error_log("getValidURLs: PubMed Redirect URL: " . $pubmed_redirect_url);
-    getPDFAndDownload($pubmed_url, $images_path, $filename);
+    error_log("handlePubmedPdfService: PubMed URL: " . $pubmed_url);
+    $content = getContentFromURL($pubmed_url);
+    error_log("handlePubmedPdfService: Redirected URL: " . $content[1]);
+    $url = array();
+    $url[] = $content[1];
+    error_log("handlePubmedPdfService: URL: " . $url);
+    getPDFAndDownload($url, $images_path, $filename);
 }
 
 function getValidURLs(string $vis_id, string $paper_id, string $vis_type) {
@@ -266,6 +263,7 @@ function getContentFromURL($link) {
 
 function getRedirectURL($link) {
     $response = getContentFromURL($link);
+    error_log("getRedirectURL: Response: " . $response[0]);
     return parsePDFLink($response[0], $response[1]);
 }
 
@@ -302,6 +300,7 @@ function startsWith($haystack, $needle) {
 
 function getPDFAndDownload($url, $images_path, $filename) {
     $output_path = $images_path . $filename;
+    error_log("getPDFAndDownload: url: " . $url[0]);
     $pdf = getContentFromURL($url)[0];
 
     if ($pdf !== false) {
