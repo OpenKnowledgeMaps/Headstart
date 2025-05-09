@@ -20,8 +20,13 @@ $vis_type = library\CommUtils::getParameter($_GET, "vis_type");
 
 $images_path = $ini_array["general"]["images_path"];
 
+error_log("getPDF.php: service: " . $service);
+error_log("getPDF.php: url: " . $url);
+error_log("isserviceWithPDFList: " . json_encode(isServiceWithPDFList($service)));
 if (isServiceWithPDFList($service)) {
     handleMultiPdfService($vis_id, $paper_id, $images_path, $filename, $vis_type);
+} else if ($service == "pubmed") {
+    handlePubmedPdfService($vis_id, $paper_id, $url, $images_path, $filename, $vis_type);
 } else {
     handleSingleUrlService($vis_id, $paper_id, $url, $images_path, $filename, $vis_type);
 }
@@ -58,16 +63,54 @@ function handleSingleUrlService(
     string $filename,
     string $vis_type
 ): void {
+    error_log("handleSingleUrlService: URL: " . $url);
+    error_log("handleSingleUrlService: Paper ID: " . $paper_id);
     $valid_pdf_urls = getValidURLs($vis_id, $paper_id, $vis_type);
+    error_log("handleSingleUrlService: Valid PDF URLs: " . json_encode($valid_pdf_urls));
 
     $decoded_input_url = urldecode($url);
+    error_log("handleSingleUrlService: Decoded input URL: " . $decoded_input_url);
     $normalized_valid_urls = array_map('urldecode', $valid_pdf_urls);
+    error_log("handleSingleUrlService: Normalized valid URLs: " . json_encode($normalized_valid_urls));
 
     if (!in_array($decoded_input_url, $normalized_valid_urls, true)) {
         returnError("Provided URL not found in valid paper links");
     }
 
     getPDFAndDownload($decoded_input_url, $images_path, $filename);
+}
+
+function handlePubmedPdfService(
+    string $vis_id,
+    string $paper_id,
+    string $url,
+    string $images_path,
+    string $filename,
+    string $vis_type
+): void {
+    $revision_data = fetchLatestRevision($vis_id);
+
+    if (!$revision_data) {
+        returnError("There are no revision data for such visualization id");
+    }
+    error_log("handleSingleUrlService: URL: " . $url);
+    error_log("handleSingleUrlService: Paper ID: " . $paper_id);
+
+    $inner_data = json_decode($revision_data["data"], true);
+    $documents_raw = $inner_data["documents"] ?? null;
+    $documents = json_decode($documents_raw, true);
+    foreach ($documents as $entry) {
+        if (($entry["id"] ?? null) !== $paper_id) {
+            continue;
+        }
+    }
+    $pmcid = $entry["pmcid"] ?? null;
+
+    $pubmed_url = "http://www.ncbi.nlm.nih.gov/pmc/articles/" . $pmcid . "/". "pdf/";
+    error_log("getValidURLs: PubMed URL: " . $pubmed_url);
+    $pubmed_redirect_url = getRedirectURL($pubmed_url);
+    error_log("getValidURLs: PubMed Redirect URL: " . $pubmed_redirect_url);
+    getPDFAndDownload($pubmed_url, $images_path, $filename);
 }
 
 function getValidURLs(string $vis_id, string $paper_id, string $vis_type) {
