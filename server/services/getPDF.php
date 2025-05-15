@@ -107,9 +107,8 @@ function handlePubmedPdfService(
     error_log("handlePubmedPdfService: PubMed URL: " . $pubmed_url);
     $content = getContentFromURL($pubmed_url);
     error_log("handlePubmedPdfService: Redirected URL: " . $content[1]);
-    $url = array();
-    $url[] = $content[1];
-    error_log("handlePubmedPdfService: URL: " . $url);
+    $url = $content[1];
+    error_log("handlePubmedPdfService: sending URL: " . $url);
     getPDFAndDownload($url, $images_path, $filename);
 }
 
@@ -301,12 +300,8 @@ function startsWith($haystack, $needle) {
     return (substr($haystack, 0, $length) === $needle);
 }
 
-function getPDFAndDownload($url, $images_path, $filename) {
+function getPDFAndDownload(string $url, string $images_path, string $filename): void {
     $output_path = $images_path . $filename;
-
-    if (is_array($url)) {
-        $url = $url[0];
-    }
 
     list($pdf, $redirected_url) = getContentFromURL($url);
 
