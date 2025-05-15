@@ -20,13 +20,10 @@ $vis_type = library\CommUtils::getParameter($_GET, "vis_type");
 
 $images_path = $ini_array["general"]["images_path"];
 
-error_log("getPDF.php: service: " . $service);
-error_log("getPDF.php: url: " . $url);
-error_log("isserviceWithPDFList: " . json_encode(isServiceWithPDFList($service)));
 if (isServiceWithPDFList($service)) {
     handleMultiPdfService($vis_id, $paper_id, $images_path, $filename, $vis_type);
 } else if ($service == "pubmed") {
-    handlePubmedPdfService($vis_id, $paper_id, $url, $images_path, $filename, $vis_type);
+    handlePubmedPdfService($vis_id, $paper_id, $url, $images_path, $filename);
 } else {
     handleSingleUrlService($vis_id, $paper_id, $url, $images_path, $filename, $vis_type);
 }
@@ -80,33 +77,33 @@ function handlePubmedPdfService(
     string $url,
     string $images_path,
     string $filename,
-    string $vis_type
 ): void {
     $revision_data = fetchLatestRevision($vis_id);
 
     if (!$revision_data) {
         returnError("There are no revision data for such visualization id");
     }
+
     error_log("handlePubmedPdfService: URL: " . $url);
     error_log("handlePubmedPdfService: Paper ID: " . $paper_id);
 
     $inner_data = json_decode($revision_data["data"], true);
     $documents_raw = $inner_data["documents"] ?? null;
     $documents = json_decode($documents_raw, true);
-    
-    # filter out the documents from the documents array
-    # where the id is not equal to the paper_id
+
     $filtered_documents = array_filter($documents, function($entry) use ($paper_id) {
         return ($entry["id"] ?? null) === $paper_id;
     });
     error_log("handlePubmedPdfService: Filtered documents: " . json_encode($filtered_documents));
+
     $entry = array_shift($filtered_documents);
     if (!$entry) {
         returnError("No valid entry found for the provided paper ID");
     }
-    $pmcid = $entry["pmcid"] ?? null;
 
+    $pmcid = $entry["pmcid"] ?? null;
     $pubmed_url = "https://www.ncbi.nlm.nih.gov/pmc/articles/" . $pmcid . "/". "pdf/";
+
     error_log("handlePubmedPdfService: PubMed URL: " . $pubmed_url);
     $content = getContentFromURL($pubmed_url);
     error_log("handlePubmedPdfService: Redirected URL: " . $content[1]);
@@ -306,8 +303,12 @@ function startsWith($haystack, $needle) {
 
 function getPDFAndDownload($url, $images_path, $filename) {
     $output_path = $images_path . $filename;
-    error_log("getPDFAndDownload: url: " . $url[0]);
-    $pdf = getContentFromURL($url)[0];
+
+    if (is_array($url)) {
+        $url = $url[0];
+    }
+
+    list($pdf, $redirected_url) = getContentFromURL($url);
 
     if ($pdf !== false) {
         file_put_contents($output_path, $pdf);
@@ -321,7 +322,7 @@ function getPDFAndDownload($url, $images_path, $filename) {
 
     if (strtolower($mime_type) != "application/pdf") {
         unlink($output_path);
-        returnError("MIME type is not application/pdf");
+        returnError("MIME type is not application/pdf! MIME type: {$mime_type}");
     }
 }
 
