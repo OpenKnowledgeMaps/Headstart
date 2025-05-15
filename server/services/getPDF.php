@@ -93,14 +93,20 @@ function handlePubmedPdfService(
     $inner_data = json_decode($revision_data["data"], true);
     $documents_raw = $inner_data["documents"] ?? null;
     $documents = json_decode($documents_raw, true);
-    foreach ($documents as $entry) {
-        if (($entry["id"] ?? null) !== $paper_id) {
-            continue;
-        }
+    
+    # filter out the documents from the documents array
+    # where the id is not equal to the paper_id
+    $filtered_documents = array_filter($documents, function($entry) use ($paper_id) {
+        return ($entry["id"] ?? null) === $paper_id;
+    });
+    error_log("handlePubmedPdfService: Filtered documents: " . json_encode($filtered_documents));
+    $entry = array_shift($filtered_documents);
+    if (!$entry) {
+        returnError("No valid entry found for the provided paper ID");
     }
     $pmcid = $entry["pmcid"] ?? null;
 
-    $pubmed_url = "http://www.ncbi.nlm.nih.gov/pmc/articles/" . $pmcid . "/". "pdf/";
+    $pubmed_url = "https://www.ncbi.nlm.nih.gov/pmc/articles/" . $pmcid . "/". "pdf/";
     error_log("handlePubmedPdfService: PubMed URL: " . $pubmed_url);
     $content = getContentFromURL($pubmed_url);
     error_log("handlePubmedPdfService: Redirected URL: " . $content[1]);
