@@ -22,6 +22,8 @@ $images_path = $ini_array["general"]["images_path"];
 
 if (isServiceWithPDFList($service)) {
     handleMultiPdfService($vis_id, $paper_id, $images_path, $filename, $vis_type);
+} else if ($service == "pubmed") {
+    handlePubmedPdfService($vis_id, $paper_id, $url, $images_path, $filename);
 } else {
     handleSingleUrlService($vis_id, $paper_id, $url, $images_path, $filename, $vis_type);
 }
@@ -59,7 +61,6 @@ function handleSingleUrlService(
     string $vis_type
 ): void {
     $valid_pdf_urls = getValidURLs($vis_id, $paper_id, $vis_type);
-
     $decoded_input_url = urldecode($url);
     $normalized_valid_urls = array_map('urldecode', $valid_pdf_urls);
 
@@ -68,6 +69,40 @@ function handleSingleUrlService(
     }
 
     getPDFAndDownload($decoded_input_url, $images_path, $filename);
+}
+
+function handlePubmedPdfService(
+    string $vis_id,
+    string $paper_id,
+    string $url,
+    string $images_path,
+    string $filename,
+): void {
+    $revision_data = fetchLatestRevision($vis_id);
+
+    if (!$revision_data) {
+        returnError("There are no revision data for such visualization id");
+    }
+
+    $inner_data = json_decode($revision_data["data"], true);
+    $documents_raw = $inner_data["documents"] ?? null;
+    $documents = json_decode($documents_raw, true);
+
+    $filtered_documents = array_filter($documents, function($entry) use ($paper_id) {
+        return ($entry["id"] ?? null) === $paper_id;
+    });
+
+    $entry = array_shift($filtered_documents);
+    if (!$entry) {
+        returnError("No valid entry found for the provided paper ID");
+    }
+
+    $pmcid = $entry["pmcid"] ?? null;
+    $pubmed_url = "https://www.ncbi.nlm.nih.gov/pmc/articles/" . $pmcid . "/". "pdf/";
+
+    $content = getContentFromURL($pubmed_url);
+    $url = $content[1];
+    getPDFAndDownload($url, $images_path, $filename);
 }
 
 function getValidURLs(string $vis_id, string $paper_id, string $vis_type) {
@@ -257,9 +292,10 @@ function startsWith($haystack, $needle) {
     return (substr($haystack, 0, $length) === $needle);
 }
 
-function getPDFAndDownload($url, $images_path, $filename) {
+function getPDFAndDownload(string $url, string $images_path, string $filename): void {
     $output_path = $images_path . $filename;
-    $pdf = getContentFromURL($url)[0];
+
+    list($pdf, $redirected_url) = getContentFromURL($url);
 
     if ($pdf !== false) {
         file_put_contents($output_path, $pdf);
@@ -273,7 +309,7 @@ function getPDFAndDownload($url, $images_path, $filename) {
 
     if (strtolower($mime_type) != "application/pdf") {
         unlink($output_path);
-        returnError("MIME type is not application/pdf");
+        returnError("MIME type is not application/pdf! MIME type: {$mime_type}");
     }
 }
 
