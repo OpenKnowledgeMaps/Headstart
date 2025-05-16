@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit
+    colors="true"
+    displayDetailsOnTestsThatTriggerDeprecations="true"
+    displayDetailsOnTestsThatTriggerWarnings="true"
+    displayDetailsOnTestsThatTriggerNotices="true"
+    displayDetailsOnTestsThatTriggerErrors="true"
+    displayDetailsOnPhpunitDeprecations="true">
+    <testsuites>
+        <testsuite name="getPDF Tests">
+            <directory>../../</directory>
+        </testsuite>
+    </testsuites>
+</phpunit>

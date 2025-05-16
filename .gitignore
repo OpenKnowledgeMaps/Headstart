@@ -10,6 +10,7 @@ dist/
 /config.js
 .cache
 coverage/
+.vscode/
 
 # local deployment files
 /deploy.sh
@@ -31,6 +32,7 @@ server/workers/tests/*.txt
 server/workers/tests/testutils/
 local_dev/renv/*
 local_dev/dev.env
+local_dev/paper_preview
 
 # php files
 /server/classes/headstart/vendor
@@ -55,23 +57,11 @@ server/preprocessing/other-scripts/renv
 .pytest_cache
 *__pycache__*
 .venv
-
-# python files
-*.pyc
-*.pkl
-.ipynb_checkpoints
-*.ipynb
-/nbproject/private/
-/server/nbproject/private/
-.pytest_cache
 *.egg-info/
-*__pycache__*
-
-# Mac files
-.DS_Store
 
 # personal
-.vscode/settings.json
+.vscode/
+
 # temporal
 local_dev/config_local_headstart.ini
 local_dev/config_local_searchflow.ini
