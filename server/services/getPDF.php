@@ -258,7 +258,6 @@ function getContentFromURL($link) {
 
 function getRedirectURL($link) {
     $response = getContentFromURL($link);
-    error_log("getRedirectURL: Response: " . $response[0]);
     return parsePDFLink($response[0], $response[1]);
 }
 
