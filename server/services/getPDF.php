@@ -84,9 +84,6 @@ function handlePubmedPdfService(
         returnError("There are no revision data for such visualization id");
     }
 
-    error_log("handlePubmedPdfService: URL: " . $url);
-    error_log("handlePubmedPdfService: Paper ID: " . $paper_id);
-
     $inner_data = json_decode($revision_data["data"], true);
     $documents_raw = $inner_data["documents"] ?? null;
     $documents = json_decode($documents_raw, true);
@@ -94,7 +91,6 @@ function handlePubmedPdfService(
     $filtered_documents = array_filter($documents, function($entry) use ($paper_id) {
         return ($entry["id"] ?? null) === $paper_id;
     });
-    error_log("handlePubmedPdfService: Filtered documents: " . json_encode($filtered_documents));
 
     $entry = array_shift($filtered_documents);
     if (!$entry) {
@@ -104,11 +100,8 @@ function handlePubmedPdfService(
     $pmcid = $entry["pmcid"] ?? null;
     $pubmed_url = "https://www.ncbi.nlm.nih.gov/pmc/articles/" . $pmcid . "/". "pdf/";
 
-    error_log("handlePubmedPdfService: PubMed URL: " . $pubmed_url);
     $content = getContentFromURL($pubmed_url);
-    error_log("handlePubmedPdfService: Redirected URL: " . $content[1]);
     $url = $content[1];
-    error_log("handlePubmedPdfService: sending URL: " . $url);
     getPDFAndDownload($url, $images_path, $filename);
 }
 
