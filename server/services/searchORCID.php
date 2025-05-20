@@ -1,43 +1,46 @@
 <?php
 
-header('Content-type: application/json');
+header('Content-Type: application/json');
 
-require_once dirname(__FILE__) . '/../classes/headstart/library/CommUtils.php';
-require 'search.php';
+include_once dirname(__FILE__) . '/search.php';
+include_once dirname(__FILE__) . '/utils/normalizeAndSanitizeString.php';
+include_once dirname(__FILE__) . '/utils/getPrecomputedIdFromRequest.php';
+include_once dirname(__FILE__) . '/utils/getQueryParameterFromRequest.php';
 
-use headstart\library;
+/**
+ * Get parameters from the request array ($_POST).
+ * @return string[] - Array with parameters.
+ */
+function getQueryParametersFromRequest(): array {
+    $DEFAULT = ["orcid", "today"];
+    $OPTIONAL = ["limit", "academic_age_offset", "enable_h_index", "enable_teaching_mentorship"];
 
-// trim ORCID query
-$dirty_query = trim(library\CommUtils::getParameter($_POST, "orcid"));
-$precomputed_id = $_POST["unique_id"] ?? null;
+    $parameters = [...$DEFAULT];
 
-$params_array = array("orcid", "today");
-$optional_get_params = array("limit", "academic_age_offset", "enable_h_index", "enable_teaching_mentorship");
-
-function filterEmptyString($value)
-{
-    // Exclude empty strings
-    return $value !== '';
-}
-
-foreach($optional_get_params as $param) {
-    if(isset($_POST[$param])) {
-        $params_array[] = $param;
+    foreach($OPTIONAL as $optionalParameter) {
+        if (isset($_POST[$optionalParameter])) {
+            $parameters[] = $optionalParameter;
+        }
     }
+
+    return $parameters;
 }
 
-$post_params = $_POST;
-
+$query = getQueryParameterFromRequest($_POST, "orcid");
+$normalizedAndSanitizedQuery = normalizeAndSanitizeString($query);
+$precomputedId = getPrecomputedIdFromRequest($_POST, "unique_id");
+$parameters = getQueryParametersFromRequest($_POST);
+$requestArray = $_POST;
 
 $result = search(
     "orcid",
-    $dirty_query,
-    $post_params,
-    $params_array,
+    $normalizedAndSanitizedQuery,
+    $requestArray,
+    $parameters,
     true,
     true,
     null,
-    $precomputed_id,
+    $precomputedId,
     false
 );
 
