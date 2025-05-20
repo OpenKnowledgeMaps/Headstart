@@ -2,10 +2,10 @@
 
 header('Content-Type: application/json');
 
-include_once 'search.php';
+include_once dirname(__FILE__) . '/search.php';
 include_once dirname(__FILE__) . '/utils/normalizeAndSanitizeString.php';
-include_once dirname(__FILE__) . '/utils/getQueryParameterFromRequest.php';
 include_once dirname(__FILE__) . '/utils/getPrecomputedIdFromRequest.php';
+include_once dirname(__FILE__) . '/utils/getQueryParameterFromRequest.php';
 
 /**
  * Get parameters from the request array ($_POST).
