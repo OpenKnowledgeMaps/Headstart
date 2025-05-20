@@ -1,27 +1,46 @@
 <?php
 
-header('Content-type: application/json');
+header('Content-Type: application/json');
 
-require_once dirname(__FILE__) . '/../classes/headstart/library/CommUtils.php';
-require 'search.php';
+include_once 'search.php';
+include_once dirname(__FILE__) . '/utils/normalizeAndSanitizeString.php';
+include_once dirname(__FILE__) . '/utils/getQueryParameterFromRequest.php';
+include_once dirname(__FILE__) . '/utils/getPrecomputedIdFromRequest.php';
 
-use headstart\library;
+/**
+ * Get parameters from the request array ($_POST).
+ * @param mixed $requestArray - Request array ($_POST).
+ * @return string[] - Array with request parameters.
+ */
+function getQueryParametersFromRequest($requestArray): array {
+    $DEFAULT = ["from", "to", "sorting"];
+    $parameters = [...$DEFAULT];
 
-$dirty_query = library\CommUtils::getParameter($_POST, "q");
-$precomputed_id = (isset($_POST["unique_id"]))?($_POST["unique_id"]):(null);
-$query_params = array("from", "to", "sorting");
-if(isset($_POST["article_types"])) {
-    $query_params[] = "article_types";
+    if (isset($requestArray["article_types"])) {
+        $parameters[] = "article_types";
+    }
+
+    return $parameters;
 }
 
-$post_params = $_POST;
+$query = getQueryParameterFromRequest($_POST, "q");
+$normalizedAndSanitizedQuery = normalizeAndSanitizeString($query);
+$precomputedId = getPrecomputedIdFromRequest($_POST, "unique_id");
+$parameters = getQueryParametersFromRequest($_POST);
+$requestArray = $_POST;
 
-$result = search("pubmed", $dirty_query
-                    , $post_params, $query_params
-                    , true
-                    , true, null
-                    , $precomputed_id, false);
+$result = search(
+    "pubmed",
+    $normalizedAndSanitizedQuery,
+    $requestArray,
+    $parameters,
+    true,
+    true,
+    null,
+    $precomputedId,
+    false
+);
 
-echo $result
+echo $result;
 
 ?>
