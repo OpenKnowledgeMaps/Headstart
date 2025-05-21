@@ -1,14 +1,15 @@
 <?php
 
-header('Content-type: application/json');
+header('Content-Type: application/json');
 
-require_once dirname(__FILE__) . '/../classes/headstart/library/CommUtils.php';
-require 'search.php';
+include_once dirname(__FILE__) . '/search.php';
+include_once dirname(__FILE__) . '/utils/normalizeAndSanitizeString.php';
+include_once dirname(__FILE__) . '/utils/getPrecomputedIdFromRequest.php';
+include_once dirname(__FILE__) . '/utils/getQueryParameterFromRequest.php';
 
-use headstart\library;
-
-$dirty_query = library\CommUtils::getParameter($_POST, "q");
-$precomputed_id = (isset($_POST["unique_id"]))?($_POST["unique_id"]):(null);
+$query = getQueryParameterFromRequest($_POST, "q");
+$normalizedAndSanitizedQuery = normalizeAndSanitizeString($query);
+$precomputedId = getPrecomputedIdFromRequest($_POST, "unique_id");
 
 $params_array = array("document_types", "sorting", "min_descsize");
 $optional_get_params = ["repo", "coll", "vis_type", "q_advanced", "lang_id", "custom_title", "exclude_date_filters", "from", "to", "custom_clustering"];
@@ -67,13 +68,13 @@ $params_array = $reordered_params;
 
 $result = search(
     "base",
-    $dirty_query,
+    $normalizedAndSanitizedQuery,
     $post_params,
     $params_array,
     true,
     true,
     null,
-    $precomputed_id,
+    $precomputedId,
     false
 );
 
