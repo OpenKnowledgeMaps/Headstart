@@ -82,8 +82,15 @@ function getParameters(array $requestArray): array {
     }
 
     // Ignore exclude date filters parameter if visualization type is timeline
-    if (isset($requestArray["vis_type"]) && $requestArray["vis_type"] == "timeline") {
-        unset($parameters[array_search("exclude_date_filters", $parameters)]);
+    if (isset($requestArray["vis_type"]) && $requestArray["vis_type"] === "timeline") {
+        $indexOfExcludeDateFilter = array_search("exclude_date_filters", $parameters);
+
+        // Check that array_search really find needle in the array
+        // (to not delete 0 index element if nothing was found)
+        if (is_numeric($indexOfExcludeDateFilter)) {
+            unset($parameters[$indexOfExcludeDateFilter]);
+        }
+
         unset($requestArray["exclude_date_filters"]);
     }
 
