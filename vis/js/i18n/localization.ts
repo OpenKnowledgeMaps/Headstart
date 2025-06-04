@@ -103,7 +103,6 @@ export interface Localization {
   citations: string;
   social: string;
   references: string;
-  scale_by_infolink_label: string;
   metrics_label: string;
   researcher_details_label: string;
   scale_by_explanation: string;
@@ -398,7 +397,6 @@ export const localization: {
     citations: "citations",
     social: "social media mentions",
     references: "references outside academia",
-    scale_by_infolink_label: "Find out more",
     metrics_label: "Metrics",
     researcher_details_label: "Researcher details",
     scale_by_explanation:
@@ -456,7 +454,6 @@ export const localization: {
     citations: "citations",
     social: "social media mentions",
     references: "references outside academia",
-    scale_by_infolink_label: "Find out more",
     metrics_label: "Metrics",
     researcher_details_label: "Researcher details",
     scale_by_explanation:
@@ -500,10 +497,8 @@ export const localization: {
     publication: "papers",
     dataset: "datasets",
     items: "items",
-    scale_by_infolink_label: "notes on use of metrics",
     // citations_count_label: "citations",
     social_media_count_label: " social media mentions",
     references_count_label: "references outside academia",
-    // scale_by_infolink_label: 'Find out more'
   },
 };

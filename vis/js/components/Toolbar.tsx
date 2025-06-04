@@ -1,5 +1,4 @@
 // @ts-nocheck
-
 import React from "react";
 import { connect } from "react-redux";
 import ScaleToolbar from "../templates/ScaleToolbar";
@@ -14,8 +13,7 @@ const Toolbar = ({
   scaleBaseUnit,
   scaleValue,
   showCredit,
-  onInfoClick,
-  onScaleChange
+  onScaleChange,
 }) => {
   if (showScaleToolbar) {
     const handleScaleChange = (newScaleBy: string) => {
@@ -34,7 +32,6 @@ const Toolbar = ({
           explanations={scaleExplanations}
           value={scaleValue}
           showCredit={showCredit}
-          onInfoClick={onInfoClick}
           onChange={handleScaleChange}
         />
       </div>
@@ -55,7 +52,6 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  onInfoClick: () => dispatch(openInfoModal()),
   onScaleChange: (value, baseUnit, contentBased, sort) =>
     dispatch(scaleMap(value, baseUnit, contentBased, sort)),
 });
