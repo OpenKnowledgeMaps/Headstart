@@ -28,11 +28,35 @@ function packParamsJSON($params_array, $post_params)
   return json_encode($output_array);
 }
 
+function encode_string(string $str, string $to_encoding = 'UTF-8'): string {
+  // Defining constants with known encodings and default one
+  $DEFAULT_ENCODING = 'ISO-8859-1';
+  $ENCODINGS = [
+    'UTF-8',
+    'Windows-1251',
+    'ISO-8859-1',
+    'ASCII',
+    'KOI8-R',
+    'CP866'
+  ];
+
+  // Trying to define the received string encoding
+  $str_encoding = mb_detect_encoding($str, $ENCODINGS, true);
+
+  // If the received string encoding is unknown the default one will be used
+  if ($str_encoding === false) {
+    $str_encoding = $DEFAULT_ENCODING;
+  }
+
+  // Converting encoding and returning updated string back
+  return mb_convert_encoding($str, $to_encoding, $str_encoding);
+}
+
 function utf8_converter($array)
 {
   array_walk_recursive($array, function (&$item, $key) {
     if ($item !== null && !mb_detect_encoding($item, 'utf-8', true)) {
-      $item = utf8_encode($item);
+      $item = encode_string($item);
     }
   });
 
