@@ -3,6 +3,7 @@ import ReactDOM from "react-dom";
 import React from "react";
 import { createStore } from "redux";
 import { Provider } from "react-redux";
+import { createRoot } from "react-dom/client";
 
 import rootReducer, { getInitialState } from "./reducers";
 import {
@@ -80,11 +81,11 @@ class HeadstartRunner {
   }
 
   renderReact() {
-    ReactDOM.render(
+    const rootNode: Root = createRoot(this.hsContainer);
+    rootNode.render(
       <Provider store={this.store}>
         <Headstart />
-      </Provider>,
-      this.hsContainer
+      </Provider>
     );
   }
 
@@ -160,10 +161,7 @@ class HeadstartRunner {
   addWindowResizeListener() {
     window.addEventListener("resize", () => {
       const chart = getChartSize(this.config);
-      const list = getListSize(
-        this.config,
-        chart.size
-      );
+      const list = getListSize(this.config, chart.size);
       this.store.dispatch(updateDimensions(chart, list));
     });
   }
@@ -195,7 +193,12 @@ class HeadstartRunner {
     elem?.dispatchEvent(event);
   }
 
-  rescaleMap(scaleBy: string, baseUnit: string, isContentBased: boolean, initialSort: string) {
+  rescaleMap(
+    scaleBy: string,
+    baseUnit: string,
+    isContentBased: boolean,
+    initialSort: string
+  ) {
     this.config.scale_by = scaleBy;
     this.config.base_unit = baseUnit;
     this.config.content_based = isContentBased;
