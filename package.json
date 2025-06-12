@@ -10,7 +10,12 @@
     "test": "TZ='Europe/Vienna' vitest",
     "dev": "webpack --progress --watch --mode=development",
     "prod": "webpack --progress",
-    "start": "webpack serve --progress --mode=development --env publicPath=http://localhost:8080/dist/",
+    "start": "webpack serve --progress --mode=development --env example=base",
+    "example:base": "npm start",
+    "example:pubmed": "npm start -- --env example=pubmed",
+    "example:triple": "npm start -- --env example=triple",
+    "example:viper": "npm start -- --env example=viper",
+    "example:covis": "npm start -- --env example=covis",
     "lint": "eslint \"./vis/js/**/*.js?(x)\""
   },
   "repository": {
@@ -80,6 +85,7 @@
     "eslint-plugin-react-hooks": "^5.1.0",
     "file-loader": "^6.2.0",
     "globals": "^15.13.0",
+    "html-webpack-plugin": "^5.5.0",
     "imports-loader": "^3.0.0",
     "jsdom": "^25.0.0",
     "mini-css-extract-plugin": "^2.3.0",
@@ -99,6 +105,7 @@
     "vite-plugin-static-copy": "^1.0.6",
     "vitest": "^2.1.1",
     "webpack": "^5.56.1",
+    "webpack-bundle-analyzer": "^4.5.0",
     "webpack-cli": "^4.8.0",
     "webpack-dev-server": "^4.3.1"
   }

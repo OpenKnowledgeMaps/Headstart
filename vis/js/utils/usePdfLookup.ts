@@ -3,25 +3,39 @@ import $ from "jquery";
 
 import { isFileAvailable } from "./data";
 import { Paper } from "../@types/paper";
+import { useSelector } from "react-redux";
+import { ensureThatURLStartsWithHTTP } from "./url";
+import { VisualizationTypes } from "../@types/visualization-types";
+
+const getVisualizationIdFromStore = (state: any): string => {
+  return state.data.options.visualizationId;
+};
+
+const getVisualizationTypeFromStore = (state: any): boolean => {
+  return state.data.options.isStreamgraph;
+};
 
 const usePdfLookup = (paper: Paper, serverUrl: string, service: string) => {
   const [url, setUrl] = useState<string | null>(null);
   const [backupUrl, setBackupUrl] = useState<string | null>(null);
-  
+
+  const visualizationId = useSelector(getVisualizationIdFromStore);
+  const isStreamgraph = useSelector(getVisualizationTypeFromStore);
+
   const resetUrls = () => {
     setUrl(null);
     setBackupUrl(null);
-  }
-  
+  };
+
   const handleSuccess = (successUrl: string) => {
     setUrl(successUrl);
     setBackupUrl("");
-  }
-  
+  };
+
   const handleError = (errorUrl: string) => {
     setUrl("");
     setBackupUrl(errorUrl);
-  }
+  };
 
   useEffect(() => {
     const loadPDF = () => {
@@ -55,7 +69,20 @@ const usePdfLookup = (paper: Paper, serverUrl: string, service: string) => {
         fallbackUrl = paper.outlink;
       }
 
-      requestPdfLookup(serverUrl, articleUrl, filename, service, possiblePDFs)
+      const visualizationType: VisualizationTypes = isStreamgraph
+        ? "timeline"
+        : "overview";
+
+      requestPdfLookup(
+        serverUrl,
+        articleUrl,
+        filename,
+        service,
+        possiblePDFs,
+        visualizationId,
+        paper.id,
+        visualizationType
+      )
         .done((data) => {
           if (data.status === "success") {
             handleSuccess(localUrl);
@@ -77,15 +104,38 @@ const usePdfLookup = (paper: Paper, serverUrl: string, service: string) => {
     if (paper) {
       loadPDF();
     }
-  }, [paper, serverUrl, service, setUrl, setBackupUrl]);
+  }, [paper, serverUrl, service, visualizationId, setUrl, setBackupUrl]);
 
   return [url, backupUrl];
 };
 
 export default usePdfLookup;
 
-const requestPdfLookup = (server: string, article: string, file: string, service: string, pdfs: string) => {
-  return $.getJSON(
-    `${server}services/getPDF.php?url=${article}&filename=${file}&service=${service}&pdf_urls=${pdfs}`
-  );
+const requestPdfLookup = (
+  server: string,
+  url: string,
+  filename: string,
+  service: string,
+  pdfURLs: string,
+  visualizationId: string,
+  paperId: string,
+  visualizationType: VisualizationTypes
+) => {
+  const SCRIPT_PATH_ON_SERVER = "services/getPDF.php";
+
+  const serverURL = ensureThatURLStartsWithHTTP(server);
+  const requestURL = new URL(SCRIPT_PATH_ON_SERVER, serverURL);
+
+  const requestParameters = new URLSearchParams({
+    url,
+    filename,
+    service,
+    pdf_urls: pdfURLs, // TODO: This parameter is not longer used on server
+    paper_id: paperId,
+    vis_id: visualizationId,
+    vis_type: visualizationType,
+  });
+
+  requestURL.search = requestParameters.toString();
+  return $.getJSON(requestURL.toString());
 };

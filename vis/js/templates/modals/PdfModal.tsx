@@ -10,6 +10,7 @@ import usePdfLookup from "../../utils/usePdfLookup";
 const PdfModal = ({ open, onClose, paper, serverUrl, service, useViewer }) => {
   const localization = useLocalizationContext();
   const [url, errorUrl] = usePdfLookup(paper, serverUrl, service);
+
   const viewerUrl = serverUrl + "services/displayPDF.php";
 
   useEffect(() => {

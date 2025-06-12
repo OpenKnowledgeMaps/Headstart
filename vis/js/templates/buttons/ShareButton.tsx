@@ -46,7 +46,6 @@ const ShareButton = ({ twitterHashtags, isStreamgraph }) => {
     : "";
   twitterHashtags = encodeURIComponent(twitterHashtags);
 
-  const twitterUrl = `https://twitter.com/intent/tweet?url=${url}&hashtags=${twitterHashtags}&text=${title}`;
   const facebookUrl = `https://www.facebook.com/sharer/sharer.php?u=${url}`;
   const emailUrl = `mailto:?subject=${title}&body=${description} ${url}`;
 
@@ -67,19 +66,6 @@ const ShareButton = ({ twitterHashtags, isStreamgraph }) => {
       </button>
       {opened && (
         <div className="sharebuttons" style={{ display: "inline-block" }}>
-          <a
-            className="sharebutton_twitter"
-            href={twitterUrl}
-            target="_blank"
-            rel="noreferrer"
-          >
-            <button
-              className="btn btn-primary"
-              onClick={() => trackShare("Twitter button")}
-            >
-              <i className="fab fa-twitter-square fa-fw" aria-hidden="true"></i>
-            </button>
-          </a>
           <a
             className="sharebutton_fb"
             href={facebookUrl}
