@@ -23,8 +23,11 @@ jobs:
           node-version: 18
           cache: "npm"
 
-      - name: Install dependencies
-        run: npm ci
+      - name: Clean node_modules and lockfile
+        run: rm -rf node_modules package-lock.json
+
+      - name: Install project dependencies
+        run: npm install
 
       - name: Run tests
         run: npm run test
