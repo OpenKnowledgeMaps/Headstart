@@ -1,0 +1,17 @@
+# Folders that should not be checked by Prettier
+.github/
+.pytest_cache/
+.vscode/
+api_cache/
+checks/
+dist/
+doc/
+examples/
+local_dev/
+node_modules/
+server/
+
+# Exact files that should not be checked by Prettier
+.docker.test.env
+.flake8
+CHANGELOG.md
