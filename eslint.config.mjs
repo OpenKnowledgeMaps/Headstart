@@ -125,4 +125,9 @@ export default [
       },
     },
   },
+
+  // Files and folders that must be ignored
+  {
+    ignores: ["webpack.config.js"],
+  },
 ];
