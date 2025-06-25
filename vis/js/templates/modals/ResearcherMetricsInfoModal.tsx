@@ -14,7 +14,7 @@ const getResearcherInfoTemplate = (service: string, isStreamgraph: boolean, moda
     case "orcid":
       return ResearcherMetricsInfo;
     default:
-      console.log(`${service} is not a valid service for the ResearcherInfoModal`);
+      // console.log(`${service} is not a valid service for the ResearcherInfoModal`);
       return null;  
   }
 };

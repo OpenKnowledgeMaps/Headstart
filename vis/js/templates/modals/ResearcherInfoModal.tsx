@@ -14,7 +14,7 @@ const getResearcherInfoTemplate = (service, isStreamgraph, modalType) => {
     case "orcid":
       return ResearcherInfo;
     default:
-      console.log(`${service} is not a valid service for the ResearcherInfoModal`);
+      // console.log(`${service} is not a valid service for the ResearcherInfoModal`);
       return null;  
   }
 };
