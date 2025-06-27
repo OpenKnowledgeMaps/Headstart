@@ -144,7 +144,7 @@ function extractValidPdfUrls(array $revision_data, string $paper_id, string $vis
 
     $inner_data = json_decode($revision_data["data"], true);
     $documents_raw = $inner_data["documents"] ?? null;
-    $documents = json_decode($documents_raw, true);
+    $documents = $documents_raw !== null ? json_decode($documents_raw, true) : null;
 
     if (strtolower($vis_type) == 'timeline') {
         $inner_data = json_decode($inner_data["data"]);
