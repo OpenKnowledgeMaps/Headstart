@@ -55,7 +55,7 @@ class HeadstartRunner {
   }
 
   async run() {
-    this.checkBrowserVersion();
+    this.checkIsSupportedBrowser();
     this.renderReact();
     this.addBackButtonListener();
     this.backendData = await this.fetchData();
@@ -65,7 +65,7 @@ class HeadstartRunner {
     this.addWindowResizeListener();
   }
 
-  private checkBrowserVersion() {
+  private checkIsSupportedBrowser() {
     const SUPPORTED = ["Chrome", "Firefox", "Safari", "Edge", "Opera"] as const;
 
     const browser = Bowser.getParser(window.navigator.userAgent);
