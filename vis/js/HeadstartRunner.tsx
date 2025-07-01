@@ -65,7 +65,7 @@ class HeadstartRunner {
     this.addWindowResizeListener();
   }
 
-  checkBrowserVersion() {
+  private checkBrowserVersion() {
     const browser = Bowser.getParser(window.navigator.userAgent);
 
     // TODO use proper browser filtering https://www.npmjs.com/package/bowser#filtering-browsers
