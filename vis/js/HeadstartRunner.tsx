@@ -66,7 +66,13 @@ class HeadstartRunner {
   }
 
   private checkIsSupportedBrowser() {
-    const SUPPORTED = ["Chrome", "Firefox", "Safari", "Edge", "Opera"] as const;
+    const SUPPORTED = [
+      "Chrome",
+      "Firefox",
+      "Safari",
+      "Microsoft Edge",
+      "Opera",
+    ] as const;
 
     const browser = Bowser.getParser(window.navigator.userAgent);
     const browserName = browser.getBrowserName(true);
