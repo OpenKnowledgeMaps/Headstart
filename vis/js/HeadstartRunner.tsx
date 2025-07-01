@@ -67,6 +67,7 @@ class HeadstartRunner {
 
   checkBrowserVersion() {
     const browser = Bowser.getParser(window.navigator.userAgent);
+
     // TODO use proper browser filtering https://www.npmjs.com/package/bowser#filtering-browsers
     if (
       !["chrome", "firefox", "safari"].includes(browser.getBrowserName(true))
@@ -160,10 +161,7 @@ class HeadstartRunner {
   addWindowResizeListener() {
     window.addEventListener("resize", () => {
       const chart = getChartSize(this.config);
-      const list = getListSize(
-        this.config,
-        chart.size
-      );
+      const list = getListSize(this.config, chart.size);
       this.store.dispatch(updateDimensions(chart, list));
     });
   }
@@ -195,7 +193,12 @@ class HeadstartRunner {
     elem?.dispatchEvent(event);
   }
 
-  rescaleMap(scaleBy: string, baseUnit: string, isContentBased: boolean, initialSort: string) {
+  rescaleMap(
+    scaleBy: string,
+    baseUnit: string,
+    isContentBased: boolean,
+    initialSort: string
+  ) {
     this.config.scale_by = scaleBy;
     this.config.base_unit = baseUnit;
     this.config.content_based = isContentBased;
