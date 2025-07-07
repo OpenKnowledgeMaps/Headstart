@@ -82,13 +82,12 @@ class HeadstartRunner {
     ).includes(browserName);
 
     if (!isSupportedBrowser || !browserName) {
-      const warningMessage =
+      alert(
         "You are using an unsupported browser. " +
-        "This visualization was successfully tested " +
-        "with the latest versions of " +
-        `${SUPPORTED.slice(0, -1).join(", ")} and ${SUPPORTED.at(-1)}.`;
-
-      alert(warningMessage);
+          "This visualization was successfully tested " +
+          "with the latest versions of " +
+          "Chrome, Firefox, Safari, Edge and Opera."
+      );
     }
   }
 
