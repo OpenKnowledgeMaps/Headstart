@@ -86,7 +86,8 @@ class HeadstartRunner {
         "You are using an unsupported browser. " +
           "This visualization was successfully tested " +
           "with the latest versions of " +
-          "Chrome, Firefox, Safari, Edge and Opera."
+          "Chrome, Firefox, Safari, Edge and Opera. " +
+          "We strongly recommend using one of these browsers."
       );
     }
   }
