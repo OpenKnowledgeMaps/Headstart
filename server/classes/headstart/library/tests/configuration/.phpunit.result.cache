@@ -1,0 +1,1 @@
+{"version":1,"defects":[],"times":{"headstart\\library\\tests\\functions\\CommUtilsTest::testEchoOrCallbackWithCallback":0.001,"headstart\\library\\tests\\functions\\CommUtilsTest::testEchoOrCallbackWithoutCallback":0,"headstart\\library\\tests\\functions\\CommUtilsTest::testGetParameterExists":0,"headstart\\library\\tests\\functions\\CommUtilsTest::testGetParameterNotExists":0}}
