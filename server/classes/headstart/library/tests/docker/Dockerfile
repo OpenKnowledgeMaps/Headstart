@@ -14,7 +14,7 @@ RUN apt-get update && apt-get install -y \
 
 # Installing composer and PHPUnit
 RUN curl -sS https://getcomposer.org/installer | php && mv composer.phar /usr/local/bin/composer
-RUN composer global require phpunit/phpunit
+RUN composer global require phpunit/phpunit mikey179/vfsstream
 ENV PATH="/root/.composer/vendor/bin:$PATH"
 
 # Defining working directory inside the container
