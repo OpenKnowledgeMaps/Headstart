@@ -193,7 +193,7 @@ function getPDFLinkForBASE($url) {
         return array_values($matches_pdf)[0];
     }
 
-    $matches_doi = array_filter($link_list, function($item) { return strpos($item, "dx.doi.org"); });
+    $matches_doi = array_filter($link_list, function($item) { return strpos($item, "doi.org"); });
     if(count($matches_doi) != 0) {
         return getRedirectURL(array_values($matches_doi)[0]);
     }
