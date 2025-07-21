@@ -11,7 +11,7 @@ dist/
 .cache
 coverage/
 .vscode/
-*/.phpunit.result.cache
+.phpunit.result.cache
 
 # local deployment files
 /deploy.sh
