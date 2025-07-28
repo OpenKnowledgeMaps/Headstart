@@ -22,6 +22,7 @@ const data = (
         paperWidthFactor: action.configObject.paper_width_factor,
         paperHeightFactor: action.configObject.paper_height_factor,
         isStreamgraph: action.configObject.is_streamgraph,
+        visualizationId: action.contextObject.id,
       };
 
       return { list: action.papers, options, size: action.chartSize };

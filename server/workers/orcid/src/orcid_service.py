@@ -8,7 +8,7 @@ import numpy as np
 from pyorcid import Orcid, errors as pyorcid_errors
 from pyorcid.orcid_authentication import OrcidAuthentication
 from typing import Tuple
-from common.utils import get_key, get_nested_value, enrich_metadata
+from common.utils import get_key, get_nested_value
 from repositories.author_info import AuthorInfoRepository
 from repositories.works import WorksRepository
 from redis import StrictRedis
@@ -79,7 +79,56 @@ class OrcidService:
         except (pyorcid_errors.Unauthorized, Exception) as e:
             return self._handle_error(params, "unexpected data processing error", e)
 
+    def enrich_metadata(self, params: Dict[str, str], metadata: pd.DataFrame) -> pd.DataFrame:
+        """
+        This function enriches the metadata DataFrame with additional information
+        from external sources, in this case crossref and altmetric.
+        The function will store the enriched metadata in the Redis queue for further
+        processing, from where it will be picked up by the metrics worker.
+        Returned data will be the original metadata enriched with additional
+        metadata columns from the external sources.
 
+        Parameters:
+        - params (dict): The parameters for the search endpoint.
+        - metadata (pd.DataFrame): The metadata DataFrame to enrich.
+
+        Returns:
+        - pd.DataFrame: The enriched metadata DataFrame.
+        """
+
+        self.logger.debug(f"Enriching metadata for ORCID {params.get('orcid')}")
+        
+        request_id = str(uuid.uuid4())
+        task_data = {
+            "id": request_id,
+            "params": params,
+            "metadata": metadata.to_json(orient="records"),
+        }
+        self.redis_store.rpush("metrics", json.dumps(task_data))
+        result = get_key(self.redis_store, request_id, 900)
+        
+        metadata = pd.DataFrame(result["input_data"])
+        
+        for c in [
+            "citation_count",
+            "cited_by_wikipedia_count",
+            "cited_by_msm_count",
+            "cited_by_policies_count",
+            "cited_by_patents_count",
+            "cited_by_accounts_count",
+            "cited_by_fbwalls_count",
+            "cited_by_feeds_count",
+            "cited_by_gplus_count",
+            "cited_by_rdts_count",
+            "cited_by_qna_count",
+            "cited_by_tweeters_count",
+            "cited_by_videos_count"
+        ]:
+            if c not in metadata.columns:
+                metadata[c] = np.NaN
+
+        return metadata
+    
     def log_dataframe(self, df: pd.DataFrame, params: Dict[str, str], name: str, ):
         orcid = params.get('orcid')
         
@@ -138,7 +187,7 @@ class OrcidService:
             }
             
             self.redis_store.rpush("base", json.dumps(task_data))
-            result = get_key(self.redis_store, request_id, 600)
+            result = get_key(self.redis_store, request_id, 900)
             
             end_time = time.time()
             duration = end_time - start_time
@@ -388,10 +437,7 @@ class OrcidService:
 
     def _process_metadata(self, metadata: pd.DataFrame, author_info: AuthorInfo, params: Dict[str, str]) -> pd.DataFrame:
         metadata["authors"] = metadata["authors"].replace("", author_info.author_name)
-
-        source_for_metadata_enrichment = ["crossref", "altmetric"]
-        metadata = enrich_metadata(self.redis_store, params, metadata, source_for_metadata_enrichment)
-
+        metadata = self.enrich_metadata(params, metadata)
         self.logger.debug(f'metadata shape after base enrichment: {metadata.shape}')
         author_info = self.enrich_author_info(author_info, metadata, params)
         self.logger.debug(f'metadata shape after enrichment: {metadata.shape}')

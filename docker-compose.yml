@@ -256,6 +256,7 @@ services:
       - ../Headstart:/var/www/html/headstart
       - ./local_dev/config_local_headstart.ini:/var/www/html/headstart/server/preprocessing/conf/config_local.ini
       - ./local_dev/entrypoint.php:/var/www/html/entrypoint.php
+      - ./local_dev/paper_preview:/var/www/html/headstart/server/paper_preview
     ports:
       - 127.0.0.1:8085:80
     networks:
