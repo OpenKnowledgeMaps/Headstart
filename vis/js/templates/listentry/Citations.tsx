@@ -10,7 +10,6 @@ const Citations = ({ number, label }: CitationsProps) => {
     // html template starts here
     <div className="list_readers">
       <span className="list_readers_entity">{label}</span> <span>{number}</span>
-      &nbsp;
     </div>
     // html template ends here
   );
