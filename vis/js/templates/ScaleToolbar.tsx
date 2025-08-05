@@ -13,19 +13,12 @@ const ScaleToolbar = ({
   explanations,
   showCredit,
   onChange,
-  onInfoClick,
 }) => {
   const localization = useLocalizationContext();
   const { trackEvent } = useMatomo();
   const handleScaleChange = (id) => {
     onChange(id);
     trackEvent("Added components", "Rescale map", labels[id]);
-  };
-
-  const handleInfoClick = (event) => {
-    event.preventDefault();
-    onInfoClick();
-    trackEvent("Added components", "Open more info modal", "Toolbar");
   };
 
   return (
@@ -36,20 +29,31 @@ const ScaleToolbar = ({
           noCaret
           title={
             <>
-              <span style={{
-                maxWidth: '100%',
-                display: 'flex',
-                justifyContent: 'center',
-                alignItems: 'center'
-              }}>
+              <span
+                style={{
+                  maxWidth: "100%",
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+              >
                 <span>{localization.scale_by_label}</span>
-                <span id="curr-filter-type" className="truncate-text" style={{
-                  minWidth: '0px',
-                  marginLeft: "3px"
-                }}>{labels[value]}</span>
-                <i className="fas fa-chevron-down chevron" style={{
-                  marginLeft: "3px",
-                }}/>
+                <span
+                  id="curr-filter-type"
+                  className="truncate-text"
+                  style={{
+                    minWidth: "0px",
+                    marginLeft: "3px",
+                  }}
+                >
+                  {labels[value]}
+                </span>
+                <i
+                  className="fas fa-chevron-down chevron"
+                  style={{
+                    marginLeft: "3px",
+                  }}
+                />
               </span>
             </>
           }
@@ -69,14 +73,6 @@ const ScaleToolbar = ({
       </div>
       <div className="context-scale-toolbar">
         <span id="curr-scale-explanation">{explanations[value]}</span>
-        <a
-          id="infolink"
-          className="scale-infolink"
-          onClick={handleInfoClick}
-          href="#"
-        >
-          {localization.scale_by_infolink_label}
-        </a>
       </div>
       {showCredit && (
         <div id="credit">
