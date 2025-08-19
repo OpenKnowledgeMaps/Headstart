@@ -371,7 +371,7 @@ class Paper extends React.Component {
                       textWrap: "nowrap",
                     }}
                   >
-                    <p className={`stat ${sizeModifierClass}`}>
+                    <p id="stat" className={`stat ${sizeModifierClass}`}>
                       <span
                         style={{
                           textWrap: "nowrap",
