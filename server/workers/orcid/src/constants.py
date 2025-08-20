@@ -14,7 +14,6 @@ doc_type_mapping = {
     "dissertation-thesis": "Dissertation thesis",
     "working-paper": "Working paper",
     "dissertation": "Dissertation",
-    "other": "Other academic publication",
     
     "annotation": "Annotation",
     "book-review": "Book review",
@@ -22,7 +21,6 @@ doc_type_mapping = {
     "review": "Review",
     "transcription": "Transcription",
     "translation": "Translation",
-    "other": "Other review or editing output",
 
     "blog-post": "Blog post",
     "dictionary-entry": "Dictionary entry",
@@ -32,7 +30,6 @@ doc_type_mapping = {
     "report": "Report",
     "public-speech": "Talk, interview, podcast or speech",
     "website": "Website",
-    "other": "Other dissemination output",
 
     "artistic-performance": "Artistic output or performance",
     "design": "Design",
@@ -41,7 +38,6 @@ doc_type_mapping = {
     "moving-image": "Moving image or video",
     "musical-composition": "Musical composition",
     "sound": "Sound",
-    "other": "Other creative output",
 
 
     "cartographic-material": "Cartographic material",
@@ -60,19 +56,17 @@ doc_type_mapping = {
     "registered-copyright": "Registered copyright",
     "standards-and-policy": "Standards or policy",
     "trademark": "Trademark",
-    "other": "Other legal or IP output",
 
     "lecture-speech": "Lecture",
     "learning-object": "Teaching material",
     "supervised-student-publication": "Supervised student publication",
-    "other": "Other teaching or supervisiont output",
 
     "conference-abstract": "Conference abstract",
     "disclosure": "Disclosure",
     "edited-book": "Edited book",
     "manual": "Manual",
     "newsletter-article": "Newsletter article",
-    "spin-off-company": "Spi-off Company",
+    "spin-off-company": "Spin-off company",
     "technical-standards": "Technical standards",
     "test": "Test",
 }

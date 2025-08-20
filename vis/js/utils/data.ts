@@ -549,3 +549,8 @@ export const queryConcatenator = (terms) => {
   let concatenatedQueries = filtered_terms.join(" and ");
   return concatenatedQueries;
 };
+
+export const getValueOrZero = (value: unknown): number => {
+  const transformedValue = Number(value);
+  return isNaN(transformedValue) ? 0 : transformedValue;
+};

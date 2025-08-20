@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>Overview of research on &quot;climate change&quot; - Open Knowledge Maps</title>
+
+    <script type="text/javascript" src="./main_integration/data-config-pubmed.js"></script>
+
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <meta http-equiv="content-style-type" content="text/css">
+    <meta http-equiv="content-language" content="en">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="robots" content="follow">
+    <meta name="revisit-after" content="1 month">
+    <meta name="distribution" content="global">
+    <meta name="author" content="Open Knowledge Maps">
+    <meta name="publisher" content="Open Knowledge Maps">
+    <meta name="keywords" content="knowldege visualization, open knowledge, open science">
+
+    <link rel="icon" type="image/png" sizes="32x32" href="./main_integration/img/favicon-32x32.png?v=xQz6nej7eR">
+    <link rel="icon" type="image/png" sizes="16x16" href="./main_integration/img/favicon-16x16.png?v=xQz6nej7eR">
+
+    <meta name="description"
+        content="Get an overview of &quot;climate change&quot;, find relevant papers, and identify important concepts.">
+
+    <link type="text/css" rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700,800' rel='stylesheet' type='text/css'>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+</head>
+
+<body class="vis">
+    <div class="overflow-vis">
+        <div id="visualization" style="background-color:white;"></div>
+    </div>
+
+    <script type="text/javascript">
+        const availableFiles = {
+            climate_change: {
+                title: "&quot;climate change&quot;",
+                file: "./main_integration/data/climate-change.json",
+            },
+            covid: {
+                title: "covid",
+                file: "./main_integration/data/covid.json",
+            }
+        };
+
+        data_config.files = [availableFiles.climate_change];
+        const urlSearchParams = new URLSearchParams(window.location.search);
+        if (urlSearchParams.has("file") && availableFiles[urlSearchParams.get("file")]) {
+            data_config.files = [availableFiles[urlSearchParams.get("file")]];
+        }
+
+        data_config.credit_embed = true;
+
+        data_config.server_url = window.location.href.replace(/[^/]*$/, '') + "./main_integration/";
+
+        document.title = `Overview of research on ${data_config.files[0].title} - Open Knowledge Maps`;
+
+        $(document).ready(function () {
+            headstart.start();
+        })
+    </script>
+    <link rel="stylesheet" href="./main_integration/css/main.css">
+</body>
+
+<!-- Matomo -->
+<script>
+    // set this to true to enable Matomo tracking
+    var enable_tracking = false;
+    if (enable_tracking) {
+        var _paq = window._paq = window._paq || [];
+        /* tracker methods like "setCustomDimension" should be called before "trackPageView" */
+        _paq.push(['trackPageView']);
+        _paq.push(['enableLinkTracking']);
+        (function () {
+            var u = "//dev.openknowledgemaps.org/piwik_stats/";
+            _paq.push(['setTrackerUrl', u + 'matomo.php']);
+            _paq.push(['setSiteId', '1']);
+            var d = document, g = d.createElement('script'), s = d.getElementsByTagName('script')[0];
+            g.async = true; g.src = u + 'matomo.js'; s.parentNode.insertBefore(g, s);
+        })();
+    }
+</script>
+<!-- End Matomo Code -->
+
+</html>
+
+</html>
