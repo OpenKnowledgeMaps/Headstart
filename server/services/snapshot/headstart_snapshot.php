@@ -27,10 +27,22 @@
                 data_config.options = options_<?php echo htmlspecialchars($_GET['service']); ?>.dropdowns;
             }
         </script>
-        <script type="text/javascript" src="../../../dist/headstart.js"></script>
-        <link type="text/css" rel="stylesheet" href="../../../dist/headstart.css"></link>
+        <?php include "../../../dist/headstart.php"; ?>
         <script type="text/javascript">
-            headstart.start();
+            // Function to check if headstart is loaded and start it
+            function initializeHeadstart() {
+                if (typeof headstart !== 'undefined' && headstart.start) {
+                    headstart.start();
+                } else {
+                    setTimeout(initializeHeadstart, 100);
+                }
+            }
+            
+            // Wait for DOM to be ready, then start checking for headstart
+            document.addEventListener('DOMContentLoaded', function() {
+                // Give a small delay to ensure deferred scripts have time to load
+                setTimeout(initializeHeadstart, 500);
+            });
         </script>
     </body>
 </html>
