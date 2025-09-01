@@ -74,7 +74,7 @@ export const ContextLine = (props) => {
         <Timespan>
           <ContextTimeFrame
             popoverContainer={popoverContainer}
-            timespan={params.timespan}
+            time={params.timespan}
           />
         </Timespan>
       )}
