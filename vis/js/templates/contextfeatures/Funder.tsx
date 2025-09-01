@@ -1,15 +1,13 @@
-import React from "react";
+import React, { FC, ReactNode } from "react";
 
-const Funder = ({ children }: {
-  children: React.ReactNode;
-}) => {
-  return (
-    // html template starts here
-    <span id="context-funder" className="context_item">
-      Funder: {children}
-    </span>
-    // html template ends here
-  );
-};
+interface FunderProps {
+  children: ReactNode;
+}
+
+const Funder: FC<FunderProps> = ({ children }) => (
+  <span id="context-funder" className="context_item">
+    Funder: {children}
+  </span>
+);
 
 export default Funder;
