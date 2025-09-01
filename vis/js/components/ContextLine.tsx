@@ -3,7 +3,7 @@ import React from "react";
 import { connect } from "react-redux";
 
 import ContextLineTemplate from "../templates/ContextLine";
-import Author from "../templates/contextfeatures/Author";
+import { Author } from "../templates/contextfeatures/Author";
 import DocumentTypes from "../templates/contextfeatures/DocumentTypes";
 import NumArticles from "../templates/contextfeatures/NumArticles";
 import DataSource from "../templates/contextfeatures/DataSource";
@@ -33,106 +33,103 @@ const defined = (param) => param !== undefined && param !== null;
  * It has to be a class component because of the popovers (they use 'this').
  */
 export const ContextLine = (props) => {
-    const { author, params, localization, hidden, service, showDataSource } = props;
-    const { popoverContainer, showLanguage } = props;
+  const { author, params, localization, hidden, service, showDataSource } =
+    props;
+  const { popoverContainer, showLanguage } = props;
 
-    const { isResearcherDetailsEnabled, isResearcherMetricsEnabled } = props;
+  const { isResearcherDetailsEnabled, isResearcherMetricsEnabled } = props;
 
-    if (hidden) {
-      return null;
-    }
+  if (hidden) {
+    return null;
+  }
 
-    return (
-      <ContextLineTemplate>
-        {params.showAuthor && (
-          <Author
-            bioLabel={localization.bio_link}
-            livingDates={params.author.livingDates}
-            // link={"https://d-nb.info/gnd/" + params.author.id}
-            author={author}
+  return (
+    <ContextLineTemplate>
+      {params.showAuthor && (
+        <Author
+          bioLabel={localization.bio_link}
+          livingDates={params.author.livingDates}
+        />
+      )}
+      <NumArticles
+        articlesCount={params.articlesCount}
+        openAccessArticlesCount={params.openAccessCount}
+        articlesCountLabel={localization.articles_label}
+        service={service}
+        modifierLimit={params.modifierLimit}
+        isStreamgraph={params.isStreamgraph}
+      >
+        <Modifier popoverContainer={popoverContainer} />
+      </NumArticles>
+      <Employment author={author} popoverContainer={popoverContainer} />
+      {showDataSource && defined(params.dataSource) && (
+        <DataSource
+          label={localization.source_label}
+          source={params.dataSource}
+          contentProvider={params.contentProvider}
+          popoverContainer={props.popoverContainer}
+        />
+      )}
+      {defined(params.timespan) && (
+        <Timespan>
+          <ContextTimeFrame
+            popoverContainer={popoverContainer}
+            timespan={params.timespan}
           />
-        )}
-        <NumArticles
-          articlesCount={params.articlesCount}
-          openAccessArticlesCount={params.openAccessCount}
-          articlesCountLabel={localization.articles_label}
-          service={service}
-          modifierLimit={params.modifierLimit}
-          isStreamgraph={params.isStreamgraph}
-        >
-          <Modifier popoverContainer={popoverContainer} />
-        </NumArticles>
-        <Employment author={author} popoverContainer={popoverContainer} />
-        {showDataSource && defined(params.dataSource) && (
-          <DataSource
-            label={localization.source_label}
-            source={params.dataSource}
-            contentProvider={params.contentProvider}
-            popoverContainer={props.popoverContainer}
-          />
-        )}
-        {defined(params.timespan) && (
-          <Timespan>
-            <ContextTimeFrame
-              popoverContainer={popoverContainer}
-              timespan={params.timespan}
-            />
-          </Timespan>
-        )}
-        {defined(params.documentTypes) && <DocumentTypes
+        </Timespan>
+      )}
+      {defined(params.documentTypes) && (
+        <DocumentTypes
           documentTypes={params.documentTypes}
           popoverContainer={popoverContainer}
-        />}
-        {/* was an issue to left "All Languages" as default value in the context if no lang_id in parameters */}
-        {showLanguage && (
-          <DocumentLang
-            value={params.documentLang}
-            popoverContainer={popoverContainer}
-          />
-        )}
-        {defined(params.paperCount) && (
-          <PaperCount
-            value={params.paperCount}
-            label={localization.paper_count_label}
-          />
-        )}
-        {defined(params.datasetCount) && (
-          <DatasetCount
-            value={params.datasetCount}
-            label={localization.dataset_count_label}
-          />
-        )}
-        {defined(params.funder) && <Funder>{params.funder}</Funder>}
-        {defined(params.projectRuntime) && (
-          <ProjectRuntime>{params.projectRuntime}</ProjectRuntime>
-        )}
-        {defined(params.legacySearchLanguage) && (
-          <LegacySearchLang>{params.legacySearchLanguage}</LegacySearchLang>
-        )}
-        {defined(params.timestamp) && (
-          <Timestamp
-            value={params.timestamp}
-            label={localization.timestamp_label}
-          />
-        )}
-        <MetadataQuality
-          quality={params.metadataQuality}
-          service={service}
+        />
+      )}
+      {/* was an issue to left "All Languages" as default value in the context if no lang_id in parameters */}
+      {showLanguage && (
+        <DocumentLang
+          value={params.documentLang}
           popoverContainer={popoverContainer}
         />
-        {defined(params.searchLanguage)  && (
-          <SearchLang>{params.searchLanguage}</SearchLang>
-        )}
-        {isResearcherDetailsEnabled && (
-          <ResearcherInfo />
-        )}
-        {isResearcherMetricsEnabled && (
-          <ResearcherMetricsInfo />
-        )}
-        <MoreInfoLink />
-      </ContextLineTemplate>
-    );
-}
+      )}
+      {defined(params.paperCount) && (
+        <PaperCount
+          value={params.paperCount}
+          label={localization.paper_count_label}
+        />
+      )}
+      {defined(params.datasetCount) && (
+        <DatasetCount
+          value={params.datasetCount}
+          label={localization.dataset_count_label}
+        />
+      )}
+      {defined(params.funder) && <Funder>{params.funder}</Funder>}
+      {defined(params.projectRuntime) && (
+        <ProjectRuntime>{params.projectRuntime}</ProjectRuntime>
+      )}
+      {defined(params.legacySearchLanguage) && (
+        <LegacySearchLang>{params.legacySearchLanguage}</LegacySearchLang>
+      )}
+      {defined(params.timestamp) && (
+        <Timestamp
+          value={params.timestamp}
+          label={localization.timestamp_label}
+        />
+      )}
+      <MetadataQuality
+        quality={params.metadataQuality}
+        service={service}
+        popoverContainer={popoverContainer}
+      />
+      {defined(params.searchLanguage) && (
+        <SearchLang>{params.searchLanguage}</SearchLang>
+      )}
+      {isResearcherDetailsEnabled && <ResearcherInfo />}
+      {isResearcherMetricsEnabled && <ResearcherMetricsInfo />}
+      <MoreInfoLink />
+    </ContextLineTemplate>
+  );
+};
 
 const mapStateToProps = (state) => ({
   isResearcherDetailsEnabled: state.contextLine.isResearcherDetailsEnabled,
