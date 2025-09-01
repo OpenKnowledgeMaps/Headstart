@@ -5,7 +5,7 @@ import { connect } from "react-redux";
 import { ContextLineTemplate } from "../templates/ContextLine";
 import { Author } from "../templates/contextfeatures/Author";
 import DocumentTypes from "../templates/contextfeatures/DocumentTypes";
-import NumArticles from "../templates/contextfeatures/NumArticles";
+import { NumArticles } from "../templates/contextfeatures/NumArticles";
 import DataSource from "../templates/contextfeatures/DataSource";
 import Timespan from "../templates/contextfeatures/Timespan";
 import PaperCount from "../templates/contextfeatures/PaperCount";

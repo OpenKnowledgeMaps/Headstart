@@ -1,33 +1,37 @@
-// @ts-nocheck
+import React, { FC, ReactNode } from "react";
 
-import React from "react";
-
-type NumArticlesProps = {
+interface NumArticlesProps {
   articlesCount: number;
   articlesCountLabel: string;
-  openAccessArticlesCount?: number;
+  openAccessArticlesCount: number | null;
   service: string;
-  children: string;
+  children: ReactNode;
   modifierLimit: number;
   isStreamgraph?: boolean;
-};
+}
 
-const NumArticles = ({
+export const NumArticles: FC<NumArticlesProps> = ({
   articlesCount,
   articlesCountLabel,
-  openAccessArticlesCount = null,
+  openAccessArticlesCount,
   service,
   children,
   modifierLimit,
-  isStreamgraph
-}: NumArticlesProps) => {
-  let displayText = `${articlesCount} ${articlesCountLabel}`;
+  isStreamgraph,
+}) => {
+  let displayText:
+    | ReactNode
+    | string = `${articlesCount} ${articlesCountLabel}`;
 
   if (service === "orcid") {
     if (articlesCount >= modifierLimit) {
-      displayText = <>{modifierLimit} {children} works</>;
+      displayText = (
+        <>
+          {modifierLimit} {children} works
+        </>
+      );
     } else {
-      displayText = <>{articlesCount} works</>
+      displayText = <>{articlesCount} works</>;
     }
   }
 
@@ -39,7 +43,11 @@ const NumArticles = ({
         </>
       );
     } else {
-      displayText = <>{articlesCount} {children} {articlesCountLabel}</>
+      displayText = (
+        <>
+          {articlesCount} {children} {articlesCountLabel}
+        </>
+      );
     }
   }
 
@@ -52,5 +60,3 @@ const NumArticles = ({
     </span>
   );
 };
-
-export default NumArticles;
