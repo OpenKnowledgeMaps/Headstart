@@ -1,15 +1,13 @@
-import React from "react";
+import React, { FC, ReactNode } from "react";
 
-const Timespan = ({ children }: {
-  children: React.ReactNode;
-}) => {
-  return (
-    // html template starts here
-    <span id="timespan" className="context_item">
-      {children}
-    </span>
-    // html template ends here
-  );
-};
+interface TimespanProps {
+  children: ReactNode;
+}
+
+const Timespan: FC<TimespanProps> = ({ children }) => (
+  <span id="timespan" className="context_item">
+    {children}
+  </span>
+);
 
 export default Timespan;
