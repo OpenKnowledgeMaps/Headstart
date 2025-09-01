@@ -1,18 +1,22 @@
-// @ts-nocheck
-import React from "react";
+import React, { FC, ReactNode } from "react";
 import { shorten } from "../../utils/string";
 import HoverPopover from "../HoverPopover";
 
 const MAX_CONTENT_PROVIDER_LENGTH = 6;
 
-type DataSourceProps = {
+interface DataSourceProps {
   label: string;
   source: string;
   contentProvider: string;
-  popoverContainer: HTMLElement;
-};
+  popoverContainer: ReactNode;
+}
 
-const DataSource = ({ label, source, contentProvider, popoverContainer }: DataSourceProps) => {
+const DataSource: FC<DataSourceProps> = ({
+  label,
+  source,
+  contentProvider,
+  popoverContainer,
+}) => {
   if (contentProvider) {
     const content = shorten(contentProvider, MAX_CONTENT_PROVIDER_LENGTH);
 
