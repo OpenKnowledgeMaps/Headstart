@@ -2,7 +2,7 @@
 import React from "react";
 import { connect } from "react-redux";
 
-import ContextLineTemplate from "../templates/ContextLine";
+import { ContextLineTemplate } from "../templates/ContextLine";
 import { Author } from "../templates/contextfeatures/Author";
 import DocumentTypes from "../templates/contextfeatures/DocumentTypes";
 import NumArticles from "../templates/contextfeatures/NumArticles";
