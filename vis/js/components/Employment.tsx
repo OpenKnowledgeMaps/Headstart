@@ -1,16 +1,16 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { ReactNode } from "react";
 import HoverPopover from "../templates/HoverPopover";
 import { Author } from "../@types/author";
 import { shorten } from "../utils/string";
 
 const MAX_ROLE_LENGTH = 18;
 
-export interface EmploymentProps {
+interface EmploymentProps {
   author: Author;
-  popoverContainer: HTMLElement;
+  popoverContainer: ReactNode;
 }
 
-export function Employment({ author, popoverContainer }: EmploymentProps) {
+export const Employment = ({ author, popoverContainer }: EmploymentProps) => {
   const authorRoleId = "author-role";
   const authorOrganizationId = "author-organization";
 
@@ -30,7 +30,6 @@ export function Employment({ author, popoverContainer }: EmploymentProps) {
       {author?.employment?.role ? (
         <span id={authorRoleId} className="context_item shrinkable">
           {authorRoleHasOverflow ? (
-            // @ts-ignore
             <HoverPopover
               id={`${authorRoleId}-popover`}
               container={popoverContainer}
@@ -55,7 +54,6 @@ export function Employment({ author, popoverContainer }: EmploymentProps) {
       {shortenedOrganization ? (
         <span id={authorOrganizationId} className="context_item shrinkable">
           {authorOrganizationHasOverflow ? (
-            // @ts-ignore
             <HoverPopover
               id={`${authorOrganizationId}-popover`}
               container={popoverContainer}
@@ -78,4 +76,4 @@ export function Employment({ author, popoverContainer }: EmploymentProps) {
       ) : null}
     </>
   );
-}
+};
