@@ -12,11 +12,6 @@ const DocumentTypes: FC<DocumentTypesProps> = ({
   documentTypes,
   popoverContainer,
 }) => {
-  console.log("DocumentTypes props:", {
-    documentTypes,
-    popoverContainer,
-  });
-
   const loc = useLocalizationContext();
   const { trackEvent } = useMatomo();
 
