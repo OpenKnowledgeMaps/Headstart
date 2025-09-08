@@ -122,7 +122,7 @@ export const ContextLine = (props) => {
         popoverContainer={popoverContainer}
       />
       {defined(params.searchLanguage) && (
-        <SearchLang>{params.searchLanguage}</SearchLang>
+        <SearchLang languageCode={params.searchLanguage} />
       )}
       {isResearcherDetailsEnabled && <ResearcherInfo />}
       {isResearcherMetricsEnabled && <ResearcherMetricsInfo />}
