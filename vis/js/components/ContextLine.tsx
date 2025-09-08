@@ -77,11 +77,17 @@ interface ContextLineProps {
  * It has to be a class component because of the popovers (they use 'this').
  */
 export const ContextLine = (props: ContextLineProps) => {
-  const { author, params, localization, hidden, service, showDataSource } =
-    props;
   const { popoverContainer, showLanguage } = props;
-
-  const { isResearcherDetailsEnabled, isResearcherMetricsEnabled } = props;
+  const {
+    author,
+    params,
+    localization,
+    hidden,
+    service,
+    showDataSource,
+    isResearcherDetailsEnabled,
+    isResearcherMetricsEnabled,
+  } = props;
 
   if (hidden) {
     return null;
