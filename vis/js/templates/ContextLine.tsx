@@ -1,12 +1,7 @@
-import React, { FC, ReactNode } from "react";
+import React, { FC } from "react";
+import { PropsWithChildren } from "../@types/common-components-props";
 
-interface ContextLineTemplateProps {
-  children: ReactNode;
-}
-
-export const ContextLineTemplate: FC<ContextLineTemplateProps> = ({
-  children,
-}) => (
+export const ContextLineTemplate: FC<PropsWithChildren> = ({ children }) => (
   <p id="context" data-testid="context">
     {children}
   </p>
