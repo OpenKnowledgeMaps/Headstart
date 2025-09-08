@@ -1,4 +1,4 @@
-import React, { ReactNode } from "react";
+import React, { FC, ReactNode } from "react";
 import HoverPopover from "../templates/HoverPopover";
 import { Author } from "../@types/author";
 import { shorten } from "../utils/string";
@@ -10,7 +10,10 @@ interface EmploymentProps {
   popoverContainer: ReactNode;
 }
 
-export const Employment = ({ author, popoverContainer }: EmploymentProps) => {
+export const Employment: FC<EmploymentProps> = ({
+  author,
+  popoverContainer,
+}) => {
   const authorRoleId = "author-role";
   const authorOrganizationId = "author-organization";
 
