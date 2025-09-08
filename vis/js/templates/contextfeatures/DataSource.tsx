@@ -7,7 +7,7 @@ const MAX_CONTENT_PROVIDER_LENGTH = 6;
 interface DataSourceProps {
   label: string;
   source: string;
-  contentProvider: string;
+  contentProvider?: string;
   popoverContainer: ReactNode;
 }
 
