@@ -1,0 +1,11 @@
+renv
+__pycache__
+.cache
+.pytest_cache
+.Rproj.user
+.RData
+.Rhistory
+*.Rproj
+.pynb_checkpoints
+*.ipynb
+.venv

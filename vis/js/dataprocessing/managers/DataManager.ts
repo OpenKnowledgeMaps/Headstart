@@ -249,10 +249,11 @@ class DataManager {
     const config = this.config;
 
     paper.num_readers = 0;
+
     paper.internal_readers = 1;
 
     // ? should we use numb_readers in some cases?
-    function parseNumber(value, defaultValue = 0) {
+    function parseNumber(value, defaultValue = "n/a") {
       const num = Number(value);
       return isNaN(num) ? defaultValue : num;
     }
@@ -273,7 +274,7 @@ class DataManager {
         paper.cited_by_qna_count,
         paper.cited_by_tweeters_count,
         paper.cited_by_videos_count,
-      ].every((item) => item === undefined)
+      ].every((item) => item === undefined || item === null)
     ) {
       paper.social = "n/a";
     } else {
