@@ -1,10 +1,7 @@
-import React, { FC, ReactNode } from "react";
+import React, { FC } from "react";
+import { PropsWithChildren } from "../../@types/common-components-props";
 
-interface ProjectRuntimeProps {
-  children: ReactNode;
-}
-
-const ProjectRuntime: FC<ProjectRuntimeProps> = ({ children }) => (
+const ProjectRuntime: FC<PropsWithChildren> = ({ children }) => (
   <span id="context-project_runtime" className="context_item">
     {children}
   </span>

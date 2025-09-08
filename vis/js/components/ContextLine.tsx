@@ -160,7 +160,7 @@ export const ContextLine = (props: ContextLineProps) => {
       {isDefined(params.legacySearchLanguage) && (
         <LegacySearchLang>{params.legacySearchLanguage}</LegacySearchLang>
       )}
-      {isDefined(params.timestamp) && <Timestamp value={params.timestamp} />}
+      {isDefined(params.timestamp) && <Timestamp>{params.timestamp}</Timestamp>}
       <MetadataQuality
         quality={params.metadataQuality}
         service={service}

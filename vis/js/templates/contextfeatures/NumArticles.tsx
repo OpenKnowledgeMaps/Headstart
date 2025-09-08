@@ -1,11 +1,11 @@
 import React, { FC, ReactNode } from "react";
+import { PropsWithChildren } from "../../@types/common-components-props";
 
-interface NumArticlesProps {
+interface NumArticlesProps extends PropsWithChildren {
   articlesCount: number;
   articlesCountLabel: string;
   openAccessArticlesCount: number | null;
   service: string;
-  children: ReactNode;
   modifierLimit: number;
   isStreamgraph?: boolean;
 }

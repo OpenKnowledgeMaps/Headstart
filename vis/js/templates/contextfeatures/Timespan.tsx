@@ -1,10 +1,7 @@
-import React, { FC, ReactNode } from "react";
+import React, { FC } from "react";
+import { PropsWithChildren } from "../../@types/common-components-props";
 
-interface TimespanProps {
-  children: ReactNode;
-}
-
-const Timespan: FC<TimespanProps> = ({ children }) => (
+const Timespan: FC<PropsWithChildren> = ({ children }) => (
   <span id="timespan" className="context_item">
     {children}
   </span>

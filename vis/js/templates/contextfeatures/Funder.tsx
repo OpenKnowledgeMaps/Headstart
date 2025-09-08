@@ -1,10 +1,7 @@
-import React, { FC, ReactNode } from "react";
+import React, { FC } from "react";
+import { PropsWithChildren } from "../../@types/common-components-props";
 
-interface FunderProps {
-  children: ReactNode;
-}
-
-const Funder: FC<FunderProps> = ({ children }) => (
+const Funder: FC<PropsWithChildren> = ({ children }) => (
   <span id="context-funder" className="context_item">
     Funder: {children}
   </span>
