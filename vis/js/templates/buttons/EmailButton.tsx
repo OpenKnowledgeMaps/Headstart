@@ -7,9 +7,10 @@ import useMatomo from "../../utils/useMatomo";
 const EmailButton = () => {
   const title = encodeURIComponent(document.title);
   const pageUrl = encodeURIComponent(window.location.href);
-  const description = encodeURIComponent(
-    $("meta[name='description']").attr("content")
-  );
+  const descriptionMetaTag = document.querySelector("meta[name='description']");
+  const description = descriptionMetaTag
+    ? encodeURIComponent(descriptionMetaTag.content)
+    : "";
 
   const url = `mailto:?subject=${title}&body=${description} ${pageUrl}`;
 

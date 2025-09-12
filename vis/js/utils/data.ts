@@ -132,7 +132,11 @@ const getWordFilterFunction = (searchedKeywords) => {
 };
 
 const getPropertyOrEmptyString = (object, property) => {
-  if (Object.prototype.hasOwnProperty.call(object, property) && object[property] !== null && object[property] !== undefined) {
+  if (
+    Object.prototype.hasOwnProperty.call(object, property) &&
+    object[property] !== null &&
+    object[property] !== undefined
+  ) {
     return object[property].toString().toLowerCase().trim();
   }
 
@@ -539,9 +543,9 @@ export const commentsSanitizer = (value) => {
 };
 
 export const queryConcatenator = (terms) => {
-  let filtered_terms = terms.filter(element => {
-    return element !== '' && element !== null && element !== undefined
+  let filtered_terms = terms.filter((element) => {
+    return element !== "" && element !== null && element !== undefined;
   });
   let concatenatedQueries = filtered_terms.join(" and ");
-  return concatenatedQueries
-}
+  return concatenatedQueries;
+};

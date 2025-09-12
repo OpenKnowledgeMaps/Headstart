@@ -43,6 +43,7 @@ const contextLine = (state = {}, action: any) => {
         documentTypes: getDocumentTypes(config, context),
         dataSource: config.service_names?.[context.service],
         contentProvider: context.params ? context.params.repo_name : null,
+        // ! TODO
         paperCount:
           config.create_title_from_context_style === "viper"
             ? papers.filter((p: any) => p.resulttype.includes("publication"))

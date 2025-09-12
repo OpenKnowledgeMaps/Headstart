@@ -165,4 +165,4 @@ COPY preprocessing/other-scripts ./other-scripts
 RUN mkdir -p /var/log/headstart && touch /var/log/headstart/headstart.log
 
 COPY workers/dataprocessing/*.py ./
-ENTRYPOINT python3 run_dataprocessing.py
+ENTRYPOINT ["python3", "run_dataprocessing.py"]

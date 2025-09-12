@@ -23,7 +23,7 @@ export const removeQueryParams = (...keys: string[]) => {
   window.history.pushState("", "", url.pathname + url.search);
 };
 
-const addRemoveQueryParams = (
+export const addRemoveQueryParams = (
   paramsToAdd: Record<string, string>,
   paramsToRemove: string[]
 ) => {
