@@ -80,6 +80,11 @@ module.exports = (env) => {
         hypher: "hypher/dist/jquery.hypher.js",
         markjs: "mark.js/dist/jquery.mark.js",
 
+        // Aliases for the root frontend folder (vis) and the folder where
+        // code of components is mostly located (vis/js)
+        "@": path.resolve(__dirname, "vis/"),
+        "@js": path.resolve(__dirname, "vis/js/"),
+
         // paths
         lib: path.resolve(__dirname, "vis/lib"),
         styles: path.resolve(__dirname, "vis/stylesheets"),
