@@ -75,22 +75,14 @@ module.exports = (env) => {
     resolve: {
       extensions: [".*", ".js", ".jsx", ".ts", ".tsx"],
       alias: {
-        //
+        // Aliases for hypher and markjs are created for more convenient
+        // import of them from the node_modules/ folder
         hypher: "hypher/dist/jquery.hypher.js",
         markjs: "mark.js/dist/jquery.mark.js",
 
         // paths
-        images: path.resolve(__dirname, "vis/images"),
         lib: path.resolve(__dirname, "vis/lib"),
         styles: path.resolve(__dirname, "vis/stylesheets"),
-
-        // modules
-        config: path.resolve(__dirname, "vis/js/default-config.js"),
-        headstart: path.resolve(__dirname, "vis/js/headstart.js"),
-        mediator: path.resolve(__dirname, "vis/js/mediator.js"),
-
-        // building
-        process: "process/browser",
       },
     },
 
