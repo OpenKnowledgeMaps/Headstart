@@ -19,7 +19,6 @@ export const NumArticles: FC<NumArticlesProps> = ({
   modifierLimit,
   isStreamgraph,
 }) => {
-  console.log("openAccessArticlesCount: ", openAccessArticlesCount);
   let displayText: ReactNode | string =
     `${articlesCount} ${articlesCountLabel}`;
 

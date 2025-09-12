@@ -15,7 +15,7 @@ export const Author: FC<AuthorProps> = memo(({ bioLabel, livingDates }) => (
 
     {bioLabel ? (
       <span id="author_bio" className="context_item">
-        <a id="author_bio_link" href="" target="_blank" rel="noreferrer">
+        <a id="author_bio_link" target="_blank" rel="noreferrer">
           {bioLabel}
         </a>
       </span>
