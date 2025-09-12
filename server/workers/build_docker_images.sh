@@ -9,7 +9,7 @@ for service in ${services[@]}; do
     echo ""
     echo "Building $service"
     echo ""
-    docker build -f "$SCRIPT_DIR/../workers/$service/Dockerfile" -t "$service:$service_version" "$SCRIPT_DIR/../"
+    docker build --platform linux/amd64 -f "$SCRIPT_DIR/../workers/$service/Dockerfile" -t "$service:$service_version" "$SCRIPT_DIR/../"
 done
 
 echo ""
