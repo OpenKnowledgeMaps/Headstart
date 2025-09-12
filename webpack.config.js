@@ -75,15 +75,15 @@ module.exports = (env) => {
     resolve: {
       extensions: [".js", ".jsx", ".ts", ".tsx"],
       alias: {
-        // Aliases for hypher and markjs are created for more convenient
-        // import of them from the node_modules/ folder
-        hypher: "hypher/dist/jquery.hypher.js",
-        markjs: "mark.js/dist/jquery.mark.js",
-
         // Aliases for the root frontend folder (vis) and the folder where
         // code of components is mostly located (vis/js)
         "@": path.resolve(__dirname, "vis/"),
         "@js": path.resolve(__dirname, "vis/js/"),
+
+        // Aliases for hypher and markjs are created for more convenient
+        // import of them from the node_modules/ folder
+        hypher: "hypher/dist/jquery.hypher.js",
+        markjs: "mark.js/dist/jquery.mark.js",
       },
     },
 
