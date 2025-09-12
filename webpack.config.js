@@ -73,7 +73,7 @@ module.exports = (env) => {
     },
 
     resolve: {
-      extensions: [".*", ".js", ".jsx", ".ts", ".tsx"],
+      extensions: [".js", ".jsx", ".ts", ".tsx"],
       alias: {
         // Aliases for hypher and markjs are created for more convenient
         // import of them from the node_modules/ folder
