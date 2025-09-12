@@ -1,8 +1,9 @@
-import { expect, describe, it } from 'vitest';
+import { expect, describe, it } from "vitest";
 import React from "react";
 import { Provider } from "react-redux";
 import { createStore } from "redux";
 import { fireEvent, render } from "@testing-library/react";
+import { act } from "react-dom/test-utils";
 
 import configureStore from "redux-mock-store";
 
@@ -43,14 +44,8 @@ const setup = () => {
 };
 
 const mockStore = configureStore([]);
-
 const localization = config.localization.eng_pubmed;
 
-/**
- * Extra test suite for testing BASE data integration on real data, config and context.
- *
- * This file tests only the interactions. The structure is tested by snapshot test.
- */
 describe("List entries component - special BASE tests", () => {
   it("renders", () => {
     const store = setup();
@@ -190,7 +185,7 @@ describe("List entries component - special BASE tests", () => {
   });
 
   describe("search, filter and sort", () => {
-    it("searches the list for 'calcium homeostasis'", () => {
+    it("searches the list for 'calcium homeostasis'", async () => {
       const store = setup();
 
       const result = render(
@@ -201,14 +196,15 @@ describe("List entries component - special BASE tests", () => {
         </Provider>
       );
 
-      store.dispatch(search("calcium homeostasis"));
+      await act(async () => {
+        store.dispatch(search("calcium homeostasis"));
+      });
 
       const papers = result.container.querySelectorAll(".list_entry");
-
       expect(papers.length).toEqual(1);
     });
 
-    it("filters the list for open access papers only", () => {
+    it("filters the list for open access papers only", async () => {
       const store = setup();
 
       const result = render(
@@ -219,14 +215,15 @@ describe("List entries component - special BASE tests", () => {
         </Provider>
       );
 
-      store.dispatch(filter("open_access"));
+      await act(async () => {
+        store.dispatch(filter("open_access"));
+      });
 
       const papers = result.container.querySelectorAll(".list_entry");
-
       expect(papers.length).toEqual(6);
     });
 
-    it("sorts the list by year", () => {
+    it("sorts the list by year", async () => {
       const store = setup();
 
       const result = render(
@@ -237,7 +234,9 @@ describe("List entries component - special BASE tests", () => {
         </Provider>
       );
 
-      store.dispatch(sort("year"));
+      await act(async () => {
+        store.dispatch(sort("year"));
+      });
 
       const papers = result.container.querySelectorAll(".list_entry");
 
@@ -256,9 +255,8 @@ describe("List entries component - special BASE tests", () => {
       ]);
     });
 
-    it("searches, filters and sorts at the same time", () => {
+    it("searches, filters and sorts at the same time", async () => {
       const store = setup();
-
       const SEARCH_TEXT = "calcium silicate";
 
       const result = render(
@@ -269,17 +267,23 @@ describe("List entries component - special BASE tests", () => {
         </Provider>
       );
 
-      store.dispatch(search(SEARCH_TEXT));
+      await act(async () => {
+        store.dispatch(search(SEARCH_TEXT));
+      });
 
       let papers = result.container.querySelectorAll(".list_entry");
       expect(papers.length).toEqual(4);
 
-      store.dispatch(filter("open_access"));
+      await act(async () => {
+        store.dispatch(filter("open_access"));
+      });
 
       papers = result.container.querySelectorAll(".list_entry");
       expect(papers.length).toEqual(2);
 
-      store.dispatch(sort("title"));
+      await act(async () => {
+        store.dispatch(sort("title"));
+      });
 
       papers = result.container.querySelectorAll(".list_entry");
 
