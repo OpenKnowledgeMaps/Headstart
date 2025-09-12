@@ -1,5 +1,5 @@
 import React, { FC } from "react";
-import { PropsWithChildren } from "../@types/common-components-props";
+import { PropsWithChildren } from "../types";
 
 export const ContextLineTemplate: FC<PropsWithChildren> = ({ children }) => (
   <p id="context" data-testid="context">

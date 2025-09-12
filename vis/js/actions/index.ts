@@ -1,5 +1,4 @@
-import { Config } from "../@types/config";
-import { Paper } from "../@types/paper";
+import { Config, Paper } from "../types";
 
 /**
  * All actions in this array are not delayed when the map is animated.
@@ -39,7 +38,10 @@ export const zoomIn = (
   selectedPaperData,
 });
 
-export const zoomOut = (callback: (() => void) | null, isFromBackButton = false) => ({
+export const zoomOut = (
+  callback: (() => void) | null,
+  isFromBackButton = false
+) => ({
   type: "ZOOM_OUT",
   callback,
   isFromBackButton,
@@ -77,7 +79,7 @@ export const initializeStore = (
   streamHeight,
   listHeight,
   scalingFactors,
-  author
+  author,
 });
 
 export const toggleList = () => ({ type: "TOGGLE_LIST" });
@@ -110,14 +112,20 @@ export const highlightArea = (paper: any) => ({
 export const showPreview = (paper: any) => ({ type: "SHOW_PREVIEW", paper });
 export const hidePreview = () => ({ type: "HIDE_PREVIEW" });
 
-export const showCitePaper = (paper: any) => ({ type: "SHOW_CITE_PAPER", paper });
+export const showCitePaper = (paper: any) => ({
+  type: "SHOW_CITE_PAPER",
+  paper,
+});
 export const hideCitePaper = () => ({ type: "HIDE_CITE_PAPER" });
 
-export const showExportPaper = (paper: any) => ({ type: "SHOW_EXPORT_PAPER", paper });
+export const showExportPaper = (paper: any) => ({
+  type: "SHOW_EXPORT_PAPER",
+  paper,
+});
 export const hideExportPaper = () => ({ type: "HIDE_EXPORT_PAPER" });
 
 export const updateDimensions = (chart: any, list: any) => ({
-type: "RESIZE",
+  type: "RESIZE",
   listHeight: list.height,
   chartSize: chart.size,
   streamWidth: chart.width,
@@ -158,10 +166,19 @@ export const closeInfoModal = () => ({ type: "CLOSE_INFO_MODAL" });
 export const openResearcherModal = () => ({ type: "OPEN_RESEARCHER_MODAL" });
 export const closeResearcherModal = () => ({ type: "CLOSE_RESEARCHER_MODAL" });
 
-export const openResearcherMetricsModal = () => ({ type: "OPEN_RESEARCHER_METRICS_MODAL" });
-export const closeResearcherMetricsModal = () => ({ type: "CLOSE_RESEARCHER_METRICS_MODAL" });
+export const openResearcherMetricsModal = () => ({
+  type: "OPEN_RESEARCHER_METRICS_MODAL",
+});
+export const closeResearcherMetricsModal = () => ({
+  type: "CLOSE_RESEARCHER_METRICS_MODAL",
+});
 
-export const scaleMap = (value: any, baseUnit: string, contentBased: boolean, sort: string) => ({
+export const scaleMap = (
+  value: any,
+  baseUnit: string,
+  contentBased: boolean,
+  sort: string
+) => ({
   type: "SCALE",
   value,
   baseUnit,

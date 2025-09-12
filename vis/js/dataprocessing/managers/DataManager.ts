@@ -24,8 +24,7 @@ import { transformData } from "../../utils/streamgraph";
 
 import DEFAULT_SCHEME, { SchemeObject } from "../schemes/defaultScheme";
 import PaperSanitizer from "../../utils/PaperSanitizer";
-import { Paper } from "../../@types/paper";
-import { Config } from "../../@types/config";
+import { Paper, Config } from "../../types";
 
 const GOLDEN_RATIO = 2.6;
 

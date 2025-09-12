@@ -1,5 +1,5 @@
 import React, { FC, ReactNode } from "react";
-import { PropsWithChildren } from "../../@types/common-components-props";
+import { PropsWithChildren } from "../../types";
 
 interface NumArticlesProps extends PropsWithChildren {
   articlesCount: number;

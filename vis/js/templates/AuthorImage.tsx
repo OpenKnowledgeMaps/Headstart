@@ -1,6 +1,6 @@
 import React, { FC } from "react";
 import defaultImage from "../../images/author_default.png";
-import { ServiceType } from "../@types/service";
+import { ServiceType } from "../types";
 
 export interface AuthorImageProps {
   orcidId: string;

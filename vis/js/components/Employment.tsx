@@ -1,6 +1,6 @@
 import React, { FC, ReactNode } from "react";
 import HoverPopover from "../templates/HoverPopover";
-import { Author } from "../@types/author";
+import { Author } from "../types";
 import { shorten } from "../utils/string";
 
 const MAX_ROLE_LENGTH = 18;

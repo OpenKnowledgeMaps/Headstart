@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 
 import SubdisciplineTitle from "../templates/SubdisciplineTitle";
 import AuthorImage from "../templates/AuthorImage";
-import { ServiceType } from "../@types/service";
+import { ServiceType } from "../types";
 
 interface TitleContextProps {
   showAuthor: boolean;

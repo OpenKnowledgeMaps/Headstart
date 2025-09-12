@@ -1,5 +1,5 @@
 import React, { FC } from "react";
-import { PropsWithChildren } from "../../@types/common-components-props";
+import { PropsWithChildren } from "../../types";
 
 const Funder: FC<PropsWithChildren> = ({ children }) => (
   <span id="context-funder" className="context_item">

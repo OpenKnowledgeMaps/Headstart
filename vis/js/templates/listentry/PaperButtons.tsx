@@ -6,7 +6,7 @@ import { getPaperPDFClickHandler } from "../../utils/data";
 import { mapDispatchToListEntriesProps } from "../../utils/eventhandlers";
 import Highlight from "../../components/Highlight";
 import { isNonTextDocument } from "../Paper";
-import { Paper } from "../../@types/paper";
+import { Paper } from "../../types";
 
 // TODO: Update type for paper with new ones after merge (using union type)
 interface PaperButtonsProps {

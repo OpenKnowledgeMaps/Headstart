@@ -1,4 +1,4 @@
-import { Paper } from "../@types/paper";
+import { Paper } from "../types";
 import {
   zoomIn,
   zoomOut,

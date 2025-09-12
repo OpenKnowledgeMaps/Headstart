@@ -32,7 +32,7 @@ import zoom from "./zoom";
 import q_advanced from "./q_advanced";
 import modalInfoType from "./modalInfoType";
 import paper from "./paper";
-import { Config } from "../@types/config";
+import { Config } from "../types";
 
 export default combineReducers({
   animation,
@@ -70,7 +70,9 @@ export const getInitialState = (config: Config) => {
   // TODO where possible, move the config values from INITIALIZE to here
   return {
     localization: {
-      ...config.localization[config.language === 'ger_linkedcat' ? 'ger' : 'eng'],
+      ...config.localization[
+        config.language === "ger_linkedcat" ? "ger" : "eng"
+      ],
       ...config.localization[config.language],
     },
     misc: {
