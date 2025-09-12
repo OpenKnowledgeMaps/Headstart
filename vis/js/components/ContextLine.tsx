@@ -23,7 +23,7 @@ import ResearcherMetricsInfo from "../templates/contextfeatures/ResearcherMetric
 import { Employment } from "./Employment";
 import ResearcherInfo from "../templates/contextfeatures/ResearcherInfo";
 import { STREAMGRAPH_MODE } from "../reducers/chartType";
-import { Author as AuthorType } from "../types";
+import { Author as AuthorType } from "../types/models/author";
 import { Localization } from "../i18n/localization";
 
 interface ContextLineProps {

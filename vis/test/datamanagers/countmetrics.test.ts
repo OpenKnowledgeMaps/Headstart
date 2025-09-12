@@ -1,9 +1,4 @@
-import {
-  BasePaper,
-  OrcidPaper,
-  Paper,
-  PubmedPaper,
-} from "../../js/@types/paper";
+import { BasePaper, OrcidPaper, Paper, PubmedPaper } from "../../js/types";
 import DataManager from "../../js/dataprocessing/managers/DataManager";
 import { productionKMConfig } from "../data/base-raw";
 import {
@@ -14,7 +9,7 @@ import {
 
 describe("The private function __countMetrics of the DataManager (with PubMed)", () => {
   const setupAndRunCountMetrics = (
-    paper: PubmedPaper = MOCK_PUBMED_PAPER_DATA
+    paper: PubmedPaper = MOCK_PUBMED_PAPER_DATA,
   ): PubmedPaper => {
     // Create the instance of DataManager class
     const dataManager = new DataManager(productionKMConfig);
@@ -223,7 +218,7 @@ describe("The private function __countMetrics of the DataManager (with PubMed)",
 
 describe("The private function __countMetrics of the DataManager (with BASE)", () => {
   const setupAndRunCountMetrics = (
-    paper: BasePaper = MOCK_BASE_PAPER_DATA
+    paper: BasePaper = MOCK_BASE_PAPER_DATA,
   ): BasePaper => {
     // Create the instance of DataManager class
     const dataManager = new DataManager(productionKMConfig);
@@ -432,7 +427,7 @@ describe("The private function __countMetrics of the DataManager (with BASE)", (
 
 describe("The private function __countMetrics of the DataManager (with ORCID)", () => {
   const setupAndRunCountMetrics = (
-    paper: OrcidPaper = MOCK_ORCID_PAPER_DATA
+    paper: OrcidPaper = MOCK_ORCID_PAPER_DATA,
   ): OrcidPaper => {
     // Create the instance of DataManager class
     const dataManager = new DataManager(productionKMConfig);
