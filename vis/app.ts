@@ -1,4 +1,4 @@
-import "styles/main.scss";
+import "@/stylesheets/main.scss";
 
 import config from "./js/default-config";
 import "bootstrap";

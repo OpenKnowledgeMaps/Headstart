@@ -84,10 +84,6 @@ module.exports = (env) => {
         // code of components is mostly located (vis/js)
         "@": path.resolve(__dirname, "vis/"),
         "@js": path.resolve(__dirname, "vis/js/"),
-
-        // paths
-        lib: path.resolve(__dirname, "vis/lib"),
-        styles: path.resolve(__dirname, "vis/stylesheets"),
       },
     },
 
