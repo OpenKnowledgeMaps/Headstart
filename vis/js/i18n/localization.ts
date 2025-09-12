@@ -107,12 +107,12 @@ export interface Localization {
   researcher_details_label: string;
   scale_by_explanation: string;
   scale_label: {
-    content_based: string;
-    citations: string;
-    cited_by_accounts_count: string;
-    references: string;
-    citation_count: string;
-    cited_by_tweeters_count: string;
+    "content_based": string;
+    "citations": string;
+    "cited_by_accounts_count": string;
+    "references": string;
+    "citation_count": string;
+    "cited_by_tweeters_count": string;
     "readers.mendeley": string;
   };
   tweets: string;
@@ -126,6 +126,7 @@ export interface Localization {
   readers_count_label: string;
   publication: string;
   dataset: string;
+  timestamp_label: string;
 }
 
 export const localization: {
@@ -402,12 +403,12 @@ export const localization: {
     scale_by_explanation:
       "The size of the bubbles is relative to the number of documents related to them.",
     scale_label: {
-      content_based: "Documents",
-      citations: "Citations",
-      cited_by_accounts_count: "Social media mentions",
-      references: "References outside academia",
-      citation_count: "Citations",
-      cited_by_tweeters_count: "Tweets",
+      "content_based": "Documents",
+      "citations": "Citations",
+      "cited_by_accounts_count": "Social media mentions",
+      "references": "References outside academia",
+      "citation_count": "Citations",
+      "cited_by_tweeters_count": "Tweets",
       "readers.mendeley": "Readers",
     },
   },
@@ -459,12 +460,12 @@ export const localization: {
     scale_by_explanation:
       "The size of the bubbles is relative to the number of documents related to them.",
     scale_label: {
-      content_based: "Documents",
-      citations: "Citations",
-      cited_by_accounts_count: "Social media mentions",
-      references: "References outside academia",
-      citation_count: "Citations",
-      cited_by_tweeters_count: "Tweets",
+      "content_based": "Documents",
+      "citations": "Citations",
+      "cited_by_accounts_count": "Social media mentions",
+      "references": "References outside academia",
+      "citation_count": "Citations",
+      "cited_by_tweeters_count": "Tweets",
       "readers.mendeley": "Readers",
     },
   },

@@ -19,9 +19,9 @@ export const NumArticles: FC<NumArticlesProps> = ({
   modifierLimit,
   isStreamgraph,
 }) => {
-  let displayText:
-    | ReactNode
-    | string = `${articlesCount} ${articlesCountLabel}`;
+  console.log("openAccessArticlesCount: ", openAccessArticlesCount);
+  let displayText: ReactNode | string =
+    `${articlesCount} ${articlesCountLabel}`;
 
   if (service === "orcid") {
     if (articlesCount >= modifierLimit) {
@@ -54,7 +54,7 @@ export const NumArticles: FC<NumArticlesProps> = ({
   return (
     <span id="num_articles" className="context_item">
       {displayText}{" "}
-      {openAccessArticlesCount !== null && (
+      {openAccessArticlesCount != null && (
         <>({openAccessArticlesCount} open access)</>
       )}
     </span>

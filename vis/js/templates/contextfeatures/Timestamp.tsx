@@ -1,9 +1,13 @@
 import React, { FC } from "react";
-import { PropsWithChildren } from "../../types";
 
-const Timestamp: FC<PropsWithChildren> = ({ children }) => (
+interface TimestampProps {
+  label: string;
+  value: string;
+}
+
+const Timestamp: FC<TimestampProps> = ({ label, value }) => (
   <span id="timestamp" className="context_item">
-    {children}
+    {label}: {value}
   </span>
 );
 
