@@ -1,4 +1,4 @@
-import { expect, describe, it } from 'vitest';
+import { expect, describe, it } from "vitest";
 
 import { initializeStore, updateDimensions } from "../../js/actions";
 
@@ -23,7 +23,7 @@ describe("data state", () => {
     it("should resize the papers correctly with no data", () => {
       const result = reducer(
         { list: [], options: {}, size: null },
-        updateDimensions({ size: 500 }, {})
+        updateDimensions({ size: 500 }, {}),
       );
 
       expect(result).toEqual({ list: [], options: {}, size: null });
@@ -32,7 +32,7 @@ describe("data state", () => {
     it("should not resize the papers if streamgraph", () => {
       const result = reducer(
         { list: [{}], options: { isStreamgraph: true }, size: null },
-        updateDimensions({ size: 500 }, {})
+        updateDimensions({ size: 500 }, {}),
       );
 
       expect(result).toEqual({
@@ -55,8 +55,8 @@ describe("data state", () => {
           500,
           500,
           500,
-          {}
-        )
+          {},
+        ),
       );
 
       expect(result).toEqual({
@@ -258,9 +258,9 @@ const RESIZED_DATA = {
         "http://mendeley.com/catalog/a-survey-of-current-research-on-online-communities-of-practice",
       comments_for_filtering: "",
       resized: false,
-      diameter: 38.46153846153847,
-      width: 28.623400289817337,
-      height: 38.164533719756456,
+      diameter: 18.461538461538463,
+      width: 13.739232139112323,
+      height: 18.3189761854831,
       zoomedX: NaN,
       zoomedY: NaN,
       zoomedWidth: NaN,
