@@ -1,13 +1,10 @@
 // @ts-nocheck
 
-import $ from "jquery";
 import d3 from "d3";
-import {
-  getDiameterScale,
-  getInitialCoordsScale,
-  getCoordsScale,
-  getRadiusScale,
-} from "../../utils/scale";
+import $ from "jquery";
+
+import { Config } from "../../@types/config";
+import { Paper } from "../../@types/paper";
 import {
   extractAuthors,
   getAuthorsList,
@@ -15,17 +12,20 @@ import {
   getListLink,
   getOpenAccessLink,
   getOutlink,
+  getValueOrZero,
   getVisibleMetric,
   isOpenAccess,
   parseCoordinate,
-  getValueOrZero,
 } from "../../utils/data";
-import { transformData } from "../../utils/streamgraph";
-
-import DEFAULT_SCHEME, { SchemeObject } from "../schemes/defaultScheme";
 import PaperSanitizer from "../../utils/PaperSanitizer";
-import { Paper } from "../../@types/paper";
-import { Config } from "../../@types/config";
+import {
+  getCoordsScale,
+  getDiameterScale,
+  getInitialCoordsScale,
+  getRadiusScale,
+} from "../../utils/scale";
+import { transformData } from "../../utils/streamgraph";
+import DEFAULT_SCHEME, { SchemeObject } from "../schemes/defaultScheme";
 
 const GOLDEN_RATIO = 2.6;
 
@@ -40,11 +40,11 @@ class DataManager {
   areas: any[] = [];
   author = {};
   scale_base_unit: Record<string, string> = {
-    citations: "citations",
-    references: "references",
-    cited_by_accounts_count: "social",
-    citation_count: "citations",
-    cited_by_tweeters_count: "tweets",
+    "citations": "citations",
+    "references": "references",
+    "cited_by_accounts_count": "social",
+    "citation_count": "citations",
+    "cited_by_tweeters_count": "tweets",
     "readers.mendeley": "readers",
   };
 
@@ -122,7 +122,7 @@ class DataManager {
         // typeof data.documents === "string" is temporal fix, consider to migrate to json instead of json in json
         return data.documents && typeof data.documents === "string"
           ? JSON.parse(data?.documents)
-          : data.documents ?? [];
+          : (data.documents ?? []);
       }
       return backendData.data?.documents ?? [];
     }
@@ -172,7 +172,7 @@ class DataManager {
       if (c === 32) {
         return "-";
       }
-      return "__" + ("000" + c.toString(16)).slice(-4);
+      return `__${`000${c.toString(16)}`.slice(-4)}`;
     });
   }
 
@@ -184,7 +184,7 @@ class DataManager {
     paper.authors_objects = extractAuthors(paper.authors);
     paper.authors_list = getAuthorsList(
       paper.authors,
-      this.config.convert_author_names
+      this.config.convert_author_names,
     );
 
     // old variable with all authors_string
@@ -205,7 +205,7 @@ class DataManager {
   // migrated from legacy code
   __escapeStrings(paper: any) {
     const protectedProps = new Set(
-      this.paperProps.filter((p) => p.protected).map((p) => p.name)
+      this.paperProps.filter((p) => p.protected).map((p) => p.name),
     );
 
     for (const field in paper) {
@@ -267,7 +267,7 @@ class DataManager {
         paper.cited_by_qna_count,
         paper.cited_by_tweeters_count,
         paper.cited_by_videos_count,
-      ].every((item) => item === undefined)
+      ].every((item) => item === undefined || item === null)
     ) {
       paper.social = "n/a";
     } else {
@@ -282,7 +282,8 @@ class DataManager {
       ].reduce((acc, val) => {
         if (typeof val === "string" || typeof val === "number") {
           return (acc ?? 0) + +val;
-        } else if (val === undefined || val === null) {
+        }
+        if (val === undefined || val === null) {
           return acc;
         }
       }, null);
@@ -297,7 +298,8 @@ class DataManager {
     ].reduce((acc, val) => {
       if (typeof val === "string" || typeof val === "number") {
         return (acc ?? 0) + +val;
-      } else if (val === undefined || val === null) {
+      }
+      if (val === undefined || val === null) {
         return acc;
       }
     }, null);
@@ -310,12 +312,12 @@ class DataManager {
     if (config.scale_by) {
       paper.num_readers = getVisibleMetric(
         paper,
-        this.scale_base_unit?.[config.scale_by] ?? config.scale_by
+        this.scale_base_unit?.[config.scale_by] ?? config.scale_by,
       );
       paper.internal_readers =
         getInternalMetric(
           paper,
-          this.scale_base_unit?.[config.scale_by] ?? config.scale_by
+          this.scale_base_unit?.[config.scale_by] ?? config.scale_by,
         ) + 1;
     }
   }
@@ -500,7 +502,7 @@ class DataManager {
 
     this.streams.forEach((stream: any) => {
       const firstTransformedEntry = transformedData.find(
-        (t) => t.key === stream.key
+        (t) => t.key === stream.key,
       );
       stream.docIds = firstTransformedEntry ? firstTransformedEntry.docIds : [];
     });

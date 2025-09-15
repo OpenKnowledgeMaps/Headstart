@@ -18,7 +18,7 @@ export const capitalize = (s: string) => {
  *
  * @returns -1/0/1
  */
-export const stringCompare = (a: string, b: string, sort_order = 'desc') => {
+export const stringCompare = (a: string, b: string, sort_order = "desc") => {
   if (typeof a === "undefined" || typeof b === "undefined") {
     return;
   }
@@ -60,7 +60,7 @@ export const stringCompare = (a: string, b: string, sort_order = 'desc') => {
     if (isNaN(a) && isNaN(b)) return 0;
     if (isNaN(a)) return sort_order === "desc" ? 1 : -1;
     if (isNaN(b)) return sort_order === "desc" ? -1 : 1;
-  
+
     return sort_order === "desc" ? d3.descending(a, b) : d3.ascending(a, b);
   }
 
@@ -87,7 +87,10 @@ export const shorten = (string: string, length: number, end = "...") => {
   return string.slice(0, length) + end;
 };
 
-export const formatString = (string: string, params: Record<string, string>) => {
+export const formatString = (
+  string: string,
+  params: Record<string, string>
+) => {
   Object.keys(params).forEach((param) => {
     string = string.replaceAll("${" + param + "}", params[param]);
   });

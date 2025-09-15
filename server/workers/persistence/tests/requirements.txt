@@ -1,0 +1,6 @@
+pytest
+pytest-mock
+flask
+flask_restx
+sqlalchemy
+psycopg2
