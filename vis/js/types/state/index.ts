@@ -9,12 +9,12 @@ export interface State {
   author: Author;
   bubbleOrder: slices.BubbleOrder;
   chart: slices.Chart;
-  chartType: "knowledgeMap" | "streamgraph";
+  chartType: slices.ChartTypes;
   contextLine: slices.ContextLine;
   data: slices.Data;
   heading: slices.Heading;
   highlightedBubble: null;
-  hyphenationLang: "en";
+  hyphenationLang: string;
   isCovis: boolean;
   list: slices.List;
   localization: Localization;
