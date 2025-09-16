@@ -1,12 +1,12 @@
 export interface List {
-  baseUnit: string;
+  baseUnit: SortValuesType;
   citePapers: boolean;
   defaultSort: string;
   disableClicks: boolean;
   exportPapers: boolean;
   filterField: null;
-  filterOptions: string[];
-  filterValue: string;
+  filterOptions: FilterValuesType[];
+  filterValue: FilterValuesType;
   height: number;
   hideUnselectedKeywords: boolean;
   isContentBased: boolean;
@@ -17,6 +17,9 @@ export interface List {
   showFilter: boolean;
   showKeywords: boolean;
   showMetrics: unknown;
-  sortOptions: string[];
-  sortValue: string;
+  sortOptions: SortValuesType[];
+  sortValue: SortValuesType;
 }
+
+export type FilterValuesType = "all" | "open_access" | "dataset";
+export type SortValuesType = "relevance" | "title" | "authors" | "year";

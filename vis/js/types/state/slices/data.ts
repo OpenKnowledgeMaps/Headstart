@@ -1,6 +1,8 @@
+import { AllPossiblePapersType } from "../../index";
+
 export interface Data {
   size: number;
-  list: unknown[];
+  list: AllPossiblePapersType[];
   options: Options;
 }
 

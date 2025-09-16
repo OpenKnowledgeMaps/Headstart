@@ -26,11 +26,11 @@ export interface State {
   q_advanced: slices.QueryAdvanced;
   query: slices.Query;
   selectedBubble: slices.SelectedBubble;
-  selectedPaper: null;
+  selectedPaper: slices.SelectedPaper;
   service: ServiceType;
   streamgraph: slices.Streamgraph;
   timespan: string;
   toolbar: slices.Toolbar;
   tracking: slices.Tracking;
-  zoom: true;
+  zoom: boolean;
 }

@@ -1,3 +1,3 @@
 export interface Tracking {
-  trackMouseOver: false;
+  trackMouseOver: boolean;
 }

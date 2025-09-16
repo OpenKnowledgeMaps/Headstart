@@ -1,4 +1,9 @@
-import { Config, Paper, ScaleMapAction, ScaleOptions } from "../types";
+import {
+  AllPossiblePapersType,
+  Config,
+  ScaleMapAction,
+  ScaleOptions,
+} from "../types";
 
 /**
  * All actions in this array are not delayed when the map is animated.
@@ -28,7 +33,7 @@ export const zoomIn = (
   callback: any,
   alreadyZoomed = false,
   isFromBackButton = false,
-  selectedPaperData: Paper | null = null,
+  selectedPaperData: AllPossiblePapersType | null = null,
 ) => ({
   type: "ZOOM_IN",
   selectedAreaData,

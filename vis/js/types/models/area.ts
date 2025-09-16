@@ -1,4 +1,4 @@
-import { PubmedPaper, BasePaper, OrcidPaper } from "../models/paper";
+import { AllPossiblePapersType } from "../models/paper";
 
 export interface Area {
   area_uri: number;
@@ -6,7 +6,7 @@ export interface Area {
   origR: number;
   origX: number;
   origY: number;
-  papers: PubmedPaper[] | BasePaper[] | OrcidPaper[];
+  papers: AllPossiblePapersType[];
   r: number;
   title: string;
   x: number;

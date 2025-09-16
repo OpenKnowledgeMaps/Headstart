@@ -1,7 +1,4 @@
-// @ts-nocheck
-
-import React from "react";
-
+import React, { FC } from "react";
 import { useLocalizationContext } from "../../components/LocalizationProvider";
 
 interface EntryBacklinkProps {
@@ -9,11 +6,10 @@ interface EntryBacklinkProps {
   onClick: () => void;
 }
 
-const EntryBacklink = ({ isInStream, onClick }: EntryBacklinkProps) => {
+const EntryBacklink: FC<EntryBacklinkProps> = ({ isInStream, onClick }) => {
   const localization = useLocalizationContext();
 
   return (
-    // html template starts here
     <button
       className="paper_button backlink_list"
       style={{ width: "auto" }}
@@ -26,7 +22,6 @@ const EntryBacklink = ({ isInStream, onClick }: EntryBacklinkProps) => {
           : localization.backlink_list_streamgraph}
       </span>
     </button>
-    // html template ends here
   );
 };
 

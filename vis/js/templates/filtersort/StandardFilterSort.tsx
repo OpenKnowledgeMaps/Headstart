@@ -1,16 +1,18 @@
-import React from "react";
+import React, { FC } from "react";
 import FilterDropdown from "../../components/filtersort/FilterDropdown";
 import SearchBox from "../../components/filtersort/SearchBox";
 import SortDropdown from "../../components/filtersort/SortDropdown";
 
-export interface StandardFilterSortProps {
+interface StandardFilterSortProps {
   displaySort: boolean;
-  color: string;
+  color: string | null;
 }
 
-const StandardFilterSort = ({ displaySort, color }: StandardFilterSortProps) => {
+const StandardFilterSort: FC<StandardFilterSortProps> = ({
+  displaySort,
+  color,
+}) => {
   return (
-    // html template starts here
     <div
       id="explorer_options"
       className="row"
@@ -20,7 +22,6 @@ const StandardFilterSort = ({ displaySort, color }: StandardFilterSortProps) => 
       <FilterDropdown />
       {!!displaySort && <SortDropdown />}
     </div>
-    // html template ends here
   );
 };
 

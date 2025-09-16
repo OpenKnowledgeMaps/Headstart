@@ -10,6 +10,8 @@ export {
   BasePaper,
   PubmedPaper,
   CommonPaperDataForAllIntegrations,
+  NotAvailable,
+  AllPossiblePapersType,
 } from "./models/paper";
 
 export { Context } from "./visualization/context";
@@ -20,6 +22,11 @@ export { ScaleOptions } from "./visualization/scale-options";
 export { ContextLine } from "./state/slices/context-line";
 
 export { State } from "./state";
+export {
+  SelectedPaper,
+  FilterValuesType,
+  SortValuesType,
+} from "./state/slices";
 export {
   Toolbar,
   ScaleExplanations,

@@ -1,6 +1,6 @@
 export interface SelectedBubble {
   title: string;
   uri: number;
-  color: unknown;
+  color: string;
   docIds: unknown;
 }
