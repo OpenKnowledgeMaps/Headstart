@@ -31,6 +31,6 @@ export interface ContextLine {
 
 interface ContextLineAuthorData {
   id: null;
-  imageLink: null;
+  imageLink: string | null;
   livingDates: null;
 }

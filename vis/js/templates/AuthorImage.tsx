@@ -5,7 +5,7 @@ import { ServiceType } from "../types";
 export interface AuthorImageProps {
   orcidId: string;
   service: ServiceType;
-  url?: string;
+  url: string | null;
 }
 
 const AuthorImage: FC<AuthorImageProps> = ({ service, orcidId, url = "" }) => {
