@@ -1,4 +1,4 @@
-import { Config, Paper } from "../types";
+import { Config, Paper, ScaleMapAction, ScaleOptions } from "../types";
 
 /**
  * All actions in this array are not delayed when the map is animated.
@@ -28,7 +28,7 @@ export const zoomIn = (
   callback: any,
   alreadyZoomed = false,
   isFromBackButton = false,
-  selectedPaperData: Paper | null = null
+  selectedPaperData: Paper | null = null,
 ) => ({
   type: "ZOOM_IN",
   selectedAreaData,
@@ -40,7 +40,7 @@ export const zoomIn = (
 
 export const zoomOut = (
   callback: (() => void) | null,
-  isFromBackButton = false
+  isFromBackButton = false,
 ) => ({
   type: "ZOOM_OUT",
   callback,
@@ -66,7 +66,7 @@ export const initializeStore = (
   streamHeight: number,
   listHeight: number,
   scalingFactors: any,
-  author: any
+  author: any,
 ) => ({
   type: "INITIALIZE",
   configObject,
@@ -174,11 +174,11 @@ export const closeResearcherMetricsModal = () => ({
 });
 
 export const scaleMap = (
-  value: any,
-  baseUnit: string,
+  value: ScaleOptions,
+  baseUnit: string | undefined,
   contentBased: boolean,
-  sort: string
-) => ({
+  sort: string | undefined,
+): ScaleMapAction => ({
   type: "SCALE",
   value,
   baseUnit,
