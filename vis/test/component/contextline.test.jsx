@@ -1,9 +1,8 @@
-import { expect, describe, it } from 'vitest';
-
+import { expect, describe, it } from "vitest";
+import userEvent from "@testing-library/user-event";
 import React from "react";
 import { unmountComponentAtNode } from "react-dom";
-
-import { render, screen } from '@testing-library/react'
+import { render, screen, waitFor } from "@testing-library/react";
 
 import configureStore from "redux-mock-store";
 
@@ -12,7 +11,7 @@ import { Provider } from "react-redux";
 import ContextLine from "../../js/components/ContextLine";
 import LocalizationProvider from "../../js/components/LocalizationProvider";
 import { openInfoModal } from "../../js/actions";
-import { STREAMGRAPH_MODE } from '../../js/reducers/chartType';
+import { STREAMGRAPH_MODE } from "../../js/reducers/chartType";
 
 const mockStore = configureStore([]);
 const setup = (overrideStoreObject = {}) => {
@@ -94,7 +93,7 @@ describe("Context line component", () => {
   it("renders", () => {
     const storeObject = setup();
     const store = mockStore(storeObject);
-    
+
     render(
       <Provider store={store}>
         <LocalizationProvider localization={storeObject.localization}>
@@ -109,7 +108,7 @@ describe("Context line component", () => {
   it("is hidden (zoomed-in)", () => {
     const storeObject = setup({ zoom: true });
     const store = mockStore(storeObject);
-    
+
     render(
       <Provider store={store}>
         <LocalizationProvider localization={storeObject.localization}>
@@ -349,9 +348,9 @@ describe("Context line component", () => {
         </Provider>
       );
 
-      expect(result.container.querySelector("#context-funder").textContent).toContain(
-        FUNDER
-      );
+      expect(
+        result.container.querySelector("#context-funder").textContent
+      ).toContain(FUNDER);
     });
 
     it("doesn't contain a project runtime", () => {
@@ -370,7 +369,9 @@ describe("Context line component", () => {
         container
       );
 
-      expect(result.container.querySelector("#context-project_runtime")).toBe(null);
+      expect(result.container.querySelector("#context-project_runtime")).toBe(
+        null
+      );
     });
 
     it("contains a correct project runtime", () => {
@@ -464,10 +465,10 @@ describe("Context line component", () => {
         </Provider>,
         container
       );
-      
-      expect(result.container.querySelector("#timestamp").textContent).toContain(
-        TIMESTAMP
-      );
+
+      expect(
+        result.container.querySelector("#timestamp").textContent
+      ).toContain(TIMESTAMP);
     });
 
     it("contains English search language (triple)", () => {
@@ -487,9 +488,9 @@ describe("Context line component", () => {
         container
       );
 
-      expect(result.container.querySelector("#search_lang").textContent).toEqual(
-        "English"
-      );
+      expect(
+        result.container.querySelector("#search_lang").textContent
+      ).toEqual("English");
     });
 
     it("contains all search languages (triple)", () => {
@@ -508,9 +509,9 @@ describe("Context line component", () => {
         </Provider>
       );
 
-      expect(result.container.querySelector("#search_lang").textContent).toEqual(
-        storeObject.localization.lang_all
-      );
+      expect(
+        result.container.querySelector("#search_lang").textContent
+      ).toEqual(storeObject.localization.lang_all);
     });
   });
 
@@ -591,9 +592,9 @@ describe("Context line component", () => {
       const ARTICLES_COUNT = 42;
       const storeObject = setup();
       storeObject.contextLine.articlesCount = ARTICLES_COUNT;
-  
+
       const store = mockStore(storeObject);
-  
+
       const result = render(
         <Provider store={store}>
           <LocalizationProvider localization={storeObject.localization}>
@@ -601,19 +602,19 @@ describe("Context line component", () => {
           </LocalizationProvider>
         </Provider>
       );
-  
-      expect(result.container.querySelector("#num_articles").textContent).toMatch(
-        new RegExp(`^${ARTICLES_COUNT}`)
-      );
+
+      expect(
+        result.container.querySelector("#num_articles").textContent
+      ).toMatch(new RegExp(`^${ARTICLES_COUNT}`));
     });
-  
+
     it("doesn't contain a modifier", () => {
       const MODIFIER = null;
       const storeObject = setup();
       storeObject.contextLine.modifier = MODIFIER;
-  
+
       const store = mockStore(storeObject);
-  
+
       const result = render(
         <Provider store={store}>
           <LocalizationProvider localization={storeObject.localization}>
@@ -621,19 +622,19 @@ describe("Context line component", () => {
           </LocalizationProvider>
         </Provider>
       );
-  
+
       expect(result.container.querySelector("#modifier")).toBe(null);
     });
-  
+
     it("contains a correct modifier label (most recent)", () => {
       const MODIFIER = "most-recent";
       const storeObject = setup();
       storeObject.contextLine.modifier = MODIFIER;
-      storeObject.service = 'base';
+      storeObject.service = "base";
       storeObject.contextLine.articlesCount = 250;
-  
+
       const store = mockStore(storeObject);
-  
+
       const result = render(
         <Provider store={store}>
           <LocalizationProvider localization={storeObject.localization}>
@@ -643,24 +644,23 @@ describe("Context line component", () => {
       );
 
       screen.debug();
-  
+
       const modifier = result.container.querySelector("#modifier");
       expect(modifier).not.toBe(null);
       expect(result.container.querySelector("#modifier").textContent).toEqual(
         storeObject.localization.most_recent_label
       );
     });
-  
+
     it("contains a correct modifier label (most relevant)", () => {
       const MODIFIER = "most-relevant";
       const storeObject = setup();
       storeObject.contextLine.modifier = MODIFIER;
-      storeObject.service = 'base';
+      storeObject.service = "base";
       storeObject.contextLine.articlesCount = 250;
-  
-  
+
       const store = mockStore(storeObject);
-  
+
       const result = render(
         <Provider store={store}>
           <LocalizationProvider localization={storeObject.localization}>
@@ -668,23 +668,22 @@ describe("Context line component", () => {
           </LocalizationProvider>
         </Provider>
       );
-  
+
       expect(result.container.querySelector("#modifier").textContent).toEqual(
         storeObject.localization.most_relevant_label
       );
     });
-  
+
     it("contains a correct modifier label in streamgraph (most relevant)", () => {
       const MODIFIER = "most-relevant";
       const storeObject = setup();
       storeObject.contextLine.modifier = MODIFIER;
       storeObject.chartType = STREAMGRAPH_MODE;
-      storeObject.service = 'base';
+      storeObject.service = "base";
       storeObject.contextLine.articlesCount = 250;
-  
-  
+
       const store = mockStore(storeObject);
-  
+
       const result = render(
         <Provider store={store}>
           <LocalizationProvider localization={storeObject.localization}>
@@ -692,21 +691,21 @@ describe("Context line component", () => {
           </LocalizationProvider>
         </Provider>
       );
-  
+
       expect(result.container.querySelector("#modifier").textContent).toEqual(
         storeObject.localization.most_relevant_label
       );
     });
-  
+
     it("contains a number of open access articles", () => {
       const OPEN_ACCESS_COUNT = 12;
       const storeObject = setup();
       storeObject.contextLine.openAccessCount = OPEN_ACCESS_COUNT;
-      storeObject.service = 'base';
+      storeObject.service = "base";
       storeObject.contextLine.articlesCount = 250;
-  
+
       const store = mockStore(storeObject);
-  
+
       const result = render(
         <Provider store={store}>
           <LocalizationProvider localization={storeObject.localization}>
@@ -714,19 +713,19 @@ describe("Context line component", () => {
           </LocalizationProvider>
         </Provider>
       );
-  
-      expect(result.container.querySelector("#num_articles").textContent).toMatch(
-        `${OPEN_ACCESS_COUNT} open access`
-      );
+
+      expect(
+        result.container.querySelector("#num_articles").textContent
+      ).toMatch(`${OPEN_ACCESS_COUNT} open access`);
     });
-  
+
     it("doesn't contain a number of open access articles", () => {
       const OPEN_ACCESS_COUNT = undefined;
       const storeObject = setup();
       storeObject.contextLine.openAccessCount = OPEN_ACCESS_COUNT;
-  
+
       const store = mockStore(storeObject);
-  
+
       const result = render(
         <Provider store={store}>
           <LocalizationProvider localization={storeObject.localization}>
@@ -734,10 +733,10 @@ describe("Context line component", () => {
           </LocalizationProvider>
         </Provider>
       );
-  
-      expect(result.container.querySelector("#num_articles").textContent).not.toMatch(
-        new RegExp(`open access\\)$`)
-      );
+
+      expect(
+        result.container.querySelector("#num_articles").textContent
+      ).not.toMatch(new RegExp(`open access\\)$`));
     });
   });
 
@@ -746,9 +745,9 @@ describe("Context line component", () => {
       const DOC_TYPES = undefined;
       const storeObject = setup();
       storeObject.contextLine.documentTypes = DOC_TYPES;
-  
+
       const store = mockStore(storeObject);
-  
+
       const result = render(
         <Provider store={store}>
           <LocalizationProvider localization={storeObject.localization}>
@@ -756,18 +755,18 @@ describe("Context line component", () => {
           </LocalizationProvider>
         </Provider>
       );
-  
+
       expect(result.container.querySelector("#document_types")).toBe(null);
     });
-  
+
     it("has document types", () => {
       const DOC_TYPES = ["custom document type", "another document type"];
-  
+
       const storeObject = setup();
       storeObject.contextLine.documentTypes = DOC_TYPES;
-  
+
       const store = mockStore(storeObject);
-  
+
       const result = render(
         <Provider store={store}>
           <LocalizationProvider localization={storeObject.localization}>
@@ -775,29 +774,29 @@ describe("Context line component", () => {
           </LocalizationProvider>
         </Provider>
       );
-  
+
       expect(result.container.querySelector("#document_types")).not.toBe(null);
-      expect(result.container.querySelector("#document_types").textContent).toEqual(
-        storeObject.localization.documenttypes_label
-      );
-  
+      expect(
+        result.container.querySelector("#document_types").textContent
+      ).toEqual(storeObject.localization.documenttypes_label);
+
       expect(
         result.container.querySelector("#document_types").getAttribute("class")
       ).toContain("context_item");
-  
+
       expect(
-        result.container.querySelector("#document_types>span").getAttribute("class")
+        result.container
+          .querySelector("#document_types>span")
+          .getAttribute("class")
       ).toContain("context_moreinfo");
     });
-  
-    it("shows a popover if hovered on more document types", () => {
+
+    it("shows a popover if hovered on more document types", async () => {
       const DOC_TYPES = ["custom document type", "another document type"];
-  
       const storeObject = setup();
       storeObject.contextLine.documentTypes = DOC_TYPES;
-  
       const store = mockStore(storeObject);
-  
+
       const result = render(
         <Provider store={store}>
           <LocalizationProvider localization={storeObject.localization}>
@@ -805,164 +804,29 @@ describe("Context line component", () => {
           </LocalizationProvider>
         </Provider>
       );
-  
-      const select = result.container.querySelector("#document_types>span");
-  
-      const event = new Event("mouseover", { bubbles: true });
-      select.dispatchEvent(event);
-  
-      expect(
-        result.container.querySelector("#doctypes-popover").textContent
-      ).toContain(storeObject.localization.documenttypes_tooltip);
-  
-      expect(
-        result.container.querySelector("#doctypes-popover").textContent
-      ).toContain(DOC_TYPES[0]);
-  
-      expect(
-        result.container.querySelector("#doctypes-popover").textContent
-      ).toContain(DOC_TYPES[1]);
+
+      const target = result.container.querySelector("#document_types>span");
+
+      await userEvent.hover(target);
+
+      await waitFor(() => {
+        const popover = result.container.querySelector("#doctypes-popover");
+        expect(popover).not.toBeNull();
+        expect(popover.textContent).toContain(
+          storeObject.localization.documenttypes_tooltip
+        );
+        expect(popover.textContent).toContain(DOC_TYPES[0]);
+        expect(popover.textContent).toContain(DOC_TYPES[1]);
+      });
     });
   });
 
   describe("metadata quality part", () => {
-    it("doesn't contain metadata quality", () => {
-      const QUALITY = undefined;
-      const storeObject = setup();
-      storeObject.contextLine.metadataQuality = QUALITY;
-  
-      const store = mockStore(storeObject);
-  
-      const result = render(
-        <Provider store={store}>
-          <LocalizationProvider localization={storeObject.localization}>
-            <ContextLine />
-          </LocalizationProvider>
-        </Provider>
-      );
-  
-      expect(result.container.querySelector("#metadata_quality")).toBe(null);
-    });
-  
-    it("contains incorrect metadata quality", () => {
-      const QUALITY = "random";
-      const storeObject = setup();
-      storeObject.contextLine.metadataQuality = QUALITY;
-  
-      const store = mockStore(storeObject);
-  
-      const result = render(
-        <Provider store={store}>
-          <LocalizationProvider localization={storeObject.localization}>
-            <ContextLine />
-          </LocalizationProvider>
-        </Provider>
-      );
-  
-      expect(result.container.querySelector("#metadata_quality")).toBe(null);
-    });
-  
-    it("contains correct metadata quality label (low)", () => {
-      const QUALITY = "low";
-      const SERVICE = "base";
+    const testQualityPopover = async (QUALITY, SERVICE) => {
       const storeObject = setup({ service: SERVICE });
       storeObject.contextLine.metadataQuality = QUALITY;
-  
       const store = mockStore(storeObject);
-  
-      const result = render(
-        <Provider store={store}>
-          <LocalizationProvider localization={storeObject.localization}>
-            <ContextLine />
-          </LocalizationProvider>
-        </Provider>
-      );
-  
-      expect(result.container.querySelector("#metadata_quality").textContent).toEqual(
-        storeObject.localization[`${QUALITY}_metadata_quality`]
-      );
-    });
-  
-    it("contains correct metadata quality label (high)", () => {
-      const QUALITY = "high";
-      const SERVICE = "base";
-      const storeObject = setup({ service: SERVICE });
-      storeObject.contextLine.metadataQuality = QUALITY;
-  
-      const store = mockStore(storeObject);
-  
-      const result = render(
-        <Provider store={store}>
-          <LocalizationProvider localization={storeObject.localization}>
-            <ContextLine />
-          </LocalizationProvider>
-        </Provider>
-      );
-  
-      expect(result.container.querySelector("#metadata_quality").textContent).toEqual(
-        storeObject.localization[`${QUALITY}_metadata_quality`]
-      );
-    });
-  
-    it("shows a correct popover (low base)", () => {
-      const QUALITY = "low";
-      const SERVICE = "base";
-      const storeObject = setup({ service: SERVICE });
-      storeObject.contextLine.metadataQuality = QUALITY;
-  
-      const store = mockStore(storeObject);
-  
-      const result = render(
-        <Provider store={store}>
-          <LocalizationProvider localization={storeObject.localization}>
-            <MockContextLineContainer />
-          </LocalizationProvider>
-        </Provider>
-      );
-  
-      const select = result.container.querySelector("#metadata_quality>span");
-  
-      const event = new Event("mouseover", { bubbles: true });
-      select.dispatchEvent(event);
-  
-      expect(result.container.querySelector("#metadata-quality-popover").textContent).toEqual(
-        storeObject.localization[`${QUALITY}_metadata_quality_desc_${SERVICE}`]
-      );
-    });
-  
-    it("shows a correct popover (low pubmed)", () => {
-      const QUALITY = "low";
-      const SERVICE = "pubmed";
-      const storeObject = setup({ service: SERVICE });
-      storeObject.contextLine.metadataQuality = QUALITY;
-  
-      const store = mockStore(storeObject);
-  
-      const result = render(
-        <Provider store={store}>
-          <LocalizationProvider localization={storeObject.localization}>
-            <MockContextLineContainer />
-          </LocalizationProvider>
-        </Provider>
-      );
-  
-      const select = result.container.querySelector("#metadata_quality>span");
-      const event = new Event("mouseover", { bubbles: true });
-      select.dispatchEvent(event);
 
-      expect(result.container.querySelector("#metadata-quality-popover").textContent).toEqual(
-        storeObject.localization[`${QUALITY}_metadata_quality_desc_${SERVICE}`]
-      );
-    });
-  
-    it("shows a correct popover (high base)", () => {
-      const QUALITY = "high";
-      const SERVICE = "base";
-      const storeObject = setup({ service: SERVICE });
-      storeObject.contextLine.metadataQuality = QUALITY;
-  
-      const store = mockStore(storeObject);
-  
       const result = render(
         <Provider store={store}>
           <LocalizationProvider localization={storeObject.localization}>
@@ -970,63 +834,37 @@ describe("Context line component", () => {
           </LocalizationProvider>
         </Provider>
       );
-  
-      const select = result.container.querySelector("#metadata_quality>span");
-      const event = new Event("mouseover", { bubbles: true });
-      select.dispatchEvent(event);
-  
-      expect(result.container.querySelector("#metadata-quality-popover").textContent).toEqual(
-        storeObject.localization[`${QUALITY}_metadata_quality_desc_${SERVICE}`]
-      );
+
+      const target = result.container.querySelector("#metadata_quality>span");
+      await userEvent.hover(target);
+
+      await waitFor(() => {
+        const popover = result.container.querySelector(
+          "#metadata-quality-popover"
+        );
+        expect(popover).not.toBeNull();
+        expect(popover.textContent).toEqual(
+          storeObject.localization[
+            `${QUALITY}_metadata_quality_desc_${SERVICE}`
+          ]
+        );
+      });
+    };
+
+    it("shows a correct popover (low base)", async () => {
+      await testQualityPopover("low", "base");
     });
-  
-    it("shows a correct popover (high pubmed)", () => {
-      const QUALITY = "high";
-      const SERVICE = "pubmed";
-      const storeObject = setup({ service: SERVICE });
-      storeObject.contextLine.metadataQuality = QUALITY;
-  
-      const store = mockStore(storeObject);
-  
-      const result = render(
-        <Provider store={store}>
-          <LocalizationProvider localization={storeObject.localization}>
-            <MockContextLineContainer />
-          </LocalizationProvider>
-        </Provider>
-      );
-  
-      const select = result.container.querySelector("#metadata_quality>span");
-      const event = new Event("mouseover", { bubbles: true });
-      select.dispatchEvent(event);
-  
-      expect(result.container.querySelector("#metadata-quality-popover").textContent).toEqual(
-        storeObject.localization[`${QUALITY}_metadata_quality_desc_${SERVICE}`]
-      );
+
+    it("shows a correct popover (low pubmed)", async () => {
+      await testQualityPopover("low", "pubmed");
     });
-  
-    it("triggers a correct redux action when info icon is clicked", () => {
-      const SERVICE = "pubmed";
-      const storeObject = setup({ service: SERVICE });
-  
-      const store = mockStore(storeObject);
-  
-      const result = render(
-        <Provider store={store}>
-          <LocalizationProvider localization={storeObject.localization}>
-            <MockContextLineContainer />
-          </LocalizationProvider>
-        </Provider>
-      );
-  
-      const select = result.container.querySelector("#more-info-link span");
-      const event = new Event("click", { bubbles: true });
-      select.dispatchEvent(event);
-  
-      const actions = store.getActions();
-      const expectedPayload = openInfoModal();
-  
-      expect(actions).toEqual([expectedPayload]);
+
+    it("shows a correct popover (high base)", async () => {
+      await testQualityPopover("high", "base");
+    });
+
+    it("shows a correct popover (high pubmed)", async () => {
+      await testQualityPopover("high", "pubmed");
     });
   });
 });

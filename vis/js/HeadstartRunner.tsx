@@ -3,6 +3,7 @@ import ReactDOM from "react-dom";
 import React from "react";
 import { createStore } from "redux";
 import { Provider } from "react-redux";
+import { createRoot } from "react-dom/client";
 
 import rootReducer, { getInitialState } from "./reducers";
 import {
@@ -55,7 +56,7 @@ class HeadstartRunner {
   }
 
   async run() {
-    this.checkBrowserVersion();
+    this.checkIsSupportedBrowser();
     this.renderReact();
     this.addBackButtonListener();
     this.backendData = await this.fetchData();
@@ -65,26 +66,39 @@ class HeadstartRunner {
     this.addWindowResizeListener();
   }
 
-  checkBrowserVersion() {
+  private checkIsSupportedBrowser() {
+    const SUPPORTED = [
+      "Chrome",
+      "Firefox",
+      "Safari",
+      "Microsoft Edge",
+      "Opera",
+    ] as const;
+
     const browser = Bowser.getParser(window.navigator.userAgent);
-    // TODO use proper browser filtering https://www.npmjs.com/package/bowser#filtering-browsers
-    if (
-      !["chrome", "firefox", "safari"].includes(browser.getBrowserName(true))
-    ) {
+    const browserName = browser.getBrowserName(true);
+
+    const isSupportedBrowser = SUPPORTED.map((browserName) =>
+      browserName.toLowerCase()
+    ).includes(browserName);
+
+    if (!isSupportedBrowser || !browserName) {
       alert(
         "You are using an unsupported browser. " +
           "This visualization was successfully tested " +
-          "with the latest versions of Chrome, Firefox and Safari."
+          "with the latest versions of " +
+          "Chrome, Firefox, Safari, Edge and Opera. " +
+          "We strongly recommend using one of these browsers."
       );
     }
   }
 
   renderReact() {
-    ReactDOM.render(
+    const rootNode: Root = createRoot(this.hsContainer);
+    rootNode.render(
       <Provider store={this.store}>
         <Headstart />
-      </Provider>,
-      this.hsContainer
+      </Provider>
     );
   }
 
@@ -160,10 +174,7 @@ class HeadstartRunner {
   addWindowResizeListener() {
     window.addEventListener("resize", () => {
       const chart = getChartSize(this.config);
-      const list = getListSize(
-        this.config,
-        chart.size
-      );
+      const list = getListSize(this.config, chart.size);
       this.store.dispatch(updateDimensions(chart, list));
     });
   }
@@ -195,7 +206,12 @@ class HeadstartRunner {
     elem?.dispatchEvent(event);
   }
 
-  rescaleMap(scaleBy: string, baseUnit: string, isContentBased: boolean, initialSort: string) {
+  rescaleMap(
+    scaleBy: string,
+    baseUnit: string,
+    isContentBased: boolean,
+    initialSort: string
+  ) {
     this.config.scale_by = scaleBy;
     this.config.base_unit = baseUnit;
     this.config.content_based = isContentBased;
