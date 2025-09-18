@@ -1,10 +1,11 @@
 import time
 import json
-import subprocess
 import logging
+import subprocess
 from common.r_wrapper import RWrapper
-from common.decorators import error_logging_aspect
 from common.rate_limiter import RateLimiter
+from common.decorators import error_logging_aspect
+
 
 formatter = logging.Formatter(
     fmt='%(asctime)s %(levelname)-8s %(message)s',
@@ -35,14 +36,12 @@ class MetricsClient(RWrapper):
     @error_logging_aspect(log_level=logging.ERROR)
     def execute_search(self, params: dict, metadata: str) -> dict:
         command = [
-            self.command, 
-            self.runner, 
-            self.wd, 
-            params.get('q'), 
+            self.command,
+            self.runner,
+            self.wd,
+            params.get('q'),
             params.get('service')
         ]
-
-        self.logger.debug(f"Executing command: {command}")
 
         data = {
             "params": params,
@@ -59,8 +58,6 @@ class MetricsClient(RWrapper):
             )
             stdout, stderr = proc.communicate(json.dumps(data))
 
-            self.logger.debug(f"Stdout: {stdout}")
-
             output = [line for line in stdout.split('\n') if line]
             errors = [line for line in stderr.split('\n') if line]
 
@@ -68,8 +65,6 @@ class MetricsClient(RWrapper):
                 raise ValueError("No output received from the subprocess")
 
             raw_metadata = json.loads(output[-2])
-
-            self.logger.debug(f"Raw metadata: {raw_metadata}")
 
             if isinstance(raw_metadata, dict) and raw_metadata.get('status') == "error":
                 return raw_metadata
