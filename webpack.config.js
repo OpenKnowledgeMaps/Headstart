@@ -134,17 +134,9 @@ module.exports = (env) => {
           ],
         },
         {
-          test: /.jsx?$/,
-          resolve: { extensions: [".js", ".jsx"] },
+          test: /\.[j]sx?$/,
           exclude: /node_modules/,
-          use: [
-            {
-              loader: "babel-loader",
-              options: {
-                presets: ["@babel/preset-env", "@babel/preset-react"],
-              },
-            },
-          ],
+          use: "babel-loader",
         },
         {
           test: /\.(woff(2)?|ttf|eot|svg)(\?v=\d+\.\d+\.\d+)?$/,
@@ -160,30 +152,24 @@ module.exports = (env) => {
           ],
         },
         {
-          test: /\.(sa|sc|c)ss$/,
+          test: /\.(sa|sc)ss$/,
           use: [
-            {
-              loader: "style-loader",
-            },
-            {
-              loader: MiniCssExtractPlugin.loader,
-              options: { esModule: false },
-            },
-            {
-              loader: "css-loader",
-            },
+            MiniCssExtractPlugin.loader,
+            "css-loader",
             {
               loader: "sass-loader",
               options: {
-                additionalData: `
-                        $skin: "${skin}";
-                    `,
+                additionalData: `$skin: "${skin}";`,
                 sassOptions: {
                   includePaths: ["node_modules"],
                 },
               },
             },
           ],
+        },
+        {
+          test: /\.css$/,
+          use: [MiniCssExtractPlugin.loader, "css-loader"],
         },
         { test: /\.csl$/, type: "asset/source" },
       ],

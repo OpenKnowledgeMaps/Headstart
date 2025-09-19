@@ -17,65 +17,11 @@ exports[`Context line component snapshot > matches a covis snapshot 1`] = `
   </span>
   <span
     className="context_item"
-    dangerouslySetInnerHTML={
-      {
-        "__html": "Data source: <span class="backlink"><a href="data" class="underline" target="_blank" >CoVis database</a></span>",
-      }
-    }
-    id="source"
-  />
-  <span
-    className="context_item"
-    id="document_lang"
-    onMouseEnter={[Function]}
-  >
-    <span
-      className="context_moreinfo"
-      onBlur={[Function]}
-      onClick={null}
-      onFocus={[Function]}
-      onMouseOut={[Function]}
-      onMouseOver={[Function]}
-    >
-      All lang
-    </span>
-  </span>
-  <span
-    className="context_item"
     id="timestamp"
   >
     Last updated
     : 
     2020-08-12 02:40:04 UTC
-  </span>
-  <span
-    className="context_item"
-    id="researcher-link"
-  >
-    <span
-      className="context_moreinfo infolink"
-      onClick={[Function]}
-    >
-      <i
-        className="fas fa-user"
-      />
-       
-    </span>
-  </span>
-  <span
-    className="context_item"
-    id="researcher-metrics-link"
-    title="Metrics"
-  >
-    <span
-      className="context_moreinfo infolink"
-      onClick={[Function]}
-    >
-      <i
-        className="fas fa-chart-line"
-      />
-       
-    </span>
   </span>
   <span
     className="context_item"
@@ -111,7 +57,6 @@ exports[`Context line component snapshot > matches a linkedcat authorview snapsh
     id="author_bio"
   >
     <a
-      href="https://d-nb.info/gnd/100016642"
       id="author_bio_link"
       rel="noreferrer"
       target="_blank"
@@ -125,60 +70,6 @@ exports[`Context line component snapshot > matches a linkedcat authorview snapsh
   >
     45 open access Dokumente
      
-  </span>
-  <span
-    className="context_item"
-    dangerouslySetInnerHTML={
-      {
-        "__html": "Quelle: LinkedCat+",
-      }
-    }
-    id="source"
-  />
-  <span
-    className="context_item"
-    id="document_lang"
-    onMouseEnter={[Function]}
-  >
-    <span
-      className="context_moreinfo"
-      onBlur={[Function]}
-      onClick={null}
-      onFocus={[Function]}
-      onMouseOut={[Function]}
-      onMouseOver={[Function]}
-    >
-      All lang
-    </span>
-  </span>
-  <span
-    className="context_item"
-    id="researcher-link"
-  >
-    <span
-      className="context_moreinfo infolink"
-      onClick={[Function]}
-    >
-      <i
-        className="fas fa-user"
-      />
-       
-    </span>
-  </span>
-  <span
-    className="context_item"
-    id="researcher-metrics-link"
-    title="Metrics"
-  >
-    <span
-      className="context_moreinfo infolink"
-      onClick={[Function]}
-    >
-      <i
-        className="fas fa-chart-line"
-      />
-       
-    </span>
   </span>
   <span
     className="context_item"
@@ -212,15 +103,6 @@ exports[`Context line component snapshot > matches a linkedcat keywordview snaps
   </span>
   <span
     className="context_item"
-    dangerouslySetInnerHTML={
-      {
-        "__html": "Quelle: LinkedCat+",
-      }
-    }
-    id="source"
-  />
-  <span
-    className="context_item"
     id="timespan"
   >
     1 Jan 1847 - 1 Jan 1918
@@ -239,51 +121,6 @@ exports[`Context line component snapshot > matches a linkedcat keywordview snaps
       onMouseOver={[Function]}
     >
       Dokumentarten
-    </span>
-  </span>
-  <span
-    className="context_item"
-    id="document_lang"
-    onMouseEnter={[Function]}
-  >
-    <span
-      className="context_moreinfo"
-      onBlur={[Function]}
-      onClick={null}
-      onFocus={[Function]}
-      onMouseOut={[Function]}
-      onMouseOver={[Function]}
-    >
-      All lang
-    </span>
-  </span>
-  <span
-    className="context_item"
-    id="researcher-link"
-  >
-    <span
-      className="context_moreinfo infolink"
-      onClick={[Function]}
-    >
-      <i
-        className="fas fa-user"
-      />
-       
-    </span>
-  </span>
-  <span
-    className="context_item"
-    id="researcher-metrics-link"
-    title="Metrics"
-  >
-    <span
-      className="context_moreinfo infolink"
-      onClick={[Function]}
-    >
-      <i
-        className="fas fa-chart-line"
-      />
-       
     </span>
   </span>
   <span
@@ -313,21 +150,30 @@ exports[`Context line component snapshot > matches a project website (base low q
     className="context_item"
     id="num_articles"
   >
-    100 documents
+    100 
+    <span
+      onMouseEnter={[Function]}
+    >
+      <span
+        className="modifier context_moreinfo"
+        id="modifier"
+        onBlur={[Function]}
+        onClick={null}
+        onFocus={[Function]}
+        onMouseOut={[Function]}
+        onMouseOver={[Function]}
+      >
+        most relevant
+      </span>
+       
+    </span>
+     
+    documents
      
     (
     52
      open access)
   </span>
-  <span
-    className="context_item"
-    dangerouslySetInnerHTML={
-      {
-        "__html": "Source: BASE",
-      }
-    }
-    id="source"
-  />
   <span
     className="context_item"
     id="timespan"
@@ -352,22 +198,6 @@ exports[`Context line component snapshot > matches a project website (base low q
   </span>
   <span
     className="context_item"
-    id="document_lang"
-    onMouseEnter={[Function]}
-  >
-    <span
-      className="context_moreinfo"
-      onBlur={[Function]}
-      onClick={null}
-      onFocus={[Function]}
-      onMouseOut={[Function]}
-      onMouseOver={[Function]}
-    >
-      All lang
-    </span>
-  </span>
-  <span
-    className="context_item"
     id="metadata_quality"
     onMouseEnter={[Function]}
   >
@@ -380,35 +210,6 @@ exports[`Context line component snapshot > matches a project website (base low q
       onMouseOver={[Function]}
     >
       low metadata quality
-    </span>
-  </span>
-  <span
-    className="context_item"
-    id="researcher-link"
-  >
-    <span
-      className="context_moreinfo infolink"
-      onClick={[Function]}
-    >
-      <i
-        className="fas fa-user"
-      />
-       
-    </span>
-  </span>
-  <span
-    className="context_item"
-    id="researcher-metrics-link"
-    title="Metrics"
-  >
-    <span
-      className="context_moreinfo infolink"
-      onClick={[Function]}
-    >
-      <i
-        className="fas fa-chart-line"
-      />
-       
     </span>
   </span>
   <span
@@ -438,21 +239,30 @@ exports[`Context line component snapshot > matches a project website (pubmed hig
     className="context_item"
     id="num_articles"
   >
-    100 documents
+    100 
+    <span
+      onMouseEnter={[Function]}
+    >
+      <span
+        className="modifier context_moreinfo"
+        id="modifier"
+        onBlur={[Function]}
+        onClick={null}
+        onFocus={[Function]}
+        onMouseOut={[Function]}
+        onMouseOver={[Function]}
+      >
+        most relevant
+      </span>
+       
+    </span>
+     
+    documents
      
     (
     52
      open access)
   </span>
-  <span
-    className="context_item"
-    dangerouslySetInnerHTML={
-      {
-        "__html": "Source: PubMed",
-      }
-    }
-    id="source"
-  />
   <span
     className="context_item"
     id="timespan"
@@ -477,22 +287,6 @@ exports[`Context line component snapshot > matches a project website (pubmed hig
   </span>
   <span
     className="context_item"
-    id="document_lang"
-    onMouseEnter={[Function]}
-  >
-    <span
-      className="context_moreinfo"
-      onBlur={[Function]}
-      onClick={null}
-      onFocus={[Function]}
-      onMouseOut={[Function]}
-      onMouseOver={[Function]}
-    >
-      All lang
-    </span>
-  </span>
-  <span
-    className="context_item"
     id="metadata_quality"
     onMouseEnter={[Function]}
   >
@@ -505,35 +299,6 @@ exports[`Context line component snapshot > matches a project website (pubmed hig
       onMouseOver={[Function]}
     >
       high metadata quality
-    </span>
-  </span>
-  <span
-    className="context_item"
-    id="researcher-link"
-  >
-    <span
-      className="context_moreinfo infolink"
-      onClick={[Function]}
-    >
-      <i
-        className="fas fa-user"
-      />
-       
-    </span>
-  </span>
-  <span
-    className="context_item"
-    id="researcher-metrics-link"
-    title="Metrics"
-  >
-    <span
-      className="context_moreinfo infolink"
-      onClick={[Function]}
-    >
-      <i
-        className="fas fa-chart-line"
-      />
-       
     </span>
   </span>
   <span
@@ -571,31 +336,6 @@ exports[`Context line component snapshot > matches a viper snapshot 1`] = `
   </span>
   <span
     className="context_item"
-    dangerouslySetInnerHTML={
-      {
-        "__html": "Source: OpenAIRE",
-      }
-    }
-    id="source"
-  />
-  <span
-    className="context_item"
-    id="document_lang"
-    onMouseEnter={[Function]}
-  >
-    <span
-      className="context_moreinfo"
-      onBlur={[Function]}
-      onClick={null}
-      onFocus={[Function]}
-      onMouseOut={[Function]}
-      onMouseOver={[Function]}
-    >
-      All lang
-    </span>
-  </span>
-  <span
-    className="context_item"
     id="context-paper_count"
   >
     36
@@ -622,35 +362,6 @@ exports[`Context line component snapshot > matches a viper snapshot 1`] = `
     id="context-project_runtime"
   >
     2011-2016
-  </span>
-  <span
-    className="context_item"
-    id="researcher-link"
-  >
-    <span
-      className="context_moreinfo infolink"
-      onClick={[Function]}
-    >
-      <i
-        className="fas fa-user"
-      />
-       
-    </span>
-  </span>
-  <span
-    className="context_item"
-    id="researcher-metrics-link"
-    title="Metrics"
-  >
-    <span
-      className="context_moreinfo infolink"
-      onClick={[Function]}
-    >
-      <i
-        className="fas fa-chart-line"
-      />
-       
-    </span>
   </span>
   <span
     className="context_item"

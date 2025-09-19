@@ -40,9 +40,10 @@ const ShareButton = ({ twitterHashtags, isStreamgraph }) => {
 
   const title = encodeURIComponent(document.title);
   const url = encodeURIComponent(window.location.href);
-  const description = encodeURIComponent(
-    $("meta[name='description']").attr("content")
-  );
+  const descriptionMetaTag = document.querySelector("meta[name='description']");
+  const description = descriptionMetaTag
+    ? encodeURIComponent(descriptionMetaTag.content)
+    : "";
   twitterHashtags = encodeURIComponent(twitterHashtags);
 
   const facebookUrl = `https://www.facebook.com/sharer/sharer.php?u=${url}`;

@@ -22,4 +22,4 @@ SecretStorage==2.3.1
 six==1.11.0
 typing-extensions==4.1.1
 zipp==3.6.0
-tzdata
+tzdata==2024.1

@@ -3,6 +3,7 @@ import ReactDOM from "react-dom";
 import React from "react";
 import { createStore } from "redux";
 import { Provider } from "react-redux";
+import { createRoot } from "react-dom/client";
 
 import rootReducer, { getInitialState } from "./reducers";
 import {
@@ -93,11 +94,11 @@ class HeadstartRunner {
   }
 
   renderReact() {
-    ReactDOM.render(
+    const rootNode: Root = createRoot(this.hsContainer);
+    rootNode.render(
       <Provider store={this.store}>
         <Headstart />
-      </Provider>,
-      this.hsContainer
+      </Provider>
     );
   }
 
