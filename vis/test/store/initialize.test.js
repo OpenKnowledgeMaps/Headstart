@@ -79,6 +79,16 @@ const setup = (overrideConfig = {}, overrideContext = {}) => {
         article_types: undefined,
         from: undefined,
         to: undefined,
+        service_names: {
+          plos: "PLOS",
+          base: "BASE",
+          pubmed: "PubMed",
+          doaj: "DOAJ",
+          openaire: "OpenAIRE",
+          triple_km: "GoTriple",
+          triple_sg: "GoTriple",
+          orcid: "ORCID",
+        },
         num_papers: undefined,
         num_datasets: undefined,
         start_date: undefined,
@@ -1478,12 +1488,13 @@ describe("config and context state", () => {
     });
 
     it("should load correct data source from service_name", () => {
-      const SERVICE_NAME = "PubMed";
-      const EXPECTED_VALUE = SERVICE_NAME;
+      const SERVICE_NAME = "pubmed";
+      const EXPECTED_VALUE = 'PubMed';
 
       const initialState = {};
       const { configObject, contextObject } = setup({
-        service_name: SERVICE_NAME,
+      }, {
+        service: SERVICE_NAME,
       });
 
       const result = contextLineReducer(

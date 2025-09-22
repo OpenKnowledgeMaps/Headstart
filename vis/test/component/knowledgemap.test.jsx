@@ -56,6 +56,8 @@ const setup = (overrideStoreObject = {}) => {
       },
       tracking: {},
       localization: {},
+      toolbar: {},
+      paper: {},
     },
     overrideStoreObject
   );
@@ -68,15 +70,14 @@ describe("Knowledge map component", () => {
     const storeObject = setup();
     const store = mockStore(storeObject);
     const localization = {}
-
-
-      const result = render(
-        <Provider store={store}>
-          <LocalizationProvider localization={localization}>
-            <KnowledgeMap />
-          </LocalizationProvider>
-        </Provider>
-      );
+      
+    const result = render(
+      <Provider store={store}>
+        <LocalizationProvider localization={localization}>
+          <KnowledgeMap />
+        </LocalizationProvider>
+      </Provider>
+    );
 
     expect(result.container.querySelector("#chart-svg")).not.toBe(null);
   });

@@ -1,6 +1,7 @@
 import d3 from "d3";
 
 import { getDiameterScale, getResizedScale } from "../utils/scale";
+import { getValueOrZero } from "../utils/data";
 
 const data = (
   state = { list: [], options: {}, size: null } as any,
@@ -62,13 +63,13 @@ const resizePapers = (
 
   let coordsScale = getResizedScale(currentSize, newSize);
 
-  let diameters = resizedPapers.map((e) => e.internal_readers);
+  let diameters = resizedPapers.map((e) => getValueOrZero(e.citation_count));
   let dScale = getDiameterScale(d3.extent(diameters), newSize, options);
 
   resizedPapers.forEach((paper: any) => {
     paper.x = coordsScale(paper.x);
     paper.y = coordsScale(paper.y);
-    paper.diameter = dScale(paper.internal_readers);
+    paper.diameter = dScale(getValueOrZero(paper.citation_count));
     paper.width =
       options.paperWidthFactor * Math.sqrt(Math.pow(paper.diameter, 2) / 2.6);
     paper.height =

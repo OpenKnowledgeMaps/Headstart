@@ -27,10 +27,40 @@
                 data_config.options = options_<?php echo htmlspecialchars($_GET['service']); ?>.dropdowns;
             }
         </script>
-        <script type="text/javascript" src="../../../dist/headstart.js"></script>
-        <link type="text/css" rel="stylesheet" href="../../../dist/headstart.css"></link>
+
+        <?php include "../../../dist/headstart.php"; ?>
+
+        <!-- The script below attempts to launch headstart by calling its start method.
+        However, because headstart loads asynchronously, it is necessary to wait some time. -->
         <script type="text/javascript">
-            headstart.start();
+            const DELAY_BETWEEN_ATTEMPTS_MS = 250;
+            const LIMIT_OF_ATTEMPTS = 10;
+            let numberOfAttempts = 0;
+
+            function checkThatInitializeMethodReady() {
+                return typeof headstart === "object" && typeof headstart.start === "function";
+            }
+
+            function initializeHeadstart() {
+                if (checkThatInitializeMethodReady()) {
+                    headstart.start();
+                    return;
+                }
+
+                if (numberOfAttempts < LIMIT_OF_ATTEMPTS) {
+                    let timerId = setTimeout(() => {
+                        clearTimeout(timerId);
+                        numberOfAttempts += 1;
+                        initializeHeadstart();
+                    }, DELAY_BETWEEN_ATTEMPTS_MS);
+
+                    return;
+                }
+
+                console.error("Unable to load headstart or its start method is not a function!");
+            }
+
+            document.addEventListener("DOMContentLoaded", initializeHeadstart);
         </script>
     </body>
 </html>

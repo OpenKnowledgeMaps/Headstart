@@ -16,16 +16,12 @@ const BaseInfo = ({ params, isStreamgraph }) => {
       serviceName="BASE"
       serviceDesc={
         <>
-            BASE provides access to over 300 million documents from more than
-            10,000 content sources in all disciplines. For more information please{" "}
-            <a
-                href="http://base-search.net"
-                target="_blank"
-                rel="noreferrer"
-            >
-                visit the BASE website
-            </a>
-            .
+          BASE provides access to over 400 million documents from more than
+          10,000 content sources in all disciplines. For more information please{" "}
+          <a href="http://base-search.net" target="_blank" rel="noreferrer">
+            visit the BASE website
+          </a>
+          .
         </>
       }
       serviceLogo={

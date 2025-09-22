@@ -1,4 +1,4 @@
-import { expect, describe, it, vitest } from 'vitest';
+import { expect, describe, it, vitest } from "vitest";
 
 import {
   getDateTimeFromTimestamp,
@@ -9,13 +9,7 @@ import {
 describe("Dates utility functions", () => {
   const mockWarn = vitest.fn();
 
-  global.console = {
-    log: console.log,
-    warn: mockWarn,
-    error: console.error,
-    info: console.info,
-    debug: console.debug,
-  };
+  global.console = Object.assign({}, console, { warn: mockWarn });
 
   it("formats timestamp to date and time", () => {
     const TIMESTAMP = "2020-07-09 18:20:14";
@@ -27,7 +21,7 @@ describe("Dates utility functions", () => {
   });
 
   it("returns empty string for a wrong input type", () => {
-    const TIMESTAMP = 123456789;
+    const TIMESTAMP = 123456789 as unknown as string;
     const EXPECTED_RESULT = "";
 
     const actualResult = getDateTimeFromTimestamp(TIMESTAMP);
@@ -45,7 +39,7 @@ describe("Dates utility functions", () => {
   });
 
   it("returns empty string for a wrong input type (date only)", () => {
-    const TIMESTAMP = 123456789;
+    const TIMESTAMP = 123456789 as unknown as string;
     const EXPECTED_RESULT = "";
 
     const actualResult = getDateFromTimestamp(TIMESTAMP);
@@ -54,7 +48,7 @@ describe("Dates utility functions", () => {
   });
 
   it("returns empty string for a wrong input type (time only)", () => {
-    const TIMESTAMP = 123456789;
+    const TIMESTAMP = 123456789 as unknown as string;
     const EXPECTED_RESULT = "";
 
     const actualResult = getTimeFromTimestamp(TIMESTAMP);

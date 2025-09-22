@@ -1,48 +1,33 @@
-import { expect, describe, it, vitest } from "vitest";
-
+import { render, screen } from "@testing-library/react";
+import { expect, describe, it } from "vitest";
 import React from "react";
-import { render } from "@testing-library/react";
-
 import AuthorImage from "../../js/templates/AuthorImage";
-import defaultImage from "../../images/author_default.png";
 
-describe("Author image component", () => {
-  it("renders", () => {
-    const result = render(
-      <AuthorImage url="http://pictures.org/link-to-author" />
+describe("AuthorImage Component", () => {
+  it("renders with the provided URL", () => {
+    render(<AuthorImage url="https://example.com/12345" />);
+
+    const imageLink = screen.getByRole("link", { name: /author image/i });
+    expect(imageLink).toHaveAttribute("href", "https://example.com/12345");
+
+    const imageDiv = screen.getByRole("img");
+    expect(imageDiv).toHaveStyle(
+      "background-image: url(https://example.com/12345)"
+    );
+  });
+
+  it("renders with the default image if no URL is provided", () => {
+    render(<AuthorImage />);
+
+    const imageLink = screen.getByRole("link", { name: /author image/i });
+    expect(imageLink).toHaveAttribute(
+      "href",
+      expect.stringContaining("author_default.png")
     );
 
-    expect(result.container.childNodes.length).toBe(1);
-  });
-
-  it("renders with correct link", () => {
-    const LINK = "https://custom-link.com/12345";
-
-    const result = render(<AuthorImage url={LINK} />);
-
-    expect(
-      result.container.querySelector("#author_image_link").getAttribute("href")
-    ).toEqual(LINK);
-  });
-
-  it("renders with correct image", () => {
-    const LINK = "https://custom-link.com/12345";
-
-    const result = render(<AuthorImage url={LINK} />);
-
-    expect(
-      result.container.querySelector("#author_image").getAttribute("style")
-    ).toContain(`background-image: url(${LINK})`);
-  });
-
-  it("renders with correct default image", () => {
-    const LINK = undefined;
-    const EXPECTED_LINK = defaultImage;
-
-    const result = render(<AuthorImage url={LINK} />);
-
-    expect(
-      result.container.querySelector("#author_image").getAttribute("style")
-    ).toContain(`background-image: url(${EXPECTED_LINK})`);
+    const imageDiv = screen.getByRole("img");
+    expect(imageDiv).toHaveStyle(
+      'background-image: url("/vis/images/author_default.png")'
+    );
   });
 });

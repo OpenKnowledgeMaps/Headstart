@@ -3,14 +3,23 @@ var data_config = {
     mode: "search_repos",
 
     service: "pubmed",
+    bubble_min_scale: 1.2,
+    bubble_max_scale: 1,
+    paper_min_scale: 1,
+    paper_max_scale: 1,
+    showLanguage: true,
+
+    // Configuring papers scaling
+    base_unit: "citations",
+    initial_sort: "citations",
+    scale_by: "citations",
 
     title: "",
-    base_unit: "citations",
     use_area_uri: true,
     show_multiples: false,
     show_dropdown: false,
     preview_type: "pdf",
-    sort_options: ["readers", "title", "authors", "year"],
+    sort_options: ["citations", "title", "authors", "year"],
     is_force_areas: true,
     language: "eng_pubmed",
     area_force_alpha: 0.015,
