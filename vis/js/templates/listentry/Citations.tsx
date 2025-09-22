@@ -9,8 +9,7 @@ interface CitationsProps {
 const Citations: FC<CitationsProps> = ({ number, label }) => {
   return (
     <div className="list_readers">
-      <span className="list_readers_entity">{label}</span>{" "}
-      <span className="num_readers">{number}</span>&nbsp;
+      <span>{number}</span> <span className="list_readers_entity">{label}</span>
     </div>
   );
 };

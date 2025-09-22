@@ -143,7 +143,7 @@ var config: Config = {
   //show result type (document type) in list entry
   show_resulttype: false,
   //sort options for sort dropdown
-  sort_options: ["readers", "title", "authors", "year"],
+  sort_options: ["citations", "title", "authors", "year"],
   //filter options for filter dropdown
   filter_options: ["all", "open_access", "publication", "dataset"],
   //custom data property to filter for. if null, defaults are used with above filter options

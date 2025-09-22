@@ -128,7 +128,7 @@ describe("The private function __countMetrics of the DataManager (with PubMed)",
 
     it("Works when readers data was provided, but it is invalid", () => {
       // Defining expected result
-      const EXPECTED_RESULT = "n/a";
+      const EXPECTED_RESULT = 0;
 
       // Modifying paper data
       const modifiedMockPaperData: PubmedPaper = {
@@ -198,7 +198,7 @@ describe("The private function __countMetrics of the DataManager (with PubMed)",
 
     it("Works when readers data was provided, but it is invalid", () => {
       // Defining expected result
-      const EXPECTED_RESULT = "n/a";
+      const EXPECTED_RESULT = 0;
 
       // Modifying paper data
       const modifiedMockPaperData: PubmedPaper = {
@@ -337,7 +337,7 @@ describe("The private function __countMetrics of the DataManager (with BASE)", (
 
     it("Works when readers data was provided, but it is invalid", () => {
       // Defining expected result
-      const EXPECTED_RESULT = "n/a";
+      const EXPECTED_RESULT = 0;
 
       // Modifying paper data
       const modifiedMockPaperData: BasePaper = {
@@ -407,7 +407,7 @@ describe("The private function __countMetrics of the DataManager (with BASE)", (
 
     it("Works when readers data was provided, but it is invalid", () => {
       // Defining expected result
-      const EXPECTED_RESULT = "n/a";
+      const EXPECTED_RESULT = 0;
 
       // Modifying paper data
       const modifiedMockPaperData: BasePaper = {
@@ -568,7 +568,7 @@ describe("The private function __countMetrics of the DataManager (with ORCID)", 
 
     it("Works when readers data was provided, but it is invalid", () => {
       // Defining expected result
-      const EXPECTED_RESULT = "n/a";
+      const EXPECTED_RESULT = 0;
 
       // Modifying paper data
       const modifiedMockPaperData: OrcidPaper = {
@@ -638,7 +638,7 @@ describe("The private function __countMetrics of the DataManager (with ORCID)", 
 
     it("Works when readers data was provided, but it is invalid", () => {
       // Defining expected result
-      const EXPECTED_RESULT = "n/a";
+      const EXPECTED_RESULT = 0;
 
       // Modifying paper data
       const modifiedMockPaperData: OrcidPaper = {

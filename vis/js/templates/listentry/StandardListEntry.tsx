@@ -61,7 +61,7 @@ const StandardListEntry: FC<StandardListEntryProps> = ({
     onClick: () => handleBacklinkClick(),
   };
 
-  const citations = paper.readers;
+  const citations = paper.citation_count;
   const showCitations =
     !isContentBased &&
     !!baseUnit &&
@@ -111,9 +111,9 @@ const StandardListEntry: FC<StandardListEntryProps> = ({
           />
         ) : null}
 
+        {showCitations && <Citations number={citations} label={baseUnit} />}
         <PaperButtons paper={paper} />
         {!isStreamgraph && <Area paper={paper} isShort={showCitations} />}
-        {showCitations && <Citations number={citations} label={baseUnit} />}
         {!!backlink.show && (
           <EntryBacklink
             onClick={backlink.onClick}
