@@ -17,7 +17,7 @@ export interface CommonPaperDataForAllIntegrations {
   comments: string[];
   comments_for_filtering: string;
 
-  citation_count: string | number;
+  citation_count: NotAvailable | number;
   tags: string[];
   social: number | NotAvailable;
   references: null;
