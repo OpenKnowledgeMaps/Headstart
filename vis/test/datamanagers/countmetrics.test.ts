@@ -14,7 +14,7 @@ import {
 
 describe("The private function __countMetrics of the DataManager (with PubMed)", () => {
   const setupAndRunCountMetrics = (
-    paper: PubmedPaper = MOCK_PUBMED_PAPER_DATA
+    paper: PubmedPaper = MOCK_PUBMED_PAPER_DATA,
   ): PubmedPaper => {
     // Create the instance of DataManager class
     const dataManager = new DataManager(productionKMConfig);
@@ -133,7 +133,7 @@ describe("The private function __countMetrics of the DataManager (with PubMed)",
 
     it("Works when readers data was provided, but it is invalid", () => {
       // Defining expected result
-      const EXPECTED_RESULT = "n/a";
+      const EXPECTED_RESULT = 0;
 
       // Modifying paper data
       const modifiedMockPaperData: PubmedPaper = {
@@ -203,7 +203,7 @@ describe("The private function __countMetrics of the DataManager (with PubMed)",
 
     it("Works when readers data was provided, but it is invalid", () => {
       // Defining expected result
-      const EXPECTED_RESULT = "n/a";
+      const EXPECTED_RESULT = 0;
 
       // Modifying paper data
       const modifiedMockPaperData: PubmedPaper = {
@@ -223,7 +223,7 @@ describe("The private function __countMetrics of the DataManager (with PubMed)",
 
 describe("The private function __countMetrics of the DataManager (with BASE)", () => {
   const setupAndRunCountMetrics = (
-    paper: BasePaper = MOCK_BASE_PAPER_DATA
+    paper: BasePaper = MOCK_BASE_PAPER_DATA,
   ): BasePaper => {
     // Create the instance of DataManager class
     const dataManager = new DataManager(productionKMConfig);
@@ -342,7 +342,7 @@ describe("The private function __countMetrics of the DataManager (with BASE)", (
 
     it("Works when readers data was provided, but it is invalid", () => {
       // Defining expected result
-      const EXPECTED_RESULT = "n/a";
+      const EXPECTED_RESULT = 0;
 
       // Modifying paper data
       const modifiedMockPaperData: BasePaper = {
@@ -412,7 +412,7 @@ describe("The private function __countMetrics of the DataManager (with BASE)", (
 
     it("Works when readers data was provided, but it is invalid", () => {
       // Defining expected result
-      const EXPECTED_RESULT = "n/a";
+      const EXPECTED_RESULT = 0;
 
       // Modifying paper data
       const modifiedMockPaperData: BasePaper = {
@@ -432,7 +432,7 @@ describe("The private function __countMetrics of the DataManager (with BASE)", (
 
 describe("The private function __countMetrics of the DataManager (with ORCID)", () => {
   const setupAndRunCountMetrics = (
-    paper: OrcidPaper = MOCK_ORCID_PAPER_DATA
+    paper: OrcidPaper = MOCK_ORCID_PAPER_DATA,
   ): OrcidPaper => {
     // Create the instance of DataManager class
     const dataManager = new DataManager(productionKMConfig);
@@ -573,7 +573,7 @@ describe("The private function __countMetrics of the DataManager (with ORCID)", 
 
     it("Works when readers data was provided, but it is invalid", () => {
       // Defining expected result
-      const EXPECTED_RESULT = "n/a";
+      const EXPECTED_RESULT = 0;
 
       // Modifying paper data
       const modifiedMockPaperData: OrcidPaper = {
@@ -643,7 +643,7 @@ describe("The private function __countMetrics of the DataManager (with ORCID)", 
 
     it("Works when readers data was provided, but it is invalid", () => {
       // Defining expected result
-      const EXPECTED_RESULT = "n/a";
+      const EXPECTED_RESULT = 0;
 
       // Modifying paper data
       const modifiedMockPaperData: OrcidPaper = {
