@@ -30,8 +30,12 @@ def api_patches(app):
 
 
 app = Flask('v1', instance_relative_config=True)
+# Configure logging
+app.logger.setLevel(os.getenv("LOGLEVEL") or logging.DEBUG)
 handler = logging.StreamHandler(sys.stdout)
-handler.setLevel(app.logger.level)
+handler.setFormatter(logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s'))
+app.logger.addHandler(handler)
+
 app.wsgi_app = ProxyFix(app.wsgi_app, x_proto=1, x_port=1, x_for=1, x_host=1, x_prefix=1)
 app.wsgi_app = ReverseProxied(app.wsgi_app)
 CORS(app, expose_headers=["Content-Disposition", "Access-Control-Allow-Origin"])
