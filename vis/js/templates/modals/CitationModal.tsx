@@ -86,7 +86,7 @@ const CitationModal = ({
   );
 };
 
-const mapStateToProps = (state) => (console.log('state here', state),{
+const mapStateToProps = (state) => ({
   open: state.modals.openCitationModal,
   isStreamgraph: state.chartType === STREAMGRAPH_MODE,
   query: state.query.text,

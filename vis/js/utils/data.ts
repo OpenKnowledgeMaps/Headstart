@@ -24,17 +24,17 @@ export const filterData = (data, searchSettings, filterSettings) => {
       }
     } else {
       data = data.filter(
-        (e) => e.area_uri.toString() === filterSettings.area.toString()
+        (e) => e.area_uri.toString() === filterSettings.area.toString(),
       );
     }
   }
 
-  let filterValue = filterSettings.value;
-  let filterField = filterSettings.field;
+  const filterValue = filterSettings.value;
+  const filterField = filterSettings.field;
 
   data = data.filter(getParamFilterFunction(filterValue, filterField));
 
-  let searchWords = parseSearchText(searchSettings.value);
+  const searchWords = parseSearchText(searchSettings.value);
   if (searchWords.length > 0) {
     data = data.filter(getWordFilterFunction(searchWords));
   }
@@ -107,7 +107,7 @@ const SEARCHED_PROPS = [
 const getWordFilterFunction = (searchedKeywords) => {
   return (paper) => {
     const paperKeywords = SEARCHED_PROPS.map((prop) =>
-      getPropertyOrEmptyString(paper, prop)
+      getPropertyOrEmptyString(paper, prop),
     );
 
     const isNonText = isNonTextDocument(paper);
@@ -132,7 +132,11 @@ const getWordFilterFunction = (searchedKeywords) => {
 };
 
 const getPropertyOrEmptyString = (object, property) => {
-  if (Object.prototype.hasOwnProperty.call(object, property) && object[property] !== null && object[property] !== undefined) {
+  if (
+    Object.prototype.hasOwnProperty.call(object, property) &&
+    object[property] !== null &&
+    object[property] !== undefined
+  ) {
     return object[property].toString().toLowerCase().trim();
   }
 
@@ -331,7 +335,7 @@ export const parseCoordinate = (coordinate, decimalDigits) => {
   }
 
   const fixedCoordinate = parseFloat(coordinate).toFixed(decimalDigits);
-  if (fixedCoordinate === "-" + parseFloat(0).toFixed(decimalDigits)) {
+  if (fixedCoordinate === `-${parseFloat(0).toFixed(decimalDigits)}`) {
     return parseFloat(0).toFixed(decimalDigits);
   }
 
@@ -369,9 +373,7 @@ export const isOpenAccess = (paper, config) => {
 export const getOpenAccessLink = (paper, config) => {
   if (config.service === "pubmed") {
     if (typeof paper.pmcid !== "undefined" && paper.pmcid !== "") {
-      return (
-        "http://www.ncbi.nlm.nih.gov/pmc/articles/" + paper.pmcid + "/pdf/"
-      );
+      return `http://www.ncbi.nlm.nih.gov/pmc/articles/${paper.pmcid}/pdf/`;
     }
 
     return "";
@@ -539,9 +541,14 @@ export const commentsSanitizer = (value) => {
 };
 
 export const queryConcatenator = (terms) => {
-  let filtered_terms = terms.filter(element => {
-    return element !== '' && element !== null && element !== undefined
+  const filtered_terms = terms.filter((element) => {
+    return element !== "" && element !== null && element !== undefined;
   });
-  let concatenatedQueries = filtered_terms.join(" and ");
-  return concatenatedQueries
-}
+  const concatenatedQueries = filtered_terms.join(" and ");
+  return concatenatedQueries;
+};
+
+export const getValueOrZero = (value: unknown): number => {
+  const transformedValue = Number(value);
+  return isNaN(transformedValue) ? 0 : transformedValue;
+};

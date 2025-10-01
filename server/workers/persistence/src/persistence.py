@@ -3,9 +3,8 @@ from hashlib import md5
 from datetime import datetime
 import json
 from collections import OrderedDict
-from flask import Blueprint, request, make_response, jsonify, abort
-from flask_restx import Namespace, Resource, fields
-
+from flask import request, make_response, jsonify
+from flask_restx import Namespace, Resource
 from models import Revisions, Visualizations
 from database import Session
 from sqlalchemy.exc import OperationalError
@@ -31,6 +30,7 @@ def write_revision(database, vis_id, data, rev_id=None):
     try:
         vis = session.query(Visualizations).filter_by(vis_id=vis_id).first()
 
+        # TODO: add check for the received vis (in the line before)
         if rev_id is None:
             if vis.vis_latest is None:
                 rev_id = 1
@@ -80,6 +80,7 @@ def create_visualization(database,
 
 def exists_visualization(database, vis_id):
     session = Session()
+    exists = False
     try:
         vis = session.query(Visualizations).filter_by(vis_id=vis_id).first()
         exists = True if vis else False

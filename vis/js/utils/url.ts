@@ -23,7 +23,10 @@ export const removeQueryParams = (...keys: string[]) => {
   window.history.pushState("", "", url.pathname + url.search);
 };
 
-const addRemoveQueryParams = (paramsToAdd: Record<string, string>, paramsToRemove: string[]) => {
+export const addRemoveQueryParams = (
+  paramsToAdd: Record<string, string>,
+  paramsToRemove: string[]
+) => {
   const url = new URL(window.location.href);
 
   Object.keys(paramsToAdd).forEach((key) => {
@@ -39,7 +42,7 @@ const addRemoveQueryParams = (paramsToAdd: Record<string, string>, paramsToRemov
 
 /**
  * Changes page url based on the current Redux action.
- * 
+ *
  * @param {Object} action the Redux action object
  */
 export const handleUrlAction = (action: any) => {
@@ -98,3 +101,21 @@ const handleSelectPaper = (action: any) => {
 };
 
 const handleDeselectPaper = () => removeQueryParams("paper");
+
+export const checkIsCurrentHostIsLocalhost = (): boolean => {
+  const currentHost: string = window.location.host;
+  return currentHost.startsWith("localhost");
+};
+
+export const ensureThatURLStartsWithHTTP = (url: string): string => {
+  let formattedURL = url;
+
+  const isCurrentHostIsLocalhost = checkIsCurrentHostIsLocalhost();
+  const protocolToBeAdded = isCurrentHostIsLocalhost ? "http" : "https";
+
+  if (!/^https?:\/\//i.test(url)) {
+    formattedURL = `${protocolToBeAdded}:${url}`;
+  }
+
+  return formattedURL;
+};

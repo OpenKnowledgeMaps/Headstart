@@ -15,8 +15,8 @@ const orderPriorityMap = {
   cited_by_accounts_count: "social",
   references: "references",
   readers: "readers",
-  tweets: "tweets"
-}
+  tweets: "tweets",
+};
 
 class Paper extends React.Component {
   constructor(props) {
@@ -108,7 +108,17 @@ class Paper extends React.Component {
   }
 
   render() {
-    const { data, zoom, selected, hovered, maxSize, enlargeFactor, onClick, onMouseOver, onMouseOut } = this.props;
+    const {
+      data,
+      zoom,
+      selected,
+      hovered,
+      maxSize,
+      enlargeFactor,
+      onClick,
+      onMouseOver,
+      onMouseOut,
+    } = this.props;
 
     const {
       title,
@@ -116,10 +126,17 @@ class Paper extends React.Component {
       authors_list: authors_list,
       year,
       area,
-      published_in: publisher
+      published_in: publisher,
     } = data;
 
-    const { x, y, width: baseWidth, height: baseHeight, path: basePath, dogEar: baseDogEar } = this.state;
+    const {
+      x,
+      y,
+      width: baseWidth,
+      height: baseHeight,
+      path: basePath,
+      dogEar: baseDogEar,
+    } = this.state;
 
     const {
       showSocialMedia,
@@ -135,14 +152,7 @@ class Paper extends React.Component {
       tweetsLabel,
     } = this.props;
 
-    const {
-      // num_readers: 
-      readers,
-      tweets,
-      citations,
-      social,
-      references,
-    } = data;
+    const { readers, tweets, citations, social, references } = data;
 
     let { width: realWidth, height: realHeight } =
       this.getCoordinatesAndDimensions();
@@ -226,11 +236,10 @@ class Paper extends React.Component {
         value: citations,
         label: citationsLabel,
       },
-      // consider to refactor and retrieve correct data from the backend side instead of doing this hack with citations for pubmed
       {
         id: "citations pubmed",
         show: showPubmedCitations,
-        value: readers,
+        value: citations,
         label: citationsLabel,
       },
       {
@@ -257,15 +266,14 @@ class Paper extends React.Component {
         value: tweets,
         label: tweetsLabel,
       },
-    ].filter(stat => stat.show)
+    ].filter((stat) => stat.show);
 
     let sortedStats = stats;
 
     if (this.props.scaleValue) {
       const { scaleValue } = this.props;
 
-
-      const tagPreference = orderPriorityMap[scaleValue]
+      const tagPreference = orderPriorityMap[scaleValue];
 
       sortedStats = tagPreference
         ? [...stats].sort((a, b) => {
@@ -354,20 +362,35 @@ class Paper extends React.Component {
                   )}
                 </p>
               </div>
-              {(hovered ? sortedStats : sortedStats.slice(0, 1)).map(({ value, label, id }) => (
-                <div key={id} className="stat" style={{
-                  textWrap: 'nowrap'
-                }}>
-                  <p id="stat" className={sizeModifierClass}>
-                    <span style={{
-                      textWrap: 'nowrap'
-                    }} className="num-stat">{value || value === 0 ? value : "n/a"} </span>
-                    <span style={{
-                      textWrap: 'nowrap'
-                    }}>{label}</span>
-                  </p>
-                </div>
-              ))}
+              {(hovered ? sortedStats : sortedStats.slice(0, 1)).map(
+                ({ value, label, id }) => (
+                  <div
+                    key={id}
+                    className="stat"
+                    style={{
+                      textWrap: "nowrap",
+                    }}
+                  >
+                    <p id="stat" className={`stat ${sizeModifierClass}`}>
+                      <span
+                        style={{
+                          textWrap: "nowrap",
+                        }}
+                        className="num-stat"
+                      >
+                        {value || value === 0 ? value : "n/a"}{" "}
+                      </span>
+                      <span
+                        style={{
+                          textWrap: "nowrap",
+                        }}
+                      >
+                        {label}
+                      </span>
+                    </p>
+                  </div>
+                )
+              )}
             </div>
           </div>
         </foreignObject>
@@ -506,8 +529,9 @@ const DOGEAR_WIDTH = 0.15;
 const DOGEAR_HEIGHT = 0.15;
 
 const getDogEar = ({ x, y, width: w, height: h }) => {
-  return `M ${x + (1 - DOGEAR_WIDTH) * w} ${y} v ${DOGEAR_HEIGHT * h} h ${DOGEAR_WIDTH * w
-    }`;
+  return `M ${x + (1 - DOGEAR_WIDTH) * w} ${y} v ${DOGEAR_HEIGHT * h} h ${
+    DOGEAR_WIDTH * w
+  }`;
 };
 
 const getRoundedPath = ({ x, y, width, height }) => {
@@ -527,8 +551,9 @@ const getRoundedPath = ({ x, y, width, height }) => {
 };
 
 const getSquarePath = ({ x, y, width: w, height: h }) => {
-  return `M ${x} ${y} h ${(1 - DOGEAR_WIDTH) * w} l ${DOGEAR_HEIGHT * w} ${DOGEAR_WIDTH * h
-    } v ${(1 - DOGEAR_HEIGHT) * h} h ${-w} v ${-h}`;
+  return `M ${x} ${y} h ${(1 - DOGEAR_WIDTH) * w} l ${DOGEAR_HEIGHT * w} ${
+    DOGEAR_WIDTH * h
+  } v ${(1 - DOGEAR_HEIGHT) * h} h ${-w} v ${-h}`;
 };
 
 const getEnlargeFactor = (offsetWidth, scrollHeight) => {
@@ -551,7 +576,7 @@ const getEnlargeFactor = (offsetWidth, scrollHeight) => {
 
 const getMetadataHeight = (realHeight, numOfLabels, isZoomed) => {
   let readersHeight = 0;
-  
+
   if (numOfLabels && isZoomed) {
     readersHeight += numOfLabels * 12 + 10;
   }

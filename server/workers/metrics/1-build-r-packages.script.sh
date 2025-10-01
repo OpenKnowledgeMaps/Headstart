@@ -1,0 +1,1 @@
+docker build -f Dockerfile.r -t r-base-image ../..
