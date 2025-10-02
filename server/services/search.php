@@ -208,11 +208,11 @@ function search(
 
   $exists = $persistence->existsVisualization($unique_id);
 
-  if (!$exists) {
-    $persistence->createVisualization($unique_id, $vis_title, $input_json, $query, $dirty_query, $params_json);
-  } else {
-    $persistence->writeRevision($unique_id, $input_json);
-  }
+  // if (!$exists) {
+  //   $persistence->createVisualization($unique_id, $vis_title, $input_json, $query, $dirty_query, $params_json);
+  // } else {
+  //   $persistence->writeRevision($unique_id, $input_json);
+  // }
 
   if (!isset($ini_array["snapshot"]["snapshot_enabled"]) || $ini_array["snapshot"]["snapshot_enabled"] > 0) {
     if (isset($post_params["vis_type"]) && $post_params["vis_type"] == "timeline") {

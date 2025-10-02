@@ -2,6 +2,9 @@
 
 header('Content-type: application/json');
 
+// Connect all necessary constants with configurations for data generation
+require_once dirname(__FILE__) . "/metadataGenerationOptions.php";
+
 require_once dirname(__FILE__) . '/../classes/headstart/library/CommUtils.php';
 require 'search.php';
 
@@ -65,9 +68,23 @@ foreach($params_array as $param) {
 }
 $params_array = $reordered_params;
 
-$result = search(
+// Start a cycle during which a request will be made for each query value
+foreach ($TOP_10_QUERIES as $q) {
+    // Configure request data below
+    $post_params['document_types'] = $ALL_BASE_DOC_TYPES;
+    $post_params['q'] = $q;
+    $post_params['q_advanced'] = 'dctype:*';
+    $post_params['raw'] = "true";
+
+    // Allows to see which query is currently being processed (see search-flow container logs)
+    error_log("Processing such query: $dirty_query");
+
+    // Go to the search.php and comment the "if (!$exists) {" section,
+    // run the search via main page/searchbox, uncomment the "if (!$exists) {"
+    // and wait for csv-file creation
+    $result = search(
     "base",
-    $dirty_query,
+    $q,
     $post_params,
     $params_array,
     true,
@@ -75,8 +92,8 @@ $result = search(
     null,
     $precomputed_id,
     false
-);
+    );
+}
 
 echo $result
-
 ?>

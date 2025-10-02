@@ -88,6 +88,79 @@ class Search(Resource):
         result = get_key(redis_store, request_id, 300)
         try:
             result, headers = set_response_headers(request.headers["Accept"], params.get("raw"), result, request_id)
+
+            # Creation of the csv file in the function
+            def get_documents_data_in_csv(data):
+                request_parameters = d.get('params')
+                visualization_title = request_parameters.get('q')
+                documents_str = data.get('documents')
+                if documents_str:
+                    documents_list = json.loads(documents_str)
+                else:
+                    documents_list = []
+
+                parsed_documents = []
+                for doc in documents_list:
+                    new_doc = {
+                        'visualization_title': visualization_title,
+                        "id": doc.get('id', ''),
+                        "relation": doc.get('relation', ''),
+                        "identifier": doc.get("identifier", ""),
+                        "title": doc.get("title", ""),
+                        "paper_abstract": doc.get("paper_abstract", ""),
+                        "published_in": doc.get("published_in", ""),
+                        "year": doc.get("year", ""),
+                        "subject_orig": doc.get("subject_orig", ""),
+                        "subject": doc.get("subject", ""),
+                        "authors": doc.get("authors", ""),
+                        "link": doc.get("link", ""),
+                        "oa_state": doc.get("oa_state", ""),
+                        "url": doc.get("url", ""),
+                        "relevance": doc.get("relevance", ""),
+                        "resulttype": doc.get("resulttype", ""),
+                        "type": doc.get("type", ""),
+                        "typenorm": doc.get("typenorm", ""),
+                        "doi": doc.get("doi", ""),
+                        "lang": doc.get("lang", ""),
+                        "language": doc.get("language", ""),
+                        "content_provider": doc.get("content_provider", ""),
+                        "coverage": doc.get("coverage", ""),
+                        "is_duplicate": doc.get("is_duplicate", ""),
+                        "has_dataset": doc.get("has_dataset", ""),
+                        "sanitized_authors": doc.get("sanitized_authors", ""),
+                        "annotations": doc.get("annotations", ""),
+                        "repo": doc.get("repo", ""),
+                        "cluster_labels": doc.get("cluster_labels", ""),
+                        "x": doc.get("x", ""),
+                        "y": doc.get("y", ""),
+                        "labels": doc.get("labels", ""),
+                        "area_uri": doc.get("area_uri", ""),
+                        "area": doc.get("area", ""),
+                    }
+                    parsed_documents.append(new_doc)
+
+                if not parsed_documents:
+                    print("No documents to add in the CSV")
+                    return
+
+                df = pd.DataFrame(parsed_documents)
+                # Configuration of the file name
+                csv_filename = 'name.csv'
+                file_exists = os.path.exists(csv_filename)
+
+                try:
+                    df.to_csv(csv_filename,
+                            mode='a' if file_exists else 'w',
+                            header=not file_exists,
+                            index=False,
+                            encoding='utf-8')
+                    print(f"Documents data added to the {csv_filename}.")
+                except IOError as e:
+                    print(f"Error during writing the {csv_filename}: {e}")
+
+            # Creation of the csv file in the function below
+            get_documents_data_in_csv(result)
+
             return make_response(result, 200, headers)
         except Exception as e:
             base_ns.logger.error(e)
