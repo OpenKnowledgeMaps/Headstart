@@ -228,6 +228,7 @@ var config: Config = {
     triple_km: "GoTriple",
     triple_sg: "GoTriple",
     orcid: "ORCID",
+    aquanavi: "AQUANAVI",
   },
 
   localization: localization,

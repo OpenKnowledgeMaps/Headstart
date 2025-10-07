@@ -54,6 +54,7 @@ class DataManager {
   }
 
   parseData(backendData: any, chartSize: number) {
+    console.log("Data that was received from the backend: ", backendData);
     // initialize this.context
     this.__parseContext(backendData);
     // initialize this.papers
@@ -74,6 +75,8 @@ class DataManager {
       // initialize this.streams
       this.__parseStreams(backendData);
     }
+
+    console.log("Papers after processing: ", this.papers);
   }
 
   __parseContext(backendData: any) {

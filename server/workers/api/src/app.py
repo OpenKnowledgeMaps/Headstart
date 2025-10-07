@@ -10,6 +10,7 @@ from apis.base import base_ns
 from apis.pubmed import pubmed_ns
 from apis.openaire import openaire_ns
 from apis.orcid import orcid_ns
+from apis.aquanavi import aquanavi_ns
 from apis.create_vis import vis_ns
 from apis.export import export_ns
 
@@ -47,6 +48,7 @@ api.add_namespace(openaire_ns, path='/openaire')
 api.add_namespace(vis_ns, path='/vis')
 api.add_namespace(export_ns, path='/export')
 api.add_namespace(orcid_ns, path='/orcid')
+api.add_namespace(aquanavi_ns, path='/aquanavi')
 
 app.logger.debug(app.config)
 app.logger.debug(app.url_map)
