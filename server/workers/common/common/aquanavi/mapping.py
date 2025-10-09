@@ -130,6 +130,7 @@ def map_sample_data():
         coverage = get_coverage(row)
 
         result.append({
+            "id": url,
             "title": title,
             "identifier": url,
             "link": url,
