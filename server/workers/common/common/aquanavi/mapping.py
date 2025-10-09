@@ -19,6 +19,11 @@ REQUIRED_COLUMNS = [
     "Photos of experiments/installations images",
 ]
 
+def remove_trailing_dot(string):
+    if string and string.endswith('.'):
+        return string[:-1]
+    return string
+
 def get_latitude_longitude(row):
     coordinates_string = str(row["Facility location(s) split"]).strip()
 
@@ -90,14 +95,12 @@ def get_coverage(row):
     return result
 
 def get_abstract(row):
-    equipment = str(row["Equipment"]).strip()
-    description = str(row["Description of Facility"]).strip()
-    parameters = str(row["Controlled Parameters"]).strip()
+    abstract_parts = []
+    abstract_parts.append(f"Facility description: {remove_trailing_dot(str(row['Description of Facility']).strip())}" if row['Description of Facility'] else "Facility description: not available")
+    abstract_parts.append(f"Equipment: {remove_trailing_dot(str(row['Equipment']).strip())}" if row['Equipment'] else "Equipment: not available")
+    abstract_parts.append(f"Controlled parameters: {remove_trailing_dot(str(row['Controlled Parameters']).strip())}" if row['Controlled Parameters'] else "Controlled parameters: not available")
 
-    abstract_parts = [part for part in [description, equipment, parameters] if part and part.lower() != "nan"]
-    result = ". ".join(abstract_parts)
-
-    return result
+    return "; ".join(abstract_parts)
 
 def check_that_csv_file_exists(csv_path):
     if not csv_path.exists():
