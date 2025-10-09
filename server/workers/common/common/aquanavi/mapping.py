@@ -5,7 +5,6 @@ import pandas as pd
 from pathlib import Path
 
 CSV_PATH = "common/common/aquanavi/mesocosm_data_cleaned.csv"
-MESOCOSM_ORG_LANDING = 'https://mesocosm.org/'
 DEFAULT_DOCUMENT_TYPE = "physical object"
 DEFAULT_RESULT_TYPE = ['Other/Unknown material']
 REQUIRED_COLUMNS = [
@@ -121,6 +120,7 @@ def map_sample_data():
     result = []
     for _, row in df.iterrows():
         title = str(row["Name"]).strip() if row["Name"] else ""
+        url = str(row["url"]).strip() if row["url"] else ""
         image = row["Photos of experiments/installations images"] if row["Photos of experiments/installations images"] else ""
         subject = str(row["Specialist areas"]).strip() if row["Specialist areas"] else ""
         abstract = get_abstract(row)
@@ -128,7 +128,8 @@ def map_sample_data():
 
         result.append({
             "title": title,
-            "identifier": MESOCOSM_ORG_LANDING,
+            "identifier": url,
+            "link": url,
             "type": DEFAULT_DOCUMENT_TYPE,
             "resulttype": DEFAULT_RESULT_TYPE,
             "authors": "",
