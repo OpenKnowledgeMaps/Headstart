@@ -95,10 +95,29 @@ def get_coverage(row):
     return result
 
 def get_abstract(row):
+    count_of_not_available_parts = 0
     abstract_parts = []
-    abstract_parts.append(f"Facility description: {remove_trailing_dot(str(row['Description of Facility']).strip())}" if row['Description of Facility'] else "Facility description: not available")
-    abstract_parts.append(f"Equipment: {remove_trailing_dot(str(row['Equipment']).strip())}" if row['Equipment'] else "Equipment: not available")
-    abstract_parts.append(f"Controlled parameters: {remove_trailing_dot(str(row['Controlled Parameters']).strip())}" if row['Controlled Parameters'] else "Controlled parameters: not available")
+
+    if (row['Description of Facility']):
+        abstract_parts.append(f"Facility description: {remove_trailing_dot(str(row['Description of Facility']).strip())}")
+    else:
+        count_of_not_available_parts += 1
+        abstract_parts.append("Facility description: not available")
+
+    if (row['Equipment']):
+        abstract_parts.append(f"Equipment: {remove_trailing_dot(str(row['Equipment']).strip())}")
+    else:
+        count_of_not_available_parts += 1
+        abstract_parts.append("Equipment: not available")
+
+    if (row['Controlled Parameters']):
+        abstract_parts.append(f"Controlled Parameters: {remove_trailing_dot(str(row['Controlled Parameters']).strip())}")
+    else:
+        count_of_not_available_parts += 1
+        abstract_parts.append("Controlled Parameters: not available")
+
+    if (count_of_not_available_parts == 3):
+        return ""
 
     return "; ".join(abstract_parts)
 
