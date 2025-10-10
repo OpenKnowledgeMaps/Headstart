@@ -19,6 +19,31 @@ REQUIRED_COLUMNS = [
     "Photos of experiments/installations images",
 ]
 
+def process_string_column(row, name):
+    """
+    Process the column name from DataFrame.
+
+    Args:
+        row (pandas.Series): String DataFrame.
+        name (str): Name of a column that must be processed.
+
+    Returns:
+        str: The processed string (parts separated by commas, or the original string),
+        or an empty string if the original value was empty.
+    """
+    value = row[name]
+
+    if value:
+        processed_string = str(value).strip()
+
+        if "\n" in processed_string:
+            parts = [part.strip() for part in processed_string.split("\n") if part.strip()]
+            return ", ".join(parts)
+        else:
+            return processed_string
+    else:
+        return ""
+
 def remove_trailing_dot(string):
     if string and string.endswith('.'):
         return string[:-1]
@@ -121,6 +146,35 @@ def get_abstract(row):
 
     return "; ".join(abstract_parts)
 
+def get_keywords(row):
+    keywords_parts = []
+
+    # Adding the "Specialist areas"
+    specialist_areas = process_string_column(row, "Specialist areas")
+    specialist_areas_without_trailing_dot = remove_trailing_dot(specialist_areas)
+    if specialist_areas_without_trailing_dot:
+        keywords_parts.append(specialist_areas_without_trailing_dot)
+    else:
+        keywords_parts.append("not available")
+
+    # Adding the "Primary interests"
+    primary_interests = process_string_column(row, "Primary interests")
+    primary_interests_without_trailing_dot = remove_trailing_dot(primary_interests)
+    if primary_interests_without_trailing_dot:
+        keywords_parts.append(f"Primary interests: {primary_interests_without_trailing_dot}")
+    else:
+        keywords_parts.append("Primary interests: not available")
+
+    # Adding the "Research Topics"
+    research_topics = process_string_column(row, "Research Topics")
+    research_topics_without_trailing_dot = remove_trailing_dot(research_topics)
+    if research_topics_without_trailing_dot:
+        keywords_parts.append(f"Research topics: {research_topics_without_trailing_dot}")
+    else:
+        keywords_parts.append("Research topics: not available")
+
+    return "; ".join(keywords_parts)
+
 def check_that_csv_file_exists(csv_path):
     if not csv_path.exists():
         sys.exit(f"CSV does not exists: {csv_path}.")
@@ -144,9 +198,6 @@ def map_sample_data():
         title = str(row["Name"]).strip() if row["Name"] else ""
         url = str(row["url"]).strip() if row["url"] else ""
         image = row["Photos of experiments/installations images"] if row["Photos of experiments/installations images"] else ""
-        subject = str(row["Specialist areas"]).strip() if row["Specialist areas"] else ""
-        abstract = get_abstract(row)
-        coverage = get_coverage(row)
 
         result.append({
             "id": url,
@@ -161,9 +212,9 @@ def map_sample_data():
             "oa_state": "",
             "published_in": "",
             "relation": image,
-            "paper_abstract": abstract,
-            "subject_orig": subject,
-            "coverage": coverage
+            "paper_abstract": get_abstract(row),
+            "subject_orig": get_keywords(row),
+            "coverage": get_coverage(row)
         })
 
     return { "documents": result }

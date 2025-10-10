@@ -2563,8 +2563,7 @@ macrophytes
                       30.4670833, 114.35961111111111
                     
 ","Along the Yangtze River, hundreds of shallow lakes are over-exploited by human beings, resulting in the deterioration of the functions and services performed by these lake ecosystems. Furthermore, these shallow lakes are suffering from global climate change, under continuous warming over the last few decades and an unpredicted pattern of extreme climate events. We are interested in how climate change will affect these shallow lakes in the future, and what we can do to mitigate these effects.
-","We are a group of young scientists, led by Prof. dr. Jun Xu. We all have international education background (studied in The Netherlands, Sweden, Finland and US). We have been working on
-
+","
 climate change effects on shallow freshwater ecosystems, focusing on
 trophic interactions
 food webs
@@ -5260,7 +5259,7 @@ Aquatron Laboratory: Phytoplankton cultivation
 
 
 ","['http://mesocosm.org/wp-content/uploads/2017/05/aquatronS.jpg', 'http://mesocosm.org/wp-content/uploads/2017/05/Aquatron-empty_400.jpg', 'http://mesocosm.org/wp-content/uploads/2017/05/halifax_pool_calltoaction.image_.jpg', 'http://mesocosm.org/wp-content/uploads/2017/05/aquatron_400.jpg', 'http://mesocosm.org/wp-content/uploads/2017/05/featureslide.image_400.jpg', 'http://mesocosm.org/wp-content/uploads/2017/05/aquatron1_400.jpg']",,,,"['44.6356125', '-63.5944334']","{'coordinates': ['44.6356125', '-63.5944334']}"
-,[TEST CASE] Aquatron Laboratory,Dalhousie University Life Sciences Centre,,North-America,"Dalhousie University Life Sciences Centre
+test 1,[TEST CASE] Aquatron Laboratory,Dalhousie University Life Sciences Centre,,North-America,"Dalhousie University Life Sciences Centre
  1355 Oxford Street
  PO BOX 15000
  Halifax, Nova Scotia
@@ -5315,7 +5314,7 @@ Aquatron Laboratory: Phytoplankton cultivation
 
 
 ","['http://mesocosm.org/wp-content/uploads/2017/05/aquatronS.jpg', 'http://mesocosm.org/wp-content/uploads/2017/05/Aquatron-empty_400.jpg', 'http://mesocosm.org/wp-content/uploads/2017/05/halifax_pool_calltoaction.image_.jpg', 'http://mesocosm.org/wp-content/uploads/2017/05/aquatron_400.jpg', 'http://mesocosm.org/wp-content/uploads/2017/05/featureslide.image_400.jpg', 'http://mesocosm.org/wp-content/uploads/2017/05/aquatron1_400.jpg']",,,,"['44.6356125', '-63.5944334']","{'coordinates': ['44.6356125', '-63.5944334']}"
-https://mesocosm.org/mesocosm/imdea-water-institute/,[TEST CASE] IMDEA Water Institute,IMDEA Water Foundation,Spain,Europe,"IMDEA Water Institute
+test 2,[TEST CASE] IMDEA Water Institute,IMDEA Water Foundation,Spain,Europe,"IMDEA Water Institute
 Avenida Punto Com 2
 PO Box 28805, Alcala de Henares
 Madrid (Spain)
@@ -5359,3 +5358,143 @@ Photo: Andreu Rico
 
  
 ","['http://mesocosm.org/wp-content/uploads/2018/04/IMG_2170-300x181.jpg', 'http://mesocosm.org/wp-content/uploads/2018/04/20160519_121359-300x169.jpg', 'http://mesocosm.org/wp-content/uploads/2018/04/20170512_154035_resized-300x169.jpg', 'http://mesocosm.org/wp-content/uploads/2018/04/IMG-20170512-WA0010-300x169.jpg']",,,,"['40.5133474', ' -3.3386556000000382']","{'coordinates': ['40.5133474', '-3.3386556000000382']}"
+test 3,[TEST CASE] Keywords: no keywords information at all,"CMU Biological Station, Central Michigan University",USA,North America,"P.O. Box 206,
+Beaver Island,
+MI 49782
+USA
+","Don Uzarski
+Please login or request access to view contact information.
+",2012 - present,"
+12 fibreglass tanks each 250 gallons
+including metal halide
+timer-controlled lights
+housed on Lake Michigan with access to epilimnetic and metalimnetic water
+
+","
+Light
+Temperature
+
+",,"
+
+
+
+
+                      45.7422222,-85.50944444444444
+                    
+",,,"YSI multiprobes
+","on site
+","https://www2.cmich.edu/colleges/se/cmubs/MesocosmFacility/Pages/default.aspx
+","photo credits: CMU Communications
+",['http://mesocosm.org/wp-content/uploads/2022/11/beaver-island-mesocosms-1024x770.jpg'],,,,"['45.7422222', '-85.50944444444444']","{'coordinates': ['45.7422222', '-85.50944444444444']}"
+test 4,"[TEST CASE] Keywords: only ""Specialist areas"" column information","CMU Biological Station, Central Michigan University",USA,North America,"P.O. Box 206,
+Beaver Island,
+MI 49782
+USA
+","Don Uzarski
+Please login or request access to view contact information.
+",2012 - present,"
+12 fibreglass tanks each 250 gallons
+including metal halide
+timer-controlled lights
+housed on Lake Michigan with access to epilimnetic and metalimnetic water
+
+","
+Light
+Temperature
+
+",,"
+
+
+
+
+                      45.7422222,-85.50944444444444
+                    
+",,"Ecology, Global warming","YSI multiprobes
+","on site
+","https://www2.cmich.edu/colleges/se/cmubs/MesocosmFacility/Pages/default.aspx
+","photo credits: CMU Communications
+",['http://mesocosm.org/wp-content/uploads/2022/11/beaver-island-mesocosms-1024x770.jpg'],,,,"['45.7422222', '-85.50944444444444']","{'coordinates': ['45.7422222', '-85.50944444444444']}"
+test 5,"[TEST CASE] Keywords: only ""Primary interests"" information","CMU Biological Station, Central Michigan University",USA,North America,"P.O. Box 206,
+Beaver Island,
+MI 49782
+USA
+","Don Uzarski
+Please login or request access to view contact information.
+",2012 - present,"
+12 fibreglass tanks each 250 gallons
+including metal halide
+timer-controlled lights
+housed on Lake Michigan with access to epilimnetic and metalimnetic water
+
+","
+Light
+Temperature
+
+",,"
+
+
+
+
+                      45.7422222,-85.50944444444444
+                    
+","Ecology, Global warming",,"YSI multiprobes
+","on site
+","https://www2.cmich.edu/colleges/se/cmubs/MesocosmFacility/Pages/default.aspx
+","photo credits: CMU Communications
+",['http://mesocosm.org/wp-content/uploads/2022/11/beaver-island-mesocosms-1024x770.jpg'],,,,"['45.7422222', '-85.50944444444444']","{'coordinates': ['45.7422222', '-85.50944444444444']}"
+test 6,"[TEST CASE] Keywords: only ""Research Topics"" information","CMU Biological Station, Central Michigan University",USA,North America,"P.O. Box 206,
+Beaver Island,
+MI 49782
+USA
+","Don Uzarski
+Please login or request access to view contact information.
+",2012 - present,"
+12 fibreglass tanks each 250 gallons
+including metal halide
+timer-controlled lights
+housed on Lake Michigan with access to epilimnetic and metalimnetic water
+
+","
+Light
+Temperature
+
+","Ecology, Global warming","
+
+
+
+
+                      45.7422222,-85.50944444444444
+                    
+",,,"YSI multiprobes
+","on site
+","https://www2.cmich.edu/colleges/se/cmubs/MesocosmFacility/Pages/default.aspx
+","photo credits: CMU Communications
+",['http://mesocosm.org/wp-content/uploads/2022/11/beaver-island-mesocosms-1024x770.jpg'],,,,"['45.7422222', '-85.50944444444444']","{'coordinates': ['45.7422222', '-85.50944444444444']}"
+test 7,[TEST CASE] Keywords: all  information available,"CMU Biological Station, Central Michigan University",USA,North America,"P.O. Box 206,
+Beaver Island,
+MI 49782
+USA
+","Don Uzarski
+Please login or request access to view contact information.
+",2012 - present,"
+12 fibreglass tanks each 250 gallons
+including metal halide
+timer-controlled lights
+housed on Lake Michigan with access to epilimnetic and metalimnetic water
+
+","
+Light
+Temperature
+
+","Ecology, Global warming","
+
+
+
+
+                      45.7422222,-85.50944444444444
+                    
+","Ecology, Global warming","Ecology, Global warming","YSI multiprobes
+","on site
+","https://www2.cmich.edu/colleges/se/cmubs/MesocosmFacility/Pages/default.aspx
+","photo credits: CMU Communications
+",['http://mesocosm.org/wp-content/uploads/2022/11/beaver-island-mesocosms-1024x770.jpg'],,,,"['45.7422222', '-85.50944444444444']","{'coordinates': ['45.7422222', '-85.50944444444444']}"
