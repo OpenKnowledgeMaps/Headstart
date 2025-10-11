@@ -2,10 +2,10 @@
 
 /**
  * Debounce any function
- * 
+ *
  * Copied from helpers.js
  */
-export default function debounce(func, wait, immediate) {
+export default function debounce(func, wait = 300, immediate = false) {
   var timeout;
   return function () {
     let context = this,
