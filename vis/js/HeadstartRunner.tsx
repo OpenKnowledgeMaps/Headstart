@@ -20,7 +20,7 @@ import { applyForce } from "./utils/force";
 import { getChartSize, getListSize } from "./utils/dimensions";
 import Headstart from "./components/Headstart";
 import { removeQueryParams } from "./utils/url";
-import debounce from "./utils/debounce";
+import { debounce } from "./utils/debounce";
 import DataManager from "./dataprocessing/managers/DataManager";
 import FetcherFactory from "./dataprocessing/fetchers/FetcherFactory";
 import handleZoomSelectQuery from "./utils/backButton";
@@ -107,7 +107,7 @@ class HeadstartRunner {
       handleZoomSelectQuery(this.dataManager, this.store, this.config);
     };
 
-    window.addEventListener("popstate", debounce(handleBackButtonClick, 300));
+    window.addEventListener("popstate", debounce(handleBackButtonClick));
   }
 
   async fetchData() {
