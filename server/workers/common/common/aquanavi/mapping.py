@@ -12,6 +12,7 @@ DEFAULT_RESULT_TYPE = ['Other/Unknown material']
 REQUIRED_COLUMNS = [
     "Name",
     "Country",
+    "Continent",
     "Equipment",
     "Research Topics",
     "Specialist areas",
@@ -110,11 +111,26 @@ def get_years_of_experiments(row):
     return None, None
 
 def get_coverage(row):
+    """
+    Creates a coverage field information for each data entry. The coverage field contains
+    string value in format as presented in the line below:
+    "country=France; continent=Europe; east=-0.618181; north=44.776596 ; start=2010-07; end=2012-06"
+
+    Args:
+        row (pandas.Series): String DataFrame.
+
+    Returns:
+        str: String in the coverage field format.
+    """
+    COUNTRY_COLUMN_NAME = 'Country'
+    CONTINENT_COLUMN_NAME = 'Continent'
+
     latitude, longitude = get_latitude_longitude(row)
     start, end = get_years_of_experiments(row)
 
     coverage_parts = []
-    coverage_parts.append(f"country={str(row['Country']).strip()}" if row["Country"] else "country= ")
+    coverage_parts.append(f"country={str(row[COUNTRY_COLUMN_NAME]).strip()}" if row[COUNTRY_COLUMN_NAME] else "country= ")
+    coverage_parts.append(f"continent={str(row[CONTINENT_COLUMN_NAME]).strip()}" if row[CONTINENT_COLUMN_NAME] else "continent= ")
     coverage_parts.append(f"east='{longitude}'" if longitude else "east=")
     coverage_parts.append(f"north='{latitude}'" if latitude else "north=")
     coverage_parts.append(f"start='{start}'" if start else "start=")
