@@ -7,6 +7,7 @@ from pathlib import Path
 
 CSV_PATH = "common/common/aquanavi/mesocosm_data_cleaned.csv"
 CSV_PATH_WITH_TEST_DATA = "common/common/aquanavi/mesocosm_data_cleaned_with_test_cases.csv"
+CSV_PATH_TEST_DATA = "common/common/aquanavi/mesocosm_data_with_test_cases.csv"
 DEFAULT_DOCUMENT_TYPE = "physical object"
 DEFAULT_RESULT_TYPE = ['Other/Unknown material']
 COLUMNS = {
