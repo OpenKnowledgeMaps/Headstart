@@ -125,12 +125,14 @@ const mapStateToProps = (state) => ({
   isInStreamBacklink: !!state.selectedBubble,
   showDocTags: state.service === "base" || state.service === "orcid",
   showAllDocTypes:
-    (state.service === "base" || state.service === "orcid") &&
+    (state.service === "base" ||
+      state.service === "orcid" ||
+      state.service === "aquanavi") &&
     !!state.selectedPaper,
   service: state.service,
 });
 
 export default connect(
   mapStateToProps,
-  mapDispatchToListEntriesProps
+  mapDispatchToListEntriesProps,
 )(StandardListEntry);
