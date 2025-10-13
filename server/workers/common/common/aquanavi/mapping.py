@@ -1,17 +1,21 @@
 import re
 import sys
+import hashlib
 import pandas as pd
 
 from pathlib import Path
 
 CSV_PATH = "common/common/aquanavi/mesocosm_data_cleaned.csv"
+CSV_PATH_WITH_TEST_DATA = "common/common/aquanavi/mesocosm_data_cleaned_with_test_cases.csv"
 DEFAULT_DOCUMENT_TYPE = "physical object"
 DEFAULT_RESULT_TYPE = ['Other/Unknown material']
 REQUIRED_COLUMNS = [
     "Name",
     "Country",
     "Equipment",
+    "Research Topics",
     "Specialist areas",
+    "Primary interests",
     "Controlled Parameters",
     "Description of Facility",
     "Facility location(s) split",
@@ -175,6 +179,28 @@ def get_keywords(row):
 
     return "; ".join(keywords_parts)
 
+def get_id(row):
+    """
+    Creates a unique identifier based on URL and location.
+
+    Args:
+        row (pandas.Series): String DataFrame.
+
+    Returns:
+        str: Identifier for a specific record. The identifier consists of: url + location in hashed form.
+    """
+    URL_COLUMN_NAME = "url"
+    LOCATION_COLUMN_NAME = "Facility location(s) split"
+
+    url = str(row[URL_COLUMN_NAME]).strip() if row[URL_COLUMN_NAME] else ""
+    location = str(row[LOCATION_COLUMN_NAME]).strip() if row[LOCATION_COLUMN_NAME] else ""
+    combined_url_and_location = url + location
+
+    hasher = hashlib.sha256()
+    hasher.update(combined_url_and_location.encode('utf-8'))
+    hashed_identifier = hasher.hexdigest()
+    return hashed_identifier
+
 def check_that_csv_file_exists(csv_path):
     if not csv_path.exists():
         sys.exit(f"CSV does not exists: {csv_path}.")
@@ -195,14 +221,15 @@ def map_sample_data():
 
     result = []
     for _, row in df.iterrows():
+        id = get_id(row)
         title = str(row["Name"]).strip() if row["Name"] else ""
         url = str(row["url"]).strip() if row["url"] else ""
         image = row["Photos of experiments/installations images"] if row["Photos of experiments/installations images"] else ""
 
         result.append({
-            "id": url,
+            "id": id,
             "title": title,
-            "identifier": url,
+            "identifier": id,
             "link": url,
             "type": DEFAULT_DOCUMENT_TYPE,
             "resulttype": DEFAULT_RESULT_TYPE,

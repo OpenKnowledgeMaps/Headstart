@@ -1,0 +1,767 @@
+url,Name,Legal name of organisation,Country,Continent,Organisation address,Primary contact information (PI),Years of Mesocosm Experiments,Description of Facility,Controlled Parameters,Research Topics,Facility location(s),Primary interests,Specialist areas,Equipment,Lodging,Source of Information,Photos of experiments/installations,Photos of experiments/installations images,Equipment images,Lodging images,Manipulations,Facility location(s) split,location_facilities
+https://mesocosm.org/mesocosm/sites-aquanet-skogaryd-research-station/,SITES AquaNet – Skogaryd Research Station,SITES and Göteborg University,Sweden,Europe,"Göteborg University
+Inst. for Geosciences
+Guldhedsgatan 5a
+40530 Göteborg
+Sweden
+ 
+","Leif Klemedtsson
+Please login or request access to view contact information.
+",2017,"
+Open access to national and international researchers.
+Outdoor, freshwater, deployed in an adaptable jetfloat, placed in the lake Erssjön within Skogaryd research Catchment.
+PE-film enclosures or 20 hardshell PE enclosures (ø = 0.9 m, depth = 1.5 m, volume = 700 l)
+
+",,"Advanced general understanding in ecology by using modularized experiments across SITES-AquaNet stations (Sweden) or potential collaborators (Sweden, Europe and other continents). Topics: biodiversity-functioning-stability relationships, community ecology, ecological stoichiometry, food web interactions, benthic-pelagic dynamics, biochemistry (carbon cycling), cyanobacterial blooms and global change research. Possibility to combine mechanistic experiments with lake monitoring data from Lake Erssjön (e.g., phytoplankton, zooplankton, nutrients and on-site climate data, incl. temperature profile measurements).
+","
+
+
+
+
+                      58.3712, 12.1613
+                    
+",,,"Apogee SQ-500 (PAR), CTG Trilux fluorometer (chlorophyll-a, phycocyanin and turbidity) and Aanderaa 4531 optode (O2 and temperature) sensors fulltime deployed in each enclosure, deployed with a Campbell CR1000 datalogger and an AM16/32B multiplexer (https://www.campbellsci.com). The sensor and logger are connected to Skogaryd fiber-optic network for maintenance and data retrieval. Surveillance camera mounted for remote monitoring of the site.
+Hach with DO and pH, an AP-2000 AquaRead Multiprobe (http://www.aquaread.com/portofolio/ap-2000/) equipped with a chlorophyll a sensor, and an Apogee MQ-500 (PAR) sensor with handheld meters.
+Laboratory container for filtering and extraction of samples, cold storage and freezers are available at the research station. Connection to laboratories for analysis at the Swedish University of Agricultural Sc.; the Geochemical laboratory (http://www.slu.se/en/departments/aquatic-sciences-assessment/laboratories/geochemical-laboratory/), and at the Uppsala University; the Erken Laboratory (http://www.ieg.uu.se/erken-laboratory).
+","Lodging capability in two houses for 8 persons with a smaller conference room in the station area (see skogarydwebmap.gu.se). A conference hostel located nearby can take 25 persons
+","SITES (AquaNet, Water and Spectral projects) (http://www.fieldsites.se)
+","
+
+
+
+Photo credit: Leif Klemedtsson
+
+
+
+
+Photo credit: Leif Klemedtsson
+
+
+
+
+ 
+","['http://mesocosm.org/wp-content/uploads/2018/05/Skogaryd_2-1024x683.jpg', 'http://mesocosm.org/wp-content/uploads/2018/05/Skogaryd_1-1024x683.jpg']",,,,"['58.3712', ' 12.1613']","{'coordinates': ['58.3712', '12.1613']}"
+https://mesocosm.org/mesocosm/university-koblenz-landau/,Landau Stream Mesocosm Facility (LSMF),University Koblenz-Landau,Germany,Europe,"University Koblenz-Landau
+ Fortstraße 7
+ 76829 Landau
+","Ralf Schulz
+ Matthias Wieczorek
+Please login or request access to view contact information.
+",2008 - present,"The stream mesocosm facility at the Landau Campus (SW Germany) consists of 16 independent high-density concrete stream channels (each channel: 45 m length, 0.5 m depth; 0.4 m width). The channels can be run in a flow-through or recirculating mode with discharges up to about 3 L/s representing flow conditions and hydraulic residence times as typically represented by scenarios used e.g. for the regulatory assessment of chemicals in Europe.
+","Discharge (L/s)
+Flow (flow-through or/and recirculating)
+Taxon and coverage of aquatic macrophytes
+Sediment composition
+Shading
+Exposure scenario (peak-, hour- and day-scale)
+","Environmental fate of pollutants (e.g. sorption transient storage and longitudinal dispersion)
+Assessment of adverse effects of pollutants on macroinvertebrates following pulse exposures
+Evaluation and establishment of aquatic-terrestrial model ecosystems to assess aquatic insect emergence-related pollutant transfer or effect translation from aquatic to adjacent terrestrial systems
+","
+
+
+
+
+                      49.20269,8.106179999999995
+                    
+",,,"Sediment of various compositions
+Aquatic macrophytes (e.g. Elodea nuttallii, E. canadensis, Myriophyllum spicatum)
+","Possible upon negotiation
+","References:
+ Elsaesser, D., Stang, C., Bakanov, N., Schulz, R., 2013. The Landau Stream Mesocosm Facility: pesticide mitigation in vegetated flow-through streams. Bull. Environ. Contam. Toxicol. 90, 640–5. doi:10.1007/s00128-013-0968-9
+ Stang, C., Elsaesser, D., Bundschuh, M., Ternes, T. a., Schulz, R., 2013. Mitigation of Biocide and Fungicide Concentrations in Flow-Through Vegetated Stream Mesocosms. J. Environ. Qual. 42, 1889. doi:10.2134/jeq2013.05.0186
+ Stang, C., Wieczorek, M.V., Noss, C., Lorke, A., Scherr, F., Goerlitz, G., Schulz, R., 2014. Role of submerged vegetation in the retention processes of three plant protection products in flow-through stream mesocosms. Chemosphere 107, 13–22. doi:10.1016/j.chemosphere.2014.02.055
+ Wieczorek, M. V., Kötter, D., Gergs, R., Schulz, R., 2015. Using stable isotope analysis in stream mesocosms to study potential effects of environmental chemicals on aquatic-terrestrial subsidies. Environ. Sci. Pollut. Res. 22, 12892–12901. doi:10.1007/s11356-015-4071-0
+ Wieczorek, M. V., Bakanov, N., Stang, C., Bilancia, D., Lagadic, L., Bruns, E., Schulz, R., 2016. Reference scenarios for exposure to plant protection products and invertebrate communities in stream mesocosms. Sci. Total Environ. 545-546, 308-319. doi: 10.1016/j.scitotenv.2015.12.048
+","
+
+
+
+
+Stream mesocosm facility at the Landau Campus
+
+
+
+
+
+Stream mesocosm facility at the Landau Campus
+
+
+
+
+","['http://mesocosm.org/wp-content/uploads/2017/05/Stream-Mesocosms-Landau_400px.jpg', 'http://mesocosm.org/wp-content/uploads/2017/05/Fliessrinnenanlage_400.jpg']",,,,"['49.20269', '8.106179999999995']","{'coordinates': ['49.20269', '8.106179999999995']}"
+https://mesocosm.org/mesocosm/sites-aquanet-erken-laboratory/,SITES AquaNet-Erken Laboratory,Uppsala University,Sweden,Europe,"Uppsala University:
+P.O. Box 256
+SE-751 05 Uppsala
+Sweden
+ 
+Erken Laboratory:
+Norra Malmavägen
+761 73 Norrtälje
+Sweden
+","Silke Langenheder:
+Please login or request access to view contact information.
+",2017 - present,"
+Open access to national and international researchers.
+Outdoor, freshwater, lake deployed in an adaptable jetfloat.
+PE-film enclosures or 20 hard-shell PE enclosures (ø = 0.9m, depth = 1.5m, volume = 700L).
+In addition, there is access to another set of 20 hard-shell PE enclosures (ø = 1m, depth = 2 m, volume = 1200L).
+
+",,"Advance general understanding in ecology by using modularized experiments across SITES-AquaNet stations (Sweden) or potential collaborators (Sweden, Europe and other continents). Topics: biodiversity-functioning-stability relationships, community ecology, ecological stoichiometry, food web interactions, benthic-pelagic dynamics, biochemistry (carbon cycling), cyanobacterial blooms and global change research. Possibility to combine mechanistic experiments with historical (decadal) lake monitoring data from Lake Erken (e.g., phytoplankton, zooplankton, fish, nutrients and high frequency temperature measurements).
+","
+
+
+
+
+                      59.8354205, 18.6327766
+                    
+",,,"Apogee SQ-500 (PAR), CTG Trilux fluorometer (chlorophyll-a, phycocyanin and turbidity) and Aanderaa 4531 optode (O2 and temperature) sensors fulltime deployed in each enclosure. CR1000 dataloggers and AM16/32B multiplexers. Possibility to develop Internet interface for collected data. One EXO2 Multiprobe (https://www.ysi.com/EXO2) one AP-2000 AquaRead Multiprobe (http://www.aquaread.com/portofolio/ap-2000/) and one Apogee MQ-500 (PAR) with handheld meters. Laboratory analytical services available in site (http://www.ieg.uu.se/erken-laboratory/analytical-services/) or at Uppsala University (http://www.ieg.uu.se/limnology/)
+","Capacity in site (Erken Laboratory) up to 60 people with fridges, freezers and cooking facilities (http://www.ieg.uu.se/erken-laboratory/.)
+","SITES AquaNet, Water and Spectral: http://www.fieldsites.se
+NETLAKE: www.netlake.org
+GLEON: www.gleon.org
+","
+
+
+
+Photo credit: Sophie Wertek
+
+
+
+
+Photo credit: Erik Sahlee
+
+
+
+
+","['http://mesocosm.org/wp-content/uploads/2018/05/Erken_2-1024x768.jpg', 'http://mesocosm.org/wp-content/uploads/2018/05/Erken_1-1024x705.jpg']",,,,"['59.8354205', ' 18.6327766']","{'coordinates': ['59.8354205', '18.6327766']}"
+https://mesocosm.org/mesocosm/resources-garden-of-aquatic-plant/,Resources garden of aquatic plant,"Wuhan Botanical Garden, Chinese Academy of Sciences",China,Asia,"Lumo Road #1, Wuhan, China
+","(+86)13297957139
+Please login or request access to view contact information.
+",2019-2022,"Total area of 450 m2, and with the concrete pools of 1 * 1 m2 and 2 * 2 m2 at 1 m and 1.5 m depths.  Electricity is powered, and two types of water supply (from nearby Donghu Lake or tap water)
+","Water depth at the gradient of 25 cm to 150 cm, and the temperature could be also controlled by the heat devices and control panel.
+","functional trait; global warming
+","
+
+
+
+
+                      30.54694,114.41972
+                    
+","1. the effects of warming or extreme water level changes on submerged macrophytes
+2. the trade-offs between functional traits of submerged macrophytes
+3. the interaction between submerged macrophytes and phytoplankton, zooplankton and fish
+","Aquatic plant
+","YSI multi-parameter probe, PAM monitor, Li-1400
+","Wuhan 
+","http://english.wbg.cas.cn/
+","
+
+
+
+The green house and the heating control system
+
+
+
+
+Outdoor tanks with different size and area
+
+
+
+
+Tanks with different macrophytes and water depth
+
+
+
+
+","['http://mesocosm.org/wp-content/uploads/2019/03/The-green-house-and-the-heating-control-system-225x300.jpeg', 'http://mesocosm.org/wp-content/uploads/2019/03/Outdoor-tanks-with-different-size-and-area-300x225.jpeg', 'http://mesocosm.org/wp-content/uploads/2019/03/Tanks-with-different-macrophytes-and-water-depth-300x225.jpeg']",,,,"['30.54694', '114.41972']","{'coordinates': ['30.54694', '114.41972']}"
+https://mesocosm.org/mesocosm/large-experimental-array-of-ponds-leap/,Large Experimental Array of Ponds (LEAP),McGill University,Canada,North America,"McGill Department of Biology
+Stewart Biology Bldg
+1205 Dr Penfield Ave
+Montreal, QC H3A 1B1
+Canada
+","Professor Andrew Gonzalez
+Please login or request access to view contact information.
+",2016 - present,"LEAP is based at McGill University’s Gault Reserve It is a facility designed for well-replicated experiments addressing the evolution and ecology of aquatic ecosystems exposed to environmental stressors. It is an array of 96 mesocosm tanks, each containing ~1000 liters of water.  Water and organisms (excluding fish) are piped to LEAP directly from a Lake Hertel over a kilometer away. Lake Hertel is a protected lake not exposed to contaminants. The plumbing at LEAP allows for a semi-continuous flow of lake water and organisms into and out of the tanks throughout the season. These communities are natural analogues of the freshwater ponds and lakes so common in Canadian landscapes. The onsite lab allows us to rapidly process samples (see images below). An outflow reservoir can hold the outflow from all mesocosms so that decontamination can be done, if needed.
+","Contaminants such as pH and herbicide concentrations.
+","
+Freshwater ecology and evolution
+Limnology
+Ecosystem processes
+
+","
+
+
+
+
+                      45.5368, -73.1578
+                    
+","Experimental research addressing how complex aquatic communities respond to environmental stressors. 
+","
+Experimental evolution
+Ecology
+Metagenomics 
+
+","
+Fluoroprobe
+Microscopes
+Drone
+
+","Available
+https://gault.mcgill.ca/en/meeting-and-lodging/detail/lodging-at-the-reserve/
+","http://gonzalezlab.weebly.com/leap.html
+","
+
+
+
+Panoramic view of the LEAP facility embedded in forest of the Gault reserve, with the inflow and outflow reservoirs visible. 
+Photo credit: Andrew Gonzalez
+
+
+
+
+Panoramic view of the LEAP-lab, in and outflow reservoir and mesocosm platform
+Photo credit: Andrew Gonzalez
+
+
+
+
+Depth and multiparameter probe (YSI) physico-chemical measurements.  Photo credit: Vincent Fugère
+ 
+
+
+
+
+","['http://mesocosm.org/wp-content/uploads/2019/04/3-1024x769.png', 'http://mesocosm.org/wp-content/uploads/2019/04/2-1024x368.png', 'http://mesocosm.org/wp-content/uploads/2019/04/1.png']",,,,"['45.5368', ' -73.1578']","{'coordinates': ['45.5368', '-73.1578']}"
+https://mesocosm.org/mesocosm/cmu-biological-station-mesocosm-facility/,[TEST CASE] Identifier: same with some other mesocosm; Location: different from some other mesocosm,"Eawag, Swiss Federal Institute of Aquatic Science and Technology",Switzerland,Europe,"Eawag, Überlandstrasse 133, 8600 Dübendorf, Switzerland
+","Christoph Vorburger
+Head of Experimental Ponds Committee
+Please login or request access to view contact information.
+",2016 – present,"The Experimental Ponds Facility at Eawag in Dübendorf consists of 36 independent ponds made of glass fiber reinforced plastic. The ponds are 1.5 m deep with a shallow end to one side (0.5 m), and they hold up to 15 m3 of fresh water. The ponds can be drained and reset completely between experiments. 
+","Depending on ongoing experiments:
+1. Nutrient loading (phosphorus)
+2. Presence/absence of macrophytes
+3. Presence/absence of filter feeders (mussels)
+4. Ecotypes of added fish
+","Ecosystem resilience
+Eco-evolutionary dynamics
+Ecosystem effects of environmental stressors
+Ecoosystem effects of evaporation control
+","
+
+
+
+
+                      47.40515,8.60855
+                    
+",,,"Indoor laboratories for sample processing
+Sampling bridges for easy access to water column
+Sampling equipment for phyto- and zooplankton
+Exo2 Multiparameter Sonds for automated measurement of water quality parameters
+","Hotels and Eawag guest house nearby
+","https://www.eawag.ch/de/ueberuns/arbeiten-an-der-eawag/forschungsumfeld/versuchsteichanlage/
+","
+
+
+
+Image 1: Eawag’s Experimental Pond Facility in Dübendorf, Switzerland. Picture taken in summer 2016, shortly after the construction of the facility. Photo credit: Christoph Vorburger
+
+
+
+
+Image 2: Schematic cross-section of an experimental pond. Image credit: Eawag
+
+
+
+
+Image 3: Scientists taking samples at Eawag’s Experimental Pond Facility in Dübendorf, Switzerland. Photo credit: Eawag
+
+
+
+
+","['http://mesocosm.org/wp-content/uploads/2019/03/Eawag-Experimental-Ponds-Facility-1-300x186.jpg', 'http://mesocosm.org/wp-content/uploads/2019/03/Eawag-Experimental-Ponds-Facility-2-300x156.jpg', 'http://mesocosm.org/wp-content/uploads/2019/03/Eawag-Experimental-Ponds-Facility-3-300x174.jpg']",,,,"['47.40515', '8.60855']","{'coordinates': ['47.40515', '8.60855']}"
+https://mesocosm.org/mesocosm/cmu-biological-station-mesocosm-facility/,[TEST CASE] Identifier: same with some other mesocosm; Location: same with some other mesocosm,"CMU Biological Station, Central Michigan University",USA,North America,"P.O. Box 206,
+Beaver Island,
+MI 49782
+USA
+","Don Uzarski
+Please login or request access to view contact information.
+",2012 - present,"
+12 fibreglass tanks each 250 gallons
+including metal halide
+timer-controlled lights
+housed on Lake Michigan with access to epilimnetic and metalimnetic water
+
+","
+Light
+Temperature
+
+","
+Predator-prey interactions
+microplastic impacts
+sediment contaminants
+macrophyte-phytoplankton interactions
+fish behavior
+nutrient impacts
+
+","
+
+
+
+
+                      45.7422222,-85.50944444444444
+                    
+","
+Invasive species
+eutrophication
+climate change
+
+","Laurentian Great Lakes
+","YSI multiprobes
+","on site
+","https://www2.cmich.edu/colleges/se/cmubs/MesocosmFacility/Pages/default.aspx
+","photo credits: CMU Communications
+",['http://mesocosm.org/wp-content/uploads/2022/11/beaver-island-mesocosms-1024x770.jpg'],,,,"['45.7422222', '-85.50944444444444']","{'coordinates': ['45.7422222', '-85.50944444444444']}"
+test 1,[TEST CASE] Aquatron Laboratory,Dalhousie University Life Sciences Centre,,North-America,"Dalhousie University Life Sciences Centre
+ 1355 Oxford Street
+ PO BOX 15000
+ Halifax, Nova Scotia
+ Canada, B3H 4R2
+","John Batt
+Please login or request access to view contact information.
+",,,"temperature, stratification, light, etc.
+","Animal behaviour, ballast water, flood containment, invasive species
+","
+
+
+
+
+                      44.6356125,-63.5944334
+                    
+",,,"These world-class facilities are backed by our mechanical system, which can provide high quality, temperature controlled seawater and freshwater year round, as well as a professional team of both biologists and mechanical operators who are available to run the systems and help researchers. 16 wet labs.
+",,"http://www.dal.ca/dept/aquatron.html
+http://www.dal.ca/dept/aquatron/facilities/tower_tank.html
+http://www.dal.ca/dept/aquatron/facilities/pool_tank.html
+","
+
+
+
+
+Aquatron Laboratory in Halifax, Nova-Scotia, CA
+
+
+
+
+
+
+
+
+
+
+
+Aquatron laboratory: Pool tank
+
+
+
+
+
+Aquatron Laboratory: Tower tank sysem
+
+
+
+
+
+Aquatron Laboratory: Phytoplankton cultivation
+
+
+
+
+","['http://mesocosm.org/wp-content/uploads/2017/05/aquatronS.jpg', 'http://mesocosm.org/wp-content/uploads/2017/05/Aquatron-empty_400.jpg', 'http://mesocosm.org/wp-content/uploads/2017/05/halifax_pool_calltoaction.image_.jpg', 'http://mesocosm.org/wp-content/uploads/2017/05/aquatron_400.jpg', 'http://mesocosm.org/wp-content/uploads/2017/05/featureslide.image_400.jpg', 'http://mesocosm.org/wp-content/uploads/2017/05/aquatron1_400.jpg']",,,,"['44.6356125', '-63.5944334']","{'coordinates': ['44.6356125', '-63.5944334']}"
+test 2,[TEST CASE] IMDEA Water Institute,IMDEA Water Foundation,Spain,Europe,"IMDEA Water Institute
+Avenida Punto Com 2
+PO Box 28805, Alcala de Henares
+Madrid (Spain)
+","Andreu Rico:  andreu.rico@imdea.org
+Marco Vighi:  marco.vighi@imdea.org
+",,,,"Environmental fate of chemicals and calculation of degradation rates
+Assessment of the adverse effects of chemicals on several biological endpoints and derivation of safe environmental concentrations
+Evaluation of the interaction between multiple stressors (chemical and non-chemical) on aquatic ecosystems
+","
+
+
+
+
+                      40.5133474, -3.3386556000000382
+                    
+","We are mainly engaged on academic research projects but also open for collaboration with the regulatory and industry sectors. Please do not hesitate to contact us.
+",,,"Can be arranged upon request
+","http://water.imdea.org/
+"," 
+
+
+
+
+Photot: Michelle Jansen
+ 
+
+
+Photo: Andreu Rico
+ 
+
+
+
+
+Photo: Andreu Rico
+
+
+Photo: Andreu Rico
+
+
+
+
+ 
+","['http://mesocosm.org/wp-content/uploads/2018/04/IMG_2170-300x181.jpg', 'http://mesocosm.org/wp-content/uploads/2018/04/20160519_121359-300x169.jpg', 'http://mesocosm.org/wp-content/uploads/2018/04/20170512_154035_resized-300x169.jpg', 'http://mesocosm.org/wp-content/uploads/2018/04/IMG-20170512-WA0010-300x169.jpg']",,,,"['40.5133474', ' -3.3386556000000382']","{'coordinates': ['40.5133474', '-3.3386556000000382']}"
+test 3,[TEST CASE] Keywords: no keywords information at all,"CMU Biological Station, Central Michigan University",USA,North America,"P.O. Box 206,
+Beaver Island,
+MI 49782
+USA
+","Don Uzarski
+Please login or request access to view contact information.
+",2015 - present,"
+12 fibreglass tanks each 250 gallons
+including metal halide
+timer-controlled lights
+housed on Lake Michigan with access to epilimnetic and metalimnetic water
+
+","
+Light
+Temperature
+
+",,"
+
+
+
+
+                      45.7422222,-85.50944444444444
+                    
+",,,"YSI multiprobes
+","on site
+","https://www2.cmich.edu/colleges/se/cmubs/MesocosmFacility/Pages/default.aspx
+","photo credits: CMU Communications
+",['http://mesocosm.org/wp-content/uploads/2022/11/beaver-island-mesocosms-1024x770.jpg'],,,,"['45.7422222', '-85.50944444444444']","{'coordinates': ['45.7422222', '-85.50944444444444']}"
+test 4,"[TEST CASE] Keywords: only ""Specialist areas"" column information","CMU Biological Station, Central Michigan University",USA,North America,"P.O. Box 206,
+Beaver Island,
+MI 49782
+USA
+","Don Uzarski
+Please login or request access to view contact information.
+",2016 - present,"
+12 fibreglass tanks each 250 gallons
+including metal halide
+timer-controlled lights
+housed on Lake Michigan with access to epilimnetic and metalimnetic water
+
+","
+Light
+Temperature
+
+",,"
+
+
+
+
+                      45.7422222,-85.50944444444444
+                    
+",,"Ecology, Global warming","YSI multiprobes
+","on site
+","https://www2.cmich.edu/colleges/se/cmubs/MesocosmFacility/Pages/default.aspx
+","photo credits: CMU Communications
+",['http://mesocosm.org/wp-content/uploads/2022/11/beaver-island-mesocosms-1024x770.jpg'],,,,"['45.7422222', '-85.50944444444444']","{'coordinates': ['45.7422222', '-85.50944444444444']}"
+test 5,"[TEST CASE] Keywords: only ""Primary interests"" information","CMU Biological Station, Central Michigan University",USA,North America,"P.O. Box 206,
+Beaver Island,
+MI 49782
+USA
+","Don Uzarski
+Please login or request access to view contact information.
+",2017 - present,"
+12 fibreglass tanks each 250 gallons
+including metal halide
+timer-controlled lights
+housed on Lake Michigan with access to epilimnetic and metalimnetic water
+
+","
+Light
+Temperature
+
+",,"
+
+
+
+
+                      45.7422222,-85.50944444444444
+                    
+","Ecology, Global warming",,"YSI multiprobes
+","on site
+","https://www2.cmich.edu/colleges/se/cmubs/MesocosmFacility/Pages/default.aspx
+","photo credits: CMU Communications
+",['http://mesocosm.org/wp-content/uploads/2022/11/beaver-island-mesocosms-1024x770.jpg'],,,,"['45.7422222', '-85.50944444444444']","{'coordinates': ['45.7422222', '-85.50944444444444']}"
+test 6,"[TEST CASE] Keywords: only ""Research Topics"" information","CMU Biological Station, Central Michigan University",USA,North America,"P.O. Box 206,
+Beaver Island,
+MI 49782
+USA
+","Don Uzarski
+Please login or request access to view contact information.
+",2018 - present,"
+12 fibreglass tanks each 250 gallons
+including metal halide
+timer-controlled lights
+housed on Lake Michigan with access to epilimnetic and metalimnetic water
+
+","
+Light
+Temperature
+
+","Ecology, Global warming","
+
+
+
+
+                      45.7422222,-85.50944444444444
+                    
+",,,"YSI multiprobes
+","on site
+","https://www2.cmich.edu/colleges/se/cmubs/MesocosmFacility/Pages/default.aspx
+","photo credits: CMU Communications
+",['http://mesocosm.org/wp-content/uploads/2022/11/beaver-island-mesocosms-1024x770.jpg'],,,,"['45.7422222', '-85.50944444444444']","{'coordinates': ['45.7422222', '-85.50944444444444']}"
+test 7,[TEST CASE] Keywords: all  information available,"CMU Biological Station, Central Michigan University",USA,North America,"P.O. Box 206,
+Beaver Island,
+MI 49782
+USA
+","Don Uzarski
+Please login or request access to view contact information.
+",2019 - present,"
+12 fibreglass tanks each 250 gallons
+including metal halide
+timer-controlled lights
+housed on Lake Michigan with access to epilimnetic and metalimnetic water
+
+","
+Light
+Temperature
+
+","Ecology, Global warming","
+
+
+
+
+                      45.7422222,-85.50944444444444
+                    
+","Ecology, Global warming","Ecology, Global warming","YSI multiprobes
+","on site
+","https://www2.cmich.edu/colleges/se/cmubs/MesocosmFacility/Pages/default.aspx
+","photo credits: CMU Communications
+",['http://mesocosm.org/wp-content/uploads/2022/11/beaver-island-mesocosms-1024x770.jpg'],,,,"['45.7422222', '-85.50944444444444']","{'coordinates': ['45.7422222', '-85.50944444444444']}"
+test 8,[TEST CASE] Non-latin characters (Chinese simplified),,China,Asia,____,____,2020 - present,___________,__,"______________
+_______","
+
+
+
+
+                      45.7422222,-85.50944444444444
+                    
+","______________
+_______","______________
+_______",____,"on site
+","https://www2.cmich.edu/colleges/se/cmubs/MesocosmFacility/Pages/default.aspx
+","photo credits: CMU Communications
+",['http://mesocosm.org/wp-content/uploads/2022/11/beaver-island-mesocosms-1024x770.jpg'],,,,"['45.7422222', '-85.50944444444444']","{'coordinates': ['45.7422222', '-85.50944444444444']}"
+test 9,[TEST CASE] Non-latin characters (Arabic),__ ____ ______,___,_______,__ ____ ______,__ ____ ______,2021 - present,_____ _____ _____ _________ __ Eawag __ Dübendorf __ 36 ____ ______ ______ __ _________ ______ ________ ________. ____ ___ _____ 1.5 ___ __ ___ ___ __ ____ ____ (0.5 ___)_ _______ __ ___ ___ 15 _____ ______ __ ______ ______. ____ _____ _____ ______ _____ _______ ___ _______.,____ _______,_______ ________ _______,"
+
+
+
+
+                      45.7422222,-85.50944444444444
+                    
+",__ ____ ______,__ ____ ______,__ ____ ______,"on site
+","https://www2.cmich.edu/colleges/se/cmubs/MesocosmFacility/Pages/default.aspx
+","photo credits: CMU Communications
+",['http://mesocosm.org/wp-content/uploads/2022/11/beaver-island-mesocosms-1024x770.jpg'],,,,"['45.7422222', '-85.50944444444444']","{'coordinates': ['45.7422222', '-85.50944444444444']}"
+"test 10 ",[TEST CASE] Non-latin characters (Greek),___ _�______ ________,Greece,Europe,___ _�______ ________,___ _�______ ________,2022 - present,"_ ___________ ____________ ______ ___ Eawag ___ Dübendorf _�_________ _�_ 36 ___________ ______ _______________ _�_ �_______ __________ __ ____ _______. __ ______ _____ _____ 1,5 m __ ___ ____ ____ ___ ___ �_____ (0,5 m) ___ ____________ ___ 15 m3 ______ _____. __ ______ _�_____ __ _�_____________ ___ __ _�_____________ �_____ ______ ___ �_________.",___,_________ _�__________,"
+
+
+
+
+                      45.7422222,-85.50944444444444
+                    
+",_________ _�__________,_________ _�__________,___ _�______ ________,"on site
+","https://www2.cmich.edu/colleges/se/cmubs/MesocosmFacility/Pages/default.aspx
+","photo credits: CMU Communications
+",['http://mesocosm.org/wp-content/uploads/2022/11/beaver-island-mesocosms-1024x770.jpg'],,,,"['45.7422222', '-85.50944444444444']","{'coordinates': ['45.7422222', '-85.50944444444444']}"
+test 11,[TEST CASE] Abstract: no information at all,University of Helsinki,Finland,Europe,"University of Helsinki
+ P.O. Box 3
+ 00014 University of Helsinki
+ Finland
+","Director: Marko Reinikainen
+ Research Coordinator: Joanna Norkko
+Please login or request access to view contact information.,Please login or request access to view contact information.
+",2023 - present,,,"Biodiversity, stoichiometry, benthic ecology, plankton ecology, seagrass ecology, ice studies, reproductive evolution in fishes
+","
+
+
+
+
+                      59.8431619,23.2440297
+                    
+",,,,"Dormitories with ca 100 beds, full board, self-service kitchens, sea-side sauna
+","http://www.finmari-infrastructure.fi/field-stations/tvarminne-uhel/
+","
+
+
+
+Pristine nature reserve for experimental set-ups
+
+
+
+
+SYKE-MRC field mesocosm work at Tvärminne
+
+
+
+
+","['http://mesocosm.org/wp-content/uploads/2017/03/Pristine-nature-reserve-for-experimental-set-ups-300x194.jpg', 'http://mesocosm.org/wp-content/uploads/2017/03/SYKE-MRC-field-mesocosm-work-300x282.jpg']",,,,"['59.8431619', '23.2440297']","{'coordinates': ['59.8431619', '23.2440297']}"
+test 12,[TEST CASE] Abstract: all information available,University of Helsinki,Finland,Europe,"University of Helsinki
+ P.O. Box 3
+ 00014 University of Helsinki
+ Finland
+","Director: Marko Reinikainen
+ Research Coordinator: Joanna Norkko
+Please login or request access to view contact information.,Please login or request access to view contact information.
+",2024 - present,"pelagic – marine – outdoor
+ A large nature reserve surrounding TZS is dedicated to research, providing access to a pristine environment for field mesocosms. Research vessels and technical services support sampling and maintenance; a hovercraft allows winter-studies. Aquarium facilities with natural or artificial light are available for flow-through experiments at up to 100 000 m3 daily water capacity. A marine laboratory provides analytical services.
+","Temperature, light, pH, pCO2, nutrient levels, community composition, turbidity
+","Biodiversity, stoichiometry, benthic ecology, plankton ecology, seagrass ecology, ice studies, reproductive evolution in fishes
+","
+
+
+
+
+                      59.8431619,23.2440297
+                    
+",,,"Wet labs, outdoor aquarium facility, climatic chambers, bio-optical instrumentation (spectrophotometry, spectrofluorometry), masspectrometry, carbon analyzers, microscopes with digital imaging, isotope lab, chemistry lab, CTD, meters for light, turbidity and oxygen, field sampling equipment, research vessels, hovercraft
+","Dormitories with ca 100 beds, full board, self-service kitchens, sea-side sauna
+","http://www.finmari-infrastructure.fi/field-stations/tvarminne-uhel/
+","
+
+
+
+Pristine nature reserve for experimental set-ups
+
+
+
+
+SYKE-MRC field mesocosm work at Tvärminne
+
+
+
+
+","['http://mesocosm.org/wp-content/uploads/2017/03/Pristine-nature-reserve-for-experimental-set-ups-300x194.jpg', 'http://mesocosm.org/wp-content/uploads/2017/03/SYKE-MRC-field-mesocosm-work-300x282.jpg']",,,,"['59.8431619', '23.2440297']","{'coordinates': ['59.8431619', '23.2440297']}"
+test 13,"[TEST CASE] Abstract: only ""Description of Facility"" data available",University of Helsinki,Finland,Europe,"University of Helsinki
+ P.O. Box 3
+ 00014 University of Helsinki
+ Finland
+","Director: Marko Reinikainen
+ Research Coordinator: Joanna Norkko
+Please login or request access to view contact information.,Please login or request access to view contact information.
+",2025 - present,"pelagic – marine – outdoor
+ A large nature reserve surrounding TZS is dedicated to research, providing access to a pristine environment for field mesocosms. Research vessels and technical services support sampling and maintenance; a hovercraft allows winter-studies. Aquarium facilities with natural or artificial light are available for flow-through experiments at up to 100 000 m3 daily water capacity. A marine laboratory provides analytical services.
+",,"Biodiversity, stoichiometry, benthic ecology, plankton ecology, seagrass ecology, ice studies, reproductive evolution in fishes
+","
+
+
+
+
+                      59.8431619,23.2440297
+                    
+",,,,"Dormitories with ca 100 beds, full board, self-service kitchens, sea-side sauna
+","http://www.finmari-infrastructure.fi/field-stations/tvarminne-uhel/
+","
+
+
+
+Pristine nature reserve for experimental set-ups
+
+
+
+
+SYKE-MRC field mesocosm work at Tvärminne
+
+
+
+
+","['http://mesocosm.org/wp-content/uploads/2017/03/Pristine-nature-reserve-for-experimental-set-ups-300x194.jpg', 'http://mesocosm.org/wp-content/uploads/2017/03/SYKE-MRC-field-mesocosm-work-300x282.jpg']",,,,"['59.8431619', '23.2440297']","{'coordinates': ['59.8431619', '23.2440297']}"
+test 14,"[TEST CASE] Abstract: only ""Equipment"" data available",University of Helsinki,Finland,Europe,"University of Helsinki
+ P.O. Box 3
+ 00014 University of Helsinki
+ Finland
+","Director: Marko Reinikainen
+ Research Coordinator: Joanna Norkko
+Please login or request access to view contact information.,Please login or request access to view contact information.
+",2026 - present,,,"Biodiversity, stoichiometry, benthic ecology, plankton ecology, seagrass ecology, ice studies, reproductive evolution in fishes
+","
+
+
+
+
+                      59.8431619,23.2440297
+                    
+",,,"Wet labs, outdoor aquarium facility, climatic chambers, bio-optical instrumentation (spectrophotometry, spectrofluorometry), masspectrometry, carbon analyzers, microscopes with digital imaging, isotope lab, chemistry lab, CTD, meters for light, turbidity and oxygen, field sampling equipment, research vessels, hovercraft
+","Dormitories with ca 100 beds, full board, self-service kitchens, sea-side sauna
+","http://www.finmari-infrastructure.fi/field-stations/tvarminne-uhel/
+","
+
+
+
+Pristine nature reserve for experimental set-ups
+
+
+
+
+SYKE-MRC field mesocosm work at Tvärminne
+
+
+
+
+","['http://mesocosm.org/wp-content/uploads/2017/03/Pristine-nature-reserve-for-experimental-set-ups-300x194.jpg', 'http://mesocosm.org/wp-content/uploads/2017/03/SYKE-MRC-field-mesocosm-work-300x282.jpg']",,,,"['59.8431619', '23.2440297']","{'coordinates': ['59.8431619', '23.2440297']}"
+test 15,"[TEST CASE] Abstract: only ""Controlled Parameters"" data available",University of Helsinki,Finland,Europe,"University of Helsinki
+ P.O. Box 3
+ 00014 University of Helsinki
+ Finland
+","Director: Marko Reinikainen
+ Research Coordinator: Joanna Norkko
+Please login or request access to view contact information.,Please login or request access to view contact information.
+",2027 - present,,"Temperature, light, pH, pCO2, nutrient levels, community composition, turbidity
+","Biodiversity, stoichiometry, benthic ecology, plankton ecology, seagrass ecology, ice studies, reproductive evolution in fishes
+","
+
+
+
+
+                      59.8431619,23.2440297
+                    
+",,,,"Dormitories with ca 100 beds, full board, self-service kitchens, sea-side sauna
+","http://www.finmari-infrastructure.fi/field-stations/tvarminne-uhel/
+","
+
+
+
+Pristine nature reserve for experimental set-ups
+
+
+
+
+SYKE-MRC field mesocosm work at Tvärminne
+
+
+
+
+","['http://mesocosm.org/wp-content/uploads/2017/03/Pristine-nature-reserve-for-experimental-set-ups-300x194.jpg', 'http://mesocosm.org/wp-content/uploads/2017/03/SYKE-MRC-field-mesocosm-work-300x282.jpg']",,,,"['59.8431619', '23.2440297']","{'coordinates': ['59.8431619', '23.2440297']}"
