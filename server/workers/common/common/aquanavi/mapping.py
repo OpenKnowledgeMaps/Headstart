@@ -138,31 +138,57 @@ def get_coverage(row):
     return result
 
 def get_abstract(row):
+    """
+    Creates the abstract field for each data entry. The abstract field contains
+    string value with data from such set of columns: Facility description, Equipment,
+    Controlled Parameters, Primary interests and Research topics. If no column contains information,
+    an empty string is returned. If the column does not contain any information, it will be added
+    in the string as follows: "Equipment: description not available".
+
+    Args:
+        row (pandas.Series): String DataFrame.
+
+    Returns:
+        str: String in the abstract field format.
+    """
+    AMOUNT_OF_ALL_POSSIBLE_ENTRIES = 5
     count_of_not_available_parts = 0
     abstract_parts = []
 
-    if (row['Description of Facility']):
-        abstract_parts.append(f"Facility description: {remove_trailing_dot(str(row['Description of Facility']).strip())}")
-    else:
+    def get_not_available_message_and_increase_counter(name):
+        nonlocal count_of_not_available_parts
         count_of_not_available_parts += 1
-        abstract_parts.append("Facility description: not available")
+        return f"{name}: description not available"
 
-    if (row['Equipment']):
-        abstract_parts.append(f"Equipment: {remove_trailing_dot(str(row['Equipment']).strip())}")
+    if (row[COLUMNS['description']]):
+        abstract_parts.append(f"Facility description: {remove_trailing_dot(str(row[COLUMNS['description']]).strip())}")
     else:
-        count_of_not_available_parts += 1
-        abstract_parts.append("Equipment: not available")
+        abstract_parts.append(get_not_available_message_and_increase_counter("Facility description"))
 
-    if (row['Controlled Parameters']):
-        abstract_parts.append(f"Controlled Parameters: {remove_trailing_dot(str(row['Controlled Parameters']).strip())}")
+    if (row[COLUMNS['equipment']]):
+        abstract_parts.append(f"Equipment: {remove_trailing_dot(str(row[COLUMNS['equipment']]).strip())}")
     else:
-        count_of_not_available_parts += 1
-        abstract_parts.append("Controlled Parameters: not available")
+        abstract_parts.append(get_not_available_message_and_increase_counter('Equipment'))
 
-    if (count_of_not_available_parts == 3):
+    if (row[COLUMNS['controlled_parameters']]):
+        abstract_parts.append(f"Controlled parameters: {remove_trailing_dot(str(row[COLUMNS['controlled_parameters']]).strip())}")
+    else:
+        abstract_parts.append(get_not_available_message_and_increase_counter('Controlled Parameters'))
+
+    if (row[COLUMNS['primary_interests']]):
+            abstract_parts.append(f"Primary interests: {remove_trailing_dot(str(row[COLUMNS['primary_interests']]).strip())}")
+    else:
+        abstract_parts.append(get_not_available_message_and_increase_counter('Primary interests'))
+
+    if (row[COLUMNS['research_topics']]):
+            abstract_parts.append(f"Research topics: {remove_trailing_dot(str(row[COLUMNS['research_topics']]).strip())}")
+    else:
+        abstract_parts.append(get_not_available_message_and_increase_counter('Research topics'))
+
+    if (count_of_not_available_parts == AMOUNT_OF_ALL_POSSIBLE_ENTRIES):
         return ""
 
-    return "; ".join(abstract_parts)
+    return "; ".join(abstract_parts) + '.'
 
 def get_keywords(row):
     keywords_parts = []
@@ -174,22 +200,6 @@ def get_keywords(row):
         keywords_parts.append(specialist_areas_without_trailing_dot)
     else:
         keywords_parts.append("not available")
-
-    # Adding the "Primary interests"
-    primary_interests = process_string_column(row, "Primary interests")
-    primary_interests_without_trailing_dot = remove_trailing_dot(primary_interests)
-    if primary_interests_without_trailing_dot:
-        keywords_parts.append(f"Primary interests: {primary_interests_without_trailing_dot}")
-    else:
-        keywords_parts.append("Primary interests: not available")
-
-    # Adding the "Research Topics"
-    research_topics = process_string_column(row, "Research Topics")
-    research_topics_without_trailing_dot = remove_trailing_dot(research_topics)
-    if research_topics_without_trailing_dot:
-        keywords_parts.append(f"Research topics: {research_topics_without_trailing_dot}")
-    else:
-        keywords_parts.append("Research topics: not available")
 
     return "; ".join(keywords_parts)
 
@@ -232,10 +242,10 @@ def check_that_required_columns_exists(df: pd.DataFrame, csv_path: str):
             sys.exit(f"The '{required_col_name}' is missing in the {csv_path} file")
 
 def map_sample_data():
-    csv_path = Path(CSV_PATH)
+    csv_path = Path(CSV_PATH_WITH_TEST_DATA)
     check_that_csv_file_exists(csv_path)
     df = pd.read_csv(csv_path).fillna("")
-    check_that_required_columns_exists(df, CSV_PATH)
+    check_that_required_columns_exists(df, CSV_PATH_WITH_TEST_DATA)
 
     result = []
     for _, row in df.iterrows():
