@@ -22,7 +22,7 @@ $post_params["sorting"] = "most-relevant";
 $post_params["time_range"] = "user-defined";
 
 // And some others...
-$params_array = ["from", "to", "document_types", "sorting", "min_descsize", "lang_id", "custom_title"];
+$params_array = ["from", "to", "document_types", "sorting", "min_descsize", "lang_id"];
 
 $result = search("aquanavi", $query, $post_params, $params_array, false, true, null, $precomputed_id, false);
 echo $result
