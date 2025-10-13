@@ -160,28 +160,33 @@ def get_abstract(row):
         count_of_not_available_parts += 1
         return f"{name}: description not available"
 
+    def get_and_process_value(row, column_name):
+        value = process_string_column(row, column_name)
+        value_without_trailing_dot = remove_trailing_dot(value)
+        return value_without_trailing_dot
+
     if (row[COLUMNS['description']]):
-        abstract_parts.append(f"Facility description: {remove_trailing_dot(str(row[COLUMNS['description']]).strip())}")
+        abstract_parts.append(f"Facility description: {get_and_process_value(row, COLUMNS['description'])}")
     else:
         abstract_parts.append(get_not_available_message_and_increase_counter("Facility description"))
 
     if (row[COLUMNS['equipment']]):
-        abstract_parts.append(f"Equipment: {remove_trailing_dot(str(row[COLUMNS['equipment']]).strip())}")
+        abstract_parts.append(f"Equipment: {get_and_process_value(row, COLUMNS['equipment'])}")
     else:
         abstract_parts.append(get_not_available_message_and_increase_counter('Equipment'))
 
     if (row[COLUMNS['controlled_parameters']]):
-        abstract_parts.append(f"Controlled parameters: {remove_trailing_dot(str(row[COLUMNS['controlled_parameters']]).strip())}")
+        abstract_parts.append(f"Controlled parameters: {get_and_process_value(row, COLUMNS['controlled_parameters'])}")
     else:
         abstract_parts.append(get_not_available_message_and_increase_counter('Controlled Parameters'))
 
     if (row[COLUMNS['primary_interests']]):
-            abstract_parts.append(f"Primary interests: {remove_trailing_dot(str(row[COLUMNS['primary_interests']]).strip())}")
+            abstract_parts.append(f"Primary interests: {get_and_process_value(row, COLUMNS['primary_interests'])}")
     else:
         abstract_parts.append(get_not_available_message_and_increase_counter('Primary interests'))
 
     if (row[COLUMNS['research_topics']]):
-            abstract_parts.append(f"Research topics: {remove_trailing_dot(str(row[COLUMNS['research_topics']]).strip())}")
+            abstract_parts.append(f"Research topics: {get_and_process_value(row, COLUMNS['research_topics'])}")
     else:
         abstract_parts.append(get_not_available_message_and_increase_counter('Research topics'))
 
