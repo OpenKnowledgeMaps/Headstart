@@ -25,19 +25,19 @@ COLUMNS = {
     "photos_of_experiments": "Photos of experiments/installations images",
 }
 
-def process_string_column(row, name):
+def process_string_column(row, column_name):
     """
     Process the column name from DataFrame.
 
     Args:
         row (pandas.Series): String DataFrame.
-        name (str): Name of a column that must be processed.
+        column_name (str): Name of a column that must be processed.
 
     Returns:
         str: The processed string (parts separated by commas, or the original string),
         or an empty string if the original value was empty.
     """
-    value = row[name]
+    value = row[column_name]
 
     if value:
         processed_string = str(value).strip()
@@ -51,9 +51,34 @@ def process_string_column(row, name):
         return ""
 
 def remove_trailing_dot(string):
+    """
+    Remove the dot from the end of the string (if it is existing the string).
+
+    Args:
+        string (str): String with/without dot at the end.
+
+    Returns:
+        str: String without dot at the end.
+    """
     if string and string.endswith('.'):
         return string[:-1]
     return string
+
+def get_and_process_value(row, column_name):
+    """
+    The function returns a value from a column with line breaks handling,
+    as well as removing the dot from the end of the value (string).
+
+    Args:
+        row (str): String DataFrame.
+        column_name (str): Name of a column that must be processed.
+
+    Returns:
+        str: String with value without dot at the end.
+    """
+    value = process_string_column(row, column_name)
+    value_without_trailing_dot = remove_trailing_dot(value)
+    return value_without_trailing_dot
 
 def get_latitude_longitude(row):
     coordinates_string = str(row[COLUMNS['location']]).strip()
@@ -160,11 +185,6 @@ def get_abstract(row):
         count_of_not_available_parts += 1
         return f"{name}: description not available"
 
-    def get_and_process_value(row, column_name):
-        value = process_string_column(row, column_name)
-        value_without_trailing_dot = remove_trailing_dot(value)
-        return value_without_trailing_dot
-
     if (row[COLUMNS['description']]):
         abstract_parts.append(f"Facility description: {get_and_process_value(row, COLUMNS['description'])}")
     else:
@@ -196,17 +216,23 @@ def get_abstract(row):
     return "; ".join(abstract_parts) + '.'
 
 def get_keywords(row):
-    keywords_parts = []
+    """
+    Creates the keywords field for each data entry. The keywords field contains
+    string value with data from the Specialist Areas column. If column does not contains information,
+    an empty string is returned.
 
-    # Adding the "Specialist areas"
-    specialist_areas = process_string_column(row, "Specialist areas")
-    specialist_areas_without_trailing_dot = remove_trailing_dot(specialist_areas)
-    if specialist_areas_without_trailing_dot:
-        keywords_parts.append(specialist_areas_without_trailing_dot)
-    else:
-        keywords_parts.append("not available")
+    Args:
+        row (pandas.Series): String DataFrame.
 
-    return "; ".join(keywords_parts)
+    Returns:
+        str: String with keywords.
+    """
+    specialist_areas = get_and_process_value(row, COLUMNS['specialist_areas'])
+
+    if specialist_areas:
+        return specialist_areas + '.'
+
+    return ""
 
 def get_id(row):
     """
