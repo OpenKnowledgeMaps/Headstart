@@ -9,20 +9,21 @@ CSV_PATH = "common/common/aquanavi/mesocosm_data_cleaned.csv"
 CSV_PATH_WITH_TEST_DATA = "common/common/aquanavi/mesocosm_data_cleaned_with_test_cases.csv"
 DEFAULT_DOCUMENT_TYPE = "physical object"
 DEFAULT_RESULT_TYPE = ['Other/Unknown material']
-REQUIRED_COLUMNS = [
-    "Name",
-    "Country",
-    "Continent",
-    "Equipment",
-    "Research Topics",
-    "Specialist areas",
-    "Primary interests",
-    "Controlled Parameters",
-    "Description of Facility",
-    "Facility location(s) split",
-    "Years of Mesocosm Experiments",
-    "Photos of experiments/installations images",
-]
+COLUMNS = {
+    "url": "url",
+    "name": "Name",
+    "country": "Country",
+    "continent": "Continent",
+    "equipment": "Equipment",
+    "research_topics": "Research Topics",
+    "specialist_areas": "Specialist areas",
+    "primary_interests": "Primary interests",
+    "controlled_parameters": "Controlled Parameters",
+    "description": "Description of Facility",
+    "location": "Facility location(s) split",
+    "years_of_experiments": "Years of Mesocosm Experiments",
+    "photos_of_experiments": "Photos of experiments/installations images",
+}
 
 def process_string_column(row, name):
     """
@@ -55,7 +56,7 @@ def remove_trailing_dot(string):
     return string
 
 def get_latitude_longitude(row):
-    coordinates_string = str(row["Facility location(s) split"]).strip()
+    coordinates_string = str(row[COLUMNS['location']]).strip()
 
     latitude, longitude = None, None
 
@@ -72,7 +73,7 @@ def get_latitude_longitude(row):
 def get_years_of_experiments(row):
     # Supported formats: yyyy - present; yyyy - yyyy; yyyy to present; since yyyy;
     # started yyyy / starting yyyy / operational since yyyy; yyyy-present;
-    text = str(row["Years of Mesocosm Experiments"]).strip()
+    text = str(row[COLUMNS['years_of_experiments']]).strip()
     if not text:
         return None, None
 
@@ -122,15 +123,12 @@ def get_coverage(row):
     Returns:
         str: String in the coverage field format.
     """
-    COUNTRY_COLUMN_NAME = 'Country'
-    CONTINENT_COLUMN_NAME = 'Continent'
-
     latitude, longitude = get_latitude_longitude(row)
     start, end = get_years_of_experiments(row)
 
     coverage_parts = []
-    coverage_parts.append(f"country={str(row[COUNTRY_COLUMN_NAME]).strip()}" if row[COUNTRY_COLUMN_NAME] else "country= ")
-    coverage_parts.append(f"continent={str(row[CONTINENT_COLUMN_NAME]).strip()}" if row[CONTINENT_COLUMN_NAME] else "continent= ")
+    coverage_parts.append(f"country={str(row[COLUMNS['country']]).strip()}" if row[COLUMNS['country']] else "country= ")
+    coverage_parts.append(f"continent={str(row[COLUMNS['continent']]).strip()}" if row[COLUMNS['continent']] else "continent= ")
     coverage_parts.append(f"east='{longitude}'" if longitude else "east=")
     coverage_parts.append(f"north='{latitude}'" if latitude else "north=")
     coverage_parts.append(f"start='{start}'" if start else "start=")
@@ -205,11 +203,8 @@ def get_id(row):
     Returns:
         str: Identifier for a specific record. The identifier consists of: url + location in hashed form.
     """
-    URL_COLUMN_NAME = "url"
-    LOCATION_COLUMN_NAME = "Facility location(s) split"
-
-    url = str(row[URL_COLUMN_NAME]).strip() if row[URL_COLUMN_NAME] else ""
-    location = str(row[LOCATION_COLUMN_NAME]).strip() if row[LOCATION_COLUMN_NAME] else ""
+    url = str(row[COLUMNS['url']]).strip() if row[COLUMNS['url']] else ""
+    location = str(row[COLUMNS['location']]).strip() if row[COLUMNS['location']] else ""
     combined_url_and_location = url + location
 
     hasher = hashlib.sha256()
@@ -221,26 +216,33 @@ def check_that_csv_file_exists(csv_path):
     if not csv_path.exists():
         sys.exit(f"CSV does not exists: {csv_path}.")
 
-def check_that_required_rows_exists(df, csv_path):
-    for col in REQUIRED_COLUMNS:
-        if col not in df.columns:
-            sys.exit(f"The '{col}' is missing in the {csv_path} file")
+def check_that_required_columns_exists(df: pd.DataFrame, csv_path: str):
+    """
+    Checks that all required columns are present in the DataFrame based on values from the COLUMNS dictionary.
+
+    Args:
+        df (pd.DataFrame): The DataFrame to be checked.
+        csv_path (str): Path to CSV file (used for error reporting).
+
+    Raises:
+        SystemExit: If any required column is missing.
+    """
+    for required_col_name in COLUMNS.values():
+        if required_col_name not in df.columns:
+            sys.exit(f"The '{required_col_name}' is missing in the {csv_path} file")
 
 def map_sample_data():
     csv_path = Path(CSV_PATH)
-
     check_that_csv_file_exists(csv_path)
-
     df = pd.read_csv(csv_path).fillna("")
-
-    check_that_required_rows_exists(df, CSV_PATH)
+    check_that_required_columns_exists(df, CSV_PATH)
 
     result = []
     for _, row in df.iterrows():
         id = get_id(row)
-        title = str(row["Name"]).strip() if row["Name"] else ""
-        url = str(row["url"]).strip() if row["url"] else ""
-        image = row["Photos of experiments/installations images"] if row["Photos of experiments/installations images"] else ""
+        title = str(row[COLUMNS['name']]).strip() if row[COLUMNS['name']] else ""
+        url = str(row[COLUMNS['url']]).strip() if row[COLUMNS['url']] else ""
+        image = row[COLUMNS['photos_of_experiments']] if row[COLUMNS['photos_of_experiments']] else ""
 
         result.append({
             "id": id,
