@@ -20,10 +20,9 @@ $post_params["to"] = "2025-10-08";
 $post_params["document_types"] = ["F"];
 $post_params["sorting"] = "most-relevant";
 $post_params["time_range"] = "user-defined";
-$post_params["custom_title"] = "aquatic mesocosm facilities";
 
 // And some others...
-$params_array = ["from", "to", "document_types", "sorting", "min_descsize", "lang_id"];
+$params_array = ["from", "to", "document_types", "sorting", "min_descsize", "lang_id", "custom_title"];
 
 $result = search("aquanavi", $query, $post_params, $params_array, false, true, null, $precomputed_id, false);
 echo $result
