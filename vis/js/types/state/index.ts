@@ -1,6 +1,7 @@
 import { Localization } from "../../i18n/localization";
 import { Author } from "../models/author";
 import { ServiceType } from "../visualization/service";
+import { VisualizationTypes } from "../visualization/visualization-types";
 import * as slices from "./slices";
 
 export interface State {
@@ -9,7 +10,7 @@ export interface State {
   author: Author;
   bubbleOrder: slices.BubbleOrder;
   chart: slices.Chart;
-  chartType: slices.ChartTypes;
+  chartType: VisualizationTypes;
   contextLine: slices.ContextLine;
   data: slices.Data;
   heading: slices.Heading;

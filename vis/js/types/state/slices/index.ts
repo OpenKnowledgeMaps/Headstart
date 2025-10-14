@@ -16,5 +16,4 @@ export { SelectedBubble } from "./selected-bubble";
 export { Streamgraph } from "./streamgraph";
 export { Toolbar } from "./toolbar";
 export { Tracking } from "./tracking";
-export { ChartTypes } from "./chartType";
 export { SelectedPaper } from "./selected-paper";

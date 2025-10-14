@@ -6,4 +6,5 @@ export interface Misc {
   renderList: boolean;
   renderMap: boolean;
   visTag: "visualization";
+  timestamp?: string;
 }
