@@ -1,12 +1,12 @@
-import React from "react";
-import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
+import React, { FC } from "react";
+import { MapContainer, TileLayer } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
-
 import L from "leaflet";
 import markerIcon2x from "leaflet/dist/images/marker-icon-2x.png";
 import markerIcon from "leaflet/dist/images/marker-icon.png";
 import markerShadow from "leaflet/dist/images/marker-shadow.png";
 import "leaflet/dist/leaflet.css";
+import { OPTIONS } from "./options";
 
 delete (L.Icon.Default.prototype as any)._getIconUrl;
 
@@ -16,22 +16,12 @@ L.Icon.Default.mergeOptions({
   shadowUrl: markerShadow as string,
 });
 
-function MyMap() {
+const { map, tileLayer } = OPTIONS;
+
+export const Geomap: FC = () => {
   return (
-    <MapContainer
-      center={[51.505, -0.09]}
-      zoom={13}
-      style={{ height: "100vh", width: "100%" }}
-    >
-      <TileLayer
-        attribution="&copy; OpenStreetMap contributors"
-        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-      />
-      <Marker position={[51.505, -0.09]}>
-        <Popup>Some popup</Popup>
-      </Marker>
+    <MapContainer {...map} className="geomap_container">
+      <TileLayer {...tileLayer} />
     </MapContainer>
   );
-}
-
-export default MyMap;
+};
