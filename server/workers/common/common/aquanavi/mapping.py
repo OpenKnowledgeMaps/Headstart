@@ -82,6 +82,15 @@ def get_and_process_value(row, column_name):
     return value_without_trailing_dot
 
 def get_latitude_longitude(row):
+    """
+    The function returns a list with latitude and longitude.
+
+    Args:
+        row (str): String DataFrame.
+
+    Returns:
+        list: A list with latitude and longitude (or None).
+    """
     coordinates_string = str(row[COLUMNS['location']]).strip()
 
     latitude, longitude = None, None
@@ -97,8 +106,19 @@ def get_latitude_longitude(row):
     return [latitude, longitude]
 
 def get_years_of_experiments(row):
-    # Supported formats: yyyy - present; yyyy - yyyy; yyyy to present; since yyyy;
-    # started yyyy / starting yyyy / operational since yyyy; yyyy-present;
+    """
+    The function returns a time range in the list format.
+    First value represents a starting date, second one - ending date.
+    Supported formats: yyyy - present; yyyy - yyyy; yyyy to present; since yyyy;
+    started yyyy / starting yyyy / operational since yyyy; yyyy-present.
+    All other date formats in the "Years of Mesocosm Experiments" column will be ignored.
+
+    Args:
+        row (str): String DataFrame.
+
+    Returns:
+        list: A list with start and end dates.
+    """
     text = str(row[COLUMNS['years_of_experiments']]).strip()
     if not text:
         return None, None
@@ -255,6 +275,15 @@ def get_id(row):
     return hashed_identifier
 
 def check_that_csv_file_exists(csv_path):
+    """
+    This function checks that .CSV file exists in the file system.
+
+    Args:
+        csv_path (str): A string with path to the .CSV file.
+
+    Raises:
+        SystemExit: If any required column is missing.
+    """
     if not csv_path.exists():
         sys.exit(f"CSV does not exists: {csv_path}.")
 
