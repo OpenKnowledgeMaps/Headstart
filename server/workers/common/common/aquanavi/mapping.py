@@ -1,4 +1,5 @@
 import re
+import ast
 import sys
 import hashlib
 import pandas as pd
@@ -97,9 +98,10 @@ def get_latitude_longitude(row):
 
     if "," in coordinates_string:
         try:
-            latitude, longitude = [x.strip() for x in coordinates_string.split(",", 1)]
-            longitude = str(longitude).strip("[]'\" ")
-            latitude = str(latitude).strip("[]'\" ")
+            coords = ast.literal_eval(coordinates_string)
+            if isinstance(coords, (list, tuple)) and len(coords) == 2:
+                latitude = float(str(coords[0]).strip())
+                longitude = float(str(coords[1]).strip())
         except Exception:
             latitude, longitude = None, None
 
@@ -175,10 +177,10 @@ def get_coverage(row):
     coverage_parts = []
     coverage_parts.append(f"country={str(row[COLUMNS['country']]).strip()}" if row[COLUMNS['country']] else "country= ")
     coverage_parts.append(f"continent={str(row[COLUMNS['continent']]).strip()}" if row[COLUMNS['continent']] else "continent= ")
-    coverage_parts.append(f"east='{longitude}'" if longitude else "east=")
-    coverage_parts.append(f"north='{latitude}'" if latitude else "north=")
-    coverage_parts.append(f"start='{start}'" if start else "start=")
-    coverage_parts.append(f"end='{end}'" if end else "end=")
+    coverage_parts.append(f"east={longitude}" if longitude else "east=")
+    coverage_parts.append(f"north={latitude}" if latitude else "north=")
+    coverage_parts.append(f"start={start}" if start else "start=")
+    coverage_parts.append(f"end={end}" if end else "end=")
 
     result = "; ".join(coverage_parts)
     return result
