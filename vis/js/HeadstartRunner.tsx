@@ -26,7 +26,7 @@ import FetcherFactory from "./dataprocessing/fetchers/FetcherFactory";
 import handleZoomSelectQuery from "./utils/backButton";
 
 import Bowser from "bowser";
-import { Config } from "./@types/config";
+import { Config } from "./types/config";
 
 class HeadstartRunner {
   public config: Config;

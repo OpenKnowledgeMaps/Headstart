@@ -1,5 +1,5 @@
-import { Config } from "./@types/config";
 import { localization } from "./i18n/localization";
+import { Config } from "./types";
 
 /* eslint-disable no-template-curly-in-string */
 var config: Config = {

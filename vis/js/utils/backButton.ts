@@ -1,6 +1,6 @@
-import { Config } from "../@types/config";
 import { deselectPaper, selectPaper, zoomIn, zoomOut } from "../actions";
 import DataManager from "../dataprocessing/managers/DataManager";
+import { Config } from "../types";
 import { createAnimationCallback } from "./eventhandlers";
 
 /**
@@ -11,7 +11,11 @@ import { createAnimationCallback } from "./eventhandlers";
  *
  * For a better user experience, it should be debounced.
  */
-const handleZoomSelectQuery = (dataManager: DataManager, store: any, config: Config) => {
+const handleZoomSelectQuery = (
+  dataManager: DataManager,
+  store: any,
+  config: Config
+) => {
   const params = new URLSearchParams(window.location.search);
 
   if (params.has("area") && params.has("paper")) {
@@ -34,7 +38,12 @@ const handleZoomSelectQuery = (dataManager: DataManager, store: any, config: Con
 
 export default handleZoomSelectQuery;
 
-const zoomKnowledgeMap = (dataManager: DataManager, store: any, areaID: string, paper?: any) => {
+const zoomKnowledgeMap = (
+  dataManager: DataManager,
+  store: any,
+  areaID: string,
+  paper?: any
+) => {
   const area = dataManager.areas.find((a) => a.area_uri == areaID);
 
   if (!area) {
@@ -52,7 +61,12 @@ const zoomKnowledgeMap = (dataManager: DataManager, store: any, areaID: string, 
   );
 };
 
-const zoomStreamgraph = (dataManager: DataManager, store: any, streamID: string, paper?: any) => {
+const zoomStreamgraph = (
+  dataManager: DataManager,
+  store: any,
+  streamID: string,
+  paper?: any
+) => {
   const stream = dataManager.streams.find((s: any) => s.key == streamID) as any;
 
   if (!stream) {
@@ -70,7 +84,12 @@ const zoomStreamgraph = (dataManager: DataManager, store: any, streamID: string,
   );
 };
 
-const selectPaperWithZoom = (dataManager: DataManager, store: any, params: any, config: Config) => {
+const selectPaperWithZoom = (
+  dataManager: DataManager,
+  store: any,
+  params: any,
+  config: Config
+) => {
   const paper = dataManager.papers.find(
     (p) => p.safe_id === params.get("paper")
   );
@@ -90,7 +109,11 @@ const selectPaperWithZoom = (dataManager: DataManager, store: any, params: any, 
   zoomKnowledgeMap(dataManager, store, areaID, paper);
 };
 
-const selectPaperWithoutZoom = (dataManager: DataManager, store: any, params: any) => {
+const selectPaperWithoutZoom = (
+  dataManager: DataManager,
+  store: any,
+  params: any
+) => {
   const paper = dataManager.papers.find(
     (p) => p.safe_id === params.get("paper")
   );
@@ -102,7 +125,12 @@ const selectPaperWithoutZoom = (dataManager: DataManager, store: any, params: an
   store.dispatch(selectPaper(paper, true));
 };
 
-const deselectAndZoomIn = (dataManager: DataManager, store: any, params: any, config: Config) => {
+const deselectAndZoomIn = (
+  dataManager: DataManager,
+  store: any,
+  params: any,
+  config: Config
+) => {
   const areaID = params.get("area");
 
   // possible optimization: only deselecting a paper if the area is the same

@@ -1,18 +1,25 @@
-// @ts-nocheck
-
-import React from "react";
+import React, { FC } from "react";
 import { connect } from "react-redux";
-
 import Highlight from "../../components/Highlight";
 import { useLocalizationContext } from "../../components/LocalizationProvider";
 import { STREAMGRAPH_MODE } from "../../reducers/chartType";
 import { getDateFromTimestamp } from "../../utils/dates";
 import { mapDispatchToListEntriesProps } from "../../utils/eventhandlers";
 import useMatomo from "../../utils/useMatomo";
+import { AllPossiblePapersType, State } from "../../types";
 
 const MAX_TITLE_LENGTH = 164;
 
-const Title = ({
+interface TitleProps {
+  disableClicks: boolean;
+  isSelected: boolean;
+  isStreamgraph: boolean;
+  paper: AllPossiblePapersType;
+  handleSelectPaper: (paper: AllPossiblePapersType) => void;
+  handleSelectPaperWithZoom: (paper: AllPossiblePapersType) => void;
+}
+
+const Title: FC<TitleProps> = ({
   paper,
   isStreamgraph,
   disableClicks,
@@ -45,7 +52,6 @@ const Title = ({
     : formatTitle(rawTitle, MAX_TITLE_LENGTH - formattedDate.length);
 
   return (
-    // html template starts here
     <div className="list_title" onClick={handleClick}>
       <a
         id="paper_list_title"
@@ -55,11 +61,10 @@ const Title = ({
         {!!paper.year && <Highlight queryHighlight>{formattedDate}</Highlight>}
       </a>
     </div>
-    // html template ends here
   );
 };
 
-const mapStateToProps = (state) => ({
+const mapStateToProps = (state: State) => ({
   isStreamgraph: state.chartType === STREAMGRAPH_MODE,
   disableClicks: state.list.disableClicks,
   isSelected: !!state.selectedPaper,
@@ -67,7 +72,7 @@ const mapStateToProps = (state) => ({
 
 export default connect(mapStateToProps, mapDispatchToListEntriesProps)(Title);
 
-export const formatPaperDate = (date) => {
+export const formatPaperDate = (date?: string) => {
   if (!date) {
     return "";
   }
@@ -85,7 +90,7 @@ export const formatPaperDate = (date) => {
   return formatted;
 };
 
-const formatTitle = (title, maxLength) => {
+const formatTitle = (title: string, maxLength: number) => {
   const ellipsis = "...";
   if (title.length > maxLength) {
     return title.substr(0, maxLength - ellipsis.length).trim() + ellipsis;

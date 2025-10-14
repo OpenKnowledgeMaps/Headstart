@@ -18,6 +18,7 @@ import {
   parseCoordinate,
 } from "../../utils/data";
 import PaperSanitizer from "../../utils/PaperSanitizer";
+import { Paper, Config } from "../../types";
 import {
   getCoordsScale,
   getDiameterScale,

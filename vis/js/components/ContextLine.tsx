@@ -1,11 +1,10 @@
-// @ts-nocheck
-import React from "react";
+import React, { ReactNode } from "react";
 import { connect } from "react-redux";
-
-import ContextLineTemplate from "../templates/ContextLine";
-import Author from "../templates/contextfeatures/Author";
+import { isDefined } from "../utils/isDefined";
+import { ContextLineTemplate } from "../templates/ContextLine";
+import { Author } from "../templates/contextfeatures/Author";
 import DocumentTypes from "../templates/contextfeatures/DocumentTypes";
-import NumArticles from "../templates/contextfeatures/NumArticles";
+import { NumArticles } from "../templates/contextfeatures/NumArticles";
 import DataSource from "../templates/contextfeatures/DataSource";
 import Timespan from "../templates/contextfeatures/Timespan";
 import PaperCount from "../templates/contextfeatures/PaperCount";
@@ -24,20 +23,71 @@ import ResearcherMetricsInfo from "../templates/contextfeatures/ResearcherMetric
 import { Employment } from "./Employment";
 import ResearcherInfo from "../templates/contextfeatures/ResearcherInfo";
 import { STREAMGRAPH_MODE } from "../reducers/chartType";
+import { Author as AuthorType } from "../types/models/author";
+import { Localization } from "../i18n/localization";
 
-const defined = (param) => param !== undefined && param !== null;
+interface ContextLineProps {
+  author: AuthorType;
+  params: {
+    showLanguage: boolean;
+    show_h_index: boolean;
+    show: boolean;
+    articlesCount: number;
+    modifier: string;
+    modifierLimit: number;
+    openAccessCount: number;
+    showDataSource: boolean;
+    showAuthor: boolean;
+    author: {
+      id?: string;
+      livingDates?: string;
+      imageLink?: string;
+    };
+    documentTypes: string[];
+    dataSource: string;
+    paperCount: null | number;
+    datasetCount: null | string;
+    funder: null | string;
+    projectRuntime: null | string;
+    legacySearchLanguage: null | string;
+    searchLanguage: null | string;
+    timestamp: null | string;
+    metadataQuality: "high" | "low";
+    documentLang: string[];
+    excludeDateFilters: null | string[];
+    service: string;
+    timespan: string;
+    contentProvider?: string;
+    isStreamgraph: false;
+  };
+  dispatch: any;
+  hidden: boolean;
+  isResearcherDetailsEnabled?: boolean;
+  isResearcherMetricsEnabled?: boolean;
+  localization: Localization;
+  popoverContainer: ReactNode;
+  service: "base" | "pubmed";
+  showDataSource: boolean;
+  showLanguage: boolean;
+}
 
 /**
  * Component that creates the heading contextline.
  *
  * It has to be a class component because of the popovers (they use 'this').
  */
-export const ContextLine = (props) => {
-  const { author, params, localization, hidden, service, showDataSource } =
-    props;
+export const ContextLine = (props: ContextLineProps) => {
   const { popoverContainer, showLanguage } = props;
-
-  const { isResearcherDetailsEnabled, isResearcherMetricsEnabled } = props;
+  const {
+    author,
+    params,
+    localization,
+    hidden,
+    service,
+    showDataSource,
+    isResearcherDetailsEnabled,
+    isResearcherMetricsEnabled,
+  } = props;
 
   if (hidden) {
     return null;
@@ -49,8 +99,6 @@ export const ContextLine = (props) => {
         <Author
           bioLabel={localization.bio_link}
           livingDates={params.author.livingDates}
-          // link={"https://d-nb.info/gnd/" + params.author.id}
-          author={author}
         />
       )}
       <NumArticles
@@ -64,7 +112,7 @@ export const ContextLine = (props) => {
         <Modifier popoverContainer={popoverContainer} />
       </NumArticles>
       <Employment author={author} popoverContainer={popoverContainer} />
-      {showDataSource && defined(params.dataSource) && (
+      {showDataSource && isDefined(params.dataSource) && (
         <DataSource
           label={localization.source_label}
           source={params.dataSource}
@@ -72,15 +120,15 @@ export const ContextLine = (props) => {
           popoverContainer={props.popoverContainer}
         />
       )}
-      {defined(params.timespan) && (
+      {isDefined(params.timespan) && (
         <Timespan>
           <ContextTimeFrame
             popoverContainer={popoverContainer}
-            timespan={params.timespan}
+            time={params.timespan}
           />
         </Timespan>
       )}
-      {defined(params.documentTypes) && (
+      {isDefined(params.documentTypes) && (
         <DocumentTypes
           documentTypes={params.documentTypes}
           popoverContainer={popoverContainer}
@@ -93,26 +141,26 @@ export const ContextLine = (props) => {
           popoverContainer={popoverContainer}
         />
       )}
-      {defined(params.paperCount) && (
+      {isDefined(params.paperCount) && (
         <PaperCount
           value={params.paperCount}
           label={localization.paper_count_label}
         />
       )}
-      {defined(params.datasetCount) && (
+      {isDefined(params.datasetCount) && (
         <DatasetCount
           value={params.datasetCount}
           label={localization.dataset_count_label}
         />
       )}
-      {defined(params.funder) && <Funder>{params.funder}</Funder>}
-      {defined(params.projectRuntime) && (
+      {isDefined(params.funder) && <Funder>{params.funder}</Funder>}
+      {isDefined(params.projectRuntime) && (
         <ProjectRuntime>{params.projectRuntime}</ProjectRuntime>
       )}
-      {defined(params.legacySearchLanguage) && (
+      {isDefined(params.legacySearchLanguage) && (
         <LegacySearchLang>{params.legacySearchLanguage}</LegacySearchLang>
       )}
-      {defined(params.timestamp) && (
+      {isDefined(params.timestamp) && (
         <Timestamp
           value={params.timestamp}
           label={localization.timestamp_label}
@@ -123,8 +171,8 @@ export const ContextLine = (props) => {
         service={service}
         popoverContainer={popoverContainer}
       />
-      {defined(params.searchLanguage) && (
-        <SearchLang>{params.searchLanguage}</SearchLang>
+      {isDefined(params.searchLanguage) && (
+        <SearchLang languageCode={params.searchLanguage} />
       )}
       {isResearcherDetailsEnabled && <ResearcherInfo />}
       {isResearcherMetricsEnabled && <ResearcherMetricsInfo />}
@@ -133,7 +181,7 @@ export const ContextLine = (props) => {
   );
 };
 
-const mapStateToProps = (state) => ({
+const mapStateToProps = (state: any) => ({
   isResearcherDetailsEnabled: state.contextLine.isResearcherDetailsEnabled,
   isResearcherMetricsEnabled: state.contextLine.isResearcherMetricsEnabled,
   showLanguage: state.contextLine.showLanguage,

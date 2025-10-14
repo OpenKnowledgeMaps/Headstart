@@ -1,6 +1,9 @@
 import dateFormat from "dateformat";
 
-export const getDateTimeFromTimestamp = (timestamp: string, { inUTC = false } = {}) => {
+export const getDateTimeFromTimestamp = (
+  timestamp?: string,
+  { inUTC = false } = {}
+) => {
   if (typeof timestamp !== "string" || !timestamp) {
     return "";
   }
@@ -25,7 +28,7 @@ export const getDateFromTimestamp = (
 
   const date = parseTimestamp(timestamp);
 
-  if (!date) return ""
+  if (!date) return "";
 
   try {
     return dateFormat(date, format, inUTC);
@@ -45,7 +48,7 @@ export const getTimeFromTimestamp = (
 
   const date = parseTimestamp(timestamp);
 
-  if (!date) return ""
+  if (!date) return "";
 
   try {
     return dateFormat(date, format, inUTC);

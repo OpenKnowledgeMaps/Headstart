@@ -1,7 +1,7 @@
 // @ts-nocheck
 
 import $ from "jquery";
-import { Config } from "../@types/config";
+import { Config } from "../types/config";
 
 // ?: fix scaling here?
 
@@ -54,7 +54,7 @@ export const getChartSize = (config: Config) => {
   const computedHeight =
     (parentHeight === 0
       ? Math.max(clientHeight, innerHeight)
-      : container.height())  -
+      : container.height()) -
     Math.max(TITLE_HEIGHT, titleImageHeight) -
     toolbarHeight -
     footerHeight -

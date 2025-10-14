@@ -1,12 +1,8 @@
-// @ts-nocheck
-
-import React from "react";
+import React, { FC } from "react";
 import { connect } from "react-redux";
-
 import { STREAMGRAPH_MODE } from "../../reducers/chartType";
 import { mapDispatchToListEntriesProps } from "../../utils/eventhandlers";
 import PaperButtons from "./PaperButtons";
-
 import Abstract from "./Abstract";
 import AccessIcons from "./AccessIcons";
 import Area from "./Area";
@@ -21,13 +17,30 @@ import Link from "./Link";
 import Metrics from "./Metrics";
 import OrcidMetrics from "./OrcidMetrics";
 import Title from "./Title";
+import {
+  AllPossiblePapersType,
+  ServiceType,
+  SortValuesType,
+  State,
+} from "../../types";
 
-/**
- * Standard list entry template used in project website, CoVis and Viper.
- * @param {Object} props
- */
-const StandardListEntry = ({
-  // data
+interface StandardListEntryProps {
+  showDocumentType: boolean;
+  showMetrics?: unknown;
+  showAllDocTypes: boolean;
+  showBacklink: boolean;
+  showDocTags: boolean;
+  showKeywords: boolean;
+  service: ServiceType;
+  paper: AllPossiblePapersType;
+  isContentBased: boolean;
+  isInStreamBacklink: boolean;
+  isStreamgraph: boolean;
+  baseUnit: SortValuesType;
+  handleBacklinkClick: () => void;
+}
+
+const StandardListEntry: FC<StandardListEntryProps> = ({
   paper,
   showDocumentType,
   showKeywords,
@@ -40,7 +53,6 @@ const StandardListEntry = ({
   showDocTags,
   showAllDocTypes,
   service,
-  // event handlers
   handleBacklinkClick,
 }) => {
   const backlink = {
@@ -54,10 +66,9 @@ const StandardListEntry = ({
     !isContentBased &&
     !!baseUnit &&
     !showMetrics &&
-    (!!citations || parseInt(citations) === 0);
+    (!!citations || parseInt(citations as unknown as string) === 0);
 
   return (
-    // html template starts here
     <div id="list_holder" className="resulttype-paper">
       <div className="list_entry">
         <a className="list_anchor" id={paper.safe_id}></a>
@@ -70,33 +81,36 @@ const StandardListEntry = ({
             isDoi={paper.list_link.isDoi}
           />
         </div>
-        {/* // ! TODO */}
+
         {showDocumentType && paper.resulttype.length > 0 && (
           <DocumentType type={paper.resulttype[0]} />
         )}
         <Abstract text={paper.paper_abstract} />
         {paper.comments.length > 0 && <Comments items={paper.comments} />}
         {showKeywords && <Keywords>{paper.keywords}</Keywords>}
-        {/* // ! TODO */}
+
         {showAllDocTypes && <DocTypesRow types={paper.resulttype} />}
 
-        {service !== "orcid" && showMetrics && (
+        {service !== "orcid" && showMetrics ? (
           <Metrics
             citations={paper.citation_count}
+            // @ts-ignore
             tweets={paper.cited_by_tweeters_count}
+            // @ts-ignore
             readers={paper["readers.mendeley"]}
             baseUnit={!isContentBased ? baseUnit : null}
           />
-        )}
+        ) : null}
 
-        {service === "orcid" && showMetrics && (
+        {service === "orcid" && showMetrics ? (
           <OrcidMetrics
             citations={paper.citation_count}
             social_media={paper.social}
             references_outside_academia={paper.references}
             baseUnit={!isContentBased ? baseUnit : null}
           />
-        )}
+        ) : null}
+
         {showCitations && <Citations number={citations} label={baseUnit} />}
         <PaperButtons paper={paper} />
         {!isStreamgraph && <Area paper={paper} isShort={showCitations} />}
@@ -108,11 +122,10 @@ const StandardListEntry = ({
         )}
       </div>
     </div>
-    // html template ends here
   );
 };
 
-const mapStateToProps = (state) => ({
+const mapStateToProps = (state: State) => ({
   showDocumentType: state.list.showDocumentType,
   showMetrics: state.list.showMetrics,
   isContentBased: state.list.isContentBased,

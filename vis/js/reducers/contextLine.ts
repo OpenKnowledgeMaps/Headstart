@@ -1,5 +1,4 @@
-import { Config } from "../@types/config";
-import { Context } from "../@types/context";
+import { Config, Context } from "../types";
 
 const exists = (param: any) => {
   return typeof param !== "undefined" && param !== "null" && param !== null;
@@ -58,7 +57,7 @@ const contextLine = (state = {}, action: any) => {
           config.create_title_from_context_style === "viper" && context.params
             ? context.params.funder
             : null,
-          
+
         projectRuntime: getProjectRuntime(config, context),
         // probably deprecated, used in base in the past
         legacySearchLanguage: getLegacySearchLanguage(config, context),
@@ -75,10 +74,11 @@ const contextLine = (state = {}, action: any) => {
             ? getDocumentLanguage(config, context)
             : null,
         //   exclude date filters parameter
-        excludeDateFilters: context.params && context.params.exclude_date_filters
+        excludeDateFilters:
+          context.params && context.params.exclude_date_filters
             ? context.params.exclude_date_filters
             : null,
-        service: context.service
+        service: context.service,
       };
     default:
       return state;

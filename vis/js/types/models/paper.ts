@@ -1,4 +1,4 @@
-type NotAvailable = "n/a";
+export type NotAvailable = "n/a";
 
 export interface CommonPaperDataForAllIntegrations {
   id: string;
@@ -17,9 +17,9 @@ export interface CommonPaperDataForAllIntegrations {
   comments: string[];
   comments_for_filtering: string;
 
-  citation_count: string | number;
+  citation_count: NotAvailable | number;
   tags: string[];
-  social: string | null;
+  social: number | NotAvailable;
   references: null;
   citations: number | null;
   readers: number | NotAvailable;
@@ -115,6 +115,8 @@ export interface OrcidPaper extends CommonPaperDataForAllIntegrations {
   cited_by_wikipedia_count: number | string | null;
   cited_by_qna_count: number | string | null;
 }
+
+export type AllPossiblePapersType = BasePaper | PubmedPaper | OrcidPaper;
 
 export interface Paper {
   id: string;
