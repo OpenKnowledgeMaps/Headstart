@@ -1,5 +1,5 @@
 const path = require("path");
-
+const CopyPlugin = require("copy-webpack-plugin");
 const { ProvidePlugin } = require("webpack");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
@@ -102,6 +102,14 @@ module.exports = (env) => {
       }),
       new MiniCssExtractPlugin(miniCssConfig),
       ...(analyzeBundle ? [new BundleAnalyzerPlugin()] : []),
+      new CopyPlugin({
+        patterns: [
+          {
+            from: path.resolve(__dirname, "node_modules/leaflet/dist/images"),
+            to: "images",
+          },
+        ],
+      }),
     ],
 
     module: {
@@ -112,28 +120,6 @@ module.exports = (env) => {
           exclude: /node_modules/,
         },
         {
-          test: [require.resolve("hypher/dist/jquery.hypher.js"), /lib\/*.js/],
-          use: [
-            {
-              loader: "imports-loader",
-              options: {
-                imports: ["default jquery $", "default jquery jQuery"],
-              },
-            },
-          ],
-        },
-        {
-          test: /lib\/*.js/,
-          use: [
-            {
-              loader: "imports-loader",
-              options: {
-                imports: ["default jquery $", "default jquery jQuery"],
-              },
-            },
-          ],
-        },
-        {
           test: /\.[j]sx?$/,
           exclude: /node_modules/,
           use: "babel-loader",
@@ -141,25 +127,32 @@ module.exports = (env) => {
         {
           test: /\.(woff(2)?|ttf|eot|svg)(\?v=\d+\.\d+\.\d+)?$/,
           type: "asset/resource",
+          generator: {
+            filename: "fonts/[name][ext]",
+          },
         },
         {
-          test: /\.png$/,
-          use: [
-            {
-              loader: "file-loader?name=img/[name].[ext]",
-              options: { exclude: /examples/ },
-            },
-          ],
+          test: /\.(png|jpe?g|gif)$/i,
+          type: "asset/resource",
+          generator: {
+            filename: "images/[name][ext]",
+          },
         },
         {
           test: /\.(sa|sc)ss$/,
           use: [
             MiniCssExtractPlugin.loader,
-            "css-loader",
+            {
+              loader: "css-loader",
+              options: {
+                url: true,
+                esModule: false,
+              },
+            },
             {
               loader: "sass-loader",
               options: {
-                additionalData: `$skin: "${skin}";`,
+                additionalData: `$skin: "${process.env.SKIN || ""}";`,
                 sassOptions: {
                   includePaths: ["node_modules"],
                 },
@@ -169,7 +162,13 @@ module.exports = (env) => {
         },
         {
           test: /\.css$/,
-          use: [MiniCssExtractPlugin.loader, "css-loader"],
+          use: [
+            MiniCssExtractPlugin.loader,
+            {
+              loader: "css-loader",
+              options: { url: true, esModule: false },
+            },
+          ],
         },
         { test: /\.csl$/, type: "asset/source" },
       ],

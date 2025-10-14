@@ -14,6 +14,7 @@ import Loading from "../templates/Loading";
 import List from "./List";
 import TitleContext from "./TitleContext";
 import Footer from "./Footer";
+import MyMap from "./Map";
 
 const Headstart = ({
   renderMap,
@@ -45,7 +46,7 @@ const Headstart = ({
           <div className="vis-col">
             <TitleContext />
             <ModalButtons />
-            <Map />
+            <MyMap />
           </div>
         )}
         {renderList && <List />}
