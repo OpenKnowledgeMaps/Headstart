@@ -1,4 +1,4 @@
-url,Name,Legal name of organisation,Country,Continent,Organisation address,Primary contact information (PI),Years of Mesocosm Experiments,Description of Facility,Controlled Parameters,Research Topics,Facility location(s),Primary interests,Specialist areas,Equipment,Lodging,Source of Information,Photos of experiments/installations,Photos of experiments/installations images,Equipment images,Lodging images,Manipulations,Facility location(s) split,location_facilities,,
+url,Name,Legal name of organisation,Country,Continent,Organisation address,Primary contact information (PI),Years of Mesocosm Experiments,Description of Facility,Controlled Parameters,Research Topics,Facility location(s),Primary interests,Specialist areas,Equipment,Lodging,Source of Information,Photos of experiments/installations,Photos of experiments/installations images,Equipment images,Lodging images,Manipulations,Facility location(s) split,location_facilities
 https://mesocosm.org/mesocosm/sites-aquanet-skogaryd-research-station/,SITES AquaNet – Skogaryd Research Station,SITES and Göteborg University,Sweden,Europe,"Göteborg University
 Inst. for Geosciences
 Guldhedsgatan 5a
@@ -40,7 +40,7 @@ Photo credit: Leif Klemedtsson
 
 
  
-","['http://mesocosm.org/wp-content/uploads/2018/05/Skogaryd_2-1024x683.jpg', 'http://mesocosm.org/wp-content/uploads/2018/05/Skogaryd_1-1024x683.jpg']",,,,"['58.3712', ' 12.1613']","{'coordinates': ['58.3712', '12.1613']}",,
+","['http://mesocosm.org/wp-content/uploads/2018/05/Skogaryd_2-1024x683.jpg', 'http://mesocosm.org/wp-content/uploads/2018/05/Skogaryd_1-1024x683.jpg']",,,,"['58.3712', ' 12.1613']","{'coordinates': ['58.3712', '12.1613']}"
 https://mesocosm.org/mesocosm/university-koblenz-landau/,Landau Stream Mesocosm Facility (LSMF),University Koblenz-Landau,Germany,Europe,"University Koblenz-Landau
  Fortstraße 7
  76829 Landau
@@ -89,7 +89,7 @@ Stream mesocosm facility at the Landau Campus
 
 
 
-","['http://mesocosm.org/wp-content/uploads/2017/05/Stream-Mesocosms-Landau_400px.jpg', 'http://mesocosm.org/wp-content/uploads/2017/05/Fliessrinnenanlage_400.jpg']",,,,"['49.20269', '8.106179999999995']","{'coordinates': ['49.20269', '8.106179999999995']}",,
+","['http://mesocosm.org/wp-content/uploads/2017/05/Stream-Mesocosms-Landau_400px.jpg', 'http://mesocosm.org/wp-content/uploads/2017/05/Fliessrinnenanlage_400.jpg']",,,,"['49.20269', '8.106179999999995']","{'coordinates': ['49.20269', '8.106179999999995']}"
 https://mesocosm.org/mesocosm/sites-aquanet-erken-laboratory/,SITES AquaNet-Erken Laboratory,Uppsala University,Sweden,Europe,"Uppsala University:
 P.O. Box 256
 SE-751 05 Uppsala
@@ -134,7 +134,7 @@ Photo credit: Erik Sahlee
 
 
 
-","['http://mesocosm.org/wp-content/uploads/2018/05/Erken_2-1024x768.jpg', 'http://mesocosm.org/wp-content/uploads/2018/05/Erken_1-1024x705.jpg']",,,,"['59.8354205', ' 18.6327766']","{'coordinates': ['59.8354205', '18.6327766']}",,
+","['http://mesocosm.org/wp-content/uploads/2018/05/Erken_2-1024x768.jpg', 'http://mesocosm.org/wp-content/uploads/2018/05/Erken_1-1024x705.jpg']",,,,"['59.8354205', ' 18.6327766']","{'coordinates': ['59.8354205', '18.6327766']}"
 https://mesocosm.org/mesocosm/resources-garden-of-aquatic-plant/,Resources garden of aquatic plant,"Wuhan Botanical Garden, Chinese Academy of Sciences",China,Asia,"Lumo Road #1, Wuhan, China
 ","(+86)13297957139
 Please login or request access to view contact information.
@@ -174,7 +174,7 @@ Tanks with different macrophytes and water depth
 
 
 
-","['http://mesocosm.org/wp-content/uploads/2019/03/The-green-house-and-the-heating-control-system-225x300.jpeg', 'http://mesocosm.org/wp-content/uploads/2019/03/Outdoor-tanks-with-different-size-and-area-300x225.jpeg', 'http://mesocosm.org/wp-content/uploads/2019/03/Tanks-with-different-macrophytes-and-water-depth-300x225.jpeg']",,,,"['30.54694', '114.41972']","{'coordinates': ['30.54694', '114.41972']}",,
+","['http://mesocosm.org/wp-content/uploads/2019/03/The-green-house-and-the-heating-control-system-225x300.jpeg', 'http://mesocosm.org/wp-content/uploads/2019/03/Outdoor-tanks-with-different-size-and-area-300x225.jpeg', 'http://mesocosm.org/wp-content/uploads/2019/03/Tanks-with-different-macrophytes-and-water-depth-300x225.jpeg']",,,,"['30.54694', '114.41972']","{'coordinates': ['30.54694', '114.41972']}"
 https://mesocosm.org/mesocosm/large-experimental-array-of-ponds-leap/,Large Experimental Array of Ponds (LEAP),McGill University,Canada,North America,"McGill Department of Biology
 Stewart Biology Bldg
 1205 Dr Penfield Ave
@@ -232,7 +232,7 @@ Depth and multiparameter probe (YSI) physico-chemical measurements.  Photo cred
 
 
 
-","['http://mesocosm.org/wp-content/uploads/2019/04/3-1024x769.png', 'http://mesocosm.org/wp-content/uploads/2019/04/2-1024x368.png', 'http://mesocosm.org/wp-content/uploads/2019/04/1.png']",,,,"['45.5368', ' -73.1578']","{'coordinates': ['45.5368', '-73.1578']}",,
+","['http://mesocosm.org/wp-content/uploads/2019/04/3-1024x769.png', 'http://mesocosm.org/wp-content/uploads/2019/04/2-1024x368.png', 'http://mesocosm.org/wp-content/uploads/2019/04/1.png']",,,,"['45.5368', ' -73.1578']","{'coordinates': ['45.5368', '-73.1578']}"
 https://mesocosm.org/mesocosm/tva%cc%88rminne-mesocosm-facility-tmf/,Tvärminne Mesocosm Facility (TMF),University of Helsinki,Finland,Europe,"University of Helsinki
  P.O. Box 3
  00014 University of Helsinki
@@ -268,7 +268,7 @@ SYKE-MRC field mesocosm work at Tvärminne
 
 
 
-","['http://mesocosm.org/wp-content/uploads/2017/03/Pristine-nature-reserve-for-experimental-set-ups-300x194.jpg', 'http://mesocosm.org/wp-content/uploads/2017/03/SYKE-MRC-field-mesocosm-work-300x282.jpg']",,,,"['59.8431619', '23.2440297']","{'coordinates': ['59.8431619', '23.2440297']}",,
+","['http://mesocosm.org/wp-content/uploads/2017/03/Pristine-nature-reserve-for-experimental-set-ups-300x194.jpg', 'http://mesocosm.org/wp-content/uploads/2017/03/SYKE-MRC-field-mesocosm-work-300x282.jpg']",,,,"['59.8431619', '23.2440297']","{'coordinates': ['59.8431619', '23.2440297']}"
 https://mesocosm.org/mesocosm/cretacosmos/,CRETACOSMOS,Hellenic Centre for Marine Research (HCMR),Greece,Europe,"Institute of Oceanography
  Ex American Base Gournes
  71003 Heraklion, Crete
@@ -311,7 +311,7 @@ Cretacosmos mesocosm facility (Photo: Vivi Pitta)
 
 
  
-","['http://mesocosm.org/wp-content/uploads/2017/02/Cretacosmos-facility-during-the-LightDynaMix-project-Photo-Stella-A-Berger-300x225.jpg', 'http://mesocosm.org/wp-content/uploads/2017/02/Two-basins-of-the-Cretacosmos-mesocosm-facility-300x188.jpg', 'http://mesocosm.org/wp-content/uploads/2017/02/Cretacosmos-mesocosm-facility-Photo-Vivi-Pitta-300x113.jpg']",,,,"['35.3387352', '25.14421260']","{'coordinates': ['35.3387352', '25.14421260']}",,
+","['http://mesocosm.org/wp-content/uploads/2017/02/Cretacosmos-facility-during-the-LightDynaMix-project-Photo-Stella-A-Berger-300x225.jpg', 'http://mesocosm.org/wp-content/uploads/2017/02/Two-basins-of-the-Cretacosmos-mesocosm-facility-300x188.jpg', 'http://mesocosm.org/wp-content/uploads/2017/02/Cretacosmos-mesocosm-facility-Photo-Vivi-Pitta-300x113.jpg']",,,,"['35.3387352', '25.14421260']","{'coordinates': ['35.3387352', '25.14421260']}"
 https://mesocosm.org/mesocosm/eawag-experimental-ponds-facility/,Eawag Experimental Ponds Facility,"Eawag, Swiss Federal Institute of Aquatic Science and Technology",Switzerland,Europe,"Eawag, Überlandstrasse 133, 8600 Dübendorf, Switzerland
 ","Christoph Vorburger
 Head of Experimental Ponds Committee
@@ -358,7 +358,7 @@ Image 3: Scientists taking samples at Eawag’s Experimental Pond Facility in D�
 
 
 
-","['http://mesocosm.org/wp-content/uploads/2019/03/Eawag-Experimental-Ponds-Facility-1-300x186.jpg', 'http://mesocosm.org/wp-content/uploads/2019/03/Eawag-Experimental-Ponds-Facility-2-300x156.jpg', 'http://mesocosm.org/wp-content/uploads/2019/03/Eawag-Experimental-Ponds-Facility-3-300x174.jpg']",,,,"['47.40515', '8.60855']","{'coordinates': ['47.40515', '8.60855']}",,
+","['http://mesocosm.org/wp-content/uploads/2019/03/Eawag-Experimental-Ponds-Facility-1-300x186.jpg', 'http://mesocosm.org/wp-content/uploads/2019/03/Eawag-Experimental-Ponds-Facility-2-300x156.jpg', 'http://mesocosm.org/wp-content/uploads/2019/03/Eawag-Experimental-Ponds-Facility-3-300x174.jpg']",,,,"['47.40515', '8.60855']","{'coordinates': ['47.40515', '8.60855']}"
 https://mesocosm.org/mesocosm/lippenbroek-experimental-wetland/,Lippenbroek Experimental Wetland,University of Antwerp,Belgium,Europe,"University of Antwerp
  Dep. Biology
  Universiteitsplein 1
@@ -416,7 +416,7 @@ Lippenbroek Experimental Wetland
 
 
 
-","['http://mesocosm.org/wp-content/uploads/2017/05/Lippenbroek_5.jpg', 'http://mesocosm.org/wp-content/uploads/2017/05/Lippenbroek_1_314px.jpg', 'http://mesocosm.org/wp-content/uploads/2017/05/Lippenbroek_3_400px.jpg', 'http://mesocosm.org/wp-content/uploads/2017/05/Lippenbroek_2_400px.jpg']",,,,"['51.09284', '4.157230']","{'coordinates': ['51.09284', '4.157230']}",,
+","['http://mesocosm.org/wp-content/uploads/2017/05/Lippenbroek_5.jpg', 'http://mesocosm.org/wp-content/uploads/2017/05/Lippenbroek_1_314px.jpg', 'http://mesocosm.org/wp-content/uploads/2017/05/Lippenbroek_3_400px.jpg', 'http://mesocosm.org/wp-content/uploads/2017/05/Lippenbroek_2_400px.jpg']",,,,"['51.09284', '4.157230']","{'coordinates': ['51.09284', '4.157230']}"
 https://mesocosm.org/mesocosm/cmu-biological-station-mesocosm-facility/,CMU Biological Station mesocosm facility,"CMU Biological Station, Central Michigan University",USA,North America,"P.O. Box 206,
 Beaver Island,
 MI 49782
@@ -458,7 +458,7 @@ climate change
 ","on site
 ","https://www2.cmich.edu/colleges/se/cmubs/MesocosmFacility/Pages/default.aspx
 ","photo credits: CMU Communications
-",['http://mesocosm.org/wp-content/uploads/2022/11/beaver-island-mesocosms-1024x770.jpg'],,,,"['45.7422222', '-85.50944444444444']","{'coordinates': ['45.7422222', '-85.50944444444444']}",,
+",['http://mesocosm.org/wp-content/uploads/2022/11/beaver-island-mesocosms-1024x770.jpg'],,,,"['45.7422222', '-85.50944444444444']","{'coordinates': ['45.7422222', '-85.50944444444444']}"
 https://mesocosm.org/mesocosm/ims-metu-mesocosm-system/,IMS-METU Mesocosm System,"Middle East Technical University (METU), Institute of Marine Sciences (IMS)",Turkey,Europe,"Middle East Technical University, Institute of Marine Sciences,
 33731, Erdemli,
 Mersin,
@@ -513,7 +513,7 @@ Mesocosm tanks are equipped with sensors including GHG measurements, photo credi
 Dedicated field laboratory and facilities, photo credits: Korhan Özkan
  
  
-","['http://mesocosm.org/wp-content/uploads/2023/12/G0018552_1.9MB-1024x768.jpg', 'http://mesocosm.org/wp-content/uploads/2023/12/WhatsApp-Image-2022-07-27-at-10.33.44-AM-1-1024x576.jpeg', 'http://mesocosm.org/wp-content/uploads/2023/12/G0011377_1.8MB-1024x768.jpg', 'http://mesocosm.org/wp-content/uploads/2023/12/IMG_9936_1.9MB-768x1024.jpg', 'http://mesocosm.org/wp-content/uploads/2023/12/G0066411_1.9MB-1024x768.jpg']",,,,"['36.564427', ' 34.254018']","{'coordinates': ['36.564427', '34.254018']}",,
+","['http://mesocosm.org/wp-content/uploads/2023/12/G0018552_1.9MB-1024x768.jpg', 'http://mesocosm.org/wp-content/uploads/2023/12/WhatsApp-Image-2022-07-27-at-10.33.44-AM-1-1024x576.jpeg', 'http://mesocosm.org/wp-content/uploads/2023/12/G0011377_1.8MB-1024x768.jpg', 'http://mesocosm.org/wp-content/uploads/2023/12/IMG_9936_1.9MB-768x1024.jpg', 'http://mesocosm.org/wp-content/uploads/2023/12/G0066411_1.9MB-1024x768.jpg']",,,,"['36.564427', ' 34.254018']","{'coordinates': ['36.564427', '34.254018']}"
 https://mesocosm.org/mesocosm/bermuda-marine-mesocosm-facility-bmmf/,Bermuda Marine Mesocosm Facility (BMMF),ASU Bermuda Institute of Ocean Sciences (ASU BIOS),Bermuda,North America,"17 Biological Station, St. George’s GE01, Bermuda
 ","Dr. Yvonne Sawall
 Please login or request access to view contact information.
@@ -598,7 +598,7 @@ Utility golf cart For quick and easy transport of life organisms from the boat t
 Mesocosm overview showing ~3/4 of the facility; photo credits: Yvonne Sawall
 One of the four 1500-L basins hosting coral fragments.; photo credits: Yvonne Sawall
 Three 40-L aquaria inside a 500-L basin, each hosting coral fragments. ; photo credits: Chloe Carbonne
-","['http://mesocosm.org/wp-content/uploads/2024/11/B31560D9-B8BA-4EA4-9665-B13B46E9372A-1024x768.jpg', 'http://mesocosm.org/wp-content/uploads/2024/11/2009F839-BFBF-4D3A-885D-30A359409B74-1024x768.jpg', 'http://mesocosm.org/wp-content/uploads/2024/11/6DC60F28-580A-4046-91C5-4C57088CE81F-768x1024.jpg', 'http://mesocosm.org/wp-content/uploads/2024/11/2CCD8F84-538A-40A1-9507-74E4794C3B3A-1024x768.jpg']",,,,"['32.370636', '-64.697763']","{'coordinates': ['32.370636', '-64.697763']}",,
+","['http://mesocosm.org/wp-content/uploads/2024/11/B31560D9-B8BA-4EA4-9665-B13B46E9372A-1024x768.jpg', 'http://mesocosm.org/wp-content/uploads/2024/11/2009F839-BFBF-4D3A-885D-30A359409B74-1024x768.jpg', 'http://mesocosm.org/wp-content/uploads/2024/11/6DC60F28-580A-4046-91C5-4C57088CE81F-768x1024.jpg', 'http://mesocosm.org/wp-content/uploads/2024/11/2CCD8F84-538A-40A1-9507-74E4794C3B3A-1024x768.jpg']",,,,"['32.370636', '-64.697763']","{'coordinates': ['32.370636', '-64.697763']}"
 https://mesocosm.org/mesocosm/limnotrons/,Limnotron,Netherlands Institute for Ecology (NIOO-KNAW),The Netherlands,Europe,"Netherlands Institute for Ecology (NIOO)
  Droevendaalsesteeg 10
  6708 PB Wageningen
@@ -647,7 +647,7 @@ Limnotron – a highly controlled experimental unit
 
 
 
-","['http://mesocosm.org/wp-content/uploads/2017/02/Limnotron_400px2-300x214.jpg', 'http://mesocosm.org/wp-content/uploads/2017/02/Limnotrons_400px1-268x300.jpg', 'http://mesocosm.org/wp-content/uploads/2017/03/Limnotron-a-highly-controlled-experimental-unit-300x225.jpg']",,,,"['51.9876442', '5.6706486']","{'coordinates': ['51.9876442', '5.6706486']}",,
+","['http://mesocosm.org/wp-content/uploads/2017/02/Limnotron_400px2-300x214.jpg', 'http://mesocosm.org/wp-content/uploads/2017/02/Limnotrons_400px1-268x300.jpg', 'http://mesocosm.org/wp-content/uploads/2017/03/Limnotron-a-highly-controlled-experimental-unit-300x225.jpg']",,,,"['51.9876442', '5.6706486']","{'coordinates': ['51.9876442', '5.6706486']}"
 https://mesocosm.org/mesocosm/aqua-stress/,Aqua-stress,University of Canberra,Australia,Australia,"Institute for Applied Ecology, Faculty of Science and Technology
 University of Canberra, Bruce, ACT, 2617, Australia
 ","Jon Bray
@@ -688,7 +688,7 @@ Credit: Alica Tschierschke
 
 
 
-","['http://mesocosm.org/wp-content/uploads/2019/03/Aqua-stress-1-300x225.jpg', 'http://mesocosm.org/wp-content/uploads/2019/03/Aqua-stress-2-300x225.jpg', 'http://mesocosm.org/wp-content/uploads/2019/03/Aqua-stress-3-300x200.jpg']",,,,"['-35.23511', ' 149.086653']","{'coordinates': ['-35.23511', '149.086653']}",,
+","['http://mesocosm.org/wp-content/uploads/2019/03/Aqua-stress-1-300x225.jpg', 'http://mesocosm.org/wp-content/uploads/2019/03/Aqua-stress-2-300x225.jpg', 'http://mesocosm.org/wp-content/uploads/2019/03/Aqua-stress-3-300x200.jpg']",,,,"['-35.23511', ' 149.086653']","{'coordinates': ['-35.23511', '149.086653']}"
 https://mesocosm.org/mesocosm/mesocosm-gmbh/,MESOCOSM GmbH,Institut für Gewaesserschutz,Germany,Europe,"Institut für Gewaesserschutz
  Neu-Ulrichstein 5
  D-35315 Homberg (Ohm)
@@ -725,7 +725,7 @@ Mesocosm test basins
 
 
 
-","['http://mesocosm.org/wp-content/uploads/2017/05/test-facility-mesocosmGmbH.de_.jpg', 'http://mesocosm.org/wp-content/uploads/2017/05/mesocosmGmbH.de_.jpg']",,,,"['50.7527558', '9.0331164']","{'coordinates': ['50.7527558', '9.0331164']}",,
+","['http://mesocosm.org/wp-content/uploads/2017/05/test-facility-mesocosmGmbH.de_.jpg', 'http://mesocosm.org/wp-content/uploads/2017/05/mesocosmGmbH.de_.jpg']",,,,"['50.7527558', '9.0331164']","{'coordinates': ['50.7527558', '9.0331164']}"
 https://mesocosm.org/mesocosm/pohang-mesocosm-system/,Pohang Mesocosm System,Pohang University of Science and Technology,South Korea,Asia,"Pohang University of Science and Technology
  77 CHEONGAM-RO.NAM-GU.
  POHANG.GYUNGBUK.
@@ -744,7 +744,7 @@ Please login or request access to view contact information.
                       34.886946,128.623892
                     
 ",,,,,"http://climate.postech.ac.kr/board/view.do?iboardgroupseq=4&iboardmanagerseq=12
-",,,,,,"['34.886946', '128.623892']","{'coordinates': ['34.886946', '128.623892']}",,
+",,,,,,"['34.886946', '128.623892']","{'coordinates': ['34.886946', '128.623892']}"
 https://mesocosm.org/mesocosm/national-experimental-platform-in-aquatic-ecology-planaqua/,National Experimental Platform in Aquatic Ecology (PLANAQUA),,France,Europe,"Ecole Normale Supérieure (ENS)
  National Centre of Scientific Research (CNRS)
  Université Pierre et Marie Curie (UPMC)
@@ -779,7 +779,7 @@ Graphic of the PLANAQUA facility
 
 
 
-","['http://mesocosm.org/wp-content/uploads/2017/02/Saint-Pierre_PLANAQUA-300x206.png', 'http://mesocosm.org/wp-content/uploads/2017/02/Plamaqua_Mesocosms_8.14-300x225.jpg', 'http://mesocosm.org/wp-content/uploads/2017/02/Bild1-225x300.jpg']",,,,"['48.287979', '2.6759703']","{'coordinates': ['48.287979', '2.6759703']}",,
+","['http://mesocosm.org/wp-content/uploads/2017/02/Saint-Pierre_PLANAQUA-300x206.png', 'http://mesocosm.org/wp-content/uploads/2017/02/Plamaqua_Mesocosms_8.14-300x225.jpg', 'http://mesocosm.org/wp-content/uploads/2017/02/Bild1-225x300.jpg']",,,,"['48.287979', '2.6759703']","{'coordinates': ['48.287979', '2.6759703']}"
 https://mesocosm.org/mesocosm/cer-mesocosms/,CER Mesocosms,Centre for Ecological Research,Hungary,Europe,"Centre for Ecological Research
 H-1113 Budapest, Karolina út 29.
 Hungary
@@ -839,7 +839,7 @@ CER mesocosms: in situ experiment (photo credit: Zsófia Horváth)
 
 
 
-","['http://mesocosm.org/wp-content/uploads/2023/07/DJI_0203-fotor-20230722131035-1024x637.jpg', 'http://mesocosm.org/wp-content/uploads/2021/05/3.m-1024x576.jpg', 'http://mesocosm.org/wp-content/uploads/2021/05/4.m-1024x682.jpg']",,,,"['47.705993', '19.229583']","{'coordinates': ['47.705993', '19.229583']}",,
+","['http://mesocosm.org/wp-content/uploads/2023/07/DJI_0203-fotor-20230722131035-1024x637.jpg', 'http://mesocosm.org/wp-content/uploads/2021/05/3.m-1024x576.jpg', 'http://mesocosm.org/wp-content/uploads/2021/05/4.m-1024x682.jpg']",,,,"['47.705993', '19.229583']","{'coordinates': ['47.705993', '19.229583']}"
 https://mesocosm.org/mesocosm/consortium-gwrc-mesocosm-facility/,Great Waters Research Consortium (GWRC) mesocosm facility,"Natural Resources Research Great Waters Research Institute (NRRI), University of Minnesota Duluth; Lake Superior Research Institute (LSRI), University of Wisconsin Superior (joint project)",USA,North America,"Montreal Pier Rd,
 Superior, WI 54880
 USA
@@ -888,7 +888,7 @@ Figure credits: Euan D. Reavie
 
 
 
-","['http://mesocosm.org/wp-content/uploads/2022/09/pic1.2-1024x576.jpg', 'http://mesocosm.org/wp-content/uploads/2022/09/pic2.2-1024x576.jpg', 'http://mesocosm.org/wp-content/uploads/2022/09/pic3-1-1024x625.jpg']",,,,"['46.7109', '-92.0484']","{'coordinates': ['46.7109', '-92.0484']}",,
+","['http://mesocosm.org/wp-content/uploads/2022/09/pic1.2-1024x576.jpg', 'http://mesocosm.org/wp-content/uploads/2022/09/pic2.2-1024x576.jpg', 'http://mesocosm.org/wp-content/uploads/2022/09/pic3-1-1024x625.jpg']",,,,"['46.7109', '-92.0484']","{'coordinates': ['46.7109', '-92.0484']}"
 https://mesocosm.org/mesocosm/bolmen-forskningsstation/,Bolmen Forskningsstation,Sweden Water Research AB,Sweden,Europe,"Sweden Water Research AB
 Ideon Science Park Scheelevägen 15
 SE-223 70 Lund
@@ -927,7 +927,7 @@ Photo credit: Juha Rankinen
 
 
 
-","['http://mesocosm.org/wp-content/uploads/2018/05/Bolmen_2-1024x577.jpg', 'http://mesocosm.org/wp-content/uploads/2018/05/Bolmen_3-1024x577.jpg']",,,,"['56.943190', ' 13.645610']","{'coordinates': ['56.943190', '13.645610']}",,
+","['http://mesocosm.org/wp-content/uploads/2018/05/Bolmen_2-1024x577.jpg', 'http://mesocosm.org/wp-content/uploads/2018/05/Bolmen_3-1024x577.jpg']",,,,"['56.943190', ' 13.645610']","{'coordinates': ['56.943190', '13.645610']}"
 https://mesocosm.org/mesocosm/sinderhoeve/,Sinderhoeve,Wageningen Environmental Research,The Netherlands,Europe,"Telefoonweg 77
 6871NJ Renkum
 The Netherlands
@@ -1003,7 +1003,7 @@ SInderhoeve areal; Figure cerdit: Wageningen Environmental Research
 
 
  
-","['http://mesocosm.org/wp-content/uploads/2018/11/Foto-sloten-sinderhoeve-1024x697.jpg', 'http://mesocosm.org/wp-content/uploads/2018/11/DSC02496-768x1024.jpg', 'http://mesocosm.org/wp-content/uploads/2018/11/IMG_2919-1024x683.jpg', 'http://mesocosm.org/wp-content/uploads/2018/11/Perspectief-Sinderhoeve-kl-1024x679.jpg']",,,,"['51.998681', '  5.752708']","{'coordinates': ['51.998681', '5.752708']}",,
+","['http://mesocosm.org/wp-content/uploads/2018/11/Foto-sloten-sinderhoeve-1024x697.jpg', 'http://mesocosm.org/wp-content/uploads/2018/11/DSC02496-768x1024.jpg', 'http://mesocosm.org/wp-content/uploads/2018/11/IMG_2919-1024x683.jpg', 'http://mesocosm.org/wp-content/uploads/2018/11/Perspectief-Sinderhoeve-kl-1024x679.jpg']",,,,"['51.998681', '  5.752708']","{'coordinates': ['51.998681', '5.752708']}"
 https://mesocosm.org/mesocosm/iberian-pond-network-ipn/,Iberian Pond Network (IPN),"InBio/CIBIO, University of Évora","Portugal, Spain",Europe,"InBio/CIBIO, University of Évora, Largo dos
 Colegiais, 7000 Évora, Portugal
 ","Prof. Miguel B. Araújo
@@ -1045,7 +1045,7 @@ Toledo – La Higueruela Experimental Farm (Spain)
 
 
 
-","['http://mesocosm.org/wp-content/uploads/2017/02/IberanPondProject_400x1-300x253.jpg', 'http://mesocosm.org/wp-content/uploads/2017/02/charcas_evora_3_295.jpg', 'http://mesocosm.org/wp-content/uploads/2017/02/charcas_higueruela_3_295.jpg']",,,,"['41.1465479', '-8.6156998']","{'coordinates': ['41.1465479', '-8.6156998']}",,
+","['http://mesocosm.org/wp-content/uploads/2017/02/IberanPondProject_400x1-300x253.jpg', 'http://mesocosm.org/wp-content/uploads/2017/02/charcas_evora_3_295.jpg', 'http://mesocosm.org/wp-content/uploads/2017/02/charcas_higueruela_3_295.jpg']",,,,"['41.1465479', '-8.6156998']","{'coordinates': ['41.1465479', '-8.6156998']}"
 https://mesocosm.org/mesocosm/iberian-pond-network-ipn/,Iberian Pond Network (IPN),"InBio/CIBIO, University of Évora","Portugal, Spain",Europe,"InBio/CIBIO, University of Évora, Largo dos
 Colegiais, 7000 Évora, Portugal
 ","Prof. Miguel B. Araújo
@@ -1087,7 +1087,7 @@ Toledo – La Higueruela Experimental Farm (Spain)
 
 
 
-","['http://mesocosm.org/wp-content/uploads/2017/02/IberanPondProject_400x1-300x253.jpg', 'http://mesocosm.org/wp-content/uploads/2017/02/charcas_evora_3_295.jpg', 'http://mesocosm.org/wp-content/uploads/2017/02/charcas_higueruela_3_295.jpg']",,,,"['38.5685819', '-7.9107097']","{'coordinates': ['38.5685819', '-7.9107097']}",,
+","['http://mesocosm.org/wp-content/uploads/2017/02/IberanPondProject_400x1-300x253.jpg', 'http://mesocosm.org/wp-content/uploads/2017/02/charcas_evora_3_295.jpg', 'http://mesocosm.org/wp-content/uploads/2017/02/charcas_higueruela_3_295.jpg']",,,,"['38.5685819', '-7.9107097']","{'coordinates': ['38.5685819', '-7.9107097']}"
 https://mesocosm.org/mesocosm/aquatic-research-facility-at-the-university-of-kansas-field-station/,Aquatic Research Facility at the University of Kansas Field Station,University of Kansas Field Station,USA,North America,"350 Wild Horse Road, Lawrence, KS 66044, USA
 ","Ted Harris
 Please login or request access to view contact information.
@@ -1406,7 +1406,7 @@ Sampling large mesocosm tanks – Photo Credit Kirsten Bosnak
 
 
 
-","['http://mesocosm.org/wp-content/uploads/2019/04/View-of-tanks-replicated-ponds-and-catchment-ponds-–-Photo-Credit-Scott-Campbell-300x199.jpeg', 'http://mesocosm.org/wp-content/uploads/2019/04/View-of-Cross-Reservoir-–-Photo-Credit-Kirsten-Bosnak-300x199.jpeg', 'http://mesocosm.org/wp-content/uploads/2019/04/View-core-field-station-facilities-–-Photo-Credit-Google-Earth-300x200.jpeg', 'http://mesocosm.org/wp-content/uploads/2019/04/View-of-inoculated-mesocosms-in-the-3-season-greenhouse-4-season-greenhouse-also-exists-–-Photo-Credit-Ted-Harris-225x300.jpeg', 'http://mesocosm.org/wp-content/uploads/2019/04/One-set-of-the-replicated-ponds–-Photo-Credit-Scott-Campbell-300x199.jpeg', 'http://mesocosm.org/wp-content/uploads/2019/04/Sampling-large-mesocosm-tanks-–-Photo-Credit-Kirsten-Bosnak-300x199.jpeg']",['http://mesocosm.org/wp-content/uploads/2019/04/equipment-300x199.jpeg'],['http://mesocosm.org/wp-content/uploads/2019/04/lodging-300x199.jpeg'],,"['39.048918', '-95.191171']","{'coordinates': ['39.048918', '-95.191171']}",,
+","['http://mesocosm.org/wp-content/uploads/2019/04/View-of-tanks-replicated-ponds-and-catchment-ponds-–-Photo-Credit-Scott-Campbell-300x199.jpeg', 'http://mesocosm.org/wp-content/uploads/2019/04/View-of-Cross-Reservoir-–-Photo-Credit-Kirsten-Bosnak-300x199.jpeg', 'http://mesocosm.org/wp-content/uploads/2019/04/View-core-field-station-facilities-–-Photo-Credit-Google-Earth-300x200.jpeg', 'http://mesocosm.org/wp-content/uploads/2019/04/View-of-inoculated-mesocosms-in-the-3-season-greenhouse-4-season-greenhouse-also-exists-–-Photo-Credit-Ted-Harris-225x300.jpeg', 'http://mesocosm.org/wp-content/uploads/2019/04/One-set-of-the-replicated-ponds–-Photo-Credit-Scott-Campbell-300x199.jpeg', 'http://mesocosm.org/wp-content/uploads/2019/04/Sampling-large-mesocosm-tanks-–-Photo-Credit-Kirsten-Bosnak-300x199.jpeg']",['http://mesocosm.org/wp-content/uploads/2019/04/equipment-300x199.jpeg'],['http://mesocosm.org/wp-content/uploads/2019/04/lodging-300x199.jpeg'],,"['39.048918', '-95.191171']","{'coordinates': ['39.048918', '-95.191171']}"
 https://mesocosm.org/mesocosm/life-infrastructure-ecp-facility-behavioural-ecology-of-fish-st-pee-lapitxuri/,"LIFE Infrastructure - ECP Facility (Behavioural Ecology of Fish, St Pée/Lapitxuri)",Infrastructure multi-site: RI LIFE,France,Europe,"RI LIFE INRA-AQUAPOLE
 Agnes Bardonnet
 64310 St-Pée-sur-Nivelle
@@ -1501,7 +1501,7 @@ Lapitxuri semi-natural stream, Foto credit: Glise/INRA
 
 
  
-","['http://mesocosm.org/wp-content/uploads/2018/11/ECP_Aerial-view_St-Pée-1024x741.jpg', 'http://mesocosm.org/wp-content/uploads/2018/11/ECP_Flume-1024x684.jpg', 'http://mesocosm.org/wp-content/uploads/2018/11/ECP_Aerial-view_Lapitxuri.jpg', 'http://mesocosm.org/wp-content/uploads/2018/11/ECP_Lapitxuri-semi-natural-stream.jpg']",,,,"['43.3561111', ' -1.5616666666666668']","{'coordinates': ['43.3561111', '-1.5616666666666668']}",,
+","['http://mesocosm.org/wp-content/uploads/2018/11/ECP_Aerial-view_St-Pée-1024x741.jpg', 'http://mesocosm.org/wp-content/uploads/2018/11/ECP_Flume-1024x684.jpg', 'http://mesocosm.org/wp-content/uploads/2018/11/ECP_Aerial-view_Lapitxuri.jpg', 'http://mesocosm.org/wp-content/uploads/2018/11/ECP_Lapitxuri-semi-natural-stream.jpg']",,,,"['43.3561111', ' -1.5616666666666668']","{'coordinates': ['43.3561111', '-1.5616666666666668']}"
 https://mesocosm.org/mesocosm/life-infrastructure-ecp-facility-behavioural-ecology-of-fish-st-pee-lapitxuri/,"LIFE Infrastructure - ECP Facility (Behavioural Ecology of Fish, St Pée/Lapitxuri)",Infrastructure multi-site: RI LIFE,France,Europe,"RI LIFE INRA-AQUAPOLE
 Agnes Bardonnet
 64310 St-Pée-sur-Nivelle
@@ -1596,7 +1596,7 @@ Lapitxuri semi-natural stream, Foto credit: Glise/INRA
 
 
  
-","['http://mesocosm.org/wp-content/uploads/2018/11/ECP_Aerial-view_St-Pée-1024x741.jpg', 'http://mesocosm.org/wp-content/uploads/2018/11/ECP_Flume-1024x684.jpg', 'http://mesocosm.org/wp-content/uploads/2018/11/ECP_Aerial-view_Lapitxuri.jpg', 'http://mesocosm.org/wp-content/uploads/2018/11/ECP_Lapitxuri-semi-natural-stream.jpg']",,,,"[' 43.2833333', ' -1.4822222222222223']","{'coordinates': ['43.2833333', '-1.4822222222222223']}",,
+","['http://mesocosm.org/wp-content/uploads/2018/11/ECP_Aerial-view_St-Pée-1024x741.jpg', 'http://mesocosm.org/wp-content/uploads/2018/11/ECP_Flume-1024x684.jpg', 'http://mesocosm.org/wp-content/uploads/2018/11/ECP_Aerial-view_Lapitxuri.jpg', 'http://mesocosm.org/wp-content/uploads/2018/11/ECP_Lapitxuri-semi-natural-stream.jpg']",,,,"[' 43.2833333', ' -1.4822222222222223']","{'coordinates': ['43.2833333', '-1.4822222222222223']}"
 https://mesocosm.org/mesocosm/heated-aquatic-mesocosms-for-climate-warming-experiment/,Heated Aquatic Mesocosms for Climate Warming Experiment,"Nanjing Institute of Geography and Limnology, Chinese Academy of Sciences",China,Asia,"73 East Beijing Road, Nanjing, China
 ","Dr. Hu He
 Please login or request access to view contact information.
@@ -1646,7 +1646,7 @@ Water temperature trends
 
 
 
-","['https://www.aquacosm.eu/wp-content/uploads/2019/03/location-300x170.png', 'https://www.aquacosm.eu/wp-content/uploads/2019/03/Experiment-setting-300x225.jpeg', 'http://mesocosm.org/wp-content/uploads/2019/03/Unheated-mesocosms-225x300.jpeg', 'http://mesocosm.org/wp-content/uploads/2019/03/Heated-mesocosms-225x300.jpeg', 'http://mesocosm.org/wp-content/uploads/2019/03/Water-temperature-trends-300x209.png']",,,,"['31.418517', '120.218446']","{'coordinates': ['31.418517', '120.218446']}",,
+","['https://www.aquacosm.eu/wp-content/uploads/2019/03/location-300x170.png', 'https://www.aquacosm.eu/wp-content/uploads/2019/03/Experiment-setting-300x225.jpeg', 'http://mesocosm.org/wp-content/uploads/2019/03/Unheated-mesocosms-225x300.jpeg', 'http://mesocosm.org/wp-content/uploads/2019/03/Heated-mesocosms-225x300.jpeg', 'http://mesocosm.org/wp-content/uploads/2019/03/Water-temperature-trends-300x209.png']",,,,"['31.418517', '120.218446']","{'coordinates': ['31.418517', '120.218446']}"
 https://mesocosm.org/mesocosm/tropical-aquatic-ecology-mesocosm/,Tropical Aquatic Ecology Mesocosm,State University of Goiás,Brazil,South America,"BR153, Nº3105, Anápolis, Goiás, Brazil.
 ","Dr. João Carlos Nabout
 Please login or request access to view contact information.
@@ -1694,7 +1694,7 @@ Figure 4 Mesocosm of Tropical Aquatic Ecology – Finalized (Photo credit: João
 
 
 
-","['http://mesocosm.org/wp-content/uploads/2019/03/Figure-1-Mesocosm-of-Tropical-Aquatic-Ecology-–-Phase-of-construction-300x225.jpeg', 'http://mesocosm.org/wp-content/uploads/2019/03/Figure-2-Mesocosm-of-Tropical-Aquatic-Ecology-–-Phase-of-construction-300x128.jpeg', 'http://mesocosm.org/wp-content/uploads/2019/03/Figure-3-Mesocosm-of-Tropical-Aquatic-Ecology-–-Pilot-of-first-studies-300x224.jpeg', 'http://mesocosm.org/wp-content/uploads/2019/03/Figure-4-Mesocosm-of-Tropical-Aquatic-Ecology-Finalized-300x127.jpeg']",,,,"['-16.37930', '-48.94672']","{'coordinates': ['-16.37930', '-48.94672']}",,
+","['http://mesocosm.org/wp-content/uploads/2019/03/Figure-1-Mesocosm-of-Tropical-Aquatic-Ecology-–-Phase-of-construction-300x225.jpeg', 'http://mesocosm.org/wp-content/uploads/2019/03/Figure-2-Mesocosm-of-Tropical-Aquatic-Ecology-–-Phase-of-construction-300x128.jpeg', 'http://mesocosm.org/wp-content/uploads/2019/03/Figure-3-Mesocosm-of-Tropical-Aquatic-Ecology-–-Pilot-of-first-studies-300x224.jpeg', 'http://mesocosm.org/wp-content/uploads/2019/03/Figure-4-Mesocosm-of-Tropical-Aquatic-Ecology-Finalized-300x127.jpeg']",,,,"['-16.37930', '-48.94672']","{'coordinates': ['-16.37930', '-48.94672']}"
 https://mesocosm.org/mesocosm/life-infrastructure-pearl-facility-experimental-aquatic-platform-rennes-le-rheu/,"LIFE Infrastructure - PEARL facility (Experimental Aquatic Platform, Rennes/Le Rheu)",Infrastructure multi-site: RI LIFE,France,Europe,"RI LIFE INRA-AQUAPOLE
 Agnes Bardonnet
 64310 St-Pée-sur-Nivelle
@@ -1793,7 +1793,7 @@ Series of mesocosms 30 m3 and 9 m3, Foto credit: Beaumont/INRA
 
 
  
-","['http://mesocosm.org/wp-content/uploads/2018/11/PEARL_Aerial_view_Rennes_experimental_complex.jpg', 'http://mesocosm.org/wp-content/uploads/2018/11/PEARL_Serie_of_30_mesocoms_3-m3-1024x678.jpg', 'http://mesocosm.org/wp-content/uploads/2018/11/PEARL_Aerial_view-Ponds-Station_PF-Etangs-1024x594.jpg', 'http://mesocosm.org/wp-content/uploads/2018/11/PEARL_Mesocosms_Series_30m3_and_9-m3-1024x678.jpg']",,,,"['48.1130833', ' -1.4822222222222223']","{'coordinates': ['48.1130833', '-1.4822222222222223']}",,
+","['http://mesocosm.org/wp-content/uploads/2018/11/PEARL_Aerial_view_Rennes_experimental_complex.jpg', 'http://mesocosm.org/wp-content/uploads/2018/11/PEARL_Serie_of_30_mesocoms_3-m3-1024x678.jpg', 'http://mesocosm.org/wp-content/uploads/2018/11/PEARL_Aerial_view-Ponds-Station_PF-Etangs-1024x594.jpg', 'http://mesocosm.org/wp-content/uploads/2018/11/PEARL_Mesocosms_Series_30m3_and_9-m3-1024x678.jpg']",,,,"['48.1130833', ' -1.4822222222222223']","{'coordinates': ['48.1130833', '-1.4822222222222223']}"
 https://mesocosm.org/mesocosm/life-infrastructure-pearl-facility-experimental-aquatic-platform-rennes-le-rheu/,"LIFE Infrastructure - PEARL facility (Experimental Aquatic Platform, Rennes/Le Rheu)",Infrastructure multi-site: RI LIFE,France,Europe,"RI LIFE INRA-AQUAPOLE
 Agnes Bardonnet
 64310 St-Pée-sur-Nivelle
@@ -1892,7 +1892,7 @@ Series of mesocosms 30 m3 and 9 m3, Foto credit: Beaumont/INRA
 
 
  
-","['http://mesocosm.org/wp-content/uploads/2018/11/PEARL_Aerial_view_Rennes_experimental_complex.jpg', 'http://mesocosm.org/wp-content/uploads/2018/11/PEARL_Serie_of_30_mesocoms_3-m3-1024x678.jpg', 'http://mesocosm.org/wp-content/uploads/2018/11/PEARL_Aerial_view-Ponds-Station_PF-Etangs-1024x594.jpg', 'http://mesocosm.org/wp-content/uploads/2018/11/PEARL_Mesocosms_Series_30m3_and_9-m3-1024x678.jpg']",,,,"[' 48.1202778', ' -1.7919444444444443']","{'coordinates': ['48.1202778', '-1.7919444444444443']}",,
+","['http://mesocosm.org/wp-content/uploads/2018/11/PEARL_Aerial_view_Rennes_experimental_complex.jpg', 'http://mesocosm.org/wp-content/uploads/2018/11/PEARL_Serie_of_30_mesocoms_3-m3-1024x678.jpg', 'http://mesocosm.org/wp-content/uploads/2018/11/PEARL_Aerial_view-Ponds-Station_PF-Etangs-1024x594.jpg', 'http://mesocosm.org/wp-content/uploads/2018/11/PEARL_Mesocosms_Series_30m3_and_9-m3-1024x678.jpg']",,,,"[' 48.1202778', ' -1.7919444444444443']","{'coordinates': ['48.1202778', '-1.7919444444444443']}"
 https://mesocosm.org/mesocosm/kosmos-kiel-off-shore-mesocosms-for-ocean-simulations/,KOSMOS (Kiel Off-Shore Mesocosms for Ocean Simulations),GEOMAR-Helmholtz Center for Ocean Research Kiel,Germany,Europe,"GEOMAR-Helmholtz Center for Ocean Research
  West shore campus
  Düsternbrooker Weg 20
@@ -1938,7 +1938,7 @@ Sampling of the KOSMOS mesocosms during an experiment on the effects of ocean ac
 
 
 
-","['http://mesocosm.org/wp-content/uploads/2017/02/KOSMOS-Raunefjord_2011-300x142.jpg', 'http://mesocosm.org/wp-content/uploads/2017/03/KOSMOS-deployment-with-the-Spanish-research-vessel-„Hesprides“-off-Gran-Canaria-in-2014-300x225.png', 'http://mesocosm.org/wp-content/uploads/2017/03/Sampling-of-the-KOSMOS-mesocosms-during-an-experiment-on-the-effects-of-ocean-acidification-off-Gran-Canaria-in-2014-300x225.png']",,,,"['54.330034', '10.1482026']","{'coordinates': ['54.330034', '10.1482026']}",,
+","['http://mesocosm.org/wp-content/uploads/2017/02/KOSMOS-Raunefjord_2011-300x142.jpg', 'http://mesocosm.org/wp-content/uploads/2017/03/KOSMOS-deployment-with-the-Spanish-research-vessel-„Hesprides“-off-Gran-Canaria-in-2014-300x225.png', 'http://mesocosm.org/wp-content/uploads/2017/03/Sampling-of-the-KOSMOS-mesocosms-during-an-experiment-on-the-effects-of-ocean-acidification-off-Gran-Canaria-in-2014-300x225.png']",,,,"['54.330034', '10.1482026']","{'coordinates': ['54.330034', '10.1482026']}"
 https://mesocosm.org/mesocosm/maximus/,MAXIMUS,Roskilde University,Denmark,Europe,"Roskilde University
  Universitetsvej 1
  P.O. Box 260
@@ -1957,7 +1957,7 @@ Please login or request access to view contact information.
                     
 ",,,,,"http://rucforsk.ruc.dk/site/person/bhansen
 Impaq project: Turbot tracked in a tanknutrients,
-",,,,,,"['55.6519602', '12.137471']","{'coordinates': ['55.6519602', '12.137471']}",,
+",,,,,,"['55.6519602', '12.137471']","{'coordinates': ['55.6519602', '12.137471']}"
 https://mesocosm.org/mesocosm/innotech-alberta-aquatic-mesocosm-facility/,InnoTech Alberta Aquatic Mesocosm Facility,InnoTech Alberta,Canada,North America,"PO Bag 4000
 Hwy 16A & 75 Street
 Vegreville, Alberta, Canada, T9C 1T4
@@ -2060,7 +2060,7 @@ A water layer is maintained at the bottom of the mesocosms during winter, photo 
 InnoTech Alberta Aquatic Mesocosm Facility, photo credit: InnoTech Alberta
 Elevated view of mesocosm facility with 2 smaller tanks nested within each of the main mesocosm tanks on the bermed containment pad. Photo Credit: InnoTech Alberta
 Mescocosms being used for an aquatic experiment. Note the floating automated CO2 flux chambers in the tanks in the foreground. Photo Credit: InnoTech Alberta
-","['http://mesocosm.org/wp-content/uploads/2023/08/sunset-innotech-1024x768.jpg', 'http://mesocosm.org/wp-content/uploads/2023/08/sinter-innotech.jpg', 'http://mesocosm.org/wp-content/uploads/2023/08/birdview-InnoTech-1024x469.jpg', 'http://mesocosm.org/wp-content/uploads/2023/08/birdeye.jpg', 'http://mesocosm.org/wp-content/uploads/2023/08/ter2.jpg']",,,,"['53.506641', '-112.093612']","{'coordinates': ['53.506641', '-112.093612']}",,
+","['http://mesocosm.org/wp-content/uploads/2023/08/sunset-innotech-1024x768.jpg', 'http://mesocosm.org/wp-content/uploads/2023/08/sinter-innotech.jpg', 'http://mesocosm.org/wp-content/uploads/2023/08/birdview-InnoTech-1024x469.jpg', 'http://mesocosm.org/wp-content/uploads/2023/08/birdeye.jpg', 'http://mesocosm.org/wp-content/uploads/2023/08/ter2.jpg']",,,,"['53.506641', '-112.093612']","{'coordinates': ['53.506641', '-112.093612']}"
 https://mesocosm.org/mesocosm/lmu-mesocosms/,LMU Mesocosms,Ludwig-Maximilians-Universität,Germany,Europe,"Ludwig-Maximilians-Universität München
  Department Biologie II
  Aquatic Ecology
@@ -2096,7 +2096,7 @@ Munich Mesocosm facility on Campus, Photo: Dr. Stella Berger
 
 
 
-","['http://mesocosm.org/wp-content/uploads/2017/02/Munih_mesocosms2-300x188.jpg', 'http://mesocosm.org/wp-content/uploads/2017/02/Munich_mesocosms1-300x225.jpg']",,,,"['48.109151', '11.45844']","{'coordinates': ['48.109151', '11.45844']}",,
+","['http://mesocosm.org/wp-content/uploads/2017/02/Munih_mesocosms2-300x188.jpg', 'http://mesocosm.org/wp-content/uploads/2017/02/Munich_mesocosms1-300x225.jpg']",,,,"['48.109151', '11.45844']","{'coordinates': ['48.109151', '11.45844']}"
 https://mesocosm.org/mesocosm/crimac-calabria-marine-centre/,Crimac – Calabria Marine Centre,Stazione Zoologica Anton Dohrn,Italy,Europe,"Contrada Torre Spaccata,
 Località Torre Spaccata,
 87071 Amendolara (CS),
@@ -2146,7 +2146,7 @@ https://www.szn.it/index.php/it/chi-siamo/le-nostre-sedi/sedi-territoriali-di-ti
 ","Amendolara Seat – outdoor facility, photo credits:
 Detail of Rack, photo credits:
 Filtration System, photo credit:
-","['http://mesocosm.org/wp-content/uploads/2025/06/Photo-1.2-Amendolara-seat-outdoor-facility-Kopie-1024x714.jpg', 'http://mesocosm.org/wp-content/uploads/2025/06/Photo-3-Detail-of-Rack-2-1024x768.jpg', 'http://mesocosm.org/wp-content/uploads/2025/06/Photo-2.2-Filtration-System-Kopie-1024x768.jpg']",,,,['39.9588889'],{'coordinates': nan},,
+","['http://mesocosm.org/wp-content/uploads/2025/06/Photo-1.2-Amendolara-seat-outdoor-facility-Kopie-1024x714.jpg', 'http://mesocosm.org/wp-content/uploads/2025/06/Photo-3-Detail-of-Rack-2-1024x768.jpg', 'http://mesocosm.org/wp-content/uploads/2025/06/Photo-2.2-Filtration-System-Kopie-1024x768.jpg']",,,,['39.9588889'],{'coordinates': nan}
 https://mesocosm.org/mesocosm/crimac-calabria-marine-centre/,Crimac – Calabria Marine Centre,Stazione Zoologica Anton Dohrn,Italy,Europe,"Contrada Torre Spaccata,
 Località Torre Spaccata,
 87071 Amendolara (CS),
@@ -2196,7 +2196,7 @@ https://www.szn.it/index.php/it/chi-siamo/le-nostre-sedi/sedi-territoriali-di-ti
 ","Amendolara Seat – outdoor facility, photo credits:
 Detail of Rack, photo credits:
 Filtration System, photo credit:
-","['http://mesocosm.org/wp-content/uploads/2025/06/Photo-1.2-Amendolara-seat-outdoor-facility-Kopie-1024x714.jpg', 'http://mesocosm.org/wp-content/uploads/2025/06/Photo-3-Detail-of-Rack-2-1024x768.jpg', 'http://mesocosm.org/wp-content/uploads/2025/06/Photo-2.2-Filtration-System-Kopie-1024x768.jpg']",,,,['16.62666666666667'],{'coordinates': nan},,
+","['http://mesocosm.org/wp-content/uploads/2025/06/Photo-1.2-Amendolara-seat-outdoor-facility-Kopie-1024x714.jpg', 'http://mesocosm.org/wp-content/uploads/2025/06/Photo-3-Detail-of-Rack-2-1024x768.jpg', 'http://mesocosm.org/wp-content/uploads/2025/06/Photo-2.2-Filtration-System-Kopie-1024x768.jpg']",,,,['16.62666666666667'],{'coordinates': nan}
 https://mesocosm.org/mesocosm/ceh-aquatic-mesocosm-facility-camf/,CEH Aquatic Mesocosm Facility (CAMF),Centre for Ecology & Hydrology (CEH),United Kingdom,Europe,"Centre for Ecology & Hydrology (CEH)
 Lancaster University
 Library Avenue
@@ -2254,7 +2254,7 @@ Figure credits: Heidrun Feuchtmayr
 
 
 
-","['http://mesocosm.org/wp-content/uploads/2019/07/IMG_5163-1024x683.jpg', 'http://mesocosm.org/wp-content/uploads/2019/07/IMG_5156-1024x683.jpg', 'http://mesocosm.org/wp-content/uploads/2019/07/CAMF-schematic.jpg']",,,,"['54.014373', ' -2.777004']","{'coordinates': ['54.014373', '-2.777004']}",,
+","['http://mesocosm.org/wp-content/uploads/2019/07/IMG_5163-1024x683.jpg', 'http://mesocosm.org/wp-content/uploads/2019/07/IMG_5156-1024x683.jpg', 'http://mesocosm.org/wp-content/uploads/2019/07/CAMF-schematic.jpg']",,,,"['54.014373', ' -2.777004']","{'coordinates': ['54.014373', '-2.777004']}"
 https://mesocosm.org/mesocosm/experimental-mesocosm-facility-at-friday-harbor-labs-fhl/,Experimental Mesocosm Facility at Friday Harbor Labs (FHL),University of Washington,USA,North-America,"University of Washington
  School of Oceanography
  1503 NE Boat Street
@@ -2317,7 +2317,7 @@ The lab is supplied with conditioned water from a custom filtration and CO2 stri
 
 
 
-","['http://mesocosm.org/wp-content/uploads/2017/05/outdoor-oalab4-300x129.jpg', 'http://mesocosm.org/wp-content/uploads/2017/05/indoor-oalab3.jpg']",,,,"['48.5466503', '-123.0127619']","{'coordinates': ['48.5466503', '-123.0127619']}",,
+","['http://mesocosm.org/wp-content/uploads/2017/05/outdoor-oalab4-300x129.jpg', 'http://mesocosm.org/wp-content/uploads/2017/05/indoor-oalab3.jpg']",,,,"['48.5466503', '-123.0127619']","{'coordinates': ['48.5466503', '-123.0127619']}"
 https://mesocosm.org/mesocosm/mekjarvik-research-station/,Mekjarvik Research Station,International Research Institute of Stavanger (IRIS),Norway,Europe,"IRIS
 P. O. Box 8046, 4068 Stavanger, (mailing address)
 Prof. Olav Hanssensvei 15, 4021 Stavanger (visiting address)
@@ -2384,7 +2384,7 @@ Photo: Leon Moodley
 
 
  
-","['http://mesocosm.org/wp-content/uploads/2018/04/Stavanger-1-300x279.jpg', 'http://mesocosm.org/wp-content/uploads/2018/04/Stavanger-2-300x225.jpg', 'http://mesocosm.org/wp-content/uploads/2018/04/Stavanger-3-300x200.jpg']",,,,"['59.0206314', ' 5.6159267000000455']","{'coordinates': ['59.0206314', '5.6159267000000455']}",,
+","['http://mesocosm.org/wp-content/uploads/2018/04/Stavanger-1-300x279.jpg', 'http://mesocosm.org/wp-content/uploads/2018/04/Stavanger-2-300x225.jpg', 'http://mesocosm.org/wp-content/uploads/2018/04/Stavanger-3-300x200.jpg']",,,,"['59.0206314', ' 5.6159267000000455']","{'coordinates': ['59.0206314', '5.6159267000000455']}"
 https://mesocosm.org/mesocosm/mesocosms-at-the-upper-parana-river-nupelia-field-station/,Mesocosms at the Upper Paraná River (Nupélia Field Station),Universidade Estadual de Maringá – UEM,Brazil,South America,"Av. Colombo 5790, Maringá, PR, Brazil, 87020-900
 ","Roger Paulo Mormul
 Please login or request access to view contact information.
@@ -2413,7 +2413,7 @@ Please login or request access to view contact information.
 
 
 
-","['http://mesocosm.org/wp-content/uploads/2019/03/Mesocosmos-300x225.jpg', 'http://mesocosm.org/wp-content/uploads/2019/03/Fieldstation-300x224.png']",,,,"['-22.765525', '-53.2572166']","{'coordinates': ['-22.765525', '-53.2572166']}",,
+","['http://mesocosm.org/wp-content/uploads/2019/03/Mesocosmos-300x225.jpg', 'http://mesocosm.org/wp-content/uploads/2019/03/Fieldstation-300x224.png']",,,,"['-22.765525', '-53.2572166']","{'coordinates': ['-22.765525', '-53.2572166']}"
 https://mesocosm.org/mesocosm/sites-aquanet-asa-research-station/,SITES AquaNet – Asa Research Station,SITES and Swedish University of Agricultural Sciences,Sweden,Europe,"Sveriges lantbruksuniversitet (SLU)
 Unit for Field-based Forest Research
 Asa Research Station
@@ -2455,7 +2455,7 @@ Photo credit: Ola Langvall
 
 
  
-","['http://mesocosm.org/wp-content/uploads/2018/05/Asa_1-1024x768.jpg', 'http://mesocosm.org/wp-content/uploads/2018/05/Asa_3-1024x574.jpg']",,,,"['57.164325', ' 14.782712']","{'coordinates': ['57.164325', '14.782712']}",,
+","['http://mesocosm.org/wp-content/uploads/2018/05/Asa_1-1024x768.jpg', 'http://mesocosm.org/wp-content/uploads/2018/05/Asa_3-1024x574.jpg']",,,,"['57.164325', ' 14.782712']","{'coordinates': ['57.164325', '14.782712']}"
 https://mesocosm.org/mesocosm/solbergstrand-experimental-facility-sef/,Solbergstrand Experimental Facility (SEF),Norwegian Institute for Water Research,Norway,Europe,"Norwegian Institute for Water Research
  NIVA Oslo
  Gaustadalléen 21
@@ -2515,7 +2515,7 @@ oddbjoern.pettersen@niva.no
 
 
 
-","['http://mesocosm.org/wp-content/uploads/2017/02/Drøbak_mesocosms-construction_400px-300x176.jpg', 'http://mesocosm.org/wp-content/uploads/2017/02/Solbergstrand_Mesocosms_400x1-300x221.jpg', 'http://mesocosm.org/wp-content/uploads/2017/02/Solbergstrand_Flumes_400px2-300x136.jpg', 'http://mesocosm.org/wp-content/uploads/2017/02/Solberstrand_Flumes_400px1-300x213.jpg']",,,,"['59.6157541', '10.6528178']","{'coordinates': ['59.6157541', '10.6528178']}",,
+","['http://mesocosm.org/wp-content/uploads/2017/02/Drøbak_mesocosms-construction_400px-300x176.jpg', 'http://mesocosm.org/wp-content/uploads/2017/02/Solbergstrand_Mesocosms_400x1-300x221.jpg', 'http://mesocosm.org/wp-content/uploads/2017/02/Solbergstrand_Flumes_400px2-300x136.jpg', 'http://mesocosm.org/wp-content/uploads/2017/02/Solberstrand_Flumes_400px1-300x213.jpg']",,,,"['59.6157541', '10.6528178']","{'coordinates': ['59.6157541', '10.6528178']}"
 https://mesocosm.org/mesocosm/sletvik-field-station/,Sletvik Field Station,Norwegian University of Science and Technology,Norway,Europe,"Norwegian University of Science and Technology
 Department of Biology
 Trondhjem Biological Station
@@ -2536,7 +2536,7 @@ sea based mesocosms
 ",,,"Two large lecturing and three smaller laboratories, one of which has access to salt water, and a meeting room.
 ","Accommodation for 50 people, kitchen and dining room, lounge, bedrooms, showers, washing rooms and a sauna. All meals are served at the station and normally consist of a self-service breakfast, lunch packet and dinner. The kitchen can be used in the evening by appointment with the station’s attendant chef.
 ","http://www.ntnu.edu/biology/sletvik-field-station
-",,,,,,"['63.5929285', '9.5457926']","{'coordinates': ['63.5929285', '9.5457926']}",,
+",,,,,,"['63.5929285', '9.5457926']","{'coordinates': ['63.5929285', '9.5457926']}"
 https://mesocosm.org/mesocosm/wuhan-warming-mesocosm-facility-wwmf/,Wuhan Warming Mesocosm Facility (WWMF),"1. Institute of Hydrobiology, Chinese Academy of Sciences (IHB-CAS); 2. College of Fischeries, Huazhong Agricultural University",China,Asia,"
 Institute of Hydrobiology, Chinese Academy of Sciences; Address: No. 7 Donghu South Road, Wuchang District, Wuhan, Hubei Province, China
 Huazhong Agricultural University; Address: No. 1, Shizishan Street, Hongshan District, Wuhan, Hubei Province, China
@@ -2590,7 +2590,7 @@ Photo credit: Chao Li
 
 
 
-","['http://mesocosm.org/wp-content/uploads/2019/01/WWMF2.jpg', 'http://mesocosm.org/wp-content/uploads/2019/01/WWMF1-1024x767.jpg']",,,,"['30.4670833', ' 114.35961111111111']","{'coordinates': ['30.4670833', '114.35961111111111']}",,
+","['http://mesocosm.org/wp-content/uploads/2019/01/WWMF2.jpg', 'http://mesocosm.org/wp-content/uploads/2019/01/WWMF1-1024x767.jpg']",,,,"['30.4670833', ' 114.35961111111111']","{'coordinates': ['30.4670833', '114.35961111111111']}"
 https://mesocosm.org/mesocosm/kob-kiel-outdoor-benthocosms/,KOB (Kiel-Outdoor-Benthocosms),GEOMAR-Helmholtz Center for Ocean Research,Germany,Europe,"GEOMAR-Helmholtz Center for Ocean Research
  West shore campus
  Düsternbrooker Weg 20
@@ -2630,7 +2630,7 @@ KOB – Kiel Outdoor Benthocosms (Photo: Mark Lenz)
 
 
 
-","['http://mesocosm.org/wp-content/uploads/2017/02/KOB_2_400_Wahl_1-282x300.jpg', 'http://mesocosm.org/wp-content/uploads/2017/02/KOB_3_400_Lenz-300x201.jpg']",,,,"['54.330034', '10.1482026']","{'coordinates': ['54.330034', '10.1482026']}",,
+","['http://mesocosm.org/wp-content/uploads/2017/02/KOB_2_400_Wahl_1-282x300.jpg', 'http://mesocosm.org/wp-content/uploads/2017/02/KOB_3_400_Lenz-300x201.jpg']",,,,"['54.330034', '10.1482026']","{'coordinates': ['54.330034', '10.1482026']}"
 https://mesocosm.org/mesocosm/the-sven-loven-centre-for-marine-sciences/,The Sven Lovén Centre for Marine Sciences,University of Gothenburg,Sweden,Europe,"University of Gothenburg
  PO Box 100, SE-405 30 Gothenburg, SWEDEN
  Visiting address: Vasaparken
@@ -2661,7 +2661,7 @@ ecotrons
 
 
 
-",['http://mesocosm.org/wp-content/uploads/2017/05/marine-ecotron.jpg'],,,,"['58.2498484', '11.4449296']","{'coordinates': ['58.2498484', '11.4449296']}",,
+",['http://mesocosm.org/wp-content/uploads/2017/05/marine-ecotron.jpg'],,,,"['58.2498484', '11.4449296']","{'coordinates': ['58.2498484', '11.4449296']}"
 https://mesocosm.org/mesocosm/medimeer-mediterranean-platform-for-marine-ecosystem-experimental-research/,MEDIMEER (MEDIterranean platform for Marine Ecosystem Experimental Research),CNRS,France,Europe,"MEDIMEER
 2 Rue des Chantiers
 34200, Sète
@@ -2708,7 +2708,7 @@ Fig.3 LAMP in Dia Island, Crete (Photo: Dr. Behzad Mostajir)
 
 
 
-","['http://mesocosm.org/wp-content/uploads/2017/03/Fig.1-Permanent-floating-structure-Photo-Dr.-Behzad-Mostajir.png', 'http://mesocosm.org/wp-content/uploads/2017/03/Fig.2-Pelagic-mesocosms-Photo-Dr.-Behzad-Mostajir.png', 'http://mesocosm.org/wp-content/uploads/2017/02/LAMP-300x129.png']",,,,"['43.4118721', '3.6907914']","{'coordinates': ['43.4118721', '3.6907914']}",,
+","['http://mesocosm.org/wp-content/uploads/2017/03/Fig.1-Permanent-floating-structure-Photo-Dr.-Behzad-Mostajir.png', 'http://mesocosm.org/wp-content/uploads/2017/03/Fig.2-Pelagic-mesocosms-Photo-Dr.-Behzad-Mostajir.png', 'http://mesocosm.org/wp-content/uploads/2017/02/LAMP-300x129.png']",,,,"['43.4118721', '3.6907914']","{'coordinates': ['43.4118721', '3.6907914']}"
 https://mesocosm.org/mesocosm/rsd-facility/,RSD Facility,Faculty of Food Sciences and Fisheries,Poland,Europe,"Kazimierza Królewicza 4, 71550 Szczecin, Poland
 ","Remigiusz Panicz 
 Please login or request access to view contact information.
@@ -2776,7 +2776,7 @@ Kempter J., Kiełpiński M., Panicz R., Sadowski J., Mysłowski B., Bergmann S. 
 
 
 
-","['http://mesocosm.org/wp-content/uploads/2019/03/RSD-Facility-300x177.jpg', 'http://mesocosm.org/wp-content/uploads/2019/03/Dolna-krew-jesiotry-2014-69-of-76-300x200.jpg', 'http://mesocosm.org/wp-content/uploads/2019/03/Dolna-krew-jesiotry-2014-22-of-35-300x200.jpg', 'http://mesocosm.org/wp-content/uploads/2019/03/Dolna-krew-jesiotry-2014-20-of-35-300x200.jpg', 'http://mesocosm.org/wp-content/uploads/2019/03/Dolna-krew-jesiotry-2014-19-of-35-300x200.jpg', 'http://mesocosm.org/wp-content/uploads/2019/03/PART_1548849527972-225x300.jpeg']",,,,"['53.209861', '14.463944']","{'coordinates': ['53.209861', '14.463944']}",,
+","['http://mesocosm.org/wp-content/uploads/2019/03/RSD-Facility-300x177.jpg', 'http://mesocosm.org/wp-content/uploads/2019/03/Dolna-krew-jesiotry-2014-69-of-76-300x200.jpg', 'http://mesocosm.org/wp-content/uploads/2019/03/Dolna-krew-jesiotry-2014-22-of-35-300x200.jpg', 'http://mesocosm.org/wp-content/uploads/2019/03/Dolna-krew-jesiotry-2014-20-of-35-300x200.jpg', 'http://mesocosm.org/wp-content/uploads/2019/03/Dolna-krew-jesiotry-2014-19-of-35-300x200.jpg', 'http://mesocosm.org/wp-content/uploads/2019/03/PART_1548849527972-225x300.jpeg']",,,,"['53.209861', '14.463944']","{'coordinates': ['53.209861', '14.463944']}"
 https://mesocosm.org/mesocosm/rsd-facility/,RSD Facility,Faculty of Food Sciences and Fisheries,Poland,Europe,"Kazimierza Królewicza 4, 71550 Szczecin, Poland
 ","Remigiusz Panicz 
 Please login or request access to view contact information.
@@ -2844,7 +2844,7 @@ Kempter J., Kiełpiński M., Panicz R., Sadowski J., Mysłowski B., Bergmann S. 
 
 
 
-","['http://mesocosm.org/wp-content/uploads/2019/03/RSD-Facility-300x177.jpg', 'http://mesocosm.org/wp-content/uploads/2019/03/Dolna-krew-jesiotry-2014-69-of-76-300x200.jpg', 'http://mesocosm.org/wp-content/uploads/2019/03/Dolna-krew-jesiotry-2014-22-of-35-300x200.jpg', 'http://mesocosm.org/wp-content/uploads/2019/03/Dolna-krew-jesiotry-2014-20-of-35-300x200.jpg', 'http://mesocosm.org/wp-content/uploads/2019/03/Dolna-krew-jesiotry-2014-19-of-35-300x200.jpg', 'http://mesocosm.org/wp-content/uploads/2019/03/PART_1548849527972-225x300.jpeg']",,,,"['53.44505', '14.562861']","{'coordinates': ['53.44505', '14.562861']}",,
+","['http://mesocosm.org/wp-content/uploads/2019/03/RSD-Facility-300x177.jpg', 'http://mesocosm.org/wp-content/uploads/2019/03/Dolna-krew-jesiotry-2014-69-of-76-300x200.jpg', 'http://mesocosm.org/wp-content/uploads/2019/03/Dolna-krew-jesiotry-2014-22-of-35-300x200.jpg', 'http://mesocosm.org/wp-content/uploads/2019/03/Dolna-krew-jesiotry-2014-20-of-35-300x200.jpg', 'http://mesocosm.org/wp-content/uploads/2019/03/Dolna-krew-jesiotry-2014-19-of-35-300x200.jpg', 'http://mesocosm.org/wp-content/uploads/2019/03/PART_1548849527972-225x300.jpeg']",,,,"['53.44505', '14.562861']","{'coordinates': ['53.44505', '14.562861']}"
 https://mesocosm.org/mesocosm/gault-nature-reserve-mesocosm-platform/,Gault Nature Reserve Mesocosm Platform,McGill University,Canada,North America,"845 Sherbrooke St W
 Montreal
 QC H3A 0G4
@@ -2915,7 +2915,7 @@ Photo credit: Egor Katkov
 
 
 
-","['http://mesocosm.org/wp-content/uploads/2019/08/Gault-Mesocosms-4-credit-Gregor-Fussmann-1024x768.jpg', 'http://mesocosm.org/wp-content/uploads/2019/08/Gault-Mesocosms-2-credit-Egor-Katkov-1024x768.jpg', 'http://mesocosm.org/wp-content/uploads/2019/08/Gault-Mesocosms-5-credit-Gregor-Fussmann-1024x768.jpg', 'http://mesocosm.org/wp-content/uploads/2019/08/Gault-Mesocosms-3-credit-Egor-Katkov-1024x576.jpg']",,,,"['45.543060', ' -73.150762']","{'coordinates': ['45.543060', '-73.150762']}",,
+","['http://mesocosm.org/wp-content/uploads/2019/08/Gault-Mesocosms-4-credit-Gregor-Fussmann-1024x768.jpg', 'http://mesocosm.org/wp-content/uploads/2019/08/Gault-Mesocosms-2-credit-Egor-Katkov-1024x768.jpg', 'http://mesocosm.org/wp-content/uploads/2019/08/Gault-Mesocosms-5-credit-Gregor-Fussmann-1024x768.jpg', 'http://mesocosm.org/wp-content/uploads/2019/08/Gault-Mesocosms-3-credit-Egor-Katkov-1024x576.jpg']",,,,"['45.543060', ' -73.150762']","{'coordinates': ['45.543060', '-73.150762']}"
 https://mesocosm.org/mesocosm/silwood-mesocosm-facility-smf/,Silwood Mesocosm Facility (SMF),Imperial College London,United Kingdom,Europe,"Silwood Park Campus, Imperial College London, Ascot, UK
 ","Prof. Guy Woodward, Please login or request access to view contact information.; 
 Dr. Michelle Jackson,Please login or request access to view contact information.m.jackson@imperial.ac.ukPlease login or request access to view contact information.; 
@@ -2941,7 +2941,7 @@ Dr. Emma Ransome,Please login or request access to view contact information.e.ra
 
 
 
-","['http://mesocosm.org/wp-content/uploads/2017/03/SMF-1.png', 'http://mesocosm.org/wp-content/uploads/2017/03/SMF-2.jpg']",,,,"['51.51772460', '-0.17322940']","{'coordinates': ['51.51772460', '-0.17322940']}",,
+","['http://mesocosm.org/wp-content/uploads/2017/03/SMF-1.png', 'http://mesocosm.org/wp-content/uploads/2017/03/SMF-2.jpg']",,,,"['51.51772460', '-0.17322940']","{'coordinates': ['51.51772460', '-0.17322940']}"
 https://mesocosm.org/mesocosm/exstream-system-china/,ExStream System China,Xi'an Jiaotong-Liverpool University,China,Asia,"Xi’an Jiaotong-Liverpool University 111 Ren’ai Road,
 Suzhou Dushu Lake Science and Education Innovation District Suzhou Industrial Park
 Suzhou, Jiangsu Province,
@@ -2997,7 +2997,7 @@ Figure credit: Jeremy (Jay) Piggott
 
 
 
-","['http://mesocosm.org/wp-content/uploads/2018/10/34498B12-BD94-4312-8FFD-C92FA6BA75D4@tcd.ie_-e1540461299359-1024x768.jpg', 'http://mesocosm.org/wp-content/uploads/2018/10/54889AEB-229B-40CC-8773-52FAD7DE72D2@tcd.ie_-e1540461322675-1024x768.jpg', 'http://mesocosm.org/wp-content/uploads/2018/10/F8410BFC-4161-4E95-9D6E-A1CBDECD2109@tcd.ie_-1024x768.jpg', 'http://mesocosm.org/wp-content/uploads/2018/05/ExStream-network-collaborators-1024x546.jpeg']",,,,"['31.276111', ' 120.7325']","{'coordinates': ['31.276111', '120.7325']}",,
+","['http://mesocosm.org/wp-content/uploads/2018/10/34498B12-BD94-4312-8FFD-C92FA6BA75D4@tcd.ie_-e1540461299359-1024x768.jpg', 'http://mesocosm.org/wp-content/uploads/2018/10/54889AEB-229B-40CC-8773-52FAD7DE72D2@tcd.ie_-e1540461322675-1024x768.jpg', 'http://mesocosm.org/wp-content/uploads/2018/10/F8410BFC-4161-4E95-9D6E-A1CBDECD2109@tcd.ie_-1024x768.jpg', 'http://mesocosm.org/wp-content/uploads/2018/05/ExStream-network-collaborators-1024x546.jpeg']",,,,"['31.276111', ' 120.7325']","{'coordinates': ['31.276111', '120.7325']}"
 https://mesocosm.org/mesocosm/exstream-system-china/,ExStream System China,Xi'an Jiaotong-Liverpool University,China,Asia,"Xi’an Jiaotong-Liverpool University 111 Ren’ai Road,
 Suzhou Dushu Lake Science and Education Innovation District Suzhou Industrial Park
 Suzhou, Jiangsu Province,
@@ -3053,7 +3053,7 @@ Figure credit: Jeremy (Jay) Piggott
 
 
 
-","['http://mesocosm.org/wp-content/uploads/2018/10/34498B12-BD94-4312-8FFD-C92FA6BA75D4@tcd.ie_-e1540461299359-1024x768.jpg', 'http://mesocosm.org/wp-content/uploads/2018/10/54889AEB-229B-40CC-8773-52FAD7DE72D2@tcd.ie_-e1540461322675-1024x768.jpg', 'http://mesocosm.org/wp-content/uploads/2018/10/F8410BFC-4161-4E95-9D6E-A1CBDECD2109@tcd.ie_-1024x768.jpg', 'http://mesocosm.org/wp-content/uploads/2018/05/ExStream-network-collaborators-1024x546.jpeg']",,,,"[' 30.118056', ' 118.023889']","{'coordinates': ['30.118056', '118.023889']}",,
+","['http://mesocosm.org/wp-content/uploads/2018/10/34498B12-BD94-4312-8FFD-C92FA6BA75D4@tcd.ie_-e1540461299359-1024x768.jpg', 'http://mesocosm.org/wp-content/uploads/2018/10/54889AEB-229B-40CC-8773-52FAD7DE72D2@tcd.ie_-e1540461322675-1024x768.jpg', 'http://mesocosm.org/wp-content/uploads/2018/10/F8410BFC-4161-4E95-9D6E-A1CBDECD2109@tcd.ie_-1024x768.jpg', 'http://mesocosm.org/wp-content/uploads/2018/05/ExStream-network-collaborators-1024x546.jpeg']",,,,"[' 30.118056', ' 118.023889']","{'coordinates': ['30.118056', '118.023889']}"
 https://mesocosm.org/mesocosm/exstream-system-ireland/,ExStream System Ireland,University College Dublin in collaboration with Trinity College Dublin,Ireland,Europe,"Belfield, Dublin 4
 ","Assoc. Prof. Mary Kelly-Quinn
 ExStream network coordinator Asst. Prof. Jeremy J. Piggott
@@ -3099,7 +3099,7 @@ Figure credit: Jeremy (Jay) Piggott
 
 
  
-","['http://mesocosm.org/wp-content/uploads/2018/05/IMG_1176-683x1024.jpg', 'http://mesocosm.org/wp-content/uploads/2018/05/DJI_0011-1024x575.jpg', 'http://mesocosm.org/wp-content/uploads/2018/05/ExStream-network-collaborators-1024x546.jpeg']",,,,"['53.307444', ' -6.227611']","{'coordinates': ['53.307444', '-6.227611']}",,
+","['http://mesocosm.org/wp-content/uploads/2018/05/IMG_1176-683x1024.jpg', 'http://mesocosm.org/wp-content/uploads/2018/05/DJI_0011-1024x575.jpg', 'http://mesocosm.org/wp-content/uploads/2018/05/ExStream-network-collaborators-1024x546.jpeg']",,,,"['53.307444', ' -6.227611']","{'coordinates': ['53.307444', '-6.227611']}"
 https://mesocosm.org/mesocosm/lunz-mesocosm-infrastructure-lmi/,Lunz Mesocosm Infrastructure (LMI),WCL - WasserCluster Lunz,Austria,Europe,"1) WCL – WasserCluster Lunz
  Dr. Carl Kupelwieser Promenade 5
  A-3293 Lunz am See
@@ -3180,7 +3180,7 @@ https://mesocosm.org/mesocosm/lunz-mesocosm-infrastructure-lmi/,Lunz Mesocosm In
 
 
 
-","['http://mesocosm.org/wp-content/uploads/2017/02/Ptacnik-Lunz_400-300x226.jpg', 'http://mesocosm.org/wp-content/uploads/2017/02/Kainz_mesocosms_400-300x224.jpg', 'http://mesocosm.org/wp-content/uploads/2017/02/HyTEC_1_400px-300x300.jpg', 'http://mesocosm.org/wp-content/uploads/2017/02/HyTEC_2_400px-300x225.jpg', 'http://mesocosm.org/wp-content/uploads/2017/02/HyTEC_3_400px-296x300.jpg']",,,,"['47.8598408', '15.030520']","{'coordinates': ['47.8598408', '15.030520']}",,
+","['http://mesocosm.org/wp-content/uploads/2017/02/Ptacnik-Lunz_400-300x226.jpg', 'http://mesocosm.org/wp-content/uploads/2017/02/Kainz_mesocosms_400-300x224.jpg', 'http://mesocosm.org/wp-content/uploads/2017/02/HyTEC_1_400px-300x300.jpg', 'http://mesocosm.org/wp-content/uploads/2017/02/HyTEC_2_400px-300x225.jpg', 'http://mesocosm.org/wp-content/uploads/2017/02/HyTEC_3_400px-296x300.jpg']",,,,"['47.8598408', '15.030520']","{'coordinates': ['47.8598408', '15.030520']}"
 https://mesocosm.org/mesocosm/shear-turbulence-resuspension-mesocosm-sturm-facility/,Shear TUrbulence Resuspension Mesocosm (STURM) facility,The University of Baltimore (UBalt),United States of America,North America,"UBalt STURM facility located at:
 Patuxent Environmental and Aquatic Research Laboratory (PEARL),
 Morgan State University,
@@ -3217,7 +3217,7 @@ turbidity monitoring
 temperature monitoring
 
 ","No lodging
-",,,,,,,"['38.39364902663247', '-76.50512446172259']","{'coordinates': ['38.39364902663247', '-76.50512446172259']}",,
+",,,,,,,"['38.39364902663247', '-76.50512446172259']","{'coordinates': ['38.39364902663247', '-76.50512446172259']}"
 https://mesocosm.org/mesocosm/the-river-laboratory-heated-pond-mesocosms/,The River Laboratory heated pond mesocosms,Queen Mary University of London,United Kingdom,Europe,"QMUL
 Mile End Road
 London E1 4NS
@@ -3272,7 +3272,7 @@ Foto credit: Yizhu Zhu
 
 
 
-","['http://mesocosm.org/wp-content/uploads/2018/11/Ponds-1-1024x768.jpg', 'http://mesocosm.org/wp-content/uploads/2018/11/Ponds-2-e1542903074614-768x1024.jpg']",,,,"['50.6666667', ' -2.1666666666666665']","{'coordinates': ['50.6666667', '-2.1666666666666665']}",,
+","['http://mesocosm.org/wp-content/uploads/2018/11/Ponds-1-1024x768.jpg', 'http://mesocosm.org/wp-content/uploads/2018/11/Ponds-2-e1542903074614-768x1024.jpg']",,,,"['50.6666667', ' -2.1666666666666665']","{'coordinates': ['50.6666667', '-2.1666666666666665']}"
 https://mesocosm.org/mesocosm/exstream-system-germany/,ExStream System Germany,"University of Duisburg-Essen, Aquatic Ecosystem Research",Germany,Europe,"University of Duisburg-Essen, Aquatic Ecosystem Research
 Universitaetsstrasse 5
 D-45141 Essen
@@ -3330,7 +3330,7 @@ Figure credti: Jeremy (Jay) Piggott
 
 
  
-","['http://mesocosm.org/wp-content/uploads/2018/05/Beerman-et-al-2017-SOTEN-1024x892.png', 'http://mesocosm.org/wp-content/uploads/2018/05/Breitenbach1.jpg', 'http://mesocosm.org/wp-content/uploads/2018/05/Felderbach2-452x1024.jpg', 'http://mesocosm.org/wp-content/uploads/2018/05/ExStream-network-collaborators-1024x546.jpeg']",,,,"['51.349722', ' 7.170583']","{'coordinates': ['51.349722', '7.170583']}",,
+","['http://mesocosm.org/wp-content/uploads/2018/05/Beerman-et-al-2017-SOTEN-1024x892.png', 'http://mesocosm.org/wp-content/uploads/2018/05/Breitenbach1.jpg', 'http://mesocosm.org/wp-content/uploads/2018/05/Felderbach2-452x1024.jpg', 'http://mesocosm.org/wp-content/uploads/2018/05/ExStream-network-collaborators-1024x546.jpeg']",,,,"['51.349722', ' 7.170583']","{'coordinates': ['51.349722', '7.170583']}"
 https://mesocosm.org/mesocosm/albufera-biological-station/,Albufera Biological Station,University of Valencia,Spain,Europe,"Catedrático José Beltrán 2,
 46980 Paterna
 (Spain)
@@ -3378,7 +3378,7 @@ photo credits: Pablo Amador
  
 photo credits: Pablo Amador
  
-","['http://mesocosm.org/wp-content/uploads/2023/12/Andreu-Rico-1024x768.jpg', 'http://mesocosm.org/wp-content/uploads/2023/12/Andreu-Rico-768x1024.jpeg', 'http://mesocosm.org/wp-content/uploads/2023/12/Pablo-Amador-1024x768.jpg', 'http://mesocosm.org/wp-content/uploads/2023/12/Pablo-Amador-2-768x1024.jpg']",,,,"['39.315582', ' -0.318789']","{'coordinates': ['39.315582', '-0.318789']}",,
+","['http://mesocosm.org/wp-content/uploads/2023/12/Andreu-Rico-1024x768.jpg', 'http://mesocosm.org/wp-content/uploads/2023/12/Andreu-Rico-768x1024.jpeg', 'http://mesocosm.org/wp-content/uploads/2023/12/Pablo-Amador-1024x768.jpg', 'http://mesocosm.org/wp-content/uploads/2023/12/Pablo-Amador-2-768x1024.jpg']",,,,"['39.315582', ' -0.318789']","{'coordinates': ['39.315582', '-0.318789']}"
 https://mesocosm.org/mesocosm/mobicos-mobile-aquatic-mesocosm/,MOBICOS - Mobile Aquatic Mesocosm,Helmholtz Zentrum für Umweltforschung-UFZ,Germany,Europe,"Helmholtz Zentrum für Umweltforschung-UFZ
 Brückstr. 3a
 39114 Magdeburg
@@ -3415,7 +3415,7 @@ In the MOBICOS-container scientists can experimentally comparare the growth of m
 
 
 
-","['http://mesocosm.org/wp-content/uploads/2017/05/Mobicos_container500px.jpg', 'http://mesocosm.org/wp-content/uploads/2017/05/Muschelaquarien_200px.jpg']",,,,"['52.1205333', '11.627623699999958']","{'coordinates': ['52.1205333', '11.627623699999958']}",,
+","['http://mesocosm.org/wp-content/uploads/2017/05/Mobicos_container500px.jpg', 'http://mesocosm.org/wp-content/uploads/2017/05/Muschelaquarien_200px.jpg']",,,,"['52.1205333', '11.627623699999958']","{'coordinates': ['52.1205333', '11.627623699999958']}"
 https://mesocosm.org/mesocosm/igb-lakelab/,IGB LakeLab,Leibniz-Institute for Freshwater Ecology and Inland Fisheries (IGB),Germany,Europe,"Leibniz-Institute for Freshwater Ecology and Inland Fisheries (IGB)
  Müggelseedamm 310
  12587 Berlin
@@ -3445,7 +3445,7 @@ a height-adjustable water recirculation system with a perforated ring, rising c
 ","http://www.lake-lab.de
 http://www.seelabor.de/
 ","Schematic diagram of the LakeLab in Lake Stechlin, northeastern Germany Aerial photograph of the LakeLab in Lake Stechlin Photo credit: HTW Dresden-Oczipka Photo credit: P. Casper, IGB
-","['http://mesocosm.org/wp-content/uploads/2017/02/Stechlin_DE_graphics_400px-300x272.jpg', 'http://mesocosm.org/wp-content/uploads/2017/02/Areal_photo_©HTWDresden-Oczipka_400px-300x200.jpg', 'http://mesocosm.org/wp-content/uploads/2017/02/lakelab_map-300x111.jpg']",,,,"['53.1520282', '13.0233035']","{'coordinates': ['53.1520282', '13.0233035']}",,
+","['http://mesocosm.org/wp-content/uploads/2017/02/Stechlin_DE_graphics_400px-300x272.jpg', 'http://mesocosm.org/wp-content/uploads/2017/02/Areal_photo_©HTWDresden-Oczipka_400px-300x200.jpg', 'http://mesocosm.org/wp-content/uploads/2017/02/lakelab_map-300x111.jpg']",,,,"['53.1520282', '13.0233035']","{'coordinates': ['53.1520282', '13.0233035']}"
 https://mesocosm.org/mesocosm/center-for-coastal-environmental-health-and-biomolecular-research-ccehbr/,Center for Coastal Environmental Health and Biomolecular Research-CCEHBR,National Oceanic and Atmospheric Administration Center - NOAA,USA,North-America,"National Oceanic and Atmospheric Administration Center – NOAA
 ","Dr. Mike Fulton
 Please login or request access to view contact information.
@@ -3479,7 +3479,7 @@ Mesocosm installation
 
 
 
-","['http://mesocosm.org/wp-content/uploads/2017/05/Cherleston_meso3.jpg', 'http://mesocosm.org/wp-content/uploads/2017/05/Charleston-mesocosms.jpg']",,,,"['32.7524467', '-79.8986098']","{'coordinates': ['32.7524467', '-79.8986098']}",,
+","['http://mesocosm.org/wp-content/uploads/2017/05/Cherleston_meso3.jpg', 'http://mesocosm.org/wp-content/uploads/2017/05/Charleston-mesocosms.jpg']",,,,"['32.7524467', '-79.8986098']","{'coordinates': ['32.7524467', '-79.8986098']}"
 https://mesocosm.org/mesocosm/archipelago-benthic-mesocosm-network/,Archipelago Benthic Mesocosm Network,Åbo Akademi University,Finland,Europe,"Henrikinkatu 2,
 20500 Åbo/Turku,
 Finland
@@ -3530,7 +3530,7 @@ programmable climate simulation (GHL)
 ","https://www.abo.fi/en/emb-research-infrastructure/mesocosms/
 https://pansch-research.com/?page_id=1592
 ","Korpoström mesocosm tanks are equipped with constant flow and circulation of seawater from the adjacent bay. Electrical cabinets currently provide the possibility for monitoring and manipulation of seawater temperature. Seagrass shoots (upper left panel) are planted into separate sediment trays, photo credits: Christian Pansch Hattich Korpoström mesocosm system located at the Skärgårdscentrum Korpoström, Finland. 20 600L tanks receive seawater from the adjacent bay, photo credits: Christian Pansch-Hattich Husö mesocosm system located at Husö Biological Station, Åland, Finland. Seawater temperature monitoring and manipulation is achieved through Aqua Medic and GHL controlling units, as well as Aqua Medic cooling and Schego heading devices. photo credits: Christian Pansch-Hattich Husö mesocosm system located at Husö Biological Station, Åland, Finland. 20 600L tanks receive a flow-through of seawater from the adjacent bay. Christian Pansch-Hattich
-","['http://mesocosm.org/wp-content/uploads/2024/07/3_small-1024x530.jpg', 'http://mesocosm.org/wp-content/uploads/2024/07/2_small-1024x567.jpg', 'http://mesocosm.org/wp-content/uploads/2024/07/5_small-1024x565.jpg', 'http://mesocosm.org/wp-content/uploads/2024/07/4_small-1024x560.jpg']",,,,"['60.1102778', '21.598055555555554']","{'coordinates': ['60.1102778', '21.598055555555554']}",,
+","['http://mesocosm.org/wp-content/uploads/2024/07/3_small-1024x530.jpg', 'http://mesocosm.org/wp-content/uploads/2024/07/2_small-1024x567.jpg', 'http://mesocosm.org/wp-content/uploads/2024/07/5_small-1024x565.jpg', 'http://mesocosm.org/wp-content/uploads/2024/07/4_small-1024x560.jpg']",,,,"['60.1102778', '21.598055555555554']","{'coordinates': ['60.1102778', '21.598055555555554']}"
 https://mesocosm.org/mesocosm/archipelago-benthic-mesocosm-network/,Archipelago Benthic Mesocosm Network,Åbo Akademi University,Finland,Europe,"Henrikinkatu 2,
 20500 Åbo/Turku,
 Finland
@@ -3581,7 +3581,7 @@ programmable climate simulation (GHL)
 ","https://www.abo.fi/en/emb-research-infrastructure/mesocosms/
 https://pansch-research.com/?page_id=1592
 ","Korpoström mesocosm tanks are equipped with constant flow and circulation of seawater from the adjacent bay. Electrical cabinets currently provide the possibility for monitoring and manipulation of seawater temperature. Seagrass shoots (upper left panel) are planted into separate sediment trays, photo credits: Christian Pansch Hattich Korpoström mesocosm system located at the Skärgårdscentrum Korpoström, Finland. 20 600L tanks receive seawater from the adjacent bay, photo credits: Christian Pansch-Hattich Husö mesocosm system located at Husö Biological Station, Åland, Finland. Seawater temperature monitoring and manipulation is achieved through Aqua Medic and GHL controlling units, as well as Aqua Medic cooling and Schego heading devices. photo credits: Christian Pansch-Hattich Husö mesocosm system located at Husö Biological Station, Åland, Finland. 20 600L tanks receive a flow-through of seawater from the adjacent bay. Christian Pansch-Hattich
-","['http://mesocosm.org/wp-content/uploads/2024/07/3_small-1024x530.jpg', 'http://mesocosm.org/wp-content/uploads/2024/07/2_small-1024x567.jpg', 'http://mesocosm.org/wp-content/uploads/2024/07/5_small-1024x565.jpg', 'http://mesocosm.org/wp-content/uploads/2024/07/4_small-1024x560.jpg']",,,,"['60.2794444', '19.83138888888889']","{'coordinates': ['60.2794444', '19.83138888888889']}",,
+","['http://mesocosm.org/wp-content/uploads/2024/07/3_small-1024x530.jpg', 'http://mesocosm.org/wp-content/uploads/2024/07/2_small-1024x567.jpg', 'http://mesocosm.org/wp-content/uploads/2024/07/5_small-1024x565.jpg', 'http://mesocosm.org/wp-content/uploads/2024/07/4_small-1024x560.jpg']",,,,"['60.2794444', '19.83138888888889']","{'coordinates': ['60.2794444', '19.83138888888889']}"
 https://mesocosm.org/mesocosm/syke-mrc-marine-research-centre-mesocosm-facility/,SYKE-MRC (Marine Research Centre) Mesocosm Facility,Marine Research Centre,Finland,Europe,"Marine Research Centre (MRC)
  Finnish Environment Institute SYKE
  P.O.Box 140
@@ -3620,7 +3620,7 @@ SYKE-MRC field mesocosm work at Tvärminne
 
 
 
-","['http://mesocosm.org/wp-content/uploads/2017/02/plankton-tower-153x300.jpg', 'http://mesocosm.org/wp-content/uploads/2017/03/SYKE-MRC-field-mesocosm-work-300x282.jpg']",,,,"['60.203843', '24.9617237']","{'coordinates': ['60.203843', '24.9617237']}",,
+","['http://mesocosm.org/wp-content/uploads/2017/02/plankton-tower-153x300.jpg', 'http://mesocosm.org/wp-content/uploads/2017/03/SYKE-MRC-field-mesocosm-work-300x282.jpg']",,,,"['60.203843', '24.9617237']","{'coordinates': ['60.203843', '24.9617237']}"
 https://mesocosm.org/mesocosm/uib-mesocosm-centre-university-of-bergen-mesocosm-centre/,UiB Mesocosm Centre (University of Bergen Mesocosm Centre),University of Bergen (UiB),Norway,Europe,"University of Bergen (UiB)
  Department of Biology
  PO-Box 7803
@@ -3666,7 +3666,7 @@ Fig.2 Land-based mesocosms (Photo: Stella A Berger)
 Nutrient composition, add/remove mesozooplankton, CO2/pH
 Land based tanks 
 Nutrient composition, add/remove mesozooplankton CO2/pH, salinity, adjust light and temperature
-","['60.2695262', '5.2234965']","{'coordinates': ['60.2695262', '5.2234965']}",,
+","['60.2695262', '5.2234965']","{'coordinates': ['60.2695262', '5.2234965']}"
 https://mesocosm.org/mesocosm/marine-ecosystems-research-laboratory-merl/,Marine Ecosystems Research Laboratory - MERL,University of Rhode Island,USA,North-America,"University of Rhode Island
 ","Prof. Candace Oviatt
 Please login or request access to view contact information.
@@ -3712,7 +3712,7 @@ Schema of the MERL construction
 
 
 
-","['http://mesocosm.org/wp-content/uploads/2017/05/merl_300.gif', 'http://mesocosm.org/wp-content/uploads/2017/05/Narragansett-US-RIMERL-deck_400.gif', 'http://mesocosm.org/wp-content/uploads/2017/05/Narragansett-US-RImerltankpic5_400.jpg']",,,,"['41.49175', '-71.4207629']","{'coordinates': ['41.49175', '-71.4207629']}",,
+","['http://mesocosm.org/wp-content/uploads/2017/05/merl_300.gif', 'http://mesocosm.org/wp-content/uploads/2017/05/Narragansett-US-RIMERL-deck_400.gif', 'http://mesocosm.org/wp-content/uploads/2017/05/Narragansett-US-RImerltankpic5_400.jpg']",,,,"['41.49175', '-71.4207629']","{'coordinates': ['41.49175', '-71.4207629']}"
 https://mesocosm.org/mesocosm/artificial-stream-and-pond-system-fsa/,Artificial Stream and Pond System (FSA),German Environment Agency,Germany,Europe,"German Environment Agency
 ","Ralf Schmidt
 Please login or request access to view contact information.
@@ -3754,7 +3754,7 @@ Outdoor streams © Umweltbundesamt
 
 
 
-","['http://mesocosm.org/wp-content/uploads/2017/02/Berlin_Marienfelde_aussen.jpg', 'http://mesocosm.org/wp-content/uploads/2017/02/Berlin-Marienfelde_aussenan-300x185.jpg', 'http://mesocosm.org/wp-content/uploads/2017/02/Berlin_Marienfelde_rinne_aus.jpg']",,,,"['52.4107352', '13.3756523']","{'coordinates': ['52.4107352', '13.3756523']}",,
+","['http://mesocosm.org/wp-content/uploads/2017/02/Berlin_Marienfelde_aussen.jpg', 'http://mesocosm.org/wp-content/uploads/2017/02/Berlin-Marienfelde_aussenan-300x185.jpg', 'http://mesocosm.org/wp-content/uploads/2017/02/Berlin_Marienfelde_rinne_aus.jpg']",,,,"['52.4107352', '13.3756523']","{'coordinates': ['52.4107352', '13.3756523']}"
 https://mesocosm.org/mesocosm/the-river-laboratory-experimental-stream-channel-mesocosms/,The River Laboratory experimental stream channel mesocosms,Queen Mary University of London,United Kingdom,Europe,"QMUL
 Mile End Road
 London E1 4NS
@@ -3819,7 +3819,7 @@ Foto credit: Iwan Jones
 
 
  
-","['http://mesocosm.org/wp-content/uploads/2018/11/Streams-3-1024x768.jpg', 'http://mesocosm.org/wp-content/uploads/2018/11/Streams-4-1024x768.jpg', 'http://mesocosm.org/wp-content/uploads/2018/11/Streams-1-1024x768.jpg']",,,,"['50.6666667', ' -2.1833330555555555']","{'coordinates': ['50.6666667', '-2.1833330555555555']}",,
+","['http://mesocosm.org/wp-content/uploads/2018/11/Streams-3-1024x768.jpg', 'http://mesocosm.org/wp-content/uploads/2018/11/Streams-4-1024x768.jpg', 'http://mesocosm.org/wp-content/uploads/2018/11/Streams-1-1024x768.jpg']",,,,"['50.6666667', ' -2.1833330555555555']","{'coordinates': ['50.6666667', '-2.1833330555555555']}"
 https://mesocosm.org/mesocosm/au-lake-mesocosm-warming-experiment-lmwe/,AU Lake Mesocosm Warming Experiment (LMWE),Aarhus University (AU),Denmark,Europe,"Aarhus University (AU)
  Nordre Ringgade 1
  8000 Aarhus C
@@ -3853,7 +3853,7 @@ Mesocosm tanks in Silkeborg, DK
 
 
 
-","['http://mesocosm.org/wp-content/uploads/2017/02/silkeborg_mesocosm_schema-300x210.png', 'http://mesocosm.org/wp-content/uploads/2017/02/silkeborg_mesocosm-300x223.png']",,,,"['56.244846', '9.529916']","{'coordinates': ['56.244846', '9.529916']}",,
+","['http://mesocosm.org/wp-content/uploads/2017/02/silkeborg_mesocosm_schema-300x210.png', 'http://mesocosm.org/wp-content/uploads/2017/02/silkeborg_mesocosm-300x223.png']",,,,"['56.244846', '9.529916']","{'coordinates': ['56.244846', '9.529916']}"
 https://mesocosm.org/mesocosm/awri-mesocosm-facility/,AWRI mesocosm facility,"Annis Water Resources Institute, Grand Valley State University",USA,North America,"740 West Shoreline Drive
 Muskegon, Michigan
 49441
@@ -3908,7 +3908,7 @@ Photo credits: AWRI GVSU
 
 
 
-","['http://mesocosm.org/wp-content/uploads/2022/09/Full_field-station_2.1-683x1024.jpg', 'http://mesocosm.org/wp-content/uploads/2022/09/mesocosm.1-1024x768.jpg', 'http://mesocosm.org/wp-content/uploads/2022/09/P3080003.jpg']",,,,"['43.224194', '-86.235809']","{'coordinates': ['43.224194', '-86.235809']}",,
+","['http://mesocosm.org/wp-content/uploads/2022/09/Full_field-station_2.1-683x1024.jpg', 'http://mesocosm.org/wp-content/uploads/2022/09/mesocosm.1-1024x768.jpg', 'http://mesocosm.org/wp-content/uploads/2022/09/P3080003.jpg']",,,,"['43.224194', '-86.235809']","{'coordinates': ['43.224194', '-86.235809']}"
 https://mesocosm.org/mesocosm/gropello-21026-gaviratevarese/,"Gropello, 21026 Gavirate/Varese",Institut Dr. Nowak (a),Italy,Europe,"Institut Dr. Nowak (a)
  Abteilung Limnologie
  Mayenbrook 1
@@ -3965,7 +3965,7 @@ Location of Lago di Varese: Latitude 45.818369; Longitude 8.738972
 
 
 
-","['http://mesocosm.org/wp-content/uploads/2017/05/Lago_di_Varese_1_400.jpg', 'http://mesocosm.org/wp-content/uploads/2017/05/Lago_di_Varese_2_400.jpg', 'http://mesocosm.org/wp-content/uploads/2017/05/Lago_di_Varese_construction_300.jpg', 'http://mesocosm.org/wp-content/uploads/2017/05/LagodiVarese_300.png']",,,,"['45.799026', '8.7300945']","{'coordinates': ['45.799026', '8.7300945']}",,
+","['http://mesocosm.org/wp-content/uploads/2017/05/Lago_di_Varese_1_400.jpg', 'http://mesocosm.org/wp-content/uploads/2017/05/Lago_di_Varese_2_400.jpg', 'http://mesocosm.org/wp-content/uploads/2017/05/Lago_di_Varese_construction_300.jpg', 'http://mesocosm.org/wp-content/uploads/2017/05/LagodiVarese_300.png']",,,,"['45.799026', '8.7300945']","{'coordinates': ['45.799026', '8.7300945']}"
 https://mesocosm.org/mesocosm/exstream-system-new-zealand/,ExStream System New Zealand,"University of Otago, Department of Zoology",New Zealand,Australasia,"340 Great King St
 Dunedin 9054
 New Zealand
@@ -4029,7 +4029,7 @@ Figure credit: Jeremy (Jay) Piggott
 
 ​
  
-","['http://mesocosm.org/wp-content/uploads/2018/10/Piggott-et-al.-2015-Global-Change-Biology-21-206-222.-959x1024.png', 'http://mesocosm.org/wp-content/uploads/2018/10/Kauru-ExStream-Under-the-Rainbow-1024x589.jpg', 'http://mesocosm.org/wp-content/uploads/2018/10/ExStream-mesocosms-960x1024.png', 'http://mesocosm.org/wp-content/uploads/2018/05/ExStream-network-collaborators-1024x546.jpeg']",,,,"['-45.06337', ' 170.44303']","{'coordinates': ['-45.06337', '170.44303']}",,
+","['http://mesocosm.org/wp-content/uploads/2018/10/Piggott-et-al.-2015-Global-Change-Biology-21-206-222.-959x1024.png', 'http://mesocosm.org/wp-content/uploads/2018/10/Kauru-ExStream-Under-the-Rainbow-1024x589.jpg', 'http://mesocosm.org/wp-content/uploads/2018/10/ExStream-mesocosms-960x1024.png', 'http://mesocosm.org/wp-content/uploads/2018/05/ExStream-network-collaborators-1024x546.jpeg']",,,,"['-45.06337', ' 170.44303']","{'coordinates': ['-45.06337', '170.44303']}"
 https://mesocosm.org/mesocosm/mesocosms-experimental-garden-radboud-university/,Mesocosms – experimental garden Radboud University,Radboud University,Netherlands,Europe,"Comeniuslaan 4, 6525 HP Nijmegen
 "," Sarian Kosten
 Please login or request access to view contact information.
@@ -4069,7 +4069,7 @@ Photo credit: Sarian Kosten
 
 
 
-","['http://mesocosm.org/wp-content/uploads/2019/03/Radboud_mesocosm1-300x169.jpg', 'http://mesocosm.org/wp-content/uploads/2019/03/Radboud_mesocosm2-300x169.jpg']",,,,"['51.822777', '5.8733333']","{'coordinates': ['51.822777', '5.8733333']}",,
+","['http://mesocosm.org/wp-content/uploads/2019/03/Radboud_mesocosm1-300x169.jpg', 'http://mesocosm.org/wp-content/uploads/2019/03/Radboud_mesocosm2-300x169.jpg']",,,,"['51.822777', '5.8733333']","{'coordinates': ['51.822777', '5.8733333']}"
 https://mesocosm.org/mesocosm/hungarian-pond-network/,Hungarian Pond Network,Centre for Ecological Research,Hungary,Europe,"Centre for Ecological Research
 H-1113 Budapest, Karolina út 29.
 Hungary
@@ -4103,7 +4103,7 @@ A mesocosm at the Fülöpháza HPN facility. (Photo credit: Csaba Vad)
 The Vácrátót HPN mesocosm facility during winter. (Photo credit: Csilla Laskai)
 A mesocosm at the Zánka facility. (Phto credit: Csilla Laskai)
  
-","['http://mesocosm.org/wp-content/uploads/2024/01/Photo-1.jpg', 'http://mesocosm.org/wp-content/uploads/2024/01/Photo-2-1024x461.jpg', 'http://mesocosm.org/wp-content/uploads/2024/01/photo-3-1024x768.jpg', 'http://mesocosm.org/wp-content/uploads/2024/01/Photo-4-1024x768.jpg']",,,,"['47.705277833333334', '19.228137999999998']","{'coordinates': ['47.705277833333334', '19.228137999999998']}",,
+","['http://mesocosm.org/wp-content/uploads/2024/01/Photo-1.jpg', 'http://mesocosm.org/wp-content/uploads/2024/01/Photo-2-1024x461.jpg', 'http://mesocosm.org/wp-content/uploads/2024/01/photo-3-1024x768.jpg', 'http://mesocosm.org/wp-content/uploads/2024/01/Photo-4-1024x768.jpg']",,,,"['47.705277833333334', '19.228137999999998']","{'coordinates': ['47.705277833333334', '19.228137999999998']}"
 https://mesocosm.org/mesocosm/hungarian-pond-network/,Hungarian Pond Network,Centre for Ecological Research,Hungary,Europe,"Centre for Ecological Research
 H-1113 Budapest, Karolina út 29.
 Hungary
@@ -4137,7 +4137,7 @@ A mesocosm at the Fülöpháza HPN facility. (Photo credit: Csaba Vad)
 The Vácrátót HPN mesocosm facility during winter. (Photo credit: Csilla Laskai)
 A mesocosm at the Zánka facility. (Phto credit: Csilla Laskai)
  
-","['http://mesocosm.org/wp-content/uploads/2024/01/Photo-1.jpg', 'http://mesocosm.org/wp-content/uploads/2024/01/Photo-2-1024x461.jpg', 'http://mesocosm.org/wp-content/uploads/2024/01/photo-3-1024x768.jpg', 'http://mesocosm.org/wp-content/uploads/2024/01/Photo-4-1024x768.jpg']",,,,"['46.870555555555555', '19.422222222222224']","{'coordinates': ['46.870555555555555', '19.422222222222224']}",,
+","['http://mesocosm.org/wp-content/uploads/2024/01/Photo-1.jpg', 'http://mesocosm.org/wp-content/uploads/2024/01/Photo-2-1024x461.jpg', 'http://mesocosm.org/wp-content/uploads/2024/01/photo-3-1024x768.jpg', 'http://mesocosm.org/wp-content/uploads/2024/01/Photo-4-1024x768.jpg']",,,,"['46.870555555555555', '19.422222222222224']","{'coordinates': ['46.870555555555555', '19.422222222222224']}"
 https://mesocosm.org/mesocosm/hungarian-pond-network/,Hungarian Pond Network,Centre for Ecological Research,Hungary,Europe,"Centre for Ecological Research
 H-1113 Budapest, Karolina út 29.
 Hungary
@@ -4171,7 +4171,7 @@ A mesocosm at the Fülöpháza HPN facility. (Photo credit: Csaba Vad)
 The Vácrátót HPN mesocosm facility during winter. (Photo credit: Csilla Laskai)
 A mesocosm at the Zánka facility. (Phto credit: Csilla Laskai)
  
-","['http://mesocosm.org/wp-content/uploads/2024/01/Photo-1.jpg', 'http://mesocosm.org/wp-content/uploads/2024/01/Photo-2-1024x461.jpg', 'http://mesocosm.org/wp-content/uploads/2024/01/photo-3-1024x768.jpg', 'http://mesocosm.org/wp-content/uploads/2024/01/Photo-4-1024x768.jpg']",,,,"['46.88', '17.66861111111111']","{'coordinates': ['46.88', '17.66861111111111']}",,
+","['http://mesocosm.org/wp-content/uploads/2024/01/Photo-1.jpg', 'http://mesocosm.org/wp-content/uploads/2024/01/Photo-2-1024x461.jpg', 'http://mesocosm.org/wp-content/uploads/2024/01/photo-3-1024x768.jpg', 'http://mesocosm.org/wp-content/uploads/2024/01/Photo-4-1024x768.jpg']",,,,"['46.88', '17.66861111111111']","{'coordinates': ['46.88', '17.66861111111111']}"
 https://mesocosm.org/mesocosm/hungarian-pond-network/,Hungarian Pond Network,Centre for Ecological Research,Hungary,Europe,"Centre for Ecological Research
 H-1113 Budapest, Karolina út 29.
 Hungary
@@ -4205,7 +4205,7 @@ A mesocosm at the Fülöpháza HPN facility. (Photo credit: Csaba Vad)
 The Vácrátót HPN mesocosm facility during winter. (Photo credit: Csilla Laskai)
 A mesocosm at the Zánka facility. (Phto credit: Csilla Laskai)
  
-","['http://mesocosm.org/wp-content/uploads/2024/01/Photo-1.jpg', 'http://mesocosm.org/wp-content/uploads/2024/01/Photo-2-1024x461.jpg', 'http://mesocosm.org/wp-content/uploads/2024/01/photo-3-1024x768.jpg', 'http://mesocosm.org/wp-content/uploads/2024/01/Photo-4-1024x768.jpg']",,,,"['47.603611111111114', '21.3575']","{'coordinates': ['47.603611111111114', '21.3575']}",,
+","['http://mesocosm.org/wp-content/uploads/2024/01/Photo-1.jpg', 'http://mesocosm.org/wp-content/uploads/2024/01/Photo-2-1024x461.jpg', 'http://mesocosm.org/wp-content/uploads/2024/01/photo-3-1024x768.jpg', 'http://mesocosm.org/wp-content/uploads/2024/01/Photo-4-1024x768.jpg']",,,,"['47.603611111111114', '21.3575']","{'coordinates': ['47.603611111111114', '21.3575']}"
 https://mesocosm.org/mesocosm/marine-plant-mesocosm-system/,Marine Plant Mesocosm System,CCMAR – Centre of Marine Sciences,Portugal,Europe,"Universidade do Algarve
 Campus de Gambelas, Ed.7
 8005-139 Faro
@@ -4253,7 +4253,7 @@ Photo credit: João Silva
 
 
 
-","['http://mesocosm.org/wp-content/uploads/2018/05/CCMAR_mesocosm_2-1024x576.jpg', 'http://mesocosm.org/wp-content/uploads/2018/05/CCMAR_mesocosm_1-1024x576.jpg', 'http://mesocosm.org/wp-content/uploads/2018/05/CCMAR_mesocosm_3.jpg']",,,,"['37.006', ' -7.966']","{'coordinates': ['37.006', '-7.966']}",,
+","['http://mesocosm.org/wp-content/uploads/2018/05/CCMAR_mesocosm_2-1024x576.jpg', 'http://mesocosm.org/wp-content/uploads/2018/05/CCMAR_mesocosm_1-1024x576.jpg', 'http://mesocosm.org/wp-content/uploads/2018/05/CCMAR_mesocosm_3.jpg']",,,,"['37.006', ' -7.966']","{'coordinates': ['37.006', '-7.966']}"
 https://mesocosm.org/mesocosm/exstream-brazil/,ExStream Brazil,Universidade Federal do ABC (Federal University of ABC),Brazil,South America,"Av. dos Estados, 5001, B. Santa Terezinha, Santo André, SP, Brazil. CEP 09210-580
 ","Adjunct Professor Ricardo Hideo Taniwaki
 Please login or request access to view contact information.
@@ -4276,7 +4276,7 @@ The Experimental Stream mesocosm network (ExStream) comprises replicate installa
 >15 publications in scientific journals by C.D. Matthaei, J. J Piggott and coauthors (https://www.otago.ac.nz/zoology/staff/matthaei.html) 
 Blog post: https://jappliedecologyblog.wordpress.com/2015/07/03/exstream-study-assesses-stream-ecosystem-functioning-the-effects-of-climate-warming-multiple-agricultural-stressors/ 
 Short video about ExStream System research: https://vimeo.com/243219546
-",,,,,,"['-23.060634', ' -48.630102']","{'coordinates': ['-23.060634', '-48.630102']}",,
+",,,,,,"['-23.060634', ' -48.630102']","{'coordinates': ['-23.060634', '-48.630102']}"
 https://mesocosm.org/mesocosm/mesocosm-facility-at-umea-marine-sciences-center-mf-umsc/,Mesocosm Facility at Umeå Marine Sciences Center (MF-UMSC),Umeå Universitet (UmU),Sweden,Europe,"Umeå University (UmU)SE-90187 Umeå
 SWEDEN
 http://www.umf.umu.se/english/?languageId=1
@@ -4357,7 +4357,7 @@ MF-UMSC outdoor; Photo: K. Viklund
 
 
  
-","['http://mesocosm.org/wp-content/uploads/2017/03/Indoor-polyethylen-mesocosms.jpg', 'http://mesocosm.org/wp-content/uploads/2017/03/Tanks-with-light-and-temperature-control.jpg', 'http://mesocosm.org/wp-content/uploads/2017/02/ice-tanks_1-300x199.jpg', 'http://mesocosm.org/wp-content/uploads/2017/02/DSC_1798-300x199.jpg', 'http://mesocosm.org/wp-content/uploads/2017/02/DSC_1801-300x199.jpg', 'http://mesocosm.org/wp-content/uploads/2017/02/INDOOR-300x199.jpg', 'http://mesocosm.org/wp-content/uploads/2017/02/OUTDOOR-300x199.jpg']",,,,"['63.5678349', '19.8206221']","{'coordinates': ['63.5678349', '19.8206221']}",,
+","['http://mesocosm.org/wp-content/uploads/2017/03/Indoor-polyethylen-mesocosms.jpg', 'http://mesocosm.org/wp-content/uploads/2017/03/Tanks-with-light-and-temperature-control.jpg', 'http://mesocosm.org/wp-content/uploads/2017/02/ice-tanks_1-300x199.jpg', 'http://mesocosm.org/wp-content/uploads/2017/02/DSC_1798-300x199.jpg', 'http://mesocosm.org/wp-content/uploads/2017/02/DSC_1801-300x199.jpg', 'http://mesocosm.org/wp-content/uploads/2017/02/INDOOR-300x199.jpg', 'http://mesocosm.org/wp-content/uploads/2017/02/OUTDOOR-300x199.jpg']",,,,"['63.5678349', '19.8206221']","{'coordinates': ['63.5678349', '19.8206221']}"
 https://mesocosm.org/mesocosm/alpstream-eco-hydraulic-flumes/,ALPSTREAM ECO-HYDRAULIC FLUMES,ALPSTREAM – Alpine Stream Research Center/MONVISO PARK,Italy,Europe,"Frazione S. Antonio 17,
 I-12030 Sant’Antonio Ostana (CN)
  
@@ -4428,7 +4428,7 @@ from window of the ALPSTREAM lab, photo credits: Elisa Falasco
 Guesthouse, photo credits: VisoaViso cooperative
 Indoor space of the ALPSTREAM lab, photo credit: Stefano Fenoglio
 Ostana landscape, photo credits: Stefano Fenoglio
-","['http://mesocosm.org/wp-content/uploads/2023/03/Flumes-1024x413.jpg', 'http://mesocosm.org/wp-content/uploads/2023/03/aerial-view-flumes-1024x768.jpg', 'http://mesocosm.org/wp-content/uploads/2023/03/from-the-window-of-the-ALPSTREAM-lab.jpg', 'http://mesocosm.org/wp-content/uploads/2023/03/guesthouse.jpg', 'http://mesocosm.org/wp-content/uploads/2023/03/indoor-space-of-the-ALPSTREAM-lab.jpg', 'http://mesocosm.org/wp-content/uploads/2023/03/Ostana-landscape.1.9MB-1024x768.jpg']",,,,"['44.6931944', ' 7.176777777777778']","{'coordinates': ['44.6931944', '7.176777777777778']}",,
+","['http://mesocosm.org/wp-content/uploads/2023/03/Flumes-1024x413.jpg', 'http://mesocosm.org/wp-content/uploads/2023/03/aerial-view-flumes-1024x768.jpg', 'http://mesocosm.org/wp-content/uploads/2023/03/from-the-window-of-the-ALPSTREAM-lab.jpg', 'http://mesocosm.org/wp-content/uploads/2023/03/guesthouse.jpg', 'http://mesocosm.org/wp-content/uploads/2023/03/indoor-space-of-the-ALPSTREAM-lab.jpg', 'http://mesocosm.org/wp-content/uploads/2023/03/Ostana-landscape.1.9MB-1024x768.jpg']",,,,"['44.6931944', ' 7.176777777777778']","{'coordinates': ['44.6931944', '7.176777777777778']}"
 https://mesocosm.org/mesocosm/yeosu-mesocosm-system/,Yeosu Mesocosm System,"Fisheries Science Institute, Chonnam National University",Republic of Korea,Asia,"50 Daehak-ro, Yeosu, Jeonnam 59626, Republic of Korea
 ","Prof. Ihn-Sil Kwak / Dr. Hyunbin Jo
 Please login or request access to view contact information.
@@ -4465,7 +4465,7 @@ Reconstruction plan
 
 
 
-","['http://mesocosm.org/wp-content/uploads/2019/03/Yeosu-Mesocosm-System-1-300x226.jpeg', 'http://mesocosm.org/wp-content/uploads/2019/03/Yeosu-Mesocosm-System-2-300x227.jpeg', 'http://mesocosm.org/wp-content/uploads/2019/03/Yeosu-Mesocosm-System-3-255x300.jpeg']",,,,"['34.627472', '127.72033']","{'coordinates': ['34.627472', '127.72033']}",,
+","['http://mesocosm.org/wp-content/uploads/2019/03/Yeosu-Mesocosm-System-1-300x226.jpeg', 'http://mesocosm.org/wp-content/uploads/2019/03/Yeosu-Mesocosm-System-2-300x227.jpeg', 'http://mesocosm.org/wp-content/uploads/2019/03/Yeosu-Mesocosm-System-3-255x300.jpeg']",,,,"['34.627472', '127.72033']","{'coordinates': ['34.627472', '127.72033']}"
 https://mesocosm.org/mesocosm/levend-lab/,Levend Lab,Leiden University,Netherlands,Europe,"Leiden University
 Institute of Environmental Sciences
 PO Box 9518
@@ -4523,7 +4523,7 @@ Photo credit:
 
 
 
-","['http://mesocosm.org/wp-content/uploads/2018/10/1-1024x576.jpg', 'http://mesocosm.org/wp-content/uploads/2018/10/2-1024x768.jpg']",,,,"['52.170726', ' 4.451855']","{'coordinates': ['52.170726', '4.451855']}",,
+","['http://mesocosm.org/wp-content/uploads/2018/10/1-1024x576.jpg', 'http://mesocosm.org/wp-content/uploads/2018/10/2-1024x768.jpg']",,,,"['52.170726', ' 4.451855']","{'coordinates': ['52.170726', '4.451855']}"
 https://mesocosm.org/mesocosm/lake-baoan-field-station-of-experimental-limnological-research/,Lake Bao’an Field Station of Experimental Limnological Research,"State Key Laboratory of Freshwater Ecology and Biotechnology, Institute of Hydrobiology, Chinese Academy of Sciences",China,Asia,"No. 7 South Donghu Road,  Wuchang District, Wuhan 430072, Hubei Province, China
 ","Hai-Jun Wang
 Please login or request access to view contact information.
@@ -4576,7 +4576,7 @@ Ponds for nitrogen pollution experiments
 
 
 
-","['http://mesocosm.org/wp-content/uploads/2019/03/The-aerial-view-of-the-experimental-station-300x169.png', 'http://mesocosm.org/wp-content/uploads/2019/03/cement-aquarium-experimental-system-300x225.jpg', 'http://mesocosm.org/wp-content/uploads/2019/03/Ponds-for-eutrophication-experiments-300x177.png', 'http://mesocosm.org/wp-content/uploads/2019/03/Ponds-for-nitrogen-pollution-experiments-300x189.png']",,,,"['30.28805', '114.72916']","{'coordinates': ['30.28805', '114.72916']}",,
+","['http://mesocosm.org/wp-content/uploads/2019/03/The-aerial-view-of-the-experimental-station-300x169.png', 'http://mesocosm.org/wp-content/uploads/2019/03/cement-aquarium-experimental-system-300x225.jpg', 'http://mesocosm.org/wp-content/uploads/2019/03/Ponds-for-eutrophication-experiments-300x177.png', 'http://mesocosm.org/wp-content/uploads/2019/03/Ponds-for-nitrogen-pollution-experiments-300x189.png']",,,,"['30.28805', '114.72916']","{'coordinates': ['30.28805', '114.72916']}"
 https://mesocosm.org/mesocosm/tihany-outdoor-mesocosm-hungary/,Tihany Outdoor Mesocosm (Hungary),"Balaton Limnological  Research Institute, Eötvös Loránd Research Network",Hungary,Europe,"Klebelsberg Kuno 3,
 8237-Tihany,
 Hungary
@@ -4637,7 +4637,7 @@ Foto credit: Ferenc Jordan
 
 ​
  
-","['http://mesocosm.org/wp-content/uploads/2018/11/Tihany-5-1024x768.jpg', 'http://mesocosm.org/wp-content/uploads/2018/11/IMG_20181024_094852-1024x768.jpg', 'http://mesocosm.org/wp-content/uploads/2018/11/IMG_20181024_104918-1024x768.jpg']",,,,"['46.9125', ' 17.893333333333334']","{'coordinates': ['46.9125', '17.893333333333334']}",,
+","['http://mesocosm.org/wp-content/uploads/2018/11/Tihany-5-1024x768.jpg', 'http://mesocosm.org/wp-content/uploads/2018/11/IMG_20181024_094852-1024x768.jpg', 'http://mesocosm.org/wp-content/uploads/2018/11/IMG_20181024_104918-1024x768.jpg']",,,,"['46.9125', ' 17.893333333333334']","{'coordinates': ['46.9125', '17.893333333333334']}"
 https://mesocosm.org/mesocosm/sites-aquanet-svartberget-research-station/,SITES AquaNet – Svartberget Research Station,SITES and Swedish University of Agricultural Sciences,Sweden,Europe,"Sveriges lantbruksuniversitet (SLU)
 Unit for Field-based Forest Research
 Svartberget Research Station
@@ -4679,7 +4679,7 @@ Photo credti: Peder Blomkvist
 
 
  
-","['http://mesocosm.org/wp-content/uploads/2018/05/Svartberget_2-1024x768.jpg', 'http://mesocosm.org/wp-content/uploads/2018/05/Svartberget_3-768x1024.jpg']",,,,"['64.143965', ' 19.455836']","{'coordinates': ['64.143965', '19.455836']}",,
+","['http://mesocosm.org/wp-content/uploads/2018/05/Svartberget_2-1024x768.jpg', 'http://mesocosm.org/wp-content/uploads/2018/05/Svartberget_3-768x1024.jpg']",,,,"['64.143965', ' 19.455836']","{'coordinates': ['64.143965', '19.455836']}"
 https://mesocosm.org/mesocosm/cambridge-environmental-assessments-cea/,Cambridge Environmental Assessments (CEA),RSK ADAS Ltd,United Kingdom,Europe,"Cambridge Environmental Assessments, ADAS Boxworth, Cambridgeshire, CB23 4NN
 ","Dr Nadine Taylor
 Please login or request access to view contact information.
@@ -4744,7 +4744,7 @@ Set-up of sloped mesocosms prior to a study (Credit: Cambridge Environmental Ass
 
 
 
-","['http://mesocosm.org/wp-content/uploads/2019/03/Established-flat-bottomed-mesocosms-300x225.jpg', 'http://mesocosm.org/wp-content/uploads/2019/03/Established-sloped-mesocosms-300x169.jpg', 'http://mesocosm.org/wp-content/uploads/2019/03/Established-sloped-mesocosms-2-300x200.jpg', 'http://mesocosm.org/wp-content/uploads/2019/03/Set-up-of-sloped-mesocosms-prior-to-a-study-300x225.jpg']",,,,"['52.252916', '-0.031916']","{'coordinates': ['52.252916', '-0.031916']}",,
+","['http://mesocosm.org/wp-content/uploads/2019/03/Established-flat-bottomed-mesocosms-300x225.jpg', 'http://mesocosm.org/wp-content/uploads/2019/03/Established-sloped-mesocosms-300x169.jpg', 'http://mesocosm.org/wp-content/uploads/2019/03/Established-sloped-mesocosms-2-300x200.jpg', 'http://mesocosm.org/wp-content/uploads/2019/03/Set-up-of-sloped-mesocosms-prior-to-a-study-300x225.jpg']",,,,"['52.252916', '-0.031916']","{'coordinates': ['52.252916', '-0.031916']}"
 https://mesocosm.org/mesocosm/carl-von-ossietzky-university-oldenburg/,Planktotrons - Indoor Mesocosm Facility,Carl-von-Ossietzky University Oldenburg,Germany,Europe,"Carl-von-Ossietzky University Oldenburg
 Institute for Chemistry and Biology of the Marine Environment (ICBM)
 Schleusenstr. 1
@@ -4788,7 +4788,7 @@ Plankrtotrons in Wilhelmshaven
 
 
 
-","['http://mesocosm.org/wp-content/uploads/2017/05/planktotrons_1_400.png', 'http://mesocosm.org/wp-content/uploads/2017/05/Planktotrons_2_400.png']",,,,"['53.5151', '8.146219999999971']","{'coordinates': ['53.5151', '8.146219999999971']}",,
+","['http://mesocosm.org/wp-content/uploads/2017/05/planktotrons_1_400.png', 'http://mesocosm.org/wp-content/uploads/2017/05/Planktotrons_2_400.png']",,,,"['53.5151', '8.146219999999971']","{'coordinates': ['53.5151', '8.146219999999971']}"
 https://mesocosm.org/mesocosm/kiel-indoor-benthokosmen-zur-simulation-von-umweltfluktuationen/,Kiel-Indoor-Benthocosms (KIBs),GEOMAR-Helmholtz Center for Ocean Research Kiel,Germany,Europe,"GEOMAR-Helmholtz Center for Ocean Research Kiel
 West shore campusDüsternbrooker Weg 20D-24105 Kiel
 East shore campusWischhofstr. 1-3D-24148 Kiel
@@ -4840,7 +4840,7 @@ Graphic: Christian Pansch
 
 
  
-","['http://mesocosm.org/wp-content/uploads/2018/04/IMG_6896-e1523449384719-200x300.jpeg', 'http://mesocosm.org/wp-content/uploads/2018/04/IMG_6905-e1523449507437-200x300.jpeg', 'http://mesocosm.org/wp-content/uploads/2018/04/A-264x300.jpg', 'http://mesocosm.org/wp-content/uploads/2018/04/B-300x181.jpg', 'http://mesocosm.org/wp-content/uploads/2018/04/C-300x222.jpg']",,,,"['54.330034', ' 10.148140']","{'coordinates': ['54.330034', '10.148140']}",,
+","['http://mesocosm.org/wp-content/uploads/2018/04/IMG_6896-e1523449384719-200x300.jpeg', 'http://mesocosm.org/wp-content/uploads/2018/04/IMG_6905-e1523449507437-200x300.jpeg', 'http://mesocosm.org/wp-content/uploads/2018/04/A-264x300.jpg', 'http://mesocosm.org/wp-content/uploads/2018/04/B-300x181.jpg', 'http://mesocosm.org/wp-content/uploads/2018/04/C-300x222.jpg']",,,,"['54.330034', ' 10.148140']","{'coordinates': ['54.330034', '10.148140']}"
 https://mesocosm.org/mesocosm/metu-mesocosm-system/,METU Mesocosm System,Middle East Technical University (METU),Turkey,Europe,"Orta Doğu Teknik Üniversitesi (ODTÜ), Middle East Technical University (METU), Üniversiteler Mahallesi, Dumlupınar Bulvarı No:1 06800 Çankaya Ankara/TURKEY, 06800 
 ","Prof.Dr. Meryem Beklioğlu
 ","2011, 2012",,"water depth and nutrients (both TP and TN)
@@ -4856,7 +4856,7 @@ https://mesocosm.org/mesocosm/metu-mesocosm-system/,METU Mesocosm System,Middle 
 ",,,,"http://limnology.bio.metu.edu.tr
 ","
 Photo: METU-Limnology Labratory
-",['http://mesocosm.org/wp-content/uploads/2017/02/METU-300x204.jpg'],,,,"['39.8897009', '32.7520139']","{'coordinates': ['39.8897009', '32.7520139']}",,
+",['http://mesocosm.org/wp-content/uploads/2017/02/METU-300x204.jpg'],,,,"['39.8897009', '32.7520139']","{'coordinates': ['39.8897009', '32.7520139']}"
 https://mesocosm.org/mesocosm/ceint-center-for-the-environmental-implications-of-nanotechnology/,CEINT-Center for the Environmental Implications of Nanotechnology,Duke University,USA,North-America,"Duke University
  134 Chapel Drive
  Durham NC 27708
@@ -4891,7 +4891,7 @@ CEINT Mesocosm Facility  
 
 
 
-","['http://mesocosm.org/wp-content/uploads/2017/05/Duke_mesocosms.jpg', 'http://mesocosm.org/wp-content/uploads/2017/05/Duke_mesocosmsBPE.jpg']",,,,"['36.0241591', '-78.911455']","{'coordinates': ['36.0241591', '-78.911455']}",,
+","['http://mesocosm.org/wp-content/uploads/2017/05/Duke_mesocosms.jpg', 'http://mesocosm.org/wp-content/uploads/2017/05/Duke_mesocosmsBPE.jpg']",,,,"['36.0241591', '-78.911455']","{'coordinates': ['36.0241591', '-78.911455']}"
 https://mesocosm.org/mesocosm/lake-mesocosms/,Lake Mesocosms,Ludwig-Maximilians-University (LMU) Munich,Germany,Europe,"Ludwig-Maximilians-University (LMU) Munich
  Department Biology II
  Aquatic Ecology
@@ -4931,7 +4931,7 @@ Mesocosm installation – view of the bags under water (Photo: Stibor)
 
 
 
-","['http://mesocosm.org/wp-content/uploads/2017/05/Seeon_1_400px.jpg', 'http://mesocosm.org/wp-content/uploads/2017/05/Seeon_2_400px.jpg']",,,,"['47.9745129', '12.46009749999996']","{'coordinates': ['47.9745129', '12.46009749999996']}",,
+","['http://mesocosm.org/wp-content/uploads/2017/05/Seeon_1_400px.jpg', 'http://mesocosm.org/wp-content/uploads/2017/05/Seeon_2_400px.jpg']",,,,"['47.9745129', '12.46009749999996']","{'coordinates': ['47.9745129', '12.46009749999996']}"
 https://mesocosm.org/mesocosm/mesodrome/,University of Antwerp MESODROME,University of Antwerp,Belgium,Europe,"University of Antwerp, Dep. Biology
 Universiteitsplein 1
 2610 Wilrijk
@@ -4972,7 +4972,7 @@ Credit: Eric Struyf
 
 
 
-",['http://mesocosm.org/wp-content/uploads/2018/05/Mesodrome_tech-drawing-300x115.jpg'],,,,"['51.155424', ' 4.409210']","{'coordinates': ['51.155424', '4.409210']}",,
+",['http://mesocosm.org/wp-content/uploads/2018/05/Mesodrome_tech-drawing-300x115.jpg'],,,,"['51.155424', ' 4.409210']","{'coordinates': ['51.155424', '4.409210']}"
 https://mesocosm.org/mesocosm/estacion-de-ciencias-marinas-de-toralla-ecimat/,Estación de Ciencias Mariñas de Toralla (ECIMAT),University of Vigo,Spain,Europe,"Illa de Toralla
 E-36331 Coruxo
 Vigo
@@ -5025,7 +5025,7 @@ Photo credits: Jose Gonzalez Fernandez
 
 
  
-","['http://mesocosm.org/wp-content/uploads/2018/04/5B25D5A7-B59A-480E-93EF-F72F6D49B420-1024x768.jpg', 'http://mesocosm.org/wp-content/uploads/2018/04/FCDD4CA6-6509-4CFE-BE24-51C6D14BCC65-1024x768.jpg', 'http://mesocosm.org/wp-content/uploads/2018/04/897C6409-336F-4357-9831-3D0F71827349-1024x768.jpg']",,,,"['42.201979', ' -8.798505']","{'coordinates': ['42.201979', '-8.798505']}",,
+","['http://mesocosm.org/wp-content/uploads/2018/04/5B25D5A7-B59A-480E-93EF-F72F6D49B420-1024x768.jpg', 'http://mesocosm.org/wp-content/uploads/2018/04/FCDD4CA6-6509-4CFE-BE24-51C6D14BCC65-1024x768.jpg', 'http://mesocosm.org/wp-content/uploads/2018/04/897C6409-336F-4357-9831-3D0F71827349-1024x768.jpg']",,,,"['42.201979', ' -8.798505']","{'coordinates': ['42.201979', '-8.798505']}"
 https://mesocosm.org/mesocosm/smart-ecolake/,Smart Ecolake,"Nanjing Institute of Geography and Limnology, Chinese Academy of Sciences (NIGLAS)",China,Asia,"73 East Beijing Road,
 Nanjing 210008,
 P.R.China
@@ -5066,7 +5066,7 @@ automation for e.g. nutrient and water supplementation
 ",,"www.ecolake.net
 ","EcoSmart mesocosm facility  whole view, photo credits: Jianming Deng
 Mesocosm close up, photo credit: Jianming Deng
-","['http://mesocosm.org/wp-content/uploads/2023/12/Whole-View_1.9MB-1024x683.jpg', 'http://mesocosm.org/wp-content/uploads/2023/12/single-tank-1024x683.jpg']",,,,"['31.03', '120.42']","{'coordinates': ['31.03', '120.42']}",,
+","['http://mesocosm.org/wp-content/uploads/2023/12/Whole-View_1.9MB-1024x683.jpg', 'http://mesocosm.org/wp-content/uploads/2023/12/single-tank-1024x683.jpg']",,,,"['31.03', '120.42']","{'coordinates': ['31.03', '120.42']}"
 https://mesocosm.org/mesocosm/imdea-water-institute/,IMDEA Water Institute,IMDEA Water Foundation,Spain,Europe,"IMDEA Water Institute
 Avenida Punto Com 2
 PO Box 28805, Alcala de Henares
@@ -5118,7 +5118,7 @@ Photo: Andreu Rico
 
 
  
-","['http://mesocosm.org/wp-content/uploads/2018/04/IMG_2170-300x181.jpg', 'http://mesocosm.org/wp-content/uploads/2018/04/20160519_121359-300x169.jpg', 'http://mesocosm.org/wp-content/uploads/2018/04/20170512_154035_resized-300x169.jpg', 'http://mesocosm.org/wp-content/uploads/2018/04/IMG-20170512-WA0010-300x169.jpg']",,,,"['40.5133474', ' -3.3386556000000382']","{'coordinates': ['40.5133474', '-3.3386556000000382']}",,
+","['http://mesocosm.org/wp-content/uploads/2018/04/IMG_2170-300x181.jpg', 'http://mesocosm.org/wp-content/uploads/2018/04/20160519_121359-300x169.jpg', 'http://mesocosm.org/wp-content/uploads/2018/04/20170512_154035_resized-300x169.jpg', 'http://mesocosm.org/wp-content/uploads/2018/04/IMG-20170512-WA0010-300x169.jpg']",,,,"['40.5133474', ' -3.3386556000000382']","{'coordinates': ['40.5133474', '-3.3386556000000382']}"
 https://mesocosm.org/mesocosm/experimental-streams-facility-esf/,Experimental Streams Facility (ESF),ICRA (Catalan Institute for Water Research),Spain,Europe,"ICRA Catalan Institute for Water Research
 Carrer Emili Grahit 101
 17003 Girona
@@ -5185,7 +5185,7 @@ Photo credit: Vicenç Acuña
 
 
  
-","['http://mesocosm.org/wp-content/uploads/2018/05/image003.jpg@01D3EBA2.451771B0.jpg', 'http://mesocosm.org/wp-content/uploads/2018/05/image002.jpg@01D3EBA2.451771B0.jpg']",,,,"['41.967303', ' 2.840650']","{'coordinates': ['41.967303', '2.840650']}",,
+","['http://mesocosm.org/wp-content/uploads/2018/05/image003.jpg@01D3EBA2.451771B0.jpg', 'http://mesocosm.org/wp-content/uploads/2018/05/image002.jpg@01D3EBA2.451771B0.jpg']",,,,"['41.967303', ' 2.840650']","{'coordinates': ['41.967303', '2.840650']}"
 https://mesocosm.org/mesocosm/aquatron-laboratory/,Aquatron Laboratory,Dalhousie University Life Sciences Centre,Canada,North-America,"Dalhousie University Life Sciences Centre
  1355 Oxford Street
  PO BOX 15000
@@ -5258,7 +5258,7 @@ Aquatron Laboratory: Phytoplankton cultivation
 
 
 
-","['http://mesocosm.org/wp-content/uploads/2017/05/aquatronS.jpg', 'http://mesocosm.org/wp-content/uploads/2017/05/Aquatron-empty_400.jpg', 'http://mesocosm.org/wp-content/uploads/2017/05/halifax_pool_calltoaction.image_.jpg', 'http://mesocosm.org/wp-content/uploads/2017/05/aquatron_400.jpg', 'http://mesocosm.org/wp-content/uploads/2017/05/featureslide.image_400.jpg', 'http://mesocosm.org/wp-content/uploads/2017/05/aquatron1_400.jpg']",,,,"['44.6356125', '-63.5944334']","{'coordinates': ['44.6356125', '-63.5944334']}",,
+","['http://mesocosm.org/wp-content/uploads/2017/05/aquatronS.jpg', 'http://mesocosm.org/wp-content/uploads/2017/05/Aquatron-empty_400.jpg', 'http://mesocosm.org/wp-content/uploads/2017/05/halifax_pool_calltoaction.image_.jpg', 'http://mesocosm.org/wp-content/uploads/2017/05/aquatron_400.jpg', 'http://mesocosm.org/wp-content/uploads/2017/05/featureslide.image_400.jpg', 'http://mesocosm.org/wp-content/uploads/2017/05/aquatron1_400.jpg']",,,,"['44.6356125', '-63.5944334']","{'coordinates': ['44.6356125', '-63.5944334']}"
 test 1,[TEST CASE] Country: data unavailable,Dalhousie University Life Sciences Centre,,North-America,"Dalhousie University Life Sciences Centre
  1355 Oxford Street
  PO BOX 15000
@@ -5313,7 +5313,7 @@ Aquatron Laboratory: Phytoplankton cultivation
 
 
 
-","['http://mesocosm.org/wp-content/uploads/2017/05/aquatronS.jpg', 'http://mesocosm.org/wp-content/uploads/2017/05/Aquatron-empty_400.jpg', 'http://mesocosm.org/wp-content/uploads/2017/05/halifax_pool_calltoaction.image_.jpg', 'http://mesocosm.org/wp-content/uploads/2017/05/aquatron_400.jpg', 'http://mesocosm.org/wp-content/uploads/2017/05/featureslide.image_400.jpg', 'http://mesocosm.org/wp-content/uploads/2017/05/aquatron1_400.jpg']",,,,"['44.6356125', '-63.5944334']","{'coordinates': ['44.6356125', '-63.5944334']}",,
+","['http://mesocosm.org/wp-content/uploads/2017/05/aquatronS.jpg', 'http://mesocosm.org/wp-content/uploads/2017/05/Aquatron-empty_400.jpg', 'http://mesocosm.org/wp-content/uploads/2017/05/halifax_pool_calltoaction.image_.jpg', 'http://mesocosm.org/wp-content/uploads/2017/05/aquatron_400.jpg', 'http://mesocosm.org/wp-content/uploads/2017/05/featureslide.image_400.jpg', 'http://mesocosm.org/wp-content/uploads/2017/05/aquatron1_400.jpg']",,,,"['44.6356125', '-63.5944334']","{'coordinates': ['44.6356125', '-63.5944334']}"
 test 11,[TEST CASE] Abstract: data unavailable,University of Helsinki,Finland,Europe,"University of Helsinki
  P.O. Box 3
  00014 University of Helsinki
@@ -5344,7 +5344,7 @@ SYKE-MRC field mesocosm work at Tvärminne
 
 
 
-","['http://mesocosm.org/wp-content/uploads/2017/03/Pristine-nature-reserve-for-experimental-set-ups-300x194.jpg', 'http://mesocosm.org/wp-content/uploads/2017/03/SYKE-MRC-field-mesocosm-work-300x282.jpg']",,,,"['59.8431619', '23.2440297']","{'coordinates': ['59.8431619', '23.2440297']}",,
+","['http://mesocosm.org/wp-content/uploads/2017/03/Pristine-nature-reserve-for-experimental-set-ups-300x194.jpg', 'http://mesocosm.org/wp-content/uploads/2017/03/SYKE-MRC-field-mesocosm-work-300x282.jpg']",,,,"['59.8431619', '23.2440297']","{'coordinates': ['59.8431619', '23.2440297']}"
 test 12,[TEST CASE] Abstract: all data available,University of Helsinki,Finland,Europe,"University of Helsinki
  P.O. Box 3
  00014 University of Helsinki
@@ -5385,7 +5385,7 @@ SYKE-MRC field mesocosm work at Tvärminne
 
 
 
-","['http://mesocosm.org/wp-content/uploads/2017/03/Pristine-nature-reserve-for-experimental-set-ups-300x194.jpg', 'http://mesocosm.org/wp-content/uploads/2017/03/SYKE-MRC-field-mesocosm-work-300x282.jpg']",,,,"['59.8431619', '23.2440297']","{'coordinates': ['59.8431619', '23.2440297']}",,
+","['http://mesocosm.org/wp-content/uploads/2017/03/Pristine-nature-reserve-for-experimental-set-ups-300x194.jpg', 'http://mesocosm.org/wp-content/uploads/2017/03/SYKE-MRC-field-mesocosm-work-300x282.jpg']",,,,"['59.8431619', '23.2440297']","{'coordinates': ['59.8431619', '23.2440297']}"
 test 13,"[TEST CASE] Abstract: only ""Description of Facility"" data available",University of Helsinki,Finland,Europe,"University of Helsinki
  P.O. Box 3
  00014 University of Helsinki
@@ -5418,7 +5418,7 @@ SYKE-MRC field mesocosm work at Tvärminne
 
 
 
-","['http://mesocosm.org/wp-content/uploads/2017/03/Pristine-nature-reserve-for-experimental-set-ups-300x194.jpg', 'http://mesocosm.org/wp-content/uploads/2017/03/SYKE-MRC-field-mesocosm-work-300x282.jpg']",,,,"['59.8431619', '23.2440297']","{'coordinates': ['59.8431619', '23.2440297']}",,
+","['http://mesocosm.org/wp-content/uploads/2017/03/Pristine-nature-reserve-for-experimental-set-ups-300x194.jpg', 'http://mesocosm.org/wp-content/uploads/2017/03/SYKE-MRC-field-mesocosm-work-300x282.jpg']",,,,"['59.8431619', '23.2440297']","{'coordinates': ['59.8431619', '23.2440297']}"
 test 14,"[TEST CASE] Abstract: only ""Equipment"" data available",University of Helsinki,Finland,Europe,"University of Helsinki
  P.O. Box 3
  00014 University of Helsinki
@@ -5450,7 +5450,7 @@ SYKE-MRC field mesocosm work at Tvärminne
 
 
 
-","['http://mesocosm.org/wp-content/uploads/2017/03/Pristine-nature-reserve-for-experimental-set-ups-300x194.jpg', 'http://mesocosm.org/wp-content/uploads/2017/03/SYKE-MRC-field-mesocosm-work-300x282.jpg']",,,,"['59.8431619', '23.2440297']","{'coordinates': ['59.8431619', '23.2440297']}",,
+","['http://mesocosm.org/wp-content/uploads/2017/03/Pristine-nature-reserve-for-experimental-set-ups-300x194.jpg', 'http://mesocosm.org/wp-content/uploads/2017/03/SYKE-MRC-field-mesocosm-work-300x282.jpg']",,,,"['59.8431619', '23.2440297']","{'coordinates': ['59.8431619', '23.2440297']}"
 test 15,"[TEST CASE] Abstract: only ""Controlled Parameters"" data available",University of Helsinki,Finland,Europe,"University of Helsinki
  P.O. Box 3
  00014 University of Helsinki
@@ -5482,7 +5482,7 @@ SYKE-MRC field mesocosm work at Tvärminne
 
 
 
-","['http://mesocosm.org/wp-content/uploads/2017/03/Pristine-nature-reserve-for-experimental-set-ups-300x194.jpg', 'http://mesocosm.org/wp-content/uploads/2017/03/SYKE-MRC-field-mesocosm-work-300x282.jpg']",,,,"['59.8431619', '23.2440297']","{'coordinates': ['59.8431619', '23.2440297']}",,
+","['http://mesocosm.org/wp-content/uploads/2017/03/Pristine-nature-reserve-for-experimental-set-ups-300x194.jpg', 'http://mesocosm.org/wp-content/uploads/2017/03/SYKE-MRC-field-mesocosm-work-300x282.jpg']",,,,"['59.8431619', '23.2440297']","{'coordinates': ['59.8431619', '23.2440297']}"
 test 16,"[TEST CASE] Abstract: only ""Primary interests"" data available",University of Helsinki,Finland,Europe,"University of Helsinki
  P.O. Box 3
  00014 University of Helsinki
@@ -5518,7 +5518,7 @@ SYKE-MRC field mesocosm work at Tvärminne
 
 
 
-","['http://mesocosm.org/wp-content/uploads/2017/03/Pristine-nature-reserve-for-experimental-set-ups-300x194.jpg', 'http://mesocosm.org/wp-content/uploads/2017/03/SYKE-MRC-field-mesocosm-work-300x282.jpg']",,,,"['59.8431619', '23.2440297']","{'coordinates': ['59.8431619', '23.2440297']}",,
+","['http://mesocosm.org/wp-content/uploads/2017/03/Pristine-nature-reserve-for-experimental-set-ups-300x194.jpg', 'http://mesocosm.org/wp-content/uploads/2017/03/SYKE-MRC-field-mesocosm-work-300x282.jpg']",,,,"['59.8431619', '23.2440297']","{'coordinates': ['59.8431619', '23.2440297']}"
 test 17,"[TEST CASE] Abstract: only ""Research topics"" data available",University of Helsinki,Finland,Europe,"University of Helsinki
  P.O. Box 3
  00014 University of Helsinki
@@ -5552,7 +5552,7 @@ SYKE-MRC field mesocosm work at Tvärminne
 
 
 
-","['http://mesocosm.org/wp-content/uploads/2017/03/Pristine-nature-reserve-for-experimental-set-ups-300x194.jpg', 'http://mesocosm.org/wp-content/uploads/2017/03/SYKE-MRC-field-mesocosm-work-300x282.jpg']",,,,"['59.8431619', '23.2440297']","{'coordinates': ['59.8431619', '23.2440297']}",,
+","['http://mesocosm.org/wp-content/uploads/2017/03/Pristine-nature-reserve-for-experimental-set-ups-300x194.jpg', 'http://mesocosm.org/wp-content/uploads/2017/03/SYKE-MRC-field-mesocosm-work-300x282.jpg']",,,,"['59.8431619', '23.2440297']","{'coordinates': ['59.8431619', '23.2440297']}"
 test 18,[TEST CASE] Keywords: data unavailable,McGill University,Canada,North America,"McGill Department of Biology
 Stewart Biology Bldg
 1205 Dr Penfield Ave
@@ -5605,7 +5605,7 @@ Depth and multiparameter probe (YSI) physico-chemical measurements.  Photo cred
 
 
 
-","['http://mesocosm.org/wp-content/uploads/2019/04/3-1024x769.png', 'http://mesocosm.org/wp-content/uploads/2019/04/2-1024x368.png', 'http://mesocosm.org/wp-content/uploads/2019/04/1.png']",,,,"['45.5368', ' -73.1578']","{'coordinates': ['45.5368', '-73.1578']}",,
+","['http://mesocosm.org/wp-content/uploads/2019/04/3-1024x769.png', 'http://mesocosm.org/wp-content/uploads/2019/04/2-1024x368.png', 'http://mesocosm.org/wp-content/uploads/2019/04/1.png']",,,,"['45.5368', ' -73.1578']","{'coordinates': ['45.5368', '-73.1578']}"
 test 19,[TEST CASE] Keywords: data available,McGill University,Canada,North America,"McGill Department of Biology
 Stewart Biology Bldg
 1205 Dr Penfield Ave
@@ -5659,4 +5659,8 @@ Depth and multiparameter probe (YSI) physico-chemical measurements.  Photo cred
 
 
 
-","['http://mesocosm.org/wp-content/uploads/2019/04/3-1024x769.png', 'http://mesocosm.org/wp-content/uploads/2019/04/2-1024x368.png', 'http://mesocosm.org/wp-content/uploads/2019/04/1.png']",,,,"['45.5368', ' -73.1578']","{'coordinates': ['45.5368', '-73.1578']}",,
+","['http://mesocosm.org/wp-content/uploads/2019/04/3-1024x769.png', 'http://mesocosm.org/wp-content/uploads/2019/04/2-1024x368.png', 'http://mesocosm.org/wp-content/uploads/2019/04/1.png']",,,,"['45.5368', ' -73.1578']","{'coordinates': ['45.5368', '-73.1578']}"
+https://example.org/gr,[TEST CASE] Non-latin characters: Greek,Εθνικό Πανεπιστήμιο Αθηνών,Ελλάδα,Ευρώπη,,,2015–2024,Το κέντρο χρησιμοποιεί μεσόκοσμους για τη μελέτη των υδάτινων οικοσυστημάτων,Θερμοκρασία; Διαλυμένο οξυγόνο,Κλιματική αλλαγή; Θαλάσσια βιολογία,Αθήνα,Υδροβιολογία,Θαλάσσια οικολογία,Αισθητήρες θερμοκρασίας και pH,Ναι,https://example.org/source,https://example.org/photo1.jpg,photo1.jpg,equipment1.jpg,lodging1.jpg,Θερμική ρύθμιση,"['58.3712', ' 12.1613']","{'coordinates': ['58.3712', '12.1613']}"
+https://example.org/ar,[TEST CASE] Non-latin characters: Arabic,الجامعة العربية للعلوم,مصر,إفريقيا,,,2018–2023,تُستخدم المِزْكُوسومات لدراسة التلوث المائي,درجة الحرارة؛ الملوحة,تغير المناخ؛ التنوع البيولوجي,القاهرة,البيئة المائية,علم الأحياء الدقيقة,مجسات حرارية,نعم,https://example.org/source2,https://example.org/photo2.jpg,photo2.jpg,equipment2.jpg,lodging2.jpg,تحكم في درجة الحرارة,"['58.3712', ' 12.1613']","{'coordinates': ['58.3712', '12.1613']}"
+https://example.org/zh,[TEST CASE] Non-latin characters: Chinese,北京环境研究院,中国,亚洲,,,2020–2025,用于研究淡水生态系统的中尺度实验系统,温度; 溶解氧,藻类生长; 水质变化,北京,水生态学,水化学,传感器; 自动采样器,提供住宿,https://example.org/source3,https://example.org/photo3.jpg,photo3.jpg,equipment3.jpg,lodging3.jpg,温度控制,"['58.3712', ' 12.1613']","{'coordinates': ['58.3712', '12.1613']}"
+https://example.org/ja,[TEST CASE] Non-latin characters: Japanese,日本環境学会,日本,アジア,,,2017–2025,淡水生態系の研究用メソコスム施設,温度; 溶存酸素,藻類動態; 水質分析,東京,淡水生態学,生態学,測定装置,あり,https://example.org/source4,https://example.org/photo4.jpg,photo4.jpg,equipment4.jpg,lodging4.jpg,加熱実験,"['58.3712', ' 12.1613']","{'coordinates': ['58.3712', '12.1613']}"
