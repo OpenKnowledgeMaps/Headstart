@@ -3,15 +3,15 @@
 import React from "react";
 import { connect } from "react-redux";
 import $ from "jquery";
-import jQuery from 'jquery';
+import jQuery from "jquery";
 
 window.jQuery = jQuery;
 window.$ = $;
 
 require("hypher/dist/jquery.hypher.js");
-import 'hypher';
-import "lib/en.js";
-import "lib/de.js";
+import "hypher";
+import "@/lib/en";
+import "@/lib/de";
 
 import "markjs";
 

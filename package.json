@@ -9,7 +9,7 @@
   "scripts": {
     "test": "TZ='Europe/Vienna' vitest",
     "dev": "webpack --progress --watch --mode=development",
-    "prod": "webpack --progress",
+    "prod": "webpack",
     "start": "webpack serve --progress --mode=development --env example=base",
     "example:base": "npm start",
     "example:pubmed": "npm start -- --env example=pubmed",
