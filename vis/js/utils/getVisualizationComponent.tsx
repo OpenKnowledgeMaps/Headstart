@@ -1,10 +1,10 @@
 import { ReactNode } from "react";
 import { VisualizationTypes } from "../types";
 import * as chartType from "../reducers/chartType";
-import { Geomap } from "../templates/Geomap";
 import Streamgraph from "../components/Streamgraph";
 import KnowledgeMap from "../components/KnowledgeMap";
 import React from "react";
+import { Geomap } from "../templates/Geomap";
 
 export const getVisualizationComponent = (
   type: VisualizationTypes,
