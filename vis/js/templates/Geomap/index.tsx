@@ -1,4 +1,4 @@
-import React, { FC } from "react";
+import { FC } from "react";
 import { MapContainer, TileLayer } from "react-leaflet";
 import { AquanaviPaper, State } from "@/js/types";
 import { useSelector } from "react-redux";

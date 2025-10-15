@@ -3,7 +3,7 @@
     "target": "es5",
     "allowJs": true,
     "lib": ["es2022", "DOM"],
-    "jsx": "react",
+    "jsx": "react-jsx",
     "moduleResolution": "node",
     "outDir": "./dist",
     "strict": true,

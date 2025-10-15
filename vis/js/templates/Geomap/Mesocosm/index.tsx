@@ -1,4 +1,4 @@
-import React, { FC } from "react";
+import { FC } from "react";
 import { Marker } from "react-leaflet";
 import { AquanaviPaper } from "@/js/types";
 
