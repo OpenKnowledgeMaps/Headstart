@@ -24,6 +24,11 @@ $post_params["time_range"] = "user-defined";
 // And some others...
 $params_array = ["from", "to", "document_types", "sorting", "min_descsize", "lang_id"];
 
+$is_custom_array_set = isset($post_params["custom_title"]);
+if ($is_custom_array_set) {
+  $params_array[] = "custom_title";
+}
+
 $result = search("aquanavi", $query, $post_params, $params_array, false, true, null, $precomputed_id, false);
 echo $result
 ?>
