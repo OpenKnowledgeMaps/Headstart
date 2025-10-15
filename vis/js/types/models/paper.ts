@@ -1,5 +1,12 @@
 export type NotAvailable = "n/a";
 
+export interface GeographicalData {
+  continent: string | null;
+  country: string | null;
+  east: number | null;
+  north: number | null;
+}
+
 export interface CommonPaperDataForAllIntegrations {
   id: string;
   doi: string;
@@ -114,6 +121,11 @@ export interface OrcidPaper extends CommonPaperDataForAllIntegrations {
   cited_by_rdts_count: number | string | null;
   cited_by_wikipedia_count: number | string | null;
   cited_by_qna_count: number | string | null;
+}
+
+export interface AquanaviPaper extends CommonPaperDataForAllIntegrations {
+  coverage: string;
+  geographicalData: GeographicalData | null;
 }
 
 export type AllPossiblePapersType = BasePaper | PubmedPaper | OrcidPaper;

@@ -1,11 +1,9 @@
 // @ts-nocheck
-
 import d3 from "d3";
 import $ from "jquery";
-
-import { Config } from "../../@types/config";
-import { Paper } from "../../@types/paper";
+import { Config, Paper, AllPossiblePapersType } from "@js/types";
 import {
+  checkIsAquanaviData,
   extractAuthors,
   getAuthorsList,
   getInternalMetric,
@@ -16,9 +14,9 @@ import {
   getVisibleMetric,
   isOpenAccess,
   parseCoordinate,
+  parseGeographicalData,
 } from "../../utils/data";
 import PaperSanitizer from "../../utils/PaperSanitizer";
-import { Paper, Config } from "../../types";
 import {
   getCoordsScale,
   getDiameterScale,
@@ -27,6 +25,8 @@ import {
 } from "../../utils/scale";
 import { transformData } from "../../utils/streamgraph";
 import DEFAULT_SCHEME, { SchemeObject } from "../schemes/defaultScheme";
+import { GEOMAP_MODE } from "@/js/reducers/chartType";
+import { AquanaviPaper } from "@/js/types/models/paper";
 
 const GOLDEN_RATIO = 2.6;
 
@@ -158,6 +158,7 @@ class DataManager {
       this.__parseComments(paper);
       this.__countMetrics(paper);
       this.__parseCoordinates(paper);
+      this.__parseGeographicalData(paper);
       while (blockedCoords[`${paper.x}:${paper.y}`]) {
         this.__adjustCoordinates(paper);
       }
@@ -226,6 +227,17 @@ class DataManager {
   __parseCoordinates(paper: any) {
     paper.x = parseCoordinate(paper.x, 8);
     paper.y = parseCoordinate(paper.y, 8);
+  }
+
+  __parseGeographicalData(paper: AllPossiblePapersType) {
+    const isAquanaviData = checkIsAquanaviData(paper, this.config);
+
+    if (!isAquanaviData) {
+      paper.geographicalData = null;
+      return;
+    }
+
+    paper.geographicalData = parseGeographicalData(paper as AquanaviPaper);
   }
 
   __adjustCoordinates(paper: any) {

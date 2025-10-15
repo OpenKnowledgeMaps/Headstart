@@ -9,9 +9,11 @@ export {
   OrcidPaper,
   BasePaper,
   PubmedPaper,
+  AquanaviPaper,
   CommonPaperDataForAllIntegrations,
   NotAvailable,
   AllPossiblePapersType,
+  GeographicalData,
 } from "./models/paper";
 
 export { Context } from "./visualization/context";

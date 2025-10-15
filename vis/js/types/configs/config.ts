@@ -1,4 +1,5 @@
-import { localization } from "../../i18n/localization";
+import { localization } from "@js/i18n/localization";
+import { VisualizationTypes } from "@js/types/visualization/visualization-types";
 
 type PaperSettings = {
   showSocialMedia: boolean;
@@ -143,4 +144,6 @@ export type Config = {
     }[];
   };
   is_force_area?: boolean;
+
+  visualization_type: VisualizationTypes;
 };

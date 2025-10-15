@@ -89,7 +89,7 @@ export const shorten = (string: string, length: number, end = "...") => {
 
 export const formatString = (
   string: string,
-  params: Record<string, string>
+  params: Record<string, string>,
 ) => {
   Object.keys(params).forEach((param) => {
     string = string.replaceAll("${" + param + "}", params[param]);
@@ -113,4 +113,13 @@ export const removeEmbedParam = (urlString: string) => {
   url.searchParams.delete("embed");
 
   return url.toString();
+};
+
+export const checkIsEmptyString = (value: unknown) => {
+  if (typeof value !== "string") {
+    return false;
+  }
+
+  const formattedString = value.trim();
+  return formattedString === "";
 };

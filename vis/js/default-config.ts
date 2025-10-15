@@ -234,6 +234,8 @@ var config: Config = {
   localization: localization,
 
   scale_types: [],
+
+  visualization_type: "overview",
 };
 
 if (config.content_based) {

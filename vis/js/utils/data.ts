@@ -1,6 +1,13 @@
 // @ts-nocheck
+import { GEOMAP_MODE } from "../reducers/chartType";
 import { isNonTextDocument } from "../templates/Paper";
-import { stringCompare } from "./string";
+import { checkIsEmptyString, stringCompare } from "./string";
+import {
+  AllPossiblePapersType,
+  Config,
+  AquanaviPaper,
+  GeographicalData,
+} from "@js/types";
 
 /**
  * Filters the input data according to the provided settings.
@@ -551,4 +558,83 @@ export const queryConcatenator = (terms) => {
 export const getValueOrZero = (value: unknown): number => {
   const transformedValue = Number(value);
   return isNaN(transformedValue) ? 0 : transformedValue;
+};
+
+/**
+ * The function checks that the transferred data object represents
+ * the Aquanavi format.
+ */
+export const checkIsAquanaviData = (
+  data: AllPossiblePapersType,
+  config: Config,
+) => {
+  const isGeomapVisType = config.visualization_type === GEOMAP_MODE;
+  const isPaperHasCoveragePopery = Object.hasOwn(data, "coverage");
+  return isGeomapVisType && isPaperHasCoveragePopery;
+};
+
+/**
+ * The function processes longitude and latitude coordinates.
+ * As agreed with the backend, they can be represented by a string
+ * containing a number or an empty string.
+ */
+const processGeographicalCoordinates = (possibleCoordinatesData: string) => {
+  const isEmptyString = checkIsEmptyString(possibleCoordinatesData);
+
+  if (isEmptyString) {
+    return null;
+  }
+
+  return Number(possibleCoordinatesData);
+};
+
+/**
+ * The function processes geographic information:
+ * country, continent, longitude, and latitude.
+ */
+export const parseGeographicalData = (data: AquanaviPaper) => {
+  const PARAMETERS_TO_EXCLUDE = ["start", "end"];
+  const result: GeographicalData = {
+    country: null,
+    continent: null,
+    east: null,
+    north: null,
+  };
+
+  const coverageEntries = data.coverage.split(";");
+  for (const entry of coverageEntries) {
+    const [key, value] = entry.split("=");
+
+    const formattedKey: string = key.trim().toLowerCase();
+
+    const isKeyToExclude = PARAMETERS_TO_EXCLUDE.includes(formattedKey);
+    const isKnownKey = Object.hasOwn(result, formattedKey);
+    if (isKeyToExclude || !isKnownKey) {
+      continue;
+    }
+
+    const formattedValue = value.trim();
+
+    switch (formattedKey) {
+      case "country": {
+        result[formattedKey] = formattedValue;
+        break;
+      }
+      case "continent": {
+        result[formattedKey] = formattedValue;
+        break;
+      }
+      case "east": {
+        result[formattedKey] = processGeographicalCoordinates(formattedValue);
+        break;
+      }
+      case "north": {
+        result[formattedKey] = processGeographicalCoordinates(formattedValue);
+        break;
+      }
+      default:
+    }
+  }
+
+  return result;
 };
