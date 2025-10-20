@@ -253,7 +253,7 @@ def get_keywords(row):
     specialist_areas = get_and_process_value(row, COLUMNS['specialist_areas'])
 
     if specialist_areas:
-        return specialist_areas + '.'
+        return specialist_areas
 
     return ""
 
