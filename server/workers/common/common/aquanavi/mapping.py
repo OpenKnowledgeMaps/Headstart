@@ -46,7 +46,7 @@ def process_string_column(row, column_name):
 
         if "\n" in processed_string:
             parts = [part.strip() for part in processed_string.split("\n") if part.strip()]
-            return ", ".join(parts)
+            return "; ".join(parts)
         else:
             return processed_string
     else:
