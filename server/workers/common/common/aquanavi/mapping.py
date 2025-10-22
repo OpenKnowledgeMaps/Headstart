@@ -27,13 +27,14 @@ COLUMNS = {
     "photos_of_experiments": "Photos of experiments/installations images",
 }
 
-def process_string_column(row, column_name):
+def process_column(row, column_name, join_value_parts_with):
     """
     Process the column name from DataFrame.
 
     Args:
         row (pandas.Series): String DataFrame.
         column_name (str): Name of a column that must be processed.
+        join_value_parts_with (str): String that will be used for part joining.
 
     Returns:
         str: The processed string (parts separated by commas, or the original string),
@@ -46,7 +47,7 @@ def process_string_column(row, column_name):
 
         if "\n" in processed_string:
             parts = [part.strip() for part in processed_string.split("\n") if part.strip()]
-            return "; ".join(parts)
+            return join_value_parts_with.join(parts)
         else:
             return processed_string
     else:
@@ -66,7 +67,7 @@ def remove_trailing_dot(string):
         return string[:-1]
     return string
 
-def get_and_process_value(row, column_name, is_remove_trailing_dot):
+def get_and_process_value(row, column_name, is_remove_trailing_dot, join_value_parts_with):
     """
     The function returns a value from a column with line breaks handling,
     as well as removing the dot from the end of the value (string).
@@ -74,11 +75,12 @@ def get_and_process_value(row, column_name, is_remove_trailing_dot):
     Args:
         row (str): String DataFrame.
         column_name (str): Name of a column that must be processed.
+        join_value_parts_with (str): String that will be used for part joining.
 
     Returns:
         str: String with value without dot at the end.
     """
-    value = process_string_column(row, column_name)
+    value = process_column(row, column_name, join_value_parts_with)
     if is_remove_trailing_dot:
         value = remove_trailing_dot(value)
 
@@ -202,6 +204,7 @@ def get_abstract(row):
         str: String in the abstract field format.
     """
     AMOUNT_OF_ALL_POSSIBLE_ENTRIES = 5
+    JOIN_PARTS_OF_VALUES_WITH = " "
     count_of_not_available_parts = 0
     abstract_parts = []
 
@@ -211,27 +214,27 @@ def get_abstract(row):
         return f"{name}: description not available"
 
     if (row[COLUMNS['description']]):
-        abstract_parts.append(f"Facility description: {get_and_process_value(row, COLUMNS['description'], True)}")
+        abstract_parts.append(f"Facility description: {get_and_process_value(row, COLUMNS['description'], True, JOIN_PARTS_OF_VALUES_WITH)}")
     else:
         abstract_parts.append(get_not_available_message_and_increase_counter("Facility description"))
 
     if (row[COLUMNS['equipment']]):
-        abstract_parts.append(f"Equipment: {get_and_process_value(row, COLUMNS['equipment'], True)}")
+        abstract_parts.append(f"Equipment: {get_and_process_value(row, COLUMNS['equipment'], True, JOIN_PARTS_OF_VALUES_WITH)}")
     else:
         abstract_parts.append(get_not_available_message_and_increase_counter('Equipment'))
 
     if (row[COLUMNS['controlled_parameters']]):
-        abstract_parts.append(f"Controlled parameters: {get_and_process_value(row, COLUMNS['controlled_parameters'], True)}")
+        abstract_parts.append(f"Controlled parameters: {get_and_process_value(row, COLUMNS['controlled_parameters'], True, JOIN_PARTS_OF_VALUES_WITH)}")
     else:
         abstract_parts.append(get_not_available_message_and_increase_counter('Controlled Parameters'))
 
     if (row[COLUMNS['primary_interests']]):
-            abstract_parts.append(f"Primary interests: {get_and_process_value(row, COLUMNS['primary_interests'], True)}")
+            abstract_parts.append(f"Primary interests: {get_and_process_value(row, COLUMNS['primary_interests'], True, JOIN_PARTS_OF_VALUES_WITH)}")
     else:
         abstract_parts.append(get_not_available_message_and_increase_counter('Primary interests'))
 
     if (row[COLUMNS['research_topics']]):
-            abstract_parts.append(f"Research topics: {get_and_process_value(row, COLUMNS['research_topics'], True)}")
+            abstract_parts.append(f"Research topics: {get_and_process_value(row, COLUMNS['research_topics'], True, JOIN_PARTS_OF_VALUES_WITH)}")
     else:
         abstract_parts.append(get_not_available_message_and_increase_counter('Research topics'))
 
@@ -252,7 +255,8 @@ def get_keywords(row):
     Returns:
         str: String with keywords.
     """
-    specialist_areas = get_and_process_value(row, COLUMNS['specialist_areas'], False)
+    JOIN_PARTS_OF_VALUES_WITH = "; "
+    specialist_areas = get_and_process_value(row, COLUMNS['specialist_areas'], False, JOIN_PARTS_OF_VALUES_WITH)
 
     if specialist_areas:
         return specialist_areas
