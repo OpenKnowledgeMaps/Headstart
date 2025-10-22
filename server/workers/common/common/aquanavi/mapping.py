@@ -66,7 +66,7 @@ def remove_trailing_dot(string):
         return string[:-1]
     return string
 
-def get_and_process_value(row, column_name):
+def get_and_process_value(row, column_name, is_remove_trailing_dot):
     """
     The function returns a value from a column with line breaks handling,
     as well as removing the dot from the end of the value (string).
@@ -79,8 +79,10 @@ def get_and_process_value(row, column_name):
         str: String with value without dot at the end.
     """
     value = process_string_column(row, column_name)
-    value_without_trailing_dot = remove_trailing_dot(value)
-    return value_without_trailing_dot
+    if is_remove_trailing_dot:
+        value = remove_trailing_dot(value)
+
+    return value
 
 def get_latitude_longitude(row):
     """
@@ -209,27 +211,27 @@ def get_abstract(row):
         return f"{name}: description not available"
 
     if (row[COLUMNS['description']]):
-        abstract_parts.append(f"Facility description: {get_and_process_value(row, COLUMNS['description'])}")
+        abstract_parts.append(f"Facility description: {get_and_process_value(row, COLUMNS['description'], True)}")
     else:
         abstract_parts.append(get_not_available_message_and_increase_counter("Facility description"))
 
     if (row[COLUMNS['equipment']]):
-        abstract_parts.append(f"Equipment: {get_and_process_value(row, COLUMNS['equipment'])}")
+        abstract_parts.append(f"Equipment: {get_and_process_value(row, COLUMNS['equipment'], True)}")
     else:
         abstract_parts.append(get_not_available_message_and_increase_counter('Equipment'))
 
     if (row[COLUMNS['controlled_parameters']]):
-        abstract_parts.append(f"Controlled parameters: {get_and_process_value(row, COLUMNS['controlled_parameters'])}")
+        abstract_parts.append(f"Controlled parameters: {get_and_process_value(row, COLUMNS['controlled_parameters'], True)}")
     else:
         abstract_parts.append(get_not_available_message_and_increase_counter('Controlled Parameters'))
 
     if (row[COLUMNS['primary_interests']]):
-            abstract_parts.append(f"Primary interests: {get_and_process_value(row, COLUMNS['primary_interests'])}")
+            abstract_parts.append(f"Primary interests: {get_and_process_value(row, COLUMNS['primary_interests'], True)}")
     else:
         abstract_parts.append(get_not_available_message_and_increase_counter('Primary interests'))
 
     if (row[COLUMNS['research_topics']]):
-            abstract_parts.append(f"Research topics: {get_and_process_value(row, COLUMNS['research_topics'])}")
+            abstract_parts.append(f"Research topics: {get_and_process_value(row, COLUMNS['research_topics'], True)}")
     else:
         abstract_parts.append(get_not_available_message_and_increase_counter('Research topics'))
 
@@ -250,7 +252,7 @@ def get_keywords(row):
     Returns:
         str: String with keywords.
     """
-    specialist_areas = get_and_process_value(row, COLUMNS['specialist_areas'])
+    specialist_areas = get_and_process_value(row, COLUMNS['specialist_areas'], False)
 
     if specialist_areas:
         return specialist_areas
