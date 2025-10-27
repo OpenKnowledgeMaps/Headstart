@@ -34,6 +34,7 @@ interface StandardListEntryProps {
   showDocTags: boolean;
   showKeywords: boolean;
   showLocation: boolean;
+  showAuthors: boolean;
   service: ServiceType;
   paper: AllPossiblePapersType;
   isContentBased: boolean;
@@ -56,6 +57,7 @@ const StandardListEntry: FC<StandardListEntryProps> = ({
   showDocumentType,
   showKeywords,
   showLocation,
+  showAuthors,
   showMetrics,
   isContentBased,
   baseUnit,
@@ -89,7 +91,9 @@ const StandardListEntry: FC<StandardListEntryProps> = ({
         <div className="list_metadata">
           <AccessIcons paper={paper} showDocTypes={showDocTags} />
           <Title paper={paper} />
-          <Details authors={paper.authors_list} source={paper.published_in} />
+          {showAuthors && (
+            <Details authors={paper.authors_list} source={paper.published_in} />
+          )}
           <Link
             address={paper.list_link.address}
             isDoi={paper.list_link.isDoi}
@@ -159,6 +163,7 @@ const mapStateToProps = (state: State) => ({
       state.service === "aquanavi") &&
     !!state.selectedPaper,
   service: state.service,
+  showAuthors: state.chartType !== GEOMAP_MODE,
 });
 
 export default connect(
