@@ -128,7 +128,11 @@ export interface AquanaviPaper extends CommonPaperDataForAllIntegrations {
   geographicalData: GeographicalData | null;
 }
 
-export type AllPossiblePapersType = BasePaper | PubmedPaper | OrcidPaper;
+export type AllPossiblePapersType =
+  | BasePaper
+  | PubmedPaper
+  | OrcidPaper
+  | AquanaviPaper;
 
 export interface Paper {
   id: string;

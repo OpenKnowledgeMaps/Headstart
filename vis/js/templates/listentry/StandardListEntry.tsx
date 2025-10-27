@@ -1,8 +1,14 @@
-import React, { FC } from "react";
+import { FC } from "react";
 import { connect } from "react-redux";
-import { STREAMGRAPH_MODE } from "../../reducers/chartType";
+
+import { GEOMAP_MODE, STREAMGRAPH_MODE } from "../../reducers/chartType";
+import {
+  AllPossiblePapersType,
+  ServiceType,
+  SortValuesType,
+  State,
+} from "../../types";
 import { mapDispatchToListEntriesProps } from "../../utils/eventhandlers";
-import PaperButtons from "./PaperButtons";
 import Abstract from "./Abstract";
 import AccessIcons from "./AccessIcons";
 import Area from "./Area";
@@ -14,15 +20,11 @@ import DocumentType from "./DocumentType";
 import EntryBacklink from "./EntryBacklink";
 import Keywords from "./Keywords";
 import Link from "./Link";
+import { Location } from "./Location";
 import Metrics from "./Metrics";
 import OrcidMetrics from "./OrcidMetrics";
+import PaperButtons from "./PaperButtons";
 import Title from "./Title";
-import {
-  AllPossiblePapersType,
-  ServiceType,
-  SortValuesType,
-  State,
-} from "../../types";
 
 interface StandardListEntryProps {
   showDocumentType: boolean;
@@ -31,6 +33,7 @@ interface StandardListEntryProps {
   showBacklink: boolean;
   showDocTags: boolean;
   showKeywords: boolean;
+  showLocation: boolean;
   service: ServiceType;
   paper: AllPossiblePapersType;
   isContentBased: boolean;
@@ -40,10 +43,19 @@ interface StandardListEntryProps {
   handleBacklinkClick: () => void;
 }
 
+const getLocationFromPaper = (paper: AllPossiblePapersType): string | null => {
+  if ("geographicalData" in paper && paper.geographicalData) {
+    return paper.geographicalData.country;
+  }
+
+  return null;
+};
+
 const StandardListEntry: FC<StandardListEntryProps> = ({
   paper,
   showDocumentType,
   showKeywords,
+  showLocation,
   showMetrics,
   isContentBased,
   baseUnit,
@@ -68,6 +80,8 @@ const StandardListEntry: FC<StandardListEntryProps> = ({
     !showMetrics &&
     (!!citations || parseInt(citations as unknown as string) === 0);
 
+  const location = getLocationFromPaper(paper);
+
   return (
     <div id="list_holder" className="resulttype-paper">
       <div className="list_entry">
@@ -87,6 +101,7 @@ const StandardListEntry: FC<StandardListEntryProps> = ({
         )}
         <Abstract text={paper.paper_abstract} />
         {paper.comments.length > 0 && <Comments items={paper.comments} />}
+        {showLocation && <Location>{location}</Location>}
         {showKeywords && <Keywords>{paper.keywords}</Keywords>}
 
         {showAllDocTypes && <DocTypesRow types={paper.resulttype} />}
@@ -130,6 +145,7 @@ const mapStateToProps = (state: State) => ({
   showMetrics: state.list.showMetrics,
   isContentBased: state.list.isContentBased,
   baseUnit: state.list.baseUnit,
+  showLocation: state.chartType === GEOMAP_MODE && Boolean(state.selectedPaper),
   showKeywords:
     state.list.showKeywords &&
     (!!state.selectedPaper || !state.list.hideUnselectedKeywords),

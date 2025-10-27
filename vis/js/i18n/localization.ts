@@ -127,6 +127,8 @@ export interface Localization {
   publication: string;
   dataset: string;
   timestamp_label: string;
+  location: string;
+  location_fallback: string;
 }
 
 export const localization: {
@@ -226,6 +228,8 @@ export const localization: {
     scale_by_label: "Scale map by: ",
     citation_warning:
       "we were not able to verify whether this citation is formatted correctly based on the metadata received. Please check before reuse.",
+    location: "Location",
+    location_fallback: "not available",
   },
   ger: {
     loading: "Wird geladen...",
@@ -317,6 +321,8 @@ export const localization: {
     lang_all: "Alle Sprachen",
     scale_by_label: "Skalierung: ",
     default_authors: "No authors available",
+    location: "Standort",
+    location_fallback: "nicht verfügbar",
   },
   ger_linkedcat: {
     year: "Jahr",
