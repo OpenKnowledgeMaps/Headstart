@@ -19,8 +19,8 @@ for service in ${services[@]}; do
     echo "Building $service"
     echo ""
 
-    # Checks that the --platform-linux flag has been passed and determines the necessary docker build command
-    if [[ "$1" == "--platform-linux" ]]; then
+    # Checks that the --build-for-linux flag has been passed and determines the necessary docker build command
+    if [[ "$1" == "--build-for-linux" ]]; then
         echo "Building services with version --platform linux/amd64"
         docker build --platform linux/amd64 -f "$SCRIPT_DIR/../workers/$service/Dockerfile" -t "$service:$service_version" "$SCRIPT_DIR/../"
     else
