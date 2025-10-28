@@ -4,3 +4,38 @@
   height: 100vh;
   width: 100%;
 }
+
+.custom-marker {
+  position: relative;
+}
+
+.marker-shape {
+  width: 22px;
+  height: 22px;
+  background-color: #000;
+  border-radius: 50% 50% 50% 0;
+  transform: rotate(-45deg);
+  border: 2px solid white;
+  transition: 200ms ease;
+}
+
+.custom-marker:hover .marker-shape {
+  scale: 1.2;
+  background-color: #007bff;
+}
+
+.custom-marker.selected .marker-shape {
+  scale: 1.2;
+  background-color: #007bff;
+}
+
+.marker-shape::after {
+  content: "";
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  background: white;
+  border-radius: 50%;
+  top: 6px;
+  left: 6px;
+}
