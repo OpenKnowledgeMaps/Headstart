@@ -1,8 +1,12 @@
-import { LatLngTuple } from "leaflet";
+import { LatLngBoundsExpression, LatLngTuple } from "leaflet";
 
 interface Map {
   center: LatLngTuple;
   zoom: number;
+  minZoom: number;
+  maxBounds: LatLngBoundsExpression;
+  maxBoundsViscosity: number;
+  worldCopyJump: boolean;
 }
 
 interface TileLayer {
