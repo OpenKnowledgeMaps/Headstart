@@ -15,6 +15,6 @@ interface TileLayer {
 }
 
 export interface Options {
-  map: Map;
-  tileLayer: TileLayer;
+  MAP: Map;
+  LAYER: TileLayer;
 }

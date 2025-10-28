@@ -1,45 +1,44 @@
 import "leaflet/dist/leaflet.css";
 
-import { FC, useCallback, useState } from "react";
+import { FC, useCallback } from "react";
 import { MapContainer, TileLayer } from "react-leaflet";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
-import { State } from "@/js/types";
-import { getCoordinatesFromPaper } from "@/js/utils/coordinates";
+import { selectPaper } from "@/js/actions";
+import { AllPossiblePapersType, State } from "@/js/types";
 
 import { OPTIONS } from "./options";
 import { Pin } from "./Pin";
 
-const { map, tileLayer } = OPTIONS;
+const { MAP, LAYER } = OPTIONS;
 
-const getMesocosmsData = (state: State) => state.data.list;
+const getItemsData = (state: State) => state.data.list;
+const getSelectedItemId = (state: State) => state.selectedPaper?.safeId;
 
 export const Geomap: FC = () => {
-  const [selectedPinId, setSelectedPinId] = useState<string | null>(null);
-  const mesocosms = useSelector(getMesocosmsData);
+  const items = useSelector(getItemsData);
+  const selectedItemId = useSelector(getSelectedItemId);
+  const handleItemSelect = useDispatch();
 
-  const handlePinClick = useCallback((id: string) => {
-    setSelectedPinId(id);
-  }, []);
+  const handlePinClick = useCallback(
+    (data: AllPossiblePapersType) => {
+      handleItemSelect(selectPaper(data));
+    },
+    [handleItemSelect],
+  );
 
   return (
-    <MapContainer {...map} className="geomap_container">
-      <TileLayer {...tileLayer} />
-      {mesocosms.map((data) => {
+    <MapContainer {...MAP} className="geomap_container">
+      <TileLayer {...LAYER} />
+      {items.map((data) => {
         const { safe_id: id } = data;
-        const { east, north } = getCoordinatesFromPaper(data);
-
-        if (!east || !north) {
-          return null;
-        }
+        const isActive = selectedItemId === id;
 
         return (
           <Pin
-            key={id}
-            id={id}
-            lon={east}
-            lat={north}
-            isActive={selectedPinId === id}
+            key={id + isActive}
+            data={data}
+            isActive={isActive}
             onClick={handlePinClick}
           />
         );

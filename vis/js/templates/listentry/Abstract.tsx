@@ -1,12 +1,13 @@
 import React, { FC } from "react";
 import { connect } from "react-redux";
-import { useLocalizationContext } from "../../components/LocalizationProvider";
+
 import Highlight from "../../components/Highlight";
+import { useLocalizationContext } from "../../components/LocalizationProvider";
 import { SelectedPaper, State } from "../../types";
 
 interface AbstractProps {
   text: string;
-  isSelected: SelectedPaper;
+  isSelected: SelectedPaper | null;
 }
 
 const Abstract: FC<AbstractProps> = ({ text, isSelected }) => {

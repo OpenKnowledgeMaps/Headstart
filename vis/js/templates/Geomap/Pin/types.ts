@@ -1,7 +1,7 @@
+import { AllPossiblePapersType } from "@/js/types";
+
 export interface PinProps {
-  id: string;
-  lon: number;
-  lat: number;
+  data: AllPossiblePapersType;
   isActive: boolean;
-  onClick: (id: string) => void;
+  onClick: (data: AllPossiblePapersType) => void;
 }

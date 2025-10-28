@@ -1,7 +1,7 @@
 import { Options } from "./types";
 
 export const OPTIONS: Options = {
-  map: {
+  MAP: {
     center: [48.216651235748074, 16.39589688527869],
     zoom: 4,
     minZoom: 2,
@@ -12,7 +12,7 @@ export const OPTIONS: Options = {
     maxBoundsViscosity: 1.0,
     worldCopyJump: true,
   },
-  tileLayer: {
+  LAYER: {
     attribution: "&copy; OpenStreetMap contributors",
     url: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
   },

@@ -27,7 +27,7 @@ export interface State {
   q_advanced: slices.QueryAdvanced;
   query: slices.Query;
   selectedBubble: slices.SelectedBubble;
-  selectedPaper: slices.SelectedPaper;
+  selectedPaper: slices.SelectedPaper | null;
   service: ServiceType;
   streamgraph: slices.Streamgraph;
   timespan: string;
