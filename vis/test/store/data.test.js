@@ -1,7 +1,6 @@
-import { expect, describe, it } from "vitest";
+import { describe, expect, it } from "vitest";
 
 import { initializeStore, updateDimensions } from "../../js/actions";
-
 import reducer from "../../js/reducers/data";
 
 describe("data state", () => {
@@ -73,6 +72,7 @@ describe("data state", () => {
           paperMinScale: undefined,
           paperWidthFactor: undefined,
           referenceSize: undefined,
+          hoveredItemId: null,
         },
         size: 500,
       });
