@@ -1,13 +1,14 @@
 // @ts-nocheck
+import {
+  AllPossiblePapersType,
+  AquanaviPaper,
+  Config,
+  GeographicalData,
+} from "@js/types";
+
 import { GEOMAP_MODE } from "../reducers/chartType";
 import { isNonTextDocument } from "../templates/Paper";
 import { checkIsEmptyString, stringCompare } from "./string";
-import {
-  AllPossiblePapersType,
-  Config,
-  AquanaviPaper,
-  GeographicalData,
-} from "@js/types";
 
 /**
  * Filters the input data according to the provided settings.
@@ -111,8 +112,8 @@ const SEARCHED_PROPS = [
  *
  * @returns {Function} filtering function that returns true if paper contains all the searched keywords
  */
-const getWordFilterFunction = (searchedKeywords) => {
-  return (paper) => {
+const getWordFilterFunction = (searchedKeywords: string[]) => {
+  return (paper: AllPossiblePapersType) => {
     const paperKeywords = SEARCHED_PROPS.map((prop) =>
       getPropertyOrEmptyString(paper, prop),
     );
@@ -130,6 +131,15 @@ const getWordFilterFunction = (searchedKeywords) => {
     }
     if (isNonText) {
       paperKeywords.push("file");
+    }
+
+    if ("geographicalData" in paper && paper.geographicalData) {
+      const { country } = paper.geographicalData;
+
+      if (country) {
+        const formattedCountry = country.toLowerCase();
+        paperKeywords.push(formattedCountry);
+      }
     }
 
     const paperString = paperKeywords.join(" ");
