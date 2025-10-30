@@ -104,6 +104,11 @@ export const selectPaper = (paper: any, isFromBackButton = false) => ({
   isFromBackButton,
 });
 
+export const hoverItem = (id: string | null) => ({
+  type: "HOVER_ITEM",
+  safeId: id,
+});
+
 export const deselectPaper = (isFromBackButton = false) => ({
   type: "DESELECT_PAPER",
   isFromBackButton,

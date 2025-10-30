@@ -16,4 +16,5 @@ interface Options {
   paperWidthFactor: number;
   referenceSize: number;
   visualizationId: string;
+  hoveredItemId: string | null;
 }

@@ -1,12 +1,13 @@
-import React, { FC } from "react";
+import { FC } from "react";
 import { connect } from "react-redux";
+
 import Highlight from "../../components/Highlight";
 import { useLocalizationContext } from "../../components/LocalizationProvider";
-import { STREAMGRAPH_MODE } from "../../reducers/chartType";
+import { GEOMAP_MODE, STREAMGRAPH_MODE } from "../../reducers/chartType";
+import { AllPossiblePapersType, State, VisualizationTypes } from "../../types";
 import { getDateFromTimestamp } from "../../utils/dates";
 import { mapDispatchToListEntriesProps } from "../../utils/eventhandlers";
 import useMatomo from "../../utils/useMatomo";
-import { AllPossiblePapersType, State } from "../../types";
 
 const MAX_TITLE_LENGTH = 164;
 
@@ -14,21 +15,26 @@ interface TitleProps {
   disableClicks: boolean;
   isSelected: boolean;
   isStreamgraph: boolean;
+  visualizationType: VisualizationTypes;
   paper: AllPossiblePapersType;
   handleSelectPaper: (paper: AllPossiblePapersType) => void;
   handleSelectPaperWithZoom: (paper: AllPossiblePapersType) => void;
+  handleMouseEnterOnTitle: (id: string | null) => void;
 }
 
 const Title: FC<TitleProps> = ({
   paper,
   isStreamgraph,
+  visualizationType,
   disableClicks,
   isSelected,
   handleSelectPaper,
   handleSelectPaperWithZoom,
+  handleMouseEnterOnTitle,
 }) => {
   const loc = useLocalizationContext();
   const { trackEvent } = useMatomo();
+  const isGeoMap = visualizationType === GEOMAP_MODE;
 
   const handleClick = () => {
     if (disableClicks) {
@@ -44,6 +50,17 @@ const Title: FC<TitleProps> = ({
     trackEvent("List document", "Select paper", "List title");
   };
 
+  const handleMouseEnter = () => {
+    handleMouseEnterOnTitle(paper.safe_id);
+  };
+
+  const handleMouseLeave = () => {
+    handleMouseEnterOnTitle(null);
+  };
+
+  const mouseEnterHandler = isGeoMap ? handleMouseEnter : undefined;
+  const mouseLeaveHandler = isGeoMap ? handleMouseLeave : undefined;
+
   const rawTitle = paper.title ? paper.title : loc.default_paper_title;
 
   const formattedDate = ` (${formatPaperDate(paper.year)})`;
@@ -52,7 +69,12 @@ const Title: FC<TitleProps> = ({
     : formatTitle(rawTitle, MAX_TITLE_LENGTH - formattedDate.length);
 
   return (
-    <div className="list_title" onClick={handleClick}>
+    <div
+      className="list_title"
+      onClick={handleClick}
+      onMouseEnter={mouseEnterHandler}
+      onMouseLeave={mouseLeaveHandler}
+    >
       <a
         id="paper_list_title"
         title={rawTitle + (paper.year ? formattedDate : "")}
@@ -66,6 +88,7 @@ const Title: FC<TitleProps> = ({
 
 const mapStateToProps = (state: State) => ({
   isStreamgraph: state.chartType === STREAMGRAPH_MODE,
+  visualizationType: state.chartType,
   disableClicks: state.list.disableClicks,
   isSelected: !!state.selectedPaper,
 });

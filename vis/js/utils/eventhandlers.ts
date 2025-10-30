@@ -1,17 +1,18 @@
-import { AllPossiblePapersType, Paper } from "../types";
 import {
-  zoomIn,
-  zoomOut,
-  highlightArea,
-  showPreview,
-  selectPaper,
   deselectPaper,
-  stopAnimation,
+  highlightArea,
   hoverBubble,
+  hoverItem,
   hoverPaper,
+  selectPaper,
   showCitePaper,
   showExportPaper,
+  showPreview,
+  stopAnimation,
+  zoomIn,
+  zoomOut,
 } from "../actions";
+import { AllPossiblePapersType, Paper } from "../types";
 
 /**
  * Returns mapDispatchToProps function used in *ListEntries.js components.
@@ -48,6 +49,7 @@ export const mapDispatchToListEntriesProps = (dispatch: any) => ({
     dispatch(showCitePaper(paper)),
   handleExportClick: (paper: AllPossiblePapersType) =>
     dispatch(showExportPaper(paper)),
+  handleMouseEnterOnTitle: (id: string | null) => dispatch(hoverItem(id)),
 });
 
 /**
