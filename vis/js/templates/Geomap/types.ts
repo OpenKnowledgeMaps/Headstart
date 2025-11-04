@@ -7,6 +7,7 @@ interface Map {
   maxBounds: LatLngBoundsExpression;
   maxBoundsViscosity: number;
   worldCopyJump: boolean;
+  keyboard: boolean;
 }
 
 interface TileLayer {

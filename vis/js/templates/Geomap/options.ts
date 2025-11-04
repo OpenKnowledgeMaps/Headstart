@@ -11,6 +11,7 @@ export const OPTIONS: Options = {
     ],
     maxBoundsViscosity: 1.0,
     worldCopyJump: true,
+    keyboard: false,
   },
   LAYER: {
     attribution: "&copy; OpenStreetMap contributors",
