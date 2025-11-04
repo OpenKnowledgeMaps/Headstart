@@ -2,7 +2,7 @@ import { Options } from "./types";
 
 export const OPTIONS: Options = {
   MAP: {
-    center: [48.216651235748074, 16.39589688527869],
+    center: [45.1, 4.1],
     zoom: 4,
     minZoom: 2,
     maxBounds: [
