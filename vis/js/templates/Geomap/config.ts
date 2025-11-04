@@ -1,9 +1,10 @@
-import { Options } from "./types";
+import { Config } from "./types";
 
-export const OPTIONS: Options = {
+export const CONFIG: Config = {
   MAP: {
     center: [45.1, 4.1],
     zoom: 4,
+    maxZoom: 17,
     minZoom: 2,
     maxBounds: [
       [-85, -180],
@@ -13,10 +14,6 @@ export const OPTIONS: Options = {
     worldCopyJump: true,
     keyboard: false,
     zoomControl: false,
-  },
-  LAYER: {
-    attribution: "&copy; OpenStreetMap contributors",
-    url: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
   },
   ZOOM_CONTROL: {
     position: "bottomright",

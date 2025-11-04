@@ -1,18 +1,19 @@
 import "leaflet/dist/leaflet.css";
 
 import { FC, useCallback } from "react";
-import { MapContainer, TileLayer, ZoomControl } from "react-leaflet";
+import { MapContainer, ZoomControl } from "react-leaflet";
 import { useDispatch, useSelector } from "react-redux";
 
 import { useData } from "@/hooks/useData";
 import { selectPaper } from "@/js/actions";
 import { AllPossiblePapersType } from "@/js/types";
 
-import { OPTIONS } from "./options";
+import { CONFIG } from "./config";
+import { LayersSwitcher } from "./LayersSwitcher";
 import { Pin } from "./Pin";
 import { getHoveredItemId, getSelectedItemId } from "./selectors";
 
-const { MAP, LAYER, ZOOM_CONTROL } = OPTIONS;
+const { MAP, ZOOM_CONTROL } = CONFIG;
 
 export const Geomap: FC = () => {
   const { filteredData } = useData(true);
@@ -29,8 +30,8 @@ export const Geomap: FC = () => {
 
   return (
     <MapContainer {...MAP} className="geomap_container">
-      <TileLayer {...LAYER} />
       <ZoomControl {...ZOOM_CONTROL} />
+      <LayersSwitcher />
       {filteredData &&
         filteredData.map((item) => {
           const { safe_id: id } = item;

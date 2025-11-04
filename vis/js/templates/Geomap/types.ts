@@ -4,6 +4,7 @@ interface Map {
   center: LatLngTuple;
   zoom: number;
   minZoom: number;
+  maxZoom: number;
   maxBounds: LatLngBoundsExpression;
   maxBoundsViscosity: number;
   worldCopyJump: boolean;
@@ -11,17 +12,11 @@ interface Map {
   zoomControl: boolean;
 }
 
-interface TileLayer {
-  attribution: string;
-  url: string;
-}
-
 interface ZoomControl {
   position?: "topleft" | "topright" | "bottomleft" | "bottomright";
 }
 
-export interface Options {
+export interface Config {
   MAP: Map;
-  LAYER: TileLayer;
   ZOOM_CONTROL: ZoomControl;
 }
