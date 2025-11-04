@@ -8,6 +8,7 @@ interface Map {
   maxBoundsViscosity: number;
   worldCopyJump: boolean;
   keyboard: boolean;
+  zoomControl: boolean;
 }
 
 interface TileLayer {
@@ -15,7 +16,12 @@ interface TileLayer {
   url: string;
 }
 
+interface ZoomControl {
+  position?: "topleft" | "topright" | "bottomleft" | "bottomright";
+}
+
 export interface Options {
   MAP: Map;
   LAYER: TileLayer;
+  ZOOM_CONTROL: ZoomControl;
 }

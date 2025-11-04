@@ -12,9 +12,13 @@ export const OPTIONS: Options = {
     maxBoundsViscosity: 1.0,
     worldCopyJump: true,
     keyboard: false,
+    zoomControl: false,
   },
   LAYER: {
     attribution: "&copy; OpenStreetMap contributors",
     url: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+  },
+  ZOOM_CONTROL: {
+    position: "bottomright",
   },
 };
