@@ -12,11 +12,11 @@ $precomputed_id = $_POST["unique_id"] ?? null;
 
 // Mock some request parameters
 $post_params = $_POST;
-$post_params["min_descsize"] = "300";
+$post_params["min_descsize"] = "0";
 $post_params["lang_id"] = ["all-lang"];
 $post_params["vis_type"] = "geomap";
 $post_params["from"] = "1665-01-01";
-$post_params["to"] = "2025-10-08";
+$post_params["to"] = "2025-11-05";
 $post_params["document_types"] = ["F"];
 $post_params["sorting"] = "most-relevant";
 $post_params["time_range"] = "user-defined";
