@@ -1,4 +1,5 @@
 import { Config } from "../types";
+import { GEOMAP_MODE } from "./chartType";
 
 const context = (state = {}, action: any) => {
   if (action.canceled) {
@@ -54,6 +55,10 @@ const getTitleLabelType = (config: Config) => {
 
   if (config.is_streamgraph) {
     return "keywordview-streamgraph";
+  }
+
+  if (config.visualization_type === GEOMAP_MODE) {
+    return "geomap";
   }
 
   return "keywordview-knowledgemap";

@@ -14,6 +14,7 @@ export interface Localization {
   streamgraph_label: string;
   overview_authors_label: string;
   streamgraph_authors_label: string;
+  geomap_label: string;
   custom_title_explanation: string;
   articles_label: string;
   most_recent_label: string;
@@ -150,6 +151,7 @@ export const localization: {
     streamgraph_label: "Streamgraph of",
     overview_authors_label: "Knowledge Map of the works of",
     streamgraph_authors_label: "Streamgraph of the works of",
+    geomap_label: "Geo Map of",
     custom_title_explanation:
       "This is a custom title. Please see the info button for more information. Original query:",
     articles_label: "documents",
@@ -248,6 +250,7 @@ export const localization: {
     streamgraph_label: "Streamgraph für",
     overview_authors_label: "Überblick über die Werke von",
     streamgraph_authors_label: "Streamgraph für die Werke von",
+    geomap_label: "Geo Map für",
     custom_title_explanation:
       "Dieser Titel wurde manuell geändert. Die Original-Suche lautet:",
     most_recent_label: "neueste",
