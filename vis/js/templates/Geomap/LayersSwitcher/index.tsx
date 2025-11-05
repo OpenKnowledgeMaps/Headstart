@@ -3,12 +3,18 @@ import { LayersControl, TileLayer } from "react-leaflet";
 
 import { CONFIG } from "./config";
 
+const { LAYERS, CHECKED_LAYER_NAME, POSITION } = CONFIG;
+
 export const LayersSwitcher: FC = () => (
-  <LayersControl position="topright">
-    {CONFIG.map(({ name, url, attribution }, index) => (
-      <LayersControl.BaseLayer key={name} checked={index === 0} name={name}>
-        <TileLayer attribution={attribution} url={url} />
-      </LayersControl.BaseLayer>
-    ))}
+  <LayersControl position={POSITION}>
+    {LAYERS.map(({ name, url, attribution }) => {
+      const isChecked = name === CHECKED_LAYER_NAME;
+
+      return (
+        <LayersControl.BaseLayer key={name} checked={isChecked} name={name}>
+          <TileLayer attribution={attribution} url={url} />
+        </LayersControl.BaseLayer>
+      );
+    })}
   </LayersControl>
 );
