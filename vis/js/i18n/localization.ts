@@ -94,9 +94,11 @@ export interface Localization {
   high_metadata_quality: string;
   high_metadata_quality_desc_base: string;
   high_metadata_quality_desc_pubmed: string;
+  high_metadata_quality_desc_aquanavi: string;
   low_metadata_quality: string;
   low_metadata_quality_desc_base: string;
   low_metadata_quality_desc_pubmed: string;
+  low_metadata_quality_desc_aquanavi: string;
   time_frame_context_sg: string;
   citations_count_label: string;
   social_media_count_label: string;
@@ -393,11 +395,15 @@ export const localization: {
       "This visualization only includes documents with an abstract (min. 300 characters). High metadata quality significantly improves the quality of your visualization.",
     high_metadata_quality_desc_pubmed:
       "This visualization only includes documents with an abstract. High metadata quality significantly improves the quality of your visualization.",
+    high_metadata_quality_desc_aquanavi:
+      "This visualization only includes documents with an abstract (min. 300 characters). High metadata quality significantly improves the quality of your visualization.",
     low_metadata_quality: "Data quality",
     low_metadata_quality_desc_base:
-      "This visualization includes documents with and without an abstract. Low metadata quality may significantly reduce the quality of your visualization. ",
+      "This visualization includes documents with and without an abstract. Low metadata quality may significantly reduce the quality of your visualization.",
     low_metadata_quality_desc_pubmed:
-      "This visualization includes documents with and without an abstract. Low metadata quality may significantly reduce the quality of your visualization. ",
+      "This visualization includes documents with and without an abstract. Low metadata quality may significantly reduce the quality of your visualization.",
+    low_metadata_quality_desc_aquanavi:
+      "This visualization includes documents with and without an abstract. Low metadata quality may significantly reduce the quality of your visualization.",
     time_frame_context_sg:
       "Please note that we remove time intervals with only a few associated papers during the computation of your streamgraph to increase its readability. As a result the time on the x-axis may not align with the time range you selected.",
     // metrics

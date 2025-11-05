@@ -1,4 +1,4 @@
-import { Config, Context } from "../types";
+import { Config, Context, MetadataQualityType } from "../types";
 
 const exists = (param: any) => {
   return typeof param !== "undefined" && param !== "null" && param !== null;
@@ -96,7 +96,7 @@ const contextLine = (state = {}, action: any) => {
 export const getModifier = (
   config: Config,
   context: any,
-  numOfPapers: number
+  numOfPapers: number,
 ) => {
   if (context.service === "orcid") {
     return "most-recent";
@@ -129,7 +129,7 @@ const getDocumentTypes = (config: Config, context: any) => {
   const documentTypesArray: string[] = [];
   // @ts-ignore
   const documentTypeObj = config.options?.find(
-    (obj: any) => obj.id === propName
+    (obj: any) => obj.id === propName,
   );
 
   context.params[propName].forEach((type: any) => {
@@ -168,7 +168,7 @@ const getProjectRuntime = (config: Config, context: any) => {
 
   return `${context.params.start_date.slice(
     0,
-    4
+    4,
   )}–${context.params.end_date.slice(0, 4)}`;
 };
 
@@ -183,14 +183,14 @@ const getLegacySearchLanguage = (config: Config, context: Context) => {
   }
 
   const lang = config.options.languages.find(
-    (lang) => lang.code === context.params.lang_id
+    (lang) => lang.code === context.params.lang_id,
   );
 
   if (!lang) {
     return null;
   }
 
-  return "Language: " + lang.lang_in_lang + " (" + lang.lang_in_eng + ") ";
+  return `Language: ${lang.lang_in_lang} (${lang.lang_in_eng}) `;
 };
 
 const getTimestamp = (config: Config, context: Context) => {
@@ -201,7 +201,10 @@ const getTimestamp = (config: Config, context: Context) => {
   return context.last_update;
 };
 
-const getMetadataQuality = (config: Config, context: Context) => {
+const getMetadataQuality = (
+  config: Config,
+  context: Context,
+): MetadataQualityType | null => {
   if (
     !context.params ||
     !context.params.min_descsize ||
@@ -210,7 +213,7 @@ const getMetadataQuality = (config: Config, context: Context) => {
     return null;
   }
 
-  let minDescSize =
+  const minDescSize =
     typeof context.params.min_descsize === "string"
       ? parseInt(context.params.min_descsize)
       : context.params.min_descsize;
@@ -224,6 +227,14 @@ const getMetadataQuality = (config: Config, context: Context) => {
   }
 
   if (context.service === "pubmed") {
+    if (minDescSize === 0) {
+      return "low";
+    }
+
+    return "high";
+  }
+
+  if (context.service === "aquanavi") {
     if (minDescSize === 0) {
       return "low";
     }

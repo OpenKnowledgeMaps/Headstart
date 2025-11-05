@@ -1,14 +1,16 @@
-import React, { FC, ReactNode } from "react";
+import { FC, ReactNode } from "react";
 
-import HoverPopover from "../HoverPopover";
+import { MetadataQualityType } from "@/js/types";
+
 import { useLocalizationContext } from "../../components/LocalizationProvider";
-import useMatomo from "../../utils/useMatomo";
 import { Localization } from "../../i18n/localization";
+import useMatomo from "../../utils/useMatomo";
+import HoverPopover from "../HoverPopover";
 
 interface MetadataQualityProps {
   popoverContainer: ReactNode;
-  service: "base" | "pubmed";
-  quality: "high" | "low";
+  service: "base" | "pubmed" | "aquanavi";
+  quality: MetadataQualityType;
 }
 
 const MetadataQuality: FC<MetadataQualityProps> = ({

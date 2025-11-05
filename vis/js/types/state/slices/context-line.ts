@@ -13,7 +13,7 @@ export interface ContextLine {
   isResearcherDetailsEnabled: unknown;
   isResearcherMetricsEnabled: unknown;
   legacySearchLanguage: null;
-  metadataQuality: string;
+  metadataQuality: MetadataQualityType;
   modifier: string;
   modifierLimit: number;
   openAccessCount: null;
@@ -34,3 +34,5 @@ interface ContextLineAuthorData {
   imageLink: string | null;
   livingDates: null;
 }
+
+export type MetadataQualityType = "high" | "low";
