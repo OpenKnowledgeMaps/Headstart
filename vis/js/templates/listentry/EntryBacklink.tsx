@@ -1,28 +1,31 @@
-import React, { FC } from "react";
+import { FC } from "react";
+
+import { useVisualizationType } from "@/hooks";
+
 import { useLocalizationContext } from "../../components/LocalizationProvider";
 
-interface EntryBacklinkProps {
+interface EntryBackLinkProps {
   isInStream: boolean;
   onClick: () => void;
 }
 
-const EntryBacklink: FC<EntryBacklinkProps> = ({ isInStream, onClick }) => {
+const EntryBackLink: FC<EntryBackLinkProps> = ({ isInStream, onClick }) => {
   const localization = useLocalizationContext();
+  const { isStreamgraph } = useVisualizationType();
+
+  let displayedText = localization.backlink_list;
+
+  if (isStreamgraph) {
+    displayedText = isInStream
+      ? localization.backlink_list_streamgraph_stream_selected
+      : localization.backlink_list_streamgraph;
+  }
 
   return (
-    <button
-      className="paper_button backlink_list"
-      style={{ width: "auto" }}
-      onClick={onClick}
-    >
-      <i className="fas fa-arrow-left"></i>
-      <span className="backlink-label">
-        {isInStream
-          ? localization.backlink_list_streamgraph_stream_selected
-          : localization.backlink_list_streamgraph}
-      </span>
+    <button type="button" className="back_link_button" onClick={onClick}>
+      {displayedText}
     </button>
   );
 };
 
-export default EntryBacklink;
+export default EntryBackLink;

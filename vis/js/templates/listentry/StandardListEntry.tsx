@@ -17,7 +17,7 @@ import Comments from "./Comments";
 import Details from "./Details";
 import DocTypesRow from "./DocTypesRow";
 import DocumentType from "./DocumentType";
-import EntryBacklink from "./EntryBacklink";
+import EntryBackLink from "./EntryBackLink";
 import Keywords from "./Keywords";
 import Link from "./Link";
 import { Location } from "./Location";
@@ -128,7 +128,7 @@ const StandardListEntry: FC<StandardListEntryProps> = ({
         <PaperButtons paper={paper} />
         {showArea && <Area paper={paper} isShort={showCitations} />}
         {showBackLink && (
-          <EntryBacklink
+          <EntryBackLink
             onClick={handleBackLinkClick}
             isInStream={isInStreamBackLink}
           />
