@@ -30,7 +30,7 @@ interface StandardListEntryProps {
   showDocumentType: boolean;
   showMetrics?: unknown;
   showAllDocTypes: boolean;
-  showBacklink: boolean;
+  showBackLink: boolean;
   showDocTags: boolean;
   showKeywords: boolean;
   showLocation: boolean;
@@ -39,9 +39,9 @@ interface StandardListEntryProps {
   service: ServiceType;
   paper: AllPossiblePapersType;
   isContentBased: boolean;
-  isInStreamBacklink: boolean;
+  isInStreamBackLink: boolean;
   baseUnit: SortValuesType;
-  handleBacklinkClick: () => void;
+  handleBackLinkClick: () => void;
 }
 
 const getLocationFromPaper = (paper: AllPossiblePapersType): string | null => {
@@ -62,19 +62,13 @@ const StandardListEntry: FC<StandardListEntryProps> = ({
   showMetrics,
   isContentBased,
   baseUnit,
-  showBacklink,
-  isInStreamBacklink,
+  showBackLink,
+  isInStreamBackLink,
   showDocTags,
   showAllDocTypes,
   service,
-  handleBacklinkClick,
+  handleBackLinkClick,
 }) => {
-  const backlink = {
-    show: showBacklink,
-    isInStream: isInStreamBacklink,
-    onClick: () => handleBacklinkClick(),
-  };
-
   const citations = paper.citation_count;
   const showCitations =
     !isContentBased &&
@@ -133,10 +127,10 @@ const StandardListEntry: FC<StandardListEntryProps> = ({
         {showCitations && <Citations number={citations} label={baseUnit} />}
         <PaperButtons paper={paper} />
         {showArea && <Area paper={paper} isShort={showCitations} />}
-        {!!backlink.show && (
+        {showBackLink && (
           <EntryBacklink
-            onClick={backlink.onClick}
-            isInStream={backlink.isInStream}
+            onClick={handleBackLinkClick}
+            isInStream={isInStreamBackLink}
           />
         )}
       </div>
@@ -153,8 +147,10 @@ const mapStateToProps = (state: State) => ({
   showKeywords:
     state.list.showKeywords &&
     (!!state.selectedPaper || !state.list.hideUnselectedKeywords),
-  showBacklink: state.chartType === STREAMGRAPH_MODE && !!state.selectedPaper,
-  isInStreamBacklink: !!state.selectedBubble,
+  showBackLink:
+    (state.chartType === STREAMGRAPH_MODE || state.chartType === GEOMAP_MODE) &&
+    !!state.selectedPaper,
+  isInStreamBackLink: !!state.selectedBubble,
   showDocTags: state.service === "base" || state.service === "orcid",
   showAllDocTypes:
     (state.service === "base" ||

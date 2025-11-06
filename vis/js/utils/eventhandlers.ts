@@ -44,7 +44,7 @@ export const mapDispatchToListEntriesProps = (dispatch: any) => ({
       ),
     ),
   handleDeselectPaper: () => dispatch(deselectPaper()),
-  handleBacklinkClick: () => dispatch(deselectPaper()),
+  handleBackLinkClick: () => dispatch(deselectPaper()),
   handleCiteClick: (paper: AllPossiblePapersType) =>
     dispatch(showCitePaper(paper)),
   handleExportClick: (paper: AllPossiblePapersType) =>
