@@ -35,11 +35,11 @@ interface StandardListEntryProps {
   showKeywords: boolean;
   showLocation: boolean;
   showAuthors: boolean;
+  showArea: boolean;
   service: ServiceType;
   paper: AllPossiblePapersType;
   isContentBased: boolean;
   isInStreamBacklink: boolean;
-  isStreamgraph: boolean;
   baseUnit: SortValuesType;
   handleBacklinkClick: () => void;
 }
@@ -58,10 +58,10 @@ const StandardListEntry: FC<StandardListEntryProps> = ({
   showKeywords,
   showLocation,
   showAuthors,
+  showArea,
   showMetrics,
   isContentBased,
   baseUnit,
-  isStreamgraph,
   showBacklink,
   isInStreamBacklink,
   showDocTags,
@@ -132,7 +132,7 @@ const StandardListEntry: FC<StandardListEntryProps> = ({
 
         {showCitations && <Citations number={citations} label={baseUnit} />}
         <PaperButtons paper={paper} />
-        {!isStreamgraph && <Area paper={paper} isShort={showCitations} />}
+        {showArea && <Area paper={paper} isShort={showCitations} />}
         {!!backlink.show && (
           <EntryBacklink
             onClick={backlink.onClick}
@@ -153,7 +153,6 @@ const mapStateToProps = (state: State) => ({
   showKeywords:
     state.list.showKeywords &&
     (!!state.selectedPaper || !state.list.hideUnselectedKeywords),
-  isStreamgraph: state.chartType === STREAMGRAPH_MODE,
   showBacklink: state.chartType === STREAMGRAPH_MODE && !!state.selectedPaper,
   isInStreamBacklink: !!state.selectedBubble,
   showDocTags: state.service === "base" || state.service === "orcid",
@@ -164,6 +163,8 @@ const mapStateToProps = (state: State) => ({
     !!state.selectedPaper,
   service: state.service,
   showAuthors: state.chartType !== GEOMAP_MODE,
+  showArea:
+    state.chartType !== STREAMGRAPH_MODE && state.chartType !== GEOMAP_MODE,
 });
 
 export default connect(
