@@ -4,12 +4,12 @@ import { useVisualizationType } from "@/hooks";
 
 import { useLocalizationContext } from "../../components/LocalizationProvider";
 
-interface EntryBackLinkProps {
+interface BackLinkProps {
   isInStream: boolean;
   onClick: () => void;
 }
 
-const EntryBackLink: FC<EntryBackLinkProps> = ({ isInStream, onClick }) => {
+const BackLink: FC<BackLinkProps> = ({ isInStream, onClick }) => {
   const localization = useLocalizationContext();
   const { isStreamgraph } = useVisualizationType();
 
@@ -28,4 +28,4 @@ const EntryBackLink: FC<EntryBackLinkProps> = ({ isInStream, onClick }) => {
   );
 };
 
-export default EntryBackLink;
+export default BackLink;

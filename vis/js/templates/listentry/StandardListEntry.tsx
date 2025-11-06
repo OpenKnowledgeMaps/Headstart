@@ -12,12 +12,12 @@ import { mapDispatchToListEntriesProps } from "../../utils/eventhandlers";
 import Abstract from "./Abstract";
 import AccessIcons from "./AccessIcons";
 import Area from "./Area";
+import BackLink from "./BackLink";
 import Citations from "./Citations";
 import Comments from "./Comments";
 import Details from "./Details";
 import DocTypesRow from "./DocTypesRow";
 import DocumentType from "./DocumentType";
-import EntryBackLink from "./EntryBackLink";
 import Keywords from "./Keywords";
 import Link from "./Link";
 import { Location } from "./Location";
@@ -128,7 +128,7 @@ const StandardListEntry: FC<StandardListEntryProps> = ({
         <PaperButtons paper={paper} />
         {showArea && <Area paper={paper} isShort={showCitations} />}
         {showBackLink && (
-          <EntryBackLink
+          <BackLink
             onClick={handleBackLinkClick}
             isInStream={isInStreamBackLink}
           />
