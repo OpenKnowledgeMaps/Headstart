@@ -41,3 +41,8 @@
 .leaflet-control-layers-base > label > span > span {
   font-size: 12px;
 }
+
+.leaflet-container,
+.leaflet-container * {
+  font-family: "Open Sans", Helvetica, sans-serif;
+}
