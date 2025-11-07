@@ -1,7 +1,11 @@
 import React from "react";
 import { connect } from "react-redux";
-import CreatedBy from "../templates/footers/CreatedBy";
+
 import { STREAMGRAPH_MODE } from "../reducers/chartType";
+import CreatedBy from "../templates/footers/CreatedBy";
+import { ServiceType, State } from "../types";
+
+const SUPPORTED_SERVICES = ["base", "pubmed", "openaire", "orcid", "aquanavi"];
 
 const Footer = ({
   service,
@@ -10,8 +14,8 @@ const Footer = ({
   faqsUrlStr,
   isStreamgraph,
 }: {
-  service: string;
-  timestamp: string;
+  service: ServiceType;
+  timestamp: string | undefined;
   faqsUrl: string;
   faqsUrlStr: string;
   isStreamgraph: boolean;
@@ -20,10 +24,7 @@ const Footer = ({
     return null;
   }
 
-  if (
-    service.startsWith("triple") ||
-    ["base", "pubmed", "openaire", "orcid"].includes(service)
-  ) {
+  if (service.startsWith("triple") || SUPPORTED_SERVICES.includes(service)) {
     return (
       <CreatedBy
         timestamp={timestamp}
@@ -35,7 +36,7 @@ const Footer = ({
   return null;
 };
 
-const mapStateToProps = (state: any) => ({
+const mapStateToProps = (state: State) => ({
   service: state.service,
   timestamp: state.misc.timestamp,
   faqsUrl: state.modals.FAQsUrl,
