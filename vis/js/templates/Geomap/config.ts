@@ -20,6 +20,6 @@ export const CONFIG: Config = {
   },
   FEATURES_DISABLING: {
     isShowLayersSwitcher: true,
-    isShowZoomControls: true,
+    isShowZoomControl: true,
   },
 };

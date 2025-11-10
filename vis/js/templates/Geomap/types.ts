@@ -19,7 +19,7 @@ type ZoomControlConfig = Control.ZoomOptions;
 
 interface FeaturesDisablingConfig {
   isShowLayersSwitcher: boolean;
-  isShowZoomControls: boolean;
+  isShowZoomControl: boolean;
 }
 
 export interface Config {
