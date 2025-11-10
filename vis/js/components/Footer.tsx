@@ -1,35 +1,37 @@
-import React from "react";
+import { FC } from "react";
 import { connect } from "react-redux";
 
-import { STREAMGRAPH_MODE } from "../reducers/chartType";
+import { useVisualizationType } from "@/hooks";
+
 import CreatedBy from "../templates/footers/CreatedBy";
+import { CreateMapButton } from "../templates/footers/CreateMapButton";
 import { ServiceType, State } from "../types";
 
-const SUPPORTED_SERVICES = ["base", "pubmed", "openaire", "orcid", "aquanavi"];
-
-const Footer = ({
-  service,
-  timestamp,
-  faqsUrl,
-  faqsUrlStr,
-  isStreamgraph,
-}: {
+interface FooterProps {
   service: ServiceType;
   timestamp: string | undefined;
   faqsUrl: string;
   faqsUrlStr: string;
-  isStreamgraph: boolean;
+}
+
+const SUPPORTED_SERVICES = ["base", "pubmed", "openaire", "orcid", "aquanavi"];
+
+const Footer: FC<FooterProps> = ({
+  service,
+  timestamp,
+  faqsUrl,
+  faqsUrlStr,
 }) => {
-  if (typeof service !== "string") {
-    return null;
-  }
+  const { isStreamgraph } = useVisualizationType();
 
   if (service.startsWith("triple") || SUPPORTED_SERVICES.includes(service)) {
+    const FAQUrl = isStreamgraph ? faqsUrlStr : faqsUrl;
+
     return (
-      <CreatedBy
-        timestamp={timestamp}
-        faqsUrl={isStreamgraph ? faqsUrlStr : faqsUrl}
-      />
+      <>
+        <CreatedBy timestamp={timestamp} faqsUrl={FAQUrl} />
+        <CreateMapButton />
+      </>
     );
   }
 
@@ -41,7 +43,6 @@ const mapStateToProps = (state: State) => ({
   timestamp: state.misc.timestamp,
   faqsUrl: state.modals.FAQsUrl,
   faqsUrlStr: state.modals.FAQsUrlStr,
-  isStreamgraph: state.chartType === STREAMGRAPH_MODE,
 });
 
 export default connect(mapStateToProps)(Footer);

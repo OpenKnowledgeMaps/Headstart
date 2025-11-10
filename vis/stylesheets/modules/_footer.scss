@@ -14,6 +14,19 @@
   }
 }
 
+.create_knowledge_map_button_container {
+  border-top: 0px solid #cacfd3;
+  padding: 50px 20px;
+
+  & > p {
+    text-align: "center";
+  }
+}
+
+.space_between_visualization_and_footer {
+  height: 24px;
+}
+
 @media screen and (max-width: 1210px) {
   .builtwith {
     font-size: 11px;

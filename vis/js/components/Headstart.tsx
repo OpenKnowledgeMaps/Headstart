@@ -1,16 +1,17 @@
-import React, { FC } from "react";
+import { FC } from "react";
 import { connect } from "react-redux";
+
+import { Localization } from "../i18n/localization";
+import Loading from "../templates/Loading";
+import { State, VisualizationTypes } from "../types";
+import { getVisualizationComponent } from "../utils/getVisualizationComponent";
+import Footer from "./Footer";
+import List from "./List";
 import LocalizationProvider from "./LocalizationProvider";
 import ModalButtons from "./ModalButtons";
 import Modals from "./Modals";
-import Toolbar from "./Toolbar";
-import Loading from "../templates/Loading";
-import List from "./List";
 import TitleContext from "./TitleContext";
-import Footer from "./Footer";
-import { getVisualizationComponent } from "../utils/getVisualizationComponent";
-import { State, VisualizationTypes } from "../types";
-import { Localization } from "../i18n/localization";
+import Toolbar from "./Toolbar";
 
 interface HeadstartProps {
   renderMap: boolean;
