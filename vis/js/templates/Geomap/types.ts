@@ -1,28 +1,29 @@
-import { LatLngBoundsExpression, LatLngTuple } from "leaflet";
+import { Control, MapOptions } from "leaflet";
 
-interface Map {
-  center: LatLngTuple;
-  zoom: number;
-  minZoom: number;
-  maxZoom: number;
-  maxBounds: LatLngBoundsExpression;
-  maxBoundsViscosity: number;
-  worldCopyJump: boolean;
-  keyboard: boolean;
-  zoomControl: boolean;
-}
+type MapConfig = Required<
+  Pick<
+    MapOptions,
+    | "center"
+    | "zoom"
+    | "minZoom"
+    | "maxZoom"
+    | "maxBounds"
+    | "maxBoundsViscosity"
+    | "worldCopyJump"
+    | "keyboard"
+    | "zoomControl"
+  >
+>;
 
-interface ZoomControl {
-  position?: "topleft" | "topright" | "bottomleft" | "bottomright";
-}
+type ZoomControlConfig = Control.ZoomOptions;
 
-interface FeaturesDisabling {
+interface FeaturesDisablingConfig {
   isShowLayersSwitcher: boolean;
   isShowZoomControls: boolean;
 }
 
 export interface Config {
-  MAP: Map;
-  ZOOM_CONTROL: ZoomControl;
-  FEATURES_DISABLING: FeaturesDisabling;
+  MAP: MapConfig;
+  ZOOM_CONTROL: ZoomControlConfig;
+  FEATURES_DISABLING: FeaturesDisablingConfig;
 }
