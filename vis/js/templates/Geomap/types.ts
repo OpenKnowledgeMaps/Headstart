@@ -16,7 +16,13 @@ interface ZoomControl {
   position?: "topleft" | "topright" | "bottomleft" | "bottomright";
 }
 
+interface FeaturesDisabling {
+  isShowLayersSwitcher: boolean;
+  isShowZoomControls: boolean;
+}
+
 export interface Config {
   MAP: Map;
   ZOOM_CONTROL: ZoomControl;
+  FEATURES_DISABLING: FeaturesDisabling;
 }

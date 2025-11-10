@@ -8,13 +8,14 @@ import { HeightContainer } from "./HeightContainer";
 import { LayersSwitcher } from "./LayersSwitcher";
 import { Pins } from "./Pins";
 
-const { MAP, ZOOM_CONTROL } = CONFIG;
+const { MAP, ZOOM_CONTROL, FEATURES_DISABLING } = CONFIG;
+const { isShowLayersSwitcher, isShowZoomControls } = FEATURES_DISABLING;
 
 export const Geomap: FC = () => (
   <HeightContainer>
     <MapContainer {...MAP} className="geomap_container">
-      <ZoomControl {...ZOOM_CONTROL} />
-      <LayersSwitcher />
+      {isShowZoomControls && <ZoomControl {...ZOOM_CONTROL} />}
+      {isShowLayersSwitcher && <LayersSwitcher />}
       <Pins />
     </MapContainer>
   </HeightContainer>

@@ -18,4 +18,8 @@ export const CONFIG: Config = {
   ZOOM_CONTROL: {
     position: "bottomright",
   },
+  FEATURES_DISABLING: {
+    isShowLayersSwitcher: true,
+    isShowZoomControls: true,
+  },
 };
