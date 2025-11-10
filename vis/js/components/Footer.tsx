@@ -24,7 +24,7 @@ const Footer: FC<FooterProps> = ({
 }) => {
   const { isStreamgraph } = useVisualizationType();
 
-  if (service.startsWith("triple") || SUPPORTED_SERVICES.includes(service)) {
+  if (service?.startsWith("triple") || SUPPORTED_SERVICES.includes(service)) {
     const FAQUrl = isStreamgraph ? faqsUrlStr : faqsUrl;
 
     return (
