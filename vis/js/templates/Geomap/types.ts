@@ -1,6 +1,6 @@
-import { Control, MapOptions } from "leaflet";
+import { MapOptions } from "leaflet";
 
-type MapConfig = Required<
+export type Config = Required<
   Pick<
     MapOptions,
     | "center"
@@ -14,10 +14,3 @@ type MapConfig = Required<
     | "zoomControl"
   >
 >;
-
-type ZoomControlConfig = Control.ZoomOptions;
-
-export interface Config {
-  MAP: MapConfig;
-  ZOOM_CONTROL: ZoomControlConfig;
-}
