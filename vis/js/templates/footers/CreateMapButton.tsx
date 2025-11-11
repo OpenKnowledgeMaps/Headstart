@@ -10,12 +10,8 @@ export const CreateMapButton: FC = () => {
   const isEmbed = useSelector(getIsEmbed);
   const { isGeoMap } = useVisualizationType();
 
-  if (isEmbed) {
+  if (isEmbed || isGeoMap) {
     return null;
-  }
-
-  if (isGeoMap) {
-    return <div className="space_between_visualization_and_footer" />;
   }
 
   return (
