@@ -1,10 +1,21 @@
 import { FC, PropsWithChildren } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+
+import { deselectPaper } from "@/js/actions";
 
 import { getMapHeight } from "./selectors";
 
 export const HeightContainer: FC<PropsWithChildren> = ({ children }) => {
   const height = useSelector(getMapHeight);
+  const dispatch = useDispatch();
 
-  return <div style={{ height }}>{children}</div>;
+  const handleMapClick = () => {
+    dispatch(deselectPaper());
+  };
+
+  return (
+    <div style={{ height }} onClick={handleMapClick}>
+      {children}
+    </div>
+  );
 };
