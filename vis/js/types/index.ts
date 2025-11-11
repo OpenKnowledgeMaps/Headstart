@@ -29,6 +29,7 @@ export { VisualizationTypes } from "./visualization/visualization-types";
 export { State } from "./state";
 export {
   FilterValuesType,
+  GeomapSettings,
   SelectedPaper,
   SortValuesType,
 } from "./state/slices";
@@ -40,4 +41,5 @@ export {
 } from "./state/slices/toolbar";
 
 // Redux actions types
+export { Action } from "./actions";
 export { ScaleMapAction } from "./actions/scale-map";

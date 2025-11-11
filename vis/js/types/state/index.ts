@@ -34,4 +34,5 @@ export interface State {
   toolbar: slices.Toolbar;
   tracking: slices.Tracking;
   zoom: boolean;
+  geomapSettings: slices.GeomapSettings;
 }

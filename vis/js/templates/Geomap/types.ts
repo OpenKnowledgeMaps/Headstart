@@ -17,13 +17,7 @@ type MapConfig = Required<
 
 type ZoomControlConfig = Control.ZoomOptions;
 
-interface FeaturesDisablingConfig {
-  isShowLayersSwitcher: boolean;
-  isShowZoomControl: boolean;
-}
-
 export interface Config {
   MAP: MapConfig;
   ZOOM_CONTROL: ZoomControlConfig;
-  FEATURES_DISABLING: FeaturesDisablingConfig;
 }

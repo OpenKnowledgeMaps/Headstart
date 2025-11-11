@@ -2,7 +2,7 @@ import { Config } from "./types";
 
 export const CONFIG: Config = {
   POSITION: "topright",
-  CHECKED_LAYER_NAME: "Standard",
+  CHECKED_LAYER_INDEX: 0,
   LAYERS: [
     {
       name: "Standard",

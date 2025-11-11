@@ -1,7 +1,6 @@
 import { localization } from "./i18n/localization";
 import { Config } from "./types";
 
-/* eslint-disable no-template-curly-in-string */
 var config: Config = {
   /*** basic visualization modes ***/
   //show list
@@ -236,6 +235,14 @@ var config: Config = {
   scale_types: [],
 
   visualization_type: "overview",
+
+  geomap: {
+    // An object containing settings that can disable certain features in the geomap visualization type
+    featuresConfiguration: {
+      isWithLayerSwitcher: true, // This flag activates or deactivates the layer switching functionality
+      isWithZoomControl: true, // This flag shows or hides the zoom control component
+    },
+  },
 };
 
 if (config.content_based) {

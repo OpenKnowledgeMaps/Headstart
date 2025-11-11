@@ -146,4 +146,11 @@ export type Config = {
   is_force_area?: boolean;
 
   visualization_type: VisualizationTypes;
+
+  geomap: {
+    featuresConfiguration: {
+      isWithLayerSwitcher: boolean;
+      isWithZoomControl: boolean;
+    };
+  };
 };

@@ -8,6 +8,6 @@ type Layer = {
 
 export interface Config {
   POSITION: ControlPosition;
-  CHECKED_LAYER_NAME: string;
+  CHECKED_LAYER_INDEX: number;
   LAYERS: Layer[];
 }
