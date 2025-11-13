@@ -104,7 +104,7 @@ add_citations <- function(metadata) {
         mlog$debug(gsub("[\r\n]", "", paste(err, doi, sep = " ")))
         cc_list <- append(cc_list, list(list(doi = doi, count = NA)))
       })
-      Sys.sleep(0.1)
+      Sys.sleep(0.05)
       }
       cc <- do.call(rbind.fill, cc_list)
     },
