@@ -20,7 +20,6 @@ export type Config = {
   scale_toolbar: boolean;
   is_authorview: boolean;
   content_based: boolean;
-  is_streamgraph: boolean;
   tag: string;
 
   metric_list?: boolean;

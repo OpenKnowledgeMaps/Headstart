@@ -1,5 +1,5 @@
 import { Config } from "../types";
-import { GEOMAP_MODE } from "./chartType";
+import { GEOMAP_MODE, STREAMGRAPH_MODE } from "./chartType";
 
 const context = (state = {}, action: any) => {
   if (action.canceled) {
@@ -45,19 +45,22 @@ const getTitleStyle = (config: Config) => {
 };
 
 const getTitleLabelType = (config: Config) => {
-  if (config.is_authorview && config.is_streamgraph) {
+  const isStreamgraph = config.visualization_type === STREAMGRAPH_MODE;
+  const isGeomap = config.visualization_type === GEOMAP_MODE;
+
+  if (config.is_authorview && isStreamgraph) {
     return "authorview-streamgraph";
   }
 
-  if (config.is_authorview && !config.is_streamgraph) {
+  if (config.is_authorview && !isStreamgraph) {
     return "authorview-knowledgemap";
   }
 
-  if (config.is_streamgraph) {
+  if (isStreamgraph) {
     return "keywordview-streamgraph";
   }
 
-  if (config.visualization_type === GEOMAP_MODE) {
+  if (isGeomap) {
     return "geomap";
   }
 

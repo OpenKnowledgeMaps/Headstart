@@ -13,8 +13,7 @@ var config: Config = {
   is_authorview: false,
   //when set to true, scale map using metrics
   content_based: false,
-  //show streamgraph instead of map
-  is_streamgraph: false,
+
   //tag that headstart is appended to
   tag: "visualization",
 

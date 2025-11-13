@@ -1,5 +1,6 @@
 import { deselectPaper, selectPaper, zoomIn, zoomOut } from "../actions";
 import DataManager from "../dataprocessing/managers/DataManager";
+import { STREAMGRAPH_MODE } from "../reducers/chartType";
 import { Config } from "../types";
 import { createAnimationCallback } from "./eventhandlers";
 
@@ -14,8 +15,9 @@ import { createAnimationCallback } from "./eventhandlers";
 const handleZoomSelectQuery = (
   dataManager: DataManager,
   store: any,
-  config: Config
+  config: Config,
 ) => {
+  const isStreamgraph = config.visualization_type === STREAMGRAPH_MODE;
   const params = new URLSearchParams(window.location.search);
 
   if (params.has("area") && params.has("paper")) {
@@ -28,7 +30,7 @@ const handleZoomSelectQuery = (
     return;
   }
 
-  if (config.is_streamgraph && params.has("paper")) {
+  if (isStreamgraph && params.has("paper")) {
     selectPaperWithoutZoom(dataManager, store, params);
     return;
   }
@@ -42,7 +44,7 @@ const zoomKnowledgeMap = (
   dataManager: DataManager,
   store: any,
   areaID: string,
-  paper?: any
+  paper?: any,
 ) => {
   const area = dataManager.areas.find((a) => a.area_uri == areaID);
 
@@ -56,8 +58,8 @@ const zoomKnowledgeMap = (
       createAnimationCallback(store.dispatch),
       store.getState().zoom,
       true,
-      paper
-    )
+      paper,
+    ),
   );
 };
 
@@ -65,7 +67,7 @@ const zoomStreamgraph = (
   dataManager: DataManager,
   store: any,
   streamID: string,
-  paper?: any
+  paper?: any,
 ) => {
   const stream = dataManager.streams.find((s: any) => s.key == streamID) as any;
 
@@ -79,8 +81,8 @@ const zoomStreamgraph = (
       null,
       store.getState().zoom,
       true,
-      paper
-    )
+      paper,
+    ),
   );
 };
 
@@ -88,10 +90,11 @@ const selectPaperWithZoom = (
   dataManager: DataManager,
   store: any,
   params: any,
-  config: Config
+  config: Config,
 ) => {
+  const isStreamgraph = config.visualization_type === STREAMGRAPH_MODE;
   const paper = dataManager.papers.find(
-    (p) => p.safe_id === params.get("paper")
+    (p) => p.safe_id === params.get("paper"),
   );
 
   if (!paper) {
@@ -102,7 +105,7 @@ const selectPaperWithZoom = (
 
   const areaID = params.get("area");
 
-  if (config.is_streamgraph) {
+  if (isStreamgraph) {
     return zoomStreamgraph(dataManager, store, areaID, paper);
   }
 
@@ -112,10 +115,10 @@ const selectPaperWithZoom = (
 const selectPaperWithoutZoom = (
   dataManager: DataManager,
   store: any,
-  params: any
+  params: any,
 ) => {
   const paper = dataManager.papers.find(
-    (p) => p.safe_id === params.get("paper")
+    (p) => p.safe_id === params.get("paper"),
   );
 
   if (!paper) {
@@ -129,8 +132,9 @@ const deselectAndZoomIn = (
   dataManager: DataManager,
   store: any,
   params: any,
-  config: Config
+  config: Config,
 ) => {
+  const isStreamgraph = config.visualization_type === STREAMGRAPH_MODE;
   const areaID = params.get("area");
 
   // possible optimization: only deselecting a paper if the area is the same
@@ -138,7 +142,7 @@ const deselectAndZoomIn = (
   //   store.dispatch(deselectPaper());
   // }
 
-  if (config.is_streamgraph) {
+  if (isStreamgraph) {
     return zoomStreamgraph(dataManager, store, areaID);
   }
 
@@ -146,14 +150,15 @@ const deselectAndZoomIn = (
 };
 
 const deselectAndZoomOut = (store: any, config: Config) => {
+  const isStreamgraph = config.visualization_type === STREAMGRAPH_MODE;
   const { zoom, selectedPaper } = store.getState();
 
   if (zoom) {
     store.dispatch(
       zoomOut(
-        config.is_streamgraph ? null : createAnimationCallback(store.dispatch),
-        true
-      )
+        isStreamgraph ? null : createAnimationCallback(store.dispatch),
+        true,
+      ),
     );
 
     return;

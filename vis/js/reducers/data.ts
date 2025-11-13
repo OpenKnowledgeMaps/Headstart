@@ -2,6 +2,7 @@ import d3 from "d3";
 
 import { getValueOrZero } from "../utils/data";
 import { getDiameterScale, getResizedScale } from "../utils/scale";
+import { STREAMGRAPH_MODE } from "./chartType";
 
 const data = (
   state = { list: [], options: {}, size: null } as any,
@@ -21,7 +22,8 @@ const data = (
         paperMaxScale: action.scalingFactors.paperMaxScale,
         paperWidthFactor: action.configObject.paper_width_factor,
         paperHeightFactor: action.configObject.paper_height_factor,
-        isStreamgraph: action.configObject.is_streamgraph,
+        isStreamgraph:
+          action.configObject.visualization_type === STREAMGRAPH_MODE,
         visualizationId: action.contextObject.id,
         hoveredItemId: null,
       };

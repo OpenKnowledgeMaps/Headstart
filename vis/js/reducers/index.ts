@@ -9,7 +9,7 @@ import areas from "./areas";
 import author from "./author";
 import bubbleOrder from "./bubbleOrder";
 import chart from "./chart";
-import chartType from "./chartType";
+import { chartType } from "./chartType";
 import contextLine from "./contextLine";
 import data from "./data";
 import { geomapSettings } from "./geomapSettings";

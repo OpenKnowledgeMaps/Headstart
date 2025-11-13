@@ -1,7 +1,11 @@
 // @ts-nocheck
+import { AllPossiblePapersType, Config, Paper } from "@js/types";
 import d3 from "d3";
 import $ from "jquery";
-import { Config, Paper, AllPossiblePapersType } from "@js/types";
+
+import { GEOMAP_MODE, STREAMGRAPH_MODE } from "@/js/reducers/chartType";
+import { AquanaviPaper } from "@/js/types/models/paper";
+
 import {
   checkIsAquanaviData,
   extractAuthors,
@@ -25,8 +29,6 @@ import {
 } from "../../utils/scale";
 import { transformData } from "../../utils/streamgraph";
 import DEFAULT_SCHEME, { SchemeObject } from "../schemes/defaultScheme";
-import { GEOMAP_MODE } from "@/js/reducers/chartType";
-import { AquanaviPaper } from "@/js/types/models/paper";
 
 const GOLDEN_RATIO = 2.6;
 
@@ -65,7 +67,9 @@ class DataManager {
     // initialize this.scalingFactors
     this.__computeScalingFactors(this.papers.length);
 
-    if (!this.config.is_streamgraph) {
+    const { visualization_type: visualizationType } = this.config;
+    const isNotStreamgraph = visualizationType !== STREAMGRAPH_MODE;
+    if (isNotStreamgraph) {
       // scale this.papers based on the chart size
       this.__scalePapers(chartSize);
       // initialize this.areas
