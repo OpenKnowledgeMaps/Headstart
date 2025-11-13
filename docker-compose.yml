@@ -236,6 +236,7 @@ services:
       LANG: "en_US.UTF-8"
       RENV_PATHS_CACHE: /renv/cache
       PYTHONIOENCODING: "utf-8"
+      R_ALTMETRIC_APIKEY: "${R_ALTMETRIC_APIKEY}"
     restart: unless-stopped
     volumes:
       - ./local_dev/renv/cache:/renv/cache

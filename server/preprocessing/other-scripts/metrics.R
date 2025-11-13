@@ -4,6 +4,7 @@ library("plyr")
 
 mlog <- getLogger("metrics")
 
+apikey_altmetric <- Sys.getenv("R_ALTMETRIC_APIKEY")
 
 enrich_metadata_metrics <- function(metadata, metrics_sources=c("altmetric", "crossref")) {
   start.time <- Sys.time()
@@ -36,7 +37,7 @@ get_altmetrics <- function(dois) {
   for (doi in valid_dois) {
     tryCatch(
       {
-        metrics <- altmetric_data(altmetrics(doi = doi, apikey = ""))
+        metrics <- altmetric_data(altmetrics(doi = doi, apikey = apikey_altmetric))
         results <- rbind.fill(results, metrics)
       },
       error = function(err) {
