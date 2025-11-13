@@ -95,7 +95,18 @@ add_citations <- function(metadata) {
 
   cc <- tryCatch(
     {
-      cr_citation_count(doi = valid_dois, async = TRUE)
+      cc_list <- list()
+      for (doi in valid_dois) {
+      tryCatch({
+        count <- cr_citation_count(doi = doi)
+        cc_list <- append(cc_list, list(count))
+      }, error = function(err) {
+        mlog$debug(gsub("[\r\n]", "", paste(err, doi, sep = " ")))
+        cc_list <- append(cc_list, list(list(doi = doi, count = NA)))
+      })
+      Sys.sleep(0.1)
+      }
+      cc <- do.call(rbind.fill, cc_list)
     },
     error = function(err) {
       mlog$debug(gsub("[\r\n]", "", paste(err, doi, sep = " ")))
