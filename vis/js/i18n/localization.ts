@@ -202,11 +202,11 @@ export const localization: {
     pdf_not_loaded:
       "Sorry, we were not able to retrieve the PDF for this publication. You can get it directly from",
     pdf_not_loaded_linktext: "this website",
-    share_button_title: "Share this knowledge map",
-    share_button_title_sg: "Share this streamgraph",
+    share_button_title: "Share this visualization",
+    share_button_title_sg: "Share this visualization",
     embed_title: "embed visualization",
-    embed_button_title: "Embed this knowledge map on other websites",
-    embed_button_title_sg: "Embed this streamgraph on other websites",
+    embed_button_title: "Embed this visualization on other websites",
+    embed_button_title_sg: "Embed this visualization on other websites",
     embed_body_text:
       "You can use this code to embed the visualization on your own website or in a dashboard.",
     area_streamgraph: "Stream",
@@ -219,8 +219,8 @@ export const localization: {
     lang_all: "All languages",
     cite: "Cite",
     filter_by_label: "show: ",
-    cite_title_km: "Cite this knowledge map",
-    cite_title_sg: "Cite this streamgraph",
+    cite_title_km: "Cite this visualization",
+    cite_title_sg: "Cite this visualization",
     citation_template:
       "Open Knowledge Maps (${year}). ${type} for research on ${query}. Retrieved from ${source} [${date}].",
     cite_vis_km: "Please cite this knowledge map as follows",
@@ -312,7 +312,7 @@ export const localization: {
       "Keine Dokumente gefunden. Setzen Sie bitte Ihre Filtereinstellungen zurück.",
     cite: "Cite",
     cite_title_km: "Zitieren Sie diese Wissenskarte",
-    cite_title_sg: "Cite this streamgraph",
+    cite_title_sg: "Cite this visualization",
     citation_template:
       "Open Knowledge Maps (${year}). ${type} for research on ${query}. Retrieved from ${source} [${date}].",
     cite_vis_km: "Please cite this knowledge map as follows",
