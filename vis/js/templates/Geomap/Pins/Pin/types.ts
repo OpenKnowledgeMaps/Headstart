@@ -5,3 +5,10 @@ export interface PinProps {
   isActive: boolean;
   onClick: (data: AllPossiblePapersType) => void;
 }
+
+export interface Config {
+  offsets: {
+    basic: number;
+    selected: number;
+  };
+}
