@@ -228,6 +228,7 @@
   padding-left: 0px;
   color: $list_abstract;
   font-weight: $fontweight400;
+  white-space: break-spaces;
 
   &.short {
     overflow: hidden;
@@ -235,6 +236,7 @@
     display: -webkit-box;
     -webkit-line-clamp: 3;
     line-clamp: 3;
+    white-space: unset;
     -webkit-box-orient: vertical;
   }
 

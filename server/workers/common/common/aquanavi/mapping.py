@@ -241,7 +241,7 @@ def get_abstract(row):
     if (count_of_not_available_parts == AMOUNT_OF_ALL_POSSIBLE_ENTRIES):
         return ""
 
-    return "; ".join(abstract_parts) + '.'
+    return "\n \n".join(abstract_parts)
 
 def get_keywords(row):
     """
