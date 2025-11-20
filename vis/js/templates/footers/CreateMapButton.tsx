@@ -8,9 +8,9 @@ const getIsEmbed = (state: State) => state.misc.isEmbedded;
 
 export const CreateMapButton: FC = () => {
   const isEmbed = useSelector(getIsEmbed);
-  const { isGeoMap } = useVisualizationType();
+  const { isGeoMap, isStreamgraph } = useVisualizationType();
 
-  if (isEmbed || isGeoMap) {
+  if (isEmbed || isGeoMap || isStreamgraph) {
     return null;
   }
 
