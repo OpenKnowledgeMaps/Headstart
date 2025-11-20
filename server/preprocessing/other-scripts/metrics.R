@@ -38,6 +38,7 @@ get_altmetrics <- function(dois) {
     tryCatch(
       {
         metrics <- altmetric_data(altmetrics(doi = doi, apikey = apikey_altmetric))
+        Sys.sleep(0.1)  # to avoid hitting rate limits
         results <- rbind.fill(results, metrics)
       },
       error = function(err) {
@@ -95,18 +96,7 @@ add_citations <- function(metadata) {
 
   cc <- tryCatch(
     {
-      cc_list <- list()
-      for (doi in valid_dois) {
-      tryCatch({
-        count <- cr_citation_count(doi = doi)
-        cc_list <- append(cc_list, list(count))
-      }, error = function(err) {
-        mlog$debug(gsub("[\r\n]", "", paste(err, doi, sep = " ")))
-        cc_list <- append(cc_list, list(list(doi = doi, count = NA)))
-      })
-      Sys.sleep(0.05)
-      }
-      cc <- do.call(rbind.fill, cc_list)
+      cr_citation_count(doi = valid_dois, async = TRUE)
     },
     error = function(err) {
       mlog$debug(gsub("[\r\n]", "", paste(err, doi, sep = " ")))
