@@ -12,7 +12,6 @@ export interface Modals {
   openInfoModal: boolean;
   openResearcherMetricsModal: boolean;
   openResearcherModal: boolean;
-  openViperEditModal: boolean;
   previewedPaper: null;
   reloadLastUpdate: unknown;
   showCitationButton: boolean;
@@ -23,10 +22,8 @@ export interface Modals {
   showReloadButton: boolean;
   showShareButton: boolean;
   showTwitterButton: boolean;
-  showViperEditButton: boolean;
   twitterHashtags: string;
   useViewer: boolean;
-  viperEditObjID: unknown;
 }
 
 interface ApiProperties {

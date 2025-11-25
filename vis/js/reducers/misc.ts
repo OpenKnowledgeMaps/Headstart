@@ -2,14 +2,13 @@ const misc = (
   state = {
     isEmbedded: false,
     isLoading: true,
-    showCreatedByViper: false,
     showLoading: false,
     renderList: false,
     renderMap: false,
     timestamp: null,
     visTag: null,
   },
-  action: any
+  action: any,
 ) => {
   if (action.canceled) {
     return state;

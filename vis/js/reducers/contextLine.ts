@@ -44,19 +44,9 @@ const contextLine = (state = {}, action: any) => {
         dataSource: config.service_names?.[context.service],
         contentProvider: context.params ? context.params.repo_name : null,
         // ! TODO
-        paperCount:
-          config.create_title_from_context_style === "viper"
-            ? papers.filter((p: any) => p.resulttype.includes("publication"))
-                .length
-            : null,
-        datasetCount:
-          config.create_title_from_context_style === "viper"
-            ? papers.filter((p: any) => p.resulttype.includes("dataset")).length
-            : null,
-        funder:
-          config.create_title_from_context_style === "viper" && context.params
-            ? context.params.funder
-            : null,
+        paperCount: null,
+        datasetCount: null,
+        funder: null,
 
         projectRuntime: getProjectRuntime(config, context),
         // probably deprecated, used in base in the past
@@ -96,7 +86,7 @@ const contextLine = (state = {}, action: any) => {
 export const getModifier = (
   config: Config,
   context: any,
-  numOfPapers: number
+  numOfPapers: number,
 ) => {
   if (context.service === "orcid") {
     return "most-recent";
@@ -129,7 +119,7 @@ const getDocumentTypes = (config: Config, context: any) => {
   const documentTypesArray: string[] = [];
   // @ts-ignore
   const documentTypeObj = config.options?.find(
-    (obj: any) => obj.id === propName
+    (obj: any) => obj.id === propName,
   );
 
   context.params[propName].forEach((type: any) => {
@@ -158,7 +148,6 @@ const getPropName = (params: any) => {
 
 const getProjectRuntime = (config: Config, context: any) => {
   if (
-    config.create_title_from_context_style !== "viper" ||
     !context.params ||
     !context.params.start_date ||
     !context.params.end_date
@@ -168,7 +157,7 @@ const getProjectRuntime = (config: Config, context: any) => {
 
   return `${context.params.start_date.slice(
     0,
-    4
+    4,
   )}–${context.params.end_date.slice(0, 4)}`;
 };
 
@@ -183,14 +172,14 @@ const getLegacySearchLanguage = (config: Config, context: Context) => {
   }
 
   const lang = config.options.languages.find(
-    (lang) => lang.code === context.params.lang_id
+    (lang) => lang.code === context.params.lang_id,
   );
 
   if (!lang) {
     return null;
   }
 
-  return "Language: " + lang.lang_in_lang + " (" + lang.lang_in_eng + ") ";
+  return `Language: ${lang.lang_in_lang} (${lang.lang_in_eng}) `;
 };
 
 const getTimestamp = (config: Config, context: Context) => {
@@ -210,7 +199,7 @@ const getMetadataQuality = (config: Config, context: Context) => {
     return null;
   }
 
-  let minDescSize =
+  const minDescSize =
     typeof context.params.min_descsize === "string"
       ? parseInt(context.params.min_descsize)
       : context.params.min_descsize;

@@ -1,9 +1,6 @@
 // @ts-nocheck
 
-const modals = (
-  state = { apiProperties: {}, infoParams: {} },
-  action
-) => {
+const modals = (state = { apiProperties: {}, infoParams: {} }, action) => {
   if (action.canceled) {
     return state;
   }
@@ -19,11 +16,6 @@ const modals = (
         showFAQsButton: !!action.configObject.faqs_button,
         FAQsUrl: action.configObject.faqs_url,
         FAQsUrlStr: action.configObject.faqs_url_streamgraph,
-        showViperEditButton: !!action.configObject.viper_edit_modal,
-        openViperEditModal: false,
-        viperEditObjID: action.contextObject.params
-            ? action.contextObject.params.obj_id
-            : null,
         showReloadButton: action.contextObject.service === "gsheets",
         reloadLastUpdate: action.contextObject.last_update,
         apiProperties: {
@@ -49,8 +41,14 @@ const modals = (
         openCitationModal: false,
         citedPaper: null,
         exportedPaper: null,
-        showTwitterButton: showTwitterShare(action.configObject, action.contextObject),
-        showEmailButton: showEmailShare(action.configObject, action.contextObject),
+        showTwitterButton: showTwitterShare(
+          action.configObject,
+          action.contextObject,
+        ),
+        showEmailButton: showEmailShare(
+          action.configObject,
+          action.contextObject,
+        ),
       };
     case "OPEN_EMBED_MODAL":
       return {
@@ -61,16 +59,6 @@ const modals = (
       return {
         ...state,
         openEmbedModal: false,
-      };
-    case "OPEN_VIPER_EDIT_MODAL":
-      return {
-        ...state,
-        openViperEditModal: true,
-      };
-    case "CLOSE_VIPER_EDIT_MODAL":
-      return {
-        ...state,
-        openViperEditModal: false,
       };
     case "OPEN_INFO_MODAL":
       return {
@@ -150,7 +138,6 @@ const modals = (
         openResearcherModal: false,
         openResearcherMetricsModal: false,
         openEmbedModal: false,
-        openViperEditModal: false,
         openCitationModal: false,
         previewedPaper: null,
         citedPaper: null,

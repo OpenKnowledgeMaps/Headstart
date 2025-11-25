@@ -3,6 +3,7 @@
  */
 import { combineReducers } from "redux";
 
+import { Config } from "../types";
 import animation from "./animation";
 import areas from "./areas";
 import author from "./author";
@@ -18,8 +19,11 @@ import isCovis from "./isCovis";
 import list from "./list";
 import localization from "./localization";
 import misc from "./misc";
+import modalInfoType from "./modalInfoType";
 import modals from "./modals";
+import paper from "./paper";
 import paperOrder from "./paperOrder";
+import q_advanced from "./q_advanced";
 import query from "./query";
 import selectedBubble from "./selectedBubble";
 import selectedPaper from "./selectedPaper";
@@ -29,10 +33,6 @@ import timespan from "./timespan";
 import toolbar from "./toolbar";
 import tracking from "./tracking";
 import zoom from "./zoom";
-import q_advanced from "./q_advanced";
-import modalInfoType from "./modalInfoType";
-import paper from "./paper";
-import { Config } from "../types";
 
 export default combineReducers({
   animation,
@@ -78,7 +78,6 @@ export const getInitialState = (config: Config) => {
     misc: {
       isEmbedded: config.credit_embed,
       isLoading: true,
-      showCreatedByViper: !!config.credit,
       showLoading: config.show_loading_screen,
       renderList: config.render_list,
       renderMap: config.render_map,

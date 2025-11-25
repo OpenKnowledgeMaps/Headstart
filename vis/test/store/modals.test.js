@@ -39,7 +39,6 @@ describe("modals state", () => {
       ...INITIAL_STATE,
       openInfoModal: false,
       openEmbedModal: false,
-      openViperEditModal: false,
       openCitationModal: false,
       openResearcherMetricsModal: false,
       openResearcherModal: false,

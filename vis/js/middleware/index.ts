@@ -7,7 +7,6 @@ import chartTypeMiddleware from "./chartType";
 import pageTitleMiddleware from "./pageTitle";
 import queryParameterMiddleware from "./queryParameter";
 import recordActionMiddleware from "./recordAction";
-import repeatedInitializeMiddleware from "./repeatedInitialize";
 import rescaleMiddleware from "./rescale";
 import scrollMiddleware from "./scroll";
 
@@ -17,7 +16,6 @@ export {
   pageTitleMiddleware,
   queryParameterMiddleware,
   recordActionMiddleware,
-  repeatedInitializeMiddleware,
   rescaleMiddleware,
   scrollMiddleware,
 };
@@ -27,13 +25,10 @@ const applyHeadstartMiddleware = (intermediate) => {
     chartTypeMiddleware,
     actionQueueMiddleware(intermediate.actionQueue),
     scrollMiddleware,
-    repeatedInitializeMiddleware(
-      intermediate.applyForceLayout.bind(intermediate)
-    ),
     rescaleMiddleware(intermediate.rescaleMap.bind(intermediate)),
     recordActionMiddleware,
     queryParameterMiddleware,
-    pageTitleMiddleware(intermediate.originalTitle)
+    pageTitleMiddleware(intermediate.originalTitle),
   );
 };
 
