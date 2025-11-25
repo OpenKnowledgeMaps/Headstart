@@ -1,26 +1,40 @@
 // @ts-nocheck
 
 import React from "react";
-import { connect } from "react-redux";
 import { Modal } from "react-bootstrap";
+import { connect } from "react-redux";
 
 import { closeResearcherMetricsModal } from "../../actions";
 import { STREAMGRAPH_MODE } from "../../reducers/chartType";
-
 import ResearcherMetricsInfo from "./researcher-modal/OrcidResearcherMetricsInfo";
 
-const getResearcherInfoTemplate = (service: string, isStreamgraph: boolean, modalType: string) => {
+const getResearcherInfoTemplate = (
+  service: string,
+  isStreamgraph: boolean,
+  modalType: string,
+) => {
   switch (service) {
     case "orcid":
       return ResearcherMetricsInfo;
     default:
       // console.log(`${service} is not a valid service for the ResearcherInfoModal`);
-      return null;  
+      return null;
   }
 };
 
-const ResearcherMetricsInfoModal = ({open, onClose, params, service, isStreamgraph, modalInfoType}) => {
-  const ResearcherMetricsInfoTemplate = getResearcherInfoTemplate(service, isStreamgraph, modalInfoType);
+const ResearcherMetricsInfoModal = ({
+  open,
+  onClose,
+  params,
+  service,
+  isStreamgraph,
+  modalInfoType,
+}) => {
+  const ResearcherMetricsInfoTemplate = getResearcherInfoTemplate(
+    service,
+    isStreamgraph,
+    modalInfoType,
+  );
 
   if (!ResearcherMetricsInfoTemplate) {
     return null;
@@ -29,12 +43,14 @@ const ResearcherMetricsInfoModal = ({open, onClose, params, service, isStreamgra
   return (
     // html template starts here
     <Modal id="info_modal" show={open} onHide={onClose} animation>
-      <ResearcherMetricsInfoTemplate params={params} isStreamgraph={isStreamgraph} />
+      <ResearcherMetricsInfoTemplate
+        params={params}
+        isStreamgraph={isStreamgraph}
+      />
     </Modal>
     // html template ends here
   );
 };
-
 
 const mapStateToProps = (state) => ({
   open: state.modals.openResearcherMetricsModal,
@@ -57,7 +73,7 @@ const mapStateToProps = (state) => ({
       state.author.total_unique_social_media_mentions,
     websites: state.author.websites,
   },
-  service: state.isCovis ? "covis" : state.service,
+  service: state.service,
   isStreamgraph: state.chartType === STREAMGRAPH_MODE,
   // new parameter from config to render correct type of info modal window
   modalInfoType: state.modalInfoType,
@@ -69,5 +85,5 @@ const mapDispatchToProps = (dispatch) => ({
 
 export default connect(
   mapStateToProps,
-  mapDispatchToProps
+  mapDispatchToProps,
 )(ResearcherMetricsInfoModal);

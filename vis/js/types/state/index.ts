@@ -15,7 +15,6 @@ export interface State {
   heading: slices.Heading;
   highlightedBubble: null;
   hyphenationLang: string;
-  isCovis: boolean;
   list: slices.List;
   localization: Localization;
   misc: slices.Misc;

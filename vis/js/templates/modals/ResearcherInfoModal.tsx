@@ -1,12 +1,11 @@
 // @ts-nocheck
 
 import React from "react";
-import { connect } from "react-redux";
 import { Modal } from "react-bootstrap";
+import { connect } from "react-redux";
 
 import { closeResearcherModal } from "../../actions";
 import { STREAMGRAPH_MODE } from "../../reducers/chartType";
-
 import ResearcherInfo from "./researcher-modal/OrcidResearcherInfo";
 
 const getResearcherInfoTemplate = (service, isStreamgraph, modalType) => {
@@ -15,12 +14,23 @@ const getResearcherInfoTemplate = (service, isStreamgraph, modalType) => {
       return ResearcherInfo;
     default:
       // console.log(`${service} is not a valid service for the ResearcherInfoModal`);
-      return null;  
+      return null;
   }
 };
 
-const ResearcherInfoModal = ({open, onClose, params, service, isStreamgraph, modalInfoType}) => {
-  const ResearcherInfoTemplate = getResearcherInfoTemplate(service, isStreamgraph, modalInfoType);
+const ResearcherInfoModal = ({
+  open,
+  onClose,
+  params,
+  service,
+  isStreamgraph,
+  modalInfoType,
+}) => {
+  const ResearcherInfoTemplate = getResearcherInfoTemplate(
+    service,
+    isStreamgraph,
+    modalInfoType,
+  );
 
   if (!ResearcherInfoTemplate) {
     return null;
@@ -32,7 +42,6 @@ const ResearcherInfoModal = ({open, onClose, params, service, isStreamgraph, mod
     </Modal>
   );
 };
-
 
 const mapStateToProps = (state) => ({
   open: state.modals.openResearcherModal,
@@ -55,7 +64,7 @@ const mapStateToProps = (state) => ({
       state.author.total_unique_social_media_mentions,
     websites: state.author.websites,
   },
-  service: state.isCovis ? "covis" : state.service,
+  service: state.service,
   isStreamgraph: state.chartType === STREAMGRAPH_MODE,
   // new parameter from config to render correct type of info modal window
   modalInfoType: state.modalInfoType,
@@ -67,5 +76,5 @@ const mapDispatchToProps = (dispatch) => ({
 
 export default connect(
   mapStateToProps,
-  mapDispatchToProps
+  mapDispatchToProps,
 )(ResearcherInfoModal);

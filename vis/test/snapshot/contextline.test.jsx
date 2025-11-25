@@ -130,35 +130,6 @@ describe("Context line component snapshot", () => {
     expect(tree).toMatchSnapshot();
   });
 
-  it("matches a covis snapshot", () => {
-    const store = mockStore(
-      setup(
-        {
-          articlesCount: 76,
-          openAccessCount: 34,
-          dataSource:
-            '<span class="backlink"><a href="data" class="underline" target="_blank" >CoVis database</a></span>',
-          timestamp: "2020-08-12 02:40:04 UTC",
-        },
-        {
-          articles_label: "resources and collections",
-          source_label: "Data source",
-        },
-      ),
-    );
-
-    const tree = renderer
-      .create(
-        <LocalizationProvider localization={store.getState().localization}>
-          <Provider store={store}>
-            <ContextLine />
-          </Provider>
-        </LocalizationProvider>,
-      )
-      .toJSON();
-    expect(tree).toMatchSnapshot();
-  });
-
   it("matches a linkedcat authorview snapshot", () => {
     const store = mockStore(
       setup(

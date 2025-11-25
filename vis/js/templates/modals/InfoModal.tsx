@@ -7,7 +7,6 @@ import { connect } from "react-redux";
 import { closeInfoModal } from "../../actions";
 import { STREAMGRAPH_MODE } from "../../reducers/chartType";
 import BaseInfo from "./infomodal/BaseInfo";
-import CovisInfo from "./infomodal/CovisInfo";
 import DefaultKMInfo from "./infomodal/DefaultKMInfo";
 import DefaultSGInfo from "./infomodal/DefaultSGInfo";
 import OpenAireInfo from "./infomodal/OpenAireInfo";
@@ -32,8 +31,6 @@ const getInfoTemplate = (
       return TripleKMInfo;
     case "triple_sg":
       return TripleSGInfo;
-    case "covis":
-      return CovisInfo;
     case "orcid":
       return OrcidInfo;
     default:
@@ -69,7 +66,7 @@ const mapStateToProps = (state) => ({
     q_advanced: state.q_advanced.text,
     author: state.author,
   },
-  service: state.isCovis ? "covis" : state.service,
+  service: state.service,
   isStreamgraph: state.chartType === STREAMGRAPH_MODE,
   // new parameter from config to render correct type of info modal window
   modalInfoType: state.modalInfoType,

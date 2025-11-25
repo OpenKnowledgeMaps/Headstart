@@ -1,46 +1,5 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`Context line component snapshot > matches a covis snapshot 1`] = `
-<p
-  data-testid="context"
-  id="context"
->
-  <span
-    className="context_item"
-    id="num_articles"
-  >
-    76 resources and collections
-     
-    (
-    34
-     open access)
-  </span>
-  <span
-    className="context_item"
-    id="timestamp"
-  >
-    Last updated
-    : 
-    2020-08-12 02:40:04 UTC
-  </span>
-  <span
-    className="context_item"
-    id="more-info-link"
-    title="More information about the visualization"
-  >
-    <span
-      className="context_moreinfo infolink"
-      onClick={[Function]}
-    >
-      <i
-        className="fas fa-info-circle"
-      />
-       
-    </span>
-  </span>
-</p>
-`;
-
 exports[`Context line component snapshot > matches a linkedcat authorview snapshot 1`] = `
 <p
   data-testid="context"

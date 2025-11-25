@@ -1,16 +1,14 @@
-import { expect, describe, it } from "vitest";
+import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import React from "react";
 import { unmountComponentAtNode } from "react-dom";
-import { render, screen, waitFor } from "@testing-library/react";
-
-import configureStore from "redux-mock-store";
-
 import { Provider } from "react-redux";
+import configureStore from "redux-mock-store";
+import { describe, expect, it } from "vitest";
 
+import { openInfoModal } from "../../js/actions";
 import ContextLine from "../../js/components/ContextLine";
 import LocalizationProvider from "../../js/components/LocalizationProvider";
-import { openInfoModal } from "../../js/actions";
 import { STREAMGRAPH_MODE } from "../../js/reducers/chartType";
 
 const mockStore = configureStore([]);
@@ -180,7 +178,7 @@ describe("Context line component", () => {
 
     it("contains a correct data source with HTML", () => {
       const DATA_SOURCE =
-        '<span class="backlink"><a href="data" class="underline" target="_blank" >CoVis database</a></span>';
+        '<span class="backlink"><a href="data" class="underline" target="_blank" >Some database</a></span>';
       const storeObject = setup();
       storeObject.contextLine.dataSource = DATA_SOURCE;
       storeObject.contextLine.showDataSource = true;
@@ -198,7 +196,7 @@ describe("Context line component", () => {
       expect(
         result.container.querySelector("#source").querySelector("a.underline")
           .textContent,
-      ).toContain("CoVis database");
+      ).toContain("Some database");
     });
 
     it("doesn't contain a timespan", () => {
