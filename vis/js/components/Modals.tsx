@@ -3,29 +3,21 @@
 import React from "react";
 import { connect } from "react-redux";
 
-import { closeEmbedModal, closeViperEditModal, hidePreview } from "../actions";
-
+import { closeEmbedModal, hidePreview } from "../actions";
 import CitationModal from "../templates/modals/CitationModal";
 import CitePaperModal from "../templates/modals/CitePaperModal";
 import EmbedModal from "../templates/modals/EmbedModal";
 import ExportPaperModal from "../templates/modals/ExportPaperModal";
 import InfoModal from "../templates/modals/InfoModal";
+import PdfModal from "../templates/modals/PdfModal";
 import ResearcherInfoModal from "../templates/modals/ResearcherInfoModal";
 import ResearcherMetricsInfoModal from "../templates/modals/ResearcherMetricsInfoModal";
-import PdfModal from "../templates/modals/PdfModal";
-import ViperEditModal from "../templates/modals/ViperEditModal";
 import LocalizationProvider from "./LocalizationProvider";
 
 const Modals = ({
   showEmbedModal,
   openEmbedModal,
   onEmbedClose,
-  showViperEditModal,
-  openViperEditModal,
-  viperEditAcronym,
-  viperEditTitle,
-  viperEditObjID,
-  onViperEditClose,
   showPDFPreview,
   previewedPaper,
   serverUrl,
@@ -39,15 +31,6 @@ const Modals = ({
     <LocalizationProvider localization={localization}>
       {showEmbedModal && (
         <EmbedModal open={openEmbedModal} onClose={onEmbedClose} />
-      )}
-      {showViperEditModal && (
-        <ViperEditModal
-          open={openViperEditModal}
-          onClose={onViperEditClose}
-          acronym={viperEditAcronym}
-          title={viperEditTitle}
-          objectID={viperEditObjID}
-        />
       )}
       <InfoModal />
       <ResearcherMetricsInfoModal />
@@ -72,11 +55,6 @@ const Modals = ({
 const mapStateToProps = (state) => ({
   showEmbedModal: state.modals.showEmbedButton,
   openEmbedModal: state.modals.openEmbedModal,
-  showViperEditModal: state.modals.showViperEditButton,
-  openViperEditModal: state.modals.openViperEditModal,
-  viperEditAcronym: state.heading.acronym,
-  viperEditTitle: state.heading.title,
-  viperEditObjID: state.modals.viperEditObjID,
   showPDFPreview: state.modals.showPDFPreview,
   previewedPaper: state.modals.previewedPaper,
   serverUrl: state.modals.apiProperties.headstartPath,
@@ -88,7 +66,6 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => ({
   onEmbedClose: () => dispatch(closeEmbedModal()),
-  onViperEditClose: () => dispatch(closeViperEditModal()),
   onPreviewClose: () => dispatch(hidePreview()),
 });
 
