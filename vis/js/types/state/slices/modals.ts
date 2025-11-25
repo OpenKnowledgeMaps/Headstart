@@ -13,7 +13,6 @@ export interface Modals {
   openResearcherMetricsModal: boolean;
   openResearcherModal: boolean;
   previewedPaper: null;
-  reloadLastUpdate: unknown;
   showCitationButton: boolean;
   showEmailButton: boolean;
   showEmbedButton: boolean;
@@ -29,7 +28,6 @@ export interface Modals {
 interface ApiProperties {
   headstartPath: string;
   persistenceBackend: unknown;
-  sheetID: null;
 }
 
 interface InfoParams {

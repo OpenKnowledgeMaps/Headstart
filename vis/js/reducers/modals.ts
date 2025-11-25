@@ -16,11 +16,8 @@ const modals = (state = { apiProperties: {}, infoParams: {} }, action) => {
         showFAQsButton: !!action.configObject.faqs_button,
         FAQsUrl: action.configObject.faqs_url,
         FAQsUrlStr: action.configObject.faqs_url_streamgraph,
-        showReloadButton: action.contextObject.service === "gsheets",
-        reloadLastUpdate: action.contextObject.last_update,
         apiProperties: {
           headstartPath: action.configObject.server_url,
-          sheetID: getSheetID(action.configObject, action.contextObject),
           persistenceBackend: action.configObject.persistence_backend,
         },
         openInfoModal:
@@ -150,18 +147,6 @@ const modals = (state = { apiProperties: {}, infoParams: {} }, action) => {
 };
 
 export default modals;
-
-const getSheetID = (config, context) => {
-  if (context.service !== "gsheets") {
-    return null;
-  }
-
-  if (!config.files || !config.files.length) {
-    return null;
-  }
-
-  return config.files[0].file;
-};
 
 const showTwitterShare = (config, context) => {
   if (config.credit_embed) {

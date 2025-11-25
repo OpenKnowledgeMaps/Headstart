@@ -10,7 +10,6 @@ import CitationButton from "../templates/buttons/CitationButton";
 import EmailButton from "../templates/buttons/EmailButton";
 import EmbedButton from "../templates/buttons/EmbedButton";
 import FAQsButton from "../templates/buttons/FAQsButton";
-import ReloadButton from "../templates/buttons/ReloadButton";
 import ShareButton from "../templates/buttons/ShareButton";
 import TwitterButton from "../templates/buttons/TwitterButton";
 
@@ -21,9 +20,6 @@ const ModalButtons = ({
   onEmbedButtonClick,
   showFAQsButton,
   FAQsUrl,
-  showReloadButton,
-  reloadLastUpdate,
-  apiProperties,
   isEmbedded,
   visTag,
   service,
@@ -55,12 +51,6 @@ const ModalButtons = ({
         />
       )}
       {showFAQsButton && <FAQsButton url={FAQsUrl} />}
-      {showReloadButton && (
-        <ReloadButton
-          lastUpdate={reloadLastUpdate}
-          apiProperties={apiProperties}
-        />
-      )}
       {showCitationButton && <CitationButton />}
     </div>
   );
@@ -72,9 +62,6 @@ const mapStateToProps = (state) => ({
   showEmbedButton: state.modals.showEmbedButton,
   showFAQsButton: state.modals.showFAQsButton,
   FAQsUrl: state.modals.FAQsUrl,
-  showReloadButton: state.modals.showReloadButton,
-  reloadLastUpdate: state.modals.reloadLastUpdate,
-  apiProperties: state.modals.apiProperties,
   isEmbedded: state.misc.isEmbedded,
   visTag: state.misc.visTag,
   service: state.service,

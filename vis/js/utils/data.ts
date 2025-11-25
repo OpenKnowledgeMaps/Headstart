@@ -233,14 +233,6 @@ export const getPaperPDFClickHandler = (paper, handlePDFClick) => {
  * @returns {object} link entry {address: string, isDoi: bool}
  */
 export const getListLink = (paper, config, context) => {
-  if (context.service === "gsheets") {
-    let address = paper.url;
-    if (typeof address !== "string" || address === "") {
-      address = "n/a";
-    }
-    return { address, isDoi: false };
-  }
-
   if (config.url_outlink) {
     return { address: paper.outlink, isDoi: false };
   }
