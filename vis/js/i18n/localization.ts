@@ -118,10 +118,6 @@ export interface Localization {
   tweets: string;
   dataset_count_label: string;
   paper_count_label: string;
-  viper_edit_title: string;
-  viper_edit_desc_label: string;
-  viper_button_desc_label: string;
-  viper_edit_button_text: string;
   tweets_count_label: string;
   readers_count_label: string;
   publication: string;
@@ -483,14 +479,6 @@ export const localization: {
     documenttypes_label: "Article types",
     dataset_count_label: "datasets",
     paper_count_label: "papers",
-    viper_edit_title: "How to add project resources",
-    viper_edit_desc_label: `<p>Are you missing relevant publications and datasets related to this project? \
-        <p>No problem: simply link further resources on the OpenAIRE website. \
-        The resources will then be be automatically added to the map. \
-        <p>Use the button indicated in the exemplary screenshot to do so: `,
-    viper_button_desc_label: `<p>By clicking on the button below, you are redirected to the\
-            OpenAIRE page for`,
-    viper_edit_button_text: "continue to openaire",
     tweets_count_label: " tweets",
     citations_count_label: " citations (Crossref)",
     all: "any",
