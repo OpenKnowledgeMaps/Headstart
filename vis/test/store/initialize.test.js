@@ -14,7 +14,6 @@ const setup = (overrideConfig = {}, overrideContext = {}) => {
     {
       title: "presetTitle",
       create_title_from_context: true,
-      create_title_from_context_style: "viper",
       is_authorview: false,
       is_streamgraph: false,
       custom_title: "customTitle",
@@ -136,7 +135,7 @@ describe("config and context state", () => {
           acronym: "acronym",
           projectId: "projectId",
           presetTitle: "presetTitle",
-          titleStyle: "viper",
+          titleStyle: "standard",
           titleLabelType: "keywordview-knowledgemap",
           customTitle: "customTitle",
         };
@@ -168,7 +167,7 @@ describe("config and context state", () => {
           acronym: undefined,
           projectId: undefined,
           presetTitle: "presetTitle",
-          titleStyle: "viper",
+          titleStyle: "standard",
           titleLabelType: "keywordview-knowledgemap",
           customTitle: "customTitle",
         };
@@ -275,7 +274,7 @@ describe("config and context state", () => {
         acronym: "acronym",
         projectId: "projectId",
         presetTitle: "presetTitle",
-        titleStyle: "viper",
+        titleStyle: "standard",
         titleLabelType: "authorview-streamgraph",
         customTitle: "customTitle",
       };
@@ -310,7 +309,7 @@ describe("config and context state", () => {
         acronym: "acronym",
         projectId: "projectId",
         presetTitle: "presetTitle",
-        titleStyle: "viper",
+        titleStyle: "standard",
         titleLabelType: "authorview-knowledgemap",
         customTitle: "customTitle",
       };
@@ -345,7 +344,7 @@ describe("config and context state", () => {
         acronym: "acronym",
         projectId: "projectId",
         presetTitle: "presetTitle",
-        titleStyle: "viper",
+        titleStyle: "standard",
         titleLabelType: "keywordview-streamgraph",
         customTitle: "customTitle",
       };
@@ -1664,17 +1663,12 @@ describe("config and context state", () => {
       const END_DATE = "2012-31-12T13:30:22.112Z";
 
       const initialState = {};
-      const { configObject, contextObject } = setup(
-        {
-          create_title_from_context_style: "viper",
+      const { configObject, contextObject } = setup(null, {
+        params: {
+          start_date: START_DATE,
+          end_date: END_DATE,
         },
-        {
-          params: {
-            start_date: START_DATE,
-            end_date: END_DATE,
-          },
-        },
-      );
+      });
 
       const result = contextLineReducer(
         initialState,
@@ -1699,17 +1693,12 @@ describe("config and context state", () => {
       const END_DATE = undefined;
 
       const initialState = {};
-      const { configObject, contextObject } = setup(
-        {
-          create_title_from_context_style: "viper",
+      const { configObject, contextObject } = setup(null, {
+        params: {
+          start_date: START_DATE,
+          end_date: END_DATE,
         },
-        {
-          params: {
-            start_date: START_DATE,
-            end_date: END_DATE,
-          },
-        },
-      );
+      });
 
       const result = contextLineReducer(
         initialState,

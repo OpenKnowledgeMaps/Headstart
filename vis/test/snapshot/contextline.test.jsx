@@ -1,10 +1,9 @@
 import React from "react";
+import { Provider } from "react-redux";
 import renderer from "react-test-renderer";
 import configureStore from "redux-mock-store";
-import { Provider } from "react-redux";
 
 import ContextLine from "../../js/components/ContextLine";
-
 import LocalizationProvider from "../../js/components/LocalizationProvider";
 
 const mockStore = configureStore([]);
@@ -12,7 +11,7 @@ const mockStore = configureStore([]);
 const setup = (
   overrideContextLine = {},
   overrideLocalization = {},
-  overrideStoreObject = {}
+  overrideStoreObject = {},
 ) => {
   const storeObject = Object.assign(
     {
@@ -64,7 +63,7 @@ const setup = (
         ...overrideLocalization,
       },
     },
-    overrideStoreObject
+    overrideStoreObject,
   );
 
   return storeObject;
@@ -85,8 +84,8 @@ describe("Context line component snapshot", () => {
         {
           service: "base",
           timespan: "All time",
-        }
-      )
+        },
+      ),
     );
 
     const tree = renderer
@@ -95,7 +94,7 @@ describe("Context line component snapshot", () => {
           <Provider store={store}>
             <ContextLine />
           </Provider>
-        </LocalizationProvider>
+        </LocalizationProvider>,
       )
       .toJSON();
     expect(tree).toMatchSnapshot();
@@ -115,8 +114,8 @@ describe("Context line component snapshot", () => {
         {
           service: "pubmed",
           timespan: "All time",
-        }
-      )
+        },
+      ),
     );
 
     const tree = renderer
@@ -125,7 +124,7 @@ describe("Context line component snapshot", () => {
           <Provider store={store}>
             <ContextLine />
           </Provider>
-        </LocalizationProvider>
+        </LocalizationProvider>,
       )
       .toJSON();
     expect(tree).toMatchSnapshot();
@@ -144,8 +143,8 @@ describe("Context line component snapshot", () => {
         {
           articles_label: "resources and collections",
           source_label: "Data source",
-        }
-      )
+        },
+      ),
     );
 
     const tree = renderer
@@ -154,32 +153,7 @@ describe("Context line component snapshot", () => {
           <Provider store={store}>
             <ContextLine />
           </Provider>
-        </LocalizationProvider>
-      )
-      .toJSON();
-    expect(tree).toMatchSnapshot();
-  });
-
-  it("matches a viper snapshot", () => {
-    const store = mockStore(
-      setup({
-        articlesCount: 36,
-        openAccessCount: 10,
-        dataSource: "OpenAIRE",
-        paperCount: 36,
-        datasetCount: 0,
-        funder: "EC",
-        projectRuntime: "2011-2016",
-      })
-    );
-
-    const tree = renderer
-      .create(
-        <LocalizationProvider localization={store.getState().localization}>
-          <Provider store={store}>
-            <ContextLine />
-          </Provider>
-        </LocalizationProvider>
+        </LocalizationProvider>,
       )
       .toJSON();
     expect(tree).toMatchSnapshot();
@@ -200,8 +174,8 @@ describe("Context line component snapshot", () => {
         {
           articles_label: "open access Dokumente",
           source_label: "Quelle",
-        }
-      )
+        },
+      ),
     );
 
     const tree = renderer
@@ -210,7 +184,7 @@ describe("Context line component snapshot", () => {
           <Provider store={store}>
             <ContextLine />
           </Provider>
-        </LocalizationProvider>
+        </LocalizationProvider>,
       )
       .toJSON();
     expect(tree).toMatchSnapshot();
@@ -238,8 +212,8 @@ describe("Context line component snapshot", () => {
         },
         {
           timespan: "1 Jan 1847 - 1 Jan 1918",
-        }
-      )
+        },
+      ),
     );
 
     const tree = renderer
@@ -248,7 +222,7 @@ describe("Context line component snapshot", () => {
           <Provider store={store}>
             <ContextLine />
           </Provider>
-        </LocalizationProvider>
+        </LocalizationProvider>,
       )
       .toJSON();
     expect(tree).toMatchSnapshot();

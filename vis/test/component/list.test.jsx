@@ -1,25 +1,17 @@
-import { expect, describe, it, vitest } from 'vitest';
-import React from "react";
+import { fireEvent, render } from "@testing-library/react";
 import { Provider } from "react-redux";
-import { render, fireEvent } from "@testing-library/react";
-import { act } from "react-dom/test-utils";
-
 import configureStore from "redux-mock-store";
+import { describe, expect, it } from "vitest";
 
-import { KNOWLEDGEMAP_MODE } from "../../js/reducers/chartType";
-
+import { zoomIn } from "../../js/actions";
+import List from "../../js/components/List";
+import LocalizationProvider from "../../js/components/LocalizationProvider";
 import defaultConfig from "../../js/default-config";
-
-import { zoomIn, highlightArea } from "../../js/actions";
-
-import initialTestData from "../data/simple";
+import { KNOWLEDGEMAP_MODE } from "../../js/reducers/chartType";
 import covisData from "../data/covis";
 import localData from "../data/local-files";
 import pubmedData from "../data/pubmed";
-import viperData from "../data/viper";
-
-import List from "../../js/components/List";
-import LocalizationProvider from "../../js/components/LocalizationProvider";
+import initialTestData from "../data/simple";
 
 const localization = defaultConfig.localization.eng;
 
@@ -27,7 +19,7 @@ const mockStore = configureStore([]);
 const setup = (
   overrideDataObject = {},
   overrideListObject = {},
-  overrideStoreObject = {}
+  overrideStoreObject = {},
 ) => {
   const storeObject = Object.assign(
     {
@@ -72,7 +64,7 @@ const setup = (
       service: "none",
       localization: localization,
     },
-    overrideStoreObject
+    overrideStoreObject,
   );
 
   return storeObject;
@@ -88,7 +80,7 @@ describe("List entries component", () => {
         <LocalizationProvider localization={localization}>
           <List />
         </LocalizationProvider>
-      </Provider>
+      </Provider>,
     );
 
     expect(result.container.querySelector(".list_metadata")).not.toBe(null);
@@ -103,7 +95,7 @@ describe("List entries component", () => {
         <LocalizationProvider localization={localization}>
           <List />
         </LocalizationProvider>
-      </Provider>
+      </Provider>,
     );
 
     expect(result.container.querySelector(".list_metadata")).toBe(null);
@@ -117,7 +109,7 @@ describe("List entries component", () => {
         showFilter: true,
         filterField: "resulttype",
         filterValue: "all",
-      }
+      },
     );
     const store = mockStore(storeObject);
 
@@ -126,7 +118,7 @@ describe("List entries component", () => {
         <LocalizationProvider localization={localization}>
           <List />
         </LocalizationProvider>
-      </Provider>
+      </Provider>,
     );
 
     expect(result.container.querySelector(".list_metadata")).not.toBe(null);
@@ -141,7 +133,7 @@ describe("List entries component", () => {
         filterField: "resulttype",
         filterValue: "all",
         height: 800,
-      }
+      },
     );
     const store = mockStore(storeObject);
 
@@ -150,11 +142,11 @@ describe("List entries component", () => {
         <LocalizationProvider localization={localization}>
           <List />
         </LocalizationProvider>
-      </Provider>
+      </Provider>,
     );
 
     expect(
-      result.container.querySelector("#papers_list").getAttribute("style")
+      result.container.querySelector("#papers_list").getAttribute("style"),
     ).toContain("height");
   });
 
@@ -170,7 +162,7 @@ describe("List entries component", () => {
           // color can only happen in triple streamgraph, not in covis
           color: "green",
         },
-      }
+      },
     );
     const store = mockStore(storeObject);
 
@@ -179,7 +171,7 @@ describe("List entries component", () => {
         <LocalizationProvider localization={localization}>
           <List />
         </LocalizationProvider>
-      </Provider>
+      </Provider>,
     );
 
     expect(result.container.querySelector(".list_metadata")).not.toBe(null);
@@ -199,7 +191,7 @@ describe("List entries component", () => {
           safeId:
             "https__003a__002f__002frefigure__002eorg__002fcollections__002fitem__002fecd1dab0__002d56a5__002d11ea__002d8c54__002d9323bc73fc6b__002f",
         },
-      }
+      },
     );
     const store = mockStore(storeObject);
 
@@ -208,7 +200,7 @@ describe("List entries component", () => {
         <LocalizationProvider localization={localization}>
           <List />
         </LocalizationProvider>
-      </Provider>
+      </Provider>,
     );
 
     expect(result.container.querySelector(".list_metadata")).not.toBe(null);
@@ -228,7 +220,7 @@ describe("List entries component", () => {
           safeId:
             "https__003a__002f__002fdoi__002eorg__002f10__002e1101__002f2020__002e02__002e10__002e942136-",
         },
-      }
+      },
     );
     const store = mockStore(storeObject);
 
@@ -237,7 +229,7 @@ describe("List entries component", () => {
         <LocalizationProvider localization={localization}>
           <List />
         </LocalizationProvider>
-      </Provider>
+      </Provider>,
     );
 
     expect(result.container.querySelector(".list_metadata")).not.toBe(null);
@@ -252,7 +244,7 @@ describe("List entries component", () => {
         filterField: "resulttype",
         filterValue: "all",
         sortValue: "title",
-      }
+      },
     );
     const store = mockStore(storeObject);
 
@@ -261,97 +253,7 @@ describe("List entries component", () => {
         <LocalizationProvider localization={localization}>
           <List />
         </LocalizationProvider>
-      </Provider>
-    );
-
-    expect(result.container.querySelector(".list_metadata")).not.toBe(null);
-  });
-
-  it("renders with viper data", () => {
-    const storeObject = setup(
-      { list: viperData },
-      { show: true, showFilter: true, showMetrics: true }
-    );
-    const store = mockStore(storeObject);
-
-    const result = render(
-      <Provider store={store}>
-        <LocalizationProvider localization={localization}>
-          <List />
-        </LocalizationProvider>
-      </Provider>
-    );
-
-    expect(result.container.querySelector(".list_metadata")).not.toBe(null);
-  });
-
-  it("renders with viper data, base unit = citations", () => {
-    const storeObject = setup(
-      { list: viperData },
-      {
-        show: true,
-        showFilter: true,
-        showMetrics: true,
-        baseUnit: "citations",
-        isContentBased: false,
-      }
-    );
-    const store = mockStore(storeObject);
-
-    const result = render(
-      <Provider store={store}>
-        <LocalizationProvider localization={localization}>
-          <List />
-        </LocalizationProvider>
-      </Provider>
-    );
-
-    expect(result.container.querySelector(".list_metadata")).not.toBe(null);
-  });
-
-  it("renders with viper data, base unit = tweets", () => {
-    const storeObject = setup(
-      { list: viperData },
-      {
-        show: true,
-        showFilter: true,
-        showMetrics: true,
-        baseUnit: "tweets",
-        isContentBased: false,
-      }
-    );
-    const store = mockStore(storeObject);
-
-    const result = render(
-      <Provider store={store}>
-        <LocalizationProvider localization={localization}>
-          <List />
-        </LocalizationProvider>
-      </Provider>
-    );
-
-    expect(result.container.querySelector(".list_metadata")).not.toBe(null);
-  });
-
-  it("renders with viper data, base unit = readers", () => {
-    const storeObject = setup(
-      { list: viperData },
-      {
-        show: true,
-        showFilter: true,
-        showMetrics: true,
-        baseUnit: "readers",
-        isContentBased: false,
-      }
-    );
-    const store = mockStore(storeObject);
-
-    const result = render(
-      <Provider store={store}>
-        <LocalizationProvider localization={localization}>
-          <List />
-        </LocalizationProvider>
-      </Provider>
+      </Provider>,
     );
 
     expect(result.container.querySelector(".list_metadata")).not.toBe(null);
@@ -366,7 +268,7 @@ describe("List entries component", () => {
         isContentBased: false,
         baseUnit: "citations",
         showMetrics: false,
-      }
+      },
     );
     const store = mockStore(storeObject);
 
@@ -375,7 +277,7 @@ describe("List entries component", () => {
         <LocalizationProvider localization={localization}>
           <List />
         </LocalizationProvider>
-      </Provider>
+      </Provider>,
     );
 
     expect(result.container.querySelector(".list_metadata")).not.toBe(null);
@@ -391,7 +293,7 @@ describe("List entries component", () => {
         baseUnit: "citations",
         showMetrics: false,
         filterValue: "open_access",
-      }
+      },
     );
     const store = mockStore(storeObject);
 
@@ -400,7 +302,7 @@ describe("List entries component", () => {
         <LocalizationProvider localization={localization}>
           <List />
         </LocalizationProvider>
-      </Provider>
+      </Provider>,
     );
 
     expect(result.container.querySelector(".list_metadata")).not.toBe(null);
@@ -416,7 +318,7 @@ describe("List entries component", () => {
         baseUnit: "citations",
         showMetrics: false,
         filterValue: "publication",
-      }
+      },
     );
     const store = mockStore(storeObject);
 
@@ -425,7 +327,7 @@ describe("List entries component", () => {
         <LocalizationProvider localization={localization}>
           <List />
         </LocalizationProvider>
-      </Provider>
+      </Provider>,
     );
 
     expect(result.container.querySelector(".list_metadata")).not.toBe(null);
@@ -441,7 +343,7 @@ describe("List entries component", () => {
         baseUnit: "citations",
         showMetrics: false,
         filterValue: "dataset",
-      }
+      },
     );
     const store = mockStore(storeObject);
 
@@ -450,7 +352,7 @@ describe("List entries component", () => {
         <LocalizationProvider localization={localization}>
           <List />
         </LocalizationProvider>
-      </Provider>
+      </Provider>,
     );
 
     expect(result.container.querySelector(".list_metadata")).not.toBe(null);
@@ -460,7 +362,7 @@ describe("List entries component", () => {
     const storeObject = setup(
       { list: localData },
       { show: true },
-      { service: null }
+      { service: null },
     );
     const store = mockStore(storeObject);
 
@@ -469,7 +371,7 @@ describe("List entries component", () => {
         <LocalizationProvider localization={localization}>
           <List />
         </LocalizationProvider>
-      </Provider>
+      </Provider>,
     );
 
     expect(result.container.querySelector(".list_metadata")).not.toBe(null);
@@ -479,7 +381,7 @@ describe("List entries component", () => {
     const storeObject = setup(
       { list: localData },
       { show: true, height: 800 },
-      { service: null }
+      { service: null },
     );
     const store = mockStore(storeObject);
 
@@ -488,11 +390,11 @@ describe("List entries component", () => {
         <LocalizationProvider localization={localization}>
           <List />
         </LocalizationProvider>
-      </Provider>
+      </Provider>,
     );
 
     expect(
-      result.container.querySelector("#papers_list").getAttribute("style")
+      result.container.querySelector("#papers_list").getAttribute("style"),
     ).toContain("height");
   });
 
@@ -500,7 +402,7 @@ describe("List entries component", () => {
     const storeObject = setup(
       { list: localData },
       { show: true, sortValue: "year" },
-      { service: null }
+      { service: null },
     );
     const store = mockStore(storeObject);
 
@@ -509,7 +411,7 @@ describe("List entries component", () => {
         <LocalizationProvider localization={localization}>
           <List />
         </LocalizationProvider>
-      </Provider>
+      </Provider>,
     );
 
     expect(result.container.querySelector(".list_metadata")).not.toBe(null);
@@ -519,7 +421,7 @@ describe("List entries component", () => {
     const storeObject = setup(
       { list: localData },
       { show: true, sortValue: "readers" },
-      { service: null }
+      { service: null },
     );
     const store = mockStore(storeObject);
 
@@ -528,7 +430,7 @@ describe("List entries component", () => {
         <LocalizationProvider localization={localization}>
           <List />
         </LocalizationProvider>
-      </Provider>
+      </Provider>,
     );
 
     expect(result.container.querySelector(".list_metadata")).not.toBe(null);
@@ -546,7 +448,7 @@ describe("List entries component", () => {
         selectedPaper: {
           safeId: localData[0].safe_id,
         },
-      }
+      },
     );
     const store = mockStore(storeObject);
 
@@ -555,7 +457,7 @@ describe("List entries component", () => {
         <LocalizationProvider localization={localization}>
           <List />
         </LocalizationProvider>
-      </Provider>
+      </Provider>,
     );
 
     expect(result.container.querySelector(".list_metadata")).not.toBe(null);
@@ -572,7 +474,7 @@ describe("List entries component", () => {
           <LocalizationProvider localization={localization}>
             <List />
           </LocalizationProvider>
-        </Provider>
+        </Provider>,
       );
 
       const title = result.container.querySelector(".list_title");
@@ -630,7 +532,7 @@ describe("List entries component", () => {
           showFilter: true,
           filterField: "resulttype",
           filterValue: "all",
-        }
+        },
       );
       const store = mockStore(storeObject);
 
@@ -639,18 +541,18 @@ describe("List entries component", () => {
           <LocalizationProvider localization={localization}>
             <List />
           </LocalizationProvider>
-        </Provider>
+        </Provider>,
       );
 
-      expect(result.container.querySelector("#paper_list_title").textContent).toEqual(
-        `${storeObject.localization.default_paper_title} (2020)`
-      );
-      expect(result.container.querySelector(".list_authors").textContent).toEqual(
-        storeObject.localization.default_authors
-      );
-      expect(result.container.querySelector("#list_abstract").textContent).toEqual(
-        storeObject.localization.default_abstract
-      );
+      expect(
+        result.container.querySelector("#paper_list_title").textContent,
+      ).toEqual(`${storeObject.localization.default_paper_title} (2020)`);
+      expect(
+        result.container.querySelector(".list_authors").textContent,
+      ).toEqual(storeObject.localization.default_authors);
+      expect(
+        result.container.querySelector("#list_abstract").textContent,
+      ).toEqual(storeObject.localization.default_abstract);
     });
   });
 });

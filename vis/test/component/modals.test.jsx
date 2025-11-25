@@ -1,92 +1,4 @@
-import { expect, describe, it, vitest } from 'vitest';
-
-import React from "react";
-import { render, fireEvent, screen, waitFor } from "@testing-library/react";
-import { act } from "react-dom/test-utils";
-import { Provider } from "react-redux";
-
-import configureStore from "redux-mock-store";
-
-import {
-  closeCitationModal,
-  closeEmbedModal,
-  closeInfoModal,
-  closeViperEditModal,
-  hideCitePaper,
-  hideExportPaper,
-} from "../../js/actions";
-import {
-  STREAMGRAPH_MODE,
-  KNOWLEDGEMAP_MODE,
-} from "../../js/reducers/chartType";
-
-import Modals from "../../js/components/Modals";
-import LocalizationProvider from "../../js/components/LocalizationProvider";
-
-const mockStore = configureStore([]);
-const setup = (overrideModalsObject = {}, overrideStoreObject = {}) => {
-  const storeObject = Object.assign(
-    {
-      chartType: KNOWLEDGEMAP_MODE,
-      heading: {
-        acronym: null,
-      },
-      query: {
-        text: "sample query",
-      },
-      misc: {
-        timestamp: "2020-07-09 18:20:14",
-      },
-      modals: {
-        showShareButton: true,
-        twitterHashtags: "COVID19,science",
-        showEmbedButton: true,
-        openEmbedModal: false,
-        showFAQsButton: true,
-        FAQsUrl: "www.example.org",
-        showViperEditButton: false,
-        openViperEditModal: false,
-        viperEditObjID: null,
-        showReloadButton: false,
-        reloadLastUpdate: null,
-        apiProperties: {
-          headstartPath: null,
-          persistenceBackend: null,
-        },
-        openInfoModal: false,
-        infoParams: {},
-        showImagePreview: false,
-        showPDFPreview: false,
-        previewedPaper: null,
-        useViewer: false,
-        showCitationButton: true,
-        openCitationModal: false,
-        ...overrideModalsObject,
-      },
-      service: "base",
-      localization: {
-        embed_title: "Some embed title",
-        viper_edit_title: "Some viper edit title",
-        viper_button_desc_label: "some button label",
-        cite: "Cite",
-        cite_title_km: "Cite this knowledge map",
-        cite_title_sg: "Cite this streamgraph",
-        citation_template:
-          "Open Knowledge Maps (${year}). Overview of research on ${query}. Retrieved from ${source} [${date}].",
-        cite_vis_km: "Please cite this knowledge map as follows",
-        cite_vis_sg: "Please cite this streamgraph as follows",
-        copied_button_text: "Copied",
-        cite_paper: "Cite this paper",
-        export_paper: "Export this paper",
-      },
-      q_advanced: {},
-      author: {},
-    },
-    overrideStoreObject
-  );
-
-  return storeObject;
-};
+import { describe, expect, it, vitest } from "vitest";
 
 describe("Modals component", () => {
   vitest.useFakeTimers().setSystemTime(new Date("2021-01-01").getTime());
@@ -94,7 +6,7 @@ describe("Modals component", () => {
   describe("map citation modal", () => {
     it("temporal", () => {
       expect(true).toBe(true);
-    })
+    });
     // it("base citation modal renders", async () => {
     //   const storeObject = setup(
     //     { openCitationModal: true, showCitationButton: true },
@@ -119,7 +31,7 @@ describe("Modals component", () => {
     //   expect(result.container.querySelector("#cite-title").textContent).toEqual(
     //     "Cite this knowledge map"
     //   );
-      
+
     //   expect(screen.queryByTestId("citation").textContent).toEqual(
     //     "Open Knowledge Maps (2021). Overview of research on digital education. Retrieved from http://localhost:3000/ [9 Jul 2020]."
     //   );
@@ -640,37 +552,6 @@ describe("Modals component", () => {
   //     );
   //   });
 
-  //   it("viper info modal renders", () => {
-  //     const storeObject = setup(
-  //       {
-  //         openInfoModal: true,
-  //         infoParams: {
-  //           organisations: [
-  //             { url: "test.com", name: "ABC" },
-  //             { url: "example.org", name: "XYZ" },
-  //           ],
-  //         },
-  //       },
-  //       { service: "openaire" }
-  //     );
-  //     const store = mockStore(storeObject);
-
-  //     act(() => {
-  //       render(
-  //         <Provider store={store}>
-  //           <LocalizationProvider localization={storeObject.localization}>
-  //             <Modals />
-  //           </LocalizationProvider>
-  //         </Provider>,
-  //         container
-  //       );
-  //     });
-
-  //     expect(document.querySelector("#info-title").textContent).toEqual(
-  //       "What's this?"
-  //     );
-  //   });
-
   //   it("triple knowledge map info modal renders", () => {
   //     const storeObject = setup(
   //       { openInfoModal: true },
@@ -905,63 +786,6 @@ describe("Modals component", () => {
   //       .querySelector(".indented-modal-btn")
   //       .textContent.trim();
   //     expect(buttonLabel).toEqual(storeObject.localization.copied_button_text);
-  //   });
-  // });
-
-  // describe("viper edit modal", () => {
-  //   it("viper edit modal renders", () => {
-  //     const storeObject = setup({
-  //       openViperEditModal: true,
-  //       showViperEditButton: true,
-  //     });
-  //     const store = mockStore(storeObject);
-
-  //     act(() => {
-  //       render(
-  //         <Provider store={store}>
-  //           <LocalizationProvider localization={storeObject.localization}>
-  //             <Modals />
-  //           </LocalizationProvider>
-  //         </Provider>,
-  //         container
-  //       );
-  //     });
-
-  //     expect(document.querySelector("#edit-title").textContent).toEqual(
-  //       storeObject.localization.viper_edit_title
-  //     );
-  //   });
-
-  //   it("triggers a correct redux action when viper edit modal is closed", () => {
-  //     const storeObject = setup(
-  //       {
-  //         openViperEditModal: true,
-  //         showViperEditButton: true,
-  //       }
-  //     );
-  //     const store = mockStore(storeObject);
-
-  //     act(() => {
-  //       render(
-  //         <Provider store={store}>
-  //           <LocalizationProvider localization={storeObject.localization}>
-  //             <Modals />
-  //           </LocalizationProvider>
-  //         </Provider>,
-  //         container
-  //       );
-  //     });
-
-  //     const select = document.querySelector(".modal-header .close");
-  //     act(() => {
-  //       const event = new Event("click", { bubbles: true });
-  //       select.dispatchEvent(event);
-  //     });
-
-  //     const actions = store.getActions();
-  //     const expectedPayload = closeViperEditModal();
-
-  //     expect(actions).toEqual([expectedPayload]);
   //   });
   // });
 });
