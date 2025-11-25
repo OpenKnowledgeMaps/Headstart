@@ -1,23 +1,20 @@
-import { expect, describe, it } from 'vitest';
+import { describe, expect, it } from "vitest";
 
 import {
   closeCitationModal,
   closeEmbedModal,
   closeInfoModal,
-  closeViperEditModal,
   hideCitePaper,
   hideExportPaper,
   hidePreview,
   openCitationModal,
   openEmbedModal,
   openInfoModal,
-  openViperEditModal,
   showCitePaper,
   showExportPaper,
   showPreview,
   zoomIn,
 } from "../../js/actions";
-
 import reducer from "../../js/reducers/modals";
 
 describe("modals state", () => {
@@ -153,32 +150,6 @@ describe("modals state", () => {
     const EXPECTED_RESULT = {
       ...INITIAL_STATE,
       openEmbedModal: false,
-    };
-
-    expect(result).toEqual(EXPECTED_RESULT);
-  });
-
-  it("should show the viper edit modal", () => {
-    const INITIAL_STATE = {};
-
-    const result = reducer(INITIAL_STATE, openViperEditModal());
-
-    const EXPECTED_RESULT = {
-      ...INITIAL_STATE,
-      openViperEditModal: true,
-    };
-
-    expect(result).toEqual(EXPECTED_RESULT);
-  });
-
-  it("should hide the viper edit modal", () => {
-    const INITIAL_STATE = {};
-
-    const result = reducer(INITIAL_STATE, closeViperEditModal());
-
-    const EXPECTED_RESULT = {
-      ...INITIAL_STATE,
-      openViperEditModal: false,
     };
 
     expect(result).toEqual(EXPECTED_RESULT);

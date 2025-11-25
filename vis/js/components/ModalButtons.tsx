@@ -1,21 +1,18 @@
 // @ts-nocheck
 
+import $ from "jquery";
 import React, { useEffect } from "react";
 import { connect } from "react-redux";
 
-import { openEmbedModal, openViperEditModal } from "../actions";
+import { openEmbedModal } from "../actions";
 import { STREAMGRAPH_MODE } from "../reducers/chartType";
-
-import $ from "jquery";
-
 import CitationButton from "../templates/buttons/CitationButton";
-import EditButton from "../templates/buttons/EditButton";
+import EmailButton from "../templates/buttons/EmailButton";
 import EmbedButton from "../templates/buttons/EmbedButton";
 import FAQsButton from "../templates/buttons/FAQsButton";
 import ReloadButton from "../templates/buttons/ReloadButton";
 import ShareButton from "../templates/buttons/ShareButton";
 import TwitterButton from "../templates/buttons/TwitterButton";
-import EmailButton from "../templates/buttons/EmailButton";
 
 const ModalButtons = ({
   showShareButton,
@@ -24,8 +21,6 @@ const ModalButtons = ({
   onEmbedButtonClick,
   showFAQsButton,
   FAQsUrl,
-  showViperEditButton,
-  onViperEditClick,
   showReloadButton,
   reloadLastUpdate,
   apiProperties,
@@ -60,9 +55,6 @@ const ModalButtons = ({
         />
       )}
       {showFAQsButton && <FAQsButton url={FAQsUrl} />}
-      {showViperEditButton && (
-        <EditButton onClick={onViperEditClick} title="Add project resources" />
-      )}
       {showReloadButton && (
         <ReloadButton
           lastUpdate={reloadLastUpdate}
@@ -80,7 +72,6 @@ const mapStateToProps = (state) => ({
   showEmbedButton: state.modals.showEmbedButton,
   showFAQsButton: state.modals.showFAQsButton,
   FAQsUrl: state.modals.FAQsUrl,
-  showViperEditButton: state.modals.showViperEditButton,
   showReloadButton: state.modals.showReloadButton,
   reloadLastUpdate: state.modals.reloadLastUpdate,
   apiProperties: state.modals.apiProperties,
@@ -95,7 +86,6 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => ({
   onEmbedButtonClick: () => dispatch(openEmbedModal()),
-  onViperEditClick: () => dispatch(openViperEditModal()),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(ModalButtons);
@@ -128,7 +118,7 @@ const positionButtons = (tag) => {
   var topPosition = $("#modals").position().top;
 
   const setPosition = () => {
-    const height = parseInt($("#" + tag).css("min-height"));
+    const height = parseInt($(`#${tag}`).css("min-height"));
     const leftOffset = $("#visualization").offset().left;
 
     $("#modals").followTo(height, topPosition, leftOffset, 0);
@@ -137,7 +127,7 @@ const positionButtons = (tag) => {
   $(".close").click(function (event) {
     $("#modals").css(
       "top",
-      $("#modals").position().top - $(event.target).parent().outerHeight()
+      $("#modals").position().top - $(event.target).parent().outerHeight(),
     );
 
     topPosition = $("#modals").position().top;
