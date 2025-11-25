@@ -95,6 +95,12 @@ detect_error <- function(failed, service, params) {
           reason <- c(reason, 'API error: timeout')
       }
     }
+    if (length(reason) == 0 && service == 'base') {
+      # check if q_advanced is in list of params
+      if (!is.null(params$q_advanced)) {
+        reason <- c(reason, "API error: q_advanced")
+      }
+    }
     if (length(reason) == 0 && service == 'pubmed') {
       if (startsWith(failed$query_reason, "HTTP failure: 500") && grepl("error forwarding request", failed$query_reason, fixed=TRUE)){
           reason <- c(reason, 'API error: requested metadata size')
