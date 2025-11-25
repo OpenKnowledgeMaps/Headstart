@@ -1,24 +1,23 @@
 import React, { FC } from "react";
 import { DropdownButton, MenuItem } from "react-bootstrap";
-import { useLocalizationContext } from "../components/LocalizationProvider";
-import useMatomo from "../utils/useMatomo";
-import { ScaleOptions, ScaleExplanations, ScaleLabels } from "../types";
 
-interface ScaleToolbar {
+import { useLocalizationContext } from "../components/LocalizationProvider";
+import { ScaleExplanations, ScaleLabels, ScaleOptions } from "../types";
+import useMatomo from "../utils/useMatomo";
+
+interface ScaleToolbarProps {
   value: ScaleOptions;
   options: ScaleOptions[] | [];
   labels: ScaleLabels;
   explanations: ScaleExplanations;
-  showCredit: boolean;
   onChange: (newSortByValue: ScaleOptions) => void;
 }
 
-const ScaleToolbar: FC<ScaleToolbar> = ({
+const ScaleToolbar: FC<ScaleToolbarProps> = ({
   value,
   options,
   labels,
   explanations,
-  showCredit,
   onChange,
 }) => {
   const localization = useLocalizationContext();
@@ -83,23 +82,6 @@ const ScaleToolbar: FC<ScaleToolbar> = ({
       <div className="context-scale-toolbar">
         <span id="curr-scale-explanation">{explanations[value]}</span>
       </div>
-      {showCredit && (
-        <div id="credit">
-          created by{" "}
-          <a
-            href="https://openknowledgemaps.org/"
-            target="_blank"
-            rel="noreferrer"
-          >
-            <img
-              className="logoimg"
-              style={{ border: "0px" }}
-              src="./img/okmaps-logo.png"
-              alt="OKMaps logo"
-            />
-          </a>
-        </div>
-      )}
     </div>
   );
 };

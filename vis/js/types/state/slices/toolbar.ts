@@ -2,7 +2,6 @@ import { ScaleOptions } from "../../index";
 
 export interface Toolbar {
   showScaleToolbar: boolean;
-  showCredit: boolean;
   scaleValue?: ScaleOptions;
   scaleOptions: ScaleOptions[] | [];
   scaleBaseUnit?: BaseUnit;

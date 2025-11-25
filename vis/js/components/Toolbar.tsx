@@ -1,13 +1,14 @@
 import React, { FC } from "react";
 import { connect } from "react-redux";
-import ScaleToolbar from "../templates/ScaleToolbar";
-import { scaleMap } from "../actions";
 import { Dispatch } from "redux";
+
+import { scaleMap } from "../actions";
+import ScaleToolbar from "../templates/ScaleToolbar";
 import {
+  ScaleMapAction,
+  ScaleOptions,
   State,
   Toolbar as ToolbarStateType,
-  ScaleOptions,
-  ScaleMapAction,
 } from "../types";
 
 interface ToolbarProps extends ToolbarStateType, MapDispatchProps {}
@@ -19,7 +20,6 @@ const Toolbar: FC<ToolbarProps> = ({
   scaleExplanations,
   scaleBaseUnit,
   scaleValue,
-  showCredit,
   onScaleChange,
 }) => {
   if (
@@ -51,7 +51,6 @@ const Toolbar: FC<ToolbarProps> = ({
         labels={scaleLabels}
         explanations={scaleExplanations}
         value={scaleValue}
-        showCredit={showCredit}
         onChange={handleScaleChange}
       />
     </div>
@@ -65,7 +64,6 @@ const mapStateToProps = (state: State) => ({
   scaleExplanations: state.toolbar.scaleExplanations,
   scaleBaseUnit: state.toolbar.scaleBaseUnit,
   scaleValue: state.toolbar.scaleValue,
-  showCredit: state.misc.showCreatedByViper,
 });
 
 const mapDispatchToProps = (dispatch: Dispatch<ScaleMapAction>) => ({
