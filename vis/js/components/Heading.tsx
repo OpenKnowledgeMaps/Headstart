@@ -3,14 +3,12 @@
 import React from "react";
 import { connect } from "react-redux";
 
+import { STREAMGRAPH_MODE } from "../reducers/chartType";
 import {
   BasicTitle,
-  ProjectTitle,
   CustomTitle,
   StandardTitle,
 } from "../templates/headingtitles";
-
-import { STREAMGRAPH_MODE } from "../reducers/chartType";
 import { queryConcatenator } from "../utils/data";
 
 const Heading = ({
@@ -22,7 +20,7 @@ const Heading = ({
   streamgraph,
   q_advanced,
   service,
-  author
+  author,
 }) => {
   if (zoomed) {
     const label = streamgraph
@@ -42,7 +40,7 @@ const Heading = ({
     );
   }
 
-  let queryString = queryConcatenator([query, q_advanced]);
+  const queryString = queryConcatenator([query, q_advanced]);
 
   return (
     // html template starts here
@@ -71,7 +69,6 @@ const mapStateToProps = (state) => ({
 export default connect(mapStateToProps)(Heading);
 
 // This should probably make its way to a more global config
-const MAX_LENGTH_VIPER = 47;
 const MAX_LENGTH_CUSTOM = 100;
 const MAX_LENGTH_ORCID = 85;
 
@@ -83,17 +80,9 @@ const renderTitle = (localization, query, headingParams, author, service) => {
     return <BasicTitle title={headingParams.presetTitle} />;
   }
 
-  let label = getHeadingLabel(headingParams.titleLabelType, localization);
+  const label = getHeadingLabel(headingParams.titleLabelType, localization);
 
   if (headingParams.titleStyle) {
-    if (headingParams.titleStyle === "viper") {
-      return renderViperTitle(
-        headingParams.title,
-        headingParams.acronym,
-        headingParams.projectId
-      );
-    }
-
     if (
       headingParams.titleStyle === "custom" &&
       typeof headingParams.customTitle !== "undefined" &&
@@ -103,7 +92,7 @@ const renderTitle = (localization, query, headingParams, author, service) => {
         headingParams.customTitle,
         label,
         query,
-        localization
+        localization,
       );
     }
 
@@ -116,8 +105,8 @@ const renderTitle = (localization, query, headingParams, author, service) => {
       }
     }
 
-    if (service === 'ORCID' && (author?.orcid_id || author?.author_name)) {
-      return renderOrcidTitle(author.orcid_id, author.author_name, label)
+    if (service === "ORCID" && (author?.orcid_id || author?.author_name)) {
+      return renderOrcidTitle(author.orcid_id, author.author_name, label);
     }
 
     return <StandardTitle label={label} title={query} />;
@@ -126,32 +115,15 @@ const renderTitle = (localization, query, headingParams, author, service) => {
   return <BasicTitle title={localization.default_title} />;
 };
 
-const renderOrcidTitle = (orcidId: string, authorName: string, label: string) => {
-  const orcidTitle = [authorName, orcidId ? `(${orcidId})` : null].join(' ')
+const renderOrcidTitle = (
+  orcidId: string,
+  authorName: string,
+  label: string,
+) => {
+  const orcidTitle = [authorName, orcidId ? `(${orcidId})` : null].join(" ");
   const shortTitle = sliceText(orcidTitle, MAX_LENGTH_ORCID);
 
-  return (
-    <StandardTitle
-      label={label}
-      title={shortTitle}
-    />
-  );
-}
-
-const renderViperTitle = (title, acronym, projectId) => {
-  let titleText = title;
-  if (typeof acronym === "string" && acronym !== "") {
-    titleText = acronym + " - " + title;
-  }
-  let shortTitleText = sliceText(titleText, MAX_LENGTH_VIPER);
-
-  return (
-    <ProjectTitle
-      fullTitle={titleText}
-      shortTitle={shortTitleText}
-      projectId={projectId}
-    />
-  );
+  return <StandardTitle label={label} title={shortTitle} />;
 };
 
 const renderCustomTitle = (title, label, query, localization) => {
@@ -178,7 +150,7 @@ const sliceText = (text, maxLength) => {
     return text;
   }
 
-  return text.slice(0, maxLength - 3) + "...";
+  return `${text.slice(0, maxLength - 3)}...`;
 };
 
 /**
@@ -200,7 +172,7 @@ export const getHeadingLabel = (labelType, localization) => {
 };
 
 const unescapeHTML = (string) => {
-  let entityMap = {
+  const entityMap = {
     "&amp;": "&",
     "&lt;": "<",
     "&gt;": ">",
@@ -216,6 +188,6 @@ const unescapeHTML = (string) => {
     /(&amp;|&lt;|&gt;|&quot;|&#34;|&#39;|&#x2F;|&#x60;|&#x3D;)/g,
     function (s) {
       return entityMap[s];
-    }
+    },
   );
 };

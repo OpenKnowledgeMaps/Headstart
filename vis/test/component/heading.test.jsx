@@ -1,13 +1,10 @@
-import { expect, describe, it } from 'vitest';
-
-import React from "react";
 import { render } from "@testing-library/react";
+import React from "react";
 import { Provider } from "react-redux";
-
 import configureStore from "redux-mock-store";
+import { describe, expect, it } from "vitest";
 
 import Heading, { getHeadingLabel } from "../../js/components/Heading";
-
 import { STREAMGRAPH_MODE } from "../../js/reducers/chartType";
 
 const mockStore = configureStore([]);
@@ -41,9 +38,9 @@ const setup = (overrideStore = {}) => {
         streamgraph_label: "Sample streamgraph keywords label",
         custom_title_explanation: "Sample explanation",
       },
-      q_advanced: {}
+      q_advanced: {},
     },
-    overrideStore
+    overrideStore,
   );
 
   const store = mockStore(storeObject);
@@ -60,7 +57,7 @@ describe("Heading component", () => {
     const result = render(
       <Provider store={store}>
         <Heading />
-      </Provider>
+      </Provider>,
     );
 
     expect(result.container.childNodes.length).toBe(1);
@@ -83,12 +80,12 @@ describe("Heading component", () => {
       const result = render(
         <Provider store={store}>
           <Heading />
-        </Provider>
+        </Provider>,
       );
 
-      expect(result.container.querySelector("#area-bold").textContent).toContain(
-        LABEL
-      );
+      expect(
+        result.container.querySelector("#area-bold").textContent,
+      ).toContain(LABEL);
     });
 
     it("renders with correct title", () => {
@@ -98,12 +95,12 @@ describe("Heading component", () => {
       const result = render(
         <Provider store={store}>
           <Heading />
-        </Provider>
+        </Provider>,
       );
 
-      expect(result.container.querySelector("#area-not-bold").textContent).toEqual(
-        TITLE
-      );
+      expect(
+        result.container.querySelector("#area-not-bold").textContent,
+      ).toEqual(TITLE);
     });
 
     it("renders as streamgraph with correct title", () => {
@@ -117,12 +114,12 @@ describe("Heading component", () => {
       const result = render(
         <Provider store={store}>
           <Heading />
-        </Provider>
+        </Provider>,
       );
 
-      expect(result.container.querySelector("#area-not-bold").textContent).toEqual(
-        TITLE
-      );
+      expect(
+        result.container.querySelector("#area-not-bold").textContent,
+      ).toEqual(TITLE);
     });
   });
 
@@ -138,10 +135,12 @@ describe("Heading component", () => {
         const result = render(
           <Provider store={store}>
             <Heading />
-          </Provider>
+          </Provider>,
         );
 
-        expect(result.container.querySelector("h4").textContent).toContain(TITLE);
+        expect(result.container.querySelector("h4").textContent).toContain(
+          TITLE,
+        );
       });
 
       it("renders with correct title taken from config", () => {
@@ -153,152 +152,12 @@ describe("Heading component", () => {
         const result = render(
           <Provider store={store}>
             <Heading />
-          </Provider>
+          </Provider>,
         );
 
-        expect(result.container.querySelector("h4").textContent).toContain(TITLE);
-      });
-
-      describe("viper", () => {
-        const setupViper = () => {
-          const { storeObject } = setup();
-          storeObject.heading.titleStyle = "viper";
-
-          const store = mockStore(storeObject);
-
-          return { store, storeObject };
-        };
-
-        it("renders with correct title", () => {
-          const TITLE = "Special Test Title";
-
-          const { storeObject } = setupViper();
-          storeObject.heading.title = TITLE;
-          const store = mockStore(storeObject);
-
-          const result = render(
-            <Provider store={store}>
-              <Heading />
-            </Provider>
-          );
-
-          expect(
-            result.container.querySelector("span.truncated-project-title").textContent
-          ).toContain(TITLE);
-        });
-
-        it("renders with correct title attribute", () => {
-          const TITLE = "Special Test Title";
-
-          const { storeObject } = setupViper();
-          storeObject.heading.title = TITLE;
-          const store = mockStore(storeObject);
-
-          const result = render(
-            <Provider store={store}>
-              <Heading />
-            </Provider>
-          );
-
-          expect(
-            result.container
-              .querySelector("span.truncated-project-title")
-              .getAttribute("title")
-          ).toContain(TITLE);
-        });
-
-        it("renders with correct acronym", () => {
-          const ACRONYM = "Special Test Acronym";
-
-          const { storeObject } = setupViper();
-          storeObject.heading.acronym = ACRONYM;
-          const store = mockStore(storeObject);
-
-          const result = render(
-            <Provider store={store}>
-              <Heading />
-            </Provider>
-          );
-
-          expect(
-            result.container.querySelector("span.truncated-project-title").textContent
-          ).toContain(ACRONYM);
-        });
-
-        it("renders without acronym", () => {
-          const TITLE = "Special Test Title";
-
-          const { storeObject } = setupViper();
-          storeObject.heading.title = TITLE;
-          delete storeObject.heading.acronym;
-          const store = mockStore(storeObject);
-
-          const result = render(
-            <Provider store={store}>
-              <Heading />
-            </Provider>
-          );
-
-          expect(
-            result.container.querySelector("span.truncated-project-title").textContent
-          ).toEqual(TITLE);
-        });
-
-        it("renders with correct project id", () => {
-          const ID = 42069;
-
-          const { storeObject } = setupViper();
-          storeObject.heading.projectId = ID;
-          const store = mockStore(storeObject);
-
-          const result = render(
-            <Provider store={store}>
-              <Heading />
-            </Provider>
-          );
-
-          expect(
-            result.container.querySelector("span.project-id").textContent
-          ).toEqual(`(${ID})`);
-        });
-
-        it("renders with correct but long title", () => {
-          const TITLE = "Special Test Title".repeat(100);
-
-          const { storeObject } = setupViper();
-          storeObject.heading.title = TITLE;
-          const store = mockStore(storeObject);
-
-          const result = render(
-            <Provider store={store}>
-              <Heading />
-            </Provider>
-          );
-
-          expect(
-            result.container.querySelector("span.truncated-project-title").textContent
-          ).toContain("...");
-        });
-
-        it("renders with correct but long title attribute", () => {
-          const TITLE = "Special Test Title".repeat(100);
-
-          const { storeObject } = setupViper();
-          storeObject.heading.title = TITLE;
-          const store = mockStore(storeObject);
-
-          const result = render(
-            <Provider store={store}>
-              <Heading />
-            </Provider>
-          );
-
-          expect(
-            result.container
-              .querySelector("span.truncated-project-title")
-              .getAttribute("title")
-          ).toContain(TITLE);
-        });
+        expect(result.container.querySelector("h4").textContent).toContain(
+          TITLE,
+        );
       });
 
       describe("custom title", () => {
@@ -328,11 +187,11 @@ describe("Heading component", () => {
           const result = render(
             <Provider store={store}>
               <Heading />
-            </Provider>
+            </Provider>,
           );
 
           expect(
-            result.container.querySelector("#search-term-unique").textContent
+            result.container.querySelector("#search-term-unique").textContent,
           ).toEqual(TITLE);
         });
 
@@ -347,15 +206,15 @@ describe("Heading component", () => {
           const result = render(
             <Provider store={store}>
               <Heading />
-            </Provider>
+            </Provider>,
           );
 
           expect(
-            result.container.querySelector("#search-term-unique").textContent
+            result.container.querySelector("#search-term-unique").textContent,
           ).toContain(TITLE);
 
           expect(
-            result.container.querySelector("#search-term-unique").textContent
+            result.container.querySelector("#search-term-unique").textContent,
           ).toContain("...");
         });
 
@@ -370,11 +229,13 @@ describe("Heading component", () => {
           const result = render(
             <Provider store={store}>
               <Heading />
-            </Provider>
+            </Provider>,
           );
 
           expect(
-            result.container.querySelector("#search-term-unique").getAttribute("title")
+            result.container
+              .querySelector("#search-term-unique")
+              .getAttribute("title"),
           ).toContain(EXPLANATION);
         });
 
@@ -386,11 +247,13 @@ describe("Heading component", () => {
           const result = render(
             <Provider store={store}>
               <Heading />
-            </Provider>
+            </Provider>,
           );
 
           expect(
-            result.container.querySelector("#search-term-unique").getAttribute("title")
+            result.container
+              .querySelector("#search-term-unique")
+              .getAttribute("title"),
           ).toContain(QUERY);
         });
 
@@ -407,11 +270,11 @@ describe("Heading component", () => {
           const result = render(
             <Provider store={store}>
               <Heading />
-            </Provider>
+            </Provider>,
           );
 
           expect(
-            result.container.querySelector("#search-term-unique").textContent
+            result.container.querySelector("#search-term-unique").textContent,
           ).toEqual(ESCAPED_TITLE);
         });
       });
@@ -434,11 +297,11 @@ describe("Heading component", () => {
           const result = render(
             <Provider store={store}>
               <Heading />
-            </Provider>
+            </Provider>,
           );
 
           expect(
-            result.container.querySelector("#search-term-unique").textContent
+            result.container.querySelector("#search-term-unique").textContent,
           ).toEqual(QUERY);
         });
 
@@ -450,11 +313,13 @@ describe("Heading component", () => {
           const result = render(
             <Provider store={store}>
               <Heading />
-            </Provider>
+            </Provider>,
           );
 
           expect(
-            result.container.querySelector("#search-term-unique").getAttribute("title")
+            result.container
+              .querySelector("#search-term-unique")
+              .getAttribute("title"),
           ).toEqual(QUERY);
         });
       });
@@ -486,7 +351,7 @@ describe("Heading component", () => {
           const LABEL = "label-that-does-not-exist";
 
           expect(() =>
-            getHeadingLabel(LABEL, storeObject.localization)
+            getHeadingLabel(LABEL, storeObject.localization),
           ).toThrow(Error);
         });
       });
