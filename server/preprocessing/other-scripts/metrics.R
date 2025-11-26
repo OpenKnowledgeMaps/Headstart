@@ -5,6 +5,7 @@ library("plyr")
 mlog <- getLogger("metrics")
 
 apikey_altmetric <- Sys.getenv("R_ALTMETRIC_APIKEY")
+email_crossref <- Sys.getenv("R_CROSSREF_APIMAIL")
 
 enrich_metadata_metrics <- function(metadata, metrics_sources=c("altmetric", "crossref")) {
   start.time <- Sys.time()
@@ -99,7 +100,7 @@ add_citations <- function(metadata) {
       cc_list <- list()
       for (doi in valid_dois) {
       tryCatch({
-        count <- cr_citation_count(doi = doi)
+        count <- cr_citation_count(doi = doi, key = email_crossref)
         cc_list <- append(cc_list, list(count))
       }, error = function(err) {
         mlog$debug(gsub("[\r\n]", "", paste(err, doi, sep = " ")))
