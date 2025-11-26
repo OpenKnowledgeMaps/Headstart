@@ -133,7 +133,6 @@ export type Config = {
 
   max_width?: number;
   modal_info_type?: string;
-  credit?: boolean;
   timestamp?: string;
   options?: {
     languages?: {
