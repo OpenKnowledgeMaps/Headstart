@@ -34,7 +34,6 @@ You can run also different examples
 
 - `npm run example:pubmed` will run the PubMed example
 - `npm run example:triple` will run the GoTriple example
-- `npm run example:covis` will run the CoVis example
 
 If everything has worked out, you should see the example visualization.
 
@@ -52,7 +51,6 @@ _dist/_ folder in the root directory.
 You can also set the `skin` property in the config to one of the following
 values to use the particular data integration skin:
 
-- `"covis"`
 - `"triple"`
 
 or leave it empty (`""`) for the default project website skin.
