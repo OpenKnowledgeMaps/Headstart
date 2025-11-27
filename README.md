@@ -91,10 +91,8 @@ Alternatively, you can point your browser to one of the following addresses:
 
     http://localhost:8080/project_website/base.html
     http://localhost:8080/project_website/pubmed.html
-    http://localhost:8080/local_covis/
     http://localhost:8080/local_triple/map.html
     http://localhost:8080/local_triple/stream.html
-    http://localhost:8080/local_viper/
 
 If everything has worked out, you should see the example visualization.
 

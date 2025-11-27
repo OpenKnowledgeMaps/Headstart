@@ -589,20 +589,6 @@ img#preview_page {
     }
 }
 
-@if $skin == 'viper' {
-    .list_metadata {
-        .list_title {
-            font-size: 14px;
-        }
-
-        .list_details, .doi_outlink {
-            .list_authors {
-                font-weight:$fontweight400;
-            }
-        }
-    }
-}
-
 @if $skin == 'cris_vis' {
     .list_images  {
         padding-left: 15px;

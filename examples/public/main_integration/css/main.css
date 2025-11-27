@@ -704,26 +704,6 @@ a.newsletter2:hover, a.newsletter2:active, a.newsletter2:focus {
     padding: 0 20px;
 }
 
-.viperfunding {
-    width:200px; 
-    margin:0px auto;
-    border-radius: 0 0 15px 15px;
-    -moz-border-radius: 0 0 15px 15px;
-    color: #2D3E52; 
-    font-weight:300; 
-    font-size: 12px;
-    background-color: #f6f6f6; 
-    text-align:center; 
-    padding:10px 0;
-}
-
-.viperfunding img {
-    width:40px; 
-    margin:0px auto; 
-    display: inline-block; 
-    margin-left:10px;
-}
-
 .benefitssearch {
     background-color: white;
 }
@@ -2681,38 +2661,6 @@ time {
     background-color: white;
 }
 
-.vipercirlce {
-    display: block;
-    position: absolute;
-    min-width: 200px;
-    min-height:100px;
-    top: 180px;
-    right: 0px;
-    border-radius: 15px;
-    -moz-border-radius: 15px;
-    border-top: 0px solid #3696e0;
-    background-color: white; 
-    text-align:center;
-    -moz-box-shadow: 0 2px 2px 0 rgba(0,0,0,0.14),0 3px 1px -2px rgba(0,0,0,0.12),0 1px 5px 0 rgba(0,0,0,0.2);
-    box-shadow: 0 2px 2px 0 rgba(0,0,0,0.14),0 3px 1px -2px rgba(0,0,0,0.12),0 1px 5px 0 rgba(0,0,0,0.2);
-}
-
-.vipercircleimg {
-    width:50px; 
-    height:50px;
-    margin:-45px auto 10px; 
-    display: block; 
-    background-color: white; 
-    padding:10px; 
-    border-radius:50px; 
-    -moz-border-radius: 50px;
-    border: 1px solid #3696e0; 
-}
-
-.vipersection {
-    display:none;
-}
-
 /*MEDIA BREAK POINTS*/
 
 /*quick fix for search header bug*/
@@ -2795,13 +2743,6 @@ time {
 
     .bg-discount {
         background-position: 110% 20%;
-    }
-
-    .vipercirlce {
-        display: none;
-    }
-    .vipersection {
-        display:block;
     }
 
     .more-info-icon {

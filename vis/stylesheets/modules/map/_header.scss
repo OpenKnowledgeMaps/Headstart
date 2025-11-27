@@ -230,16 +230,6 @@
     }
 }
 
-@if $skin == 'viper' {
-    #infolink {
-        border-bottom: 1px solid $infolink;
-    }
-
-    #infolink:hover, #infolink:focus, #infolink:active {
-        border-bottom: 2px solid $black;
-    }
-}
-
 @if $skin == 'cris_vis' {
     #infolink, #infolink-areas {
         //border: 1px solid $infolink;

@@ -18,7 +18,6 @@ coverage/
 /config_covis.js
 /config_linkedcat.js
 /config_triple.js
-/config_viper.js
 /example_config.ini
 /example_config.js
 /lc_browseview_cache.json
