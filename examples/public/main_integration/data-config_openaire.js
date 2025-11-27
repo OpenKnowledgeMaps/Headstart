@@ -29,7 +29,6 @@ var data_config = {
 
     show_context: true,
     create_title_from_context: true,
-    create_title_from_context_style: 'viper',
     show_context_oa_number: false,
 
     viper_edit_modal: false,
