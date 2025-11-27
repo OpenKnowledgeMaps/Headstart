@@ -212,11 +212,6 @@ const getExampleConfig = (example) => {
         skin: "triple",
         template: "examples/templates/triple.html",
       };
-    case "covis":
-      return {
-        skin: "covis",
-        template: "examples/templates/covis.html",
-      };
     default:
       return null;
   }
