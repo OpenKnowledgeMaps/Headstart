@@ -212,11 +212,6 @@ const getExampleConfig = (example) => {
         skin: "triple",
         template: "examples/templates/triple.html",
       };
-    case "viper":
-      return {
-        skin: "viper",
-        template: "examples/templates/viper.html",
-      };
     case "covis":
       return {
         skin: "covis",
