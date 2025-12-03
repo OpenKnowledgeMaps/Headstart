@@ -3,11 +3,9 @@ import requests
 
 from pathlib import Path
 
-# Before starting, you can change the path to the configuration for the desired integration and set of files.
 BASE_DIR = Path(__file__).resolve().parent
-CONFIG_PATH = BASE_DIR / "OpenAIRE" / "config.json" # Change integration folder name here.
+CONFIG_PATH = BASE_DIR / "OpenAIRE" / "config.json"
 
-# Fallbacks
 VISUALIZATION_DATA = []
 ENDPOINT_URL = "http://127.0.0.1:8081/dev/persistence/createVisualization/dev"
 
