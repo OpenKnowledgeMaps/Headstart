@@ -7,7 +7,7 @@ def insert_visualization(vis_id):
 
     payload = {}
     payload["vis_id"] = vis_id
-    payload['vis_title'] = 'Title'
+    payload['vis_title'] = 'openaire'
     payload['vis_clean_query'] = 'DP0878177'
     payload['vis_query'] = 'DP0878177'
     payload['vis_params'] = "{\"from\":\"1665-01-01\",\"to\":\"2022-06-21\",\"document_types\":[\"121\"],\"sorting\":\"most-relevant\",\"min_descsize\":\"300\"}"
