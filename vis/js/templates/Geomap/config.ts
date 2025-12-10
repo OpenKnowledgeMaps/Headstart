@@ -2,7 +2,7 @@ import { Config } from "./types";
 
 export const CONFIG: Config = {
   center: [45.1, 4.1],
-  zoom: 4,
+  zoom: 2,
   maxZoom: 17,
   minZoom: 2,
   maxBounds: [
