@@ -627,11 +627,11 @@ export const parseGeographicalData = (data: AquanaviPaper) => {
 
     switch (formattedKey) {
       case "country": {
-        result[formattedKey] = formattedValue;
+        result[formattedKey] = formattedValue ? formattedValue : null;
         break;
       }
       case "continent": {
-        result[formattedKey] = formattedValue;
+        result[formattedKey] = formattedValue ? formattedValue : null;
         break;
       }
       case "east": {
