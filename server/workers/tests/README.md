@@ -69,6 +69,8 @@ listen_addresses = 'localhost,headstart_db_1,headstart-db-1'
 
 Run tests
 
+Create a `.docker.test.env` file first, then run the following command:
+
 ```
 docker compose -f docker-compose-integration-tests.yml --env-file .docker.test.env run integration_tests
 ```

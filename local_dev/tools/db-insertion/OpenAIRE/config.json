@@ -1,0 +1,15 @@
+{
+  "endpoint": "http://127.0.0.1:8081/dev/persistence/createVisualization/dev",
+  "visualizations": [
+    {
+      "vis_id": "9d4dc6b920d1e2cc08a741f7c56821db",
+      "vis_title": "openaire",
+      "vis_clean_query": "DP0878177",
+      "vis_query": "DP0878177",
+      "vis_params": "{\"project_id\":\"DP0878177\",\"funder\":\"ARC\",\"acronym\":\"\",\"title\":\"Understanding the impact of global environmental change on Australian forests and woodlands using rainforest boundaries and Callitris growth as bio-indicators\",\"start_date\":\"2008-01-01\",\"end_date\":\"2011-12-31\",\"special_clause\":\"false\",\"oa_mandate\":\"false\",\"organisations\":[],\"openaire_link\":\"http:\\/\\/purl.org\\/au-research\\/grants\\/arc\\/DP0878177\",\"obj_id\":\"arc_________::fe52f7d04f4139c2c80b4144c294f12d\",\"call_id\":\"\",\"funding_tree\":[null,null,\"Discovery Projects\"]}",
+      "data_file": "9d4dc6b920d1e2cc08a741f7c56821db.json"
+    }
+  ]
+}
+
+
