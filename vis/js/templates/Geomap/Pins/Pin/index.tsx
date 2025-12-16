@@ -14,8 +14,6 @@ const { basic, selected } = offsets;
 export const Pin: FC<PinProps> = memo(({ data, isActive, onClick }) => {
   const { east, north } = getCoordinatesFromPaper(data);
 
-  console.log("Pin rendering");
-
   const handleClick = () => onClick(data);
 
   if (!east || !north) {
