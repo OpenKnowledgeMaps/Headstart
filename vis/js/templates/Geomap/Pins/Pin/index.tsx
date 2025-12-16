@@ -4,14 +4,17 @@ import { Marker } from "react-leaflet";
 import { getCoordinatesFromPaper } from "@/js/utils/coordinates";
 
 import { CONFIG } from "./config";
-import { createPinIcon } from "./createPinIcon";
+
 import { PinProps } from "./types";
+import { createPinIcon } from "./createPinIcon";
 
 const { offsets } = CONFIG;
 const { basic, selected } = offsets;
 
 export const Pin: FC<PinProps> = memo(({ data, isActive, onClick }) => {
   const { east, north } = getCoordinatesFromPaper(data);
+
+  console.log("Pin rendering");
 
   const handleClick = () => onClick(data);
 
@@ -22,7 +25,7 @@ export const Pin: FC<PinProps> = memo(({ data, isActive, onClick }) => {
   return (
     <Marker
       position={[north, east]}
-      icon={createPinIcon(isActive)}
+      icon={createPinIcon(isActive, data)}
       zIndexOffset={isActive ? selected : basic}
       eventHandlers={{
         click: handleClick,
