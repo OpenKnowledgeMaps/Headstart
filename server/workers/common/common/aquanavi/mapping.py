@@ -318,15 +318,12 @@ def load_and_prepare_dataframe():
         DataFrame: Pandas DataFrame with information from CSVs.
     """
     csv_real_path = Path(CSV_PATH_WITH_REAL_DATA)
-    csv_test_path = Path(CSV_PATH_WITH_TEST_DATA)
 
     check_that_csv_file_exists(csv_real_path)
-    check_that_csv_file_exists(csv_test_path)
 
     df_real = pd.read_csv(csv_real_path).fillna("")
-    df_test = pd.read_csv(csv_test_path).fillna("")
 
-    df = pd.concat([df_real, df_test], ignore_index=True)
+    df = pd.concat([df_real], ignore_index=True)
     check_that_required_columns_exists(df, CSV_PATH_WITH_REAL_DATA)
 
     return df
