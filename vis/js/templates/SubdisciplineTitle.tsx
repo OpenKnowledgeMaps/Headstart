@@ -1,4 +1,4 @@
-import React from "react";
+import React, { ReactNode } from "react";
 
 import Heading from "../components/Heading";
 import BackLink from "../components/Backlink";
@@ -11,7 +11,7 @@ class SubdisciplineTitle extends React.Component {
         <div id="subdiscipline_title">
           <Heading />
           <BackLink />
-          <ContextLine popoverContainer={this} />
+          <ContextLine popoverContainer={this as any as ReactNode} />
         </div>
       </>
     );

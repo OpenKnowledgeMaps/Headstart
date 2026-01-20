@@ -1,7 +1,4 @@
-// @ts-nocheck
-
-import React from "react";
-
+import React, { FC } from "react";
 import { useLocalizationContext } from "../../components/LocalizationProvider";
 import Highlight from "../../components/Highlight";
 
@@ -9,7 +6,7 @@ interface DocumentTypeProps {
   type: string;
 }
 
-const DocumentType = ({ type }: DocumentTypeProps) => {
+const DocumentType: FC<DocumentTypeProps> = ({ type }) => {
   const localization = useLocalizationContext();
 
   return (

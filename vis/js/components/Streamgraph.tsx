@@ -1,31 +1,28 @@
 // @ts-nocheck
-import React from "react";
-import { connect } from "react-redux";
-
-import StreamgraphChart from "../templates/StreamgraphChart";
-
 // importing this for the linter
 import d3 from "d3";
 import $ from "jquery";
+import React from "react";
+import { connect } from "react-redux";
 
+import { zoomIn, zoomOut } from "../actions";
+import StreamgraphChart from "../templates/StreamgraphChart";
 import {
   getLabelPosition,
   recalculateOverlappingLabels,
   setTM,
 } from "../utils/streamgraph";
 import {
+  AXIS_PADDING,
   CHART_MARGIN,
   COLOR_RECT_MARGIN_RIGHT,
   COLOR_RECT_WIDTH,
-  MAX_TICKS_X,
-  AXIS_PADDING,
   LABEL_BORDER_WIDTH,
   LABEL_ROUND_FACTOR,
   LINE_HELPER_MARGIN,
+  MAX_TICKS_X,
   TOOLTIP_OFFSET,
 } from "../utils/streamgraph";
-
-import { zoomIn, zoomOut } from "../actions";
 
 /**
  * Class representing the streamgraph visualization.
@@ -72,7 +69,7 @@ class Streamgraph extends React.Component {
     const streams = this.props.streams;
     const streamEntries = streams.reduce(
       (l, stream) => [...l, ...stream.values],
-      []
+      [],
     );
 
     xScale.domain(d3.extent(streamEntries, (d) => d.date));
@@ -182,7 +179,7 @@ class Streamgraph extends React.Component {
     container
       .append("g")
       .attr("class", "x axis")
-      .attr("transform", "translate(0," + height + ")")
+      .attr("transform", `translate(0,${height})`)
       .call(xAxis);
 
     container.append("g").attr("class", "y axis").call(yAxis.orient("left"));
@@ -201,7 +198,7 @@ class Streamgraph extends React.Component {
       .attr("text-anchor", "middle")
       .attr(
         "transform",
-        "translate(" + AXIS_PADDING.left + "," + height / 2 + ")rotate(-90)"
+        `translate(${AXIS_PADDING.left},${height / 2})rotate(-90)`,
       )
       .text(this.props.localization.stream_doc_num);
   }
@@ -222,7 +219,9 @@ class Streamgraph extends React.Component {
     this.moveOverlappingLabels(container);
 
     // finally render the white boxes
-    this.renderLabelsBoxes(container, xScale);
+    requestAnimationFrame(() => {
+      this.renderLabelsBoxes(container, xScale);
+    });
   }
 
   /**
@@ -268,14 +267,14 @@ class Streamgraph extends React.Component {
     labels.attr("transform", function (d) {
       const position = getLabelPosition(this, d, xScale, yScale, width);
       self.labelPositions.push(position);
-      return "translate(" + position.x + ", " + position.y + ")";
+      return `translate(${position.x}, ${position.y})`;
     });
 
     labels
       .on("mouseover", (label) => this.handleStreamMouseover(container, label))
       .on("mouseout", () => this.handleStreamMouseout(container))
       .on("mousemove", (label) =>
-        this.handleStreamMousemove(d3.event, label, xScale)
+        this.handleStreamMousemove(d3.event, label, xScale),
       );
 
     labels.on("click", (d) => this.props.onAreaClick(d));
@@ -289,6 +288,7 @@ class Streamgraph extends React.Component {
    */
   renderLabelsBoxes(container, xScale) {
     const labels = container.selectAll(".label");
+
     labels[0].forEach((label) => {
       const bbox = label.getBBox();
       const ctm = label.getCTM();
@@ -306,11 +306,11 @@ class Streamgraph extends React.Component {
 
       boxes
         .on("mouseover", () =>
-          this.handleStreamMouseover(container, currentData)
+          this.handleStreamMouseover(container, currentData),
         )
         .on("mouseout", () => this.handleStreamMouseout(container))
         .on("mousemove", (d) =>
-          this.handleStreamMousemove(d3.event, currentData, xScale)
+          this.handleStreamMousemove(d3.event, currentData, xScale),
         );
 
       boxes.on("click", () => this.props.onAreaClick(currentData));
@@ -326,14 +326,14 @@ class Streamgraph extends React.Component {
    */
   moveOverlappingLabels(container) {
     const repositionedLabels = recalculateOverlappingLabels(
-      this.labelPositions
+      this.labelPositions,
     );
 
     container.selectAll("g.label").attr("transform", (d) => {
       const currentLabel = repositionedLabels.find((obj) => {
         return obj.key === d.key;
       });
-      return "translate(" + currentLabel.x + "," + currentLabel.y + ")";
+      return `translate(${currentLabel.x},${currentLabel.y})`;
     });
   }
 
@@ -348,7 +348,7 @@ class Streamgraph extends React.Component {
     if (previousTooltip.empty() || previousTooltip.classed("hidden")) {
       previousTooltip.remove();
 
-      d3.select("#" + this.props.visTag)
+      d3.select(`#${this.props.visTag}`)
         .append("div")
         .attr("id", "tooltip")
         .attr("class", "tip hidden");
@@ -407,7 +407,7 @@ class Streamgraph extends React.Component {
 
     const moveLine = (event) => {
       const { x } = this.getRelativeMouseCoords(event);
-      lineHelper.style("left", x + LINE_HELPER_MARGIN + "px");
+      lineHelper.style("left", `${x + LINE_HELPER_MARGIN}px`);
     };
 
     container
@@ -491,7 +491,7 @@ class Streamgraph extends React.Component {
       .reduce((a, b) => a + b, 0);
 
     const currentYearData = element.values.find(
-      (v) => streamYear === v.date.getFullYear()
+      (v) => streamYear === v.date.getFullYear(),
     );
 
     if (currentYearData) {
@@ -506,19 +506,19 @@ class Streamgraph extends React.Component {
               yearDocs: currentYearData.value,
               totalDocs,
             },
-            this.props.localization
-          )
+            this.props.localization,
+          ),
         )
         .classed("hidden", false);
 
       const tooltipHeight = tooltipEl.node().getBoundingClientRect().height;
       const tooltipY = Math.max(
         window.scrollY,
-        y - tooltipHeight + TOOLTIP_OFFSET.top
+        y - tooltipHeight + TOOLTIP_OFFSET.top,
       );
       tooltipEl
-        .style("top", tooltipY + "px")
-        .style("left", x + TOOLTIP_OFFSET.left + "px");
+        .style("top", `${tooltipY}px`)
+        .style("left", `${x + TOOLTIP_OFFSET.left}px`);
     }
   }
 
@@ -543,7 +543,7 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => ({
   onAreaClick: (stream) => {
     dispatch(
-      zoomIn({ title: stream.key, color: stream.color, docIds: stream.docIds })
+      zoomIn({ title: stream.key, color: stream.color, docIds: stream.docIds }),
     );
   },
   outsideAreaClick: () => dispatch(zoomOut()),
@@ -553,7 +553,7 @@ export default connect(mapStateToProps, mapDispatchToProps)(Streamgraph);
 
 const getTooltip = (
   { year, color, keyword, yearDocs, totalDocs },
-  localization
+  localization,
 ) => {
   return `
 <div class="sg-tooltip">

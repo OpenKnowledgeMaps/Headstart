@@ -1,9 +1,9 @@
 // @ts-nocheck
 
 import React from "react";
+import { Button } from "react-bootstrap";
 import { connect } from "react-redux";
 
-import { Button } from "react-bootstrap";
 import useMatomo from "../../utils/useMatomo";
 
 const TwitterButton = ({ twitterHashtags }) => {
@@ -29,7 +29,7 @@ const TwitterButton = ({ twitterHashtags }) => {
       >
         <Button
           bsStyle="primary"
-          title="Share this knowledge map via Twitter"
+          title="Share this visualization via Twitter"
           onClick={handleClick}
         >
           <i className="fab fa-twitter"></i>

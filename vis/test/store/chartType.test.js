@@ -1,10 +1,10 @@
-import { expect, describe, it } from 'vitest';
+import { describe, expect, it } from "vitest";
 
 import { initializeStore } from "../../js/actions";
-
-import reducer, {
-  STREAMGRAPH_MODE,
+import {
+  chartType,
   KNOWLEDGEMAP_MODE,
+  STREAMGRAPH_MODE,
 } from "../../js/reducers/chartType";
 
 describe("chartType state", () => {
@@ -12,7 +12,7 @@ describe("chartType state", () => {
     it("should return the initial state", () => {
       const expectedResult = KNOWLEDGEMAP_MODE;
 
-      const result = reducer(undefined, {});
+      const result = chartType(undefined, {});
 
       expect(result).toEqual(expectedResult);
     });
@@ -21,7 +21,10 @@ describe("chartType state", () => {
       const initialState = KNOWLEDGEMAP_MODE;
       const expectedResult = KNOWLEDGEMAP_MODE;
 
-      const result = reducer(initialState, initializeStore({ is_streamgraph: false }));
+      const result = chartType(
+        initialState,
+        initializeStore({ is_streamgraph: false }),
+      );
 
       expect(result).toEqual(expectedResult);
     });
@@ -30,7 +33,10 @@ describe("chartType state", () => {
       const initialState = KNOWLEDGEMAP_MODE;
       const expectedResult = STREAMGRAPH_MODE;
 
-      const result = reducer(initialState, initializeStore({ is_streamgraph: true }));
+      const result = chartType(
+        initialState,
+        initializeStore({ visualization_type: STREAMGRAPH_MODE }),
+      );
 
       expect(result).toEqual(expectedResult);
     });
@@ -38,7 +44,7 @@ describe("chartType state", () => {
     it("should not change the state if the action is canceled", () => {
       const INITIAL_STATE = { some_state: 1 };
 
-      const result = reducer(INITIAL_STATE, { canceled: true });
+      const result = chartType(INITIAL_STATE, { canceled: true });
 
       expect(result).toEqual(INITIAL_STATE);
     });

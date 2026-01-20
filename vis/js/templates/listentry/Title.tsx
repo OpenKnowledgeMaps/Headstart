@@ -1,41 +1,64 @@
-// @ts-nocheck
-
-import React from "react";
+import { FC } from "react";
 import { connect } from "react-redux";
+
+import { useVisualizationType } from "@/hooks";
 
 import Highlight from "../../components/Highlight";
 import { useLocalizationContext } from "../../components/LocalizationProvider";
-import { STREAMGRAPH_MODE } from "../../reducers/chartType";
+import { AllPossiblePapersType, State } from "../../types";
 import { getDateFromTimestamp } from "../../utils/dates";
 import { mapDispatchToListEntriesProps } from "../../utils/eventhandlers";
 import useMatomo from "../../utils/useMatomo";
 
 const MAX_TITLE_LENGTH = 164;
 
-const Title = ({
+interface TitleProps {
+  disableClicks: boolean;
+  isSelected: boolean;
+  paper: AllPossiblePapersType;
+  handleSelectPaper: (paper: AllPossiblePapersType) => void;
+  handleSelectPaperWithZoom: (paper: AllPossiblePapersType) => void;
+  handleMouseEnterOnTitle: (id: string | null) => void;
+}
+
+const Title: FC<TitleProps> = ({
   paper,
-  isStreamgraph,
   disableClicks,
   isSelected,
   handleSelectPaper,
   handleSelectPaperWithZoom,
+  handleMouseEnterOnTitle,
 }) => {
   const loc = useLocalizationContext();
   const { trackEvent } = useMatomo();
+  const { isGeoMap, isKnowledgeMap, isStreamgraph } = useVisualizationType();
 
   const handleClick = () => {
     if (disableClicks) {
       return;
     }
 
-    if (!isStreamgraph) {
-      handleSelectPaperWithZoom(paper);
-    } else {
+    if (isGeoMap || isStreamgraph) {
       handleSelectPaper(paper);
+    }
+
+    if (isKnowledgeMap) {
+      handleSelectPaperWithZoom(paper);
     }
 
     trackEvent("List document", "Select paper", "List title");
   };
+
+  const handleMouseEnter = () => {
+    handleMouseEnterOnTitle(paper.safe_id);
+  };
+
+  const handleMouseLeave = () => {
+    handleMouseEnterOnTitle(null);
+  };
+
+  const mouseEnterHandler = isGeoMap ? handleMouseEnter : undefined;
+  const mouseLeaveHandler = isGeoMap ? handleMouseLeave : undefined;
 
   const rawTitle = paper.title ? paper.title : loc.default_paper_title;
 
@@ -45,29 +68,28 @@ const Title = ({
     : formatTitle(rawTitle, MAX_TITLE_LENGTH - formattedDate.length);
 
   return (
-    // html template starts here
-    <div className="list_title" onClick={handleClick}>
-      <a
-        id="paper_list_title"
-        title={rawTitle + (paper.year ? formattedDate : "")}
-      >
+    <div
+      className="list_title"
+      onClick={handleClick}
+      onMouseEnter={mouseEnterHandler}
+      onMouseLeave={mouseLeaveHandler}
+    >
+      <a id="paper_list_title" title={rawTitle + (paper.year ? formattedDate : "")}>
         <Highlight queryHighlight>{formattedTitle}</Highlight>
         {!!paper.year && <Highlight queryHighlight>{formattedDate}</Highlight>}
       </a>
     </div>
-    // html template ends here
   );
 };
 
-const mapStateToProps = (state) => ({
-  isStreamgraph: state.chartType === STREAMGRAPH_MODE,
+const mapStateToProps = (state: State) => ({
   disableClicks: state.list.disableClicks,
   isSelected: !!state.selectedPaper,
 });
 
 export default connect(mapStateToProps, mapDispatchToListEntriesProps)(Title);
 
-export const formatPaperDate = (date) => {
+export const formatPaperDate = (date?: string) => {
   if (!date) {
     return "";
   }
@@ -85,7 +107,7 @@ export const formatPaperDate = (date) => {
   return formatted;
 };
 
-const formatTitle = (title, maxLength) => {
+const formatTitle = (title: string, maxLength: number) => {
   const ellipsis = "...";
   if (title.length > maxLength) {
     return title.substr(0, maxLength - ellipsis.length).trim() + ellipsis;

@@ -1,11 +1,13 @@
 // @ts-nocheck
-
+import { AllPossiblePapersType, Config, Paper } from "@js/types";
 import d3 from "d3";
 import $ from "jquery";
 
-import { Config } from "../../@types/config";
-import { Paper } from "../../@types/paper";
+import { GEOMAP_MODE, STREAMGRAPH_MODE } from "@/js/reducers/chartType";
+import { AquanaviPaper } from "@/js/types/models/paper";
+
 import {
+  checkIsAquanaviData,
   extractAuthors,
   getAuthorsList,
   getInternalMetric,
@@ -16,6 +18,7 @@ import {
   getVisibleMetric,
   isOpenAccess,
   parseCoordinate,
+  parseGeographicalData,
 } from "../../utils/data";
 import PaperSanitizer from "../../utils/PaperSanitizer";
 import {
@@ -54,6 +57,7 @@ class DataManager {
   }
 
   parseData(backendData: any, chartSize: number) {
+    console.log("Data that was received from the backend: ", backendData);
     // initialize this.context
     this.__parseContext(backendData);
     // initialize this.papers
@@ -63,7 +67,9 @@ class DataManager {
     // initialize this.scalingFactors
     this.__computeScalingFactors(this.papers.length);
 
-    if (!this.config.is_streamgraph) {
+    const { visualization_type: visualizationType } = this.config;
+    const isNotStreamgraph = visualizationType !== STREAMGRAPH_MODE;
+    if (isNotStreamgraph) {
       // scale this.papers based on the chart size
       this.__scalePapers(chartSize);
       // initialize this.areas
@@ -74,6 +80,8 @@ class DataManager {
       // initialize this.streams
       this.__parseStreams(backendData);
     }
+
+    console.log("Papers after processing: ", this.papers);
   }
 
   __parseContext(backendData: any) {
@@ -154,6 +162,7 @@ class DataManager {
       this.__parseComments(paper);
       this.__countMetrics(paper);
       this.__parseCoordinates(paper);
+      this.__parseGeographicalData(paper);
       while (blockedCoords[`${paper.x}:${paper.y}`]) {
         this.__adjustCoordinates(paper);
       }
@@ -222,6 +231,17 @@ class DataManager {
   __parseCoordinates(paper: any) {
     paper.x = parseCoordinate(paper.x, 8);
     paper.y = parseCoordinate(paper.y, 8);
+  }
+
+  __parseGeographicalData(paper: AllPossiblePapersType) {
+    const isAquanaviData = checkIsAquanaviData(paper, this.config);
+
+    if (!isAquanaviData) {
+      paper.geographicalData = null;
+      return;
+    }
+
+    paper.geographicalData = parseGeographicalData(paper as AquanaviPaper);
   }
 
   __adjustCoordinates(paper: any) {

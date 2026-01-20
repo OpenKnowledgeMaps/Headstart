@@ -1,14 +1,17 @@
-// @ts-nocheck
-
-import React from "react";
-
+import React, { FC } from "react";
 import Highlight from "../../components/Highlight";
 import Tags from "./Tags";
+import { AllPossiblePapersType } from "../../types";
 
-const datasetPredicate = (e) => e.toLowerCase() === "dataset";
-const unknownPredicate = (e) => e.toLowerCase().includes("unknown");
+const datasetPredicate = (e: string) => e.toLowerCase() === "dataset";
+const unknownPredicate = (e: string) => e.toLowerCase().includes("unknown");
 
-const AccessIcons = ({ paper, showDocTypes }) => {
+interface AccessIconsProps {
+  paper: AllPossiblePapersType;
+  showDocTypes: boolean;
+}
+
+const AccessIcons: FC<AccessIconsProps> = ({ paper, showDocTypes }) => {
   const isDataset = paper.resulttype.some(datasetPredicate);
 
   const tags = [...paper.tags];
@@ -17,12 +20,11 @@ const AccessIcons = ({ paper, showDocTypes }) => {
       ...paper.resulttype
         .filter((e) => !datasetPredicate(e))
         .filter((e) => !unknownPredicate(e))
-        .slice(0, isDataset ? 1 : 2)
+        .slice(0, isDataset ? 1 : 2),
     );
   }
 
   return (
-    // html template starts here
     <div id="oa">
       {!!paper.oa && (
         <span className="paper-tag open-access-tag">
@@ -48,7 +50,6 @@ const AccessIcons = ({ paper, showDocTypes }) => {
       )}
       {tags.length > 0 && <Tags values={tags} />}
     </div>
-    // html template ends here
   );
 };
 

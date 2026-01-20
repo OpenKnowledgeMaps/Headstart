@@ -1,4 +1,4 @@
-import { Config } from "../@types/config";
+import { Config } from "../types";
 
 const toolbar = (state = {}, action: any) => {
   if (action.canceled) {

@@ -1,15 +1,15 @@
-// @ts-nocheck
-
-import React from "react";
+import React, { FC } from "react";
 import { connect } from "react-redux";
 
 import useMatomo from "../../utils/useMatomo";
 import { useLocalizationContext } from "../../components/LocalizationProvider";
 import { openResearcherModal } from "../../actions";
 
-const ResearcherInfo = ({ onClick }: {
+interface ResearcherInfoProps {
   onClick: () => void;
-}) => {
+}
+
+const ResearcherInfo: FC<ResearcherInfoProps> = ({ onClick }) => {
   const loc = useLocalizationContext();
   const { trackEvent } = useMatomo();
 
@@ -24,7 +24,6 @@ const ResearcherInfo = ({ onClick }: {
   };
 
   return (
-    // html template starts here
     <span
       id="researcher-link"
       className="context_item"
@@ -34,12 +33,10 @@ const ResearcherInfo = ({ onClick }: {
         <i className="fas fa-user"></i> {loc.researcher_details_label}
       </span>
     </span>
-
-    // html template ends here
   );
 };
 
-const mapDispatchToProps = (dispatch) => ({
+const mapDispatchToProps = (dispatch: any) => ({
   onClick: () => dispatch(openResearcherModal()),
 });
 

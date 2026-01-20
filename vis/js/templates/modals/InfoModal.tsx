@@ -1,34 +1,43 @@
 // @ts-nocheck
 
 import React from "react";
-import { connect } from "react-redux";
 import { Modal } from "react-bootstrap";
+import { connect } from "react-redux";
+
+import { useVisualizationType } from "@/hooks";
 
 import { closeInfoModal } from "../../actions";
-import { STREAMGRAPH_MODE } from "../../reducers/chartType";
-
 import BaseInfo from "./infomodal/BaseInfo";
 import CovisInfo from "./infomodal/CovisInfo";
 import DefaultKMInfo from "./infomodal/DefaultKMInfo";
 import DefaultSGInfo from "./infomodal/DefaultSGInfo";
+import OpenAireInfo from "./infomodal/OpenAireInfo";
+import OrcidInfo from "./infomodal/OrcidInfo";
 import PubMedInfo from "./infomodal/PubMedInfo";
 import TripleKMInfo from "./infomodal/TripleKMInfo";
 import TripleSGInfo from "./infomodal/TripleSGInfo";
 import ViperInfo from "./infomodal/ViperInfo";
-import OpenAireInfo from "./infomodal/OpenAireInfo";
-import OrcidInfo from "./infomodal/OrcidInfo";
 
+const getInfoTemplate = (
+  service: string,
+  isStreamgraph: boolean,
+  modalType: string,
+  isGeomap: boolean,
+) => {
+  if (isGeomap) {
+    return BaseInfo;
+  }
 
-const getInfoTemplate = (service: string, isStreamgraph: boolean, modalType: string) => {
   switch (service) {
     case "base":
       return BaseInfo;
     case "pubmed":
       return PubMedInfo;
     case "openaire":
-      if (modalType && modalType === 'openaire') {
+      if (modalType && modalType === "openaire") {
         return OpenAireInfo;
-      } else if (modalType && modalType === 'viper') {
+      }
+      if (modalType && modalType === "viper") {
         return ViperInfo;
       }
       return OpenAireInfo;
@@ -45,18 +54,24 @@ const getInfoTemplate = (service: string, isStreamgraph: boolean, modalType: str
   }
 };
 
-const InfoModal = ({open, onClose, params, service, isStreamgraph, modalInfoType}) => {
-  const InfoTemplate = getInfoTemplate(service, isStreamgraph, modalInfoType);
+const InfoModal = ({ open, onClose, params, service, modalInfoType }) => {
+  const { isStreamgraph, isGeoMap } = useVisualizationType();
+
+  const InfoTemplate = getInfoTemplate(
+    service,
+    isStreamgraph,
+    modalInfoType,
+    isGeoMap,
+  );
 
   return (
-      // html template starts here
-      <Modal id="info_modal" show={open} onHide={onClose} animation>
-        <InfoTemplate params={params} isStreamgraph={isStreamgraph}/>
-      </Modal>
-      // html template ends here
+    // html template starts here
+    <Modal id="info_modal" show={open} onHide={onClose} animation>
+      <InfoTemplate params={params} isStreamgraph={isStreamgraph} />
+    </Modal>
+    // html template ends here
   );
 };
-
 
 const mapStateToProps = (state) => ({
   open: state.modals.openInfoModal,
@@ -68,9 +83,8 @@ const mapStateToProps = (state) => ({
     author: state.author,
   },
   service: state.isCovis ? "covis" : state.service,
-  isStreamgraph: state.chartType === STREAMGRAPH_MODE,
   // new parameter from config to render correct type of info modal window
-  modalInfoType: state.modalInfoType
+  modalInfoType: state.modalInfoType,
 });
 
 const mapDispatchToProps = (dispatch) => ({

@@ -1,11 +1,12 @@
-// @ts-nocheck
-
-import React from "react";
-
+import React, { FC } from "react";
 import { useLocalizationContext } from "../../components/LocalizationProvider";
 import Highlight from "../../components/Highlight";
 
-const DocTypesRow = ({ types }) => {
+interface DocTypesRowProps {
+  types: string[];
+}
+
+const DocTypesRow: FC<DocTypesRowProps> = ({ types }) => {
   const loc = useLocalizationContext();
 
   const typesString = types.length > 0 ? types.join(", ") : loc.unknown;

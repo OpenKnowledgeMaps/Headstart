@@ -1,4 +1,4 @@
-FROM php:8.2-apache
+FROM php:8.2-apache-bookworm
 
 LABEL maintainer="Chris Kittel <christopher.kittel@openknowledgemaps.org>"
 
