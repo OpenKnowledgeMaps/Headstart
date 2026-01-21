@@ -29,6 +29,6 @@ if ($is_custom_array_set) {
   $params_array[] = "custom_title";
 }
 
-$result = search("aquanavi", $query, $post_params, $params_array, false, true, null, $precomputed_id, false);
+$result = search("aquanavi", $query, $post_params, $params_array, true, true, null, $precomputed_id, false);
 echo $result
 ?>
