@@ -10,6 +10,7 @@ from apis.base import base_ns
 from apis.pubmed import pubmed_ns
 from apis.openaire import openaire_ns
 from apis.orcid import orcid_ns
+from apis.aquanavi import aquanavi_ns
 from apis.create_vis import vis_ns
 from apis.export import export_ns
 
@@ -30,8 +31,12 @@ def api_patches(app):
 
 
 app = Flask('v1', instance_relative_config=True)
+# Configure logging
+app.logger.setLevel(os.getenv("LOGLEVEL") or logging.DEBUG)
 handler = logging.StreamHandler(sys.stdout)
-handler.setLevel(app.logger.level)
+handler.setFormatter(logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s'))
+app.logger.addHandler(handler)
+
 app.wsgi_app = ProxyFix(app.wsgi_app, x_proto=1, x_port=1, x_for=1, x_host=1, x_prefix=1)
 app.wsgi_app = ReverseProxied(app.wsgi_app)
 CORS(app, expose_headers=["Content-Disposition", "Access-Control-Allow-Origin"])
@@ -43,6 +48,7 @@ api.add_namespace(openaire_ns, path='/openaire')
 api.add_namespace(vis_ns, path='/vis')
 api.add_namespace(export_ns, path='/export')
 api.add_namespace(orcid_ns, path='/orcid')
+api.add_namespace(aquanavi_ns, path='/aquanavi')
 
 app.logger.debug(app.config)
 app.logger.debug(app.url_map)

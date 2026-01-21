@@ -1,12 +1,23 @@
-// @ts-nocheck
+import { FC, ReactNode } from "react";
 
-import React from "react";
+import { MetadataQualityType } from "@/js/types";
 
-import HoverPopover from "../HoverPopover";
 import { useLocalizationContext } from "../../components/LocalizationProvider";
+import { Localization } from "../../i18n/localization";
 import useMatomo from "../../utils/useMatomo";
+import HoverPopover from "../HoverPopover";
 
-const MetadataQuality = ({ quality, popoverContainer, service }) => {
+interface MetadataQualityProps {
+  popoverContainer: ReactNode;
+  service: "base" | "pubmed" | "aquanavi";
+  quality: MetadataQualityType;
+}
+
+const MetadataQuality: FC<MetadataQualityProps> = ({
+  quality,
+  popoverContainer,
+  service,
+}) => {
   const loc = useLocalizationContext();
   const { trackEvent } = useMatomo();
 
@@ -17,6 +28,14 @@ const MetadataQuality = ({ quality, popoverContainer, service }) => {
   const trackMouseEnter = () =>
     trackEvent("Title & Context line", "Hover data quality", "Context line");
 
+  const descriptionKey: keyof Localization = `${quality}_metadata_quality_desc_${service}`;
+  const qualityKey: keyof Localization = `${quality}_metadata_quality`;
+
+  if (!(descriptionKey in loc) || !(qualityKey in loc)) {
+    console.error("Missing localization keys:", descriptionKey, qualityKey);
+    return null;
+  }
+
   return (
     <span
       id="metadata_quality"
@@ -26,10 +45,10 @@ const MetadataQuality = ({ quality, popoverContainer, service }) => {
       <HoverPopover
         id="metadata-quality-popover"
         container={popoverContainer}
-        content={loc[quality + "_metadata_quality_desc_" + service]}
+        content={loc[descriptionKey]}
       >
         <span className={`context_moreinfo context_metadata_${quality}`}>
-          {loc[[quality + "_metadata_quality"]]}
+          {loc[qualityKey]}
         </span>
       </HoverPopover>
     </span>

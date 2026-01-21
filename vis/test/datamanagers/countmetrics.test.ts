@@ -1,9 +1,4 @@
-import {
-  BasePaper,
-  OrcidPaper,
-  Paper,
-  PubmedPaper,
-} from "../../js/@types/paper";
+import { BasePaper, OrcidPaper, Paper, PubmedPaper } from "../../js/types";
 import DataManager from "../../js/dataprocessing/managers/DataManager";
 import { productionKMConfig } from "../data/base-raw";
 import {

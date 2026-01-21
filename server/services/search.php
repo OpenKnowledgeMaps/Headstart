@@ -101,6 +101,7 @@ function search(
     "base" => "BASE",
     "openaire" => "OpenAire",
     "orcid" => "ORCID",
+    "aquanavi" => "AQUANAVI",
   );
 
   $query = ($do_clean_query === true)

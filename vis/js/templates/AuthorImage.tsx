@@ -1,18 +1,16 @@
-import React from "react";
-
-// @ts-ignore
+import React, { FC } from "react";
 import defaultImage from "../../images/author_default.png";
-import { ServiceType } from "../@types/service";
+import { ServiceType } from "../types";
 
 export interface AuthorImageProps {
-  service: ServiceType;
-  url: string;
   orcidId: string;
+  service: ServiceType;
+  url: string | null;
 }
 
-const AuthorImage = ({ service, url = "", orcidId }: AuthorImageProps) => {
+const AuthorImage: FC<AuthorImageProps> = ({ service, orcidId, url = "" }) => {
   let link = defaultImage;
-  
+
   if (url) {
     link = url;
   }
@@ -20,7 +18,7 @@ const AuthorImage = ({ service, url = "", orcidId }: AuthorImageProps) => {
   let href = "";
 
   if (service === ServiceType.ORCID) {
-    href = `https://orcid.org/${orcidId}`
+    href = `https://orcid.org/${orcidId}`;
   } else {
     href = link;
   }

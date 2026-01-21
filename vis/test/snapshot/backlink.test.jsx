@@ -10,10 +10,10 @@ import { STREAMGRAPH_MODE } from "../../js/reducers/chartType";
 const mockStore = configureStore([]);
 
 describe("Backlink component snapshot", () => {
-  it("matches as knowledgeMap snapshot", () => {
+  it("matches as overview snapshot", () => {
     const store = mockStore({
       zoom: true,
-      chartType: "knowledgeMap",
+      chartType: "overview",
       localization: {
         backlink: "← Back to overview",
       },
@@ -22,7 +22,7 @@ describe("Backlink component snapshot", () => {
       .create(
         <Provider store={store}>
           <BackLink />
-        </Provider>
+        </Provider>,
       )
       .toJSON();
     expect(tree).toMatchSnapshot();
@@ -40,7 +40,7 @@ describe("Backlink component snapshot", () => {
       .create(
         <Provider store={store}>
           <BackLink />
-        </Provider>
+        </Provider>,
       )
       .toJSON();
     expect(tree).toMatchSnapshot();

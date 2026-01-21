@@ -1,15 +1,10 @@
-import React from "react";
+import React, { FC } from "react";
+import { PropsWithChildren } from "../../types";
 
-const LegacySearchLang = ({ children }: {
-  children: React.ReactNode;
-}) => {
-  return (
-    // html template starts here
-    <span id="legacy_search_lang" className="context_item">
-      {children}
-    </span>
-    // html template ends here
-  );
-};
+const LegacySearchLang: FC<PropsWithChildren> = ({ children }) => (
+  <span id="legacy_search_lang" className="context_item">
+    {children}
+  </span>
+);
 
 export default LegacySearchLang;

@@ -1,29 +1,26 @@
-// @ts-nocheck
-
-import React from "react";
+import React, { FC } from "react";
 import { connect } from "react-redux";
 
-import { useLocalizationContext } from "../../components/LocalizationProvider";
 import Highlight from "../../components/Highlight";
+import { useLocalizationContext } from "../../components/LocalizationProvider";
+import { SelectedPaper, State } from "../../types";
 
 interface AbstractProps {
   text: string;
-  isSelected: boolean;
+  isSelected: SelectedPaper | null;
 }
 
-const Abstract = ({ text, isSelected }: AbstractProps) => {
+const Abstract: FC<AbstractProps> = ({ text, isSelected }) => {
   const loc = useLocalizationContext();
 
   return (
-    // html template starts here
     <p id="list_abstract" className={!isSelected ? "short" : undefined}>
       <Highlight queryHighlight>{text ? text : loc.default_abstract}</Highlight>
     </p>
-    // html template ends here
   );
 };
 
-const mapStateToProps = (state) => ({
+const mapStateToProps = (state: State) => ({
   isSelected: state.selectedPaper,
 });
 

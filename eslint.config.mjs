@@ -2,6 +2,7 @@ import js from "@eslint/js";
 import parserBabel from "@babel/eslint-parser";
 import parserTs from "@typescript-eslint/parser";
 import pluginReact from "eslint-plugin-react";
+import globals from "globals";
 import pluginReactHooks from "eslint-plugin-react-hooks";
 import pluginTs from "@typescript-eslint/eslint-plugin";
 import pluginSimpleImportSort from "eslint-plugin-simple-import-sort";
@@ -20,6 +21,10 @@ export default [
         sourceType: "module",
         ecmaFeatures: { jsx: true },
         project: true,
+      },
+      globals: {
+        ...globals.browser,
+        ...globals.es2021,
       },
     },
     plugins: {
@@ -80,6 +85,10 @@ export default [
         },
         ecmaFeatures: {
           jsx: true,
+        },
+        globals: {
+          ...globals.browser,
+          ...globals.es2021,
         },
       },
     },

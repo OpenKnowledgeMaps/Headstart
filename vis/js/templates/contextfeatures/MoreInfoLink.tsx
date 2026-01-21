@@ -1,15 +1,15 @@
-// @ts-nocheck
-
-import React from "react";
+import React, { FC } from "react";
 import { connect } from "react-redux";
 
 import useMatomo from "../../utils/useMatomo";
 import { useLocalizationContext } from "../../components/LocalizationProvider";
 import { openInfoModal } from "../../actions";
 
-const MoreInfoLink = ({ onClick }: {
+interface MoreInfoLinkProps {
   onClick: () => void;
-}) => {
+}
+
+const MoreInfoLink: FC<MoreInfoLinkProps> = ({ onClick }) => {
   const loc = useLocalizationContext();
   const { trackEvent } = useMatomo();
 
@@ -24,7 +24,6 @@ const MoreInfoLink = ({ onClick }: {
   };
 
   return (
-    // html template starts here
     <span
       id="more-info-link"
       className="context_item"
@@ -34,12 +33,10 @@ const MoreInfoLink = ({ onClick }: {
         <i className="fas fa-info-circle"></i> {loc.intro_label}
       </span>
     </span>
-
-    // html template ends here
   );
 };
 
-const mapDispatchToProps = (dispatch) => ({
+const mapDispatchToProps = (dispatch: any) => ({
   onClick: () => dispatch(openInfoModal()),
 });
 

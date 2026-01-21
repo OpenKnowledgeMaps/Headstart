@@ -1,14 +1,28 @@
-// @ts-nocheck
 import React from "react";
 import { Glyphicon } from "react-bootstrap";
-
 import debounce from "../../utils/debounce";
 import { trackMatomoEvent } from "../../utils/useMatomo";
 
+interface DebouncedSearchBoxProps {
+  value: string;
+  placeholder: string;
+  handleChange: (value: string) => void;
+}
+
+interface DebouncedSearchBoxState {
+  value: string;
+}
+
 // inspired by
 // https://medium.com/@justintulk/debouncing-reacts-controlled-textareas-w-redux-lodash-4383084ca090
-class DebouncedSearchBox extends React.Component {
-  constructor(props) {
+class DebouncedSearchBox extends React.Component<
+  DebouncedSearchBoxProps,
+  DebouncedSearchBoxState
+> {
+  private onChange: (value: string) => void;
+  private onChangeDebounced: (value: string) => void;
+
+  constructor(props: DebouncedSearchBoxProps) {
     super(props);
     this.state = {
       value: props.value,
@@ -19,13 +33,13 @@ class DebouncedSearchBox extends React.Component {
     this.handleChange = this.handleChange.bind(this);
   }
 
-  handleChange(newValue) {
+  handleChange(newValue: string) {
     this.setState({ value: newValue }, () => {
       this.onChangeDebounced(newValue);
     });
   }
 
-  handleChangeImmediately(newValue) {
+  handleChangeImmediately(newValue: string) {
     this.setState({ value: newValue }, () => {
       this.onChange(newValue);
     });
@@ -40,7 +54,6 @@ class DebouncedSearchBox extends React.Component {
     };
 
     return (
-      // html template starts here
       <div id="filter_container">
         <div className="input-group input-group-sm">
           <i className="fa fa-search searchfield-icon"></i>
@@ -61,7 +74,6 @@ class DebouncedSearchBox extends React.Component {
           )}
         </div>
       </div>
-      // html template ends here
     );
   }
 }

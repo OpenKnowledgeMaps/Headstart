@@ -1,15 +1,26 @@
-// @ts-nocheck
-
-import React from "react";
+import React, { FC } from "react";
 import { connect } from "react-redux";
-
 import { filterData, sortData } from "../utils/data";
 import { STREAMGRAPH_MODE } from "../reducers/chartType";
 import ListToggle from "../templates/ListToggle";
 import FilterSort from "./FilterSort";
-import ListEntries from "./ListEntries";
+import ListEntries, {
+  FilterSettingsData,
+  SearchSettingsData,
+} from "./ListEntries";
+import { AllPossiblePapersType, SortValuesType, State } from "../types";
 
-const List = ({
+interface ListProps {
+  data: AllPossiblePapersType[];
+  searchSettings: SearchSettingsData;
+  filterSettings: FilterSettingsData;
+  sortSettings: {
+    value: SortValuesType;
+  };
+  fullWidth: boolean;
+}
+
+const List: FC<ListProps> = ({
   data,
   searchSettings,
   filterSettings,
@@ -38,7 +49,7 @@ const List = ({
   );
 };
 
-const mapStateToProps = (state) => ({
+const mapStateToProps = (state: State) => ({
   data: state.data.list,
   searchSettings: {
     value: state.list.searchValue,
