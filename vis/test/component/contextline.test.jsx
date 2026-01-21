@@ -62,7 +62,7 @@ const setup = (overrideStoreObject = {}) => {
         lang_all: "All languages",
       },
     },
-    overrideStoreObject
+    overrideStoreObject,
   );
 
   return storeObject;
@@ -99,7 +99,7 @@ describe("Context line component", () => {
         <LocalizationProvider localization={storeObject.localization}>
           <ContextLine />
         </LocalizationProvider>
-      </Provider>
+      </Provider>,
     );
 
     expect(screen.getByTestId("context")).toBeInTheDocument();
@@ -114,7 +114,7 @@ describe("Context line component", () => {
         <LocalizationProvider localization={storeObject.localization}>
           <ContextLine />
         </LocalizationProvider>
-      </Provider>
+      </Provider>,
     );
 
     expect(screen.queryByTestId("context")).toBeNull();
@@ -132,7 +132,7 @@ describe("Context line component", () => {
           <ContextLine />
         </LocalizationProvider>
       </Provider>,
-      container
+      container,
     );
 
     expect(container.childNodes.length).toBe(0);
@@ -151,7 +151,7 @@ describe("Context line component", () => {
           <LocalizationProvider localization={storeObject.localization}>
             <ContextLine />
           </LocalizationProvider>
-        </Provider>
+        </Provider>,
       );
 
       expect(result.container.querySelector("#source")).toBe(null);
@@ -170,11 +170,11 @@ describe("Context line component", () => {
           <LocalizationProvider localization={storeObject.localization}>
             <ContextLine />
           </LocalizationProvider>
-        </Provider>
+        </Provider>,
       );
 
       expect(result.container.querySelector("#source").textContent).toContain(
-        DATA_SOURCE
+        DATA_SOURCE,
       );
     });
 
@@ -192,12 +192,12 @@ describe("Context line component", () => {
           <LocalizationProvider localization={storeObject.localization}>
             <ContextLine />
           </LocalizationProvider>
-        </Provider>
+        </Provider>,
       );
 
       expect(
         result.container.querySelector("#source").querySelector("a.underline")
-          .textContent
+          .textContent,
       ).toContain("CoVis database");
     });
 
@@ -213,7 +213,7 @@ describe("Context line component", () => {
           <LocalizationProvider localization={storeObject.localization}>
             <ContextLine />
           </LocalizationProvider>
-        </Provider>
+        </Provider>,
       );
 
       expect(result.container.querySelector("#timespan")).toBe(null);
@@ -231,11 +231,11 @@ describe("Context line component", () => {
           <LocalizationProvider localization={storeObject.localization}>
             <ContextLine />
           </LocalizationProvider>
-        </Provider>
+        </Provider>,
       );
 
       expect(result.container.querySelector("#timespan").textContent).toEqual(
-        TIMESPAN
+        TIMESPAN,
       );
     });
 
@@ -251,7 +251,7 @@ describe("Context line component", () => {
           <LocalizationProvider localization={storeObject.localization}>
             <ContextLine />
           </LocalizationProvider>
-        </Provider>
+        </Provider>,
       );
 
       expect(result.container.querySelector("#context-paper_count")).toBe(null);
@@ -269,11 +269,11 @@ describe("Context line component", () => {
           <LocalizationProvider localization={storeObject.localization}>
             <ContextLine />
           </LocalizationProvider>
-        </Provider>
+        </Provider>,
       );
 
       expect(
-        result.container.querySelector("#context-paper_count").textContent
+        result.container.querySelector("#context-paper_count").textContent,
       ).toContain(PAPER_COUNT.toString());
     });
 
@@ -289,7 +289,7 @@ describe("Context line component", () => {
           <LocalizationProvider localization={storeObject.localization}>
             <ContextLine />
           </LocalizationProvider>
-        </Provider>
+        </Provider>,
       );
 
       expect(result.container.querySelector("#context-paper_count")).toBe(null);
@@ -307,11 +307,11 @@ describe("Context line component", () => {
           <LocalizationProvider localization={storeObject.localization}>
             <ContextLine />
           </LocalizationProvider>
-        </Provider>
+        </Provider>,
       );
 
       expect(
-        result.container.querySelector("#context-dataset_count").textContent
+        result.container.querySelector("#context-dataset_count").textContent,
       ).toContain(DATASET_COUNT.toString());
     });
 
@@ -327,7 +327,7 @@ describe("Context line component", () => {
           <LocalizationProvider localization={storeObject.localization}>
             <ContextLine />
           </LocalizationProvider>
-        </Provider>
+        </Provider>,
       );
 
       expect(result.container.querySelector("#context-funder")).toBe(null);
@@ -345,11 +345,11 @@ describe("Context line component", () => {
           <LocalizationProvider localization={storeObject.localization}>
             <ContextLine />
           </LocalizationProvider>
-        </Provider>
+        </Provider>,
       );
 
       expect(
-        result.container.querySelector("#context-funder").textContent
+        result.container.querySelector("#context-funder").textContent,
       ).toContain(FUNDER);
     });
 
@@ -366,11 +366,11 @@ describe("Context line component", () => {
             <ContextLine />
           </LocalizationProvider>
         </Provider>,
-        container
+        container,
       );
 
       expect(result.container.querySelector("#context-project_runtime")).toBe(
-        null
+        null,
       );
     });
 
@@ -386,11 +386,11 @@ describe("Context line component", () => {
           <LocalizationProvider localization={storeObject.localization}>
             <ContextLine />
           </LocalizationProvider>
-        </Provider>
+        </Provider>,
       );
 
       expect(
-        result.container.querySelector("#context-project_runtime").textContent
+        result.container.querySelector("#context-project_runtime").textContent,
       ).toEqual(PROJ_RUNTIME);
     });
 
@@ -406,7 +406,7 @@ describe("Context line component", () => {
           <LocalizationProvider localization={storeObject.localization}>
             <ContextLine />
           </LocalizationProvider>
-        </Provider>
+        </Provider>,
       );
 
       expect(result.container.querySelector("#legacy_search_lang")).toBe(null);
@@ -424,11 +424,11 @@ describe("Context line component", () => {
           <LocalizationProvider localization={storeObject.localization}>
             <ContextLine />
           </LocalizationProvider>
-        </Provider>
+        </Provider>,
       );
 
       expect(
-        result.container.querySelector("#legacy_search_lang").textContent
+        result.container.querySelector("#legacy_search_lang").textContent,
       ).toEqual(SEARCH_LANG);
     });
 
@@ -444,7 +444,7 @@ describe("Context line component", () => {
           <LocalizationProvider localization={storeObject.localization}>
             <ContextLine />
           </LocalizationProvider>
-        </Provider>
+        </Provider>,
       );
 
       expect(result.container.querySelector("#timestamp")).toBe(null);
@@ -463,11 +463,11 @@ describe("Context line component", () => {
             <ContextLine />
           </LocalizationProvider>
         </Provider>,
-        container
+        container,
       );
 
       expect(
-        result.container.querySelector("#timestamp").textContent
+        result.container.querySelector("#timestamp").textContent,
       ).toContain(TIMESTAMP);
     });
 
@@ -485,11 +485,11 @@ describe("Context line component", () => {
             <ContextLine />
           </LocalizationProvider>
         </Provider>,
-        container
+        container,
       );
 
       expect(
-        result.container.querySelector("#search_lang").textContent
+        result.container.querySelector("#search_lang").textContent,
       ).toEqual("English");
     });
 
@@ -506,11 +506,11 @@ describe("Context line component", () => {
           <LocalizationProvider localization={storeObject.localization}>
             <ContextLine />
           </LocalizationProvider>
-        </Provider>
+        </Provider>,
       );
 
       expect(
-        result.container.querySelector("#search_lang").textContent
+        result.container.querySelector("#search_lang").textContent,
       ).toEqual(storeObject.localization.lang_all);
     });
   });
@@ -600,11 +600,11 @@ describe("Context line component", () => {
           <LocalizationProvider localization={storeObject.localization}>
             <ContextLine />
           </LocalizationProvider>
-        </Provider>
+        </Provider>,
       );
 
       expect(
-        result.container.querySelector("#num_articles").textContent
+        result.container.querySelector("#num_articles").textContent,
       ).toMatch(new RegExp(`^${ARTICLES_COUNT}`));
     });
 
@@ -620,7 +620,7 @@ describe("Context line component", () => {
           <LocalizationProvider localization={storeObject.localization}>
             <ContextLine />
           </LocalizationProvider>
-        </Provider>
+        </Provider>,
       );
 
       expect(result.container.querySelector("#modifier")).toBe(null);
@@ -640,7 +640,7 @@ describe("Context line component", () => {
           <LocalizationProvider localization={storeObject.localization}>
             <ContextLine />
           </LocalizationProvider>
-        </Provider>
+        </Provider>,
       );
 
       screen.debug();
@@ -648,7 +648,7 @@ describe("Context line component", () => {
       const modifier = result.container.querySelector("#modifier");
       expect(modifier).not.toBe(null);
       expect(result.container.querySelector("#modifier").textContent).toEqual(
-        storeObject.localization.most_recent_label
+        storeObject.localization.most_recent_label,
       );
     });
 
@@ -666,11 +666,11 @@ describe("Context line component", () => {
           <LocalizationProvider localization={storeObject.localization}>
             <ContextLine />
           </LocalizationProvider>
-        </Provider>
+        </Provider>,
       );
 
       expect(result.container.querySelector("#modifier").textContent).toEqual(
-        storeObject.localization.most_relevant_label
+        storeObject.localization.most_relevant_label,
       );
     });
 
@@ -689,11 +689,11 @@ describe("Context line component", () => {
           <LocalizationProvider localization={storeObject.localization}>
             <ContextLine />
           </LocalizationProvider>
-        </Provider>
+        </Provider>,
       );
 
       expect(result.container.querySelector("#modifier").textContent).toEqual(
-        storeObject.localization.most_relevant_label
+        storeObject.localization.most_relevant_label,
       );
     });
 
@@ -711,11 +711,11 @@ describe("Context line component", () => {
           <LocalizationProvider localization={storeObject.localization}>
             <ContextLine />
           </LocalizationProvider>
-        </Provider>
+        </Provider>,
       );
 
       expect(
-        result.container.querySelector("#num_articles").textContent
+        result.container.querySelector("#num_articles").textContent,
       ).toMatch(`${OPEN_ACCESS_COUNT} open access`);
     });
 
@@ -731,11 +731,11 @@ describe("Context line component", () => {
           <LocalizationProvider localization={storeObject.localization}>
             <ContextLine />
           </LocalizationProvider>
-        </Provider>
+        </Provider>,
       );
 
       expect(
-        result.container.querySelector("#num_articles").textContent
+        result.container.querySelector("#num_articles").textContent,
       ).not.toMatch(new RegExp(`open access\\)$`));
     });
   });
@@ -753,7 +753,7 @@ describe("Context line component", () => {
           <LocalizationProvider localization={storeObject.localization}>
             <ContextLine />
           </LocalizationProvider>
-        </Provider>
+        </Provider>,
       );
 
       expect(result.container.querySelector("#document_types")).toBe(null);
@@ -772,22 +772,22 @@ describe("Context line component", () => {
           <LocalizationProvider localization={storeObject.localization}>
             <ContextLine />
           </LocalizationProvider>
-        </Provider>
+        </Provider>,
       );
 
       expect(result.container.querySelector("#document_types")).not.toBe(null);
       expect(
-        result.container.querySelector("#document_types").textContent
+        result.container.querySelector("#document_types").textContent,
       ).toEqual(storeObject.localization.documenttypes_label);
 
       expect(
-        result.container.querySelector("#document_types").getAttribute("class")
+        result.container.querySelector("#document_types").getAttribute("class"),
       ).toContain("context_item");
 
       expect(
         result.container
           .querySelector("#document_types>span")
-          .getAttribute("class")
+          .getAttribute("class"),
       ).toContain("context_moreinfo");
     });
 
@@ -802,7 +802,7 @@ describe("Context line component", () => {
           <LocalizationProvider localization={storeObject.localization}>
             <MockContextLineContainer />
           </LocalizationProvider>
-        </Provider>
+        </Provider>,
       );
 
       const target = result.container.querySelector("#document_types>span");
@@ -813,7 +813,7 @@ describe("Context line component", () => {
         const popover = result.container.querySelector("#doctypes-popover");
         expect(popover).not.toBeNull();
         expect(popover.textContent).toContain(
-          storeObject.localization.documenttypes_tooltip
+          storeObject.localization.documenttypes_tooltip,
         );
         expect(popover.textContent).toContain(DOC_TYPES[0]);
         expect(popover.textContent).toContain(DOC_TYPES[1]);
@@ -832,7 +832,7 @@ describe("Context line component", () => {
           <LocalizationProvider localization={storeObject.localization}>
             <MockContextLineContainer />
           </LocalizationProvider>
-        </Provider>
+        </Provider>,
       );
 
       const target = result.container.querySelector("#metadata_quality>span");
@@ -840,13 +840,13 @@ describe("Context line component", () => {
 
       await waitFor(() => {
         const popover = result.container.querySelector(
-          "#metadata-quality-popover"
+          "#metadata-quality-popover",
         );
         expect(popover).not.toBeNull();
         expect(popover.textContent).toEqual(
           storeObject.localization[
             `${QUALITY}_metadata_quality_desc_${SERVICE}`
-          ]
+          ],
         );
       });
     };

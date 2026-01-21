@@ -1,33 +1,36 @@
-// @ts-nocheck
+import React, { FC, ReactNode } from "react";
+import { PropsWithChildren } from "../../types";
 
-import React from "react";
-
-type NumArticlesProps = {
+interface NumArticlesProps extends PropsWithChildren {
   articlesCount: number;
   articlesCountLabel: string;
-  openAccessArticlesCount?: number;
+  openAccessArticlesCount: number | null;
   service: string;
-  children: string;
   modifierLimit: number;
   isStreamgraph?: boolean;
-};
+}
 
-const NumArticles = ({
+export const NumArticles: FC<NumArticlesProps> = ({
   articlesCount,
   articlesCountLabel,
-  openAccessArticlesCount = null,
+  openAccessArticlesCount,
   service,
   children,
   modifierLimit,
-  isStreamgraph
-}: NumArticlesProps) => {
-  let displayText = `${articlesCount} ${articlesCountLabel}`;
+  isStreamgraph,
+}) => {
+  let displayText: ReactNode | string =
+    `${articlesCount} ${articlesCountLabel}`;
 
   if (service === "orcid") {
     if (articlesCount >= modifierLimit) {
-      displayText = <>{modifierLimit} {children} works</>;
+      displayText = (
+        <>
+          {modifierLimit} {children} works
+        </>
+      );
     } else {
-      displayText = <>{articlesCount} works</>
+      displayText = <>{articlesCount} works</>;
     }
   }
 
@@ -39,18 +42,20 @@ const NumArticles = ({
         </>
       );
     } else {
-      displayText = <>{articlesCount} {children} {articlesCountLabel}</>
+      displayText = (
+        <>
+          {articlesCount} {children} {articlesCountLabel}
+        </>
+      );
     }
   }
 
   return (
     <span id="num_articles" className="context_item">
       {displayText}{" "}
-      {openAccessArticlesCount !== null && (
+      {openAccessArticlesCount != null && (
         <>({openAccessArticlesCount} open access)</>
       )}
     </span>
   );
 };
-
-export default NumArticles;

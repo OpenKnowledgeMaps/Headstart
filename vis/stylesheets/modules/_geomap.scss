@@ -1,0 +1,48 @@
+/* ########### Geomap ########### */
+
+.geomap_container {
+  height: 100%;
+  width: 100%;
+  z-index: 0;
+}
+
+.custom-marker {
+  position: relative;
+}
+
+.marker-shape {
+  cursor: pointer;
+  width: 22px;
+  height: 22px;
+  background-color: #000;
+  border-radius: 50% 50% 50% 0;
+  transform: rotate(-45deg);
+  border: 2px solid white;
+  transition: 200ms ease;
+}
+
+.custom-marker:hover .marker-shape,
+.custom-marker.selected .marker-shape {
+  background-color: #007bff;
+}
+
+.marker-shape::after {
+  content: "";
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  background: white;
+  border-radius: 50%;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.leaflet-control-layers-base > label > span > span {
+  font-size: 12px;
+}
+
+.leaflet-container,
+.leaflet-container * {
+  font-family: "Open Sans", Helvetica, sans-serif;
+}

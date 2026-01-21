@@ -1,13 +1,13 @@
-import { render, screen, fireEvent } from '@testing-library/react';
-import { cleanup } from '@testing-library/react';
-import { Provider } from 'react-redux';
-import configureStore from 'redux-mock-store';
-import { expect, describe, it, vi, afterEach } from 'vitest';
+import { render, screen, fireEvent } from "@testing-library/react";
+import { cleanup } from "@testing-library/react";
+import { Provider } from "react-redux";
+import configureStore from "redux-mock-store";
+import { expect, describe, it, vi, afterEach } from "vitest";
 
-import BackLinkContainer from '../../js/components/Backlink';
-import BackLinkTemplate from '../../js/templates/Backlink';
-import { BackLink } from '../../js/components/Backlink';
-import { zoomOut } from '../../js/actions';
+import BackLinkContainer from "../../js/components/Backlink";
+import BackLinkTemplate from "../../js/templates/Backlink";
+import { BackLink } from "../../js/components/Backlink";
+import { zoomOut } from "../../js/actions";
 
 // Setup function for Backlink component tests
 const setup = (overrideProps = {}) => {
@@ -15,7 +15,7 @@ const setup = (overrideProps = {}) => {
     hidden: false,
     onClick: vi.fn(),
     localization: {
-      backlink: 'Sample backlink label',
+      backlink: "Sample backlink label",
     },
     ...overrideProps,
   };
@@ -25,36 +25,36 @@ const setup = (overrideProps = {}) => {
 };
 
 // Basic component render tests using @testing-library/react
-describe('Backlink component', () => {
+describe("Backlink component", () => {
   // Cleanup after each test
   afterEach(() => {
     cleanup();
   });
 
-  it('renders', () => {
+  it("renders", () => {
     setup();
-    expect(screen.getByText('Sample backlink label')).toBeInTheDocument();
+    expect(screen.getByText("Sample backlink label")).toBeInTheDocument();
   });
 
-  describe('visibility', () => {
-    it('renders shown', () => {
+  describe("visibility", () => {
+    it("renders shown", () => {
       setup({ hidden: false });
-      expect(screen.getByText('Sample backlink label')).toBeInTheDocument();
+      expect(screen.getByText("Sample backlink label")).toBeInTheDocument();
     });
 
-    it('renders hidden', () => {
+    it("renders hidden", () => {
       setup({ hidden: true });
-      const backlinkElement = screen.queryByText('Sample backlink label');
+      const backlinkElement = screen.queryByText("Sample backlink label");
       expect(backlinkElement).toBeNull();
     });
   });
 
-  describe('dom tests', () => {
+  describe("dom tests", () => {
     /**
      * Component event tests
      */
-    describe('onclick', () => {
-      it('triggers the onClick function when clicked', () => {
+    describe("onclick", () => {
+      it("triggers the onClick function when clicked", () => {
         const onClick = vi.fn();
         setup({ onClick });
 
@@ -76,22 +76,22 @@ describe('Backlink component', () => {
     /**
      * Redux/React integration tests
      */
-    describe('onclick (redux integration)', () => {
+    describe("onclick (redux integration)", () => {
       const mockStore = configureStore([]);
 
-      it('should dispatch zoomOut when clicked', () => {
+      it("should dispatch zoomOut when clicked", () => {
         const store = mockStore({
           zoom: true,
-          chartType: 'knowledgeMap',
+          chartType: "overview",
           localization: {
-            backlink: 'Sample backlink label',
+            backlink: "Sample backlink label",
           },
         });
 
         render(
           <Provider store={store}>
             <BackLinkContainer />
-          </Provider>
+          </Provider>,
         );
 
         const link = screen.getByText(/Sample backlink label/i);
@@ -108,13 +108,13 @@ describe('Backlink component', () => {
 });
 
 // Backlink template tests
-describe('Backlink template', () => {
+describe("Backlink template", () => {
   afterEach(() => {
     cleanup();
   });
 
-  it('renders with the default classname', () => {
+  it("renders with the default classname", () => {
     render(<BackLinkTemplate label="sample text" onClick={vi.fn()} />);
-    expect(screen.getByText('sample text')).toBeInTheDocument();
+    expect(screen.getByText("sample text")).toBeInTheDocument();
   });
 });

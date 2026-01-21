@@ -2,16 +2,27 @@
 
 import React from "react";
 
-import baseLogo from "../../../../images/logos/base_logo.png";
+import { useVisualizationType } from "@/hooks";
 
+import baseLogo from "../../../../images/logos/base_logo.png";
+import { StandardGeomapInfo } from "./subcomponents/StandardGeomapInfo";
 import StandardKMInfo from "./subcomponents/StandardKMInfo";
 import StandardSGInfo from "./subcomponents/StandardSGInfo";
 
-const BaseInfo = ({ params, isStreamgraph }) => {
-  const MainTemplate = isStreamgraph ? StandardSGInfo : StandardKMInfo;
+const BaseInfo = ({ params }) => {
+  const { isGeoMap, isStreamgraph } = useVisualizationType();
+
+  let MainTemplate = StandardKMInfo;
+
+  if (isStreamgraph) {
+    MainTemplate = StandardSGInfo;
+  }
+
+  if (isGeoMap) {
+    MainTemplate = StandardGeomapInfo;
+  }
 
   return (
-    // html template starts here
     <MainTemplate
       serviceName="BASE"
       serviceDesc={
@@ -31,7 +42,6 @@ const BaseInfo = ({ params, isStreamgraph }) => {
       }
       params={params}
     />
-    // html template ends here
   );
 };
 

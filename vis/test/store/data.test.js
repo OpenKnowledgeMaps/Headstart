@@ -1,7 +1,8 @@
-import { expect, describe, it } from "vitest";
+import { describe, expect, it } from "vitest";
+
+import { STREAMGRAPH_MODE } from "@/js/reducers/chartType";
 
 import { initializeStore, updateDimensions } from "../../js/actions";
-
 import reducer from "../../js/reducers/data";
 
 describe("data state", () => {
@@ -46,7 +47,7 @@ describe("data state", () => {
       const result = reducer(
         { list: [], options: {}, size: null },
         initializeStore(
-          { is_streamgraph: true },
+          { visualization_type: STREAMGRAPH_MODE },
           {},
           [],
           [],
@@ -73,6 +74,7 @@ describe("data state", () => {
           paperMinScale: undefined,
           paperWidthFactor: undefined,
           referenceSize: undefined,
+          hoveredItemId: null,
         },
         size: 500,
       });

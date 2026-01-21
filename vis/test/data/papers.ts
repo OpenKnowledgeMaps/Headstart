@@ -3,7 +3,7 @@ import {
   CommonPaperDataForAllIntegrations,
   OrcidPaper,
   PubmedPaper,
-} from "../../js/@types/paper";
+} from "../../js/types";
 
 const MOCK_COMMON_PAPER_DATA: CommonPaperDataForAllIntegrations = {
   id: "id",

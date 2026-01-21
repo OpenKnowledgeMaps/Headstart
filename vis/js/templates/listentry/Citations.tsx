@@ -1,17 +1,16 @@
-import React from "react";
+import React, { FC } from "react";
+import { NotAvailable } from "../../types";
 
 interface CitationsProps {
-  number: number;
+  number: number | NotAvailable;
   label: string;
 }
 
-const Citations = ({ number, label }: CitationsProps) => {
+const Citations: FC<CitationsProps> = ({ number, label }) => {
   return (
-    // html template starts here
     <div className="list_readers">
       <span>{number}</span> <span className="list_readers_entity">{label}</span>
     </div>
-    // html template ends here
   );
 };
 

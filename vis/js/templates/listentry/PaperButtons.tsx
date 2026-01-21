@@ -1,22 +1,20 @@
 import React, { FC } from "react";
 import { connect } from "react-redux";
-
 import useMatomo from "../../utils/useMatomo";
 import { getPaperPDFClickHandler } from "../../utils/data";
 import { mapDispatchToListEntriesProps } from "../../utils/eventhandlers";
 import Highlight from "../../components/Highlight";
 import { isNonTextDocument } from "../Paper";
-import { Paper } from "../../@types/paper";
+import { AllPossiblePapersType, State } from "../../types";
 
-// TODO: Update type for paper with new ones after merge (using union type)
 interface PaperButtonsProps {
-  paper: Paper;
+  paper: AllPossiblePapersType;
   showCiteButton: boolean;
   showExportButton: boolean;
   noCitationDoctypes: string[];
-  handlePDFClick: (paper: Paper) => void;
-  handleCiteClick: (paper: Paper) => void;
-  handleExportClick: (paper: Paper) => void;
+  handlePDFClick: (paper: AllPossiblePapersType) => void;
+  handleCiteClick: (paper: AllPossiblePapersType) => void;
+  handleExportClick: (paper: AllPossiblePapersType) => void;
 }
 
 const PaperButtons: FC<PaperButtonsProps> = ({
@@ -56,7 +54,7 @@ const PaperButtons: FC<PaperButtonsProps> = ({
   const hasCiteButton =
     showCiteButton &&
     !paper.resulttype.some((t: string) =>
-      noCitationDoctypes.includes(t.toLowerCase())
+      noCitationDoctypes.includes(t.toLowerCase()),
     );
 
   return (
@@ -111,7 +109,7 @@ const PaperButtons: FC<PaperButtonsProps> = ({
   );
 };
 
-const mapStateToProps = (state: any) => ({
+const mapStateToProps = (state: State) => ({
   showCiteButton: state.list.citePapers,
   noCitationDoctypes: state.list.noCitationDoctypes,
   showExportButton: state.list.exportPapers,
@@ -119,5 +117,5 @@ const mapStateToProps = (state: any) => ({
 
 export default connect(
   mapStateToProps,
-  mapDispatchToListEntriesProps
+  mapDispatchToListEntriesProps,
 )(PaperButtons);

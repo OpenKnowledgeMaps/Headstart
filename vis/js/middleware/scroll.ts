@@ -10,7 +10,7 @@ const scrollMiddleware = ({ getState }) => {
   return (next) => (action: any) => {
     const selectedPaper = getState().selectedPaper;
     const returnValue = next(action);
-    if (action.type === "ZOOM_OUT") {
+    if (action.type === "ZOOM_OUT" || action.type === "DESELECT_PAPER") {
       if (selectedPaper !== null) {
         scrollList(selectedPaper.safeId);
       } else {
@@ -37,7 +37,7 @@ const scrollList = (safeId) => {
   requestAnimationFrame(() => {
     let scrollTop = 0;
     if (safeId) {
-      scrollTop = $("#" + safeId).offset().top - $("#papers_list").offset().top;
+      scrollTop = $(`#${safeId}`).offset().top - $("#papers_list").offset().top;
     }
     $("#papers_list").animate({ scrollTop }, 0);
   });

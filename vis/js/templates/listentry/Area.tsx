@@ -1,13 +1,21 @@
-// @ts-nocheck
-
-import React from "react";
+import React, { FC } from "react";
 import { connect } from "react-redux";
-
 import { useLocalizationContext } from "../../components/LocalizationProvider";
 import { mapDispatchToListEntriesProps } from "../../utils/eventhandlers";
 import useMatomo from "../../utils/useMatomo";
+import { AllPossiblePapersType, State } from "../../types";
 
-const Area = ({
+interface AreaProps {
+  disableClicks: boolean;
+  isShort: boolean;
+  paper: AllPossiblePapersType;
+  trackMouseOver: boolean;
+  handleAreaMouseout: () => void;
+  handleAreaMouseover: (paper: AllPossiblePapersType) => void;
+  handleZoomIn: (paper: AllPossiblePapersType) => void;
+}
+
+const Area: FC<AreaProps> = ({
   paper,
   isShort = false,
   trackMouseOver,
@@ -35,7 +43,6 @@ const Area = ({
   };
 
   return (
-    // html template starts here
     <div
       className={"list_row list_area" + (isShort ? " short" : "")}
       onClick={handleClick}
@@ -47,11 +54,10 @@ const Area = ({
         {paper.area}
       </span>
     </div>
-    // html template ends here
   );
 };
 
-const mapStateToProps = (state) => ({
+const mapStateToProps = (state: State) => ({
   trackMouseOver: state.tracking.trackMouseOver,
   disableClicks: state.list.disableClicks,
 });

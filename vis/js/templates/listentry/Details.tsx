@@ -1,55 +1,53 @@
-// @ts-nocheck
-
-import React from "react";
+import React, { FC } from "react";
 import { connect } from "react-redux";
-
 import Highlight from "../../components/Highlight";
 import { useLocalizationContext } from "../../components/LocalizationProvider";
+import { State } from "../../types";
 
 const MAX_AUTHORS_LENGTH = 100;
 
-const Details = ({authors, source, isSelected}) => {
+interface DetailsProps {
+  authors: string[];
+  source: string;
+  isSelected: boolean;
+}
+
+const Details: FC<DetailsProps> = ({ authors, source, isSelected }) => {
   const loc = useLocalizationContext();
 
   const authorsString = getAuthorsString(
-      authors,
-      isSelected ? Number.POSITIVE_INFINITY : MAX_AUTHORS_LENGTH
+    authors,
+    isSelected ? Number.POSITIVE_INFINITY : MAX_AUTHORS_LENGTH,
   );
 
-  // console.log("Details.jsx: authorsString: ", authorsString);
-  // console.log("Details.jsx: loc.default_authors: ", loc.default_authors);
-
   return (
-      // html template starts here
-      <div className="list_details">
-        <div className="list_authors">
-          <Highlight queryHighlight>
-            {authorsString ? authorsString : loc.default_authors}
-          </Highlight>
-        </div>
-        {!!source && (
-            <div className={"list_source" + (isSelected ? "" : " short")}>
+    <div className="list_details">
+      <div className="list_authors">
+        <Highlight queryHighlight>
+          {authorsString ? authorsString : loc.default_authors}
+        </Highlight>
+      </div>
+      {!!source && (
+        <div className={"list_source" + (isSelected ? "" : " short")}>
           <span className="list_published_in">
             <Highlight queryHighlight>{source}</Highlight>
           </span>
-            </div>
-        )}
-      </div>
-      // html template ends here
+        </div>
+      )}
+    </div>
   );
 };
 
-const mapStateToProps = (state) => ({
+const mapStateToProps = (state: State) => ({
   isSelected: !!state.selectedPaper,
 });
 
 export default connect(mapStateToProps)(React.memo(Details));
 
-const getAuthorsString = (authorsList, maxLength) => {
+const getAuthorsString = (authorsList: string[], maxLength: number) => {
   if (!authorsList || authorsList.length === 0) {
     return "";
   }
-
 
   const authorsListCopy = [...authorsList];
 
@@ -66,7 +64,7 @@ const getAuthorsString = (authorsList, maxLength) => {
   while (authorsListCopy.length > 0) {
     const nextAuthor = authorsListCopy.shift();
     let nextPossibleLength =
-        finalString.length + join.length + nextAuthor.length;
+      finalString!.length + join.length + nextAuthor!.length;
 
     if (authorsListCopy.length !== 0) {
       nextPossibleLength += ellipsis.length;

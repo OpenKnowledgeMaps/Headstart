@@ -3,6 +3,7 @@ import { describe } from "vitest";
 import {
   addEmbedParam,
   capitalize,
+  checkIsEmptyString,
   formatString,
   removeEmbedParam,
   shorten,
@@ -83,14 +84,14 @@ describe("String utils tests", () => {
       const resultInAscCompare = stringCompare(
         10 as unknown as string,
         5 as unknown as string,
-        "asc"
+        "asc",
       );
       expect(resultInAscCompare).toBe(d3.ascending(10, 5));
 
       const resultInDescCompare = stringCompare(
         10 as unknown as string,
         5 as unknown as string,
-        "desc"
+        "desc",
       );
       expect(resultInDescCompare).toBe(d3.descending(10, 5));
     });
@@ -98,13 +99,13 @@ describe("String utils tests", () => {
     it("Should work correctly with different types", () => {
       const resultWithIncorrectFirstArg = stringCompare(
         10 as unknown as string,
-        "string"
+        "string",
       );
       expect(resultWithIncorrectFirstArg).toBe(-1);
 
       const resultWithIncorrectSecondArg = stringCompare(
         "string",
-        10 as unknown as string
+        10 as unknown as string,
       );
       expect(resultWithIncorrectSecondArg).toBe(1);
     });
@@ -112,13 +113,13 @@ describe("String utils tests", () => {
     it("Should return undefined if undefined values were provided", () => {
       const resultWithFirstArg = stringCompare(
         undefined as unknown as string,
-        "string"
+        "string",
       );
       expect(resultWithFirstArg).toBeUndefined();
 
       const resultWithSecondArg = stringCompare(
         "string",
-        undefined as unknown as string
+        undefined as unknown as string,
       );
       expect(resultWithSecondArg).toBeUndefined();
     });
@@ -198,6 +199,37 @@ describe("String utils tests", () => {
     it("Should work correctly with URLs without params", () => {
       const result = removeEmbedParam("https://example.com");
       expect(result).toBe("https://example.com/");
+    });
+  });
+
+  describe("Tests for the function that checks that string is empty", () => {
+    it("Should work with empty string", () => {
+      const result = checkIsEmptyString("");
+      expect(result).toBe(true);
+    });
+
+    it("Should work with string without letters, but with space", () => {
+      const result = checkIsEmptyString("  ");
+      expect(result).toBe(true);
+    });
+
+    it("Should work with not empty string", () => {
+      const result = checkIsEmptyString("Content in the string!");
+      expect(result).toBe(false);
+    });
+
+    it("Should work with different data types", () => {
+      const resultForBoolean = checkIsEmptyString(true);
+      expect(resultForBoolean).toBe(false);
+
+      const resultForNumber = checkIsEmptyString(1);
+      expect(resultForNumber).toBe(false);
+
+      const resultForObject = checkIsEmptyString({});
+      expect(resultForObject).toBe(false);
+
+      const resultForFunction = checkIsEmptyString(() => {});
+      expect(resultForFunction).toBe(false);
     });
   });
 });

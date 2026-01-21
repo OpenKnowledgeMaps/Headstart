@@ -1,4 +1,4 @@
-import { Context } from "../@types/context";
+import { Context } from "../types";
 
 const query = (state = { text: "", parsedTerms: [] }, action: any) => {
   if (action.canceled) {
@@ -72,7 +72,7 @@ const getQueryTerms = (context: Context): string[] => {
     .map((x) => x.replace(/[\\:]/g, ""))
     .filter((x) => x !== "");
 
-    phraseArray = Array.from(new Set(phraseArray));
+  phraseArray = Array.from(new Set(phraseArray));
 
   return phraseArray;
 };

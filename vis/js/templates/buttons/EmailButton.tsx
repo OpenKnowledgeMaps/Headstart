@@ -1,7 +1,7 @@
 // @ts-nocheck
 import React from "react";
-
 import { Button } from "react-bootstrap";
+
 import useMatomo from "../../utils/useMatomo";
 
 const EmailButton = () => {
@@ -30,7 +30,7 @@ const EmailButton = () => {
       >
         <Button
           bsStyle="primary"
-          title="Share this knowledge map via email"
+          title="Share this visualization via email"
           onClick={handleClick}
         >
           <i className="fa fa-envelope"></i>
