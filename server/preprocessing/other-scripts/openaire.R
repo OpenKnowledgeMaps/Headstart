@@ -52,7 +52,11 @@ get_papers <- function(query, params) {
                          funder = funder,
                          format = 'xml')
     pubs_metadata <- parse_response(response)
-    pubs_metadata <- fill_dois(pubs_metadata)
+    # FYI: The deactivation of the fill_dois() function is a hotfix
+    # to enable creation of OpenAIRE project maps
+    # TODO: root cause analysis of failure mode
+    # TODO: refactor/replace/remove the function, decision pending
+    #pubs_metadata <- fill_dois(pubs_metadata)
   },
   error = function(err){
     olog$warn(paste0("vis_id:", .GlobalEnv$VIS_ID, "publications: ", err))
