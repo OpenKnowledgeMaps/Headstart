@@ -1,13 +1,25 @@
-// @ts-nocheck
-
-import React from "react";
-
+import React, { FC } from "react";
 import { useLocalizationContext } from "../../components/LocalizationProvider";
+import { NotAvailable } from "../../types";
 
+// TODO: This function looks strange after adding types. It must be refactored.
 // it is either some value or zero
-const isDefined = (param) => !!param || parseInt(param) === 0;
+const isDefined = (param: number | string | null) => {
+  if (!param) {
+    return false;
+  }
 
-const OrcidMetrics = ({
+  return !!param || parseInt(param as string) === 0;
+};
+
+interface OrcidMetricsProps {
+  citations: number | string;
+  social_media: number | NotAvailable;
+  references_outside_academia: null | number;
+  baseUnit: null | string;
+}
+
+const OrcidMetrics: FC<OrcidMetricsProps> = ({
   citations,
   social_media,
   references_outside_academia,
@@ -16,7 +28,6 @@ const OrcidMetrics = ({
   const localization = useLocalizationContext();
 
   return (
-    // html template starts here
     <div className="list_metrics">
       <span>
         <span
@@ -57,7 +68,6 @@ const OrcidMetrics = ({
         </span>
       </span>
     </div>
-    // html template ends here
   );
 };
 

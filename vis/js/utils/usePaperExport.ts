@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Paper } from "../@types/paper";
+import { Paper } from "../types";
 
 export const PAPER_EXPORT_ENDPOINT =
   "services/exportMetadata.php?format=bibtex";
@@ -24,7 +24,11 @@ const usePaperExport = (paper: Paper, serverUrl: string) => {
 
 export default usePaperExport;
 
-const loadPaperExport = (paper: Paper, serverUrl: string, callback: (params: any) => void) => {
+const loadPaperExport = (
+  paper: Paper,
+  serverUrl: string,
+  callback: (params: any) => void
+) => {
   fetch(serverUrl + PAPER_EXPORT_ENDPOINT, {
     method: "POST",
     mode: "cors",

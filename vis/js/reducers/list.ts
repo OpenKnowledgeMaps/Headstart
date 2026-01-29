@@ -1,5 +1,4 @@
-import { Config } from "../@types/config";
-import { Context } from "../@types/context";
+import { Config, Context } from "../types";
 
 const list = (
   state = {

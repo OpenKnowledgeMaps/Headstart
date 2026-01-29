@@ -1,24 +1,31 @@
-// @ts-nocheck
-import React from "react";
+import { FC } from "react";
 import { connect } from "react-redux";
-import { STREAMGRAPH_MODE } from "../reducers/chartType";
 
+import { Localization } from "../i18n/localization";
+import Loading from "../templates/Loading";
+import { State, VisualizationTypes } from "../types";
+import { getVisualizationComponent } from "../utils/getVisualizationComponent";
+import Footer from "./Footer";
+import List from "./List";
 import LocalizationProvider from "./LocalizationProvider";
-
-import Streamgraph from "./Streamgraph";
-import KnowledgeMap from "./KnowledgeMap";
 import ModalButtons from "./ModalButtons";
 import Modals from "./Modals";
-import Toolbar from "./Toolbar";
-import Loading from "../templates/Loading";
-import List from "./List";
 import TitleContext from "./TitleContext";
-import Footer from "./Footer";
+import Toolbar from "./Toolbar";
 
-const Headstart = ({
+interface HeadstartProps {
+  renderMap: boolean;
+  renderList: boolean;
+  visualizationType: VisualizationTypes;
+  isLoading: boolean;
+  showLoading: boolean;
+  localization: Localization;
+}
+
+const Headstart: FC<HeadstartProps> = ({
   renderMap,
   renderList,
-  isStreamgraph,
+  visualizationType,
   isLoading,
   showLoading,
   localization,
@@ -36,7 +43,7 @@ const Headstart = ({
     );
   }
 
-  const Map = isStreamgraph ? Streamgraph : KnowledgeMap;
+  const VisualizationComponent = getVisualizationComponent(visualizationType);
 
   return (
     <LocalizationProvider localization={localization}>
@@ -45,7 +52,7 @@ const Headstart = ({
           <div className="vis-col">
             <TitleContext />
             <ModalButtons />
-            <Map />
+            {VisualizationComponent}
           </div>
         )}
         {renderList && <List />}
@@ -57,10 +64,10 @@ const Headstart = ({
   );
 };
 
-const mapStateToProps = (state) => ({
+const mapStateToProps = (state: State) => ({
   renderMap: state.misc.renderMap,
   renderList: state.misc.renderList,
-  isStreamgraph: state.chartType === STREAMGRAPH_MODE,
+  visualizationType: state.chartType,
   isLoading: state.misc.isLoading,
   showLoading: state.misc.showLoading,
   localization: state.localization,

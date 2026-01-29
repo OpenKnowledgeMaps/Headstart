@@ -1,25 +1,29 @@
-// @ts-nocheck
-
-import React from "react";
+import React, { FC, ReactNode } from "react";
 import { connect } from "react-redux";
-
 import { useLocalizationContext } from "../../components/LocalizationProvider";
 import { STREAMGRAPH_MODE } from "../../reducers/chartType";
 import useMatomo from "../../utils/useMatomo";
-
 import HoverPopover from "../HoverPopover";
 
-const Modifier = ({ popoverContainer, modifier, isStreamgraph }) => {
+interface ModifierProps {
+  popoverContainer: ReactNode;
+  modifier: "most-relevant" | "most-recent";
+  isStreamgraph: boolean;
+}
+
+const Modifier: FC<ModifierProps> = ({
+  popoverContainer,
+  modifier,
+  isStreamgraph,
+}) => {
   const localization = useLocalizationContext();
   const { trackEvent } = useMatomo();
 
   if (modifier === "most-recent") {
     return (
-      <>
-        <span id="modifier" className="modifier">
-          {localization.most_recent_label}
-        </span>
-      </>
+      <span id="modifier" className="modifier">
+        {localization.most_recent_label}
+      </span>
     );
   }
 
@@ -49,7 +53,7 @@ const Modifier = ({ popoverContainer, modifier, isStreamgraph }) => {
   return null;
 };
 
-const mapStateToProps = (state) => ({
+const mapStateToProps = (state: any) => ({
   modifier: state.contextLine.modifier,
   isStreamgraph: state.chartType === STREAMGRAPH_MODE,
 });

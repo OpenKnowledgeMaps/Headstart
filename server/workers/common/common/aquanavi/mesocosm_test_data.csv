@@ -1,0 +1,406 @@
+url,Name,Legal name of organisation,Country,Continent,Organisation address,Primary contact information (PI),Years of Mesocosm Experiments,Description of Facility,Controlled Parameters,Research Topics,Facility location(s),Primary interests,Specialist areas,Equipment,Lodging,Source of Information,Photos of experiments/installations,Photos of experiments/installations images,Equipment images,Lodging images,Manipulations,Facility location(s) split,location_facilities
+test 1,[TEST CASE] Country: information unavailable,Dalhousie University Life Sciences Centre,,North-America,"Dalhousie University Life Sciences Centre
+ 1355 Oxford Street
+ PO BOX 15000
+ Halifax, Nova Scotia
+ Canada, B3H 4R2
+","John Batt
+Please login or request access to view contact information.
+",,,"temperature, stratification, light, etc.
+","Animal behaviour, ballast water, flood containment, invasive species
+","
+
+
+
+
+                      44.6356125,-63.5944334
+                    
+",,,"These world-class facilities are backed by our mechanical system, which can provide high quality, temperature controlled seawater and freshwater year round, as well as a professional team of both biologists and mechanical operators who are available to run the systems and help researchers. 16 wet labs.
+",,"http://www.dal.ca/dept/aquatron.html
+http://www.dal.ca/dept/aquatron/facilities/tower_tank.html
+http://www.dal.ca/dept/aquatron/facilities/pool_tank.html
+","
+
+
+
+
+Aquatron Laboratory in Halifax, Nova-Scotia, CA
+
+
+
+
+
+
+
+
+
+
+
+Aquatron laboratory: Pool tank
+
+
+
+
+
+Aquatron Laboratory: Tower tank sysem
+
+
+
+
+
+Aquatron Laboratory: Phytoplankton cultivation
+
+
+
+
+","['http://mesocosm.org/wp-content/uploads/2017/05/aquatronS.jpg', 'http://mesocosm.org/wp-content/uploads/2017/05/Aquatron-empty_400.jpg', 'http://mesocosm.org/wp-content/uploads/2017/05/halifax_pool_calltoaction.image_.jpg', 'http://mesocosm.org/wp-content/uploads/2017/05/aquatron_400.jpg', 'http://mesocosm.org/wp-content/uploads/2017/05/featureslide.image_400.jpg', 'http://mesocosm.org/wp-content/uploads/2017/05/aquatron1_400.jpg']",,,,"['44.6356125', '-63.5944334']","{'coordinates': ['44.6356125', '-63.5944334']}"
+test 11,[TEST CASE] Abstract: no information at all,University of Helsinki,Finland,Europe,"University of Helsinki
+ P.O. Box 3
+ 00014 University of Helsinki
+ Finland
+","Director: Marko Reinikainen
+ Research Coordinator: Joanna Norkko
+Please login or request access to view contact information.,Please login or request access to view contact information.
+",2023 - present,,,,"
+
+
+
+
+                      59.8431619,23.2440297
+                    
+",,,,"Dormitories with ca 100 beds, full board, self-service kitchens, sea-side sauna
+","http://www.finmari-infrastructure.fi/field-stations/tvarminne-uhel/
+","
+
+
+
+Pristine nature reserve for experimental set-ups
+
+
+
+
+SYKE-MRC field mesocosm work at Tvärminne
+
+
+
+
+","['http://mesocosm.org/wp-content/uploads/2017/03/Pristine-nature-reserve-for-experimental-set-ups-300x194.jpg', 'http://mesocosm.org/wp-content/uploads/2017/03/SYKE-MRC-field-mesocosm-work-300x282.jpg']",,,,"['59.8431619', '23.2440297']","{'coordinates': ['59.8431619', '23.2440297']}"
+test 12,[TEST CASE] Abstract: all information available,University of Helsinki,Finland,Europe,"University of Helsinki
+ P.O. Box 3
+ 00014 University of Helsinki
+ Finland
+","Director: Marko Reinikainen
+ Research Coordinator: Joanna Norkko
+Please login or request access to view contact information.,Please login or request access to view contact information.
+",2024 - present,"pelagic – marine – outdoor
+ A large nature reserve surrounding TZS is dedicated to research, providing access to a pristine environment for field mesocosms. Research vessels and technical services support sampling and maintenance; a hovercraft allows winter-studies. Aquarium facilities with natural or artificial light are available for flow-through experiments at up to 100 000 m3 daily water capacity. A marine laboratory provides analytical services.
+","Temperature, light, pH, pCO2, nutrient levels, community composition, turbidity
+","Biodiversity, stoichiometry, benthic ecology, plankton ecology, seagrass ecology, ice studies, reproductive evolution in fishes
+","
+
+
+
+
+                      59.8431619,23.2440297
+                    
+","
+Invasive species
+eutrophication
+climate change
+
+",,"Wet labs, outdoor aquarium facility, climatic chambers, bio-optical instrumentation (spectrophotometry, spectrofluorometry), masspectrometry, carbon analyzers, microscopes with digital imaging, isotope lab, chemistry lab, CTD, meters for light, turbidity and oxygen, field sampling equipment, research vessels, hovercraft
+","Dormitories with ca 100 beds, full board, self-service kitchens, sea-side sauna
+","http://www.finmari-infrastructure.fi/field-stations/tvarminne-uhel/
+","
+
+
+
+Pristine nature reserve for experimental set-ups
+
+
+
+
+SYKE-MRC field mesocosm work at Tvärminne
+
+
+
+
+","['http://mesocosm.org/wp-content/uploads/2017/03/Pristine-nature-reserve-for-experimental-set-ups-300x194.jpg', 'http://mesocosm.org/wp-content/uploads/2017/03/SYKE-MRC-field-mesocosm-work-300x282.jpg']",,,,"['59.8431619', '23.2440297']","{'coordinates': ['59.8431619', '23.2440297']}"
+test 13,"[TEST CASE] Abstract: only ""Description of Facility"" data available",University of Helsinki,Finland,Europe,"University of Helsinki
+ P.O. Box 3
+ 00014 University of Helsinki
+ Finland
+","Director: Marko Reinikainen
+ Research Coordinator: Joanna Norkko
+Please login or request access to view contact information.,Please login or request access to view contact information.
+",2025 - present,"pelagic – marine – outdoor
+ A large nature reserve surrounding TZS is dedicated to research, providing access to a pristine environment for field mesocosms. Research vessels and technical services support sampling and maintenance; a hovercraft allows winter-studies. Aquarium facilities with natural or artificial light are available for flow-through experiments at up to 100 000 m3 daily water capacity. A marine laboratory provides analytical services.
+",,,"
+
+
+
+
+                      59.8431619,23.2440297
+                    
+",,,,"Dormitories with ca 100 beds, full board, self-service kitchens, sea-side sauna
+","http://www.finmari-infrastructure.fi/field-stations/tvarminne-uhel/
+","
+
+
+
+Pristine nature reserve for experimental set-ups
+
+
+
+
+SYKE-MRC field mesocosm work at Tvärminne
+
+
+
+
+","['http://mesocosm.org/wp-content/uploads/2017/03/Pristine-nature-reserve-for-experimental-set-ups-300x194.jpg', 'http://mesocosm.org/wp-content/uploads/2017/03/SYKE-MRC-field-mesocosm-work-300x282.jpg']",,,,"['59.8431619', '23.2440297']","{'coordinates': ['59.8431619', '23.2440297']}"
+test 14,"[TEST CASE] Abstract: only ""Equipment"" data available",University of Helsinki,Finland,Europe,"University of Helsinki
+ P.O. Box 3
+ 00014 University of Helsinki
+ Finland
+","Director: Marko Reinikainen
+ Research Coordinator: Joanna Norkko
+Please login or request access to view contact information.,Please login or request access to view contact information.
+",2026 - present,,,,"
+
+
+
+
+                      59.8431619,23.2440297
+                    
+",,,"Wet labs, outdoor aquarium facility, climatic chambers, bio-optical instrumentation (spectrophotometry, spectrofluorometry), masspectrometry, carbon analyzers, microscopes with digital imaging, isotope lab, chemistry lab, CTD, meters for light, turbidity and oxygen, field sampling equipment, research vessels, hovercraft
+","Dormitories with ca 100 beds, full board, self-service kitchens, sea-side sauna
+","http://www.finmari-infrastructure.fi/field-stations/tvarminne-uhel/
+","
+
+
+
+Pristine nature reserve for experimental set-ups
+
+
+
+
+SYKE-MRC field mesocosm work at Tvärminne
+
+
+
+
+","['http://mesocosm.org/wp-content/uploads/2017/03/Pristine-nature-reserve-for-experimental-set-ups-300x194.jpg', 'http://mesocosm.org/wp-content/uploads/2017/03/SYKE-MRC-field-mesocosm-work-300x282.jpg']",,,,"['59.8431619', '23.2440297']","{'coordinates': ['59.8431619', '23.2440297']}"
+test 15,"[TEST CASE] Abstract: only ""Controlled Parameters"" data available",University of Helsinki,Finland,Europe,"University of Helsinki
+ P.O. Box 3
+ 00014 University of Helsinki
+ Finland
+","Director: Marko Reinikainen
+ Research Coordinator: Joanna Norkko
+Please login or request access to view contact information.,Please login or request access to view contact information.
+",2027 - present,,"Temperature, light, pH, pCO2, nutrient levels, community composition, turbidity
+",,"
+
+
+
+
+                      59.8431619,23.2440297
+                    
+",,,,"Dormitories with ca 100 beds, full board, self-service kitchens, sea-side sauna
+","http://www.finmari-infrastructure.fi/field-stations/tvarminne-uhel/
+","
+
+
+
+Pristine nature reserve for experimental set-ups
+
+
+
+
+SYKE-MRC field mesocosm work at Tvärminne
+
+
+
+
+","['http://mesocosm.org/wp-content/uploads/2017/03/Pristine-nature-reserve-for-experimental-set-ups-300x194.jpg', 'http://mesocosm.org/wp-content/uploads/2017/03/SYKE-MRC-field-mesocosm-work-300x282.jpg']",,,,"['59.8431619', '23.2440297']","{'coordinates': ['59.8431619', '23.2440297']}"
+test 16,"[TEST CASE] Abstract: only ""Primary interests"" data available",University of Helsinki,Finland,Europe,"University of Helsinki
+ P.O. Box 3
+ 00014 University of Helsinki
+ Finland
+","Director: Marko Reinikainen
+ Research Coordinator: Joanna Norkko
+Please login or request access to view contact information.,Please login or request access to view contact information.
+",2027 - present,,,,"
+
+
+
+
+                      59.8431619,23.2440297
+                    
+","
+Invasive species
+eutrophication
+climate change
+
+",,,"Dormitories with ca 100 beds, full board, self-service kitchens, sea-side sauna
+","http://www.finmari-infrastructure.fi/field-stations/tvarminne-uhel/
+","
+
+
+
+Pristine nature reserve for experimental set-ups
+
+
+
+
+SYKE-MRC field mesocosm work at Tvärminne
+
+
+
+
+","['http://mesocosm.org/wp-content/uploads/2017/03/Pristine-nature-reserve-for-experimental-set-ups-300x194.jpg', 'http://mesocosm.org/wp-content/uploads/2017/03/SYKE-MRC-field-mesocosm-work-300x282.jpg']",,,,"['59.8431619', '23.2440297']","{'coordinates': ['59.8431619', '23.2440297']}"
+test 17,"[TEST CASE] Abstract: only ""Research topics"" data available",University of Helsinki,Finland,Europe,"University of Helsinki
+ P.O. Box 3
+ 00014 University of Helsinki
+ Finland
+","Director: Marko Reinikainen
+ Research Coordinator: Joanna Norkko
+Please login or request access to view contact information.,Please login or request access to view contact information.
+",2027 - present,,,"Environmental fate of pollutants (e.g. sorption transient storage and longitudinal dispersion)
+Assessment of adverse effects of pollutants on macroinvertebrates following pulse exposures
+Evaluation and establishment of aquatic-terrestrial model ecosystems to assess aquatic insect emergence-related pollutant transfer or effect translation from aquatic to adjacent terrestrial systems
+","
+
+
+
+
+                      59.8431619,23.2440297
+                    
+",,,,"Dormitories with ca 100 beds, full board, self-service kitchens, sea-side sauna
+","http://www.finmari-infrastructure.fi/field-stations/tvarminne-uhel/
+","
+
+
+
+Pristine nature reserve for experimental set-ups
+
+
+
+
+SYKE-MRC field mesocosm work at Tvärminne
+
+
+
+
+","['http://mesocosm.org/wp-content/uploads/2017/03/Pristine-nature-reserve-for-experimental-set-ups-300x194.jpg', 'http://mesocosm.org/wp-content/uploads/2017/03/SYKE-MRC-field-mesocosm-work-300x282.jpg']",,,,"['59.8431619', '23.2440297']","{'coordinates': ['59.8431619', '23.2440297']}"
+https://example.org/gr,[TEST CASE] Non-latin characters: Greek,Εθνικό Πανεπιστήμιο Αθηνών,Ελλάδα,Ευρώπη,,,2015–2024,Το κέντρο χρησιμοποιεί μεσόκοσμους για τη μελέτη των υδάτινων οικοσυστημάτων,Θερμοκρασία; Διαλυμένο οξυγόνο,Κλιματική αλλαγή; Θαλάσσια βιολογία,Αθήνα,Υδροβιολογία,Θαλάσσια οικολογία,Αισθητήρες θερμοκρασίας και pH,Ναι,https://example.org/source,https://example.org/photo1.jpg,photo1.jpg,equipment1.jpg,lodging1.jpg,Θερμική ρύθμιση,"['58.3712', ' 12.1613']","{'coordinates': ['58.3712', '12.1613']}"
+https://example.org/ar,[TEST CASE] Non-latin characters: Arabic,الجامعة العربية للعلوم,مصر,إفريقيا,,,2018–2023,تُستخدم المِزْكُوسومات لدراسة التلوث المائي,درجة الحرارة؛ الملوحة,تغير المناخ؛ التنوع البيولوجي,القاهرة,البيئة المائية,علم الأحياء الدقيقة,مجسات حرارية,نعم,https://example.org/source2,https://example.org/photo2.jpg,photo2.jpg,equipment2.jpg,lodging2.jpg,تحكم في درجة الحرارة,"['58.3712', ' 12.1613']","{'coordinates': ['58.3712', '12.1613']}"
+https://example.org/zh,[TEST CASE] Non-latin characters: Chinese,北京环境研究院,中国,亚洲,,,2020–2025,用于研究淡水生态系统的中尺度实验系统,温度; 溶解氧,藻类生长; 水质变化,北京,水生态学,水化学,传感器; 自动采样器,提供住宿,https://example.org/source3,https://example.org/photo3.jpg,photo3.jpg,equipment3.jpg,lodging3.jpg,温度控制,"['58.3712', ' 12.1613']","{'coordinates': ['58.3712', '12.1613']}"
+https://example.org/ja,[TEST CASE] Non-latin characters: Japanese,日本環境学会,日本,アジア,,,2017–2025,淡水生態系の研究用メソコスム施設,温度; 溶存酸素,藻類動態; 水質分析,東京,淡水生態学,生態学,測定装置,あり,https://example.org/source4,https://example.org/photo4.jpg,photo4.jpg,equipment4.jpg,lodging4.jpg,加熱実験,"['58.3712', ' 12.1613']","{'coordinates': ['58.3712', '12.1613']}"
+test 18,[TEST CASE] Keywords: data unavailable,McGill University,Canada,North America,"McGill Department of Biology
+Stewart Biology Bldg
+1205 Dr Penfield Ave
+Montreal, QC H3A 1B1
+Canada
+","Professor Andrew Gonzalez
+Please login or request access to view contact information.
+",2016 - present,"LEAP is based at McGill University’s Gault Reserve It is a facility designed for well-replicated experiments addressing the evolution and ecology of aquatic ecosystems exposed to environmental stressors. It is an array of 96 mesocosm tanks, each containing ~1000 liters of water.  Water and organisms (excluding fish) are piped to LEAP directly from a Lake Hertel over a kilometer away. Lake Hertel is a protected lake not exposed to contaminants. The plumbing at LEAP allows for a semi-continuous flow of lake water and organisms into and out of the tanks throughout the season. These communities are natural analogues of the freshwater ponds and lakes so common in Canadian landscapes. The onsite lab allows us to rapidly process samples (see images below). An outflow reservoir can hold the outflow from all mesocosms so that decontamination can be done, if needed.
+","Contaminants such as pH and herbicide concentrations.
+","
+Freshwater ecology and evolution
+Limnology
+Ecosystem processes
+
+","
+
+
+
+
+                      45.5368, -73.1578
+                    
+","Experimental research addressing how complex aquatic communities respond to environmental stressors. 
+",,"
+Fluoroprobe
+Microscopes
+Drone
+
+","Available
+https://gault.mcgill.ca/en/meeting-and-lodging/detail/lodging-at-the-reserve/
+","http://gonzalezlab.weebly.com/leap.html
+","
+
+
+
+Panoramic view of the LEAP facility embedded in forest of the Gault reserve, with the inflow and outflow reservoirs visible. 
+Photo credit: Andrew Gonzalez
+
+
+
+
+Panoramic view of the LEAP-lab, in and outflow reservoir and mesocosm platform
+Photo credit: Andrew Gonzalez
+
+
+
+
+Depth and multiparameter probe (YSI) physico-chemical measurements.  Photo credit: Vincent Fugère
+ 
+
+
+
+
+","['http://mesocosm.org/wp-content/uploads/2019/04/3-1024x769.png', 'http://mesocosm.org/wp-content/uploads/2019/04/2-1024x368.png', 'http://mesocosm.org/wp-content/uploads/2019/04/1.png']",,,,"['45.5368', ' -73.1578']","{'coordinates': ['45.5368', '-73.1578']}"
+test 19,[TEST CASE] Keywords: data available,McGill University,Canada,North America,"McGill Department of Biology
+Stewart Biology Bldg
+1205 Dr Penfield Ave
+Montreal, QC H3A 1B1
+Canada
+","Professor Andrew Gonzalez
+Please login or request access to view contact information.
+",2016 - present,"LEAP is based at McGill University’s Gault Reserve It is a facility designed for well-replicated experiments addressing the evolution and ecology of aquatic ecosystems exposed to environmental stressors. It is an array of 96 mesocosm tanks, each containing ~1000 liters of water.  Water and organisms (excluding fish) are piped to LEAP directly from a Lake Hertel over a kilometer away. Lake Hertel is a protected lake not exposed to contaminants. The plumbing at LEAP allows for a semi-continuous flow of lake water and organisms into and out of the tanks throughout the season. These communities are natural analogues of the freshwater ponds and lakes so common in Canadian landscapes. The onsite lab allows us to rapidly process samples (see images below). An outflow reservoir can hold the outflow from all mesocosms so that decontamination can be done, if needed.
+","Contaminants such as pH and herbicide concentrations.
+","
+Freshwater ecology and evolution
+Limnology
+Ecosystem processes
+
+","
+
+
+
+
+                      45.5368, -73.1578
+                    
+","Experimental research addressing how complex aquatic communities respond to environmental stressors. 
+","Aquatic plant
+","
+Fluoroprobe
+Microscopes
+Drone
+
+","Available
+https://gault.mcgill.ca/en/meeting-and-lodging/detail/lodging-at-the-reserve/
+","http://gonzalezlab.weebly.com/leap.html
+","
+
+
+
+Panoramic view of the LEAP facility embedded in forest of the Gault reserve, with the inflow and outflow reservoirs visible. 
+Photo credit: Andrew Gonzalez
+
+
+
+
+Panoramic view of the LEAP-lab, in and outflow reservoir and mesocosm platform
+Photo credit: Andrew Gonzalez
+
+
+
+
+Depth and multiparameter probe (YSI) physico-chemical measurements.  Photo credit: Vincent Fugère
+ 
+
+
+
+
+","['http://mesocosm.org/wp-content/uploads/2019/04/3-1024x769.png', 'http://mesocosm.org/wp-content/uploads/2019/04/2-1024x368.png', 'http://mesocosm.org/wp-content/uploads/2019/04/1.png']",,,,"['45.5368', ' -73.1578']","{'coordinates': ['45.5368', '-73.1578']}"

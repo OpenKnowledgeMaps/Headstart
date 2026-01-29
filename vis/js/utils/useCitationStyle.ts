@@ -12,7 +12,7 @@ import mlaCsl from "../../csl/mla.csl";
 import chiCsl from "../../csl/chicago.csl";
 // @ts-ignore
 import acmCsl from "../../csl/acm.csl";
-import { Paper } from "../@types/paper";
+import { Paper } from "../types";
 
 const citationConfig = plugins.config.get("@csl");
 citationConfig.templates.add("custom-apa", apaCsl);

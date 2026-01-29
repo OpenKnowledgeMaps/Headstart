@@ -1,6 +1,8 @@
 // @ts-nocheck
 
 import dateFormat from "dateformat";
+
+import { STREAMGRAPH_MODE } from "./chartType";
 import { getModifier } from "./contextLine";
 
 const timespan = (state = null, action: any) => {
@@ -54,7 +56,10 @@ const getTimespan = (config, context) => {
   const modifier = getModifier(config, context);
   // most recent streamgraphs straight away display "Until xyz",
   // other maps have a more complicated logic
-  if (!config.is_streamgraph || modifier !== "most-recent") {
+
+  const { visualization_type: visualizationType } = config;
+  const isNotStreamgraph = visualizationType !== STREAMGRAPH_MODE;
+  if (isNotStreamgraph || modifier !== "most-recent") {
     const defaultFromHyphenated =
       SERVICE_START[config.service] || SERVICE_START.default;
 
@@ -62,11 +67,11 @@ const getTimespan = (config, context) => {
     const fromFormatted = dateFormat(from, displayFormat);
 
     if (fromHyphenated !== defaultFromHyphenated) {
-      return fromFormatted + " - " + toFormatted;
+      return `${fromFormatted} - ${toFormatted}`;
     }
   }
 
-  return "Until " + toFormatted;
+  return `Until ${toFormatted}`;
 };
 
 const getTodayDate = () => {

@@ -1,11 +1,12 @@
 import d3 from "d3";
 
-import { getDiameterScale, getResizedScale } from "../utils/scale";
 import { getValueOrZero } from "../utils/data";
+import { getDiameterScale, getResizedScale } from "../utils/scale";
+import { STREAMGRAPH_MODE } from "./chartType";
 
 const data = (
   state = { list: [], options: {}, size: null } as any,
-  action: any
+  action: any,
 ) => {
   if (action.canceled) {
     return state;
@@ -21,8 +22,10 @@ const data = (
         paperMaxScale: action.scalingFactors.paperMaxScale,
         paperWidthFactor: action.configObject.paper_width_factor,
         paperHeightFactor: action.configObject.paper_height_factor,
-        isStreamgraph: action.configObject.is_streamgraph,
+        isStreamgraph:
+          action.configObject.visualization_type === STREAMGRAPH_MODE,
         visualizationId: action.contextObject.id,
+        hoveredItemId: null,
       };
 
       return { list: action.papers, options, size: action.chartSize };
@@ -38,12 +41,20 @@ const data = (
           state.list,
           state.size,
           action.chartSize,
-          state.options
+          state.options,
         );
       }
 
       return { ...state, list, size: action.chartSize };
     }
+    case "HOVER_ITEM":
+      return {
+        ...state,
+        options: {
+          ...state.options,
+          hoveredItemId: action.safeId,
+        },
+      };
     case "APPLY_FORCE_PAPERS":
       return { ...state, list: action.dataArray };
     default:
@@ -57,14 +68,14 @@ const resizePapers = (
   papers: any[],
   currentSize: number,
   newSize: number,
-  options: any
+  options: any,
 ) => {
   const resizedPapers = papers.slice(0);
 
-  let coordsScale = getResizedScale(currentSize, newSize);
+  const coordsScale = getResizedScale(currentSize, newSize);
 
-  let diameters = resizedPapers.map((e) => getValueOrZero(e.citation_count));
-  let dScale = getDiameterScale(d3.extent(diameters), newSize, options);
+  const diameters = resizedPapers.map((e) => getValueOrZero(e.citation_count));
+  const dScale = getDiameterScale(d3.extent(diameters), newSize, options);
 
   resizedPapers.forEach((paper: any) => {
     paper.x = coordsScale(paper.x);

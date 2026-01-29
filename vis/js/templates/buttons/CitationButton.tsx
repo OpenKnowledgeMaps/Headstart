@@ -8,7 +8,10 @@ import { useLocalizationContext } from "../../components/LocalizationProvider";
 import { STREAMGRAPH_MODE } from "../../reducers/chartType";
 import useMatomo from "../../utils/useMatomo";
 
-const CitationButton = ({ isStreamgraph, onClick }: {
+const CitationButton = ({
+  isStreamgraph,
+  onClick,
+}: {
   isStreamgraph: boolean;
   onClick: () => void;
 }) => {

@@ -1,14 +1,13 @@
-import React from "react";
+import React, { FC } from "react";
 import SearchBox from "../../components/filtersort/SearchBox";
 import SortDropdown from "../../components/filtersort/SortDropdown";
 
-
-export interface BasicFilterSortProps {
+interface BasicFilterSortProps {
   displaySort: boolean;
-  color: string;
+  color: string | null;
 }
 
-const BasicFilterSort = ({ displaySort, color }: BasicFilterSortProps) => {
+const BasicFilterSort: FC<BasicFilterSortProps> = ({ displaySort, color }) => {
   return (
     <div
       id="explorer_options"

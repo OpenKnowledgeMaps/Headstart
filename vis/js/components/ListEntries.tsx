@@ -1,18 +1,36 @@
-// @ts-nocheck
-
-import React from "react";
+import React, { FC } from "react";
 import { connect } from "react-redux";
-
 import { useLocalizationContext } from "./LocalizationProvider";
-
 import { filterData } from "../utils/data";
 import { STREAMGRAPH_MODE } from "../reducers/chartType";
-
 import EntriesWrapper from "./EntriesWrapper";
 import StandardListEntry from "../templates/listentry/StandardListEntry";
+import { AllPossiblePapersType, FilterValuesType, State } from "../types";
 
-const ListEntries = ({
-  // data
+export interface FilterSettingsData {
+  value: FilterValuesType;
+  field: null;
+  zoomed: boolean;
+  area: number | null;
+  isStreamgraph: boolean;
+  title: string | null;
+  docIds: unknown;
+}
+
+export interface SearchSettingsData {
+  value: string;
+}
+
+interface ListEntriesProps {
+  show: boolean;
+  displayedData: AllPossiblePapersType[];
+  rawData: AllPossiblePapersType[];
+  searchSettings: SearchSettingsData;
+  filterSettings: FilterSettingsData;
+  isStreamgraph: boolean;
+}
+
+const ListEntries: FC<ListEntriesProps> = ({
   show,
   displayedData,
   rawData,
@@ -56,7 +74,7 @@ const ListEntries = ({
   );
 };
 
-const mapStateToProps = (state) => ({
+const mapStateToProps = (state: State) => ({
   show: state.list.show,
   rawData: state.data.list,
   searchSettings: {

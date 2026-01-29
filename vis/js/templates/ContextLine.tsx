@@ -1,15 +1,8 @@
-import React from "react";
+import React, { FC } from "react";
+import { PropsWithChildren } from "../types";
 
-// inside the 'children' variable are various React components
-// from directory ./contextfeatures
-const ContextLine = ({ children }: {
-  children: React.ReactNode;
-}) => {
-  return (
-    // html template starts here
-    <p id="context" data-testid="context">{children}</p>
-    // html template ends here
-  );
-};
-
-export default ContextLine;
+export const ContextLineTemplate: FC<PropsWithChildren> = ({ children }) => (
+  <p id="context" data-testid="context">
+    {children}
+  </p>
+);
