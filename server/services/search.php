@@ -221,6 +221,9 @@ function search(
     } else {
       $vis_type = "overview";
     }
+    if (isset($post_params["vis_type"]) && $post_params["vis_type"] == "geomap") {
+      $vis_type = "geomap";
+    }
     $snapshot = new \headstart\preprocessing\Snapshot($ini_array, $query, $unique_id, $service, $repo2snapshot[$service], $vis_type);
     $snapshot->takeSnapshot();
   }

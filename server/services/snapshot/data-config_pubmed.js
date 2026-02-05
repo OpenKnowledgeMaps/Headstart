@@ -34,4 +34,5 @@ var data_config = {
     filter_menu_dropdown: true,
     sort_menu_dropdown: true,
     filter_options: ["all", "open_access"],
+    visualization_type: "overview", // Used in the reducer named "chartType" to determine the visualization type: overview, timeline, geomap
 };
