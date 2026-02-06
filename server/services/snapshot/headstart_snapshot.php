@@ -11,6 +11,7 @@
         <script type="text/javascript" src="data-config_<?php echo htmlspecialchars($_GET['service']) ?>.js"></script>
 		<script src="../../../../js/search_options.js"></script>
         <script>
+            vis_type = <?php echo json_encode(isset($_GET['vis_type']) ? $_GET['vis_type'] : "overview") ?>;
             data_config.files = [{
                     title: <?php echo json_encode($_GET['query']) ?>,
                     file: <?php echo json_encode($_GET['file']) ?>
@@ -19,12 +20,15 @@
             data_config.show_context = true;
             data_config.create_title_from_context= true;
             data_config.intro = "";
-            if(<?php echo json_encode(isset($_GET['vis_type']) ? $_GET['vis_type'] : "") ?> === "timeline") {
-                data_config.is_streamgraph = true;
+            if (vis_type === "timeline") {
+                data_config.visualization_type = "timeline";
                 //data_config.embed_modal = false;
                 data_config.show_area = false;
             } else {
                 data_config.options = options_<?php echo htmlspecialchars($_GET['service']); ?>.dropdowns;
+            }
+            if (vis_type === "geomap") {
+                data_config.visualization_type = "geomap";
             }
         </script>
 
