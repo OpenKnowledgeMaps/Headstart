@@ -10,6 +10,7 @@ def enrich_anchor_using_duplicates(df, dupind):
 
     List of improvements:
         - subject_orig: replaced from a duplicate with the highest number of keywords
+        - paper_abstract: replaced from a duplicate with the longest description
 
     Args:
         df: DataFrame with metadata, containing the column is_anchor
@@ -34,6 +35,7 @@ def enrich_anchor_using_duplicates(df, dupind):
             anchor_idx = anchor.name
 
             df = replace_subjects(df, anchor_idx, idx)
+            df = replace_paper_abstract(df, anchor_idx, idx)
 
     return df
 
@@ -62,7 +64,6 @@ def replace_subjects(df, anchor_idx, group_indices):
 
     best_subject_orig = None
     best_count = 0
-    best_idx = None
 
     for idx in group_indices:
         subject_orig_value = group_data.loc[idx, 'subject_orig']
@@ -76,9 +77,8 @@ def replace_subjects(df, anchor_idx, group_indices):
         if keyword_count > best_count:
             best_count = keyword_count
             best_subject_orig = subject_orig_value
-            best_idx = idx
 
-    if best_subject_orig is not None and best_idx is not None:
+    if best_subject_orig is not None:
         current_subject_orig_in_anchor = df.loc[anchor_idx, 'subject_orig']
 
         if pd.isna(current_subject_orig_in_anchor) or str(current_subject_orig_in_anchor) != str(best_subject_orig):
@@ -86,5 +86,50 @@ def replace_subjects(df, anchor_idx, group_indices):
 
             if 'subject' in df.columns:
                 df.loc[anchor_idx, 'subject'] = best_subject_orig
+
+    return df
+
+def replace_paper_abstract(df, anchor_idx, group_indices):
+    """
+    Replaces the paper_abstract field of the anchor element with
+    the best value from the group of duplicates.
+
+    Finds the element with the longest description in the paper_abstract field
+    and replaces the paper_abstract of the anchor element with this variant.
+
+    Args:
+        df: DataFrame with metadata
+        anchor_idx: Index of the anchor element in the DataFrame
+        group_indices: Indices of all elements in the group (including the anchor)
+
+    Returns:
+        DataFrame with the updated paper_abstract of the anchor element
+    """
+    group_data = df.loc[group_indices]
+
+    if 'paper_abstract' not in group_data.columns:
+        return df
+
+    best_paper_abstract = None
+    best_length = 0
+
+    for idx in group_indices:
+        paper_abstract_value = group_data.loc[idx, 'paper_abstract']
+
+        if pd.isna(paper_abstract_value) or paper_abstract_value == '':
+            continue
+
+        paper_abstract_str = str(paper_abstract_value)
+        abstract_length = len(paper_abstract_str)
+
+        if abstract_length > best_length:
+            best_length = abstract_length
+            best_paper_abstract = paper_abstract_value
+
+    if best_paper_abstract is not None:
+        current_paper_abstract_in_anchor = df.loc[anchor_idx, 'paper_abstract']
+
+        if pd.isna(current_paper_abstract_in_anchor) or str(current_paper_abstract_in_anchor) != str(best_paper_abstract):
+            df.loc[anchor_idx, 'paper_abstract'] = best_paper_abstract
 
     return df
