@@ -235,11 +235,10 @@ pattern_annotations = re.compile(r"([A-Za-z]+:[\w'\- ]+);?")
 
 def filter_duplicates(df):
     df.drop_duplicates("id", inplace=True, keep="first")
-    df["is_latest"] = True
+    df["is_anchor"] = False
     df["doi_duplicate"] = False
     df["has_relations"] = False
     df["link_duplicate"] = False
-    df["keep"] = False
     df["duplicates"] = df.apply(
         lambda x: ",".join([x["id"], x["duplicates"]])
         if len(x["duplicates"].split(",")) >= 1
@@ -266,17 +265,16 @@ def filter_duplicates(df):
     non_datasets = df.loc[df.index.difference(pure_datasets.index)]
     non_datasets = prioritize_OA_and_latest(non_datasets, dupind)
     pure_datasets = mark_latest_doi(pure_datasets, dupind)
-    filtered_non_datasets = non_datasets[non_datasets.is_latest == True]
+    filtered_non_datasets = non_datasets[non_datasets.is_anchor == True]
     filtered_datasets = pure_datasets[
-        (pure_datasets.keep == True) | (pure_datasets.is_duplicate == False)
+        (pure_datasets.is_anchor == True) | (pure_datasets.is_duplicate == False)
     ]
     filtered = pd.concat([filtered_non_datasets, filtered_datasets])
     filtered.sort_index(inplace=True)
     for c in [
         "doi_duplicate",
         "link_duplicate",
-        "is_latest",
-        "keep",
+        "is_anchor",
         "duplicates",
         "doi_version",
         "unversioned_doi",

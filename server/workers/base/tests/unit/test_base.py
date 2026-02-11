@@ -193,8 +193,7 @@ def test_filter_duplicates():
     # Add extra columns that filter_duplicates is supposed to drop.
     df["doi_duplicate"] = False
     df["link_duplicate"] = False
-    df["is_latest"] = True
-    df["keep"] = False
+    df["is_anchor"] = False
     df["doi_version"] = ["v1", "v1", "v2"]
     df["unversioned_doi"] = ["doi1", "doi1", "doi2"]
     df["publisher_doi"] = ["pub1", "pub1", "pub2"]
@@ -203,7 +202,7 @@ def test_filter_duplicates():
     filtered = filter_duplicates(df.copy())
     # Verify that the dropped columns are not present.
     for col in [
-        "doi_duplicate", "link_duplicate", "is_latest", "keep",
+        "doi_duplicate", "link_duplicate", "is_anchor",
         "doi_version", "unversioned_doi", "publisher_doi", "has_relations"
     ]:
         assert col not in filtered.columns

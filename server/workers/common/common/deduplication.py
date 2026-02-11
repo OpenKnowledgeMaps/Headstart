@@ -72,16 +72,13 @@ def remove_textual_duplicates_from_different_sources(df, dupind):
         if len(idx) > 1:
             tmp = df.loc[idx]
             df.loc[tmp.index, "is_duplicate"] = True
-            df.loc[tmp.index, "is_latest"] = False
+            df.loc[tmp.index, "is_anchor"] = False
             publisher_dois = list(filter(None, tmp.publisher_doi.unique().tolist()))
             if len(publisher_dois) > 0:
                 # keep entry with doi
-                df.loc[idx, "keep"] = False
-                df.loc[tmp[tmp.publisher_doi!=""].index, "is_latest"] = True
-                df.loc[tmp[tmp.publisher_doi!=""].index, "keep"] = True
+                df.loc[tmp[tmp.publisher_doi!=""].index, "is_anchor"] = True
             else:
-                df.loc[tmp.sort_values(["doi", "year"], ascending=[False, False]).head(1).index, "is_latest"] = True
-                df.loc[tmp.sort_values(["doi", "year"], ascending=[False, False]).head(1).index, "keep"] = True
+                df.loc[tmp.sort_values(["doi", "year"], ascending=[False, False]).head(1).index, "is_anchor"] = True
     return df
 
 def mark_latest_doi(df, dupind):
@@ -91,14 +88,12 @@ def mark_latest_doi(df, dupind):
         for udoi in list(filter(None, tmp.unversioned_doi.unique().tolist())):
             tmp2 = tmp[tmp.unversioned_doi == udoi]
             if len(tmp2) > 0:
-                df.loc[tmp2.index, "is_latest"] = False
-                df.loc[tmp2.index, "keep"] = False
+                df.loc[tmp2.index, "is_anchor"] = False
                 versions = tmp2.id
                 latest = tmp2.sort_values("doi_version", ascending=False).head(1).id
                 v = [{"versions": versions.values.tolist(), "latest": latest.values.tolist()}]*len(tmp2)
                 df.loc[versions.index, "versions"] = v
-                df.loc[latest.index, "is_latest"] = True
-                df.loc[latest.index, "keep"] = True
+                df.loc[latest.index, "is_anchor"] = True
     return df
     
 def prioritize_OA_and_latest(df, dupind):
@@ -106,14 +101,11 @@ def prioritize_OA_and_latest(df, dupind):
         idx = df.index.intersection(idx)
         if len(idx) > 1:
             tmp = df.loc[idx]
-            df.loc[idx, "keep"] = False
-            df.loc[idx, "is_latest"] = False
+            df.loc[idx, "is_anchor"] = False
             if len(tmp[tmp.oa_state=="1"]) > 0:
-                df.loc[tmp[tmp.oa_state=="1"].sort_values("year", ascending=False).head(1).index, "keep"] = True
-                df.loc[tmp[tmp.oa_state=="1"].sort_values("year", ascending=False).head(1).index, "is_latest"] = True
+                df.loc[tmp[tmp.oa_state=="1"].sort_values("year", ascending=False).head(1).index, "is_anchor"] = True
             else:
-                df.loc[tmp.sort_values("year", ascending=False).head(1).index, "keep"] = True
-                df.loc[tmp.sort_values("year", ascending=False).head(1).index, "is_latest"] = True
+                df.loc[tmp.sort_values("year", ascending=False).head(1).index, "is_anchor"] = True
     return df
 
 def mark_duplicates(metadata):
