@@ -2,6 +2,7 @@ import os
 import json
 import subprocess
 import pandas as pd
+import logging
 from common.r_wrapper import RWrapper
 from common.deduplication import (
     find_version_in_doi,
@@ -29,6 +30,7 @@ import dateparser
 import sys
 from common.rate_limiter import RateLimiter
 
+logger = logging.getLogger(__name__)
 
 class BaseClient(RWrapper):
     def __init__(self, *args):
@@ -50,7 +52,10 @@ class BaseClient(RWrapper):
         message = json.loads(message.decode("utf-8"))
         request_id = message.get("id")
         params = self.add_default_params(message.get("params"))
+        original_service = params.get("original_service")
         params["service"] = "base"
+        if original_service:
+            params["original_service"] = original_service
         endpoint = message.get("endpoint")
         self.logger.debug(f"Request ID: {request_id}, Params: {params}, Endpoint: {endpoint}")
         return request_id, params, endpoint
@@ -58,6 +63,7 @@ class BaseClient(RWrapper):
     def execute_search(self, params):
         q = params.get("q")
         service = params.get("service")
+        original_service = params.get("original_service", service)
         data = {}
         data["params"] = params
         cmd = [self.command, self.runner, self.wd, q, service]
@@ -80,7 +86,7 @@ class BaseClient(RWrapper):
             else:
                 metadata = pd.DataFrame(raw_metadata)
                 metadata = self.sanitize_metadata(metadata)
-                metadata = filter_duplicates(metadata)
+                metadata = filter_duplicates(metadata, original_service)
                 metadata = pd.concat(
                     [metadata, parse_annotations_for_all(metadata, "subject_orig")],
                     axis=1,
@@ -234,7 +240,7 @@ class BaseClient(RWrapper):
 pattern_annotations = re.compile(r"([A-Za-z]+:[\w'\- ]+);?")
 
 
-def filter_duplicates(df):
+def filter_duplicates(df, service):
     df.drop_duplicates("id", inplace=True, keep="first")
     df["is_anchor"] = False
     df["doi_duplicate"] = False
@@ -262,10 +268,13 @@ def filter_duplicates(df):
     df = remove_textual_duplicates_from_different_sources(df, dupind)
     df = add_false_negatives(df)
     df = mark_latest_doi(df, dupind)
+
     pure_datasets = df[df.typenorm == "7"]
     non_datasets = df.loc[df.index.difference(pure_datasets.index)]
+
     non_datasets = prioritize_OA_and_latest(non_datasets, dupind)
-    non_datasets = prioritize_doi_and_provider(non_datasets, dupind)
+    if service == "orcid":
+        non_datasets = prioritize_doi_and_provider(non_datasets, dupind)
     pure_datasets = mark_latest_doi(pure_datasets, dupind)
 
     pure_datasets_condition_mask = (pure_datasets.is_anchor == True) | (pure_datasets.is_duplicate == False)

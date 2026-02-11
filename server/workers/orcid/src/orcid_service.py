@@ -177,6 +177,7 @@ class OrcidService:
                     'today': '2024-10-21', 
                     'unique_id': 'abf2625e2d84eb4367fb443e2cb6f4a1', 
                     'service': 'base', 
+                    'original_service': 'orcid',
                     'embed': 'false', 
                     'vis_id': 'abf2625e2d84eb4367fb443e2cb6f4a1', 
                     'limit': 120, 
