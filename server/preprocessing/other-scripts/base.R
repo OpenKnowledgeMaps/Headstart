@@ -58,7 +58,7 @@ get_papers <- function(query, params,
   document_types = paste("dctypenorm:", "(", paste(params$document_types, collapse=" OR "), ")", sep="")
   
   sortby_string = ifelse(params$sorting == "most-recent", "dcyear desc", "")
-  return_fields <- "dcdocid,dctitle,dcdescription,dcsource,dcdate,dcsubject,dccreator,dclink,dcoa,dcidentifier,dcrelation,dctype,dctypenorm,dcprovider,dclang,dclanguage,dccoverage"
+  return_fields <- "dcdocid,dctitle,dcdescription,dcsource,dcdate,dcsubject,dccreator,dclink,dcoa,dcidentifier,dcrelation,dctype,dctypenorm,dcprovider,dclang,dclanguage,dccoverage,dccollection"
 
   if (!is.null(exact_query) && exact_query != '') {
     base_query <- paste(paste0("(",exact_query,")"), document_types, collapse=" ")
@@ -281,6 +281,7 @@ etl <- function(res, repo, non_public) {
   metadata$language = check_metadata(res$dclanguage)
   metadata$content_provider = check_metadata(res$dcprovider)
   metadata$coverage = check_metadata(res$dccoverage)
+  metadata$collection = check_metadata(res$dccollection)
   if(repo=="fttriple" && non_public==TRUE) {
     metadata$content_provider <- "GoTriple"
   }
@@ -406,5 +407,6 @@ fieldmapper <- list(
   "lang"="dclang",
   "language"="dclanguage",
   "content_provider"="dcprovider",
-  "coverage"="dccoverage"
+  "coverage"="dccoverage",
+  "collection"="dccollection"
 )
