@@ -265,12 +265,15 @@ def filter_duplicates(df):
     non_datasets = df.loc[df.index.difference(pure_datasets.index)]
     non_datasets = prioritize_OA_and_latest(non_datasets, dupind)
     pure_datasets = mark_latest_doi(pure_datasets, dupind)
+
+    pure_datasets_condition_mask = (pure_datasets.is_anchor == True) | (pure_datasets.is_duplicate == False)
+    pure_datasets.loc[pure_datasets_condition_mask, "is_anchor"] = True
+
     filtered_non_datasets = non_datasets[non_datasets.is_anchor == True]
-    filtered_datasets = pure_datasets[
-        (pure_datasets.is_anchor == True) | (pure_datasets.is_duplicate == False)
-    ]
+    filtered_datasets = pure_datasets[pure_datasets.is_anchor == True]
     filtered = pd.concat([filtered_non_datasets, filtered_datasets])
     filtered.sort_index(inplace=True)
+
     for c in [
         "doi_duplicate",
         "link_duplicate",
@@ -284,6 +287,7 @@ def filter_duplicates(df):
     ]:
         if c in filtered.columns:
             filtered.drop(c, axis=1, inplace=True)
+
     return filtered
 
 
