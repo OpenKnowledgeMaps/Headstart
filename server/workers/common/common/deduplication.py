@@ -170,3 +170,53 @@ def compute_lv_matrix(titles, n):
             distance_matrix[i, j] = dist
             distance_matrix[j, i] = dist  # Symmetric matrix
     return distance_matrix
+
+def prioritize_doi_and_provider(df, dupind):
+    for _, idx in dupind.items():
+        idx = df.index.intersection(idx)
+
+        if len(idx) <= 1:
+            continue
+
+        tmp = df.loc[idx].copy()
+
+        has_doi_and_collection = (
+            tmp.doi.notna() &
+            (tmp.doi != "") &
+            tmp.collection.notna() &
+            (tmp.collection != "")
+        )
+
+        candidates = tmp[has_doi_and_collection]
+
+        if len(candidates) == 0:
+            continue
+
+        candidates = candidates.copy()
+        candidates["provider_priority"] = candidates.collection.map(get_provider_priority)
+
+        max_priority = candidates["provider_priority"].max()
+        highest_priority_candidates = candidates[candidates["provider_priority"] == max_priority]
+
+        if len(highest_priority_candidates) > 0:
+            anchor_idx = highest_priority_candidates.index[0]
+            df.loc[anchor_idx, "is_anchor"] = True
+
+            other_idx = idx.difference([anchor_idx])
+            df.loc[other_idx, "is_anchor"] = False
+
+    return df
+
+def get_provider_priority(provider):
+    is_provider_not_available = pd.isna(provider) or provider == ""
+    if is_provider_not_available:
+        return -1
+
+    formatted_provider = str(provider).lower()
+
+    if "ftdatacite" in formatted_provider:
+        return 1
+    elif "cr" in formatted_provider:
+        return 2
+    else:
+        return 0

@@ -17,6 +17,7 @@ from common.deduplication import (
     remove_textual_duplicates_from_different_sources,
     mark_latest_doi,
     prioritize_OA_and_latest,
+    prioritize_doi_and_provider,
 )
 
 import re
@@ -264,6 +265,7 @@ def filter_duplicates(df):
     pure_datasets = df[df.typenorm == "7"]
     non_datasets = df.loc[df.index.difference(pure_datasets.index)]
     non_datasets = prioritize_OA_and_latest(non_datasets, dupind)
+    non_datasets = prioritize_doi_and_provider(non_datasets, dupind)
     pure_datasets = mark_latest_doi(pure_datasets, dupind)
 
     pure_datasets_condition_mask = (pure_datasets.is_anchor == True) | (pure_datasets.is_duplicate == False)
