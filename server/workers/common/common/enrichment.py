@@ -6,6 +6,12 @@ STRATEGY_MERGE = 'merge'
 
 KEYWORD_SIMILARITY_THRESHOLD = 85
 
+OA_STATE_PRIORITY = {
+    "1": 0,  # yes
+    "0": 1,  # no
+    "2": 2,  # unknown
+}
+
 def enrich_anchor_using_duplicates(df, dupind, subject_strategy=STRATEGY_MERGE):
     """
     Enriches anchor elements using data from duplicates in their groups.
@@ -18,6 +24,7 @@ def enrich_anchor_using_duplicates(df, dupind, subject_strategy=STRATEGY_MERGE):
         - subject_orig: processed according to subject_strategy
         - subject: processed according to subject_strategy
         - paper_abstract: replaced with the longest description
+        - oa_state: replaced with the highest priority status (yes > no > unknown)
 
     Args:
         df: DataFrame with metadata, containing the column is_anchor
@@ -32,8 +39,9 @@ def enrich_anchor_using_duplicates(df, dupind, subject_strategy=STRATEGY_MERGE):
     has_subject_orig = 'subject_orig' in df.columns
     has_subject = 'subject' in df.columns
     has_paper_abstract = 'paper_abstract' in df.columns
+    has_oa_state = 'oa_state' in df.columns
 
-    is_all_columns_are_missing = not has_subject_orig and not has_subject and not has_paper_abstract
+    is_all_columns_are_missing = not has_subject_orig and not has_subject and not has_paper_abstract and not has_oa_state
     if is_all_columns_are_missing:
         return df
 
@@ -68,6 +76,9 @@ def enrich_anchor_using_duplicates(df, dupind, subject_strategy=STRATEGY_MERGE):
 
         best_paper_abstract = None
         best_paper_abstract_length = 0
+
+        best_oa_state = None
+        best_oa_state_priority = float('inf')
 
         for element_idx in idx:
             if has_subject_orig:
@@ -105,6 +116,16 @@ def enrich_anchor_using_duplicates(df, dupind, subject_strategy=STRATEGY_MERGE):
                         best_paper_abstract_length = abstract_length
                         best_paper_abstract = paper_abstract_value
 
+            if has_oa_state:
+                oa_state_value = group_data.loc[element_idx, 'oa_state']
+                is_not_empty = not pd.isna(oa_state_value)
+                if is_not_empty:
+                    oa_state_str = str(oa_state_value)
+                    priority = OA_STATE_PRIORITY.get(oa_state_str, float('inf'))
+                    if priority < best_oa_state_priority:
+                        best_oa_state_priority = priority
+                        best_oa_state = oa_state_value
+
         if has_subject_orig:
             if is_use_merge_strategy:
                 if all_subject_orig_keywords:
@@ -136,6 +157,12 @@ def enrich_anchor_using_duplicates(df, dupind, subject_strategy=STRATEGY_MERGE):
             current = df.loc[anchor_idx, 'paper_abstract']
             if pd.isna(current) or str(current) != str(best_paper_abstract):
                 df.loc[anchor_idx, 'paper_abstract'] = best_paper_abstract
+
+        is_better_oa_state_presented = best_oa_state is not None
+        if is_better_oa_state_presented:
+            current = df.loc[anchor_idx, 'oa_state']
+            if pd.isna(current) or str(current) != str(best_oa_state):
+                df.loc[anchor_idx, 'oa_state'] = best_oa_state
 
     return df
 
