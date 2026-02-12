@@ -181,7 +181,7 @@ class OrcidService:
                     'original_service': 'orcid',
                     'embed': 'false', 
                     'vis_id': 'abf2625e2d84eb4367fb443e2cb6f4a1', 
-                    'limit': 120, 
+                    'limit': 240,
                     'list_size': 100,
                     'deduplicate_base': 'false'
                 },
