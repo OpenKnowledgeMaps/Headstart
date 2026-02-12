@@ -41,13 +41,12 @@ def enrich_anchor_using_duplicates(df, dupind):
 
 def replace_subjects(df, anchor_idx, group_indices):
     """
-    Replaces the subject_orig field of the anchor element with the best
-    value from the group of duplicates by the number of keywords.
-    Also updates the subject field for consistency.
+    Replaces subject_orig and subject fields of the anchor element with the best
+    values from the group of duplicates by the number of keywords.
 
-    Finds the element with the highest number of keywords in the subject_orig field
-    (keywords separated by ";") and replaces the subject_orig of the anchor element.
-    Also updates the subject field for consistency.
+    Finds the element with the highest number of keywords in each field
+    (keywords separated by ";") and replaces the corresponding field of the anchor element.
+    Each field is searched independently to find the best value.
 
     Args:
         df: DataFrame with metadata
@@ -55,37 +54,51 @@ def replace_subjects(df, anchor_idx, group_indices):
         group_indices: Indices of all elements in the group (including the anchor)
 
     Returns:
-        DataFrame with the updated subject_orig of the anchor element
+        DataFrame with the updated subject_orig and subject of the anchor element
     """
     group_data = df.loc[group_indices]
 
-    if 'subject_orig' not in group_data.columns:
+    has_subject_orig = 'subject_orig' in group_data.columns
+    has_subject = 'subject' in group_data.columns
+
+    if not has_subject_orig and not has_subject:
         return df
 
     best_subject_orig = None
-    best_count = 0
+    best_subject_orig_count = 0
+    best_subject = None
+    best_subject_count = 0
 
     for idx in group_indices:
-        subject_orig_value = group_data.loc[idx, 'subject_orig']
+        if has_subject_orig:
+            subject_orig_value = group_data.loc[idx, 'subject_orig']
+            if not (pd.isna(subject_orig_value) or subject_orig_value == ''):
+                keywords = [kw.strip() for kw in str(subject_orig_value).split(';') if kw.strip()]
+                keyword_count = len(keywords)
+                if keyword_count > best_subject_orig_count:
+                    best_subject_orig_count = keyword_count
+                    best_subject_orig = subject_orig_value
 
-        is_empty = pd.isna(subject_orig_value) or subject_orig_value == ''
-        if is_empty:
-            continue
+        if has_subject:
+            subject_value = group_data.loc[idx, 'subject']
+            if not (pd.isna(subject_value) or subject_value == ''):
+                keywords = [kw.strip() for kw in str(subject_value).split(';') if kw.strip()]
+                keyword_count = len(keywords)
+                if keyword_count > best_subject_count:
+                    best_subject_count = keyword_count
+                    best_subject = subject_value
 
-        keywords = [kw.strip() for kw in str(subject_orig_value).split(';') if kw.strip()]
-        keyword_count = len(keywords)
-        if keyword_count > best_count:
-            best_count = keyword_count
-            best_subject_orig = subject_orig_value
-
-    if best_subject_orig is not None:
-        current_subject_orig_in_anchor = df.loc[anchor_idx, 'subject_orig']
-
-        if pd.isna(current_subject_orig_in_anchor) or str(current_subject_orig_in_anchor) != str(best_subject_orig):
+    is_best_subject_orig = best_subject_orig is not None
+    if is_best_subject_orig:
+        current_subject_orig = df.loc[anchor_idx, 'subject_orig']
+        if pd.isna(current_subject_orig) or str(current_subject_orig) != str(best_subject_orig):
             df.loc[anchor_idx, 'subject_orig'] = best_subject_orig
 
-            if 'subject' in df.columns:
-                df.loc[anchor_idx, 'subject'] = best_subject_orig
+    is_best_subject = best_subject is not None
+    if is_best_subject:
+        current_subject = df.loc[anchor_idx, 'subject']
+        if pd.isna(current_subject) or str(current_subject) != str(best_subject):
+            df.loc[anchor_idx, 'subject'] = best_subject
 
     return df
 
