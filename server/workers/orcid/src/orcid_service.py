@@ -16,6 +16,7 @@ from typing import Dict, List, Union
 from model import AuthorInfo, SuccessResult, ErrorResult
 from dataclasses import asdict
 import time
+from datetime import datetime
 
 def remove_doi_prefix(doi):
     if pd.isna(doi) or doi == '':  # Handle NaN, None, or empty strings
@@ -171,10 +172,10 @@ class OrcidService:
                     'document_types': ['4', '11', '111', '13', '16', '7', '5', '12', '121', '122', '17', '19', '3', '52', '2', 'F', '1A', '14', '15', '6', '51', '1', '18', '181', '183', '182'], 
                     'min_descsize': '0', 
                     'from': '1665-01-01', 
-                    'to': '2024-10-21', 
+                    'to': datetime.now().strftime('%Y-%m-%d'),
                     # ? is that a good idea to pass here empty query?
                     'q': '', 
-                    'today': '2024-10-21', 
+                    'today': datetime.now().strftime('%Y-%m-%d'),
                     'unique_id': 'abf2625e2d84eb4367fb443e2cb6f4a1', 
                     'service': 'base', 
                     'original_service': 'orcid',
