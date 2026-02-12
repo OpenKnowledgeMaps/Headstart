@@ -1,7 +1,10 @@
 import pandas as pd
+from rapidfuzz import fuzz
 
 STRATEGY_REPLACE = 'replace'
 STRATEGY_MERGE = 'merge'
+
+KEYWORD_SIMILARITY_THRESHOLD = 85
 
 def enrich_anchor_using_duplicates(df, dupind, subject_strategy=STRATEGY_MERGE):
     """
@@ -105,7 +108,8 @@ def enrich_anchor_using_duplicates(df, dupind, subject_strategy=STRATEGY_MERGE):
         if has_subject_orig:
             if is_use_merge_strategy:
                 if all_subject_orig_keywords:
-                    merged_value = '; '.join(sorted(all_subject_orig_keywords))
+                    unique_keywords = deduplicate_keywords(all_subject_orig_keywords)
+                    merged_value = '; '.join(sorted(unique_keywords))
                     df.loc[anchor_idx, 'subject_orig'] = merged_value
             else:
                 is_better_subject_orig_presented = best_subject_orig is not None
@@ -117,7 +121,8 @@ def enrich_anchor_using_duplicates(df, dupind, subject_strategy=STRATEGY_MERGE):
         if has_subject:
             if is_use_merge_strategy:
                 if all_subject_keywords:
-                    merged_value = '; '.join(sorted(all_subject_keywords))
+                    unique_keywords = deduplicate_keywords(all_subject_keywords)
+                    merged_value = '; '.join(sorted(unique_keywords))
                     df.loc[anchor_idx, 'subject'] = merged_value
             else:
                 is_better_subject_presented = best_subject is not None
@@ -133,3 +138,44 @@ def enrich_anchor_using_duplicates(df, dupind, subject_strategy=STRATEGY_MERGE):
                 df.loc[anchor_idx, 'paper_abstract'] = best_paper_abstract
 
     return df
+
+def deduplicate_keywords(keywords, similarity_threshold=KEYWORD_SIMILARITY_THRESHOLD):
+    """
+    Removes similar keywords from the list, leaving only unique.
+
+    Uses RapidFuzz for fuzzy string comparison. If two keywords
+    are similar more than threshold%, the longer variant is kept.
+
+    Examples of duplicates that will be recognized:
+        - "ME CFS", "ME/CFS", "ME-CFS"
+        - "chronic fatigue", "Chronic Fatigue"
+
+    Args:
+        keywords: Set or list of keywords
+        similarity_threshold: Threshold for similarity (0-100), above which words are considered duplicates
+
+    Returns:
+        List of unique keywords
+    """
+    if not keywords:
+        return []
+
+    keywords_list = list(keywords)
+    unique_keywords = []
+
+    for keyword in keywords_list:
+        is_duplicate = False
+
+        for i, existing in enumerate(unique_keywords):
+            similarity = fuzz.token_sort_ratio(keyword.lower(), existing.lower())
+
+            is_similar = similarity >= similarity_threshold
+            if is_similar:
+                is_duplicate = True
+                if len(keyword) > len(existing):
+                    unique_keywords[i] = keyword
+
+        if not is_duplicate:
+            unique_keywords.append(keyword)
+
+    return unique_keywords
