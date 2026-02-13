@@ -1,5 +1,6 @@
 import pandas as pd
 from rapidfuzz import fuzz
+from urllib.parse import urlparse
 
 STRATEGY_REPLACE = 'replace'
 STRATEGY_MERGE = 'merge'
@@ -25,6 +26,7 @@ def enrich_anchor_using_duplicates(df, dupind, subject_strategy=STRATEGY_MERGE):
         - subject: processed according to subject_strategy
         - paper_abstract: replaced with the longest description
         - oa_state: replaced with the highest priority status (yes > no > unknown)
+        - link: merged from all duplicates, duplicates links are removed (https > http)
 
     Args:
         df: DataFrame with metadata, containing the column is_anchor
@@ -40,8 +42,9 @@ def enrich_anchor_using_duplicates(df, dupind, subject_strategy=STRATEGY_MERGE):
     has_subject = 'subject' in df.columns
     has_paper_abstract = 'paper_abstract' in df.columns
     has_oa_state = 'oa_state' in df.columns
+    has_link = 'link' in df.columns
 
-    is_all_columns_are_missing = not has_subject_orig and not has_subject and not has_paper_abstract and not has_oa_state
+    is_all_columns_are_missing = not has_subject_orig and not has_subject and not has_paper_abstract and not has_oa_state and not has_link
     if is_all_columns_are_missing:
         return df
 
@@ -79,6 +82,8 @@ def enrich_anchor_using_duplicates(df, dupind, subject_strategy=STRATEGY_MERGE):
 
         best_oa_state = None
         best_oa_state_priority = float('inf')
+
+        all_links = set()
 
         for element_idx in idx:
             if has_subject_orig:
@@ -126,6 +131,13 @@ def enrich_anchor_using_duplicates(df, dupind, subject_strategy=STRATEGY_MERGE):
                         best_oa_state_priority = priority
                         best_oa_state = oa_state_value
 
+            if has_link:
+                link_value = group_data.loc[element_idx, 'link']
+                is_not_empty = not (pd.isna(link_value) or link_value == '')
+                if is_not_empty:
+                    links = [link.strip() for link in str(link_value).split(';') if link.strip()]
+                    all_links.update(links)
+
         if has_subject_orig:
             if is_use_merge_strategy:
                 if all_subject_orig_keywords:
@@ -163,6 +175,13 @@ def enrich_anchor_using_duplicates(df, dupind, subject_strategy=STRATEGY_MERGE):
             current = df.loc[anchor_idx, 'oa_state']
             if pd.isna(current) or str(current) != str(best_oa_state):
                 df.loc[anchor_idx, 'oa_state'] = best_oa_state
+
+        if has_link:
+            if all_links:
+                unique_links = deduplicate_links(all_links)
+                if unique_links:
+                    merged_links = '; '.join(sorted(unique_links))
+                    df.loc[anchor_idx, 'link'] = merged_links
 
     return df
 
@@ -206,3 +225,58 @@ def deduplicate_keywords(keywords, similarity_threshold=KEYWORD_SIMILARITY_THRES
             unique_keywords.append(keyword)
 
     return unique_keywords
+
+def deduplicate_links(links):
+    """
+    Removes duplicates links from the list, considering the difference in protocols.
+
+    If the same link appears with http and https, the https version is kept.
+    Other duplicates are also removed.
+
+    Args:
+        links: List or set of links
+
+    Returns:
+        List of unique links (https versions are preferred)
+    """
+    if not links:
+        return []
+
+    normalized_to_link = {}
+    invalid_urls = set()
+
+    for link in links:
+        link_str = str(link).strip()
+        if not link_str:
+            continue
+
+        try:
+            parsed = urlparse(link_str)
+            protocol = parsed.scheme.lower()
+
+            if not protocol:
+                if link_str.startswith('//'):
+                    link_str = 'http:' + link_str
+                    parsed = urlparse(link_str)
+                    protocol = parsed.scheme.lower()
+                else:
+                    invalid_urls.add(link_str)
+                    continue
+
+            normalized = f"{parsed.netloc}{parsed.path}{parsed.params}{parsed.query}{parsed.fragment}"
+
+            if normalized in normalized_to_link:
+                existing_link = normalized_to_link[normalized]
+                existing_protocol = urlparse(existing_link).scheme.lower()
+
+                if protocol == 'https' and existing_protocol == 'http':
+                    normalized_to_link[normalized] = link_str
+                elif protocol == 'http' and existing_protocol == 'https':
+                    continue
+            else:
+                normalized_to_link[normalized] = link_str
+        except Exception:
+            invalid_urls.add(link_str)
+
+    result = list(normalized_to_link.values()) + list(invalid_urls)
+    return result
