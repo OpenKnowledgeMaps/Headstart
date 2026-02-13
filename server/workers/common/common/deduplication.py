@@ -2,6 +2,8 @@ import re
 import numpy as np
 import pandas as pd
 import Levenshtein
+from rapidfuzz import fuzz
+from urllib.parse import urlparse
 
 pattern_doi = re.compile(r"\.v(\d)+$")
 
@@ -220,3 +222,99 @@ def get_provider_priority(provider):
         return 2
     else:
         return 0
+
+def deduplicate_keywords(keywords, similarity_threshold):
+    """
+    Removes similar keywords from the list, leaving only unique.
+
+    Uses RapidFuzz for fuzzy string comparison. If two keywords
+    are similar more than threshold%, the longer variant is kept.
+
+    Examples of duplicates that will be recognized:
+        - "ME CFS", "ME/CFS", "ME-CFS"
+        - "chronic fatigue", "Chronic Fatigue"
+
+    Args:
+        keywords: Set or list of keywords
+        similarity_threshold: Threshold for similarity (0-100), above which words are considered duplicates
+
+    Returns:
+        List of unique keywords
+    """
+    if not keywords:
+        return []
+
+    keywords_list = list(keywords)
+    unique_keywords = []
+
+    for keyword in keywords_list:
+        is_duplicate = False
+
+        for i, existing in enumerate(unique_keywords):
+            similarity = fuzz.token_sort_ratio(keyword.lower(), existing.lower())
+
+            is_similar = similarity >= similarity_threshold
+            if is_similar:
+                is_duplicate = True
+                if len(keyword) > len(existing):
+                    unique_keywords[i] = keyword
+
+        if not is_duplicate:
+            unique_keywords.append(keyword)
+
+    return unique_keywords
+
+def deduplicate_links(links):
+    """
+    Removes duplicates links from the list, considering the difference in protocols.
+
+    If the same link appears with http and https, the https version is kept.
+    Other duplicates are also removed.
+
+    Args:
+        links: List or set of links
+
+    Returns:
+        List of unique links (https versions are preferred)
+    """
+    if not links:
+        return []
+
+    normalized_to_link = {}
+    invalid_urls = set()
+
+    for link in links:
+        link_str = str(link).strip()
+        if not link_str:
+            continue
+
+        try:
+            parsed = urlparse(link_str)
+            protocol = parsed.scheme.lower()
+
+            if not protocol:
+                if link_str.startswith('//'):
+                    link_str = 'http:' + link_str
+                    parsed = urlparse(link_str)
+                    protocol = parsed.scheme.lower()
+                else:
+                    invalid_urls.add(link_str)
+                    continue
+
+            normalized = f"{parsed.netloc}{parsed.path}{parsed.params}{parsed.query}{parsed.fragment}"
+
+            if normalized in normalized_to_link:
+                existing_link = normalized_to_link[normalized]
+                existing_protocol = urlparse(existing_link).scheme.lower()
+
+                if protocol == 'https' and existing_protocol == 'http':
+                    normalized_to_link[normalized] = link_str
+                elif protocol == 'http' and existing_protocol == 'https':
+                    continue
+            else:
+                normalized_to_link[normalized] = link_str
+        except Exception:
+            invalid_urls.add(link_str)
+
+    result = list(normalized_to_link.values()) + list(invalid_urls)
+    return result
