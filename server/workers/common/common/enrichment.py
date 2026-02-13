@@ -1,5 +1,8 @@
+import os
 import pandas as pd
 from common.deduplication import deduplicate_keywords, deduplicate_links
+
+ENRICHMENT_STRATEGY_FOR_SUBJECT = os.getenv("ENRICHMENT_STRATEGY_FOR_SUBJECT")
 
 STRATEGY_REPLACE = 'replace'
 STRATEGY_MERGE = 'merge'
@@ -12,7 +15,7 @@ OA_STATE_PRIORITY = {
     "2": 2,  # unknown
 }
 
-def enrich_anchor_using_duplicates(df, dupind, subject_strategy=STRATEGY_MERGE):
+def enrich_anchor_using_duplicates(df, dupind, subject_strategy=ENRICHMENT_STRATEGY_FOR_SUBJECT):
     """
     Enriches anchor elements using data from duplicates in their groups.
 

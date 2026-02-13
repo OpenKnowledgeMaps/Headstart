@@ -161,6 +161,7 @@ services:
       RENV_PATHS_CACHE: /renv/cache
       PYTHONIOENCODING: "utf-8"
       R_BASE_APIKEY: "${R_BASE_APIKEY}"
+      ENRICHMENT_STRATEGY_FOR_SUBJECT: "${ENRICHMENT_STRATEGY_FOR_SUBJECT}"
     restart: unless-stopped
     volumes:
       - ./local_dev/renv/cache:/renv/cache
