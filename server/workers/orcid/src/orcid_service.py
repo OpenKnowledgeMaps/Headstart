@@ -148,8 +148,7 @@ class OrcidService:
 
     def request_base_metadata(self, dois: List[str], params: Dict[str, str]) -> pd.DataFrame:
         orcid = params.get('orcid')
-        
-        batch_size = 25
+        batch_size = 10
         batches = [dois[i:i + batch_size] for i in range(0, len(dois), batch_size)]
         base_metadata = pd.DataFrame(dtype=object)
 
@@ -202,9 +201,15 @@ class OrcidService:
 
             base_response: str = get_nested_value(result, ["input_data", "metadata"], '[]') # type: ignore
 
+            batch_df = pd.DataFrame(json.loads(base_response))
+            if len(batch_df) < len(batch):
+                self.logger.warning(
+                    f"BASE response shortfall: requested {len(batch)} DOIs, received {len(batch_df)} rows (limit or missing records?)"
+                )
+
             base_metadata = pd.concat([
-                base_metadata, 
-                pd.DataFrame(json.loads(base_response)        )
+                base_metadata,
+                batch_df
             ], ignore_index=True)
 
         timing_df = pd.DataFrame(timing_data)
@@ -214,10 +219,10 @@ class OrcidService:
         timing_df.to_csv(f'{folder}/stat_base_requests.csv', index=False)
 
         return base_metadata
-    
+
     def enrich_metadata_with_base(self, params: Dict[str, str], metadata: pd.DataFrame) -> pd.DataFrame:
         self.logger.debug(f"Enriching metadata with base for ORCID {params.get('orcid')}")
-        
+
         original_columns = metadata.columns.to_list()
         required_fields = ['id', 'identifier', 'relevance', 'relation', 'title', 'subtitle', 'doi', 
                        'paper_abstract', 'link', 'subject', 'oa_state', 'subject_orig', 'published_in', 
@@ -249,6 +254,15 @@ class OrcidService:
         self.logger.debug(f"Dois to search in base: {dois}")
 
         base_metadata = self.request_base_metadata(dois, params)
+        received = len(base_metadata)
+        requested = len(dois)
+        if received < requested:
+            self.logger.warning(
+                f"BASE enrichment shortfall: requested {requested} DOIs, received {received} rows ({requested - received} missing)"
+            )
+        else:
+            self.logger.debug(f"BASE response: {received} rows for {requested} requested DOIs")
+
         base_metadata = base_metadata.reindex(columns=required_fields)
         base_metadata.loc[:, 'doi'] = base_metadata['doi'].apply(remove_doi_prefix)
 
