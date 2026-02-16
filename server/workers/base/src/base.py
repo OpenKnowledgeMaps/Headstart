@@ -268,6 +268,7 @@ def filter_duplicates(df, service):
     df = remove_textual_duplicates_from_different_sources(df, dupind)
     df = add_false_negatives(df)
     df = mark_latest_doi(df, dupind)
+    df.loc[df[~df.is_duplicate].index, "is_anchor"] = True
 
     pure_datasets = df[df.typenorm == "7"]
     non_datasets = df.loc[df.index.difference(pure_datasets.index)]
