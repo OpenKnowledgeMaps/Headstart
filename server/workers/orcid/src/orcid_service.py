@@ -220,7 +220,7 @@ class OrcidService:
 
         return base_metadata
 
-    def _prepare_dois_for_base_query(self, dois: List[str]) -> List[str]:
+    def _prepare_dois_for_base_query(self, dois: List[str]) -> Tuple[List[str], Dict[str, List[str]]]:
         """
         Prepare DOI list for BASE query by adding lowercase variants for DOIs containing uppercase letters.
 
@@ -231,9 +231,10 @@ class OrcidService:
         - dois: List of original DOIs from ORCID
 
         Returns:
-        - List of DOIs including originals and lowercase variants (without duplicates)
+        - Tuple of (list of DOIs including originals and lowercase variants, mapping from lowercase DOI to original DOIs)
         """
-        self.logger.debug(f"Original DOIs from ORCID: {dois}") # TODO: remove after implementation and testing
+        # TODO: remove after implementation and testing
+        self.logger.debug(f"Original DOIs from ORCID: {dois}")
 
         dois_for_base_query = []
         doi_mapping = {}
@@ -249,15 +250,54 @@ class OrcidService:
                     doi_mapping[lowercase_doi] = []
 
                 doi_mapping[lowercase_doi].append(doi)
-                self.logger.debug(f"Added lowercase version for DOI: '{doi}' -> '{lowercase_doi}'") # TODO: remove after implementation and testing
+                # TODO: remove after implementation and testing
+                self.logger.debug(f"Added lowercase version for DOI: '{doi}' -> '{lowercase_doi}'")
 
         dois_for_base_query = list(dict.fromkeys(dois_for_base_query))
 
         # TODO: remove after implementation and testing
-        self.logger.info(f"DOIs to search in BASE (original + lowercase variants): {dois_for_base_query}")
-        self.logger.info(f"Total DOIs for BASE query: {len(dois_for_base_query)} (original: {len(dois)}, added lowercase variants: {len(dois_for_base_query) - len(dois)})")
+        self.logger.debug(f"DOIs to search in BASE (original + lowercase variants): {dois_for_base_query}")
+        self.logger.debug(f"Total DOIs for BASE query: {len(dois_for_base_query)} (original: {len(dois)}, added lowercase variants: {len(dois_for_base_query) - len(dois)})")
 
-        return dois_for_base_query
+        return dois_for_base_query, doi_mapping
+
+    def _normalize_base_results_to_original_dois(
+        self,
+        base_metadata: pd.DataFrame,
+        doi_mapping: Dict[str, List[str]]
+    ) -> pd.DataFrame:
+        """
+        Normalize DOI values in BASE results to match original DOIs from ORCID.
+
+        If BASE returns results with lowercase DOI variants, this function maps them back
+        to the original DOI format from ORCID to ensure proper merging.
+
+        Parameters:
+        - base_metadata: DataFrame with results from BASE
+        - doi_mapping: Mapping from lowercase DOI to list of original DOIs
+
+        Returns:
+        - DataFrame with normalized DOI values
+        """
+        if base_metadata.empty:
+            return base_metadata
+
+        def normalize_doi(doi_value):
+            if pd.isna(doi_value) or doi_value == '':
+                return doi_value
+
+            if doi_value in doi_mapping:
+                original_dois_for_variant = doi_mapping[doi_value]
+                # TODO: remove after implementation and testing
+                self.logger.debug(f"Normalized DOI from BASE: '{doi_value}' -> '{original_dois_for_variant}'")
+                return original_dois_for_variant[0]
+
+            return doi_value
+
+        base_metadata = base_metadata.copy()
+        base_metadata.loc[:, 'doi'] = base_metadata['doi'].apply(normalize_doi)
+
+        return base_metadata
 
     def enrich_metadata_with_base(self, params: Dict[str, str], metadata: pd.DataFrame) -> pd.DataFrame:
         self.logger.debug(f"Enriching metadata with base for ORCID {params.get('orcid')}")
@@ -290,7 +330,7 @@ class OrcidService:
         raw_dois = metadata["doi"].tolist()
         dois = [doi for doi in raw_dois if doi and pd.notna(doi)]
 
-        dois_for_base_query = self._prepare_dois_for_base_query(dois)
+        dois_for_base_query, doi_mapping = self._prepare_dois_for_base_query(dois)
 
         base_metadata = self.request_base_metadata(dois_for_base_query, params)
         received = len(base_metadata)
@@ -307,6 +347,9 @@ class OrcidService:
 
         # Remove rows where 'doi' is pd.NaN
         base_metadata = base_metadata[pd.notna(base_metadata['doi'])]
+
+        base_metadata = self._normalize_base_results_to_original_dois(base_metadata, doi_mapping)
+
         base_metadata = base_metadata[base_metadata['doi'].isin(dois)]
         base_metadata = base_metadata.drop_duplicates(subset='doi', keep='first')
 
