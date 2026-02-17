@@ -220,6 +220,45 @@ class OrcidService:
 
         return base_metadata
 
+    def _prepare_dois_for_base_query(self, dois: List[str]) -> List[str]:
+        """
+        Prepare DOI list for BASE query by adding lowercase variants for DOIs containing uppercase letters.
+
+        For each DOI that contains uppercase letters, this function adds a lowercase version
+        to ensure case-insensitive matching in BASE search.
+
+        Parameters:
+        - dois: List of original DOIs from ORCID
+
+        Returns:
+        - List of DOIs including originals and lowercase variants (without duplicates)
+        """
+        self.logger.debug(f"Original DOIs from ORCID: {dois}") # TODO: remove after implementation and testing
+
+        dois_for_base_query = []
+        doi_mapping = {}
+
+        for doi in dois:
+            dois_for_base_query.append(doi)
+
+            if doi != doi.lower():
+                lowercase_doi = doi.lower()
+                dois_for_base_query.append(lowercase_doi)
+
+                if lowercase_doi not in doi_mapping:
+                    doi_mapping[lowercase_doi] = []
+
+                doi_mapping[lowercase_doi].append(doi)
+                self.logger.debug(f"Added lowercase version for DOI: '{doi}' -> '{lowercase_doi}'") # TODO: remove after implementation and testing
+
+        dois_for_base_query = list(dict.fromkeys(dois_for_base_query))
+
+        # TODO: remove after implementation and testing
+        self.logger.info(f"DOIs to search in BASE (original + lowercase variants): {dois_for_base_query}")
+        self.logger.info(f"Total DOIs for BASE query: {len(dois_for_base_query)} (original: {len(dois)}, added lowercase variants: {len(dois_for_base_query) - len(dois)})")
+
+        return dois_for_base_query
+
     def enrich_metadata_with_base(self, params: Dict[str, str], metadata: pd.DataFrame) -> pd.DataFrame:
         self.logger.debug(f"Enriching metadata with base for ORCID {params.get('orcid')}")
 
@@ -251,9 +290,9 @@ class OrcidService:
         raw_dois = metadata["doi"].tolist()
         dois = [doi for doi in raw_dois if doi and pd.notna(doi)]
 
-        self.logger.debug(f"Dois to search in base: {dois}")
+        dois_for_base_query = self._prepare_dois_for_base_query(dois)
 
-        base_metadata = self.request_base_metadata(dois, params)
+        base_metadata = self.request_base_metadata(dois_for_base_query, params)
         received = len(base_metadata)
         requested = len(dois)
         if received < requested:
