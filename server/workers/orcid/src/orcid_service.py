@@ -173,7 +173,6 @@ class OrcidService:
                     'min_descsize': '0', 
                     'from': '1665-01-01', 
                     'to': datetime.now().strftime('%Y-%m-%d'),
-                    # ? is that a good idea to pass here empty query?
                     'q': '', 
                     'today': datetime.now().strftime('%Y-%m-%d'),
                     'unique_id': request_id, 
@@ -400,6 +399,7 @@ class OrcidService:
                        'relations', 'annotations', 'repo', 'source', 'volume', 'issue', 'page', 'issn', 
                        'citation_count', 'cited_by_wikipedia_count', 'cited_by_msm_count', 'cited_by_policies_count', 
                        'cited_by_patents_count', 'cited_by_accounts_count', 'cited_by_fbwalls_count',
+                       'merged_dois',
                         'cited_by_feeds_count',
                         'cited_by_gplus_count',
                         'cited_by_rdts_count',
@@ -421,7 +421,6 @@ class OrcidService:
         dois = [doi for doi in raw_dois if doi and pd.notna(doi)]
 
         dois_for_base_query, doi_mapping = self._prepare_dois_for_base_query(dois)
-
         base_metadata = self.request_base_metadata(dois_for_base_query, params)
         # dataframe
         # paper, doi= "10.17169/refubium-48053; 10.1371/journal.pone.0311918"
@@ -434,7 +433,12 @@ class OrcidService:
 
         base_metadata = base_metadata.reindex(columns=required_fields)
 
-        base_metadata = self._explode_merged_dois(base_metadata)
+        #base_metadata = self._explode_merged_dois(base_metadata)
+        base_metadata = base_metadata.explode('merged_dois', ignore_index=True) if 'merged_dois' in base_metadata.columns else base_metadata
+        # replace doi with merged_dois if merged_dois is not empty, otherwise keep doi
+        if 'merged_dois' in base_metadata.columns:
+            base_metadata.loc[base_metadata['merged_dois'].notna() & (base_metadata['merged_dois'] != ''), 'doi'] = base_metadata.loc[base_metadata['merged_dois'].notna() & (base_metadata['merged_dois'] != ''), 'merged_dois']
+        base_metadata.loc[:, 'doi'] = base_metadata['doi'].apply(remove_doi_prefix)
 
         # Remove rows where 'doi' is pd.NaN
         base_metadata = base_metadata[pd.notna(base_metadata['doi'])]
@@ -444,10 +448,6 @@ class OrcidService:
 
         base_metadata = base_metadata[base_metadata['doi'].isin(dois)]
         base_metadata = base_metadata.drop_duplicates(subset='doi', keep='first')
-
-        # TEMPORAL
-        # self.log_dataframe(base_metadata, params, '_base')
-        # TEMPORAL
 
         # Select and rename relevant fields from base_metadata, including subject_orig
         fields_to_merge = {
@@ -476,7 +476,8 @@ class OrcidService:
 
         def custom_merge_link_oa_state(row):
             existing_link, existing_oa_state = row['link'], row['oa_state']
-            new_link, new_oa_state = row.get('link_base', None), row.get('oa_state_base', None)
+            new_link, oa_state_base = row.get('link_base', None), row.get('oa_state_base', None)
+            new_oa_state = "1" if oa_state_base == "1" else existing_oa_state  # If BASE indicates OA, set oa_state to 1, otherwise keep original
             if pd.isna(existing_link) and pd.notna(new_link):
                 return new_link, new_oa_state
             return existing_link, existing_oa_state
