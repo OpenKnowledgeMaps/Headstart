@@ -300,6 +300,61 @@ class OrcidService:
 
         return base_metadata
 
+    def _explode_merged_dois(self, base_metadata: pd.DataFrame) -> pd.DataFrame:
+        """
+        Explode merged_dois field to create separate rows for each DOI variant.
+
+        If base_metadata contains a 'merged_dois' field with multiple DOIs separated by '; ',
+        this function creates separate rows for each DOI, allowing matching with ORCID metadata
+        by any of those DOIs.
+
+        Parameters:
+        - base_metadata: DataFrame with BASE metadata, potentially containing 'merged_dois' field
+
+        Returns:
+        - DataFrame with exploded rows where each row has a single DOI in the 'doi' column
+        """
+        # Process merged_dois: explode to create separate rows for each DOI variant
+        # This allows us to match BASE records with multiple DOIs to ORCID records by any of those DOIs
+        if 'merged_dois' in base_metadata.columns:
+            # Split merged_dois by "; " and create a list of DOIs for each row
+            base_metadata['merged_dois_list'] = base_metadata['merged_dois'].apply(
+                lambda x: [remove_doi_prefix(doi.strip()) for doi in str(x).split('; ') if doi.strip()] 
+                if pd.notna(x) and str(x).strip() else []
+            )
+
+            # Separate rows with merged_dois and without
+            rows_with_merged_dois = base_metadata[base_metadata['merged_dois_list'].apply(lambda x: len(x) > 0)]
+            rows_without_merged_dois = base_metadata[base_metadata['merged_dois_list'].apply(lambda x: len(x) == 0)]
+
+            # Explode rows with merged_dois to create separate rows for each DOI variant
+            # This creates multiple rows with identical metadata except for the DOI
+            if len(rows_with_merged_dois) > 0:
+                base_metadata_exploded = rows_with_merged_dois.explode('merged_dois_list', ignore_index=True)
+
+                # Use merged_dois_list as the DOI for merging
+                base_metadata_exploded['doi'] = base_metadata_exploded['merged_dois_list']
+
+                # Drop temporary column
+                base_metadata_exploded = base_metadata_exploded.drop(columns=['merged_dois_list'])
+
+                # Process regular doi column for rows without merged_dois
+                if len(rows_without_merged_dois) > 0:
+                    rows_without_merged_dois = rows_without_merged_dois.drop(columns=['merged_dois_list'])
+                    rows_without_merged_dois.loc[:, 'doi'] = rows_without_merged_dois['doi'].apply(remove_doi_prefix)
+                    base_metadata = pd.concat([base_metadata_exploded, rows_without_merged_dois], ignore_index=True)
+                else:
+                    base_metadata = base_metadata_exploded
+            else:
+                # No rows with merged_dois, process regular doi column
+                base_metadata = rows_without_merged_dois.drop(columns=['merged_dois_list'])
+                base_metadata.loc[:, 'doi'] = base_metadata['doi'].apply(remove_doi_prefix)
+        else:
+            # No merged_dois column, process regular doi column
+            base_metadata.loc[:, 'doi'] = base_metadata['doi'].apply(remove_doi_prefix)
+
+        return base_metadata
+
     def enrich_metadata_with_base(self, params: Dict[str, str], metadata: pd.DataFrame) -> pd.DataFrame:
         self.logger.debug(f"Enriching metadata with base for ORCID {params.get('orcid')}")
 
@@ -342,17 +397,10 @@ class OrcidService:
         # paper identical metadata except doi 1: "10.17169/refubium-48053"
         # paper identical metadata except doi 2: "10.1371/journal.pone.0311918"
         # after that we can apply the merge, but for the base_metadata is has to use the doi_merge field, not doi
-        received = len(base_metadata)
-        requested = len(dois)
-        if received < requested:
-            self.logger.warning(
-                f"BASE enrichment shortfall: requested {requested} DOIs, received {received} rows ({requested - received} missing)"
-            )
-        else:
-            self.logger.debug(f"BASE response: {received} rows for {requested} requested DOIs")
 
         base_metadata = base_metadata.reindex(columns=required_fields)
-        base_metadata.loc[:, 'doi'] = base_metadata['doi'].apply(remove_doi_prefix)
+
+        base_metadata = self._explode_merged_dois(base_metadata)
 
         # Remove rows where 'doi' is pd.NaN
         base_metadata = base_metadata[pd.notna(base_metadata['doi'])]
