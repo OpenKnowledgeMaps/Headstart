@@ -334,6 +334,14 @@ class OrcidService:
         dois_for_base_query, doi_mapping = self._prepare_dois_for_base_query(dois)
 
         base_metadata = self.request_base_metadata(dois_for_base_query, params)
+        # dataframe
+        # paper, doi= "10.17169/refubium-48053; 10.1371/journal.pone.0311918"
+        # 1. step: split on "; " -> ["10.17169/refubium-48053", "10.1371/journal.pone.0311918"]
+        # use pandas explode to create new rows for each DOI variant,
+        # then we can merge on the 'doi' column with the original metadata
+        # paper identical metadata except doi 1: "10.17169/refubium-48053"
+        # paper identical metadata except doi 2: "10.1371/journal.pone.0311918"
+        # after that we can apply the merge, but for the base_metadata is has to use the doi_merge field, not doi
         received = len(base_metadata)
         requested = len(dois)
         if received < requested:

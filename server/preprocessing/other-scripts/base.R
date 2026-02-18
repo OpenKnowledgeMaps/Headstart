@@ -275,9 +275,10 @@ etl <- function(res, repo, non_public) {
   metadata$relevance = c(nrow(metadata):1)
   metadata$resulttype = lapply(res$dctypenorm, decode_dctypenorm)
   metadata$type = check_metadata(res$dctype)
-  metadata$typenorm = check_metadata(res$dctypenorm)
-  metadata$doi = check_metadata(res$dcdoi)
-  metadata$doi = check_metadata(lapply(metadata$doi, clean_doi_keep_first))
+  metadata$typenorm = check_metadata(res$dctypenorm) 
+  metadata$doi = unlist(lapply(metadata$link, find_dois))
+  metadata$doi_merge = check_metadata(res$dcdoi) 
+  metadata$doi_merge = check_metadata(lapply(metadata$doi_merge, prepare_dois)) # "10.17169/refubium-48053; 10.1371/journal.pone.0311918"
   metadata$lang = check_metadata(res$dclang)
   metadata$language = check_metadata(res$dclanguage)
   metadata$content_provider = check_metadata(res$dcprovider)
@@ -351,10 +352,14 @@ find_dois <- function(link) {
   return(doi)
 }
 
-clean_doi_keep_first <- function(doi_string) {
+prepare_dois <- function(doi_string) {
+  # TODO: Check if it returns "https://doi.org/10.17169/refubium-48053; https://doi.org/10.1371/journal.pone.0311918"
   dois <- strsplit(doi_string, ";")[[1]]
-  result <- trimws(dois[1])
-  return(result)
+  dois <- trimws(dois)
+  dois <- dois[!is.na(dois) & nchar(dois) > 0]
+  if (length(dois) == 0) return("")
+  result <- paste0("https://doi.org/", dois)
+  return(paste(result, collapse = "; "))
 }
 
 
