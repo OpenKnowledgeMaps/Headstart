@@ -434,10 +434,12 @@ class OrcidService:
         base_metadata = base_metadata.reindex(columns=required_fields)
 
         #base_metadata = self._explode_merged_dois(base_metadata)
-        base_metadata = base_metadata.explode('merged_dois', ignore_index=True) if 'merged_dois' in base_metadata.columns else base_metadata
+        base_metadata['merged_dois'] = base_metadata['merged_dois'].apply(lambda x: x[0] if isinstance(x, list) and len(x) > 0 else x)
+        base_metadata['merged_dois'] = base_metadata['merged_dois'].apply(lambda x: x.split(';') if isinstance(x, str) else [])
+        base_metadata['merged_dois'] = base_metadata['merged_dois'].apply(lambda x: [x.strip() for x in x] if isinstance(x, list) else x)
+        base_metadata = base_metadata.explode('merged_dois', ignore_index=True)
         # replace doi with merged_dois if merged_dois is not empty, otherwise keep doi
-        if 'merged_dois' in base_metadata.columns:
-            base_metadata.loc[base_metadata['merged_dois'].notna() & (base_metadata['merged_dois'] != ''), 'doi'] = base_metadata.loc[base_metadata['merged_dois'].notna() & (base_metadata['merged_dois'] != ''), 'merged_dois']
+        base_metadata.loc[base_metadata['merged_dois'].notna() & (base_metadata['merged_dois'] != ''), 'doi'] = base_metadata.loc[base_metadata['merged_dois'].notna() & (base_metadata['merged_dois'] != ''), 'merged_dois']
         base_metadata.loc[:, 'doi'] = base_metadata['doi'].apply(remove_doi_prefix)
 
         # Remove rows where 'doi' is pd.NaN
