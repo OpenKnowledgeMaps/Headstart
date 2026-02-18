@@ -277,6 +277,7 @@ etl <- function(res, repo, non_public) {
   metadata$type = check_metadata(res$dctype)
   metadata$typenorm = check_metadata(res$dctypenorm)
   metadata$doi = check_metadata(res$dcdoi)
+  metadata$doi = check_metadata(lapply(metadata$doi, clean_doi_keep_first))
   metadata$lang = check_metadata(res$dclang)
   metadata$language = check_metadata(res$dclanguage)
   metadata$content_provider = check_metadata(res$dcprovider)
@@ -348,6 +349,12 @@ find_dois <- function(link) {
     doi <- ""
   }
   return(doi)
+}
+
+clean_doi_keep_first <- function(doi_string) {
+  dois <- strsplit(doi_string, ";")[[1]]
+  result <- trimws(dois[1])
+  return(result)
 }
 
 

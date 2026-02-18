@@ -175,11 +175,11 @@ class OrcidService:
                     # ? is that a good idea to pass here empty query?
                     'q': '', 
                     'today': datetime.now().strftime('%Y-%m-%d'),
-                    'unique_id': 'abf2625e2d84eb4367fb443e2cb6f4a1', 
+                    'unique_id': request_id, 
                     'service': 'base', 
                     'original_service': 'orcid',
                     'embed': 'false', 
-                    'vis_id': 'abf2625e2d84eb4367fb443e2cb6f4a1', 
+                    'vis_id': request_id, 
                     'limit': 360,
                     'list_size': 360,
                     'deduplicate_base': 'false',
