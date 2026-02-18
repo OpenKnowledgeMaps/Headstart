@@ -277,8 +277,8 @@ etl <- function(res, repo, non_public) {
   metadata$type = check_metadata(res$dctype)
   metadata$typenorm = check_metadata(res$dctypenorm) 
   metadata$doi = unlist(lapply(metadata$link, find_dois))
-  metadata$doi_merge = check_metadata(res$dcdoi) 
-  metadata$doi_merge = check_metadata(lapply(metadata$doi_merge, prepare_dois)) # "10.17169/refubium-48053; 10.1371/journal.pone.0311918"
+  metadata$merged_dois = check_metadata(res$dcdoi) 
+  metadata$merged_dois = check_metadata(lapply(metadata$merged_dois, normalize_dois))
   metadata$lang = check_metadata(res$dclang)
   metadata$language = check_metadata(res$dclanguage)
   metadata$content_provider = check_metadata(res$dcprovider)
@@ -352,14 +352,20 @@ find_dois <- function(link) {
   return(doi)
 }
 
-prepare_dois <- function(doi_string) {
-  # TODO: Check if it returns "https://doi.org/10.17169/refubium-48053; https://doi.org/10.1371/journal.pone.0311918"
+normalize_dois <- function(doi_string) {
   dois <- strsplit(doi_string, ";")[[1]]
   dois <- trimws(dois)
   dois <- dois[!is.na(dois) & nchar(dois) > 0]
-  if (length(dois) == 0) return("")
-  result <- paste0("https://doi.org/", dois)
-  return(paste(result, collapse = "; "))
+
+  if (length(dois) == 0) {
+    return("")
+  }
+
+  dois_cleaned <- gsub("^https?://(dx\\.)?doi\\.org/", "", dois, ignore.case = TRUE)
+  result <- paste0("https://doi.org/", dois_cleaned)
+  final_result <- paste(result, collapse = "; ")
+
+  return(final_result)
 }
 
 
