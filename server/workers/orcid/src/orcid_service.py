@@ -1,4 +1,5 @@
 import logging
+import re
 import json
 import pandas as pd
 import os
@@ -234,9 +235,6 @@ class OrcidService:
         Returns:
         - Tuple of (list of DOIs including originals and lowercase variants, mapping from lowercase DOI to original DOIs)
         """
-        # TODO: remove after implementation and testing
-        self.logger.debug(f"Original DOIs from ORCID: {dois}")
-
         dois_for_base_query = []
         doi_mapping = {}
 
@@ -251,14 +249,8 @@ class OrcidService:
                     doi_mapping[lowercase_doi] = []
 
                 doi_mapping[lowercase_doi].append(doi)
-                # TODO: remove after implementation and testing
-                self.logger.debug(f"Added lowercase version for DOI: '{doi}' -> '{lowercase_doi}'")
 
         dois_for_base_query = list(dict.fromkeys(dois_for_base_query))
-
-        # TODO: remove after implementation and testing
-        self.logger.debug(f"DOIs to search in BASE (original + lowercase variants): {dois_for_base_query}")
-        self.logger.debug(f"Total DOIs for BASE query: {len(dois_for_base_query)} (original: {len(dois)}, added lowercase variants: {len(dois_for_base_query) - len(dois)})")
 
         return dois_for_base_query, doi_mapping
 
@@ -289,14 +281,67 @@ class OrcidService:
 
             if doi_value in doi_mapping:
                 original_dois_for_variant = doi_mapping[doi_value]
-                # TODO: remove after implementation and testing
-                self.logger.debug(f"Normalized DOI from BASE: '{doi_value}' -> '{original_dois_for_variant}'")
                 return original_dois_for_variant[0]
 
             return doi_value
 
         base_metadata = base_metadata.copy()
         base_metadata.loc[:, 'doi'] = base_metadata['doi'].apply(normalize_doi)
+
+        return base_metadata
+
+    def _match_dois_by_version(
+        self,
+        base_metadata: pd.DataFrame,
+        original_dois: List[str],
+    ) -> pd.DataFrame:
+        """
+        Match BASE results that have versioned DOIs (e.g. .v1, .v2) to original DOIs without version.
+
+        If BASE returned a DOI with a version suffix but the original ORCID DOI is without version,
+        this function updates the base_metadata 'doi' column so that those rows match the original
+        DOI for merging.
+
+        Parameters:
+        - base_metadata: DataFrame with 'doi' column (after explode and normalize)
+        - original_dois: List of original DOIs from ORCID
+
+        Returns:
+        - DataFrame with 'doi' updated where versioned variants were matched to original DOIs
+        """
+        pattern_doi_version = re.compile(r"\.v(\d)+$")
+
+        def get_unversioned_doi(doi_str):
+            if pd.isna(doi_str) or doi_str == '':
+                return None
+            return pattern_doi_version.sub("", str(doi_str))
+
+        dois_received = base_metadata['doi'].unique().tolist()
+        base_unversioned_to_versioned = {}
+        for doi_from_base in dois_received:
+            unversioned = get_unversioned_doi(doi_from_base)
+            if unversioned and unversioned != doi_from_base:
+                if unversioned not in base_unversioned_to_versioned:
+                    base_unversioned_to_versioned[unversioned] = []
+                base_unversioned_to_versioned[unversioned].append(doi_from_base)
+
+        dois_lost = [doi for doi in original_dois if doi not in dois_received]
+        dois_lost_with_versions = []
+        for lost_doi in dois_lost:
+            unversioned_lost = get_unversioned_doi(lost_doi)
+            if unversioned_lost in base_unversioned_to_versioned:
+                dois_lost_with_versions.append({
+                    'original': lost_doi,
+                    'versioned_variants_found': base_unversioned_to_versioned[unversioned_lost],
+                })
+
+        base_metadata = base_metadata.copy()
+        for lost_doi_info in dois_lost_with_versions:
+            original_doi = lost_doi_info['original']
+            versioned_variants = lost_doi_info['versioned_variants_found']
+            versioned_mask = base_metadata['doi'].isin(versioned_variants)
+            if versioned_mask.any():
+                base_metadata.loc[versioned_mask, 'doi'] = original_doi
 
         return base_metadata
 
@@ -395,6 +440,7 @@ class OrcidService:
         base_metadata = base_metadata[pd.notna(base_metadata['doi'])]
 
         base_metadata = self._normalize_base_results_to_original_dois(base_metadata, doi_mapping)
+        base_metadata = self._match_dois_by_version(base_metadata, dois)
 
         base_metadata = base_metadata[base_metadata['doi'].isin(dois)]
         base_metadata = base_metadata.drop_duplicates(subset='doi', keep='first')
@@ -448,8 +494,6 @@ class OrcidService:
             lambda row: custom_merge(row['relation'], row['relation_base']), axis=1
         )
 
-        self.logger.debug('assigned some fields')
-
         # Apply custom logic for link and oa_state and assign results
         link_oa_state_values = enriched_metadata.apply(custom_merge_link_oa_state, axis=1)
         enriched_metadata['link'], enriched_metadata['oa_state'] = zip(*link_oa_state_values)
@@ -459,8 +503,6 @@ class OrcidService:
         # TEMPORAL
         #self.log_dataframe(enriched_metadata, params, '_enriched')
         # TEMPORAL
-
-        self.logger.debug(f"Enriched metadata using base for ORCID {params.get('orcid')}: {enriched_metadata[['id', 'link', 'oa_state']].head()}")
 
         # temporal solution, for some reason if we have some undefined data, dataprocessing is failing
         enriched_metadata = enriched_metadata.reindex(columns=list(set(original_columns + ['oa_state', 'subject', 'subject_orig', 'paper_abstract', 'link', 'relation'])))
