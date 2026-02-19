@@ -149,7 +149,7 @@ class OrcidService:
 
     def request_base_metadata(self, dois: List[str], params: Dict[str, str]) -> pd.DataFrame:
         orcid = params.get('orcid')
-        batch_size = 10
+        batch_size = 25
         batches = [dois[i:i + batch_size] for i in range(0, len(dois), batch_size)]
         base_metadata = pd.DataFrame(dtype=object)
 
@@ -157,7 +157,7 @@ class OrcidService:
 
         for batch in batches:
             start_time = time.time()
-            q_advanced = " OR ".join([f"dcdoi:{doi}" for doi in batch if doi])
+            q_advanced = " OR ".join([f"dcdoi:{str(doi).lower()}" for doi in batch if doi])
 
             request_id = str(uuid.uuid4())
 
@@ -202,15 +202,9 @@ class OrcidService:
 
             base_response: str = get_nested_value(result, ["input_data", "metadata"], '[]') # type: ignore
 
-            batch_df = pd.DataFrame(json.loads(base_response))
-            if len(batch_df) < len(batch):
-                self.logger.warning(
-                    f"BASE response shortfall: requested {len(batch)} DOIs, received {len(batch_df)} rows (limit or missing records?)"
-                )
-
             base_metadata = pd.concat([
                 base_metadata,
-                batch_df
+                pd.DataFrame(json.loads(base_response))
             ], ignore_index=True)
 
         timing_df = pd.DataFrame(timing_data)
@@ -418,7 +412,7 @@ class OrcidService:
         # TEMPORAL
 
         raw_dois = metadata["doi"].tolist()
-        dois = [doi for doi in raw_dois if doi and pd.notna(doi)]
+        dois = [str(doi).lower() for doi in raw_dois if doi and pd.notna(doi)]
 
         dois_for_base_query, doi_mapping = self._prepare_dois_for_base_query(dois)
         base_metadata = self.request_base_metadata(dois_for_base_query, params)
@@ -441,6 +435,9 @@ class OrcidService:
         # replace doi with merged_dois if merged_dois is not empty, otherwise keep doi
         base_metadata.loc[base_metadata['merged_dois'].notna() & (base_metadata['merged_dois'] != ''), 'doi'] = base_metadata.loc[base_metadata['merged_dois'].notna() & (base_metadata['merged_dois'] != ''), 'merged_dois']
         base_metadata.loc[:, 'doi'] = base_metadata['doi'].apply(remove_doi_prefix)
+        base_metadata.loc[:, 'doi'] = base_metadata['doi'].apply(
+            lambda x: str(x).lower() if pd.notna(x) and x else x
+        )
 
         # Remove rows where 'doi' is pd.NaN
         base_metadata = base_metadata[pd.notna(base_metadata['doi'])]
@@ -464,13 +461,18 @@ class OrcidService:
         # Rename base metadata columns to avoid conflicts with original metadata
         base_metadata = base_metadata.rename(columns=fields_to_merge)
 
-        # Merge base metadata into the original metadata
+        metadata['_doi_lower'] = metadata['doi'].apply(
+            lambda x: str(x).lower() if pd.notna(x) and x else x
+        )
         enriched_metadata = pd.merge(
             metadata,
-            base_metadata[['doi'] + list(fields_to_merge.values())],  # Use renamed columns from base_metadata
-            on='doi',
-            how='left'
+            base_metadata[['doi'] + list(fields_to_merge.values())],
+            left_on='_doi_lower',
+            right_on='doi',
+            how='left',
+            suffixes=('', '_base')
         )
+        enriched_metadata = enriched_metadata.drop(columns=['_doi_lower', 'doi_base'], errors='ignore')
 
         # Custom merging functions
         def custom_merge(existing_value, new_value):
