@@ -186,7 +186,8 @@ class OrcidService:
                     'limit': 360,
                     'list_size': 360,
                     'deduplicate_base': 'false',
-                    'exclude_date_filters': 'true'
+                    'exclude_date_filters': 'true',
+                    'q_advanced_only': 'true'
                 },
                 "endpoint": "search"
             }
@@ -382,6 +383,9 @@ class OrcidService:
         self.logger.debug(f"Prepared DOIs for BASE query: {dois_for_base_query}")
         self.logger.debug(f"DOI mapping for normalization: {doi_mapping}")
         base_metadata = self.request_base_metadata(dois_for_base_query, params)
+
+        if self.logger.isEnabledFor(logging.DEBUG):
+            self._log_dataframe(base_metadata, params, 'base_metadata_raw')
 
         # dataframe
         # paper, doi= "10.17169/refubium-48053; 10.1371/journal.pone.0311918"
