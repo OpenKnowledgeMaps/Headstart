@@ -152,7 +152,7 @@ class OrcidService:
 
     def request_base_metadata(self, dois: List[str], params: Dict[str, str]) -> pd.DataFrame:
         orcid = params.get('orcid')
-        batch_size = 25
+        batch_size = 15
         batches = [dois[i:i + batch_size] for i in range(0, len(dois), batch_size)]
         base_metadata = pd.DataFrame(dtype=object)
 
@@ -376,6 +376,8 @@ class OrcidService:
         dois = [str(doi).lower() for doi in raw_dois if doi and pd.notna(doi)]
 
         dois_for_base_query, doi_mapping = self._prepare_dois_for_base_query(dois)
+        self.logger.debug(f"Prepared DOIs for BASE query: {dois_for_base_query}")
+        self.logger.debug(f"DOI mapping for normalization: {doi_mapping}")
         base_metadata = self.request_base_metadata(dois_for_base_query, params)
 
         # dataframe
