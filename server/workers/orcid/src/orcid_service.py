@@ -203,10 +203,7 @@ class OrcidService:
             base_response: str = get_nested_value(result, ["input_data", "metadata"], '[]') # type: ignore
 
             batch_df = pd.DataFrame(json.loads(base_response))
-            if len(batch_df) < len(batch):
-                self.logger.warning(
-                    f"BASE response shortfall: requested {len(batch)} DOIs, received {len(batch_df)} rows (limit or missing records?)"
-                )
+            self._log_is_base_response_missing_dois(batch, batch_df)
 
             base_metadata = pd.concat([
                 base_metadata,
@@ -680,3 +677,10 @@ class OrcidService:
         self.logger.debug(f"Error processing ORCID: {exception}. Params: {params}")
         self.logger.debug(exception.__traceback__)
         return {"status": "error", "reason": [reason]}
+
+    def _log_is_base_response_missing_dois(self, batch: List[str], batch_df: pd.DataFrame):
+        is_some_dois_missing = len(batch_df) < len(batch)
+        if is_some_dois_missing:
+            self.logger.debug(
+                f"BASE response statistics: requested {len(batch)} DOIs, received {len(batch_df)} rows"
+            )
