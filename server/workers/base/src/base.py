@@ -274,16 +274,15 @@ def filter_duplicates(df, service):
     non_datasets = df.loc[df.index.difference(pure_datasets.index)]
 
     non_datasets = prioritize_OA_and_latest(non_datasets, dupind)
-    if service == "orcid":
-        non_datasets = prioritize_doi_and_provider(non_datasets, dupind)
+
+    non_datasets = prioritize_doi_and_provider(non_datasets, dupind)
     pure_datasets = mark_latest_doi(pure_datasets, dupind)
 
     pure_datasets_condition_mask = (pure_datasets.is_anchor == True) | (pure_datasets.is_duplicate == False)
     pure_datasets.loc[pure_datasets_condition_mask, "is_anchor"] = True
 
-    if service == "orcid":
-        non_datasets = enrich_anchor_using_duplicates(non_datasets, dupind)
-        pure_datasets = enrich_anchor_using_duplicates(pure_datasets, dupind)
+    non_datasets = enrich_anchor_using_duplicates(non_datasets, dupind)
+    pure_datasets = enrich_anchor_using_duplicates(pure_datasets, dupind)
 
     filtered_non_datasets = non_datasets[non_datasets.is_anchor == True]
     filtered_datasets = pure_datasets[pure_datasets.is_anchor == True]
