@@ -421,7 +421,7 @@ class OrcidService:
         
         # run only if loglevel is debug, otherwise it is too expensive and we don't want it on production
         if self.logger.isEnabledFor(logging.DEBUG):
-            self._log_dataframe(metadata, params, '_original')
+            self._log_dataframe(metadata.sort_values(by='title'), params, '_original')
 
         raw_dois = metadata["doi"].tolist()
         dois = [doi for doi in raw_dois if doi and pd.notna(doi)]
@@ -430,8 +430,7 @@ class OrcidService:
         base_metadata = self.request_base_metadata(dois_for_base_query, params)
 
         if self.logger.isEnabledFor(logging.DEBUG):
-            self._log_dataframe(base_metadata, params, 'base_metadata_raw')
-
+            self._log_dataframe(base_metadata.sort_values(by='title'), params, 'base_metadata_raw')
         # dataframe
         # paper, doi= "10.17169/refubium-48053; 10.1371/journal.pone.0311918"
         # 1. step: split on "; " -> ["10.17169/refubium-48053", "10.1371/journal.pone.0311918"]
@@ -459,14 +458,9 @@ class OrcidService:
         base_metadata = self._match_dois_by_version(base_metadata, dois)
 
         base_metadata = base_metadata[base_metadata['doi'].isin(dois)]
-        # Sort by oa_state priority (1=open > 0=restricted > 2=unknown) so the
-        # most open record is kept when deduplicating by DOI.
-        oa_state_order = {1: 0, 0: 1, 2: 2}
-        base_metadata = base_metadata.assign(
-            _oa_sort=base_metadata['oa_state'].map(oa_state_order)
-        ).sort_values(by='_oa_sort').drop_duplicates(subset='doi', keep='first').drop(columns='_oa_sort')
+        base_metadata = base_metadata.drop_duplicates(subset='doi', keep='first')
         if self.logger.isEnabledFor(logging.DEBUG):
-            self._log_dataframe(base_metadata, params, 'base_metadata')
+            self._log_dataframe(base_metadata.sort_values(by='title'), params, 'base_metadata')
 
         # Select and rename relevant fields from base_metadata, including subject_orig
         fields_to_merge = {
@@ -519,7 +513,7 @@ class OrcidService:
         enriched_metadata.drop(columns=['paper_abstract_base', 'subject_orig_base', 'subject_base', 'oa_state_base', 'link_base', 'relation_base'], inplace=True)
         
         if self.logger.isEnabledFor(logging.DEBUG):
-            self._log_dataframe(enriched_metadata, params, '_enriched')
+            self._log_dataframe(enriched_metadata.sort_values(by='title'), params, '_enriched')
 
         # temporal solution, for some reason if we have some undefined data, dataprocessing is failing
         enriched_metadata = enriched_metadata.reindex(columns=list(set(original_columns + ['oa_state', 'subject', 'subject_orig', 'paper_abstract', 'link', 'relation'])))
