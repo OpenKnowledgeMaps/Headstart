@@ -204,8 +204,8 @@ class OrcidService:
             })
 
             base_response: str = get_nested_value(result, ["input_data", "metadata"], '[]') # type: ignore
-
             batch_df = pd.DataFrame(json.loads(base_response))
+            self._log_is_base_response_missing_dois(batch, batch_df)
             if len(batch_df) < len(batch):
                 self.logger.warning(
                     f"BASE response shortfall: requested {len(batch)} DOIs, received {len(batch_df)} rows (limit or missing records?)"
