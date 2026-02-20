@@ -223,6 +223,7 @@ class OrcidService:
                 os.makedirs(folder)
             timing_df.to_csv(f'{folder}/stat_base_requests.csv', index=False)
 
+        base_metadata["oa_state"] = base_metadata["oa_state"].fillna("2").astype(int)
         return base_metadata
 
     def _prepare_dois_for_base_query(self, dois: List[str]) -> Tuple[List[str], Dict[str, List[str]]]:
@@ -458,8 +459,9 @@ class OrcidService:
         base_metadata = self._match_dois_by_version(base_metadata, dois)
 
         base_metadata = base_metadata[base_metadata['doi'].isin(dois)]
-
-        base_metadata = base_metadata.drop_duplicates(subset='doi', keep='first')
+        # Sort ascending so oa_state=1 (open access) rows come before oa_state=2,
+        # ensuring the most open record is kept when deduplicating by DOI.
+        base_metadata = base_metadata.sort_values(by='oa_state', ascending=True).drop_duplicates(subset='doi', keep='first')
         if self.logger.isEnabledFor(logging.DEBUG):
             self._log_dataframe(base_metadata, params, 'base_metadata')
 
