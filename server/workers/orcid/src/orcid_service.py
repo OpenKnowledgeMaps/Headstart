@@ -485,9 +485,6 @@ class OrcidService:
             base_metadata[['doi'] + list(fields_to_merge.values())],  # Use renamed columns from base_metadata
             on='doi',
             how='left'
-            base_metadata[['doi'] + list(fields_to_merge.values())],  # Use renamed columns from base_metadata
-            on='doi',
-            how='left'
         )
 
         # Custom merging functions
