@@ -186,7 +186,8 @@ class OrcidService:
                     'limit': 360,
                     'list_size': 360,
                     'deduplicate_base': 'false',
-                    'exclude_date_filters': 'true'
+                    'exclude_date_filters': 'true',
+                    'q_advanced_only': 'true'
                 },
                 "endpoint": "search"
             }
