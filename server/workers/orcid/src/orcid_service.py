@@ -161,7 +161,6 @@ class OrcidService:
         for batch in batches:
             start_time = time.time()
             q_advanced = " OR ".join([f"dcdoi:{doi}" for doi in batch if doi])
-            q_advanced = " OR ".join([f"dcdoi:{doi}" for doi in batch if doi])
 
             request_id = str(uuid.uuid4())
 
@@ -205,6 +204,7 @@ class OrcidService:
             })
 
             base_response: str = get_nested_value(result, ["input_data", "metadata"], '[]') # type: ignore
+
             batch_df = pd.DataFrame(json.loads(base_response))
             if len(batch_df) < len(batch):
                 self.logger.warning(
@@ -424,7 +424,6 @@ class OrcidService:
 
         raw_dois = metadata["doi"].tolist()
         dois = [doi for doi in raw_dois if doi and pd.notna(doi)]
-        dois = [doi for doi in raw_dois if doi and pd.notna(doi)]
 
         dois_for_base_query, doi_mapping = self._prepare_dois_for_base_query(dois)
         base_metadata = self.request_base_metadata(dois_for_base_query, params)
@@ -478,7 +477,6 @@ class OrcidService:
         # Rename base metadata columns to avoid conflicts with original metadata
         base_metadata = base_metadata.rename(columns=fields_to_merge)
 
-        # Merge base metadata into the original metadata
         # Merge base metadata into the original metadata
         enriched_metadata = pd.merge(
             metadata,
