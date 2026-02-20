@@ -515,10 +515,6 @@ class OrcidService:
             lambda row: custom_merge(row['relation'], row['relation_base']), axis=1
         )
 
-        # Apply custom logic for link and oa_state and assign results
-        link_oa_state_values = enriched_metadata.apply(custom_merge_link_oa_state, axis=1)
-        enriched_metadata['link'], enriched_metadata['oa_state'] = zip(*link_oa_state_values)
-
         enriched_metadata.drop(columns=['paper_abstract_base', 'subject_orig_base', 'subject_base', 'oa_state_base', 'link_base', 'relation_base'], inplace=True)
         
         if self.logger.isEnabledFor(logging.DEBUG):
