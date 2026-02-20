@@ -91,6 +91,11 @@ get_papers <- function(query, params,
     base_query <- paste(base_query, q_advanced)
   }
 
+  if (!is.null(params$q_advanced_only)
+      && (params$q_advanced_only == TRUE || params$q_advanced_only == "true")) {
+    base_query <- q_advanced
+  }
+
   min_descsize <- if (is.null(params$min_descsize)) 300 else params$min_descsize
   filter <- I(paste0('descsize:[', min_descsize, '%20TO%20*]'))
   limit <- params$limit

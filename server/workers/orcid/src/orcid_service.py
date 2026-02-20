@@ -131,10 +131,13 @@ class OrcidService:
 
         return metadata
     
-    def log_dataframe(self, df: pd.DataFrame, params: Dict[str, str], name: str, ):
+    def _log_dataframe(self, df: pd.DataFrame, params: Dict[str, str], name: str, ):
         orcid = params.get('orcid')
         
-        columns_to_print = ['id', 'title', 'doi', 'paper_abstract', 'link', 'subject', 'subject_orig', 'oa_state']
+        columns_to_print = ['id', 'title', 'doi', 'merged_dois', 'paper_abstract', 'link', 'subject', 'subject_orig', 'oa_state']
+
+        available_columns = df.columns.tolist()
+        columns_to_print = [col for col in columns_to_print if col in available_columns]
 
         transformed = df.copy().reindex(columns=columns_to_print)
         
@@ -145,11 +148,11 @@ class OrcidService:
         if not os.path.exists(folder):
             os.makedirs(folder)
         file_path = f"{folder}/{name}.csv"
-        transformed.sort_values(by='doi', ascending=True).to_csv(file_path, index=False)
+        transformed.to_csv(file_path, index=False)
 
     def request_base_metadata(self, dois: List[str], params: Dict[str, str]) -> pd.DataFrame:
         orcid = params.get('orcid')
-        batch_size = 10
+        batch_size = 15
         batches = [dois[i:i + batch_size] for i in range(0, len(dois), batch_size)]
         base_metadata = pd.DataFrame(dtype=object)
 
@@ -210,12 +213,14 @@ class OrcidService:
                 batch_df
             ], ignore_index=True)
 
-        timing_df = pd.DataFrame(timing_data)
-        folder = f'./output/{orcid}'
-        if not os.path.exists(folder):
-            os.makedirs(folder)
-        timing_df.to_csv(f'{folder}/stat_base_requests.csv', index=False)
+        if self.logger.isEnabledFor(logging.DEBUG):
+            timing_df = pd.DataFrame(timing_data)
+            folder = f'./output/{orcid}'
+            if not os.path.exists(folder):
+                os.makedirs(folder)
+            timing_df.to_csv(f'{folder}/stat_base_requests.csv', index=False)
 
+        base_metadata["oa_state"] = base_metadata["oa_state"].fillna("2").astype(int)
         return base_metadata
 
     def _prepare_dois_for_base_query(self, dois: List[str]) -> Tuple[List[str], Dict[str, List[str]]]:
@@ -410,15 +415,19 @@ class OrcidService:
 
         self.logger.debug('metadata reindexed')
         
-        # TEMPORAL
-        #self.log_dataframe(metadata, params, '_original')
-        # TEMPORAL
+        # run only if loglevel is debug, otherwise it is too expensive and we don't want it on production
+        if self.logger.isEnabledFor(logging.DEBUG):
+            self._log_dataframe(metadata, params, '_original')
 
         raw_dois = metadata["doi"].tolist()
         dois = [doi for doi in raw_dois if doi and pd.notna(doi)]
 
         dois_for_base_query, doi_mapping = self._prepare_dois_for_base_query(dois)
         base_metadata = self.request_base_metadata(dois_for_base_query, params)
+
+        if self.logger.isEnabledFor(logging.DEBUG):
+            self._log_dataframe(base_metadata, params, 'base_metadata_raw')
+
         # dataframe
         # paper, doi= "10.17169/refubium-48053; 10.1371/journal.pone.0311918"
         # 1. step: split on "; " -> ["10.17169/refubium-48053", "10.1371/journal.pone.0311918"]
@@ -446,7 +455,11 @@ class OrcidService:
         base_metadata = self._match_dois_by_version(base_metadata, dois)
 
         base_metadata = base_metadata[base_metadata['doi'].isin(dois)]
-        base_metadata = base_metadata.drop_duplicates(subset='doi', keep='first')
+        # Sort ascending so oa_state=1 (open access) rows come before oa_state=2,
+        # ensuring the most open record is kept when deduplicating by DOI.
+        base_metadata = base_metadata.sort_values(by='oa_state', ascending=True).drop_duplicates(subset='doi', keep='first')
+        if self.logger.isEnabledFor(logging.DEBUG):
+            self._log_dataframe(base_metadata, params, 'base_metadata')
 
         # Select and rename relevant fields from base_metadata, including subject_orig
         fields_to_merge = {
@@ -473,13 +486,15 @@ class OrcidService:
         def custom_merge(existing_value, new_value):
             return existing_value if pd.notnull(existing_value) and existing_value  else new_value
 
-        def custom_merge_link_oa_state(row):
-            existing_link, existing_oa_state = row['link'], row['oa_state']
-            new_link, oa_state_base = row.get('link_base', None), row.get('oa_state_base', None)
-            new_oa_state = "1" if oa_state_base == "1" else existing_oa_state  # If BASE indicates OA, set oa_state to 1, otherwise keep original
-            if pd.isna(existing_link) and pd.notna(new_link):
-                return new_link, new_oa_state
-            return existing_link, existing_oa_state
+        enriched_metadata['oa_state'] = enriched_metadata.apply(
+            lambda row: 1 if (pd.notna(row['oa_state']) and row['oa_state'] == 1)
+                             or (pd.notna(row.get('oa_state_base', None)) and row.get('oa_state_base', None) == 1)
+                        else row['oa_state'], axis=1
+        )
+
+        enriched_metadata['link'] = enriched_metadata.apply(
+            lambda row: custom_merge(row['link'], row['link_base']), axis=1
+        )
 
         enriched_metadata['paper_abstract'] = enriched_metadata.apply(
             lambda row: custom_merge(row['paper_abstract'], row['paper_abstract_base']), axis=1
@@ -494,15 +509,10 @@ class OrcidService:
             lambda row: custom_merge(row['relation'], row['relation_base']), axis=1
         )
 
-        # Apply custom logic for link and oa_state and assign results
-        link_oa_state_values = enriched_metadata.apply(custom_merge_link_oa_state, axis=1)
-        enriched_metadata['link'], enriched_metadata['oa_state'] = zip(*link_oa_state_values)
-
         enriched_metadata.drop(columns=['paper_abstract_base', 'subject_orig_base', 'subject_base', 'oa_state_base', 'link_base', 'relation_base'], inplace=True)
         
-        # TEMPORAL
-        #self.log_dataframe(enriched_metadata, params, '_enriched')
-        # TEMPORAL
+        if self.logger.isEnabledFor(logging.DEBUG):
+            self._log_dataframe(enriched_metadata, params, '_enriched')
 
         # temporal solution, for some reason if we have some undefined data, dataprocessing is failing
         enriched_metadata = enriched_metadata.reindex(columns=list(set(original_columns + ['oa_state', 'subject', 'subject_orig', 'paper_abstract', 'link', 'relation'])))
@@ -564,7 +574,6 @@ class OrcidService:
         )
 
         # Calculate h-index
-        self.logger.debug('citation counts', citation_counts)
         h_index = 0
         for i, citation in enumerate(citation_counts, start=1):
             if citation >= i:
