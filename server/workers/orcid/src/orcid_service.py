@@ -459,9 +459,12 @@ class OrcidService:
         base_metadata = self._match_dois_by_version(base_metadata, dois)
 
         base_metadata = base_metadata[base_metadata['doi'].isin(dois)]
-        # Sort ascending so oa_state=1 (open access) rows come before oa_state=2,
-        # ensuring the most open record is kept when deduplicating by DOI.
-        base_metadata = base_metadata.sort_values(by='oa_state', ascending=True).drop_duplicates(subset='doi', keep='first')
+        # Sort by oa_state priority (1=open > 0=restricted > 2=unknown) so the
+        # most open record is kept when deduplicating by DOI.
+        oa_state_order = {1: 0, 0: 1, 2: 2}
+        base_metadata = base_metadata.assign(
+            _oa_sort=base_metadata['oa_state'].map(oa_state_order)
+        ).sort_values(by='_oa_sort').drop_duplicates(subset='doi', keep='first').drop(columns='_oa_sort')
         if self.logger.isEnabledFor(logging.DEBUG):
             self._log_dataframe(base_metadata, params, 'base_metadata')
 
