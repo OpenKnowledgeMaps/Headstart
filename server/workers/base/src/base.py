@@ -28,6 +28,7 @@ from parsers import improved_df_parsing
 from datetime import datetime
 import dateparser
 import sys
+from typing import Dict
 from common.rate_limiter import RateLimiter
 
 logger = logging.getLogger(__name__)
@@ -86,7 +87,7 @@ class BaseClient(RWrapper):
             else:
                 metadata = pd.DataFrame(raw_metadata)
                 metadata = self.sanitize_metadata(metadata)
-                metadata = filter_duplicates(metadata, original_service)
+                metadata = filter_duplicates(metadata, original_service, params)
                 metadata = pd.concat(
                     [metadata, parse_annotations_for_all(metadata, "subject_orig")],
                     axis=1,
@@ -240,7 +241,11 @@ class BaseClient(RWrapper):
 pattern_annotations = re.compile(r"([A-Za-z]+:[\w'\- ]+);?")
 
 
-def filter_duplicates(df, service):
+def filter_duplicates(df, service, params):
+    if logger.isEnabledFor(logging.DEBUG):
+        logger.debug(f"Filtering duplicates for service: {service}")
+        logger.debug(f"Initial number of records: {len(df)}")
+        _log_dataframe(df, params, "initial_records")
     df.drop_duplicates("id", inplace=True, keep="first")
     df["is_anchor"] = False
     df["doi_duplicate"] = False
@@ -303,6 +308,9 @@ def filter_duplicates(df, service):
         if c in filtered.columns:
             filtered.drop(c, axis=1, inplace=True)
 
+    if logger.isEnabledFor(logging.DEBUG):
+        logger.debug(f"Number of records after filtering: {len(filtered)}")
+        _log_dataframe(filtered, params, "filtered_records")
     return filtered
 
 
@@ -362,3 +370,22 @@ def sanitize_year(year_str):
         sanitized_year = year_str  # here we keep the original string
 
     return sanitized_year
+
+def _log_dataframe(df: pd.DataFrame, params: Dict[str, str], name: str, ):
+    vis_id = params.get('vis_id')
+    
+    columns_to_print = ['id', 'title', 'doi', 'merged_dois', 'paper_abstract', 'link', 'subject', 'subject_orig', 'oa_state']
+
+    available_columns = df.columns.tolist()
+    columns_to_print = [col for col in columns_to_print if col in available_columns]
+
+    transformed = df.copy().reindex(columns=columns_to_print)
+    
+    transformed = transformed.fillna(value='missing')
+    
+    # create folder
+    folder = f'./output/{vis_id}'
+    if not os.path.exists(folder):
+        os.makedirs(folder)
+    file_path = f"{folder}/{name}.csv"
+    transformed.to_csv(file_path, index=False)

@@ -152,7 +152,7 @@ class OrcidService:
 
     def request_base_metadata(self, dois: List[str], params: Dict[str, str]) -> pd.DataFrame:
         orcid = params.get('orcid')
-        batch_size = 15
+        batch_size = 20
         batches = [dois[i:i + batch_size] for i in range(0, len(dois), batch_size)]
         base_metadata = pd.DataFrame(dtype=object)
 
@@ -185,7 +185,6 @@ class OrcidService:
                     'vis_id': request_id, 
                     'limit': 360,
                     'list_size': 360,
-                    'deduplicate_base': 'false',
                     'exclude_date_filters': 'true',
                     'q_advanced_only': 'true'
                 },
