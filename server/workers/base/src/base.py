@@ -251,6 +251,7 @@ def filter_duplicates(df, service, params):
     df["doi_duplicate"] = False
     df["has_relations"] = False
     df["link_duplicate"] = False
+    df["pdf_link_candidates_from_duplicates"] = ""
     df["duplicates"] = df.apply(
         lambda x: ",".join([x["id"], x["duplicates"]])
         if len(x["duplicates"].split(",")) >= 1

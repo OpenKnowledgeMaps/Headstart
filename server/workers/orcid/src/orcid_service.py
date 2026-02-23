@@ -400,7 +400,7 @@ class OrcidService:
                        'relations', 'annotations', 'repo', 'source', 'volume', 'issue', 'page', 'issn', 
                        'citation_count', 'cited_by_wikipedia_count', 'cited_by_msm_count', 'cited_by_policies_count', 
                        'cited_by_patents_count', 'cited_by_accounts_count', 'cited_by_fbwalls_count',
-                       'merged_dois',
+                       'merged_dois', 'pdf_link_candidates_from_duplicates',
                         'cited_by_feeds_count',
                         'cited_by_gplus_count',
                         'cited_by_rdts_count',

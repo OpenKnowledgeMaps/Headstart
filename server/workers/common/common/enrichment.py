@@ -261,7 +261,9 @@ def apply_oa_state_improvements(df, anchor_idx, accumulator):
 
 def apply_link_improvements(df, anchor_idx, all_links):
     """
-    Applies improvements for link to the anchor element.
+    Applies improvements for link to the anchor element: set in
+    pdf_link_candidates_from_duplicates column if there are any links
+    from duplicates that can be used for PDF lookup.
 
     Args:
         df: DataFrame with data
@@ -272,4 +274,4 @@ def apply_link_improvements(df, anchor_idx, all_links):
         unique_links = deduplicate_links(all_links)
         if unique_links:
             merged_links = '; '.join(sorted(unique_links))
-            df.loc[anchor_idx, 'link'] = merged_links
+            df.loc[anchor_idx, 'pdf_link_candidates_from_duplicates'] = merged_links
