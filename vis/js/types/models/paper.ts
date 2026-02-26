@@ -68,6 +68,8 @@ export interface CommonPaperDataForAllIntegrations {
   zoomedY: number;
   zoomedWidth: number;
   zoomedHeight: number;
+
+  pdf_link_candidates_from_duplicates: string[] | null;
 }
 
 export interface PubmedPaper extends CommonPaperDataForAllIntegrations {

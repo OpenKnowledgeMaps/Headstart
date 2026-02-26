@@ -152,7 +152,7 @@ class OrcidService:
 
     def request_base_metadata(self, dois: List[str], params: Dict[str, str]) -> pd.DataFrame:
         orcid = params.get('orcid')
-        batch_size = 15
+        batch_size = 25
         batches = [dois[i:i + batch_size] for i in range(0, len(dois), batch_size)]
         base_metadata = pd.DataFrame(dtype=object)
 
@@ -185,7 +185,6 @@ class OrcidService:
                     'vis_id': request_id, 
                     'limit': 360,
                     'list_size': 360,
-                    'deduplicate_base': 'false',
                     'exclude_date_filters': 'true',
                     'q_advanced_only': 'true'
                 },
@@ -207,10 +206,6 @@ class OrcidService:
             base_response: str = get_nested_value(result, ["input_data", "metadata"], '[]') # type: ignore
             batch_df = pd.DataFrame(json.loads(base_response))
             self._log_is_base_response_missing_dois(batch, batch_df)
-            if len(batch_df) < len(batch):
-                self.logger.warning(
-                    f"BASE response shortfall: requested {len(batch)} DOIs, received {len(batch_df)} rows (limit or missing records?)"
-                )
 
             base_metadata = pd.concat([
                 base_metadata,
@@ -350,50 +345,6 @@ class OrcidService:
 
         return base_metadata
 
-    def _explode_merged_dois(self, base_metadata: pd.DataFrame) -> pd.DataFrame:
-        """
-        Explode merged_dois field to create separate rows for each DOI variant.
-
-        If base_metadata contains a 'merged_dois' field with multiple DOIs separated by '; ',
-        this function creates separate rows for each DOI, allowing matching with ORCID metadata
-        by any of those DOIs.
-
-        Parameters:
-        - base_metadata: DataFrame with BASE metadata, potentially containing 'merged_dois' field
-
-        Returns:
-        - DataFrame with exploded rows where each row has a single DOI in the 'doi' column
-        """
-        # Process merged_dois: explode to create separate rows for each DOI variant
-        # This allows us to match BASE records with multiple DOIs to ORCID records by any of those DOIs
-        if 'merged_dois' in base_metadata.columns:
-            # Split merged_dois by "; " and create a list of DOIs for each row
-            # If merged_dois is empty/NaN, create empty list; otherwise split and process each DOI
-            base_metadata['merged_dois_list'] = base_metadata['merged_dois'].apply(
-                lambda x: [remove_doi_prefix(doi.strip()) for doi in str(x).split('; ') if doi.strip()] 
-                if pd.notna(x) and str(x).strip() else []
-            )
-
-            # Use explode to create separate rows for each DOI in merged_dois_list
-            # Rows with empty lists will remain as single rows
-            base_metadata = base_metadata.explode('merged_dois_list', ignore_index=True)
-
-            # For rows where merged_dois_list is not empty, use it as the DOI
-            # For rows where merged_dois_list is empty/NaN, use the regular doi column
-            mask_has_merged_doi = pd.notna(base_metadata['merged_dois_list']) & (base_metadata['merged_dois_list'] != '')
-            base_metadata.loc[mask_has_merged_doi, 'doi'] = base_metadata.loc[mask_has_merged_doi, 'merged_dois_list']
-
-            # Process regular doi column for rows without merged_dois
-            base_metadata.loc[~mask_has_merged_doi, 'doi'] = base_metadata.loc[~mask_has_merged_doi, 'doi'].apply(remove_doi_prefix)
-
-            # Drop temporary column
-            base_metadata = base_metadata.drop(columns=['merged_dois_list'])
-        else:
-            # No merged_dois column, process regular doi column
-            base_metadata.loc[:, 'doi'] = base_metadata['doi'].apply(remove_doi_prefix)
-
-        return base_metadata
-
     def enrich_metadata_with_base(self, params: Dict[str, str], metadata: pd.DataFrame) -> pd.DataFrame:
         self.logger.debug(f"Enriching metadata with base for ORCID {params.get('orcid')}")
 
@@ -405,7 +356,7 @@ class OrcidService:
                        'relations', 'annotations', 'repo', 'source', 'volume', 'issue', 'page', 'issn', 
                        'citation_count', 'cited_by_wikipedia_count', 'cited_by_msm_count', 'cited_by_policies_count', 
                        'cited_by_patents_count', 'cited_by_accounts_count', 'cited_by_fbwalls_count',
-                       'merged_dois',
+                       'merged_dois', 'pdf_link_candidates_from_duplicates',
                         'cited_by_feeds_count',
                         'cited_by_gplus_count',
                         'cited_by_rdts_count',
@@ -442,7 +393,6 @@ class OrcidService:
 
         base_metadata = base_metadata.reindex(columns=required_fields)
 
-        #base_metadata = self._explode_merged_dois(base_metadata)
         base_metadata['merged_dois'] = base_metadata['merged_dois'].apply(lambda x: x[0] if isinstance(x, list) and len(x) > 0 else x)
         base_metadata['merged_dois'] = base_metadata['merged_dois'].apply(lambda x: x.split(';') if isinstance(x, str) else [])
         base_metadata['merged_dois'] = base_metadata['merged_dois'].apply(lambda x: [x.strip() for x in x] if isinstance(x, list) else x)
@@ -458,7 +408,12 @@ class OrcidService:
         base_metadata = self._match_dois_by_version(base_metadata, dois)
 
         base_metadata = base_metadata[base_metadata['doi'].isin(dois)]
-        base_metadata = base_metadata.drop_duplicates(subset='doi', keep='first')
+        # Sort by oa_state priority (1=open > 0=restricted > 2=unknown) so the
+        # most open record is kept when deduplicating by DOI.
+        oa_state_order = {1: 0, 0: 1, 2: 2}
+        base_metadata = base_metadata.assign(
+            _oa_sort=base_metadata['oa_state'].map(oa_state_order)
+        ).sort_values(by='_oa_sort').drop_duplicates(subset='doi', keep='first').drop(columns='_oa_sort')
         if self.logger.isEnabledFor(logging.DEBUG):
             self._log_dataframe(base_metadata.sort_values(by='title'), params, 'base_metadata')
 

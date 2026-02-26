@@ -50,6 +50,12 @@ const usePdfLookup = (paper: Paper, serverUrl: string, service: string) => {
       let possiblePDFs = "";
       let fallbackUrl = "";
       if (service === "base") {
+        let pdfLinkCandidatesFromDuplicates = null;
+
+        if ("pdf_link_candidates_from_duplicates" in paper) {
+          pdfLinkCandidatesFromDuplicates = paper.pdf_link_candidates_from_duplicates as string[] | null;
+        }
+
         possiblePDFs =
           encodeURIComponent(paper.link) +
           ";" +
@@ -59,6 +65,10 @@ const usePdfLookup = (paper: Paper, serverUrl: string, service: string) => {
             .split("; ")
             .map((x) => encodeURIComponent(x))
             .join("; ");
+
+        if (pdfLinkCandidatesFromDuplicates) {
+          possiblePDFs += ";" + pdfLinkCandidatesFromDuplicates.map((x: string) => encodeURIComponent(x)).join("; ");
+        }
       }
 
       if (service === "openaire") {

@@ -261,7 +261,9 @@ def apply_oa_state_improvements(df, anchor_idx, accumulator):
 
 def apply_link_improvements(df, anchor_idx, all_links):
     """
-    Applies improvements for link to the anchor element.
+    Applies improvements for link to the anchor element: set in
+    pdf_link_candidates_from_duplicates column if there are any links
+    from duplicates that can be used for PDF lookup.
 
     Args:
         df: DataFrame with data
@@ -271,5 +273,20 @@ def apply_link_improvements(df, anchor_idx, all_links):
     if all_links:
         unique_links = deduplicate_links(all_links)
         if unique_links:
-            merged_links = '; '.join(sorted(unique_links))
-            df.loc[anchor_idx, 'link'] = merged_links
+            anchor_link = get_anchor_field_value(df, anchor_idx, 'link')
+            unique_links_without_anchor_link = [x for x in unique_links if x != anchor_link]
+
+            merged_links = '; '.join(sorted(unique_links_without_anchor_link))
+            df.loc[anchor_idx, 'pdf_link_candidates_from_duplicates'] = merged_links
+
+def get_anchor_field_value(df, anchor_idx, column_name):
+    """
+    Returns the value of the given column for the anchor row, or None if
+    the column is missing or the value is empty/NaN.
+    """
+    if column_name not in df.columns:
+        return None
+    value = df.loc[anchor_idx, column_name]
+    if pd.isna(value) or value == '':
+        return None
+    return value
