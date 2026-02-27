@@ -50,6 +50,21 @@ def main():
 
     before_all = []
     after_all = []
+    # only keep orcids that have data in both logs for the per-ORCID comparison, remove all else
+    all_orcids = [orcid for orcid in all_orcids if orcid in before and orcid in after]
+
+    # print which ORCIDs will be excluded due to missing data in either log
+    exluded_from_before = set(after.keys()) - set(before.keys())
+    exluded_from_after = set(before.keys()) - set(after.keys())
+    if exluded_from_before:
+        print(f"Excluded ORCID IDs due to missing data in BEFORE log: {', '.join(sorted(exluded_from_before))}")
+    if exluded_from_after:
+        print(f"Excluded ORCID IDs due to missing data in AFTER log: {', '.join(sorted(exluded_from_after))}")
+
+    # filter before and after to only include ORCIDs that have data in both logs
+    before = {orcid: before[orcid] for orcid in all_orcids if orcid in before}
+    after = {orcid: after[orcid] for orcid in all_orcids if orcid in after}
+
     for orcid in all_orcids:
         before_all.extend(before.get(orcid, []))
         after_all.extend(after.get(orcid, []))
