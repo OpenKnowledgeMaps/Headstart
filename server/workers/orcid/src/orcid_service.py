@@ -229,6 +229,14 @@ class OrcidService:
         For each DOI that contains uppercase letters, this function adds a lowercase version
         to ensure case-insensitive matching in BASE search.
 
+        Example:
+        - Case 1: DOI = 10.1594/PANGAEA.982329
+            - DOIs for BASE query = [10.1594/PANGAEA.982329, 10.1594/pangaea.982329]
+            - Added lowercase DOI = 10.1594/pangaea.982329
+        - Case 2: DOI = 10.1038/s41586-025-0410-x
+            - DOIs for BASE query = [10.1038/s41586-025-0410-x]
+            - Added lowercase DOI = 10.1038/s41586-025-0410-x
+
         Parameters:
         - dois: List of original DOIs from ORCID
 
@@ -265,6 +273,18 @@ class OrcidService:
         If BASE returns results with lowercase DOI variants, this function maps them back
         to the original DOI format from ORCID to ensure proper merging.
 
+        Example:
+        - Original DOIs from ORCID: ["10.1594/PANGAEA.982329"]
+        - DOIs sent to BASE (after `_prepare_dois_for_base_query`):
+            ["10.1594/PANGAEA.982329", "10.1594/pangaea.982329"]
+        - Suppose BASE returns rows with:
+            base_metadata['doi'] == ["10.1594/PANGAEA.982329", "10.1594/pangaea.982329"]
+        - And `doi_mapping` contains:
+            {"10.1594/pangaea.982329": ["10.1594/PANGAEA.982329"]}
+        - After `_normalize_base_results_to_original_dois`:
+            base_metadata['doi'] == ["10.1594/PANGAEA.982329", "10.1594/PANGAEA.982329"]
+        - Both DOI variants are now normalized to the original format from ORCID
+
         Parameters:
         - base_metadata: DataFrame with results from BASE
         - doi_mapping: Mapping from lowercase DOI to list of original DOIs
@@ -296,10 +316,10 @@ class OrcidService:
         original_dois: List[str],
     ) -> pd.DataFrame:
         """
-        Match BASE results that have versioned DOIs (e.g. .v1, .v2) to original DOIs without version.
+        Match BASE results that have versioned DOIs (e.g. `.v1`, `.v2`) to original DOIs without version.
 
         If BASE returned a DOI with a version suffix but the original ORCID DOI is without version,
-        this function updates the base_metadata 'doi' column so that those rows match the original
+        this function updates the `base_metadata['doi']` column so that those rows match the original
         DOI for merging.
 
         Parameters:
@@ -308,6 +328,21 @@ class OrcidService:
 
         Returns:
         - DataFrame with 'doi' updated where versioned variants were matched to original DOIs
+
+        Example:
+        - Original DOIs from ORCID: ["10.1000/example"]
+        - BASE returns:
+            base_metadata['doi'] == ["10.1000/example.v1", "10.1000/example.v2"]
+        - After calculation:
+            base_unversioned_to_versioned == {
+                "10.1000/example": ["10.1000/example.v1", "10.1000/example.v2"]
+            }
+        - Since "10.1000/example" is in `original_dois`, but not in `dois_received`,
+            the function considers it lost (`dois_lost`) and finds versioned variants for it.
+        - After `_match_dois_by_version`:
+            base_metadata['doi'] == ["10.1000/example", "10.1000/example"]
+            (both versioned records are now bound to the original DOI without version,
+            and are further processed as a group of duplicates for "10.1000/example").
         """
         pattern_doi_version = re.compile(r"\.v(\d)+$")
 
