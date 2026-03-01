@@ -48,8 +48,6 @@ def main():
 
     all_orcids = sorted(set(list(before.keys()) + list(after.keys())))
 
-    before_all = []
-    after_all = []
     # only keep orcids that have data in both logs for the per-ORCID comparison, remove all else
     all_orcids = [orcid for orcid in all_orcids if orcid in before and orcid in after]
 
@@ -64,10 +62,6 @@ def main():
     # filter before and after to only include ORCIDs that have data in both logs
     before = {orcid: before[orcid] for orcid in all_orcids if orcid in before}
     after = {orcid: after[orcid] for orcid in all_orcids if orcid in after}
-
-    for orcid in all_orcids:
-        before_all.extend(before.get(orcid, []))
-        after_all.extend(after.get(orcid, []))
 
     print("=" * 60)
     print("BEFORE vs AFTER comparison (ORCID worker)")
@@ -90,17 +84,20 @@ def main():
             print(f"  Change in median: {a_stats['median'] - b_stats['median']:+.3f}s ({(a_stats['median'] / b_stats['median'] - 1) * 100:+.1f}%)")
             print(f"  Change in mean:   {a_stats['mean'] - b_stats['mean']:+.3f}s ({(a_stats['mean'] / b_stats['mean'] - 1) * 100:+.1f}%)")
 
-    # Overall stats
+    # Overall stats: aggregate per-ORCID means (one value per ORCID)
+    before_means = [statistics.mean(before[orcid]) for orcid in all_orcids]
+    after_means = [statistics.mean(after[orcid]) for orcid in all_orcids]
+
     print(f"\n{'=' * 60}")
-    print("ALL ORCID IDs COMBINED")
+    print("ALL ORCID IDs COMBINED (per-ORCID means)")
     print("=" * 60)
     b_total = a_total = None
-    if before_all:
-        b_total = print_stats("Before", before_all)
+    if before_means:
+        b_total = print_stats("Before", before_means)
     else:
         print("  Before: (no data)")
-    if after_all:
-        a_total = print_stats("After", after_all)
+    if after_means:
+        a_total = print_stats("After", after_means)
     else:
         print("  After: (no data)")
     if b_total and a_total:
