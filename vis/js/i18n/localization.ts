@@ -176,7 +176,7 @@ export const localization: {
     backlink_list_streamgraph: "Show all documents",
     backlink_list_streamgraph_stream_selected: "Show all documents in stream",
     keywords: "Keywords",
-    doctypes: "Document type(s)",
+    doctypes: "Resource type(s)",
     unknown: "Unknown",
     no_keywords: "not available",
     notAvailable: "not available",
