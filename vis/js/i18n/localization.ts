@@ -156,7 +156,7 @@ export const localization: {
     geomap_label: "Geo Map of",
     custom_title_explanation:
       "This is a custom title. Please see the info button for more information. Original query:",
-    articles_label: "documents",
+    articles_label: "resources",
     most_recent_label: "most recent",
     most_relevant_label: "most relevant",
     most_relevant_tooltip:
@@ -168,7 +168,7 @@ export const localization: {
     documenttypes_label: "Document types",
     readers_count_label: "readers",
     documenttypes_tooltip:
-      "The following document types were taken into consideration in the creation of this visualization (not all of them may appear in the visualization):",
+      "The following resource types were taken into consideration in the creation of this visualization (not all of them may appear in the visualization):",
     area: "Area",
     items: "items",
     backlink: "← Back to overview",
@@ -257,7 +257,7 @@ export const localization: {
       "Dieser Titel wurde manuell geändert. Die Original-Suche lautet:",
     most_recent_label: "neueste",
     most_relevant_label: "relevanteste",
-    articles_label: "Artikel",
+    articles_label: "ressourcen",
     source_label: "Quelle",
     resulttype_label: "Dokumentart",
     documenttypes_label: "Publikationsarten",
@@ -392,18 +392,18 @@ export const localization: {
     items: "items",
     high_metadata_quality: "Data quality",
     high_metadata_quality_desc_base:
-      "This visualization only includes documents with an abstract (min. 300 characters). High metadata quality significantly improves the quality of your visualization.",
+      "This visualization only includes resources with an abstract (min. 300 characters). High metadata quality significantly improves the quality of your visualization.",
     high_metadata_quality_desc_pubmed:
-      "This visualization only includes documents with an abstract. High metadata quality significantly improves the quality of your visualization.",
+      "This visualization only includes resources with an abstract. High metadata quality significantly improves the quality of your visualization.",
     high_metadata_quality_desc_aquanavi:
-      "This visualization only includes documents with an abstract (min. 300 characters). High metadata quality significantly improves the quality of your visualization.",
+      "This visualization only includes resources with an abstract (min. 300 characters). High metadata quality significantly improves the quality of your visualization.",
     low_metadata_quality: "Data quality",
     low_metadata_quality_desc_base:
-      "This visualization includes documents with and without an abstract. Low metadata quality may significantly reduce the quality of your visualization.",
+      "This visualization includes resources with and without an abstract. Low metadata quality may significantly reduce the quality of your visualization.",
     low_metadata_quality_desc_pubmed:
-      "This visualization includes documents with and without an abstract. Low metadata quality may significantly reduce the quality of your visualization.",
+      "This visualization includes resources with and without an abstract. Low metadata quality may significantly reduce the quality of your visualization.",
     low_metadata_quality_desc_aquanavi:
-      "This visualization includes documents with and without an abstract. Low metadata quality may significantly reduce the quality of your visualization.",
+      "This visualization includes resources with and without an abstract. Low metadata quality may significantly reduce the quality of your visualization.",
     time_frame_context_sg:
       "Please note that we remove time intervals with only a few associated papers during the computation of your streamgraph to increase its readability. As a result the time on the x-axis may not align with the time range you selected.",
     // metrics
@@ -453,14 +453,14 @@ export const localization: {
     items: "items",
     high_metadata_quality: "Data quality",
     high_metadata_quality_desc_base:
-      "This visualization only includes documents with an abstract (min. 300 characters). High metadata quality significantly improves the quality of your visualization.",
+      "This visualization only includes resources with an abstract (min. 300 characters). High metadata quality significantly improves the quality of your visualization.",
     high_metadata_quality_desc_pubmed:
-      "This visualization only includes documents with an abstract. High metadata quality significantly improves the quality of your visualization.",
+      "This visualization only includes resources with an abstract. High metadata quality significantly improves the quality of your visualization.",
     low_metadata_quality: "Data quality",
     low_metadata_quality_desc_base:
-      "This visualization includes documents with and without an abstract. Low metadata quality may significantly reduce the quality of your visualization. ",
+      "This visualization includes resources with and without an abstract. Low metadata quality may significantly reduce the quality of your visualization. ",
     low_metadata_quality_desc_pubmed:
-      "This visualization includes documents with and without an abstract. Low metadata quality may significantly reduce the quality of your visualization. ",
+      "This visualization includes resources with and without an abstract. Low metadata quality may significantly reduce the quality of your visualization. ",
     time_frame_context_sg:
       "Please note that we remove time intervals with only a few associated papers during the computation of your streamgraph to increase its readability. As a result the time on the x-axis may not align with the time range you selected.",
     // metrics
