@@ -162,7 +162,7 @@ export const localization: {
     most_relevant_tooltip:
       "At the moment, we use the relevance ranking provided by the source API. Both PubMed and BASE mainly use text similarity between your query and the article metadata to determine the relevance. Please consult the FAQ for more information.",
     most_relevant_tooltip_sg:
-      "In this streamgraph you find the most relevant documents matching your query related to the top keywords. To determine the most relevant documents, we use the relevance ranking provided by the data source e.g. BASE. Data sources mainly use text similarity between your query and the article metadata to determine the relevance ranking. Please consult the FAQs for more information.",
+      "In this streamgraph you find the most relevant resources matching your query related to the top keywords. To determine the most relevant resources, we use the relevance ranking provided by the data source e.g. BASE. Data sources mainly use text similarity between your query and the article metadata to determine the relevance ranking. Please consult the FAQs for more information.",
     source_label: "Data source",
     resulttype_label: "Document type",
     documenttypes_label: "Resource types",
@@ -211,9 +211,9 @@ export const localization: {
       "You can use this code to embed the visualization on your own website or in a dashboard.",
     area_streamgraph: "Stream",
     stream_year: "Year",
-    stream_doc_num: "Number of documents",
-    stream_docs: "Documents",
-    stream_total: "Total documents in stream",
+    stream_doc_num: "Number of resources",
+    stream_docs: "Resources",
+    stream_total: "Total resources in stream",
     empty_area_warning:
       "No matches found. Please reset your filter options above.",
     lang_all: "All languages",
@@ -225,8 +225,8 @@ export const localization: {
       "Open Knowledge Maps (${year}). ${type} for research on ${query}. Retrieved from ${source} [${date}].",
     cite_vis_km: "Please cite this knowledge map as follows",
     cite_vis_sg: "Please cite this streamgraph as follows",
-    cite_paper: "Cite this document as",
-    export_paper: "Export this document",
+    cite_paper: "Cite this resource as",
+    export_paper: "Export this resource",
     download: "Download",
     please_note: "Please note",
     scale_by_label: "Scale map by: ",
@@ -317,8 +317,8 @@ export const localization: {
       "Open Knowledge Maps (${year}). ${type} for research on ${query}. Retrieved from ${source} [${date}].",
     cite_vis_km: "Please cite this knowledge map as follows",
     cite_vis_sg: "Please cite this streamgraph as follows",
-    cite_paper: "Cite this document as",
-    export_paper: "Export this document",
+    cite_paper: "Cite this resource as",
+    export_paper: "Export this resource",
     download: "Download",
     please_note: "Please note",
     citation_warning:
@@ -385,7 +385,7 @@ export const localization: {
     custom_title_explanation:
       "This is a custom title. Please see the info button for more information. Original query:",
     most_relevant_tooltip:
-      "To determine the most relevant documents, we use the relevance ranking provided by the data source e.g. BASE. Data sources mainly use text similarity between your query and the article metadata to determine the relevance ranking. Please consult the FAQs for more information.",
+      "To determine the most relevant resources, we use the relevance ranking provided by the data source e.g. BASE. Data sources mainly use text similarity between your query and the article metadata to determine the relevance ranking. Please consult the FAQs for more information.",
     documenttypes_label: "Resource types",
     all: "any",
     open_access: "Open Access",
@@ -416,7 +416,7 @@ export const localization: {
     metrics_label: "Metrics",
     researcher_details_label: "Researcher details",
     scale_by_explanation:
-      "The size of the bubbles is relative to the number of documents related to them.",
+      "The size of the bubbles is relative to the number of resources related to them.",
     scale_label: {
       "content_based": "Documents",
       "citations": "Citations",
@@ -446,7 +446,7 @@ export const localization: {
     custom_title_explanation:
       "This is a custom title. Please see the info button for more information. Original query:",
     most_relevant_tooltip:
-      "To determine the most relevant documents, we use the relevance ranking provided by the data source e.g. BASE. Data sources mainly use text similarity between your query and the article metadata to determine the relevance ranking. Please consult the FAQs for more information.",
+      "To determine the most relevant resources, we use the relevance ranking provided by the data source e.g. BASE. Data sources mainly use text similarity between your query and the article metadata to determine the relevance ranking. Please consult the FAQs for more information.",
     documenttypes_label: "Resource types",
     all: "any",
     open_access: "Open Access",
@@ -473,7 +473,7 @@ export const localization: {
     metrics_label: "Metrics",
     researcher_details_label: "Researcher details",
     scale_by_explanation:
-      "The size of the bubbles is relative to the number of documents related to them.",
+      "The size of the bubbles is relative to the number of resources related to them.",
     scale_label: {
       "content_based": "Documents",
       "citations": "Citations",
