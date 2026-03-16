@@ -67,5 +67,11 @@ server/preprocessing/other-scripts/renv
 local_dev/config_local_headstart.ini
 local_dev/config_local_searchflow.ini
 
+# Playwright
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
+
 # mac os
 .DS_Store
