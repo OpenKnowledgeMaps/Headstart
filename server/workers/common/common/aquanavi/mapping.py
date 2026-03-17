@@ -326,6 +326,9 @@ def load_and_prepare_dataframe():
     df = pd.concat([df_real], ignore_index=True)
     check_that_required_columns_exists(df, CSV_PATH_WITH_REAL_DATA)
 
+    # remove duplicates based on all columns
+    df = df.drop_duplicates()
+
     return df
 
 def map_sample_data():
