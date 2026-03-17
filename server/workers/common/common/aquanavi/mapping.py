@@ -19,7 +19,7 @@ COLUMNS = {
     "equipment": "Equipment",
     "research_topics": "Research Topics",
     "specialist_areas": "Specialist areas",
-    "primary_interests": "Primary interests",
+    "grand_challenges": "Primary interests",
     "controlled_parameters": "Controlled Parameters",
     "description": "Description of Facility",
     "location": "Facility location(s) split",
@@ -228,10 +228,10 @@ def get_abstract(row):
     else:
         abstract_parts.append(get_not_available_message_and_increase_counter('Controlled Parameters'))
 
-    if (row[COLUMNS['primary_interests']]):
-            abstract_parts.append(f"Primary interests: {get_and_process_value(row, COLUMNS['primary_interests'], True, JOIN_PARTS_OF_VALUES_WITH)}")
+    if (row[COLUMNS['grand_challenges']]):
+            abstract_parts.append(f"Grand challenges: {get_and_process_value(row, COLUMNS['grand_challenges'], True, JOIN_PARTS_OF_VALUES_WITH)}")
     else:
-        abstract_parts.append(get_not_available_message_and_increase_counter('Primary interests'))
+        abstract_parts.append(get_not_available_message_and_increase_counter('Grand challenges'))
 
     if (row[COLUMNS['research_topics']]):
             abstract_parts.append(f"Research topics: {get_and_process_value(row, COLUMNS['research_topics'], True, JOIN_PARTS_OF_VALUES_WITH)}")
