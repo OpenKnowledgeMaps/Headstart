@@ -405,7 +405,7 @@ export const localization: {
     low_metadata_quality_desc_aquanavi:
       "This visualization includes resources with and without an abstract. Low metadata quality may significantly reduce the quality of your visualization.",
     time_frame_context_sg:
-      "Please note that we remove time intervals with only a few associated papers during the computation of your streamgraph to increase its readability. As a result the time on the x-axis may not align with the time range you selected.",
+      "Please note that we remove time intervals with only a few associated resources during the computation of your streamgraph to increase its readability. As a result the time on the x-axis may not align with the time range you selected.",
     // metrics
     citations_count_label: "citations",
     social_media_count_label: "social media mentions",
@@ -462,7 +462,7 @@ export const localization: {
     low_metadata_quality_desc_pubmed:
       "This visualization includes resources with and without an abstract. Low metadata quality may significantly reduce the quality of your visualization. ",
     time_frame_context_sg:
-      "Please note that we remove time intervals with only a few associated papers during the computation of your streamgraph to increase its readability. As a result the time on the x-axis may not align with the time range you selected.",
+      "Please note that we remove time intervals with only a few associated resources during the computation of your streamgraph to increase its readability. As a result the time on the x-axis may not align with the time range you selected.",
     // metrics
     citations_count_label: "citations",
     social_media_count_label: "social media mentions",
