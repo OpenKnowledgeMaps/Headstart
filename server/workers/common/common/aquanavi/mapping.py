@@ -204,7 +204,14 @@ def get_abstract(row):
         str: String in the abstract field format.
     """
     AMOUNT_OF_ALL_POSSIBLE_ENTRIES = 5
-    JOIN_PARTS_OF_VALUES_WITH = " "
+    JOIN_PARTS_WITH = {
+        "description": " ",
+        "equipment": " ",
+        "controlled_parameters": "; ",
+        "grand_challenges": "; ",
+        "research_topics": " ",
+    }
+
     count_of_not_available_parts = 0
     abstract_parts = []
 
@@ -214,27 +221,27 @@ def get_abstract(row):
         return f"{name}: description not available"
 
     if (row[COLUMNS['description']]):
-        abstract_parts.append(f"Facility description: {get_and_process_value(row, COLUMNS['description'], True, JOIN_PARTS_OF_VALUES_WITH)}")
+        abstract_parts.append(f"Facility description: {get_and_process_value(row, COLUMNS['description'], True, JOIN_PARTS_WITH['description'])}")
     else:
         abstract_parts.append(get_not_available_message_and_increase_counter("Facility description"))
 
     if (row[COLUMNS['equipment']]):
-        abstract_parts.append(f"Equipment: {get_and_process_value(row, COLUMNS['equipment'], True, JOIN_PARTS_OF_VALUES_WITH)}")
+        abstract_parts.append(f"Equipment: {get_and_process_value(row, COLUMNS['equipment'], True, JOIN_PARTS_WITH['equipment'])}")
     else:
         abstract_parts.append(get_not_available_message_and_increase_counter('Equipment'))
 
     if (row[COLUMNS['controlled_parameters']]):
-        abstract_parts.append(f"Controlled parameters: {get_and_process_value(row, COLUMNS['controlled_parameters'], True, JOIN_PARTS_OF_VALUES_WITH)}")
+        abstract_parts.append(f"Controlled parameters: {get_and_process_value(row, COLUMNS['controlled_parameters'], True, JOIN_PARTS_WITH['controlled_parameters'])}")
     else:
         abstract_parts.append(get_not_available_message_and_increase_counter('Controlled Parameters'))
 
     if (row[COLUMNS['grand_challenges']]):
-            abstract_parts.append(f"Grand challenges: {get_and_process_value(row, COLUMNS['grand_challenges'], True, JOIN_PARTS_OF_VALUES_WITH)}")
+            abstract_parts.append(f"Grand challenges: {get_and_process_value(row, COLUMNS['grand_challenges'], True, JOIN_PARTS_WITH['grand_challenges'])}")
     else:
         abstract_parts.append(get_not_available_message_and_increase_counter('Grand challenges'))
 
     if (row[COLUMNS['research_topics']]):
-            abstract_parts.append(f"Research topics: {get_and_process_value(row, COLUMNS['research_topics'], True, JOIN_PARTS_OF_VALUES_WITH)}")
+            abstract_parts.append(f"Research topics: {get_and_process_value(row, COLUMNS['research_topics'], True, JOIN_PARTS_WITH['research_topics'])}")
     else:
         abstract_parts.append(get_not_available_message_and_increase_counter('Research topics'))
 
