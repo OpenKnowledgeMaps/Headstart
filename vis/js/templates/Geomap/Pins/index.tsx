@@ -4,7 +4,7 @@ import { useDispatch } from "react-redux";
 import { useActiveDataItem } from "@/hooks/useActiveDataItem";
 import { useData } from "@/hooks/useData";
 import { selectPaper } from "@/js/actions";
-import { AllPossiblePapersType } from "@/js/types";
+import { AllPossiblePapersType, AquanaviPaper } from "@/js/types";
 
 import { Pin } from "./Pin";
 
