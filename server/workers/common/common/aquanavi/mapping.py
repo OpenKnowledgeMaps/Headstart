@@ -1,11 +1,15 @@
 import re
 import sys
 import hashlib
-import pandas as pd
+import logging
+import pandas as pd  # type: ignore[reportMissingImports]
 
 from pathlib import Path
 from .helpers.coordinates import get_row_coordinates_with_collision_offset
+from .helpers.text_content_validation import has_meaningful_value
 from .constants.constants import COLUMNS
+
+logger = logging.getLogger(__name__)
 
 PATH_TO_FOLDER_IN_CONTAINER = "common/common/aquanavi/"
 CSV_PATH_WITH_REAL_DATA = f"{PATH_TO_FOLDER_IN_CONTAINER}mesocosm_data_cleaned.csv"
@@ -182,28 +186,28 @@ def get_abstract(row):
         count_of_not_available_parts += 1
         return f"{name}: description not available"
 
-    if (row[COLUMNS['description']]):
+    if has_meaningful_value(row, COLUMNS['description']):
         abstract_parts.append(f"Facility description: {get_and_process_value(row, COLUMNS['description'], True, JOIN_PARTS_WITH['description'])}")
     else:
         abstract_parts.append(get_not_available_message_and_increase_counter("Facility description"))
 
-    if (row[COLUMNS['equipment']]):
+    if has_meaningful_value(row, COLUMNS['equipment']):
         abstract_parts.append(f"Equipment: {get_and_process_value(row, COLUMNS['equipment'], True, JOIN_PARTS_WITH['equipment'])}")
     else:
         abstract_parts.append(get_not_available_message_and_increase_counter('Equipment'))
 
-    if (row[COLUMNS['controlled_parameters']]):
+    if has_meaningful_value(row, COLUMNS['controlled_parameters']):
         abstract_parts.append(f"Controlled parameters: {get_and_process_value(row, COLUMNS['controlled_parameters'], True, JOIN_PARTS_WITH['controlled_parameters'])}")
     else:
         abstract_parts.append(get_not_available_message_and_increase_counter('Controlled Parameters'))
 
-    if (row[COLUMNS['grand_challenges']]):
-            abstract_parts.append(f"Grand challenges: {get_and_process_value(row, COLUMNS['grand_challenges'], True, JOIN_PARTS_WITH['grand_challenges'])}")
+    if has_meaningful_value(row, COLUMNS['grand_challenges']):
+        abstract_parts.append(f"Grand challenges: {get_and_process_value(row, COLUMNS['grand_challenges'], True, JOIN_PARTS_WITH['grand_challenges'])}")
     else:
         abstract_parts.append(get_not_available_message_and_increase_counter('Grand challenges'))
 
-    if (row[COLUMNS['research_topics']]):
-            abstract_parts.append(f"Research topics: {get_and_process_value(row, COLUMNS['research_topics'], True, JOIN_PARTS_WITH['research_topics'])}")
+    if has_meaningful_value(row, COLUMNS['research_topics']):
+        abstract_parts.append(f"Research topics: {get_and_process_value(row, COLUMNS['research_topics'], True, JOIN_PARTS_WITH['research_topics'])}")
     else:
         abstract_parts.append(get_not_available_message_and_increase_counter('Research topics'))
 
