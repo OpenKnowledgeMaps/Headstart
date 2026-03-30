@@ -2,9 +2,8 @@
 import React, { Fragment } from "react";
 import { Modal } from "react-bootstrap";
 
-import DataSource from "./subcomponents/DataSource";
 import AboutSoftware from "./subcomponents/AboutSoftware";
-
+import DataSource from "./subcomponents/DataSource";
 
 const OpenAireInfo = ({
   params: {
@@ -21,7 +20,6 @@ const OpenAireInfo = ({
     obj_id,
   },
 }) => {
-
   return (
     // html template starts here
     <>
@@ -30,7 +28,8 @@ const OpenAireInfo = ({
       </Modal.Header>
       <Modal.Body id="info-body">
         <p>
-          This knowledge map presents you with a topical overview of research conducted in the following project:
+          This knowledge map presents you with a topical overview of research
+          conducted in the following project:
         </p>
         <h3>Project Details</h3>
         <table className="table">
@@ -97,11 +96,7 @@ const OpenAireInfo = ({
                     organisations.map((org, i) => (
                       <Fragment key={org.url}>
                         {i !== 0 ? ", " : ""}
-                        <a
-                          href={org.url}
-                          target="_blank"
-                          rel="noreferrer"
-                        >
+                        <a href={org.url} target="_blank" rel="noreferrer">
                           {org.name}
                         </a>
                       </Fragment>
@@ -127,14 +122,16 @@ const OpenAireInfo = ({
         </table>
 
         <p>
-          We use text similarity to create a knowledge map. The algorithm groups those documents together that have
-          many words in common. Area titles are created from subject keywords of documents that have been assigned
-          to the same area. We select those keywords and phrases that appear frequently in one area, and seldom in
-          other areas.
+          We use text similarity to create a knowledge map. The algorithm groups
+          those resources together that have many words in common. Area titles
+          are created from subject keywords of resources that have been assigned
+          to the same area. We select those keywords and phrases that appear
+          frequently in one area, and seldom in other areas.
         </p>
         <p>
-          Knowledge maps provide an instant overview of a topic by showing the main areas at a glance, and documents
-          related to them. This makes it possible to easily identify useful, pertinent information.
+          Knowledge maps provide an instant overview of a topic by showing the
+          main areas at a glance, and resources related to them. This makes it
+          possible to easily identify useful, pertinent information.
         </p>
         <p>
           Please{" "}
@@ -158,15 +155,16 @@ const OpenAireInfo = ({
                 rel="noreferrer"
               >
                 OpenAIRE
-              </a>{" "}is a key infrastructure that enables the European transition to open science. It provides
-              access to 3 million research projects and more than 70 million research outputs from more than 100,000
+              </a>{" "}
+              is a key infrastructure that enables the European transition to
+              open science. It provides access to 3 million research projects
+              and more than 70 million research outputs from more than 100,000
               data sources.
             </>
           }
         />
         <AboutSoftware />
       </Modal.Body>
-
     </>
     // html template ends here
   );
