@@ -3,6 +3,26 @@
 # Defines the script directory
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
 
+CONTENTPROVIDERS_FILE="$SCRIPT_DIR/common/common/contentproviders.json"
+
+# Update contentproviders.json cache from the running dev-base-1 container
+echo ""
+echo "Updating contentproviders.json cache..."
+echo ""
+docker exec dev-base-1 Rscript /headstart/other-scripts/update_contentproviders.R \
+  /headstart/other-scripts \
+  /common/contentproviders.json
+docker cp dev-base-1:/common/contentproviders.json - | tar -xO | python3 -c "import json,sys; print(json.dumps(json.load(sys.stdin), indent=4, ensure_ascii=False))" > "$CONTENTPROVIDERS_FILE"
+
+# Commit if the file changed
+cd "$SCRIPT_DIR/../.." && git diff --quiet "$CONTENTPROVIDERS_FILE"
+if [ $? -ne 0 ]; then
+  echo "contentproviders.json changed, committing..."
+  git add "$CONTENTPROVIDERS_FILE"
+  git commit -m "update of contentprovider.json cache"
+fi
+cd "$SCRIPT_DIR"
+
 # Define the list of services
 services=("api" "persistence" "dataprocessing" "base" "pubmed" "openaire" "orcid" "metrics")
 
