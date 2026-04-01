@@ -12,7 +12,7 @@ echo ""
 docker exec dev-base-1 Rscript /headstart/other-scripts/update_contentproviders.R \
   /headstart/other-scripts \
   /common/contentproviders.json
-docker cp dev-base-1:/common/contentproviders.json - | tar -xO | python3 -c "import json,sys; print(json.dumps(json.load(sys.stdin), indent=4, ensure_ascii=False))" > "$CONTENTPROVIDERS_FILE"
+docker cp dev-base-1:/common/contentproviders.json "$CONTENTPROVIDERS_FILE"
 
 # Commit if the file changed
 cd "$SCRIPT_DIR/../.." && git diff --quiet "$CONTENTPROVIDERS_FILE"

@@ -40,7 +40,7 @@ tryCatch({
   triple <- list(name = "GoTriple", internal_name = "fttriple")
   contentproviders <- rbind(contentproviders, triple)
 
-  write(toJSON(contentproviders), file = output_path)
+  write(toJSON(contentproviders, pretty = TRUE), file = output_path)
   log$info(paste("contentproviders.json updated:", output_path,
                  "—", nrow(contentproviders), "entries"))
 }, error = function(err) {
