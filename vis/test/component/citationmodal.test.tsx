@@ -43,8 +43,9 @@ const getMockStoreData = (isStreamgraph: boolean) => {
 const getCitationText = (isStreamgraph: boolean) => {
   const mockStoreData = getMockStoreData(isStreamgraph);
   const citationTemplate = mockStoreData.localization.citation_template;
+  const currentYear = new Date().getFullYear();
   const mockCitationStringData = {
-    year: "2025",
+    year: String(currentYear),
     type: isStreamgraph ? "Streamgraph" : "Knowledge Map",
     query: "climate change and impact",
     source: "http://localhost:3000/",
@@ -53,7 +54,7 @@ const getCitationText = (isStreamgraph: boolean) => {
 
   return formatString(citationTemplate, mockCitationStringData).replace(
     " [].",
-    "."
+    ".",
   );
 };
 
@@ -68,7 +69,7 @@ const setup = (isStreamgraph: boolean) => {
       <LocalizationProvider localization={localization}>
         <CitationModal />
       </LocalizationProvider>
-    </Provider>
+    </Provider>,
   );
 };
 

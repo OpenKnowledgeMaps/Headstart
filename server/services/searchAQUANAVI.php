@@ -16,7 +16,7 @@ $post_params["min_descsize"] = "0";
 $post_params["lang_id"] = ["all-lang"];
 $post_params["vis_type"] = "geomap";
 $post_params["from"] = "1665-01-01";
-$post_params["to"] = "2025-11-05";
+$post_params["to"] = "2026-01-21";
 $post_params["document_types"] = ["F"];
 $post_params["sorting"] = "most-relevant";
 $post_params["time_range"] = "user-defined";
@@ -29,6 +29,6 @@ if ($is_custom_array_set) {
   $params_array[] = "custom_title";
 }
 
-$result = search("aquanavi", $query, $post_params, $params_array, false, true, null, $precomputed_id, false);
+$result = search("aquanavi", $query, $post_params, $params_array, true, true, null, $precomputed_id, false);
 echo $result
 ?>

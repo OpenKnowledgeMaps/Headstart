@@ -2075,6 +2075,7 @@ a.donation-button:hover, a.donation-button:active, a.donation-button:focus {
 
 #error-remedy_list li {
     list-style: disc;
+    margin-bottom: 10px;
 }
 
 #error-remedy_list {

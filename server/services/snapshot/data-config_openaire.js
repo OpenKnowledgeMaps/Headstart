@@ -64,5 +64,5 @@ var data_config = {
         cited_by_tweeters_count: 'tweets',
         'readers.mendeley': 'readers'
     },
-    
+    visualization_type: "overview", // Used in the reducer named "chartType" to determine the visualization type: overview, timeline, geomap
 };
