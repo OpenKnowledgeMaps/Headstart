@@ -51,7 +51,7 @@ exports[`List entries component snapshot (BASE) > matches a snapshot (zoomed-in,
                     1
                   </span>
                    
-                  document
+                  resource
                   )
                 </span>
               </span>
@@ -616,7 +616,7 @@ exports[`List entries component snapshot (BASE) > matches a snapshot (zoomed-out
                     20
                   </span>
                    
-                  documents
+                  resources
                   )
                 </span>
               </span>

@@ -1,7 +1,7 @@
 // @ts-nocheck
 
-import React, { useEffect } from "react";
 import $ from "jquery";
+import React, { useEffect } from "react";
 import { Modal } from "react-bootstrap";
 
 import { useLocalizationContext } from "../../components/LocalizationProvider";
@@ -11,7 +11,7 @@ const PdfModal = ({ open, onClose, paper, serverUrl, service, useViewer }) => {
   const localization = useLocalizationContext();
   const [url, errorUrl] = usePdfLookup(paper, serverUrl, service);
 
-  const viewerUrl = serverUrl + "services/displayPDF.php";
+  const viewerUrl = `${serverUrl}services/displayPDF.php`;
 
   useEffect(() => {
     $(".modal-lg.modal-dialog").draggable();
@@ -37,7 +37,7 @@ const PdfModal = ({ open, onClose, paper, serverUrl, service, useViewer }) => {
         {!!url && (
           <iframe
             id="pdf_iframe"
-            title="Document PDF preview"
+            title="Resource PDF preview"
             className="block"
             src={useViewer ? `${viewerUrl}?file=${url}` : url}
             frameBorder="0"

@@ -1,11 +1,12 @@
 import React, { FC } from "react";
 import { connect } from "react-redux";
+import { Dispatch } from "redux";
+
 import { toggleList } from "../actions";
 import { useLocalizationContext } from "../components/LocalizationProvider";
-import useMatomo from "../utils/useMatomo";
 import { STREAMGRAPH_MODE } from "../reducers/chartType";
-import { Dispatch } from "redux";
 import { FilterValuesType, State } from "../types";
+import useMatomo from "../utils/useMatomo";
 
 interface ListToggleProps {
   appliedFilter: FilterValuesType;
@@ -42,10 +43,10 @@ const ListToggle: FC<ListToggleProps> = ({
     mainLabel = isStreamgraph ? loc.area_streamgraph : loc.area;
   }
 
-  let docsLabel = "document";
+  let docsLabel = "resource";
   switch (appliedFilter) {
     case "open_access":
-      docsLabel = "open access document";
+      docsLabel = "open access resource";
       break;
     case "dataset":
       docsLabel = "dataset";
