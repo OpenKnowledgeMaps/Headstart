@@ -22,7 +22,7 @@ $post_params["sorting"] = "most-relevant";
 $post_params["time_range"] = "user-defined";
 
 // And some others...
-$params_array = ["from", "to", "document_types", "sorting", "min_descsize", "lang_id"];
+$params_array = ["from", "to", "document_types", "sorting", "min_descsize", "lang_id", "vis_type"];
 
 $is_custom_array_set = isset($post_params["custom_title"]);
 if ($is_custom_array_set) {
