@@ -24,9 +24,12 @@ $post_params["time_range"] = "user-defined";
 // And some others...
 $params_array = ["from", "to", "document_types", "sorting", "min_descsize", "lang_id", "vis_type"];
 
-$is_custom_array_set = isset($post_params["custom_title"]);
-if ($is_custom_array_set) {
-  $params_array[] = "custom_title";
+// Optional keys must be listed here so packParamsJSON() includes them in vis_params (see searchBASE.php).
+$optional_params = ["custom_title", "q_advanced"];
+foreach ($optional_params as $param) {
+  if (isset($post_params[$param])) {
+    $params_array[] = $param;
+  }
 }
 
 $result = search("aquanavi", $query, $post_params, $params_array, true, true, null, $precomputed_id, false);
