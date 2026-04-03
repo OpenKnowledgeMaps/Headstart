@@ -38,6 +38,19 @@
   transform: translate(-50%, -50%);
 }
 
+.leaflet-control-layers-base > label {
+  font-weight: 400;
+  color: #818181;
+
+  &:hover {
+    color: #333;
+  }
+
+  .leaflet-control-layers-selector:checked + span {
+    color: #333;
+  }
+}
+
 .leaflet-control-layers-base > label > span > span {
   font-size: 12px;
 }
