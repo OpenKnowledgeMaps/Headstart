@@ -4,6 +4,11 @@ import { Button } from "react-bootstrap";
 
 import useMatomo from "../../utils/useMatomo";
 
+// This button currently builds email content from page metadata:
+// - subject <- document.title
+// - body <- meta[name="description"] + current URL
+// As a result, social/SEO metadata changes can also change email template. It is
+// also impossible to change the email template without changing the social/SEO metadata.
 const EmailButton = () => {
   const title = encodeURIComponent(document.title);
   const pageUrl = encodeURIComponent(window.location.href);
