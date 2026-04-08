@@ -1,24 +1,24 @@
 // @ts-nocheck
 
 import React from "react";
+import { Modal } from "react-bootstrap";
 import { connect } from "react-redux";
 
-import { Modal } from "react-bootstrap";
 import { closeCitationModal } from "../../actions";
-
 import { useLocalizationContext } from "../../components/LocalizationProvider";
-import { STREAMGRAPH_MODE } from "../../reducers/chartType";
+import { GEOMAP_MODE, STREAMGRAPH_MODE } from "../../reducers/chartType";
+import { queryConcatenator } from "../../utils/data";
 import { getDateFromTimestamp } from "../../utils/dates";
 import { formatString, removeEmbedParam } from "../../utils/string";
-import CopyButton from "../CopyButton";
+import { unescapeHTML } from "../../utils/unescapeHTMLentities";
 import useMatomo from "../../utils/useMatomo";
-import { queryConcatenator } from "../../utils/data";
-import {unescapeHTML} from "../../utils/unescapeHTMLentities";
+import CopyButton from "../CopyButton";
 
 const CitationModal = ({
   open,
   onClose,
   isStreamgraph,
+  isGeomap,
   query,
   customTitle,
   timestamp,
@@ -37,24 +37,44 @@ const CitationModal = ({
 
   let customQuery = queryConcatenator([query, q_advanced]);
   if (customQuery.length > 100) {
-    customQuery = customQuery.substr(0, 100) + "[..]";
+    customQuery = `${customQuery.substr(0, 100)}[..]`;
   }
   if (customTitle) {
     customQuery = unescapeHTML(customTitle);
   }
 
   const date = getDateFromTimestamp(timestamp);
+  const year = new Date().getFullYear();
+  const link = removeEmbedParam(window.location.href);
 
-  let citationText = formatString(loc.citation_template, {
-    year: new Date().getFullYear(),
-    type: isStreamgraph ? "Streamgraph" : "Knowledge Map",
-    query: customQuery,
-    source: removeEmbedParam(window.location.href),
-    date,
-  });
+  let citeModalTitle: string;
+  let citeModalInstruction: string;
+  if (isGeomap) {
+    citeModalTitle = loc.cite_title_geomap;
+    citeModalInstruction = loc.cite_vis_geomap;
+  } else if (isStreamgraph) {
+    citeModalTitle = loc.cite_title_sg;
+    citeModalInstruction = loc.cite_vis_sg;
+  } else {
+    citeModalTitle = loc.cite_title_km;
+    citeModalInstruction = loc.cite_vis_km;
+  }
 
-  if (!date) {
-    citationText = citationText.replace(" [].", ".");
+  let citationText;
+  if (isGeomap) {
+    citationText = `Open Knowledge Maps ${year}. Geo Map of ${customQuery}. Retrieved from ${link}.`;
+  } else {
+    citationText = formatString(loc.citation_template, {
+      year,
+      type: isStreamgraph ? "Streamgraph" : "Knowledge Map",
+      query: customQuery,
+      source: link,
+      date,
+    });
+
+    if (!date) {
+      citationText = citationText.replace(" [].", ".");
+    }
   }
 
   return (
@@ -66,11 +86,11 @@ const CitationModal = ({
           className="cite-modal-title"
           style={{ fontSize: 20 }}
         >
-          {isStreamgraph ? loc.cite_title_sg : loc.cite_title_km}
+          {citeModalTitle}
         </Modal.Title>
       </Modal.Header>
       <Modal.Body id="cite-body" className="modal-body">
-        <p>{isStreamgraph ? loc.cite_vis_sg : loc.cite_vis_km}:</p>
+        <p>{`${citeModalInstruction}:`}</p>
         <div id="copy-map-citation" className="citation">
           {citationText}
         </div>
@@ -89,6 +109,7 @@ const CitationModal = ({
 const mapStateToProps = (state) => ({
   open: state.modals.openCitationModal,
   isStreamgraph: state.chartType === STREAMGRAPH_MODE,
+  isGeomap: state.chartType === GEOMAP_MODE,
   query: state.query.text,
   customTitle:
       state.heading.titleStyle === "custom" ? state.heading.customTitle : null,

@@ -74,9 +74,11 @@ export interface Localization {
   filter_by_label: string;
   cite_title_km: string;
   cite_title_sg: string;
+  cite_title_geomap: string;
   citation_template: string;
   cite_vis_km: string;
   cite_vis_sg: string;
+  cite_vis_geomap: string;
   cite_paper: string;
   export_paper: string;
   download: string;
@@ -221,10 +223,12 @@ export const localization: {
     filter_by_label: "show: ",
     cite_title_km: "Cite this visualization",
     cite_title_sg: "Cite this visualization",
+    cite_title_geomap: "Cite this geo map",
     citation_template:
       "Open Knowledge Maps (${year}). ${type} for research on ${query}. Retrieved from ${source} [${date}].",
     cite_vis_km: "Please cite this knowledge map as follows",
     cite_vis_sg: "Please cite this streamgraph as follows",
+    cite_vis_geomap: "Please cite this geo map as follows",
     cite_paper: "Cite this resource as",
     export_paper: "Export this resource",
     download: "Download",
@@ -313,10 +317,12 @@ export const localization: {
     cite: "Cite",
     cite_title_km: "Zitieren Sie diese Wissenskarte",
     cite_title_sg: "Cite this visualization",
+    cite_title_geomap: "Cite this geo map",
     citation_template:
       "Open Knowledge Maps (${year}). ${type} for research on ${query}. Retrieved from ${source} [${date}].",
     cite_vis_km: "Please cite this knowledge map as follows",
     cite_vis_sg: "Please cite this streamgraph as follows",
+    cite_vis_geomap: "Please cite this geo map as follows",
     cite_paper: "Cite this resource as",
     export_paper: "Export this resource",
     download: "Download",
