@@ -5,11 +5,11 @@ import { MapContainer } from "react-leaflet";
 
 import { CONFIG } from "./config";
 import { HeightContainer } from "./HeightContainer";
+import { KeyboardZoomController } from "./KeyboardZoomController";
 import { Layer } from "./Layer";
 import { Pins } from "./Pins";
 import { SelectionResetHandler } from "./SelectionResetHandler";
 import { ZoomControls } from "./ZoomControls";
-import { KeyboardZoomController } from "./KeyboardZoomController";
 
 export const Geomap: FC = () => (
   <HeightContainer>
