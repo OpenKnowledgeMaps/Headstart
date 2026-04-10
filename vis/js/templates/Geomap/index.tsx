@@ -4,6 +4,7 @@ import { FC } from "react";
 import { MapContainer } from "react-leaflet";
 
 import { CONFIG } from "./config";
+import { ControlTabOrder } from "./ControlTabOrder";
 import { HeightContainer } from "./HeightContainer";
 import { KeyboardZoomController } from "./KeyboardZoomController";
 import { Layer } from "./Layer";
@@ -14,6 +15,7 @@ import { ZoomControls } from "./ZoomControls";
 export const Geomap: FC = () => (
   <HeightContainer>
     <MapContainer {...CONFIG} className="geomap_container">
+      <ControlTabOrder />
       <SelectionResetHandler />
       <ZoomControls />
       <KeyboardZoomController />
