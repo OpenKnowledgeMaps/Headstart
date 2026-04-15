@@ -3,25 +3,29 @@
 # Defines the script directory
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
 
-CONTENTPROVIDERS_FILE="$SCRIPT_DIR/common/common/contentproviders.json"
+build_for_linux=false
+skip_contentproviders_update=false
 
-# Update contentproviders.json cache from the running dev-base-1 container
-echo ""
-echo "Updating contentproviders.json cache..."
-echo ""
-docker exec dev-base-1 Rscript /headstart/other-scripts/update_contentproviders.R \
-  /headstart/other-scripts \
-  /common/contentproviders.json
-docker cp dev-base-1:/common/contentproviders.json "$CONTENTPROVIDERS_FILE"
+# Parse script flags
+for arg in "$@"; do
+  case "$arg" in
+    --build-for-linux)
+      build_for_linux=true
+      ;;
+    --skip-contentproviders-update)
+      skip_contentproviders_update=true
+      ;;
+  esac
+done
 
-# Commit if the file changed
-cd "$SCRIPT_DIR/../.." && git diff --quiet "$CONTENTPROVIDERS_FILE"
-if [ $? -ne 0 ]; then
-  echo "contentproviders.json changed, committing..."
-  git add "$CONTENTPROVIDERS_FILE"
-  git commit -m "update of contentprovider.json cache"
+# Update contentproviders.json cache if required
+if [ "$skip_contentproviders_update" = true ]; then
+  echo ""
+  echo "Skipping contentproviders.json cache update..."
+  echo ""
+else
+  bash "$SCRIPT_DIR/update_contentproviders_cache.sh"
 fi
-cd "$SCRIPT_DIR"
 
 # Define the list of services
 services=("api" "persistence" "dataprocessing" "base" "pubmed" "openaire" "orcid" "metrics")
@@ -40,7 +44,7 @@ for service in ${services[@]}; do
     echo ""
 
     # Checks that the --build-for-linux flag has been passed and determines the necessary docker build command
-    if [[ "$1" == "--build-for-linux" ]]; then
+    if [ "$build_for_linux" = true ]; then
         echo "Building services with version --platform linux/amd64"
         docker build --platform linux/amd64 -f "$SCRIPT_DIR/../workers/$service/Dockerfile" -t "$service:$service_version" "$SCRIPT_DIR/../"
     else
