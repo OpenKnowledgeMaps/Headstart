@@ -3,6 +3,7 @@ import { Config, Context } from "../types";
 const list = (
   state = {
     show: true,
+    showSort: false,
     searchValue: "",
     showFilter: false,
     filterField: null,
@@ -35,6 +36,7 @@ const list = (
       return {
         ...state,
         show: !!config.show_list,
+        showSort: !!config.sort_menu_dropdown,
         showFilter: config.filter_menu_dropdown,
         filterField: config.filter_field,
         filterValue: config.filter_options ? config.filter_options[0] : null,
