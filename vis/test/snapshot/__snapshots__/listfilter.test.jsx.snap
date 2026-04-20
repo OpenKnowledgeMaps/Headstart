@@ -34,207 +34,209 @@ exports[`List filter component snapshot > matches a snapshot 1`] = `
       />
     </div>
   </div>
-  <div
-    className="dropdown"
-    id="filter_parameter_container"
-  >
+  <div>
     <div
-      className="dropdown btn-group"
+      className="dropdown"
+      id="filter_parameter_container"
     >
-      <button
-        aria-expanded={false}
-        aria-haspopup={true}
-        className="truncate-text dropdown-toggle btn btn-default"
-        disabled={false}
-        id="filter_params"
-        onClick={[Function]}
-        onKeyDown={[Function]}
-        role="button"
-        type="button"
+      <div
+        className="dropdown btn-group"
       >
-        <span
-          style={
-            {
-              "alignItems": "center",
-              "display": "flex",
-              "justifyContent": "center",
-              "maxWidth": "100%",
-            }
-          }
+        <button
+          aria-expanded={false}
+          aria-haspopup={true}
+          className="truncate-text dropdown-toggle btn btn-default"
+          disabled={false}
+          id="filter_params"
+          onClick={[Function]}
+          onKeyDown={[Function]}
+          role="button"
+          type="button"
         >
-          <span>
-            Filter by: 
-          </span>
           <span
-            className="truncate-text"
-            id="curr-filter-type"
             style={
               {
-                "marginLeft": "3px",
-                "minWidth": "0px",
+                "alignItems": "center",
+                "display": "flex",
+                "justifyContent": "center",
+                "maxWidth": "100%",
               }
             }
           >
-            All
-          </span>
-          <i
-            className="fas fa-chevron-down chevron"
-            style={
-              {
-                "marginLeft": "3px",
+            <span>
+              Filter by: 
+            </span>
+            <span
+              className="truncate-text"
+              id="curr-filter-type"
+              style={
+                {
+                  "marginLeft": "3px",
+                  "minWidth": "0px",
+                }
               }
-            }
-          />
-        </span>
-      </button>
-      <ul
-        aria-labelledby="filter_params"
-        className="dropdown-menu"
-        role="menu"
-      >
-        <li
-          className="active"
-          role="presentation"
-        >
-          <a
-            href="#"
-            id="filter_option_all"
-            onClick={[Function]}
-            onKeyDown={[Function]}
-            role="menuitem"
-            tabIndex="-1"
-          >
-            <div
-              className="wrap"
             >
               All
-            </div>
-          </a>
-        </li>
-        <li
-          className=""
-          role="presentation"
+            </span>
+            <i
+              className="fas fa-chevron-down chevron"
+              style={
+                {
+                  "marginLeft": "3px",
+                }
+              }
+            />
+          </span>
+        </button>
+        <ul
+          aria-labelledby="filter_params"
+          className="dropdown-menu"
+          role="menu"
         >
-          <a
-            href="#"
-            id="filter_option_open_access"
-            onClick={[Function]}
-            onKeyDown={[Function]}
-            role="menuitem"
-            tabIndex="-1"
+          <li
+            className="active"
+            role="presentation"
           >
-            <div
-              className="wrap"
+            <a
+              href="#"
+              id="filter_option_all"
+              onClick={[Function]}
+              onKeyDown={[Function]}
+              role="menuitem"
+              tabIndex="-1"
             >
-              Open access
-            </div>
-          </a>
-        </li>
-      </ul>
+              <div
+                className="wrap"
+              >
+                All
+              </div>
+            </a>
+          </li>
+          <li
+            className=""
+            role="presentation"
+          >
+            <a
+              href="#"
+              id="filter_option_open_access"
+              onClick={[Function]}
+              onKeyDown={[Function]}
+              role="menuitem"
+              tabIndex="-1"
+            >
+              <div
+                className="wrap"
+              >
+                Open access
+              </div>
+            </a>
+          </li>
+        </ul>
+      </div>
     </div>
-  </div>
-  <div
-    className="dropdown"
-    id="sort_container"
-    style={
-      {
-        "display": "inline-block",
-      }
-    }
-  >
     <div
-      className="dropdown btn-group"
+      className="dropdown"
+      id="sort_container"
+      style={
+        {
+          "display": "inline-block",
+        }
+      }
     >
-      <button
-        aria-expanded={false}
-        aria-haspopup={true}
-        className="truncate-text dropdown-toggle btn btn-default"
-        disabled={false}
-        id="sort"
-        onClick={[Function]}
-        onKeyDown={[Function]}
-        role="button"
-        type="button"
+      <div
+        className="dropdown btn-group"
       >
-        <span
-          style={
-            {
-              "alignItems": "center",
-              "display": "flex",
-              "justifyContent": "center",
-              "maxWidth": "100%",
-            }
-          }
+        <button
+          aria-expanded={false}
+          aria-haspopup={true}
+          className="truncate-text dropdown-toggle btn btn-default"
+          disabled={false}
+          id="sort"
+          onClick={[Function]}
+          onKeyDown={[Function]}
+          role="button"
+          type="button"
         >
-          <span>
-            Sort by: 
-          </span>
           <span
-            className="truncate-text"
-            id="curr-filter-type"
             style={
               {
-                "marginLeft": "3px",
-                "minWidth": "0px",
+                "alignItems": "center",
+                "display": "flex",
+                "justifyContent": "center",
+                "maxWidth": "100%",
               }
             }
           >
-            Relevance
-          </span>
-          <i
-            className="fas fa-chevron-down chevron"
-            style={
-              {
-                "marginLeft": "3px",
+            <span>
+              Sort by: 
+            </span>
+            <span
+              className="truncate-text"
+              id="curr-filter-type"
+              style={
+                {
+                  "marginLeft": "3px",
+                  "minWidth": "0px",
+                }
               }
-            }
-          />
-        </span>
-      </button>
-      <ul
-        aria-labelledby="sort"
-        className="dropdown-menu"
-        role="menu"
-      >
-        <li
-          className="active"
-          role="presentation"
-        >
-          <a
-            href="#"
-            id="sort_option_relevance"
-            onClick={[Function]}
-            onKeyDown={[Function]}
-            role="menuitem"
-            tabIndex="-1"
-          >
-            <div
-              className="wrap"
             >
               Relevance
-            </div>
-          </a>
-        </li>
-        <li
-          className=""
-          role="presentation"
+            </span>
+            <i
+              className="fas fa-chevron-down chevron"
+              style={
+                {
+                  "marginLeft": "3px",
+                }
+              }
+            />
+          </span>
+        </button>
+        <ul
+          aria-labelledby="sort"
+          className="dropdown-menu"
+          role="menu"
         >
-          <a
-            href="#"
-            id="sort_option_year"
-            onClick={[Function]}
-            onKeyDown={[Function]}
-            role="menuitem"
-            tabIndex="-1"
+          <li
+            className="active"
+            role="presentation"
           >
-            <div
-              className="wrap"
+            <a
+              href="#"
+              id="sort_option_relevance"
+              onClick={[Function]}
+              onKeyDown={[Function]}
+              role="menuitem"
+              tabIndex="-1"
             >
-              Year
-            </div>
-          </a>
-        </li>
-      </ul>
+              <div
+                className="wrap"
+              >
+                Relevance
+              </div>
+            </a>
+          </li>
+          <li
+            className=""
+            role="presentation"
+          >
+            <a
+              href="#"
+              id="sort_option_year"
+              onClick={[Function]}
+              onKeyDown={[Function]}
+              role="menuitem"
+              tabIndex="-1"
+            >
+              <div
+                className="wrap"
+              >
+                Year
+              </div>
+            </a>
+          </li>
+        </ul>
+      </div>
     </div>
   </div>
 </div>
