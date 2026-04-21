@@ -59,7 +59,7 @@ const OverviewParagraph: FC<PropsWithChildren> = ({ children }) => (
 
 const CustomTitleParagraph: FC<PropsWithChildren> = ({ children }) => (
   <p>
-    This map has a custom title and was created using the following query:{" "}
-    <strong className="hs-strong">{children}</strong>
+    This visualization has a custom title and was created using the following
+    query: <strong className="hs-strong">{children}</strong>
   </p>
 );
