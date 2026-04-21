@@ -36,10 +36,12 @@ const StandardKMInfo = ({
     custom_clustering,
   },
 }) => {
-  const queryString = queryConcatenator([query, q_advanced]);
-
-  customTitle = customTitle && unescapeHTML(customTitle);
+  const queryAfterConcatenate = queryConcatenator([query, q_advanced]);
+  const saveCustomTitle = customTitle && unescapeHTML(customTitle);
   custom_clustering = custom_clustering && unescapeHTML(custom_clustering);
+
+  const hasQuery = queryAfterConcatenate.length > 0;
+  const hasCustomTitle = Boolean(saveCustomTitle);
 
   return (
     // html template starts here
@@ -54,7 +56,7 @@ const StandardKMInfo = ({
             {custom_clustering ? "an overview" : "a topical overview"} of
             research on{" "}
             <strong className="hs-strong">
-              {customTitle ? customTitle : queryString}
+              {customTitle ? customTitle : queryAfterConcatenate}
             </strong>{" "}
             based on the 100{" "}
             {sorting === "most-relevant" ? (
@@ -83,13 +85,15 @@ const StandardKMInfo = ({
             based on 100 resources.
           </p>
         )}
-        {!!customTitle && (
+
+        {hasQuery && hasCustomTitle && (
           <p>
             This visualization has a custom title and was created using the
             following query:{" "}
-            <strong className="hs-strong">{queryString}</strong>
+            <strong className="hs-strong">{queryAfterConcatenate}</strong>
           </p>
         )}
+
         {!custom_clustering && (
           <p>
             We use text similarity to create a knowledge map. The algorithm
