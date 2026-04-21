@@ -53,8 +53,8 @@ const StandardSGInfo = ({
         </p>
         {!!customTitle && (
           <p>
-            This map has a custom title and was created using the following
-            query: <strong className="hs-strong">{query}</strong>
+            This visualization has a custom title and was created using the
+            following query: <strong className="hs-strong">{query}</strong>
           </p>
         )}
         <p>
