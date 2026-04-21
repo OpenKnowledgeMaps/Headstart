@@ -33,6 +33,8 @@ const list = (
 
   switch (action.type) {
     case "INITIALIZE":
+      const initialSortValue = getEffectiveInitialSortValue(config, context);
+
       return {
         ...state,
         show: !!config.show_list,
@@ -41,8 +43,8 @@ const list = (
         filterField: config.filter_field,
         filterValue: config.filter_options ? config.filter_options[0] : null,
         filterOptions: config.filter_options,
-        sortValue: getSortValue(config, context),
-        defaultSort: getSortValue(config, context),
+        sortValue: initialSortValue,
+        defaultSort: initialSortValue,
         sortOptions: config.sort_options,
         showDocumentType: config.show_resulttype,
         showMetrics: config.metric_list,
@@ -129,4 +131,14 @@ const getSortValue = (config: Config, context: Context) => {
   }
 
   return config.sort_options[0];
+};
+
+const getEffectiveInitialSortValue = (config: Config, context: Context) => {
+  const fallbackSortValue = getSortValue(config, context);
+
+  if (!config.sort_menu_dropdown && config.sort_options?.includes("title")) {
+    return "title";
+  }
+
+  return fallbackSortValue;
 };
