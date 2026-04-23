@@ -2,6 +2,8 @@
 import React from "react";
 import { Modal } from "react-bootstrap";
 
+import { unescapeHTML } from "@/js/utils/unescapeHTMLentities";
+
 import { queryConcatenator } from "../../../../utils/data";
 import AboutSoftware from "./AboutSoftware";
 import DataSource from "./DataSource";
@@ -12,7 +14,12 @@ const StandardSGInfo = ({
   serviceLogo,
   params: { query, customTitle, sorting, repo_name, q_advanced },
 }) => {
-  const queryString = queryConcatenator([query, q_advanced]);
+  const queryAfterConcatenate = queryConcatenator([query, q_advanced]);
+  const saveCustomTitle = customTitle && unescapeHTML(customTitle);
+
+  const hasQuery = queryAfterConcatenate.length > 0;
+  const hasCustomTitle = Boolean(saveCustomTitle);
+
   return (
     // html template starts here
     <>
@@ -26,7 +33,7 @@ const StandardSGInfo = ({
             <>
               related to{" "}
               <strong className="hs-strong">
-                {customTitle ? customTitle : queryString}
+                {customTitle ? customTitle : queryAfterConcatenate}
               </strong>
             </>
           )}{" "}
@@ -51,12 +58,14 @@ const StandardSGInfo = ({
           resources matches the relative height, not the absolute height of the
           stream.
         </p>
-        {!!customTitle && (
+
+        {hasQuery && hasCustomTitle && (
           <p>
-            This map has a custom title and was created using the following
-            query: <strong className="hs-strong">{query}</strong>
+            This visualization has a custom title and was created using the
+            following query: <strong className="hs-strong">{query}</strong>
           </p>
         )}
+
         <p>
           Streamgraphs are particularly useful for investigating the evolution
           of keywords over time and to analyse trends in research.
