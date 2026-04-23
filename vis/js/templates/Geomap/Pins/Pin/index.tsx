@@ -1,3 +1,4 @@
+import L from "leaflet";
 import { FC, memo } from "react";
 import { Marker } from "react-leaflet";
 
@@ -15,6 +16,15 @@ export const Pin: FC<PinProps> = memo(({ data, isActive, onClick }) => {
 
   const handleClick = () => onClick(data);
 
+  const handleKeydown = (event: L.LeafletKeyboardEvent) => {
+    const key = event.originalEvent.key;
+
+    if (key === "Enter" || key === " ") {
+      event.originalEvent.preventDefault();
+      handleClick();
+    }
+  };
+
   if (!east || !north) {
     return null;
   }
@@ -22,10 +32,12 @@ export const Pin: FC<PinProps> = memo(({ data, isActive, onClick }) => {
   return (
     <Marker
       position={[north, east]}
-      icon={createPinIcon(isActive)}
+      icon={createPinIcon(isActive, data)}
+      keyboard
       zIndexOffset={isActive ? selected : basic}
       eventHandlers={{
         click: handleClick,
+        keydown: handleKeydown,
       }}
     />
   );
