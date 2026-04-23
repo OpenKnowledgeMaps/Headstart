@@ -101,6 +101,7 @@ function search(
     "base" => "BASE",
     "openaire" => "OpenAire",
     "orcid" => "ORCID",
+    "aquanavi" => "AQUANAVI",
   );
 
   $query = ($do_clean_query === true)
@@ -219,6 +220,9 @@ function search(
       $vis_type = "timeline";
     } else {
       $vis_type = "overview";
+    }
+    if (isset($post_params["vis_type"]) && $post_params["vis_type"] == "geomap") {
+      $vis_type = "geomap";
     }
     $snapshot = new \headstart\preprocessing\Snapshot($ini_array, $query, $unique_id, $service, $repo2snapshot[$service], $vis_type);
     $snapshot->takeSnapshot();

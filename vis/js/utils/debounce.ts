@@ -1,11 +1,10 @@
 // @ts-nocheck
-
 /**
  * Debounce any function
- * 
+ *
  * Copied from helpers.js
  */
-export default function debounce(func, wait, immediate) {
+export default function debounce(func, wait, immediate?) {
   var timeout;
   return function () {
     let context = this,

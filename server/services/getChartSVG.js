@@ -7,7 +7,11 @@ function timeout(ms) {
 
 (async() => {
     try {
-        const browser = await puppeteer.launch({ headless: true, args: ['--no-sandbox', '--disable-setuid-sandbox'] });
+        const browser = await puppeteer.launch({
+            headless: true,
+            args: ['--no-sandbox', '--disable-setuid-sandbox'],
+            executablePath: process.argv[5]
+        });
         await timeout(1000)
         const page = await browser.newPage();
         await timeout(1000)

@@ -1,4 +1,4 @@
-import { Paper } from "../@types/paper";
+import { Paper } from "../types";
 
 /**
  * Sets correct page title based on the current action and state.
@@ -7,7 +7,11 @@ import { Paper } from "../@types/paper";
  * @param {string} defaultTitle the original page title Headstart has when it loads
  * @param {Object} state the Redux state object
  */
-export const handleTitleAction = (action: any, defaultTitle: string, state: any) => {
+export const handleTitleAction = (
+  action: any,
+  defaultTitle: string,
+  state: any
+) => {
   switch (action.type) {
     case "ZOOM_IN":
       document.title = getZoomInTitle(
@@ -30,7 +34,11 @@ export const handleTitleAction = (action: any, defaultTitle: string, state: any)
   }
 };
 
-const getZoomInTitle = (areaData: Partial<Paper>, paperData: Paper | null, defaultTitle: string) => {
+const getZoomInTitle = (
+  areaData: Partial<Paper>,
+  paperData: Paper | null,
+  defaultTitle: string
+) => {
   if (!areaData) {
     return document.title;
   }

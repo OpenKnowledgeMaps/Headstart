@@ -1,7 +1,9 @@
 // @ts-nocheck
 
 import $ from "jquery";
-import { Config } from "../@types/config";
+
+import { STREAMGRAPH_MODE } from "../reducers/chartType";
+import { Config } from "../types/config";
 
 // ?: fix scaling here?
 
@@ -32,6 +34,7 @@ const FOOTER_HEIGHT: Record<string, number> = {
  * @param {Object} config the headstart config
  */
 export const getChartSize = (config: Config) => {
+  const isStreamgraph = config.visualization_type === STREAMGRAPH_MODE;
   const container = $(`#${config.tag}`);
 
   // height section
@@ -54,7 +57,7 @@ export const getChartSize = (config: Config) => {
   const computedHeight =
     (parentHeight === 0
       ? Math.max(clientHeight, innerHeight)
-      : container.height())  -
+      : container.height()) -
     Math.max(TITLE_HEIGHT, titleImageHeight) -
     toolbarHeight -
     footerHeight -
@@ -62,7 +65,7 @@ export const getChartSize = (config: Config) => {
 
   const finalHeight = Math.max(
     config.min_height,
-    Math.min(config.max_height, computedHeight)
+    Math.min(config.max_height, computedHeight),
   );
 
   // width section
@@ -70,11 +73,11 @@ export const getChartSize = (config: Config) => {
 
   // MODALS_WIDTH subtraction is questionable - I disabled it for streamgraph
   const computedWidth =
-    visWidth * VIS_COL_RATIO - (config.is_streamgraph ? 0 : MODALS_WIDTH);
+    visWidth * VIS_COL_RATIO - (isStreamgraph ? 0 : MODALS_WIDTH);
 
   const finalWidth = Math.max(
     config.min_width || 0,
-    Math.min(config.max_width || computedWidth, computedWidth)
+    Math.min(config.max_width || computedWidth, computedWidth),
   );
 
   return {

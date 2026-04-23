@@ -1,13 +1,23 @@
-// @ts-nocheck
-import React from "react";
+import React, { FC } from "react";
 import { connect } from "react-redux";
+import { Dispatch } from "redux";
 
 import { toggleList } from "../actions";
 import { useLocalizationContext } from "../components/LocalizationProvider";
-import useMatomo from "../utils/useMatomo";
 import { STREAMGRAPH_MODE } from "../reducers/chartType";
+import { FilterValuesType, State } from "../types";
+import useMatomo from "../utils/useMatomo";
 
-const ListToggle = ({
+interface ListToggleProps {
+  appliedFilter: FilterValuesType;
+  docsNumber: number;
+  isShown: boolean;
+  isStreamgraph: boolean;
+  isZoomed: boolean;
+  onClick: () => void;
+}
+
+const ListToggle: FC<ListToggleProps> = ({
   docsNumber,
   isShown,
   isZoomed,
@@ -33,10 +43,10 @@ const ListToggle = ({
     mainLabel = isStreamgraph ? loc.area_streamgraph : loc.area;
   }
 
-  let docsLabel = "document";
+  let docsLabel = "resource";
   switch (appliedFilter) {
     case "open_access":
-      docsLabel = "open access document";
+      docsLabel = "open access resource";
       break;
     case "dataset":
       docsLabel = "dataset";
@@ -50,7 +60,6 @@ const ListToggle = ({
   }
 
   return (
-    // html template starts here
     <div
       id="show_hide_button"
       className="row"
@@ -74,18 +83,17 @@ const ListToggle = ({
         <i className="fas fa-chevron-down chevron"></i>
       </div>
     </div>
-    // html template ends here
   );
 };
 
-const mapStateToProps = (state) => ({
+const mapStateToProps = (state: State) => ({
   isShown: state.list.show,
   isZoomed: state.zoom,
   isStreamgraph: state.chartType === STREAMGRAPH_MODE,
   appliedFilter: state.list.filterValue,
 });
 
-const mapDispatchToProps = (dispatch) => ({
+const mapDispatchToProps = (dispatch: Dispatch) => ({
   onClick: () => dispatch(toggleList()),
 });
 

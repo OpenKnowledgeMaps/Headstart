@@ -1,32 +1,29 @@
 // @ts-nocheck
-import ReactDOM from "react-dom";
+import Bowser from "bowser";
 import React from "react";
-import { createStore } from "redux";
-import { Provider } from "react-redux";
+import ReactDOM from "react-dom";
 import { createRoot } from "react-dom/client";
+import { Provider } from "react-redux";
+import { createStore } from "redux";
 
-import rootReducer, { getInitialState } from "./reducers";
 import {
-  initializeStore,
-  updateDimensions,
   applyForceAreas,
   applyForcePapers,
+  initializeStore,
+  updateDimensions,
 } from "./actions";
-
-import applyHeadstartMiddleware from "./middleware";
-
-import { applyForce } from "./utils/force";
-
-import { getChartSize, getListSize } from "./utils/dimensions";
 import Headstart from "./components/Headstart";
-import { removeQueryParams } from "./utils/url";
-import debounce from "./utils/debounce";
-import DataManager from "./dataprocessing/managers/DataManager";
 import FetcherFactory from "./dataprocessing/fetchers/FetcherFactory";
+import DataManager from "./dataprocessing/managers/DataManager";
+import applyHeadstartMiddleware from "./middleware";
+import rootReducer, { getInitialState } from "./reducers";
+import { STREAMGRAPH_MODE } from "./reducers/chartType";
+import { Config } from "./types/config";
 import handleZoomSelectQuery from "./utils/backButton";
-
-import Bowser from "bowser";
-import { Config } from "./@types/config";
+import debounce from "./utils/debounce";
+import { getChartSize, getListSize } from "./utils/dimensions";
+import { applyForce } from "./utils/force";
+import { removeQueryParams } from "./utils/url";
 
 class HeadstartRunner {
   public config: Config;
@@ -79,7 +76,7 @@ class HeadstartRunner {
     const browserName = browser.getBrowserName(true);
 
     const isSupportedBrowser = SUPPORTED.map((browserName) =>
-      browserName.toLowerCase()
+      browserName.toLowerCase(),
     ).includes(browserName);
 
     if (!isSupportedBrowser || !browserName) {
@@ -88,7 +85,7 @@ class HeadstartRunner {
           "This visualization was successfully tested " +
           "with the latest versions of " +
           "Chrome, Firefox, Safari, Edge and Opera. " +
-          "We strongly recommend using one of these browsers."
+          "We strongly recommend using one of these browsers.",
       );
     }
   }
@@ -98,7 +95,7 @@ class HeadstartRunner {
     rootNode.render(
       <Provider store={this.store}>
         <Headstart />
-      </Provider>
+      </Provider>,
     );
   }
 
@@ -116,7 +113,7 @@ class HeadstartRunner {
     const dataFetcher = FetcherFactory.getInstance(config.mode, {
       serverUrl: config.server_url,
       files: config.files,
-      isStreamgraph: config.is_streamgraph,
+      isStreamgraph: config.visualization_type === STREAMGRAPH_MODE,
     });
 
     return await dataFetcher.getData();
@@ -145,11 +142,14 @@ class HeadstartRunner {
         height,
         list.height,
         this.dataManager.scalingFactors,
-        this.dataManager.author
-      )
+        this.dataManager.author,
+      ),
     );
 
-    if (!this.config.is_streamgraph) {
+    const { visualization_type: visualizationType } = this.config;
+    const isNotStreamgraph = visualizationType !== STREAMGRAPH_MODE;
+
+    if (isNotStreamgraph) {
       this.applyForceLayout();
     }
   }
@@ -190,7 +190,7 @@ class HeadstartRunner {
         this.store.dispatch(applyForceAreas(newAreas, state.chart.height)),
       (newPapers: any) =>
         this.store.dispatch(applyForcePapers(newPapers, state.chart.height)),
-      this.config
+      this.config,
     );
   }
 
@@ -210,7 +210,7 @@ class HeadstartRunner {
     scaleBy: string,
     baseUnit: string,
     isContentBased: boolean,
-    initialSort: string
+    initialSort: string,
   ) {
     this.config.scale_by = scaleBy;
     this.config.base_unit = baseUnit;

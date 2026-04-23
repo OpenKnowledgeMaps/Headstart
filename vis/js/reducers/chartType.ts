@@ -1,21 +1,41 @@
-export const STREAMGRAPH_MODE = "streamgraph";
-export const KNOWLEDGEMAP_MODE = "knowledgeMap";
+import { Action, VisualizationTypes } from "../types";
 
-type ChartType = typeof STREAMGRAPH_MODE | typeof KNOWLEDGEMAP_MODE;
-
-const chartType = (state: ChartType = KNOWLEDGEMAP_MODE, action: any) => {
-  if (action.canceled) {
-    return state;
-  }
-  
-  switch (action.type) {
-    case "INITIALIZE":
-      return action.configObject.is_streamgraph
-        ? STREAMGRAPH_MODE
-        : KNOWLEDGEMAP_MODE;
-    default:
-      return state;
-  }
+export const STREAMGRAPH_MODE = "timeline";
+export const KNOWLEDGEMAP_MODE = "overview";
+export const GEOMAP_MODE = "geomap";
+const WARNINGS = {
+  undefined:
+    "Chart type is not defined in the configuration. The overview one will be used as a fallback.",
+  notAllowed:
+    "Configured chart type is not allowed. The overview one will be used as a fallback.",
 };
 
-export default chartType;
+type ChartTypeReducer = (
+  prevState: VisualizationTypes | undefined,
+  action: Action,
+) => VisualizationTypes;
+
+export const chartType: ChartTypeReducer = (prevState, action) => {
+  const state = prevState ?? KNOWLEDGEMAP_MODE;
+
+  switch (action.type) {
+    case "INITIALIZE": {
+      const type = action.configObject?.visualization_type;
+
+      if (!type) {
+        console.warn(WARNINGS.undefined);
+        return KNOWLEDGEMAP_MODE;
+      }
+
+      if (![STREAMGRAPH_MODE, KNOWLEDGEMAP_MODE, GEOMAP_MODE].includes(type)) {
+        console.warn(WARNINGS.notAllowed);
+        return KNOWLEDGEMAP_MODE;
+      }
+
+      return type;
+    }
+    default: {
+      return state;
+    }
+  }
+};

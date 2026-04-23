@@ -1,10 +1,10 @@
 import React from "react";
 import { getIcon } from "../listentry/Tags";
-import { Paper } from "../../@types/paper";
+import { Paper } from "../../types";
 
 interface IconsProps {
   paper: Paper;
-  iconClasses: string
+  iconClasses: string;
 }
 
 const Icons = ({ paper, iconClasses }: IconsProps) => {

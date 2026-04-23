@@ -7,8 +7,7 @@ import {
   productionKMData,
   productionKMDataModified,
 } from "../data/base-raw";
-import { Config } from "../../js/@types/config";
-import { Paper } from "../../js/@types/paper";
+import { Config, Paper } from "../../js/types";
 
 describe("Default data manager", () => {
   it("Doesn't crash", () => {

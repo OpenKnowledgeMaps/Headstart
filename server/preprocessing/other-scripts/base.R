@@ -248,6 +248,13 @@ etl <- function(res, repo, non_public) {
   subject_cleaned = gsub("(wikidata)?\\.org/entity/[qQ]([\\d]+)?", "", subject_cleaned) # remove wikidata classification
   subject_cleaned = gsub("</keyword><keyword>", "", subject_cleaned) # remove </keyword><keyword>
   subject_cleaned = gsub("\\[No keyword\\]", "", subject_cleaned)
+
+  if (!is.null(params$vis_type) && params$vis_type == "timeline") {
+    subject_cleaned = remove_keywords_with_text_in_square_brackets(subject_cleaned)
+  } else {
+    subject_cleaned = remove_text_in_square_brackets_from_keywords(subject_cleaned)
+  }
+
   subject_cleaned = gsub("\\[[^\\[]+\\][^\\;]+(;|$)?", "", subject_cleaned) # remove classification
   subject_cleaned = gsub("[0-9]{2,} [A-Z]+[^;]*(;|$)?", "", subject_cleaned) #remove classification
   subject_cleaned = gsub(" -- ", "; ", subject_cleaned) #replace inconsistent keyword separation
@@ -354,6 +361,18 @@ decode_dctypenorm <- function(dctypestring) {
   typecodes <- lapply(typecodes, function(x) {dctypenorm_decoder[x]})
   typecodes <- unlist(unname(typecodes[[1]]))
   return(typecodes)
+}
+
+remove_keywords_with_text_in_square_brackets <- function(x) {
+  # This function removes whole keywords that contain text in square brackets.
+  # Example: 'Climate [MeSH]' | 'Some keywords [Chemical]'.
+  gsub("[^;]*\\[[^]]+\\][^;]*;?", "", x)
+}
+
+remove_text_in_square_brackets_from_keywords <- function(x) {
+  # This function removes text in square brackets.
+  # Example: 'Climate [MeSH]' -> 'Climate'| 'Some keywords [Chemical]' -> 'Some keywords'.
+  gsub("\\[[^]]*\\]", "", x)
 }
 
 dctypenorm_decoder <- list(

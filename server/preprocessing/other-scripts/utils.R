@@ -120,26 +120,17 @@ detect_error <- function(failed, service, params) {
         reason <- c(reason, "API error: OpenAIRE not reachable")
       }
     }
+
+    # If not one of the known data source API errors:
+    # "not enough results" or "timeframe too short" if it was specified
     if (length(reason) == 0) {
-        result <- regmatches(failed$query, regexec(phrasepattern, failed$query))
-        # if not one of the known data source API errors:
-        # apply query error detection heuristics
-        if (grepl('“', failed$query, fixed = TRUE) ||
-            grepl('“', failed$query, fixed = TRUE)) {
-          reason <- c(reason, 'query formatting')
-        }
-        if (!identical(result[[1]], character(0)) &&
-            length(unlist(strsplit(result[[1]][2], " "))) > 4) {
-          reason <- c(reason, 'too specific')
-        } else if (length(unlist(strsplit(failed$query, " "))) < 4) {
-          reason <- c(reason, 'typo', 'too specific')
-        } else {
-          reason <- c(reason, 'query length', 'too specific')
-        }
-        if (!is.null(failed$params$to) &&
-            !is.null(failed$params$from) &&
-            difftime(failed$params$to, failed$params$from) <= 60) {
-          reason <- c(reason, 'timeframe too short')
+      has_timeframe <- !is.null(failed$params$to) && !is.null(failed$params$from)
+      is_short_timeframe <- has_timeframe && difftime(failed$params$to, failed$params$from) <= 60
+
+      if (is_short_timeframe) {
+        reason <- c(reason, 'timeframe too short')
+      } else {
+        reason <- c(reason, 'not enough results')
       }
     }
   }

@@ -28,4 +28,6 @@ var data_config = {
     filter_options: ["all", "open_access"],
     //show number of open access documents in context
     show_context_oa_number: false,
+
+    visualization_type: "overview", // Used in the reducer named "chartType" to determine the visualization type: overview, timeline, geomap
 };

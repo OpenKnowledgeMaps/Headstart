@@ -1,0 +1,15 @@
+{
+  "endpoint": "http://127.0.0.1:8081/dev/persistence/createVisualization/dev",
+  "visualizations": [
+    {
+      "vis_id": "81abae6d3af6e47761e2a761a47c2c11",
+      "vis_title": "base",
+      "vis_clean_query": "digital education",
+      "vis_query": "digital education",
+      "vis_params": "{\"from\":\"1665-01-01\",\"to\":\"2025-12-03\",\"document_types\":[\"121\"],\"sorting\":\"most-relevant\",\"min_descsize\":\"300\",\"lang_id\":[\"all-lang\"]}",
+      "data_file": "81abae6d3af6e47761e2a761a47c2c11.json"
+    }
+  ]
+}
+
+

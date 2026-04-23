@@ -1,8 +1,4 @@
-
-// @ts-nocheck
-
-import React from "react";
-
+import React, { FC } from "react";
 import { useLocalizationContext } from "../../components/LocalizationProvider";
 import useMatomo from "../../utils/useMatomo";
 
@@ -11,7 +7,7 @@ interface LinkProps {
   isDoi: boolean;
 }
 
-const Link = ({ address, isDoi }: LinkProps) => {
+const Link: FC<LinkProps> = ({ address, isDoi }) => {
   const localization = useLocalizationContext();
   const { trackEvent } = useMatomo();
 
@@ -19,7 +15,6 @@ const Link = ({ address, isDoi }: LinkProps) => {
     trackEvent("List document", "Open paper link", "Text link");
 
   return (
-    // html template starts here
     <div className="doi_outlink">
       <span>
         [{isDoi ? "doi" : localization.link}]:{" "}
@@ -39,7 +34,6 @@ const Link = ({ address, isDoi }: LinkProps) => {
         )}
       </span>
     </div>
-    // html template ends here
   );
 };
 

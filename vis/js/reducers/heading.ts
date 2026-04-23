@@ -1,4 +1,5 @@
-import { Config } from "../@types/config";
+import { Config } from "../types";
+import { GEOMAP_MODE, STREAMGRAPH_MODE } from "./chartType";
 
 const context = (state = {}, action: any) => {
   if (action.canceled) {
@@ -9,19 +10,23 @@ const context = (state = {}, action: any) => {
     case "INITIALIZE":
       return {
         title: action.contextObject.params
-            ? action.contextObject.params.title
-            : undefined,
+          ? action.contextObject.params.title
+          : undefined,
         acronym: action.contextObject.params
-            ? action.contextObject.params.acronym
-            : undefined,
+          ? action.contextObject.params.acronym
+          : undefined,
         projectId: action.contextObject.params
-            ? action.contextObject.params.project_id
-            : undefined,
+          ? action.contextObject.params.project_id
+          : undefined,
         presetTitle: action.configObject.title,
         // Todo: set titleStyle = "custom" if custom_title exists
-        titleStyle: action.contextObject.custom_title ? 'custom' : getTitleStyle(action.configObject),
+        titleStyle: action.contextObject.custom_title
+          ? "custom"
+          : getTitleStyle(action.configObject),
         titleLabelType: getTitleLabelType(action.configObject),
-        customTitle: action.configObject.custom_title ? action.configObject.custom_title : action.contextObject.params.custom_title,
+        customTitle: action.configObject.custom_title
+          ? action.configObject.custom_title
+          : action.contextObject.params.custom_title,
       };
     default:
       return state;
@@ -29,7 +34,6 @@ const context = (state = {}, action: any) => {
 };
 
 const getTitleStyle = (config: Config) => {
-  
   if (config.create_title_from_context) {
     if (config.create_title_from_context_style) {
       return config.create_title_from_context_style;
@@ -41,16 +45,23 @@ const getTitleStyle = (config: Config) => {
 };
 
 const getTitleLabelType = (config: Config) => {
-  if (config.is_authorview && config.is_streamgraph) {
+  const isStreamgraph = config.visualization_type === STREAMGRAPH_MODE;
+  const isGeomap = config.visualization_type === GEOMAP_MODE;
+
+  if (config.is_authorview && isStreamgraph) {
     return "authorview-streamgraph";
   }
 
-  if (config.is_authorview && !config.is_streamgraph) {
+  if (config.is_authorview && !isStreamgraph) {
     return "authorview-knowledgemap";
   }
 
-  if (config.is_streamgraph) {
+  if (isStreamgraph) {
     return "keywordview-streamgraph";
+  }
+
+  if (isGeomap) {
+    return "geomap";
   }
 
   return "keywordview-knowledgemap";

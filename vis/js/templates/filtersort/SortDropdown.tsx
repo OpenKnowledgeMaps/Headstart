@@ -1,10 +1,5 @@
-import React from "react";
-import {
-  DropdownButton,
-  MenuItem,
-  OverlayTrigger,
-  Tooltip,
-} from "react-bootstrap";
+import React, { FC } from "react";
+import { DropdownButton, MenuItem } from "react-bootstrap";
 import useMatomo from "../../utils/useMatomo";
 import { useLocalizationContext } from "../../components/LocalizationProvider";
 
@@ -16,7 +11,13 @@ export interface SortDropdownProps {
   handleChange: (id: string) => void;
 }
 
-const SortDropdown = ({ label, value, valueLabel, options, handleChange }: SortDropdownProps) => {
+const SortDropdown: FC<SortDropdownProps> = ({
+  label,
+  value,
+  valueLabel,
+  options,
+  handleChange,
+}) => {
   const { trackEvent } = useMatomo();
   const localization = useLocalizationContext();
 
@@ -26,7 +27,7 @@ const SortDropdown = ({ label, value, valueLabel, options, handleChange }: SortD
     trackEvent(
       "List controls",
       "Sort list",
-      selectedOption ? selectedOption.label : undefined
+      selectedOption ? selectedOption.label : undefined,
     );
   };
 
@@ -42,20 +43,31 @@ const SortDropdown = ({ label, value, valueLabel, options, handleChange }: SortD
         className="truncate-text"
         title={
           <>
-           <span style={{
-              maxWidth: '100%',
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center'
-            }}>
+            <span
+              style={{
+                maxWidth: "100%",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
               <span>{label}</span>
-              <span id="curr-filter-type" className="truncate-text" style={{
-                minWidth: '0px',
-                marginLeft: "3px"
-              }}>{valueLabel}</span>
-              <i className="fas fa-chevron-down chevron" style={{
-                marginLeft: "3px",
-              }}/>
+              <span
+                id="curr-filter-type"
+                className="truncate-text"
+                style={{
+                  minWidth: "0px",
+                  marginLeft: "3px",
+                }}
+              >
+                {valueLabel}
+              </span>
+              <i
+                className="fas fa-chevron-down chevron"
+                style={{
+                  marginLeft: "3px",
+                }}
+              />
             </span>
           </>
         }

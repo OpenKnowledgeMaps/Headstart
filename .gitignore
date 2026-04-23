@@ -34,10 +34,12 @@ server/workers/tests/testutils/
 local_dev/renv/*
 local_dev/dev.env
 local_dev/paper_preview
+.docker.test.env
 
 # php files
 /server/classes/headstart/vendor
 /server/classes/headstart/var/*
+**.phpunit.cache
 
 # R files
 server/preprocessing/other-scripts/.Rhistory
@@ -46,6 +48,9 @@ server/preprocessing/other-scripts/renv
 .Rprofile
 .Rproj*
 /*.Rproj
+*/**/*.Rproj
+*/**/*.RData
+server/workers/*/renv
 .Rproj.user
 
 # python files
@@ -66,6 +71,9 @@ server/preprocessing/other-scripts/renv
 # temporal
 local_dev/config_local_headstart.ini
 local_dev/config_local_searchflow.ini
+local_dev/tools/**/*.csv
+local_dev/tools/**/*.json
+local_dev/tools/**/*.log
 
 # mac os
 .DS_Store

@@ -3,14 +3,16 @@
  */
 import { combineReducers } from "redux";
 
+import { Config } from "../types";
 import animation from "./animation";
 import areas from "./areas";
 import author from "./author";
 import bubbleOrder from "./bubbleOrder";
 import chart from "./chart";
-import chartType from "./chartType";
+import { chartType } from "./chartType";
 import contextLine from "./contextLine";
 import data from "./data";
+import { geomapSettings } from "./geomapSettings";
 import heading from "./heading";
 import highlightedBubble from "./highlightedBubble";
 import hyphenationLang from "./hyphenationLang";
@@ -18,8 +20,11 @@ import isCovis from "./isCovis";
 import list from "./list";
 import localization from "./localization";
 import misc from "./misc";
+import modalInfoType from "./modalInfoType";
 import modals from "./modals";
+import paper from "./paper";
 import paperOrder from "./paperOrder";
+import q_advanced from "./q_advanced";
 import query from "./query";
 import selectedBubble from "./selectedBubble";
 import selectedPaper from "./selectedPaper";
@@ -29,10 +34,6 @@ import timespan from "./timespan";
 import toolbar from "./toolbar";
 import tracking from "./tracking";
 import zoom from "./zoom";
-import q_advanced from "./q_advanced";
-import modalInfoType from "./modalInfoType";
-import paper from "./paper";
-import { Config } from "../@types/config";
 
 export default combineReducers({
   animation,
@@ -64,13 +65,16 @@ export default combineReducers({
   zoom,
   q_advanced,
   modalInfoType,
+  geomapSettings,
 });
 
 export const getInitialState = (config: Config) => {
   // TODO where possible, move the config values from INITIALIZE to here
   return {
     localization: {
-      ...config.localization[config.language === 'ger_linkedcat' ? 'ger' : 'eng'],
+      ...config.localization[
+        config.language === "ger_linkedcat" ? "ger" : "eng"
+      ],
       ...config.localization[config.language],
     },
     misc: {

@@ -1,16 +1,14 @@
-import React from "react";
+import React, { FC } from "react";
 
-const Timestamp = ({ value, label }: {
-  value: string;
+interface TimestampProps {
   label: string;
-}) => {
-  return (
-    // html template starts here
-    <span id="timestamp" className="context_item">
-      {label}: {value}
-    </span>
-    // html template ends here
-  );
-};
+  value: string;
+}
+
+const Timestamp: FC<TimestampProps> = ({ label, value }) => (
+  <span id="timestamp" className="context_item">
+    {label}: {value}
+  </span>
+);
 
 export default Timestamp;

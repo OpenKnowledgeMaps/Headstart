@@ -1,6 +1,14 @@
 // @ts-nocheck
+import {
+  AllPossiblePapersType,
+  AquanaviPaper,
+  Config,
+  GeographicalData,
+} from "@js/types";
+
+import { GEOMAP_MODE } from "../reducers/chartType";
 import { isNonTextDocument } from "../templates/Paper";
-import { stringCompare } from "./string";
+import { checkIsEmptyString, stringCompare } from "./string";
 
 /**
  * Filters the input data according to the provided settings.
@@ -104,8 +112,8 @@ const SEARCHED_PROPS = [
  *
  * @returns {Function} filtering function that returns true if paper contains all the searched keywords
  */
-const getWordFilterFunction = (searchedKeywords) => {
-  return (paper) => {
+const getWordFilterFunction = (searchedKeywords: string[]) => {
+  return (paper: AllPossiblePapersType) => {
     const paperKeywords = SEARCHED_PROPS.map((prop) =>
       getPropertyOrEmptyString(paper, prop),
     );
@@ -123,6 +131,15 @@ const getWordFilterFunction = (searchedKeywords) => {
     }
     if (isNonText) {
       paperKeywords.push("file");
+    }
+
+    if ("geographicalData" in paper && paper.geographicalData) {
+      const { country } = paper.geographicalData;
+
+      if (country) {
+        const formattedCountry = country.toLowerCase();
+        paperKeywords.push(formattedCountry);
+      }
     }
 
     const paperString = paperKeywords.join(" ");
@@ -551,4 +568,83 @@ export const queryConcatenator = (terms) => {
 export const getValueOrZero = (value: unknown): number => {
   const transformedValue = Number(value);
   return isNaN(transformedValue) ? 0 : transformedValue;
+};
+
+/**
+ * The function checks that the transferred data object represents
+ * the Aquanavi format.
+ */
+export const checkIsAquanaviData = (
+  data: AllPossiblePapersType,
+  config: Config,
+) => {
+  const isGeomapVisType = config.visualization_type === GEOMAP_MODE;
+  const isPaperHasCoveragePopery = Object.hasOwn(data, "coverage");
+  return isGeomapVisType && isPaperHasCoveragePopery;
+};
+
+/**
+ * The function processes longitude and latitude coordinates.
+ * As agreed with the backend, they can be represented by a string
+ * containing a number or an empty string.
+ */
+const processGeographicalCoordinates = (possibleCoordinatesData: string) => {
+  const isEmptyString = checkIsEmptyString(possibleCoordinatesData);
+
+  if (isEmptyString) {
+    return null;
+  }
+
+  return Number(possibleCoordinatesData);
+};
+
+/**
+ * The function processes geographic information:
+ * country, continent, longitude, and latitude.
+ */
+export const parseGeographicalData = (data: AquanaviPaper) => {
+  const PARAMETERS_TO_EXCLUDE = ["start", "end"];
+  const result: GeographicalData = {
+    country: null,
+    continent: null,
+    east: null,
+    north: null,
+  };
+
+  const coverageEntries = data.coverage.split(";");
+  for (const entry of coverageEntries) {
+    const [key, value] = entry.split("=");
+
+    const formattedKey: string = key.trim().toLowerCase();
+
+    const isKeyToExclude = PARAMETERS_TO_EXCLUDE.includes(formattedKey);
+    const isKnownKey = Object.hasOwn(result, formattedKey);
+    if (isKeyToExclude || !isKnownKey) {
+      continue;
+    }
+
+    const formattedValue = value.trim();
+
+    switch (formattedKey) {
+      case "country": {
+        result[formattedKey] = formattedValue ? formattedValue : null;
+        break;
+      }
+      case "continent": {
+        result[formattedKey] = formattedValue ? formattedValue : null;
+        break;
+      }
+      case "east": {
+        result[formattedKey] = processGeographicalCoordinates(formattedValue);
+        break;
+      }
+      case "north": {
+        result[formattedKey] = processGeographicalCoordinates(formattedValue);
+        break;
+      }
+      default:
+    }
+  }
+
+  return result;
 };

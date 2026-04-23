@@ -28,9 +28,10 @@ class Snapshot
         $snap_php = $ini_array["snapshot"]["snapshot_php"];
         $storage = $ini_array["snapshot"]["storage_path"];
         $nodemodules = $ini_array["snapshot"]["nodemodules_path"];
+        $chrome_executable_path = $ini_array["snapshot"]["chrome_executable_path"];
 
         $url = "{$host}{$snap_php}?{$url_postfix}";
-        $this->cmd = "{$node_path} {$getsvg} \"{$url}\" {$storage}{$post_data['file']}.png {$nodemodules}";
+        $this->cmd = "{$node_path} {$getsvg} \"{$url}\" {$storage}{$post_data['file']}.png {$nodemodules} {$chrome_executable_path}";
     }
 
     public function takeSnapshot() {

@@ -5,10 +5,15 @@ import { connect } from "react-redux";
 
 import { openCitationModal } from "../../actions";
 import { useLocalizationContext } from "../../components/LocalizationProvider";
-import { STREAMGRAPH_MODE } from "../../reducers/chartType";
+import { GEOMAP_MODE, STREAMGRAPH_MODE } from "../../reducers/chartType";
 import useMatomo from "../../utils/useMatomo";
 
-const CitationButton = ({ isStreamgraph, onClick }: {
+const CitationButton = ({
+  isGeomap,
+  isStreamgraph,
+  onClick,
+}: {
+  isGeomap: boolean;
   isStreamgraph: boolean;
   onClick: () => void;
 }) => {
@@ -20,16 +25,21 @@ const CitationButton = ({ isStreamgraph, onClick }: {
     trackEvent("Added components", "Open cite modal", "Cite button");
   };
 
+  let citeButtonTitle: string;
+  if (isGeomap) {
+    citeButtonTitle = localization.cite_title_geomap;
+  } else if (isStreamgraph) {
+    citeButtonTitle = localization.cite_title_sg;
+  } else {
+    citeButtonTitle = localization.cite_title_km;
+  }
+
   return (
     // html template starts here
     <div>
       <button
         className="btn btn-primary"
-        title={
-          isStreamgraph
-            ? localization.cite_title_sg
-            : localization.cite_title_km
-        }
+        title={citeButtonTitle}
         onClick={handleClick}
       >
         <span id="citationlink">
@@ -43,6 +53,7 @@ const CitationButton = ({ isStreamgraph, onClick }: {
 };
 
 const mapStateToProps = (state) => ({
+  isGeomap: state.chartType === GEOMAP_MODE,
   isStreamgraph: state.chartType === STREAMGRAPH_MODE,
 });
 

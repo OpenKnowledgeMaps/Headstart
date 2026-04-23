@@ -1,5 +1,4 @@
-import { expect, describe, it } from 'vitest';
-
+import { expect, describe, it } from "vitest";
 
 import {
   commentArrayValidator,
@@ -8,9 +7,11 @@ import {
   getInternalMetric,
   getVisibleMetric,
   oaStateValidator,
+  parseGeographicalData,
   resultTypeSanitizer,
   stringArrayValidator,
-} from "../../js/utils/data";
+} from "@/js/utils/data";
+import { AquanaviPaper } from "@/js/types";
 
 describe("Data utility functions", () => {
   describe("date validator", () => {
@@ -219,6 +220,108 @@ describe("Data utility functions", () => {
       const result = getInternalMetric(data, "testMetric");
 
       expect(result).toEqual(0);
+    });
+  });
+
+  describe("Geomap data processing functions", () => {
+    describe("Parse geographical data correctly", () => {
+      const createMockData = (coverageString: string): AquanaviPaper => {
+        const MOCK_DATA = {
+          coverage: coverageString,
+        } as AquanaviPaper;
+
+        return MOCK_DATA;
+      };
+
+      describe("Country name", () => {
+        it("Return the name if it is presented in the string", () => {
+          const COUNTRY_NAME = "France";
+          const COVERAGE_STRING_TO_PARSE = `country=${COUNTRY_NAME}; continent=Europe; east=-0.618181; north=44.776596; start=2010-07; end=2012-06`;
+          const MOCK_DATA = createMockData(COVERAGE_STRING_TO_PARSE);
+
+          const result = parseGeographicalData(MOCK_DATA);
+          const { country } = result;
+
+          expect(country).toBe(COUNTRY_NAME);
+        });
+
+        it("Return null instead of a name if it is not presented in the string", () => {
+          const COVERAGE_STRING_TO_PARSE = `country=; continent=Europe; east=-0.618181; north=44.776596; start=2010-07; end=2012-06`;
+          const MOCK_DATA = createMockData(COVERAGE_STRING_TO_PARSE);
+
+          const result = parseGeographicalData(MOCK_DATA);
+          const { country } = result;
+
+          expect(country).toBe(null);
+        });
+      });
+
+      describe("Continent name", () => {
+        it("Return the name if it is presented in the string", () => {
+          const CONTINENT_NAME = "Europe";
+          const COVERAGE_STRING_TO_PARSE = `country=France; continent=${CONTINENT_NAME}; east=-0.618181; north=44.776596; start=2010-07; end=2012-06`;
+          const MOCK_DATA = createMockData(COVERAGE_STRING_TO_PARSE);
+
+          const result = parseGeographicalData(MOCK_DATA);
+          const { continent } = result;
+
+          expect(continent).toBe(CONTINENT_NAME);
+        });
+
+        it("Return null instead of a name if it is not presented in the string", () => {
+          const COVERAGE_STRING_TO_PARSE = `country=France; continent=; east=-0.618181; north=44.776596; start=2010-07; end=2012-06`;
+          const MOCK_DATA = createMockData(COVERAGE_STRING_TO_PARSE);
+
+          const result = parseGeographicalData(MOCK_DATA);
+          const { continent } = result;
+
+          expect(continent).toBe(null);
+        });
+      });
+
+      describe("Coordinates", () => {
+        it("Return east coordinates if they are presented in the string", () => {
+          const COORDINATES = "-0.618181";
+          const COVERAGE_STRING_TO_PARSE = `country=France; continent=Europe; east=${COORDINATES}; north=44.776596; start=2010-07; end=2012-06`;
+          const MOCK_DATA = createMockData(COVERAGE_STRING_TO_PARSE);
+
+          const result = parseGeographicalData(MOCK_DATA);
+          const { east } = result;
+
+          expect(east).toBe(Number(COORDINATES));
+        });
+
+        it("Return null instead of east coordinates if they are not presented in the string", () => {
+          const COVERAGE_STRING_TO_PARSE = `country=France; continent=Europe; east=; north=44.776596; start=2010-07; end=2012-06`;
+          const MOCK_DATA = createMockData(COVERAGE_STRING_TO_PARSE);
+
+          const result = parseGeographicalData(MOCK_DATA);
+          const { east } = result;
+
+          expect(east).toBe(null);
+        });
+
+        it("Return north coordinates if they are presented in the string", () => {
+          const COORDINATES = "44.776596";
+          const COVERAGE_STRING_TO_PARSE = `country=France; continent=Europe; east=-0.618181; north=${COORDINATES}; start=2010-07; end=2012-06`;
+          const MOCK_DATA = createMockData(COVERAGE_STRING_TO_PARSE);
+
+          const result = parseGeographicalData(MOCK_DATA);
+          const { north } = result;
+
+          expect(north).toBe(Number(COORDINATES));
+        });
+
+        it("Return null instead of north coordinates if they are not presented in the string", () => {
+          const COVERAGE_STRING_TO_PARSE = `country=France; continent=Europe; east=-0.618181; north=; start=2010-07; end=2012-06`;
+          const MOCK_DATA = createMockData(COVERAGE_STRING_TO_PARSE);
+
+          const result = parseGeographicalData(MOCK_DATA);
+          const { north } = result;
+
+          expect(north).toBe(null);
+        });
+      });
     });
   });
 });

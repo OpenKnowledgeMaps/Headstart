@@ -2,10 +2,9 @@ import { useState, useEffect } from "react";
 import $ from "jquery";
 
 import { isFileAvailable } from "./data";
-import { Paper } from "../@types/paper";
+import { Paper, VisualizationTypes } from "../types";
 import { useSelector } from "react-redux";
 import { ensureThatURLStartsWithHTTP } from "./url";
-import { VisualizationTypes } from "../@types/visualization-types";
 
 const getVisualizationIdFromStore = (state: any): string => {
   return state.data.options.visualizationId;

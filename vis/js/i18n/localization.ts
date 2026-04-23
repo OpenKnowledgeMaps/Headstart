@@ -14,6 +14,7 @@ export interface Localization {
   streamgraph_label: string;
   overview_authors_label: string;
   streamgraph_authors_label: string;
+  geomap_label: string;
   custom_title_explanation: string;
   articles_label: string;
   most_recent_label: string;
@@ -73,9 +74,11 @@ export interface Localization {
   filter_by_label: string;
   cite_title_km: string;
   cite_title_sg: string;
+  cite_title_geomap: string;
   citation_template: string;
   cite_vis_km: string;
   cite_vis_sg: string;
+  cite_vis_geomap: string;
   cite_paper: string;
   export_paper: string;
   download: string;
@@ -93,9 +96,11 @@ export interface Localization {
   high_metadata_quality: string;
   high_metadata_quality_desc_base: string;
   high_metadata_quality_desc_pubmed: string;
+  high_metadata_quality_desc_aquanavi: string;
   low_metadata_quality: string;
   low_metadata_quality_desc_base: string;
   low_metadata_quality_desc_pubmed: string;
+  low_metadata_quality_desc_aquanavi: string;
   time_frame_context_sg: string;
   citations_count_label: string;
   social_media_count_label: string;
@@ -107,12 +112,12 @@ export interface Localization {
   researcher_details_label: string;
   scale_by_explanation: string;
   scale_label: {
-    content_based: string;
-    citations: string;
-    cited_by_accounts_count: string;
-    references: string;
-    citation_count: string;
-    cited_by_tweeters_count: string;
+    "content_based": string;
+    "citations": string;
+    "cited_by_accounts_count": string;
+    "references": string;
+    "citation_count": string;
+    "cited_by_tweeters_count": string;
     "readers.mendeley": string;
   };
   tweets: string;
@@ -126,6 +131,9 @@ export interface Localization {
   readers_count_label: string;
   publication: string;
   dataset: string;
+  timestamp_label: string;
+  location: string;
+  location_fallback: string;
 }
 
 export const localization: {
@@ -147,29 +155,30 @@ export const localization: {
     streamgraph_label: "Streamgraph of",
     overview_authors_label: "Knowledge Map of the works of",
     streamgraph_authors_label: "Streamgraph of the works of",
+    geomap_label: "Geo Map of",
     custom_title_explanation:
       "This is a custom title. Please see the info button for more information. Original query:",
-    articles_label: "documents",
+    articles_label: "resources",
     most_recent_label: "most recent",
     most_relevant_label: "most relevant",
     most_relevant_tooltip:
       "At the moment, we use the relevance ranking provided by the source API. Both PubMed and BASE mainly use text similarity between your query and the article metadata to determine the relevance. Please consult the FAQ for more information.",
     most_relevant_tooltip_sg:
-      "In this streamgraph you find the most relevant documents matching your query related to the top keywords. To determine the most relevant documents, we use the relevance ranking provided by the data source e.g. BASE. Data sources mainly use text similarity between your query and the article metadata to determine the relevance ranking. Please consult the FAQs for more information.",
+      "In this streamgraph you find the most relevant resources matching your query related to the top keywords. To determine the most relevant resources, we use the relevance ranking provided by the data source e.g. BASE. Data sources mainly use text similarity between your query and the article metadata to determine the relevance ranking. Please consult the FAQs for more information.",
     source_label: "Data source",
     resulttype_label: "Document type",
-    documenttypes_label: "Document types",
+    documenttypes_label: "Resource types",
     readers_count_label: "readers",
     documenttypes_tooltip:
-      "The following document types were taken into consideration in the creation of this visualization (not all of them may appear in the visualization):",
+      "The following resource types were taken into consideration in the creation of this visualization (not all of them may appear in the visualization):",
     area: "Area",
     items: "items",
     backlink: "← Back to overview",
-    backlink_list: "Show all documents in area",
-    backlink_list_streamgraph: "Show all documents",
-    backlink_list_streamgraph_stream_selected: "Show all documents in stream",
+    backlink_list: "Show all resources in area",
+    backlink_list_streamgraph: "Show all resources",
+    backlink_list_streamgraph_stream_selected: "Show all resources in stream",
     keywords: "Keywords",
-    doctypes: "Document type(s)",
+    doctypes: "Resource type(s)",
     unknown: "Unknown",
     no_keywords: "not available",
     notAvailable: "not available",
@@ -195,36 +204,40 @@ export const localization: {
     pdf_not_loaded:
       "Sorry, we were not able to retrieve the PDF for this publication. You can get it directly from",
     pdf_not_loaded_linktext: "this website",
-    share_button_title: "Share this knowledge map",
-    share_button_title_sg: "Share this streamgraph",
+    share_button_title: "Share this visualization",
+    share_button_title_sg: "Share this visualization",
     embed_title: "embed visualization",
-    embed_button_title: "Embed this knowledge map on other websites",
-    embed_button_title_sg: "Embed this streamgraph on other websites",
+    embed_button_title: "Embed this visualization on other websites",
+    embed_button_title_sg: "Embed this visualization on other websites",
     embed_body_text:
       "You can use this code to embed the visualization on your own website or in a dashboard.",
     area_streamgraph: "Stream",
     stream_year: "Year",
-    stream_doc_num: "Number of documents",
-    stream_docs: "Documents",
-    stream_total: "Total documents in stream",
+    stream_doc_num: "Number of resources",
+    stream_docs: "Resources",
+    stream_total: "Total resources in stream",
     empty_area_warning:
       "No matches found. Please reset your filter options above.",
     lang_all: "All languages",
     cite: "Cite",
     filter_by_label: "show: ",
-    cite_title_km: "Cite this knowledge map",
-    cite_title_sg: "Cite this streamgraph",
+    cite_title_km: "Cite this visualization",
+    cite_title_sg: "Cite this visualization",
+    cite_title_geomap: "Cite this geo map",
     citation_template:
       "Open Knowledge Maps (${year}). ${type} for research on ${query}. Retrieved from ${source} [${date}].",
     cite_vis_km: "Please cite this knowledge map as follows",
     cite_vis_sg: "Please cite this streamgraph as follows",
-    cite_paper: "Cite this document as",
-    export_paper: "Export this document",
+    cite_vis_geomap: "Please cite this geo map as follows",
+    cite_paper: "Cite this resource as",
+    export_paper: "Export this resource",
     download: "Download",
     please_note: "Please note",
     scale_by_label: "Scale map by: ",
     citation_warning:
       "we were not able to verify whether this citation is formatted correctly based on the metadata received. Please check before reuse.",
+    location: "Location",
+    location_fallback: "not available",
   },
   ger: {
     loading: "Wird geladen...",
@@ -243,11 +256,12 @@ export const localization: {
     streamgraph_label: "Streamgraph für",
     overview_authors_label: "Überblick über die Werke von",
     streamgraph_authors_label: "Streamgraph für die Werke von",
+    geomap_label: "Geo Map für",
     custom_title_explanation:
       "Dieser Titel wurde manuell geändert. Die Original-Suche lautet:",
     most_recent_label: "neueste",
     most_relevant_label: "relevanteste",
-    articles_label: "Artikel",
+    articles_label: "ressourcen",
     source_label: "Quelle",
     resulttype_label: "Dokumentart",
     documenttypes_label: "Publikationsarten",
@@ -302,13 +316,15 @@ export const localization: {
       "Keine Dokumente gefunden. Setzen Sie bitte Ihre Filtereinstellungen zurück.",
     cite: "Cite",
     cite_title_km: "Zitieren Sie diese Wissenskarte",
-    cite_title_sg: "Cite this streamgraph",
+    cite_title_sg: "Cite this visualization",
+    cite_title_geomap: "Cite this geo map",
     citation_template:
       "Open Knowledge Maps (${year}). ${type} for research on ${query}. Retrieved from ${source} [${date}].",
     cite_vis_km: "Please cite this knowledge map as follows",
     cite_vis_sg: "Please cite this streamgraph as follows",
-    cite_paper: "Cite this document as",
-    export_paper: "Export this document",
+    cite_vis_geomap: "Please cite this geo map as follows",
+    cite_paper: "Cite this resource as",
+    export_paper: "Export this resource",
     download: "Download",
     please_note: "Please note",
     citation_warning:
@@ -316,6 +332,8 @@ export const localization: {
     lang_all: "Alle Sprachen",
     scale_by_label: "Skalierung: ",
     default_authors: "No authors available",
+    location: "Standort",
+    location_fallback: "nicht verfügbar",
   },
   ger_linkedcat: {
     year: "Jahr",
@@ -348,7 +366,7 @@ export const localization: {
     title: "title",
     items: "items",
     backlink: "← Back to overview",
-    backlink_list: "Show all documents in area",
+    backlink_list: "Show all resources in area",
     unknown: "Unknown",
     custom_title_explanation:
       "This is a custom title. Please see the info button for more information. Original query:",
@@ -363,9 +381,9 @@ export const localization: {
     authors: "authors",
     title: "title",
     backlink: "← Back to overview",
-    backlink_list: "Show all documents in area",
-    backlink_list_streamgraph: "Show all documents",
-    backlink_list_streamgraph_stream_selected: "Show all documents in stream",
+    backlink_list: "← Show all resources",
+    backlink_list_streamgraph: "← Show all resources",
+    backlink_list_streamgraph_stream_selected: "← Show all resources in stream",
     unknown: "Unknown",
     streamgraph_label: "Streamgraph of",
     overview_authors_label: "Overview of the works of",
@@ -373,23 +391,27 @@ export const localization: {
     custom_title_explanation:
       "This is a custom title. Please see the info button for more information. Original query:",
     most_relevant_tooltip:
-      "To determine the most relevant documents, we use the relevance ranking provided by the data source e.g. BASE. Data sources mainly use text similarity between your query and the article metadata to determine the relevance ranking. Please consult the FAQs for more information.",
-    documenttypes_label: "Document types",
+      "To determine the most relevant resources, we use the relevance ranking provided by the data source e.g. BASE. Data sources mainly use text similarity between your query and the article metadata to determine the relevance ranking. Please consult the FAQs for more information.",
+    documenttypes_label: "Resource types",
     all: "any",
     open_access: "Open Access",
     items: "items",
     high_metadata_quality: "Data quality",
     high_metadata_quality_desc_base:
-      "This visualization only includes documents with an abstract (min. 300 characters). High metadata quality significantly improves the quality of your visualization.",
+      "This visualization only includes resources with an abstract (min. 300 characters). High metadata quality significantly improves the quality of your visualization.",
     high_metadata_quality_desc_pubmed:
-      "This visualization only includes documents with an abstract. High metadata quality significantly improves the quality of your visualization.",
+      "This visualization only includes resources with an abstract. High metadata quality significantly improves the quality of your visualization.",
+    high_metadata_quality_desc_aquanavi:
+      "This visualization only includes resources with an abstract (min. 300 characters). High metadata quality significantly improves the quality of your visualization.",
     low_metadata_quality: "Data quality",
     low_metadata_quality_desc_base:
-      "This visualization includes documents with and without an abstract. Low metadata quality may significantly reduce the quality of your visualization. ",
+      "This visualization includes resources with and without an abstract. Low metadata quality may significantly reduce the quality of your visualization.",
     low_metadata_quality_desc_pubmed:
-      "This visualization includes documents with and without an abstract. Low metadata quality may significantly reduce the quality of your visualization. ",
+      "This visualization includes resources with and without an abstract. Low metadata quality may significantly reduce the quality of your visualization.",
+    low_metadata_quality_desc_aquanavi:
+      "This visualization includes resources with and without an abstract. Low metadata quality may significantly reduce the quality of your visualization.",
     time_frame_context_sg:
-      "Please note that we remove time intervals with only a few associated papers during the computation of your streamgraph to increase its readability. As a result the time on the x-axis may not align with the time range you selected.",
+      "Please note that we remove time intervals with only a few associated resources during the computation of your streamgraph to increase its readability. As a result the time on the x-axis may not align with the time range you selected.",
     // metrics
     citations_count_label: "citations",
     social_media_count_label: "social media mentions",
@@ -400,14 +422,14 @@ export const localization: {
     metrics_label: "Metrics",
     researcher_details_label: "Researcher details",
     scale_by_explanation:
-      "The size of the bubbles is relative to the number of documents related to them.",
+      "The size of the bubbles is relative to the number of resources related to them.",
     scale_label: {
-      content_based: "Documents",
-      citations: "Citations",
-      cited_by_accounts_count: "Social media mentions",
-      references: "References outside academia",
-      citation_count: "Citations",
-      cited_by_tweeters_count: "Tweets",
+      "content_based": "Documents",
+      "citations": "Citations",
+      "cited_by_accounts_count": "Social media mentions",
+      "references": "References outside academia",
+      "citation_count": "Citations",
+      "cited_by_tweeters_count": "Tweets",
       "readers.mendeley": "Readers",
     },
   },
@@ -420,9 +442,9 @@ export const localization: {
     authors: "authors",
     title: "title",
     backlink: "← Back to overview",
-    backlink_list: "Show all documents in area",
-    backlink_list_streamgraph: "Show all documents",
-    backlink_list_streamgraph_stream_selected: "Show all documents in stream",
+    backlink_list: "Show all resources in area",
+    backlink_list_streamgraph: "Show all resources",
+    backlink_list_streamgraph_stream_selected: "Show all resources in stream",
     unknown: "Unknown",
     streamgraph_label: "Streamgraph of",
     overview_authors_label: "Knowledge map for the works of",
@@ -430,23 +452,23 @@ export const localization: {
     custom_title_explanation:
       "This is a custom title. Please see the info button for more information. Original query:",
     most_relevant_tooltip:
-      "To determine the most relevant documents, we use the relevance ranking provided by the data source e.g. BASE. Data sources mainly use text similarity between your query and the article metadata to determine the relevance ranking. Please consult the FAQs for more information.",
-    documenttypes_label: "Document types",
+      "To determine the most relevant resources, we use the relevance ranking provided by the data source e.g. BASE. Data sources mainly use text similarity between your query and the article metadata to determine the relevance ranking. Please consult the FAQs for more information.",
+    documenttypes_label: "Resource types",
     all: "any",
     open_access: "Open Access",
     items: "items",
     high_metadata_quality: "Data quality",
     high_metadata_quality_desc_base:
-      "This visualization only includes documents with an abstract (min. 300 characters). High metadata quality significantly improves the quality of your visualization.",
+      "This visualization only includes resources with an abstract (min. 300 characters). High metadata quality significantly improves the quality of your visualization.",
     high_metadata_quality_desc_pubmed:
-      "This visualization only includes documents with an abstract. High metadata quality significantly improves the quality of your visualization.",
+      "This visualization only includes resources with an abstract. High metadata quality significantly improves the quality of your visualization.",
     low_metadata_quality: "Data quality",
     low_metadata_quality_desc_base:
-      "This visualization includes documents with and without an abstract. Low metadata quality may significantly reduce the quality of your visualization. ",
+      "This visualization includes resources with and without an abstract. Low metadata quality may significantly reduce the quality of your visualization. ",
     low_metadata_quality_desc_pubmed:
-      "This visualization includes documents with and without an abstract. Low metadata quality may significantly reduce the quality of your visualization. ",
+      "This visualization includes resources with and without an abstract. Low metadata quality may significantly reduce the quality of your visualization. ",
     time_frame_context_sg:
-      "Please note that we remove time intervals with only a few associated papers during the computation of your streamgraph to increase its readability. As a result the time on the x-axis may not align with the time range you selected.",
+      "Please note that we remove time intervals with only a few associated resources during the computation of your streamgraph to increase its readability. As a result the time on the x-axis may not align with the time range you selected.",
     // metrics
     citations_count_label: "citations",
     social_media_count_label: "social media mentions",
@@ -457,14 +479,14 @@ export const localization: {
     metrics_label: "Metrics",
     researcher_details_label: "Researcher details",
     scale_by_explanation:
-      "The size of the bubbles is relative to the number of documents related to them.",
+      "The size of the bubbles is relative to the number of resources related to them.",
     scale_label: {
-      content_based: "Documents",
-      citations: "Citations",
-      cited_by_accounts_count: "Social media mentions",
-      references: "References outside academia",
-      citation_count: "Citations",
-      cited_by_tweeters_count: "Tweets",
+      "content_based": "Documents",
+      "citations": "Citations",
+      "cited_by_accounts_count": "Social media mentions",
+      "references": "References outside academia",
+      "citation_count": "Citations",
+      "cited_by_tweeters_count": "Tweets",
       "readers.mendeley": "Readers",
     },
   },
@@ -477,7 +499,7 @@ export const localization: {
     citations: "citations",
     title: "title",
     backlink: "← Back to overview",
-    backlink_list: "Show all documents in area",
+    backlink_list: "Show all resources in area",
     unknown: "Unknown",
     documenttypes_label: "Article types",
     dataset_count_label: "datasets",

@@ -1,48 +1,55 @@
-import { Paper } from "../@types/paper";
 import {
-  zoomIn,
-  zoomOut,
-  highlightArea,
-  showPreview,
-  selectPaper,
   deselectPaper,
-  stopAnimation,
+  highlightArea,
   hoverBubble,
+  hoverItem,
   hoverPaper,
+  selectPaper,
   showCitePaper,
   showExportPaper,
+  showPreview,
+  stopAnimation,
+  zoomIn,
+  zoomOut,
 } from "../actions";
+import { AllPossiblePapersType, Paper } from "../types";
 
 /**
  * Returns mapDispatchToProps function used in *ListEntries.js components.
  * @param {Function} dispatch
  */
 export const mapDispatchToListEntriesProps = (dispatch: any) => ({
-  handleZoomIn: (paper: Record<string, string>) =>
+  handleZoomIn: (paper: AllPossiblePapersType) =>
     dispatch(
       zoomIn(
         { title: paper.area, uri: paper.area_uri },
-        createAnimationCallback(dispatch)
-      )
+        createAnimationCallback(dispatch),
+      ),
     ),
-  handlePDFClick: (paper: Paper) => dispatch(showPreview(paper)),
-  handleAreaMouseover: (paper: Paper) => dispatch(highlightArea(paper)),
+  handlePDFClick: (paper: AllPossiblePapersType) =>
+    dispatch(showPreview(paper)),
+  handleAreaMouseover: (paper: AllPossiblePapersType) =>
+    dispatch(highlightArea(paper)),
   handleAreaMouseout: () => dispatch(highlightArea(null)),
-  handleSelectPaper: (paper: Paper) => dispatch(selectPaper(paper)),
-  handleSelectPaperWithZoom: (paper: Paper) =>
+  handleSelectPaper: (paper: AllPossiblePapersType) =>
+    dispatch(selectPaper(paper)),
+  handleSelectPaperWithZoom: (paper: AllPossiblePapersType) =>
     dispatch(
       zoomIn(
         { title: paper.area, uri: paper.area_uri },
         createAnimationCallback(dispatch),
         false,
         false,
-        paper
-      )
+        paper,
+      ),
     ),
   handleDeselectPaper: () => dispatch(deselectPaper()),
-  handleBacklinkClick: () => dispatch(deselectPaper()),
-  handleCiteClick: (paper: Paper) => dispatch(showCitePaper(paper)),
-  handleExportClick: (paper: Paper) => dispatch(showExportPaper(paper)),
+  handleBackLinkClick: () => dispatch(deselectPaper()),
+  handleCiteClick: (paper: AllPossiblePapersType) =>
+    dispatch(showCitePaper(paper)),
+  handleExportClick: (paper: AllPossiblePapersType) =>
+    dispatch(showExportPaper(paper)),
+  handleMouseEnterOnTitle: (id: string | null) => dispatch(hoverItem(id)),
 });
 
 /**
@@ -55,8 +62,8 @@ export const mapDispatchToMapEntriesProps = (dispatch: any) => ({
       zoomIn(
         { title: area.title, uri: area.area_uri },
         createAnimationCallback(dispatch),
-        alreadyZoomed
-      )
+        alreadyZoomed,
+      ),
     ),
   handleZoomOut: () => dispatch(zoomOut(createAnimationCallback(dispatch))),
   handleDeselectPaper: () => dispatch(deselectPaper()),

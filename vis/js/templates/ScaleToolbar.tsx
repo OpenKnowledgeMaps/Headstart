@@ -1,12 +1,19 @@
-// @ts-nocheck
-import React from "react";
+import React, { FC } from "react";
 import { DropdownButton, MenuItem } from "react-bootstrap";
-
 import { useLocalizationContext } from "../components/LocalizationProvider";
 import useMatomo from "../utils/useMatomo";
-import HoverPopover from "./HoverPopover";
+import { ScaleOptions, ScaleExplanations, ScaleLabels } from "../types";
 
-const ScaleToolbar = ({
+interface ScaleToolbar {
+  value: ScaleOptions;
+  options: ScaleOptions[] | [];
+  labels: ScaleLabels;
+  explanations: ScaleExplanations;
+  showCredit: boolean;
+  onChange: (newSortByValue: ScaleOptions) => void;
+}
+
+const ScaleToolbar: FC<ScaleToolbar> = ({
   value,
   options,
   labels,
@@ -16,7 +23,8 @@ const ScaleToolbar = ({
 }) => {
   const localization = useLocalizationContext();
   const { trackEvent } = useMatomo();
-  const handleScaleChange = (id) => {
+
+  const handleScaleChange = (id: ScaleOptions) => {
     onChange(id);
     trackEvent("Added components", "Rescale map", labels[id]);
   };
@@ -63,6 +71,7 @@ const ScaleToolbar = ({
               className="scale_item"
               key={key}
               eventKey={key}
+              // @ts-ignore
               onSelect={handleScaleChange}
               active={key === value}
             >

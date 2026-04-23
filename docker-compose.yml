@@ -1,13 +1,13 @@
 services:
-
   db:
-    image: 'postgres:12.2-alpine'
+    image: "postgres:12.2-alpine"
     hostname: "${POSTGRES_HOSTNAME}"
     restart: unless-stopped
     environment:
       POSTGRES_USER: "${POSTGRES_USER}"
       POSTGRES_PASSWORD: "${POSTGRES_PASSWORD}"
-    command: postgres -c config_file=/etc/postgresql.conf -c hba_file=/etc/pg_hba.conf
+    command:
+      postgres -c config_file=/etc/postgresql.conf -c hba_file=/etc/pg_hba.conf
     volumes:
       - db_data:/var/lib/postgresql/data
       - ./local_dev/pg_hba.conf:/etc/pg_hba.conf
@@ -16,18 +16,26 @@ services:
       - headstart
 
   redis:
-    image: 'redis:6.0-alpine'
+    image: "redis:6.0-alpine"
     restart: unless-stopped
     hostname: "${REDIS_HOST}"
     environment:
       REDIS_HOST: "${REDIS_HOST}"
       REDIS_PORT: "${REDIS_PORT}"
-    command: ["redis-server", "/etc/redis/redis.conf", "--bind", "${REDIS_HOST}", "--port", "${REDIS_PORT}"]
+    command:
+      [
+        "redis-server",
+        "/etc/redis/redis.conf",
+        "--bind",
+        "${REDIS_HOST}",
+        "--port",
+        "${REDIS_PORT}",
+      ]
     volumes:
-        - 'redis:/var/lib/redis/data'
-        - ./local_dev/redis.conf:/etc/redis/redis.conf
+      - "redis:/var/lib/redis/data"
+      - ./local_dev/redis.conf:/etc/redis/redis.conf
     ports:
-     - "127.0.0.1:${REDIS_PORT}:${REDIS_PORT}"
+      - "127.0.0.1:${REDIS_PORT}:${REDIS_PORT}"
     networks:
       - headstart
 
@@ -80,6 +88,7 @@ services:
       - ./server/workers/persistence/src:/api
     depends_on:
       - redis
+      - db
     networks:
       - headstart
 
@@ -236,6 +245,8 @@ services:
       LANG: "en_US.UTF-8"
       RENV_PATHS_CACHE: /renv/cache
       PYTHONIOENCODING: "utf-8"
+      R_ALTMETRIC_APIKEY: "${R_ALTMETRIC_APIKEY}"
+      R_CROSSREF_APIMAIL: "${R_CROSSREF_APIMAIL}"
     restart: unless-stopped
     volumes:
       - ./local_dev/renv/cache:/renv/cache
@@ -261,7 +272,6 @@ services:
       - 127.0.0.1:8085:80
     networks:
       - headstart
-
 
 volumes:
   redis:
