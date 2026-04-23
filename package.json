@@ -19,7 +19,11 @@
     "eslint:check": "eslint .",
     "eslint:fix": "eslint . --fix",
     "prettier:check": "prettier . --check",
-    "prettier:fix": "prettier . --write"
+    "prettier:fix": "prettier . --write",
+    "test:e2e": "playwright test",
+    "test:e2e:ui": "playwright test --ui",
+    "test:e2e:headed": "playwright test --headed",
+    "test:e2e:with-environment-startup": "bash ./local-hotreload.sh && playwright test"
   },
   "repository": {
     "type": "git",
@@ -64,6 +68,7 @@
     "@babel/preset-react": "^7.27.1",
     "@babel/preset-typescript": "^7.27.1",
     "@eslint/js": "^9.29.0",
+    "@playwright/test": "^1.58.2",
     "@rollup/plugin-inject": "^5.0.5",
     "@testing-library/jest-dom": "^6.6.3",
     "@testing-library/react": "^14.3.1",

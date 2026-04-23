@@ -75,5 +75,11 @@ local_dev/tools/**/*.csv
 local_dev/tools/**/*.json
 local_dev/tools/**/*.log
 
+# Playwright
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
+
 # mac os
 .DS_Store
