@@ -1,5 +1,25 @@
 [
   {
+    "name": "INKUBIS: Jurnal Ekonomi dan Bisnis",
+    "internal_name": "ftid14576"
+  },
+  {
+    "name": "African Journal for Development Informatics (AJDI)",
+    "internal_name": "ftid14673"
+  },
+  {
+    "name": "Journal Azzahro",
+    "internal_name": "ftid14697"
+  },
+  {
+    "name": "Revista Internacional Educon",
+    "internal_name": "ftid14699"
+  },
+  {
+    "name": "International Journal of Innovations in Engineering Technology and Applied Sciences (IJIETAS)",
+    "internal_name": "ftid14700"
+  },
+  {
     "name": "VMRF Digital Repository",
     "internal_name": "ftid14684"
   },
@@ -40,7 +60,7 @@
     "internal_name": "ftid14674"
   },
   {
-    "name": "Proceedings Centre-Mersenne",
+    "name": "Books, Proceedings and Seminars of Centre Mersenne",
     "internal_name": "ftid14678"
   },
   {
@@ -10812,7 +10832,7 @@
     "internal_name": "ftuaaguascalient"
   },
   {
-    "name": "Portail de Revues Scientifiques Marocaines IMIST (Institut Marocain de l’Information Scientifique et Technique)",
+    "name": "Portail des Revues Scientifiques Marocaines (PRSM)",
     "internal_name": "ftinstmistojs"
   },
   {
@@ -37468,10 +37488,6 @@
     "internal_name": "ftpolozksuniv"
   },
   {
-    "name": "Fatih Sultan Mehmet Vakıf Üniversitesi (FSMVÜ)",
-    "internal_name": "ftfsmvakifuniv"
-  },
-  {
     "name": "International Journal of the Commons",
     "internal_name": "ftjijotc"
   },
@@ -38802,10 +38818,6 @@
   {
     "name": "Universitas Semarang Jurusan: SIJALU - Sistem Informasi Jurnal Ilmiah USM",
     "internal_name": "ftunivsemarojs"
-  },
-  {
-    "name": "TECNALIA Publications (Fundación TECNALIA Research & Innovation)",
-    "internal_name": "fttecnalia"
   },
   {
     "name": "The University of Melbourne: Digitised Collections",
@@ -44352,10 +44364,6 @@
     "internal_name": "ftcreativearts"
   },
   {
-    "name": "The London School of Economics and Political Science: LSE Theses Online",
-    "internal_name": "ftlschooleconom"
-  },
-  {
     "name": "Repositorio de trabajos finales del Taller de Diseño Industrial (Cátedra Gálan) de la Carrera de Diseño Industrial (FADU - Facultad de Arquitectura, Diseño y Urbanismo, UBA - Universida de Buenos Aires)",
     "internal_name": "ftunibadiana"
   },
@@ -47012,7 +47020,7 @@
     "internal_name": "ftcalpoly"
   },
   {
-    "name": "Repositorio Institucional - UNI (Universidad Nacional de Ingeniería, Lima, Peru)",
+    "name": "Repositorio Institucional Universidad Nacional de Ingeniería",
     "internal_name": "ftunivnilima"
   },
   {
