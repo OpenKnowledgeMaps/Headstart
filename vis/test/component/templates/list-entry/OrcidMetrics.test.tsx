@@ -1,5 +1,7 @@
-import React from "react";
+// @ts-nocheck
 import { render } from "@testing-library/react";
+import React from "react";
+
 import OrcidMetrics from "../../../../js/templates/listentry/OrcidMetrics";
 
 describe("OrcidMetrics in the ListEntry component", () => {
