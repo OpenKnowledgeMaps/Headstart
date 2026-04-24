@@ -1,4 +1,4 @@
-import { defineConfig } from "vitest/config";
+import { configDefaults, defineConfig } from "vitest/config";
 import react from "@vitejs/plugin-react";
 import inject from "@rollup/plugin-inject";
 
@@ -11,7 +11,6 @@ export default defineConfig({
     }),
   ],
   assetsInclude: ["**/*.csl"],
-
   resolve: {
     alias: {
       "@": "/vis/",
@@ -26,5 +25,6 @@ export default defineConfig({
     globals: true,
     environment: "jsdom",
     setupFiles: "./vis/test/setupTests.js",
+    exclude: [...configDefaults.exclude, "e2e/**"],
   },
 });
