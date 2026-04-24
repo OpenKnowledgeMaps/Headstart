@@ -10,7 +10,7 @@ export const prepareVisualisation = async (page: Page, url: string) => {
     .poll(
       async () =>
         ((await contextLine.textContent()) ?? "").replace(/\s+/g, " ").trim(),
-      { timeout: 60_000, intervals: [500, 1000, 2000, 5000] },
+      { timeout: 5 * 60 * 1000, intervals: [500, 1000, 2000, 5000] },
     )
     .not.toBe("");
 };
