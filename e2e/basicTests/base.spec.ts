@@ -73,15 +73,9 @@ test.describe("Basic tests for BASE integration (Knowledge Map and Streamgraph v
         .click();
       await page
         .getByRole("textbox", { name: "Enter search query (e.g." })
-        .fill("");
-      await page
-        .getByRole("textbox", { name: "Enter search query (e.g." })
-        .click();
-      await page
-        .getByRole("textbox", { name: "Enter search query (e.g." })
         .fill("climate change");
       await page.getByRole("button", { name: "Create Overview" }).click();
-
+      await waitForVisualisationCreation(page);
       await expect(page.locator("#search-term-unique")).toContainText(
         "climate change",
       );
