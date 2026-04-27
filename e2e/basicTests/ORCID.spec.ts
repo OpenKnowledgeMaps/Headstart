@@ -2,7 +2,9 @@ import { test, expect } from "@playwright/test";
 import { prepareVisualisation } from "../../vis/js/utils/e2eVisualisationLoader";
 
 test.describe("Basic tests for ORCID integration (Knowledge Map visualisation type)", () => {
-  test("Loads default Knowledge Map visualisation", async ({ page }) => {
+  test("Loads default Knowledge Map visualisation (using direct URL)", async ({
+    page,
+  }) => {
     const VISUALISATION_DYNAMIC_URL =
       "/search?type=get&vis_type=overview&orcid=0000-0001-6011-4382&service=orcid&embed=true";
 

@@ -2,7 +2,9 @@ import { test, expect } from "@playwright/test";
 import { prepareVisualisation } from "../../vis/js/utils/e2eVisualisationLoader";
 
 test.describe("Basic tests for PubMed integration (Knowledge Map visualisation type)", () => {
-  test("Loads default Knowledge Map visualisation", async ({ page }) => {
+  test("Loads default Knowledge Map visualisation (using direct URL)", async ({
+    page,
+  }) => {
     const VISUALISATION_DYNAMIC_URL =
       "/search?type=get&vis_type=overview&q=infection&service=pubmed&sorting=most-relevant";
 

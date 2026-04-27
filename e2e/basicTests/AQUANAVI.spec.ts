@@ -2,7 +2,9 @@ import { test, expect } from "@playwright/test";
 import { prepareVisualisation } from "../../vis/js/utils/e2eVisualisationLoader";
 
 test.describe("Basic tests for AQUANAVI integration (Geomap visualisation type)", () => {
-  test("Loads default Knowledge Map visualisation", async ({ page }) => {
+  test("Loads default Geomap visualisation (using direct URL)", async ({
+    page,
+  }) => {
     const VISUALISATION_DYNAMIC_URL =
       "/search?type=get&vis_type=geomap&q=mesocosms&service=aquanavi&custom_title=aquatic+mesocosm+facilities&min_descsize=0";
 

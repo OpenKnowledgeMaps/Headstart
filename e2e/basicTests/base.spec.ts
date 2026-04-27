@@ -2,7 +2,9 @@ import { test, expect } from "@playwright/test";
 import { prepareVisualisation } from "../../vis/js/utils/e2eVisualisationLoader";
 
 test.describe("Basic tests for BASE integration (Knowledge Map and Streamgraph visualisation types)", () => {
-  test("Loads default Knowledge Map visualisation", async ({ page }) => {
+  test("Loads default Knowledge Map visualisation (using direct URL)", async ({
+    page,
+  }) => {
     const VISUALISATION_DYNAMIC_URL =
       "/search?type=get&vis_type=overview&q=digital%20education&service=base&sorting=most-relevant&document_types%5B%5D=121&lang_id%5B%5D=all-lang&min_descsize=300";
 
@@ -18,7 +20,9 @@ test.describe("Basic tests for BASE integration (Knowledge Map and Streamgraph v
     );
   });
 
-  test("Loads default Streamgraph visualisation", async ({ page }) => {
+  test("Loads default Streamgraph visualisation (using direct URL)", async ({
+    page,
+  }) => {
     const VISUALISATION_DYNAMIC_URL =
       "/search?type=get&vis_type=timeline&q=climate%20change&service=base&sorting=most-relevant&document_types%5B%5D=121&lang_id%5B%5D=all-lang&min_descsize=300";
 
