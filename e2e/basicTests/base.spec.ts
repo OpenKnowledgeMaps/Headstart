@@ -86,4 +86,62 @@ test.describe("Basic tests for BASE integration (Knowledge Map and Streamgraph v
       );
     });
   });
+
+  test.describe("Using old search box", () => {
+    const MAIN_PAGE = "";
+
+    test("Loads default Knowledge Map visualisation using the 'digital education' try out link", async ({
+      page,
+    }) => {
+      await page.goto(MAIN_PAGE);
+
+      const visualisationPagePromise = page.waitForEvent("popup");
+      await page.getByRole("link", { name: "digital education" }).click();
+      const visualisationPage = await visualisationPagePromise;
+
+      await waitForVisualisationCreation(visualisationPage);
+
+      await expect(
+        visualisationPage.locator("#search-term-unique"),
+      ).toContainText("digital education");
+      await expect(visualisationPage.locator("#source")).toContainText(
+        "Data source: BASE",
+      );
+      await visualisationPage
+        .getByTestId("context")
+        .getByText("More information")
+        .click();
+      await expect(visualisationPage.locator("#info-body")).toContainText(
+        "This knowledge map presents you with a topical overview of research on digital education based on the 100 most relevant resources matching your search query.",
+      );
+    });
+
+    test("Loads default Knowledge Map visualisation using the 'climate change AND impact' try out link", async ({
+      page,
+    }) => {
+      await page.goto(MAIN_PAGE);
+
+      const visualisationPagePromise = page.waitForEvent("popup");
+      await page
+        .getByRole("link", { name: "climate change AND impact" })
+        .click();
+      const visualisationPage = await visualisationPagePromise;
+
+      await waitForVisualisationCreation(visualisationPage);
+
+      await expect(
+        visualisationPage.locator("#search-term-unique"),
+      ).toContainText("climate change and impact");
+      await expect(visualisationPage.locator("#source")).toContainText(
+        "Data source: BASE",
+      );
+      await visualisationPage
+        .getByTestId("context")
+        .getByText("More information")
+        .click();
+      await expect(visualisationPage.locator("#info-body")).toContainText(
+        "This knowledge map presents you with a topical overview of research on climate change and impact based on the 100 most relevant resources matching your search query.",
+      );
+    });
+  });
 });
