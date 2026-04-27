@@ -1,5 +1,6 @@
 import { test, expect } from "@playwright/test";
 import { prepareVisualisation } from "../../vis/js/utils/e2eVisualisationLoader";
+import { waitForVisualisationCreation } from "../../vis/js/utils/e2eWaitForVisualisationCreation";
 
 test.describe("Basic tests for ORCID integration (Knowledge Map visualisation type)", () => {
   test.describe("Using direct dynamic URL / PSVS link", () => {
@@ -15,6 +16,33 @@ test.describe("Basic tests for ORCID integration (Knowledge Map visualisation ty
       await page.goto(
         "http://localhost:8085/map/4355a899a6d71b9c6863cf34577bf17e?embed=true",
       );
+      await page.getByText("About the map").click();
+      await expect(page.locator("#info-body")).toContainText(
+        "This knowledge map presents you with a topical overview of the most recent works of Sebastian Dennerlein (0000-0001-6011-4382).",
+      );
+    });
+  });
+
+  test.describe("Using search embedded search box", () => {
+    test("Loads default Knowledge Map visualisation", async ({ page }) => {
+      const VISUALISATION_DYNAMIC_URL =
+        "/embedded_searchbox?service=orcid&embed=true";
+
+      await page.goto(VISUALISATION_DYNAMIC_URL);
+      await page
+        .getByRole("textbox", { name: "Enter ORCID (e.g. 0000-0002-" })
+        .click();
+      await page
+        .getByRole("textbox", { name: "Enter ORCID (e.g. 0000-0002-" })
+        .fill("0000-0001-6011-4382");
+      await page.getByRole("button", { name: "Create Overview" }).click();
+
+      await waitForVisualisationCreation(page);
+
+      await expect(page.locator("#search-term-unique")).toContainText(
+        "Sebastian  Dennerlein (0000-0001-6011-4382)",
+      );
+
       await page.getByText("About the map").click();
       await expect(page.locator("#info-body")).toContainText(
         "This knowledge map presents you with a topical overview of the most recent works of Sebastian Dennerlein (0000-0001-6011-4382).",
