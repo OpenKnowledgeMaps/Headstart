@@ -13,6 +13,7 @@ export interface List {
   noCitationDoctypes: string[];
   searchValue: string;
   show: boolean;
+  showSort: boolean;
   showDocumentType: boolean;
   showFilter: boolean;
   showKeywords: boolean;

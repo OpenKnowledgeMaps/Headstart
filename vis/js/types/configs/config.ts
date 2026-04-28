@@ -96,6 +96,7 @@ export type Config = {
   highlight_query_fields: string[];
 
   filter_menu_dropdown: boolean;
+  sort_menu_dropdown: boolean;
   list_images: string[];
   list_images_path: string;
   visual_distributions: boolean;

@@ -1,25 +1,37 @@
 import React, { FC } from "react";
 import { connect } from "react-redux";
-import StandardFilterSort from "../templates/filtersort/StandardFilterSort";
+
 import BasicFilterSort from "../templates/filtersort/BasicFilterSort";
+import StandardFilterSort from "../templates/filtersort/StandardFilterSort";
 import { State } from "../types";
 
 export interface FilterSortProps {
-  showList: boolean;
+  showSort: boolean;
   showFilter: boolean;
+  isListVisible: boolean;
   color: string | null;
 }
 
-const FilterSort: FC<FilterSortProps> = ({ showList, showFilter, color }) => {
+const FilterSort: FC<FilterSortProps> = ({
+  showSort,
+  showFilter,
+  color,
+  isListVisible,
+}) => {
+  const isSortFilterDisplayed = showSort && isListVisible;
+
   if (showFilter) {
-    return <StandardFilterSort displaySort={showList} color={color} />;
+    return (
+      <StandardFilterSort displaySort={isSortFilterDisplayed} color={color} />
+    );
   }
 
-  return <BasicFilterSort displaySort={showList} color={color} />;
+  return <BasicFilterSort displaySort={isSortFilterDisplayed} color={color} />;
 };
 
 const mapStateToProps = (state: State) => ({
-  showList: state.list.show,
+  isListVisible: state.list.show,
+  showSort: state.list.showSort,
   showFilter: state.list.showFilter,
   color: state.selectedBubble ? state.selectedBubble.color : null,
 });
