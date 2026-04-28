@@ -161,6 +161,8 @@ var config: Config = {
 
   //display filter menu dropdown
   filter_menu_dropdown: false,
+  // display sort menu dropdown
+  sort_menu_dropdown: false,
   list_images: [],
   list_images_path: "images/",
   visual_distributions: false,
