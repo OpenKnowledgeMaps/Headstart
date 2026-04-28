@@ -4,7 +4,7 @@ export const prepareVisualisation = async (page: Page, url: string) => {
   await page.goto(url);
 
   const contextLine = page.getByTestId("context");
-  await expect(contextLine).toBeVisible({ timeout: 60_000 });
+  await expect(contextLine).toBeVisible();
 
   await expect
     .poll(

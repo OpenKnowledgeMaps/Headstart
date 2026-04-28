@@ -5,6 +5,10 @@ export default defineConfig({
   testDir: "./e2e",
   // Maximum duration of a single test
   timeout: 5 * 60 * 1000,
+  // Maximum time for expect() assertions (e.g. toBeVisible)
+  expect: {
+    timeout: 5 * 60 * 1000,
+  },
   // Allow running test files in parallel
   fullyParallel: true,
   // Protect against accidental commit of test.only in CI

@@ -2,7 +2,7 @@ import { expect, Page } from "@playwright/test";
 
 export const waitForVisualisationCreation = async (page: Page) => {
   const contextLine = page.getByTestId("context");
-  await expect(contextLine).toBeVisible({ timeout: 60_000 });
+  await expect(contextLine).toBeVisible();
 
   await expect
     .poll(
