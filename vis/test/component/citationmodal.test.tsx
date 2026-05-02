@@ -33,8 +33,12 @@ const getMockStoreData = (isStreamgraph: boolean) => {
     localization: {
       cite_title_km: "Cite this knowledge map",
       cite_title_sg: "Cite this streamgraph",
+      cite_title_geomap: "Cite this geo map",
       citation_template:
         "Open Knowledge Maps (${year}). ${type} for research on ${query}. Retrieved from ${source} [${date}].",
+      cite_vis_km: "Please cite this knowledge map as follows",
+      cite_vis_sg: "Please cite this streamgraph as follows",
+      cite_vis_geomap: "Please cite this geo map as follows",
     },
   };
 };
