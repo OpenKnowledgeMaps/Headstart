@@ -11,6 +11,7 @@ dist/
 .cache
 coverage/
 .vscode/
+.phpunit.result.cache
 
 # local deployment files
 /deploy.sh
@@ -73,6 +74,12 @@ local_dev/config_local_searchflow.ini
 local_dev/tools/**/*.csv
 local_dev/tools/**/*.json
 local_dev/tools/**/*.log
+
+# Playwright
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
 
 # mac os
 .DS_Store
