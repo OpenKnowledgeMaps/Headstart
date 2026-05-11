@@ -52,11 +52,6 @@ get_papers <- function(query, params) {
                          funder = funder,
                          format = 'xml')
     pubs_metadata <- parse_response(response)
-    # FYI: The deactivation of the fill_dois() function is a hotfix
-    # to enable creation of OpenAIRE project maps
-    # TODO: root cause analysis of failure mode
-    # TODO: refactor/replace/remove the function, decision pending
-    #pubs_metadata <- fill_dois(pubs_metadata)
   },
   error = function(err){
     olog$warn(paste0("vis_id:", .GlobalEnv$VIS_ID, "publications: ", err))
@@ -191,34 +186,6 @@ parse_response <- function(response) {
     olog$warn("Length of results: ", length(tmp))
     stop("Length of results: ", length(tmp))
   }
-}
-
-fill_dois <- function(df) {
-  missing_doi_indices <- which(is.na(df$doi))
-  titles <- df[missing_doi_indices,]$title
-  if (exists("DEBUG") && DEBUG) {
-    olog$debug(paste("Missing DOIs:", length(titles)))
-    olog$debug("Time for filling missing DOIs")
-    olog$debug(system.time(cr_works(query=queries(titles), async=TRUE)))
-  }
-  tryCatch({
-    if (length(titles) > 1) {
-      response <- cr_works(query=queries(titles))
-      candidates <- lapply(response, get_doi_candidates)
-      dois <- mapply(check_distance, titles, candidates, USE.NAMES=FALSE)
-    } else if (length(titles) == 1) {
-      response <- cr_works(flq=c('query.title'=titles))$data
-      candidate_response = response[1,]
-      dois <- check_distance(titles, candidate_response)
-    } else {
-      dois <- ""
-    }
-    df$doi[c(missing_doi_indices)] <- dois
-    }, error=function(err){
-      olog$error(paste("vis_id:", .GlobalEnv$VIS_ID, "DOI enrichment failed:", paste(err)))
-    }
-  )
-  return (df)
 }
 
 get_doi_candidates <- function(response){

@@ -3,6 +3,34 @@
 # Defines the script directory
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
 
+build_for_linux=false
+skip_contentproviders_update=false
+push_to_dockerhub=false
+
+# Parse script flags
+for arg in "$@"; do
+  case "$arg" in
+    --build-for-linux)
+      build_for_linux=true
+      ;;
+    --skip-contentproviders-update)
+      skip_contentproviders_update=true
+      ;;
+    --push)
+      push_to_dockerhub=true
+      ;;
+  esac
+done
+
+# Update contentproviders.json cache if required
+if [ "$skip_contentproviders_update" = true ]; then
+  echo ""
+  echo "Skipping contentproviders.json cache update..."
+  echo ""
+else
+  bash "$SCRIPT_DIR/update_contentproviders_cache.sh"
+fi
+
 # Define the list of services
 services=("api" "persistence" "dataprocessing" "base" "pubmed" "openaire" "orcid" "metrics")
 
@@ -20,7 +48,7 @@ for service in ${services[@]}; do
     echo ""
 
     # Checks that the --build-for-linux flag has been passed and determines the necessary docker build command
-    if [[ "$1" == "--build-for-linux" ]]; then
+    if [ "$build_for_linux" = true ]; then
         echo "Building services with version --platform linux/amd64"
         docker build --platform linux/amd64 -f "$SCRIPT_DIR/../workers/$service/Dockerfile" -t "$service:$service_version" "$SCRIPT_DIR/../"
     else
@@ -32,3 +60,7 @@ done
 echo ""
 echo "Finished building services with version $service_version"
 echo ""
+
+if [ "$push_to_dockerhub" = true ]; then
+  bash "$SCRIPT_DIR/push_to_dockerhub.sh" "$service_version" "${services[@]}"
+fi

@@ -1,31 +1,21 @@
 import re
-import ast
 import sys
 import hashlib
-import pandas as pd
+import logging
+import pandas as pd  # type: ignore[reportMissingImports]
 
 from pathlib import Path
+from .helpers.coordinates import get_row_coordinates_with_collision_offset
+from .helpers.text_content_validation import has_meaningful_value
+from .constants.constants import COLUMNS
+
+logger = logging.getLogger(__name__)
 
 PATH_TO_FOLDER_IN_CONTAINER = "common/common/aquanavi/"
 CSV_PATH_WITH_REAL_DATA = f"{PATH_TO_FOLDER_IN_CONTAINER}mesocosm_data_cleaned.csv"
 CSV_PATH_WITH_TEST_DATA = f"{PATH_TO_FOLDER_IN_CONTAINER}mesocosm_test_data.csv"
 DEFAULT_DOCUMENT_TYPE = "physical object"
 DEFAULT_RESULT_TYPE = ['Other/Unknown material']
-COLUMNS = {
-    "url": "url",
-    "name": "Name",
-    "country": "Country",
-    "continent": "Continent",
-    "equipment": "Equipment",
-    "research_topics": "Research Topics",
-    "specialist_areas": "Specialist areas",
-    "primary_interests": "Primary interests",
-    "controlled_parameters": "Controlled Parameters",
-    "description": "Description of Facility",
-    "location": "Facility location(s) split",
-    "years_of_experiments": "Years of Mesocosm Experiments",
-    "photos_of_experiments": "Photos of experiments/installations images",
-}
 
 def process_column(row, column_name, join_value_parts_with):
     """
@@ -86,31 +76,6 @@ def get_and_process_value(row, column_name, is_remove_trailing_dot, join_value_p
 
     return value
 
-def get_latitude_longitude(row):
-    """
-    The function returns a list with latitude and longitude.
-
-    Args:
-        row (str): String DataFrame.
-
-    Returns:
-        list: A list with latitude and longitude (or None).
-    """
-    coordinates_string = str(row[COLUMNS['location']]).strip()
-
-    latitude, longitude = None, None
-
-    if "," in coordinates_string:
-        try:
-            coords = ast.literal_eval(coordinates_string)
-            if isinstance(coords, (list, tuple)) and len(coords) == 2:
-                latitude = float(str(coords[0]).strip())
-                longitude = float(str(coords[1]).strip())
-        except Exception:
-            latitude, longitude = None, None
-
-    return [latitude, longitude]
-
 def get_years_of_experiments(row):
     """
     The function returns a time range in the list format.
@@ -163,7 +128,7 @@ def get_years_of_experiments(row):
 
     return None, None
 
-def get_coverage(row):
+def get_coverage_with_coordinates(row, latitude, longitude):
     """
     Creates a coverage field information for each data entry. The coverage field contains
     string value in format as presented in the line below:
@@ -171,11 +136,12 @@ def get_coverage(row):
 
     Args:
         row (pandas.Series): String DataFrame.
+        latitude (float|None): Latitude.
+        longitude (float|None): Longitude.
 
     Returns:
         str: String in the coverage field format.
     """
-    latitude, longitude = get_latitude_longitude(row)
     start, end = get_years_of_experiments(row)
 
     coverage_parts = []
@@ -204,7 +170,14 @@ def get_abstract(row):
         str: String in the abstract field format.
     """
     AMOUNT_OF_ALL_POSSIBLE_ENTRIES = 5
-    JOIN_PARTS_OF_VALUES_WITH = " "
+    JOIN_PARTS_WITH = {
+        "description": " ",
+        "equipment": " ",
+        "controlled_parameters": "; ",
+        "grand_challenges": "; ",
+        "research_topics": " ",
+    }
+
     count_of_not_available_parts = 0
     abstract_parts = []
 
@@ -213,28 +186,28 @@ def get_abstract(row):
         count_of_not_available_parts += 1
         return f"{name}: description not available"
 
-    if (row[COLUMNS['description']]):
-        abstract_parts.append(f"Facility description: {get_and_process_value(row, COLUMNS['description'], True, JOIN_PARTS_OF_VALUES_WITH)}")
+    if has_meaningful_value(row, COLUMNS['description']):
+        abstract_parts.append(f"Facility description: {get_and_process_value(row, COLUMNS['description'], True, JOIN_PARTS_WITH['description'])}")
     else:
         abstract_parts.append(get_not_available_message_and_increase_counter("Facility description"))
 
-    if (row[COLUMNS['equipment']]):
-        abstract_parts.append(f"Equipment: {get_and_process_value(row, COLUMNS['equipment'], True, JOIN_PARTS_OF_VALUES_WITH)}")
+    if has_meaningful_value(row, COLUMNS['equipment']):
+        abstract_parts.append(f"Equipment: {get_and_process_value(row, COLUMNS['equipment'], True, JOIN_PARTS_WITH['equipment'])}")
     else:
         abstract_parts.append(get_not_available_message_and_increase_counter('Equipment'))
 
-    if (row[COLUMNS['controlled_parameters']]):
-        abstract_parts.append(f"Controlled parameters: {get_and_process_value(row, COLUMNS['controlled_parameters'], True, JOIN_PARTS_OF_VALUES_WITH)}")
+    if has_meaningful_value(row, COLUMNS['controlled_parameters']):
+        abstract_parts.append(f"Controlled parameters: {get_and_process_value(row, COLUMNS['controlled_parameters'], True, JOIN_PARTS_WITH['controlled_parameters'])}")
     else:
         abstract_parts.append(get_not_available_message_and_increase_counter('Controlled Parameters'))
 
-    if (row[COLUMNS['primary_interests']]):
-            abstract_parts.append(f"Primary interests: {get_and_process_value(row, COLUMNS['primary_interests'], True, JOIN_PARTS_OF_VALUES_WITH)}")
+    if has_meaningful_value(row, COLUMNS['grand_challenges']):
+        abstract_parts.append(f"Grand challenges: {get_and_process_value(row, COLUMNS['grand_challenges'], True, JOIN_PARTS_WITH['grand_challenges'])}")
     else:
-        abstract_parts.append(get_not_available_message_and_increase_counter('Primary interests'))
+        abstract_parts.append(get_not_available_message_and_increase_counter('Grand challenges'))
 
-    if (row[COLUMNS['research_topics']]):
-            abstract_parts.append(f"Research topics: {get_and_process_value(row, COLUMNS['research_topics'], True, JOIN_PARTS_OF_VALUES_WITH)}")
+    if has_meaningful_value(row, COLUMNS['research_topics']):
+        abstract_parts.append(f"Research topics: {get_and_process_value(row, COLUMNS['research_topics'], True, JOIN_PARTS_WITH['research_topics'])}")
     else:
         abstract_parts.append(get_not_available_message_and_increase_counter('Research topics'))
 
@@ -326,17 +299,22 @@ def load_and_prepare_dataframe():
     df = pd.concat([df_real], ignore_index=True)
     check_that_required_columns_exists(df, CSV_PATH_WITH_REAL_DATA)
 
+    # remove duplicates based on all columns
+    df = df.drop_duplicates()
+
     return df
 
 def map_sample_data():
     df = load_and_prepare_dataframe()
 
     result = []
+    seen_coordinates = {}
     for _, row in df.iterrows():
         id = get_id(row)
         title = str(row[COLUMNS['name']]).strip() if row[COLUMNS['name']] else ""
         url = str(row[COLUMNS['url']]).strip() if row[COLUMNS['url']] else ""
         image = row[COLUMNS['photos_of_experiments']] if row[COLUMNS['photos_of_experiments']] else ""
+        latitude, longitude = get_row_coordinates_with_collision_offset(row, seen_coordinates)
 
         result.append({
             "id": id,
@@ -353,7 +331,7 @@ def map_sample_data():
             "relation": image,
             "paper_abstract": get_abstract(row),
             "subject_orig": get_keywords(row),
-            "coverage": get_coverage(row)
+            "coverage": get_coverage_with_coordinates(row, latitude=latitude, longitude=longitude)
         })
 
     return { "documents": result }

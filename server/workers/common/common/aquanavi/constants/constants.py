@@ -1,0 +1,15 @@
+COLUMNS = {
+    "url": "url",
+    "name": "Name",
+    "country": "Country",
+    "continent": "Continent",
+    "equipment": "Equipment",
+    "research_topics": "Research Topics",
+    "specialist_areas": "Specialist areas",
+    "grand_challenges": "Primary interests",
+    "controlled_parameters": "Controlled Parameters",
+    "description": "Description of Facility",
+    "location": "Facility location(s) split",
+    "years_of_experiments": "Years of Mesocosm Experiments",
+    "photos_of_experiments": "Photos of experiments/installations images",
+}

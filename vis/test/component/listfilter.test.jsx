@@ -1,11 +1,12 @@
-import { expect, describe, it, vitest } from 'vitest';
+import { fireEvent, render } from "@testing-library/react";
 import React from "react";
 import { Provider } from "react-redux";
-import { render, fireEvent } from "@testing-library/react";
 import configureStore from "redux-mock-store";
-import { search, filter, sort } from "../../js/actions";
+import { describe, expect, it, vitest } from "vitest";
+
+import { filter, search, sort } from "../../js/actions";
 import FilterSort from "../../js/components/FilterSort";
-import LocalizationProvider from '../../js/components/LocalizationProvider';
+import LocalizationProvider from "../../js/components/LocalizationProvider";
 
 const mockStore = configureStore([]);
 const setup = (overrideListObject = {}, overrideStoreObject = {}) => {
@@ -33,7 +34,7 @@ const setup = (overrideListObject = {}, overrideStoreObject = {}) => {
         sort_by_label: "Sort by: ",
       },
     },
-    overrideStoreObject
+    overrideStoreObject,
   );
 
   return storeObject;
@@ -47,7 +48,7 @@ describe("List filter component", () => {
     const result = render(
       <Provider store={store}>
         <FilterSort />
-      </Provider>
+      </Provider>,
     );
 
     expect(result.container.querySelector("#explorer_options")).not.toBe(null);
@@ -62,11 +63,11 @@ describe("List filter component", () => {
       const result = render(
         <Provider store={store}>
           <FilterSort />
-        </Provider>
+        </Provider>,
       );
 
       expect(
-        result.container.querySelector("#filter_input").getAttribute("value")
+        result.container.querySelector("#filter_input").getAttribute("value"),
       ).toEqual(SEARCH_TEXT);
     });
 
@@ -78,7 +79,7 @@ describe("List filter component", () => {
       const result = render(
         <Provider store={store}>
           <FilterSort />
-        </Provider>
+        </Provider>,
       );
 
       expect(result.container.querySelector("#searchclear")).toBe(null);
@@ -90,7 +91,7 @@ describe("List filter component", () => {
 
     //   const SEARCH_TEXT = "some text";
     //   const EXPECTED_PAYLOAD = search(SEARCH_TEXT);
-    //   const storeObject = setup({ 
+    //   const storeObject = setup({
     //     searchValue: SEARCH_TEXT,
     //     showFilter: true
     //   });
@@ -117,9 +118,9 @@ describe("List filter component", () => {
     //   vitest.advanceTimersByTime(300);
 
     //   vitest.runAllTimers();
-      
+
     //   const actions = store.getActions();
-      
+
     //   expect(actions).toEqual([EXPECTED_PAYLOAD]);
     // });
 
@@ -132,7 +133,7 @@ describe("List filter component", () => {
       const result = render(
         <Provider store={store}>
           <FilterSort />
-        </Provider>
+        </Provider>,
       );
 
       const searchClear = result.container.querySelector("#searchclear");
@@ -153,12 +154,12 @@ describe("List filter component", () => {
       const result = render(
         <Provider store={store}>
           <FilterSort />
-        </Provider>
+        </Provider>,
       );
 
-      expect(result.container.querySelector("#filter_params").textContent).toContain(
-        storeObject.localization[FILTER_ID]
-      );
+      expect(
+        result.container.querySelector("#filter_params").textContent,
+      ).toContain(storeObject.localization[FILTER_ID]);
     });
 
     it("triggers a correct redux action when option is clicked", () => {
@@ -171,10 +172,12 @@ describe("List filter component", () => {
       const result = render(
         <Provider store={store}>
           <FilterSort />
-        </Provider>
+        </Provider>,
       );
 
-      const filterOption = result.container.querySelector("#filter_option_" + EXPECTED_ID);
+      const filterOption = result.container.querySelector(
+        `#filter_option_${EXPECTED_ID}`,
+      );
       fireEvent.click(filterOption);
 
       const actions = store.getActions();
@@ -188,6 +191,7 @@ describe("List filter component", () => {
       const SORT_ID = "relevance";
       const storeObject = setup({
         showFilter: false,
+        showSort: true,
         showDropdownSort: true,
         sortValue: SORT_ID,
       });
@@ -196,11 +200,11 @@ describe("List filter component", () => {
       const result = render(
         <Provider store={store}>
           <FilterSort />
-        </Provider>
+        </Provider>,
       );
 
       expect(result.container.querySelector("#sort").textContent).toContain(
-        storeObject.localization[SORT_ID]
+        storeObject.localization[SORT_ID],
       );
     });
 
@@ -210,6 +214,7 @@ describe("List filter component", () => {
       const SORT_ID = "relevance";
       const storeObject = setup({
         showFilter: false,
+        showSort: true,
         showDropdownSort: true,
         sortValue: SORT_ID,
       });
@@ -218,10 +223,12 @@ describe("List filter component", () => {
       const result = render(
         <Provider store={store}>
           <FilterSort />
-        </Provider>
+        </Provider>,
       );
 
-      const sortOption = result.container.querySelector("#sort_option_" + EXPECTED_ID);
+      const sortOption = result.container.querySelector(
+        `#sort_option_${EXPECTED_ID}`,
+      );
       fireEvent.click(sortOption);
 
       const actions = store.getActions();

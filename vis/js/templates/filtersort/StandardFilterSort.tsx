@@ -1,4 +1,5 @@
 import React, { FC } from "react";
+
 import FilterDropdown from "../../components/filtersort/FilterDropdown";
 import SearchBox from "../../components/filtersort/SearchBox";
 import SortDropdown from "../../components/filtersort/SortDropdown";
@@ -16,11 +17,13 @@ const StandardFilterSort: FC<StandardFilterSortProps> = ({
     <div
       id="explorer_options"
       className="row"
-      style={{ borderBottom: color ? "5px solid " + color : "" }}
+      style={{ borderBottom: color ? `5px solid ${color}` : "" }}
     >
       <SearchBox />
-      <FilterDropdown />
-      {!!displaySort && <SortDropdown />}
+      <div>
+        <FilterDropdown />
+        {!!displaySort && <SortDropdown />}
+      </div>
     </div>
   );
 };

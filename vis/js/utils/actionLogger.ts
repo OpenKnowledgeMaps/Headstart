@@ -12,8 +12,8 @@ const logAction = (action: any, state: any) => {
   switch (action.type) {
     case "INITIALIZE":
       return trackMatomoEvent("Headstart", "Load");
-    case "RESIZE":
-      return trackMatomoEvent("Headstart", "Resize window");
+    // case "RESIZE":
+    //   return trackMatomoEvent("Headstart", "Resize window");
     case "SEARCH":
       // TODO trackSiteSearch ?
       // https://developer.matomo.org/guides/tracking-javascript-guide

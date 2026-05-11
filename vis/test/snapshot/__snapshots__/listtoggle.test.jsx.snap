@@ -34,7 +34,7 @@ exports[`List toggle component snapshot > matches a snapshot 1`] = `
             13
           </span>
            
-          documents
+          resources
           )
         </span>
       </span>

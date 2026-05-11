@@ -3,7 +3,6 @@
 import React from "react";
 
 //import pubmedLogo from "../../../../images/logos/pubmed_logo.png";
-
 import StandardKMInfo from "./subcomponents/StandardKMInfo";
 import StandardSGInfo from "./subcomponents/StandardSGInfo";
 
@@ -24,7 +23,7 @@ const PubMedInfo = ({ params, isStreamgraph }) => {
           </a>
           .
           <br />
-          Citations are available for documents with a DOI and based on citation
+          Citations are available for resources with a DOI and based on citation
           data provided by{" "}
           <a href="https://www.crossref.org/" target="_blank">
             Crossref
