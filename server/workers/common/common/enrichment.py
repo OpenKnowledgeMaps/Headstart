@@ -2,11 +2,6 @@ import os
 import pandas as pd
 from common.deduplication import deduplicate_keywords, deduplicate_links
 
-ENRICHMENT_STRATEGY_FOR_SUBJECT = os.getenv("ENRICHMENT_STRATEGY_FOR_SUBJECT")
-
-STRATEGY_REPLACE = 'replace'
-STRATEGY_MERGE = 'merge'
-
 KEYWORD_SIMILARITY_THRESHOLD = 85
 
 OA_STATE_PRIORITY = {
@@ -15,7 +10,7 @@ OA_STATE_PRIORITY = {
     "2": 2,  # unknown
 }
 
-def enrich_anchor_using_duplicates(df, dupind, subject_strategy=ENRICHMENT_STRATEGY_FOR_SUBJECT):
+def enrich_anchor_using_duplicates(df, dupind):
     """
     Enriches anchor elements using data from duplicates in their groups.
 
@@ -24,8 +19,8 @@ def enrich_anchor_using_duplicates(df, dupind, subject_strategy=ENRICHMENT_STRAT
     All improvements are done in a single pass through the group for efficiency.
 
     List of improvements:
-        - subject_orig: processed according to subject_strategy
-        - subject: processed according to subject_strategy
+        - subject_orig: processed according to merge strategy (merge all keywords from duplicates, remove duplicates, sort alphabetically)
+        - subject: processed according to merge strategy (merge all keywords from duplicates, remove duplicates, sort alphabetically)
         - paper_abstract: replaced with the longest description
         - oa_state: replaced with the highest priority status (yes > no > unknown)
         - link: merged from all duplicates, duplicates links are removed (https > http)
@@ -33,9 +28,6 @@ def enrich_anchor_using_duplicates(df, dupind, subject_strategy=ENRICHMENT_STRAT
     Args:
         df: DataFrame with metadata, containing the column is_anchor
         dupind: Series with indices of duplicates for each id
-        subject_strategy: Strategy for processing keywords ('replace' or 'merge')
-            - 'replace': select the value with the highest number of keywords
-            - 'merge': combine all keywords from the group, removing duplicates
 
     Returns:
         DataFrame with improved anchor properties
@@ -49,8 +41,6 @@ def enrich_anchor_using_duplicates(df, dupind, subject_strategy=ENRICHMENT_STRAT
     is_all_columns_are_missing = not has_subject_orig and not has_subject and not has_paper_abstract and not has_oa_state and not has_link
     if is_all_columns_are_missing:
         return df
-
-    is_use_merge_strategy = subject_strategy == STRATEGY_MERGE
 
     for _, idx in dupind.items():
         idx = df.index.intersection(idx)
@@ -80,11 +70,11 @@ def enrich_anchor_using_duplicates(df, dupind, subject_strategy=ENRICHMENT_STRAT
         for element_idx in idx:
             if has_subject_orig:
                 subject_orig_value = group_data.loc[element_idx, 'subject_orig']
-                process_subject_orig_element(subject_orig_value, subject_orig_acc, is_use_merge_strategy)
+                process_subject_orig_element(subject_orig_value, subject_orig_acc)
 
             if has_subject:
                 subject_value = group_data.loc[element_idx, 'subject']
-                process_subject_element(subject_value, subject_acc, is_use_merge_strategy)
+                process_subject_element(subject_value, subject_acc)
 
             if has_paper_abstract:
                 paper_abstract_value = group_data.loc[element_idx, 'paper_abstract']
@@ -99,10 +89,10 @@ def enrich_anchor_using_duplicates(df, dupind, subject_strategy=ENRICHMENT_STRAT
                 process_link_element(link_value, all_links)
 
         if has_subject_orig:
-            apply_subject_improvements(df, anchor_idx, subject_orig_acc, is_use_merge_strategy, 'subject_orig')
+            apply_subject_improvements(df, anchor_idx, subject_orig_acc, 'subject_orig')
 
         if has_subject:
-            apply_subject_improvements(df, anchor_idx, subject_acc, is_use_merge_strategy, 'subject')
+            apply_subject_improvements(df, anchor_idx, subject_acc, 'subject')
 
         if has_paper_abstract:
             apply_paper_abstract_improvements(df, anchor_idx, paper_abstract_acc)
@@ -115,49 +105,35 @@ def enrich_anchor_using_duplicates(df, dupind, subject_strategy=ENRICHMENT_STRAT
 
     return df
 
-def process_subject_orig_element(value, accumulator, use_merge_strategy):
+def process_subject_orig_element(value, accumulator):
     """
     Processes the subject_orig value for one element of the group.
 
     Args:
         value: The subject_orig value from the element
         accumulator: Dictionary with accumulative data
-        use_merge_strategy: If True, uses the merge strategy, otherwise replace
     """
     is_not_empty = not (pd.isna(value) or value == '')
     if not is_not_empty:
         return
 
     keywords = [kw.strip() for kw in str(value).split(';') if kw.strip()]
-    if use_merge_strategy:
-        accumulator['all_keywords'].update(keywords)
-    else:
-        keyword_count = len(keywords)
-        if keyword_count > accumulator['best_count']:
-            accumulator['best_count'] = keyword_count
-            accumulator['best_value'] = value
+    accumulator['all_keywords'].update(keywords)
 
-def process_subject_element(value, accumulator, use_merge_strategy):
+def process_subject_element(value, accumulator):
     """
     Processes the subject value for one element of the group.
 
     Args:
         value: The subject value from the element
         accumulator: Dictionary with accumulative data
-        use_merge_strategy: If True, uses the merge strategy, otherwise replace
     """
     is_not_empty = not (pd.isna(value) or value == '')
     if not is_not_empty:
         return
 
     keywords = [kw.strip() for kw in str(value).split(';') if kw.strip()]
-    if use_merge_strategy:
-        accumulator['all_keywords'].update(keywords)
-    else:
-        keyword_count = len(keywords)
-        if keyword_count > accumulator['best_count']:
-            accumulator['best_count'] = keyword_count
-            accumulator['best_value'] = value
+    accumulator['all_keywords'].update(keywords)
 
 def process_paper_abstract_element(value, accumulator):
     """
@@ -209,7 +185,7 @@ def process_link_element(value, accumulator):
     links = [link.strip() for link in str(value).split(';') if link.strip()]
     accumulator.update(links)
 
-def apply_subject_improvements(df, anchor_idx, accumulator, use_merge_strategy, column_name):
+def apply_subject_improvements(df, anchor_idx, accumulator, column_name):
     """
     Applies improvements for subject or subject_orig to the anchor element.
 
@@ -217,19 +193,12 @@ def apply_subject_improvements(df, anchor_idx, accumulator, use_merge_strategy, 
         df: DataFrame with data
         anchor_idx: Index of the anchor element
         accumulator: Dictionary with accumulative data
-        use_merge_strategy: If True, uses the merge strategy, otherwise replace
         column_name: Column name ('subject' or 'subject_orig')
     """
-    if use_merge_strategy:
-        if accumulator['all_keywords']:
-            unique_keywords = deduplicate_keywords(accumulator['all_keywords'], KEYWORD_SIMILARITY_THRESHOLD)
-            merged_value = '; '.join(sorted(unique_keywords))
-            df.loc[anchor_idx, column_name] = merged_value
-    else:
-        if accumulator['best_value'] is not None:
-            current = df.loc[anchor_idx, column_name]
-            if pd.isna(current) or str(current) != str(accumulator['best_value']):
-                df.loc[anchor_idx, column_name] = accumulator['best_value']
+    if accumulator['all_keywords']:
+        unique_keywords = deduplicate_keywords(accumulator['all_keywords'], KEYWORD_SIMILARITY_THRESHOLD)
+        merged_value = '; '.join(sorted(unique_keywords))
+        df.loc[anchor_idx, column_name] = merged_value
 
 def apply_paper_abstract_improvements(df, anchor_idx, accumulator):
     """
