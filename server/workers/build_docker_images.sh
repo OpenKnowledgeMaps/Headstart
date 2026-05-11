@@ -16,9 +16,6 @@ for arg in "$@"; do
     --skip-contentproviders-update)
       skip_contentproviders_update=true
       ;;
-    --push)
-      push_to_dockerhub=true
-      ;;
   esac
 done
 
@@ -60,7 +57,3 @@ done
 echo ""
 echo "Finished building services with version $service_version"
 echo ""
-
-if [ "$push_to_dockerhub" = true ]; then
-  bash "$SCRIPT_DIR/push_to_dockerhub.sh" "$service_version" "${services[@]}"
-fi
