@@ -396,10 +396,17 @@ class OrcidService:
         base_metadata['merged_dois'] = base_metadata['merged_dois'].apply(lambda x: x[0] if isinstance(x, list) and len(x) > 0 else x)
         base_metadata['merged_dois'] = base_metadata['merged_dois'].apply(lambda x: x.split(';') if isinstance(x, str) else [])
         base_metadata['merged_dois'] = base_metadata['merged_dois'].apply(lambda x: [x.strip() for x in x] if isinstance(x, list) else x)
+        # Save the normalized original doi before explode so we can rank direct fetches
+        # above rows whose doi was reassigned from merged_dois after explosion.
+        base_metadata['_fetch_doi'] = base_metadata['doi'].apply(remove_doi_prefix)
         base_metadata = base_metadata.explode('merged_dois', ignore_index=True)
         # replace doi with merged_dois if merged_dois is not empty, otherwise keep doi
         base_metadata.loc[base_metadata['merged_dois'].notna() & (base_metadata['merged_dois'] != ''), 'doi'] = base_metadata.loc[base_metadata['merged_dois'].notna() & (base_metadata['merged_dois'] != ''), 'merged_dois']
         base_metadata.loc[:, 'doi'] = base_metadata['doi'].apply(remove_doi_prefix)
+        # True for rows whose final doi still matches the original fetched doi (direct);
+        # False for rows where doi was replaced by a merged_dois value (exploded).
+        base_metadata['_is_direct_fetch'] = base_metadata['doi'] == base_metadata['_fetch_doi']
+        base_metadata.drop(columns='_fetch_doi', inplace=True)
 
         # Remove rows where 'doi' is pd.NaN
         base_metadata = base_metadata[pd.notna(base_metadata['doi'])]
@@ -408,14 +415,33 @@ class OrcidService:
         base_metadata = self._match_dois_by_version(base_metadata, dois)
 
         base_metadata = base_metadata[base_metadata['doi'].isin(dois)]
-        # Sort by oa_state priority (1=open > 0=restricted > 2=unknown) so the
-        # most open record is kept when deduplicating by DOI.
+        if self.logger.isEnabledFor(logging.DEBUG):
+            self._log_dataframe(base_metadata.sort_values(by='title'), params, 'base_metadata_before_doi_dedup')
+            doi_counts = base_metadata['doi'].value_counts()
+            duplicate_dois = doi_counts[doi_counts > 1].index.tolist()
+            if duplicate_dois:
+                self.logger.debug(
+                    f"[doi_dedup] {len(base_metadata)} records before dedup, "
+                    f"{len(duplicate_dois)} DOIs with multiple records: {duplicate_dois}"
+                )
+                for doi in duplicate_dois:
+                    group = base_metadata[base_metadata['doi'] == doi][['doi', 'title', 'paper_abstract', 'subject_orig', 'oa_state']]
+                    self.logger.debug(f"[doi_dedup] duplicate group for doi={doi!r}:\n{group.to_string()}")
+            else:
+                self.logger.debug(f"[doi_dedup] {len(base_metadata)} records, no duplicate DOIs — dedup step is a no-op here")
+        # Sort by: (1) direct fetch before exploded-from-merged_dois rows,
+        # (2) oa_state priority (1=open > 0=restricted > 2=unknown) as tiebreaker.
+        # This ensures the record actually fetched for a DOI wins over a record
+        # that acquired that DOI via merged_dois expansion.
         oa_state_order = {1: 0, 0: 1, 2: 2}
         base_metadata = base_metadata.assign(
-            _oa_sort=base_metadata['oa_state'].map(oa_state_order)
-        ).sort_values(by='_oa_sort').drop_duplicates(subset='doi', keep='first').drop(columns='_oa_sort')
+            _oa_sort=base_metadata['oa_state'].map(oa_state_order),
+            _direct_sort=(~base_metadata['_is_direct_fetch']).astype(int),
+        ).sort_values(by=['_direct_sort', '_oa_sort']).drop_duplicates(
+            subset='doi', keep='first'
+        ).drop(columns=['_oa_sort', '_direct_sort', '_is_direct_fetch'])
         if self.logger.isEnabledFor(logging.DEBUG):
-            self._log_dataframe(base_metadata.sort_values(by='title'), params, 'base_metadata')
+            self._log_dataframe(base_metadata.sort_values(by='title'), params, 'base_metadata_after_doi_dedup')
 
         # Select and rename relevant fields from base_metadata, including subject_orig
         fields_to_merge = {
