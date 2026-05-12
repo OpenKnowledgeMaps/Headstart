@@ -152,10 +152,6 @@ test.describe("Warm-up: pre-load unique ORCID profiles", () => {
       await expect(page.locator("#search-term-unique")).toContainText(`(${orcid})`);
     });
   }
-
-  test("wait for DB cache refresh", async () => {
-    await new Promise((resolve) => setTimeout(resolve, 180_000));
-  });
 });
 
 for (const tc of testCases) {

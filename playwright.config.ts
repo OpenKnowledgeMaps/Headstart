@@ -15,8 +15,8 @@ export default defineConfig({
   forbidOnly: !!process.env.CI,
   // Number of retries for failed tests
   retries: process.env.CI ? 2 : 0,
-  // In CI, limit to one worker for stability
-  workers: process.env.CI ? 1 : undefined,
+  // Single worker to avoid hammering the backend pipeline with parallel requests
+  workers: 1,
   // Report format after running
   reporter: "html",
   // Explicitly specify the test files to run

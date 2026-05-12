@@ -16,7 +16,7 @@ class DummyRedis:
     def __init__(self):
         self.store = {}
         self.queue = []
-    
+
     def blpop(self, key, timeout=0):
         if self.queue:
             return (key, self.queue.pop(0))
@@ -26,10 +26,10 @@ class DummyRedis:
 
     def rpush(self, key, value):
         self.queue.append(value)
-    
+
     def llen(self, key):
         return len(self.queue)
-    
+
     def set(self, key, value):
         self.store[key] = value
 
@@ -81,6 +81,37 @@ def client_base():
     }
     return client
 
+
+def _make_record(id, title="Title", doi="", duplicates="", typenorm="1",
+                 is_duplicate=False, link="", identifier="", oa_state="0",
+                 year="2020", collection="", paper_abstract="Abstract",
+                 authors="Author A", published_in="Journal", subject="",
+                 subject_orig="", content_provider="cp1"):
+    """Build a minimal record dict with all columns required by filter_duplicates."""
+    return {
+        "id": id,
+        "title": title,
+        "doi": doi,
+        "duplicates": duplicates,
+        "typenorm": typenorm,
+        "is_duplicate": is_duplicate,
+        "link": link,
+        "identifier": identifier,
+        "oa_state": oa_state,
+        "year": year,
+        "collection": collection,
+        "paper_abstract": paper_abstract,
+        "authors": authors,
+        "published_in": published_in,
+        "subject": subject,
+        "subject_orig": subject_orig,
+        "content_provider": content_provider,
+    }
+
+
+_DEFAULT_PARAMS = {"vis_id": "test", "list_size": 100}
+
+
 # --- Tests for BaseClient methods ---
 
 def test_next_item(client_base):
@@ -88,7 +119,7 @@ def test_next_item(client_base):
     message = {"id": "123", "params": {"q": "test"}, "endpoint": "search"}
     encoded_message = json.dumps(message).encode("utf-8")
     client_base.redis_store.queue.append(encoded_message)
-    
+
     request_id, params, endpoint = client_base.next_item()
     assert request_id == "123"
     assert params.get("q") == "test"
@@ -104,7 +135,7 @@ def test_execute_search(client_base, monkeypatch):
             self._stderr = stderr
         def communicate(self, input=None):
             return (self._stdout, self._stderr)
-    
+
     def dummy_popen(cmd, stdin, stdout, stderr, encoding):
         # Simulate output with several lines.
         # Return a list of dictionaries containing required columns.
@@ -119,17 +150,18 @@ def test_execute_search(client_base, monkeypatch):
         dummy_stdout = "irrelevant line\n" + json.dumps([dummy_row]) + "\nextra line\n"
         dummy_stderr = ""
         return DummyProcess(dummy_stdout, dummy_stderr)
-    
+
     monkeypatch.setattr(subprocess, "Popen", dummy_popen)
-    
+
     # Patch methods used inside execute_search.
     monkeypatch.setattr(client_base, "sanitize_metadata", lambda df: df)
-    monkeypatch.setattr("base.filter_duplicates", lambda df: df)
-    monkeypatch.setattr("base.parse_annotations_for_all", lambda metadata, field: 
+    # filter_duplicates takes (df, service, params) — use correct arity
+    monkeypatch.setattr("base.filter_duplicates", lambda df, service, params: df)
+    monkeypatch.setattr("base.parse_annotations_for_all", lambda metadata, field:
                         pd.DataFrame({"annotations": [{}] * len(metadata)}))
     monkeypatch.setattr(client_base, "enrich_metadata", lambda df: pd.concat(
         [df, pd.DataFrame({"enriched": ["yes"] * len(df)})], axis=1))
-    
+
     params = {"q": "dummy query", "service": "base", "list_size": 100}
     res = client_base.execute_search(params)
     assert isinstance(res, dict)
@@ -138,7 +170,7 @@ def test_execute_search(client_base, monkeypatch):
 
 def test_sanitize_metadata(client_base):
     # Create a dummy DataFrame with an "authors" column.
-    df = pd.DataFrame({"authors": ["John Doe; Jane Smith"]})
+    df = pd.DataFrame({"authors": ["John Doe; Jane Smith"], "year": ["2020"]})
     sanitized = client_base.sanitize_metadata(df)
     assert "sanitized_authors" in sanitized.columns
     # Expect the authors string to be unchanged by our dummy sanitizer.
@@ -166,11 +198,11 @@ def test_get_contentproviders(client_base, monkeypatch):
             self._stderr = stderr
         def communicate(self, input=None):
             return (self._stdout, self._stderr)
-    
+
     def dummy_popen_cp(cmd, stdin, stdout, stderr, encoding):
         dummy_stdout = json.dumps([{"name": "cp1", "internal_name": "Provider1"}]) + "\n"
         return DummyProcessCP(dummy_stdout, "")
-    
+
     monkeypatch.setattr(subprocess, "Popen", dummy_popen_cp)
     res = client_base.get_contentproviders()
     cp_list = json.loads(res["contentproviders"])
@@ -178,34 +210,122 @@ def test_get_contentproviders(client_base, monkeypatch):
     assert cp_list[0]["name"] == "cp1"
     assert cp_list[0]["internal_name"] == "Provider1"
 
-# --- Tests for parser functions ---
+# --- Tests for filter_duplicates ---
 
-def test_filter_duplicates():
-    # Create a dummy DataFrame simulating duplicate entries.
-    df = pd.DataFrame({
-        "id": ["1", "1", "2"],  # id as strings
-        "duplicates": ["1,1", "1,1", ""],
-        "doi": ["doi1", "doi1", "doi2"],
-        "typenorm": ["7", "7", "non7"],
-        "is_duplicate": [False, False, False],
-        "link": ["", "", ""]  # Provide a link column to avoid KeyError
-    })
-    # Add extra columns that filter_duplicates is supposed to drop.
-    df["doi_duplicate"] = False
-    df["link_duplicate"] = False
-    df["is_anchor"] = False
-    df["doi_version"] = ["v1", "v1", "v2"]
-    df["unversioned_doi"] = ["doi1", "doi1", "doi2"]
-    df["publisher_doi"] = ["pub1", "pub1", "pub2"]
-    df["has_relations"] = False
-    
-    filtered = filter_duplicates(df.copy())
-    # Verify that the dropped columns are not present.
-    for col in [
-        "doi_duplicate", "link_duplicate", "is_anchor",
-        "doi_version", "unversioned_doi", "publisher_doi", "has_relations"
-    ]:
-        assert col not in filtered.columns
+def test_filter_duplicates_drops_internal_columns():
+    """filter_duplicates must remove all working columns from the output."""
+    df = pd.DataFrame([
+        _make_record("1", doi="doi1", duplicates=""),
+        _make_record("2", doi="doi2", duplicates=""),
+    ])
+    filtered = filter_duplicates(df.copy(), "test_service", _DEFAULT_PARAMS)
+    for col in ["doi_duplicate", "link_duplicate", "is_anchor",
+                "doi_version", "unversioned_doi", "publisher_doi", "has_relations"]:
+        assert col not in filtered.columns, f"Column {col!r} should have been dropped"
+
+
+def test_filter_duplicates_removes_exact_id_duplicates():
+    """Records sharing the same id must be deduplicated to one."""
+    df = pd.DataFrame([
+        _make_record("1", title="Paper A"),
+        _make_record("1", title="Paper A copy"),
+        _make_record("2", title="Paper B"),
+    ])
+    filtered = filter_duplicates(df.copy(), "test_service", _DEFAULT_PARAMS)
+    assert len(filtered) == 2
+    assert set(filtered["id"]) == {"1", "2"}
+
+
+def test_filter_duplicates_keeps_unique_records():
+    """Records that are genuinely unique must all survive."""
+    df = pd.DataFrame([
+        _make_record("1", doi="10.1/a"),
+        _make_record("2", doi="10.1/b"),
+        _make_record("3", doi="10.1/c"),
+    ])
+    filtered = filter_duplicates(df.copy(), "test_service", _DEFAULT_PARAMS)
+    assert len(filtered) == 3
+
+
+def test_filter_duplicates_textual_duplicates_from_duplicates_column():
+    """Records listed in each other's duplicates column should collapse to one anchor."""
+    # R preprocessing identified "1" and "2" as textual duplicates
+    df = pd.DataFrame([
+        _make_record("1", duplicates="2", oa_state="0", year="2020"),
+        _make_record("2", duplicates="1", oa_state="0", year="2021"),
+        _make_record("3", doi="10.1/c"),
+    ])
+    filtered = filter_duplicates(df.copy(), "test_service", _DEFAULT_PARAMS)
+    # Only one of {1, 2} should survive plus record 3
+    assert len(filtered) == 2
+    ids = set(filtered["id"])
+    assert "3" in ids
+    assert len(ids & {"1", "2"}) == 1
+
+
+def test_filter_duplicates_doi_duplicates_resolved():
+    """Records with the same DOI (but not in duplicates column) should yield one anchor.
+
+    This tests the add_false_negatives → prioritize path for doi-only duplicates
+    that the R script did not mark as textual duplicates.
+    """
+    df = pd.DataFrame([
+        _make_record("1", doi="10.1234/test", duplicates="", oa_state="1", year="2022"),
+        _make_record("2", doi="10.1234/test", duplicates="", oa_state="0", year="2020"),
+        _make_record("3", doi="10.1234/other"),
+    ])
+    filtered = filter_duplicates(df.copy(), "test_service", _DEFAULT_PARAMS)
+    # Exactly one of {1, 2} should survive
+    doi_test_survivors = filtered[filtered["doi"] == "10.1234/test"]
+    assert len(doi_test_survivors) == 1, (
+        f"Expected 1 anchor for doi 10.1234/test, got {len(doi_test_survivors)}: "
+        f"{doi_test_survivors['id'].tolist()}"
+    )
+
+
+def test_filter_duplicates_mixed_type_duplicates_no_double_anchor():
+    """A dataset (typenorm=7) and a non-dataset that are textual duplicates must not
+    both appear in the output — the split into pure_datasets/non_datasets must not
+    accidentally give each sub-group an independent anchor."""
+    df = pd.DataFrame([
+        _make_record("dataset-A", typenorm="7", duplicates="non-dataset-B",
+                     doi="10.1/x", oa_state="0", year="2020"),
+        _make_record("non-dataset-B", typenorm="1", duplicates="dataset-A",
+                     doi="10.1/x", oa_state="0", year="2020"),
+        _make_record("unrelated-C", doi="10.1/c"),
+    ])
+    filtered = filter_duplicates(df.copy(), "test_service", _DEFAULT_PARAMS)
+    ids = set(filtered["id"])
+    assert "unrelated-C" in ids
+    duplicate_pair_survivors = ids & {"dataset-A", "non-dataset-B"}
+    assert len(duplicate_pair_survivors) == 1, (
+        f"Both members of a duplicate pair survived: {duplicate_pair_survivors}"
+    )
+
+
+def test_filter_duplicates_oa_preferred_over_non_oa():
+    """When prioritizing within a duplicate group, the OA record should be the anchor."""
+    df = pd.DataFrame([
+        _make_record("oa-version", duplicates="closed-version", oa_state="1", year="2020"),
+        _make_record("closed-version", duplicates="oa-version", oa_state="0", year="2021"),
+    ])
+    filtered = filter_duplicates(df.copy(), "test_service", _DEFAULT_PARAMS)
+    assert len(filtered) == 1
+    assert filtered.iloc[0]["id"] == "oa-version"
+
+
+def test_filter_duplicates_latest_year_preferred_when_no_oa():
+    """When no OA record exists, the newest record should be the anchor."""
+    df = pd.DataFrame([
+        _make_record("old", duplicates="new", oa_state="0", year="2018"),
+        _make_record("new", duplicates="old", oa_state="0", year="2022"),
+    ])
+    filtered = filter_duplicates(df.copy(), "test_service", _DEFAULT_PARAMS)
+    assert len(filtered) == 1
+    assert filtered.iloc[0]["id"] == "new"
+
+
+# --- Tests for parser functions ---
 
 def test_parse_annotations_for_all():
     # Create a dummy DataFrame with annotation strings.
