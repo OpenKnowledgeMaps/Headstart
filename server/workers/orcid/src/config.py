@@ -21,7 +21,7 @@ class OrcidConfig(TypedDict):
 
 # Logging configuration
 LOGGING_CONFIG: LoggingConfig = {
-    "level": os.getenv("LOG_LEVEL", "INFO"),
+    "level": os.getenv("LOGLEVEL", "INFO"),
     "format": "%(asctime)s %(levelname)-8s %(message)s",
     "datefmt": "%Y-%m-%d %H:%M:%S"
 }

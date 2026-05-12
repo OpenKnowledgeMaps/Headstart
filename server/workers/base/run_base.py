@@ -18,6 +18,7 @@ def setup_logging():
 
 
 if __name__ == "__main__":
+    setup_logging()
     redis_store = redis.StrictRedis(**REDIS_CONFIG)
     wrapper = BaseClient(
         "./other-scripts",

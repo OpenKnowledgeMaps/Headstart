@@ -241,6 +241,24 @@ class BaseClient(RWrapper):
 pattern_annotations = re.compile(r"([A-Za-z]+:[\w'\- ]+);?")
 
 
+def _log_dedup_state(df, step, params):
+    if not logger.isEnabledFor(logging.DEBUG):
+        return
+    n_dup = int(df["is_duplicate"].sum()) if "is_duplicate" in df.columns else "?"
+    n_anchor = int(df["is_anchor"].sum()) if "is_anchor" in df.columns else "?"
+    n_doi_dup = int(df["doi_duplicate"].sum()) if "doi_duplicate" in df.columns else "?"
+    n_link_dup = int(df["link_duplicate"].sum()) if "link_duplicate" in df.columns else "?"
+    logger.debug(
+        f"[dedup:{step}] total={len(df)} is_duplicate={n_dup} is_anchor={n_anchor}"
+        f" doi_duplicate={n_doi_dup} link_duplicate={n_link_dup}"
+    )
+    if "id" in df.columns and "is_duplicate" in df.columns:
+        dup_ids = df.loc[df["is_duplicate"], "id"].tolist()
+        anchor_ids = df.loc[df["is_anchor"], "id"].tolist() if "is_anchor" in df.columns else []
+        logger.debug(f"[dedup:{step}] duplicate_ids={dup_ids}")
+        logger.debug(f"[dedup:{step}] anchor_ids={anchor_ids}")
+
+
 def filter_duplicates(df, service, params):
     if logger.isEnabledFor(logging.DEBUG):
         logger.debug(f"Filtering duplicates for service: {service}")
@@ -266,27 +284,36 @@ def filter_duplicates(df, service, params):
     )
     df["publisher_doi"] = df.doi.map(lambda x: get_publisher_doi(x))
     dupind = find_duplicate_indexes(df)
+    logger.debug(f"[dedup:find_duplicate_indexes] dupind groups: {len(dupind)}, multi-member groups: {sum(1 for idx in dupind if len(idx) > 1)}")
     df = mark_duplicate_dois(df)
     df = mark_duplicate_links(df)
+    _log_dedup_state(df, "after_mark_doi_link_duplicates", params)
     df = identify_relations(df)
     df = remove_false_positives_doi(df)
     df = remove_false_positives_link(df)
+    _log_dedup_state(df, "after_remove_false_positives", params)
     df = remove_textual_duplicates_from_different_sources(df, dupind)
+    _log_dedup_state(df, "after_remove_textual_duplicates", params)
     df = add_false_negatives(df)
+    _log_dedup_state(df, "after_add_false_negatives", params)
     df = mark_latest_doi(df, dupind)
+    _log_dedup_state(df, "after_mark_latest_doi", params)
     df.loc[df[~df.is_duplicate].index, "is_anchor"] = True
+    _log_dedup_state(df, "after_non_duplicate_anchors", params)
 
     pure_datasets = df[df.typenorm == "7"]
     non_datasets = df.loc[df.index.difference(pure_datasets.index)]
+    logger.debug(f"[dedup:split] non_datasets={len(non_datasets)} pure_datasets={len(pure_datasets)}")
 
     non_datasets = prioritize_OA_and_latest(non_datasets, dupind)
     non_datasets = prioritize_doi_and_provider(non_datasets, dupind)
+    _log_dedup_state(non_datasets, "non_datasets_after_prioritize", params)
     pure_datasets = mark_latest_doi(pure_datasets, dupind)
 
     pure_datasets_condition_mask = (pure_datasets.is_anchor == True) | (pure_datasets.is_duplicate == False)
     pure_datasets.loc[pure_datasets_condition_mask, "is_anchor"] = True
+    _log_dedup_state(pure_datasets, "pure_datasets_after_mark_latest", params)
 
-    
     non_datasets = enrich_anchor_using_duplicates(non_datasets, dupind)
     pure_datasets = enrich_anchor_using_duplicates(pure_datasets, dupind)
 
