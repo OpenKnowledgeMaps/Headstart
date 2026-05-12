@@ -142,6 +142,21 @@ const testCases: EnrichmentTestCase[] = [
   },
 ];
 
+const uniqueOrcids = [...new Set(testCases.map((tc) => tc.orcid).filter(Boolean))];
+
+test.describe("Warm-up: pre-load unique ORCID profiles", () => {
+  for (const orcid of uniqueOrcids) {
+    test(`${orcid}`, async ({ page }) => {
+      const url = `/search?type=get&vis_type=overview&orcid=${orcid}&service=orcid&embed=true`;
+      await prepareVisualisation(page, url);
+      await expect(page.locator("#search-term-unique")).toContainText(`(${orcid})`);
+    });
+  }
+
+  test("wait for DB cache refresh", async () => {
+    await new Promise((resolve) => setTimeout(resolve, 180_000));
+  });
+});
 
 for (const tc of testCases) {
   test.describe(
