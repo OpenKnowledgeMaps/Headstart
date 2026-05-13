@@ -122,7 +122,7 @@ const testCases: EnrichmentTestCase[] = [
       "610 Medicine & health; Artificial Intelligence [MeSH]; Dopamine [Chemical]; Dopamine [MeSH]; Humans [MeSH]; Neural Networks, Computer [MeSH]; Neurotransmitter Agents [Chemical]; Neurotransmitter Agents [MeSH]; Serotonin [Chemical]; Serotonin [MeSH]; acetylcholine; adaptive learning; dopamine; multiscale organization; noradrenaline; serotonin",
   },
   {
-    suiteName: "bugfix 1",
+    suiteName: "bugfix merge of keywords and abstracts",
     orcid: "0000-0002-5238-4195",
     paperTitle: "Ten simple rules for innovative dissemination of research",
     abstract:
@@ -131,7 +131,7 @@ const testCases: EnrichmentTestCase[] = [
       "Biology (General); Humans [MeSH]; Information Dissemination [MeSH]; Innovative dissemination; Online Social Networking [MeSH]; Open Science; QH301-705.5; Research Personnel [MeSH]; Scientific publishing",
   },
   {
-    suiteName: "bugfix 1",
+    suiteName: "bugfix merge of keywords and abstracts",
     orcid: "0000-0001-5116-955X",
     paperTitle:
       "Social immunity modulates competition between coinfecting pathogens",
@@ -139,6 +139,26 @@ const testCases: EnrichmentTestCase[] = [
       "Coinfections with multiple pathogens can result in complex within‐host dynamics affecting virulence and transmission. While multiple infections are intensively studied in solitary hosts, it is so far unresolved how social host interactions interfere with pathogen competition, and if this depends on coinfection diversity. We studied how the collective disease defences of ants – their social immunity – influence pathogen competition in coinfections of same or different fungal pathogen species. Social immunity reduced virulence for all pathogen combinations, but interfered with spore production only in different‐species coinfections. Here, it decreased overall pathogen sporulation success while increasing co‐sporulation on individual cadavers and maintaining a higher pathogen diversity at the community level. Mathematical modelling revealed that host sanitary care alone can modulate competitive outcomes between pathogens, giving advantage to fast‐germinating, thus less grooming‐sensitive ones. Host social interactions can hence modulate infection dynamics in coinfected group members, thereby altering pathogen communities at the host level and population level.",
     keywords:
       "Animals [MeSH]; Ants [MeSH]; Argentine ants; Grooming [MeSH]; Host-Pathogen Interactions [MeSH]; Metarhizium [MeSH]; Metarhizium fungus; Social Behavior [MeSH]; Virulence [MeSH]; ddc:570; grooming; immune-mediated competition; infectious disease; multiple infections; pathogen competition; pathogen diversity; social insects",
+  },
+  {
+    suiteName: "bugfix wrong DOIs in duplicates",
+    orcid: "0000-0002-5238-4195",
+    paperTitle:
+      "Comparison of downloads, citations and readership data for two information systems journals",
+    abstract:
+      "No abstract available",
+    keywords:
+      "Keywords: not available",
+  },
+  {
+    suiteName: "bugfix wrong DOIs in duplicates",
+    orcid: "0000-0002-5238-4195",
+    paperTitle:
+      "Research data explored: an extended analysis of citations and altmetrics",
+    abstract:
+      'In this study, we explore the citedness of research data, its distribution over time and its relation to the availability of a digital object identifier (DOI) in the Thomson Reuters database Data Citation Index (DCI). We investigate if cited research data "impacts" the (social) web, reflected by altmetrics scores, and if there is any relationship between the number of citations and the sum of altmetrics scores from various social media platforms. Three tools are used to collect altmetrics scores, namely PlumX, ImpactStory, and Altmetric.com, and the corresponding results are compared. We found that out of the three altmetrics tools, PlumX has the best coverage. Our experiments revealed that research data remain mostly uncited (about 85 %), although there has been an increase in citing data sets published since 2008. The percentage of the number of cited research data with a DOI in DCI has decreased in the last years. Only nine repositories are responsible for research data with DOIs and two or more citations. The number of cited research data with altmetrics "foot-prints" is even lower (4-9 %) but shows a higher coverage of research data from the last decade. In our study, we also found no correlation between the number of citations and the total number of altmetrics scores. Yet, certain data types (i.e. survey, aggregate data, and sequence data) are more often cited and also receive higher altmetrics scores. Additionally, we performed citation and altmetric analyses of all research data published between 2011 and 2013 in four different disciplines covered by the DCI. In general, these results correspond very well with the ones obtained for research data cited at least twice and also show low numbers in citations and in altmetrics. Finally, we observed that there are disciplinary differences in the availability and extent of altmetrics scores.',
+    keywords:
+      "Altmetrics; Citedness; Co-citation analysis; Data Citation Index; Research data",
   },
 ];
 
