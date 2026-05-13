@@ -286,7 +286,7 @@ def test_journal_prefix_not_filtered(anchor, candidate):
 
 # ---------------------------------------------------------------------------
 # Ratio 23–36 — ALL-CAPS vs title-case on short titles
-# fuzz.ratio is case-sensitive so these score very low on raw comparison;
+# fuzz.partial_ratio is case-sensitive so these score very low on raw comparison;
 # lowercasing before comparison resolves them.
 # ---------------------------------------------------------------------------
 
@@ -294,12 +294,12 @@ CAPS_VARIANT_CASES = [
     _case(
         "Recent Deaths",
         "RECENT DEATHS",
-        "10.1126/science.96.2492.311.a",
+        "10.11/test_doi_title_filter_caps_variant",
     ),
     _case(
         "TECHNOCHEMICAL LECTURES, 1942-1943, OF THE MELLON INSTITUTE",
         "Technochemical Lectures, 1942-1943, of the Mellon Institute",
-        "10.1126/science.96.2492.311-a",
+        "10.11/test_doi_title_filter_caps_variant",
     ),
 ]
 
