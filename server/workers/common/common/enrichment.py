@@ -10,7 +10,7 @@ OA_STATE_PRIORITY = {
     "2": 2,  # unknown
 }
 
-def enrich_anchor_using_duplicates(df, dupind):
+def enrich_anchor_using_duplicates(df, duplicate_groups):
     """
     Enriches anchor elements using data from duplicates in their groups.
 
@@ -27,7 +27,7 @@ def enrich_anchor_using_duplicates(df, dupind):
 
     Args:
         df: DataFrame with metadata, containing the column is_anchor
-        dupind: Series with indices of duplicates for each id
+        duplicate_groups: Series with indices of duplicates for each id
 
     Returns:
         DataFrame with improved anchor properties
@@ -42,7 +42,7 @@ def enrich_anchor_using_duplicates(df, dupind):
     if is_all_columns_are_missing:
         return df
 
-    for _, idx in dupind.items():
+    for _, idx in duplicate_groups.items():
         idx = df.index.intersection(idx)
 
         is_group_has_only_one_element = len(idx) <= 1

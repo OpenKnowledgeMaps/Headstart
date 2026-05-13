@@ -7,8 +7,8 @@ The function signature is:
 Returns True  → titles refer to the same paper (keep candidate)
 Returns False → titles are genuinely different papers (filter candidate out)
 
-All test cases below are benign pairs extracted from real container logs
-(doi_dup_groups across 12 ORCID runs). None should be filtered out.
+Tests include known test cases of false negatives which should be filtered out.
+Tests include test cases of benign pairs extracted from real container logs. None of themshould be filtered out.
 
 Patterns observed:
 - Exact matches (ratio 100): identical titles from different repository records
@@ -67,7 +67,7 @@ EXACT_CASES = [
 
 @pytest.mark.parametrize("anchor,candidate", EXACT_CASES)
 def test_exact_match_not_filtered(anchor, candidate):
-    assert doi_title_filter(anchor, candidate) is True
+    assert doi_title_filter(anchor, candidate) is False
 
 
 # ---------------------------------------------------------------------------
@@ -115,7 +115,7 @@ NEAR_MATCH_CASES = [
 
 @pytest.mark.parametrize("anchor,candidate", NEAR_MATCH_CASES)
 def test_near_match_not_filtered(anchor, candidate):
-    assert doi_title_filter(anchor, candidate) is True
+    assert doi_title_filter(anchor, candidate) is False
 
 
 # ---------------------------------------------------------------------------
@@ -281,7 +281,7 @@ JOURNAL_PREFIX_CASES = [
 
 @pytest.mark.parametrize("anchor,candidate", JOURNAL_PREFIX_CASES)
 def test_journal_prefix_not_filtered(anchor, candidate):
-    assert doi_title_filter(anchor, candidate) is True
+    assert doi_title_filter(anchor, candidate) is False
 
 
 # ---------------------------------------------------------------------------
@@ -306,4 +306,26 @@ CAPS_VARIANT_CASES = [
 
 @pytest.mark.parametrize("anchor,candidate", CAPS_VARIANT_CASES)
 def test_caps_variant_not_filtered(anchor, candidate):
+    assert doi_title_filter(anchor, candidate) is False
+
+
+# ---------------------------------------------------------------------------
+# Known test cases of false negatives which should be filtered out
+# ---------------------------------------------------------------------------
+
+FALSE_NEGATIVE_CASES = [
+    _case(
+        "Comparison of downloads, citations and readership data for two information systems journals",
+        "Scientific publications – the bad, the good, for a fistful of dollars ; Научные публикации – хорошие, плохие, за пригоршню долларов",
+        "10.1007/s11192-014-1365-9",
+    ),
+    _case(
+        "Research data explored: an extended analysis of citations and altmetrics",
+        "Methodological issues of open research data: analysis of the datasets from SciELO included in Figshare ; Aspectos metodológicos de los datos abiertos de investigación: análisis de los conjuntos de datos de la colección SciELO incluidos en Figshare",
+        "10.1007/s11192-016-1887-4",
+    ),
+]
+
+@pytest.mark.parametrize("anchor,candidate", FALSE_NEGATIVE_CASES)
+def test_false_negatives_filtered(anchor, candidate):
     assert doi_title_filter(anchor, candidate) is True

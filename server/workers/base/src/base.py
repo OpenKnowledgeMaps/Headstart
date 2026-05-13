@@ -3,12 +3,14 @@ import json
 import subprocess
 import pandas as pd
 import logging
+from itertools import combinations
+from rapidfuzz import fuzz
 from common.r_wrapper import RWrapper
 from common.deduplication import (
     find_version_in_doi,
     get_unversioned_doi,
     get_publisher_doi,
-    find_duplicate_indexes,
+    find_duplicate_groups,
     mark_duplicate_dois,
     mark_duplicate_links,
     identify_relations,
@@ -19,6 +21,7 @@ from common.deduplication import (
     mark_latest_doi,
     prioritize_OA_and_latest,
     prioritize_doi_and_provider,
+    doi_title_filter,
 )
 from common.enrichment import enrich_anchor_using_duplicates
 import re
@@ -259,6 +262,22 @@ def _log_dedup_state(df, step, params):
         logger.debug(f"[dedup:{step}] anchor_ids={anchor_ids}")
 
 
+def _log_group_similarity(df, indexes, group_type, group_key):
+    """Log titles, DOIs, and pairwise Levenshtein ratios for one duplicate group."""
+    if not logger.isEnabledFor(logging.DEBUG):
+        return
+    rows = df.loc[list(indexes)]
+    titles = rows["title"].fillna("").tolist()
+    dois = rows["doi"].fillna("").tolist()
+    ids = rows["id"].fillna("").tolist()
+    logger.debug(f"[dedup:{group_type}] group={group_key!r} size={len(rows)}")
+    for i, (rid, doi, title) in enumerate(zip(ids, dois, titles)):
+        logger.debug(f"  [{i}] id={rid!r} doi={doi!r} title={title!r}")
+    for (i, t1), (j, t2) in combinations(enumerate(titles), 2):
+        ratio = fuzz.ratio(t1, t2)
+        logger.debug(f"  levenshtein[{i},{j}]={ratio:.1f}")
+
+
 def filter_duplicates(df, service, params):
     if logger.isEnabledFor(logging.DEBUG):
         logger.debug(f"Filtering duplicates for service: {service}")
@@ -283,8 +302,8 @@ def filter_duplicates(df, service, params):
         lambda x: get_unversioned_doi(x) if type(x) is str else None
     )
     df["publisher_doi"] = df.doi.map(lambda x: get_publisher_doi(x))
-    dupind = find_duplicate_indexes(df)
-    logger.debug(f"[dedup:find_duplicate_indexes] dupind groups: {len(dupind)}, multi-member groups: {sum(1 for idx in dupind if len(idx) > 1)}")
+    duplicate_groups = find_duplicate_groups(df)
+    logger.debug(f"[dedup:find_duplicate_groups] duplicate_groups groups: {len(duplicate_groups)}, multi-member groups: {sum(1 for idx in duplicate_groups if len(idx) > 1)}")
     df = mark_duplicate_dois(df)
     df = mark_duplicate_links(df)
     _log_dedup_state(df, "after_mark_doi_link_duplicates", params)
@@ -292,30 +311,61 @@ def filter_duplicates(df, service, params):
     df = remove_false_positives_doi(df)
     df = remove_false_positives_link(df)
     _log_dedup_state(df, "after_remove_false_positives", params)
-    df = remove_textual_duplicates_from_different_sources(df, dupind)
+    df = remove_textual_duplicates_from_different_sources(df, duplicate_groups)
     _log_dedup_state(df, "after_remove_textual_duplicates", params)
     df = add_false_negatives(df)
     _log_dedup_state(df, "after_add_false_negatives", params)
-    df = mark_latest_doi(df, dupind)
+    df = mark_latest_doi(df, duplicate_groups)
     _log_dedup_state(df, "after_mark_latest_doi", params)
     df.loc[df[~df.is_duplicate].index, "is_anchor"] = True
     _log_dedup_state(df, "after_non_duplicate_anchors", params)
+
+    false_positive_indexes = []
+    for doi_val, grp in df[df["doi_duplicate"]].groupby("doi"):
+        if len(grp) < 2:
+            continue
+        anchors = grp[grp["is_anchor"]]
+        anchor_idx = anchors.index[0] if len(anchors) else grp.index[0]
+        anchor_title = df.at[anchor_idx, "title"]
+        for idx in grp.index:
+            if idx == anchor_idx:
+                continue
+            if doi_title_filter(anchor_title, df.at[idx, "title"]):
+                false_positive_indexes.append(idx)
+                logger.info(
+                    f"[dedup:doi_title_filter] dropping false-positive DOI match "
+                    f"doi={doi_val!r} anchor={anchor_title!r} "
+                    f"candidate={df.at[idx, 'title']!r}"
+                )
+    if false_positive_indexes:
+        df.drop(index=false_positive_indexes, inplace=True)
+        logger.info(f"[dedup:doi_title_filter] dropped {len(false_positive_indexes)} false-positive records")
+
+    if logger.isEnabledFor(logging.DEBUG):
+        for idx_group in duplicate_groups:
+            if len(idx_group) > 1:
+                _log_group_similarity(df, idx_group, "textual_dup_group", group_key="duplicate_groups")
+    if logger.isEnabledFor(logging.DEBUG):
+        doi_groups = df[df["doi_duplicate"]].groupby("doi")
+        for doi_val, grp in doi_groups:
+            if len(grp) > 1:
+                _log_group_similarity(df, grp.index, "doi_dup_group", group_key=doi_val)
 
     pure_datasets = df[df.typenorm == "7"]
     non_datasets = df.loc[df.index.difference(pure_datasets.index)]
     logger.debug(f"[dedup:split] non_datasets={len(non_datasets)} pure_datasets={len(pure_datasets)}")
 
-    non_datasets = prioritize_OA_and_latest(non_datasets, dupind)
-    non_datasets = prioritize_doi_and_provider(non_datasets, dupind)
+    non_datasets = prioritize_OA_and_latest(non_datasets, duplicate_groups)
+    non_datasets = prioritize_doi_and_provider(non_datasets, duplicate_groups)
     _log_dedup_state(non_datasets, "non_datasets_after_prioritize", params)
-    pure_datasets = mark_latest_doi(pure_datasets, dupind)
+    pure_datasets = mark_latest_doi(pure_datasets, duplicate_groups)
 
     pure_datasets_condition_mask = (pure_datasets.is_anchor == True) | (pure_datasets.is_duplicate == False)
     pure_datasets.loc[pure_datasets_condition_mask, "is_anchor"] = True
     _log_dedup_state(pure_datasets, "pure_datasets_after_mark_latest", params)
 
-    non_datasets = enrich_anchor_using_duplicates(non_datasets, dupind)
-    pure_datasets = enrich_anchor_using_duplicates(pure_datasets, dupind)
+    non_datasets = enrich_anchor_using_duplicates(non_datasets, duplicate_groups)
+    pure_datasets = enrich_anchor_using_duplicates(pure_datasets, duplicate_groups)
 
     filtered_non_datasets = non_datasets[non_datasets.is_anchor == True]
     filtered_datasets = pure_datasets[pure_datasets.is_anchor == True]

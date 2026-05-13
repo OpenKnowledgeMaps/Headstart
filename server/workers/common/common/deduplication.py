@@ -6,6 +6,27 @@ from rapidfuzz import fuzz
 from urllib.parse import urlparse
 
 pattern_doi = re.compile(r"\.v(\d)+$")
+_pattern_punctuation = re.compile(r"[^\w\s]")
+_DOI_TITLE_CUTOFF = 1/15.83*100  # ≈ 6.32 on rapidfuzz's 0–100 scale
+
+
+def _normalize_title(title: str) -> str:
+    return _pattern_punctuation.sub("", title.lower())
+
+
+def doi_title_filter(anchor_title: str, candidate_title: str) -> bool:
+    """Return False if anchor and candidate likely not refer to the same paper.
+
+    Uses case-folded, punctuation-stripped ratio matching so that
+    journal-name prefixes ("Journal Name / Paper Title" vs "Paper Title") and
+    ALL-CAPS vs title-case variants both resolve correctly.
+    Returns True only when the titles share so little text that they are
+    almost certainly unrelated papers mis-indexed under the same DOI.
+    """
+    a = _normalize_title(anchor_title)
+    c = _normalize_title(candidate_title)
+    return fuzz.partial_ratio(a, c) <= 100 - _DOI_TITLE_CUTOFF
+
 
 def find_version_in_doi(doi):
     m = pattern_doi.findall(doi)
@@ -25,10 +46,10 @@ def get_publisher_doi(doi):
     else:
         return ""
 
-def find_duplicate_indexes(df):    
-    dupind = df.id.map(lambda x: df[df.duplicates.str.contains(x)].index)
-    tmp = pd.DataFrame(dupind).astype(str).drop_duplicates().index
-    return dupind[tmp]
+def find_duplicate_groups(df):    
+    duplicate_groups = df.id.map(lambda x: df[df.duplicates.str.contains(x)].index)
+    tmp = pd.DataFrame(duplicate_groups).astype(str).drop_duplicates().index
+    return duplicate_groups[tmp]
 
 def mark_duplicate_dois(df):
     for doi, index in df.groupby("doi").groups.items():
@@ -69,8 +90,8 @@ def add_false_negatives(df):
     df.loc[df[(~df.is_duplicate) & (df.doi_duplicate)].index, "is_duplicate"] = True
     return df
 
-def remove_textual_duplicates_from_different_sources(df, dupind):
-    for _, idx in dupind.items():
+def remove_textual_duplicates_from_different_sources(df, duplicate_groups):
+    for _, idx in duplicate_groups.items():
         if len(idx) > 1:
             tmp = df.loc[idx]
             df.loc[tmp.index, "is_duplicate"] = True
@@ -83,8 +104,8 @@ def remove_textual_duplicates_from_different_sources(df, dupind):
                 df.loc[tmp.sort_values(["doi", "year"], ascending=[False, False]).head(1).index, "is_anchor"] = True
     return df
 
-def mark_latest_doi(df, dupind):
-    for _, idx in dupind.items():
+def mark_latest_doi(df, duplicate_groups):
+    for _, idx in duplicate_groups.items():
         idx = df.index.intersection(idx)
         tmp = df.loc[idx]
         for udoi in list(filter(None, tmp.unversioned_doi.unique().tolist())):
@@ -98,8 +119,8 @@ def mark_latest_doi(df, dupind):
                 df.loc[latest.index, "is_anchor"] = True
     return df
     
-def prioritize_OA_and_latest(df, dupind):
-    for _, idx in dupind.items():
+def prioritize_OA_and_latest(df, duplicate_groups):
+    for _, idx in duplicate_groups.items():
         idx = df.index.intersection(idx)
         if len(idx) > 1:
             tmp = df.loc[idx]
@@ -173,8 +194,8 @@ def compute_lv_matrix(titles, n):
             distance_matrix[j, i] = dist  # Symmetric matrix
     return distance_matrix
 
-def prioritize_doi_and_provider(df, dupind):
-    for _, idx in dupind.items():
+def prioritize_doi_and_provider(df, duplicate_groups):
+    for _, idx in duplicate_groups.items():
         idx = df.index.intersection(idx)
 
         if len(idx) <= 1:
