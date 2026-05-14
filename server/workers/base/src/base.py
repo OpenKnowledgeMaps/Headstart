@@ -156,6 +156,9 @@ class BaseClient(RWrapper):
             lambda x: sanitize_authors(x)
         )
         metadata["year"] = metadata["year"].map(lambda x: sanitize_year(x))
+        # in anticipation of BASE API returning DOIs in inconsistent cases,
+        # we lowercase them here for better deduplication and enrichment
+        # metadata["doi"] = metadata["doi"].map(lambda x: x.lower() if type(x) is str else x) 
 
         return metadata
 

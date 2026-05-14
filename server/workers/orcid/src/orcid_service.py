@@ -345,16 +345,57 @@ class OrcidService:
 
         return base_metadata
 
+    def _log_doi_casing_comparison(self, orcid_dois: List[str], base_metadata: pd.DataFrame, params: Dict[str, str]) -> None:
+        """Log how often ORCID and BASE have differently-cased versions of the same DOI."""
+        orcid_id = params.get('orcid', 'unknown')
+
+        raw_base_dois = base_metadata['doi'].dropna().unique().tolist() if not base_metadata.empty else []
+        # Strip URL prefixes so both sides are bare DOIs before comparing
+        base_dois = [remove_doi_prefix(d) for d in raw_base_dois]
+        base_dois = [d for d in base_dois if d and not pd.isna(d)]
+
+        orcid_lower_map: Dict[str, str] = {}
+        for doi in orcid_dois:
+            lower = doi.lower()
+            if lower not in orcid_lower_map:
+                orcid_lower_map[lower] = doi
+
+        base_lower_map: Dict[str, str] = {}
+        for doi in base_dois:
+            lower = doi.lower()
+            if lower not in base_lower_map:
+                base_lower_map[lower] = doi
+
+        case_mismatches = []
+        for lower_doi, orcid_doi in orcid_lower_map.items():
+            if lower_doi in base_lower_map:
+                base_doi = base_lower_map[lower_doi]
+                if orcid_doi != base_doi:
+                    case_mismatches.append({'orcid': orcid_doi, 'base': base_doi})
+
+        self.logger.debug(
+            f"[doi_casing] orcid={orcid_id} sent {len(orcid_dois)} DOIs to BASE, "
+            f"BASE returned {len(base_dois)} unique DOIs (raw), "
+            f"{len(case_mismatches)} case mismatch(es) detected"
+        )
+        for mismatch in case_mismatches:
+            self.logger.debug(
+                f"[doi_casing] mismatch: orcid_doi={mismatch['orcid']!r} base_doi={mismatch['base']!r}"
+            )
+        if self.logger.isEnabledFor(logging.DEBUG):
+            self.logger.debug(f"[doi_casing] orcid_dois={orcid_dois}")
+            self.logger.debug(f"[doi_casing] base_dois={base_dois}")
+
     def enrich_metadata_with_base(self, params: Dict[str, str], metadata: pd.DataFrame) -> pd.DataFrame:
         self.logger.debug(f"Enriching metadata with base for ORCID {params.get('orcid')}")
 
         original_columns = metadata.columns.to_list()
-        required_fields = ['id', 'identifier', 'relevance', 'relation', 'title', 'subtitle', 'doi', 
-                       'paper_abstract', 'link', 'subject', 'oa_state', 'subject_orig', 'published_in', 
-                       'year', 'authors', 'url', 'resulttype', 'type', 'typenorm', 'lang', 'language', 
-                       'content_provider', 'coverage', 'is_duplicate', 'has_dataset', 'sanitized_authors', 
-                       'relations', 'annotations', 'repo', 'source', 'volume', 'issue', 'page', 'issn', 
-                       'citation_count', 'cited_by_wikipedia_count', 'cited_by_msm_count', 'cited_by_policies_count', 
+        required_fields = ['id', 'identifier', 'relevance', 'relation', 'title', 'subtitle', 'doi',
+                       'paper_abstract', 'link', 'subject', 'oa_state', 'subject_orig', 'published_in',
+                       'year', 'authors', 'url', 'resulttype', 'type', 'typenorm', 'lang', 'language',
+                       'content_provider', 'coverage', 'is_duplicate', 'has_dataset', 'sanitized_authors',
+                       'relations', 'annotations', 'repo', 'source', 'volume', 'issue', 'page', 'issn',
+                       'citation_count', 'cited_by_wikipedia_count', 'cited_by_msm_count', 'cited_by_policies_count',
                        'cited_by_patents_count', 'cited_by_accounts_count', 'cited_by_fbwalls_count',
                        'merged_dois', 'pdf_link_candidates_from_duplicates',
                         'cited_by_feeds_count',
@@ -369,7 +410,7 @@ class OrcidService:
         metadata = metadata.reindex(columns=required_fields)
 
         self.logger.debug('metadata reindexed')
-        
+
         # run only if loglevel is debug, otherwise it is too expensive and we don't want it on production
         if self.logger.isEnabledFor(logging.DEBUG):
             self._log_dataframe(metadata.sort_values(by='title'), params, '_original')
@@ -377,8 +418,19 @@ class OrcidService:
         raw_dois = metadata["doi"].tolist()
         dois = [doi for doi in raw_dois if doi and pd.notna(doi)]
 
+        doi_counts = pd.Series(dois).value_counts()
+        orcid_dup_dois = doi_counts[doi_counts > 1].index.tolist()
+        if orcid_dup_dois:
+            self.logger.info(
+                f"[doi_orcid_dedup] orcid={params.get('orcid')} has {len(orcid_dup_dois)} duplicate DOI(s) "
+                f"in ORCID metadata: {orcid_dup_dois}"
+            )
+        else:
+            self.logger.debug(f"[doi_orcid_dedup] orcid={params.get('orcid')} no duplicate DOIs in ORCID metadata")
+
         dois_for_base_query, doi_mapping = self._prepare_dois_for_base_query(dois)
         base_metadata = self.request_base_metadata(dois_for_base_query, params)
+        self._log_doi_casing_comparison(dois, base_metadata, params)
 
         if self.logger.isEnabledFor(logging.DEBUG):
             self._log_dataframe(base_metadata.sort_values(by='title'), params, 'base_metadata_raw')
@@ -495,9 +547,6 @@ class OrcidService:
         
         if self.logger.isEnabledFor(logging.DEBUG):
             self._log_dataframe(enriched_metadata.sort_values(by='title'), params, '_enriched')
-
-        # temporal solution, for some reason if we have some undefined data, dataprocessing is failing
-        enriched_metadata = enriched_metadata.reindex(columns=list(set(original_columns + ['oa_state', 'subject', 'subject_orig', 'paper_abstract', 'link', 'relation'])))
         
         return enriched_metadata
 

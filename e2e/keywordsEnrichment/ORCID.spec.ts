@@ -191,10 +191,30 @@ const testCases: EnrichmentTestCase[] = [
 
 const uniqueOrcids = [...new Set(testCases.map((tc) => tc.orcid).filter(Boolean))];
 
+const additionalUniqueOrcids = [
+  "0000-0001-5116-955X",
+  "0000-0003-4221-6275",
+  "0000-0002-9843-6798",
+  "0000-0002-5238-4195",
+  "0000-0002-4505-0517",
+  "0000-0003-2897-6075",
+  "0000-0002-8911-7832",
+  "0000-0002-2233-6926",
+  "0000-0001-9287-3770",
+  "0000-0002-1193-6256",
+  "0000-0003-0108-7980",
+  "0000-0001-9237-8606"
+];
+
+const allUniqueOrcids = [...new Set([...uniqueOrcids, ...additionalUniqueOrcids])];
+
+
+// This can also be used to pre-load the unique ORCID profiles, so that the subsequent tests run faster
+// npx playwright test "e2e/keywordsEnrichment/ORCID.spec.ts" --grep "Warm-up: pre-load unique ORCID profiles"
 test.describe("Warm-up: pre-load unique ORCID profiles", () => {
-  for (const orcid of uniqueOrcids) {
+  for (const orcid of allUniqueOrcids) {
     test(`${orcid}`, async ({ page }) => {
-      const url = `/search?type=get&vis_type=overview&orcid=${orcid}&service=orcid&embed=true`;
+      const url = `/search?type=get&vis_type=overview&orcid=${orcid}&service=orcid&embed=true&academic_age_offset=3`;
       await prepareVisualisation(page, url);
       await expect(page.locator("#search-term-unique")).toContainText(`(${orcid})`);
     });
