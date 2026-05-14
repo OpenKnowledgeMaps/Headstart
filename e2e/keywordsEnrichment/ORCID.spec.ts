@@ -214,7 +214,7 @@ const allUniqueOrcids = [...new Set([...uniqueOrcids, ...additionalUniqueOrcids]
 test.describe("Warm-up: pre-load unique ORCID profiles", () => {
   for (const orcid of allUniqueOrcids) {
     test(`${orcid}`, async ({ page }) => {
-      const url = `/search?type=get&vis_type=overview&orcid=${orcid}&service=orcid&embed=true&academic_age_offset=3`;
+      const url = `/search?type=get&vis_type=overview&orcid=${orcid}&service=orcid&embed=true`;
       await prepareVisualisation(page, url);
       await expect(page.locator("#search-term-unique")).toContainText(`(${orcid})`);
     });
