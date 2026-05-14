@@ -338,8 +338,9 @@ class OrcidService:
 
         # Remove rows where 'doi' is pd.NaN
         base_metadata = base_metadata[pd.notna(base_metadata['doi'])]
-
+        base_metadata = self._match_dois_by_version(base_metadata, dois)
         base_metadata = base_metadata[base_metadata['doi'].isin(dois)]
+
         if self.logger.isEnabledFor(logging.DEBUG):
             self._log_dataframe(base_metadata.sort_values(by='title'), params, 'base_metadata_before_doi_dedup')
             doi_counts = base_metadata['doi'].value_counts()
@@ -354,17 +355,14 @@ class OrcidService:
                     self.logger.debug(f"[doi_dedup] duplicate group for doi={doi!r}:\n{group.to_string()}")
             else:
                 self.logger.debug(f"[doi_dedup] {len(base_metadata)} records, no duplicate DOIs — dedup step is a no-op here")
-        # Sort by: (1) direct fetch before exploded-from-merged_dois rows,
-        # (2) oa_state priority (1=open > 0=restricted > 2=unknown) as tiebreaker.
+        # Sort by: direct fetch before exploded-from-merged_dois rows,
         # This ensures the record actually fetched for a DOI wins over a record
         # that acquired that DOI via merged_dois expansion.
-        oa_state_order = {1: 0, 0: 1, 2: 2}
         base_metadata = base_metadata.assign(
-            _oa_sort=base_metadata['oa_state'].map(oa_state_order),
             _direct_sort=(~base_metadata['_is_direct_fetch']).astype(int),
-        ).sort_values(by=['_direct_sort', '_oa_sort']).drop_duplicates(
+        ).sort_values(by=['_direct_sort']).drop_duplicates(
             subset='doi', keep='first'
-        ).drop(columns=['_oa_sort', '_direct_sort', '_is_direct_fetch'])
+        ).drop(columns=['_direct_sort', '_is_direct_fetch'])
         if self.logger.isEnabledFor(logging.DEBUG):
             self._log_dataframe(base_metadata.sort_values(by='title'), params, 'base_metadata_after_doi_dedup')
 
@@ -424,7 +422,10 @@ class OrcidService:
         
         if self.logger.isEnabledFor(logging.DEBUG):
             self._log_dataframe(enriched_metadata.sort_values(by='title'), params, '_enriched')
-        
+
+        # temporal solution, for some reason if we have some undefined data, dataprocessing is failing
+        enriched_metadata = enriched_metadata.reindex(columns=list(set(original_columns + ['oa_state', 'subject', 'subject_orig', 'paper_abstract', 'link', 'relation'])))
+
         return enriched_metadata
 
     def enrich_author_info(self, author_info: AuthorInfo, metadata: pd.DataFrame, params: Dict[str, str]) -> AuthorInfo:
@@ -601,3 +602,58 @@ class OrcidService:
             self.logger.debug(
                 f"BASE response statistics: requested {len(batch)} DOIs, received {len(batch_df)} rows"
             )
+
+    def _match_dois_by_version(
+        self,
+        base_metadata: pd.DataFrame,
+        original_dois: List[str],
+    ) -> pd.DataFrame:
+        """
+        Match BASE results that have versioned DOIs (e.g. .v1, .v2) to original DOIs without version.
+
+        If BASE returned a DOI with a version suffix but the original ORCID DOI is without version,
+        this function updates the base_metadata 'doi' column so that those rows match the original
+        DOI for merging.
+
+        Parameters:
+        - base_metadata: DataFrame with 'doi' column (after explode and normalize)
+        - original_dois: List of original DOIs from ORCID
+
+        Returns:
+        - DataFrame with 'doi' updated where versioned variants were matched to original DOIs
+        """
+        pattern_doi_version = re.compile(r"\.v(\d)+$")
+
+        def get_unversioned_doi(doi_str):
+            if pd.isna(doi_str) or doi_str == '':
+                return None
+            return pattern_doi_version.sub("", str(doi_str))
+
+        dois_received = base_metadata['doi'].unique().tolist()
+        base_unversioned_to_versioned = {}
+        for doi_from_base in dois_received:
+            unversioned = get_unversioned_doi(doi_from_base)
+            if unversioned and unversioned != doi_from_base:
+                if unversioned not in base_unversioned_to_versioned:
+                    base_unversioned_to_versioned[unversioned] = []
+                base_unversioned_to_versioned[unversioned].append(doi_from_base)
+
+        dois_lost = [doi for doi in original_dois if doi not in dois_received]
+        dois_lost_with_versions = []
+        for lost_doi in dois_lost:
+            unversioned_lost = get_unversioned_doi(lost_doi)
+            if unversioned_lost in base_unversioned_to_versioned:
+                dois_lost_with_versions.append({
+                    'original': lost_doi,
+                    'versioned_variants_found': base_unversioned_to_versioned[unversioned_lost],
+                })
+
+        base_metadata = base_metadata.copy()
+        for lost_doi_info in dois_lost_with_versions:
+            original_doi = lost_doi_info['original']
+            versioned_variants = lost_doi_info['versioned_variants_found']
+            versioned_mask = base_metadata['doi'].isin(versioned_variants)
+            if versioned_mask.any():
+                base_metadata.loc[versioned_mask, 'doi'] = original_doi
+
+        return base_metadata
