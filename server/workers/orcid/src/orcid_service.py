@@ -222,129 +222,6 @@ class OrcidService:
         base_metadata["oa_state"] = base_metadata["oa_state"].fillna("2").astype(int)
         return base_metadata
 
-    def _prepare_dois_for_base_query(self, dois: List[str]) -> Tuple[List[str], Dict[str, List[str]]]:
-        """
-        Prepare DOI list for BASE query by adding lowercase variants for DOIs containing uppercase letters.
-
-        For each DOI that contains uppercase letters, this function adds a lowercase version
-        to ensure case-insensitive matching in BASE search.
-
-        Parameters:
-        - dois: List of original DOIs from ORCID
-
-        Returns:
-        - Tuple of (list of DOIs including originals and lowercase variants, mapping from lowercase DOI to original DOIs)
-        """
-        dois_for_base_query = []
-        doi_mapping = {}
-
-        for doi in dois:
-            dois_for_base_query.append(doi)
-
-            if doi != doi.lower():
-                lowercase_doi = doi.lower()
-                dois_for_base_query.append(lowercase_doi)
-
-                if lowercase_doi not in doi_mapping:
-                    doi_mapping[lowercase_doi] = []
-
-                doi_mapping[lowercase_doi].append(doi)
-
-        dois_for_base_query = list(dict.fromkeys(dois_for_base_query))
-
-        return dois_for_base_query, doi_mapping
-
-    def _normalize_base_results_to_original_dois(
-        self,
-        base_metadata: pd.DataFrame,
-        doi_mapping: Dict[str, List[str]]
-    ) -> pd.DataFrame:
-        """
-        Normalize DOI values in BASE results to match original DOIs from ORCID.
-
-        If BASE returns results with lowercase DOI variants, this function maps them back
-        to the original DOI format from ORCID to ensure proper merging.
-
-        Parameters:
-        - base_metadata: DataFrame with results from BASE
-        - doi_mapping: Mapping from lowercase DOI to list of original DOIs
-
-        Returns:
-        - DataFrame with normalized DOI values
-        """
-        if base_metadata.empty:
-            return base_metadata
-
-        def normalize_doi(doi_value):
-            if pd.isna(doi_value) or doi_value == '':
-                return doi_value
-
-            if doi_value in doi_mapping:
-                original_dois_for_variant = doi_mapping[doi_value]
-                return original_dois_for_variant[0]
-
-            return doi_value
-
-        base_metadata = base_metadata.copy()
-        base_metadata.loc[:, 'doi'] = base_metadata['doi'].apply(normalize_doi)
-
-        return base_metadata
-
-    def _match_dois_by_version(
-        self,
-        base_metadata: pd.DataFrame,
-        original_dois: List[str],
-    ) -> pd.DataFrame:
-        """
-        Match BASE results that have versioned DOIs (e.g. .v1, .v2) to original DOIs without version.
-
-        If BASE returned a DOI with a version suffix but the original ORCID DOI is without version,
-        this function updates the base_metadata 'doi' column so that those rows match the original
-        DOI for merging.
-
-        Parameters:
-        - base_metadata: DataFrame with 'doi' column (after explode and normalize)
-        - original_dois: List of original DOIs from ORCID
-
-        Returns:
-        - DataFrame with 'doi' updated where versioned variants were matched to original DOIs
-        """
-        pattern_doi_version = re.compile(r"\.v(\d)+$")
-
-        def get_unversioned_doi(doi_str):
-            if pd.isna(doi_str) or doi_str == '':
-                return None
-            return pattern_doi_version.sub("", str(doi_str))
-
-        dois_received = base_metadata['doi'].unique().tolist()
-        base_unversioned_to_versioned = {}
-        for doi_from_base in dois_received:
-            unversioned = get_unversioned_doi(doi_from_base)
-            if unversioned and unversioned != doi_from_base:
-                if unversioned not in base_unversioned_to_versioned:
-                    base_unversioned_to_versioned[unversioned] = []
-                base_unversioned_to_versioned[unversioned].append(doi_from_base)
-
-        dois_lost = [doi for doi in original_dois if doi not in dois_received]
-        dois_lost_with_versions = []
-        for lost_doi in dois_lost:
-            unversioned_lost = get_unversioned_doi(lost_doi)
-            if unversioned_lost in base_unversioned_to_versioned:
-                dois_lost_with_versions.append({
-                    'original': lost_doi,
-                    'versioned_variants_found': base_unversioned_to_versioned[unversioned_lost],
-                })
-
-        base_metadata = base_metadata.copy()
-        for lost_doi_info in dois_lost_with_versions:
-            original_doi = lost_doi_info['original']
-            versioned_variants = lost_doi_info['versioned_variants_found']
-            versioned_mask = base_metadata['doi'].isin(versioned_variants)
-            if versioned_mask.any():
-                base_metadata.loc[versioned_mask, 'doi'] = original_doi
-
-        return base_metadata
-
     def _log_doi_casing_comparison(self, orcid_dois: List[str], base_metadata: pd.DataFrame, params: Dict[str, str]) -> None:
         """Log how often ORCID and BASE have differently-cased versions of the same DOI."""
         orcid_id = params.get('orcid', 'unknown')
@@ -428,8 +305,7 @@ class OrcidService:
         else:
             self.logger.debug(f"[doi_orcid_dedup] orcid={params.get('orcid')} no duplicate DOIs in ORCID metadata")
 
-        dois_for_base_query, doi_mapping = self._prepare_dois_for_base_query(dois)
-        base_metadata = self.request_base_metadata(dois_for_base_query, params)
+        base_metadata = self.request_base_metadata(dois, params)
         self._log_doi_casing_comparison(dois, base_metadata, params)
 
         if self.logger.isEnabledFor(logging.DEBUG):
@@ -462,9 +338,6 @@ class OrcidService:
 
         # Remove rows where 'doi' is pd.NaN
         base_metadata = base_metadata[pd.notna(base_metadata['doi'])]
-
-        base_metadata = self._normalize_base_results_to_original_dois(base_metadata, doi_mapping)
-        base_metadata = self._match_dois_by_version(base_metadata, dois)
 
         base_metadata = base_metadata[base_metadata['doi'].isin(dois)]
         if self.logger.isEnabledFor(logging.DEBUG):
@@ -508,13 +381,17 @@ class OrcidService:
         # Rename base metadata columns to avoid conflicts with original metadata
         base_metadata = base_metadata.rename(columns=fields_to_merge)
 
-        # Merge base metadata into the original metadata
+        # Merge base metadata into the original metadata using a temporary lowercase key
+        # so that DOIs differing only in case (e.g. ORCID mixed-case vs BASE lowercase) are matched,
+        # while the original ORCID DOI casing is preserved in the output.
         enriched_metadata = pd.merge(
-            metadata,
-            base_metadata[['doi'] + list(fields_to_merge.values())],  # Use renamed columns from base_metadata
-            on='doi',
+            metadata.assign(_doi_key=metadata['doi'].str.lower()),
+            base_metadata[['doi'] + list(fields_to_merge.values())]
+                .assign(_doi_key=base_metadata['doi'].str.lower())
+                .drop(columns='doi'),
+            on='_doi_key',
             how='left'
-        )
+        ).drop(columns='_doi_key')
 
         # Custom merging functions
         def custom_merge(existing_value, new_value):
