@@ -187,6 +187,33 @@ const testCases: EnrichmentTestCase[] = [
     keywords:
       "Wissenschaftskommunikation; Open Access; Open Science; Vision; Bibliography. Library science. Information resources; Z",
   },
+  {
+    suiteName: "regression test DOI case-insensitive merge",
+    orcid: "0000-0002-4505-0517",
+    paperTitle: "Network structure, metadata, and the prediction of missing nodes and annotations",
+    keywords:
+      "Machine Learning; Physics; Physics and Society; QC1-999; Social and Information Networks",
+    abstract:
+      "The empirical validation of community detection methods is often based on available annotations on the nodes that serve as putative indicators of the large-scale network structure.",
+  },
+  {
+    suiteName: "regression test DOI case-insensitive merge",
+    orcid: "0000-0002-4505-0517",
+    paperTitle: "Hierarchical block structures and high-resolution model selection in large networks",
+    keywords:
+      "Data Analysis; Disordered Systems and Neural Networks; Machine Learning; Physics; Physics and Society; QC1-999; Social and Information Networks; Statistical Mechanics; Statistics and Probability",
+    abstract:
+      "Discovering and characterizing the large-scale topological features in empirical networks are crucial steps in understanding how complex systems function.",
+  },
+  {
+    suiteName: "regression test DOI case-insensitive merge",
+    orcid: "0000-0002-9843-6798",
+    paperTitle: "Generalizing Tree–Level Sap Flow Across the European Continent",
+    keywords:
+      "Earth sciences; Geophysics. Cosmic physics; LSTMs; QC801-809; ddc:550; deep learning; ecohydrology; info:eu-repo/classification/ddc/550; sap flow; transpiration; vegetation dynamics",
+    abstract:
+      "Sap flow offers key insights about transpiration dynamics and forest‐climate interactions.",
+  },
 ];
 
 const uniqueOrcids = [...new Set(testCases.map((tc) => tc.orcid).filter(Boolean))];
