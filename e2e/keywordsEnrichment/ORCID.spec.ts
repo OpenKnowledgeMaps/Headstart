@@ -191,28 +191,37 @@ const testCases: EnrichmentTestCase[] = [
     suiteName: "regression test DOI case-insensitive merge",
     orcid: "0000-0002-4505-0517",
     paperTitle: "Network structure, metadata, and the prediction of missing nodes and annotations",
-    keywords:
-      "Machine Learning; Physics; Physics and Society; QC1-999; Social and Information Networks",
     abstract:
       "The empirical validation of community detection methods is often based on available annotations on the nodes that serve as putative indicators of the large-scale network structure.",
+    keywords:
+      "Machine Learning; Physics; Physics and Society; QC1-999; Social and Information Networks",
   },
   {
     suiteName: "regression test DOI case-insensitive merge",
     orcid: "0000-0002-4505-0517",
     paperTitle: "Hierarchical block structures and high-resolution model selection in large networks",
-    keywords:
-      "Data Analysis; Disordered Systems and Neural Networks; Machine Learning; Physics; Physics and Society; QC1-999; Social and Information Networks; Statistical Mechanics; Statistics and Probability",
     abstract:
       "Discovering and characterizing the large-scale topological features in empirical networks are crucial steps in understanding how complex systems function.",
+    keywords:
+      "Data Analysis; Disordered Systems and Neural Networks; Machine Learning; Physics; Physics and Society; QC1-999; Social and Information Networks; Statistical Mechanics; Statistics and Probability",
   },
   {
     suiteName: "regression test DOI case-insensitive merge",
     orcid: "0000-0002-9843-6798",
     paperTitle: "Generalizing Tree–Level Sap Flow Across the European Continent",
-    keywords:
-      "Earth sciences; Geophysics. Cosmic physics; LSTMs; QC801-809; ddc:550; deep learning; ecohydrology; info:eu-repo/classification/ddc/550; sap flow; transpiration; vegetation dynamics",
     abstract:
       "Sap flow offers key insights about transpiration dynamics and forest‐climate interactions.",
+    keywords:
+      "Earth sciences; Geophysics. Cosmic physics; LSTMs; QC801-809; ddc:550; deep learning; ecohydrology; info:eu-repo/classification/ddc/550; sap flow; transpiration; vegetation dynamics",
+  },
+  {
+    suiteName: "regression test DOI case-insensitive merge",
+    orcid: "0000-0001-9237-8606",
+    paperTitle: "Multibeam bathymetry raw data (Atlas Hydrosweep DS 3 echo sounder entire dataset) of RV POLARSTERN during cruise PS147/2",
+    abstract:
+      'Multibeam data were collected with RV Polarstern along the route of cruise PS147/2 and data acquisition was continuously monitored during the survey. Multibeam sonar system was Teledyne/Atlas Hydrosweep DS3. SVPs were retrieved from CTD data and synthetic profiles from World Ocean Atlas 18. SVPs were processed with HydrOffice SoundSpeedManager (https://www.hydroffice.org/soundspeed/main) and extended with World Ocean Atlas 18 (https://www.ncei.noaa.gov/archive/accession/NCEI-WOA18). SVP data were applied during acquisition. Multibeam data are unprocessed and may contain outliers and blunders and should not be used for grid calculations and charting projects without further editing. The raw multibeam sonar data in Teledyne Reson multibeam processing format (.s7k) were recorded with Teledyne PDS software. Raw data files can be processed using software packages like CARIS HIPS/SIPS. For updated vessel configuration files check further details.',
+    keywords:
+      'Bathymetry ; Multibeam Echosounder ; Event label ; Binary Object ; Binary Object Media Type ; Binary Object File Size ; File content ; Data file recording duration ; Data file recording distance ; Ship speed ; Number of pings ; Start of data file recording, date/time ; Start of data file recording, latitude ; Start of data file recording, longitude ; Start of data file, heading ; Start of data file, depth ; Stop of data file recording, date/time ; Stop of data file recording, latitude ; Stop of data file recording, longitude ; Stop of data file, heading ; Stop of data file, depth ; DATE/TIME ; LATITUDE ; LONGITUDE ; ELEVATION ; Comment ; Swath-mapping system Atlas Hydrosweep DS-3 ; CTD/Rosette ; Extracted with MB-System ; PS147/2 ; Polarstern ; BATHYmetric Long-Term Observations during Expeditions with RV Polarstern BATHY-LTO ; DataHub Earth and Environment of the Helmholtz Association DataHub ; Pilot study: "targeted underway bathymetry" for mapping uncharted seamounts SEAMAP',
   },
 ];
 
