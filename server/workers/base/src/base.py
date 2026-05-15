@@ -307,6 +307,12 @@ def filter_duplicates(df, service, params):
     df["publisher_doi"] = df.doi.map(lambda x: get_publisher_doi(x))
     duplicate_groups = find_duplicate_groups(df)
     logger.debug(f"[dedup:find_duplicate_groups] duplicate_groups groups: {len(duplicate_groups)}, multi-member groups: {sum(1 for idx in duplicate_groups if len(idx) > 1)}")
+    for grp_id, idx in duplicate_groups.items():
+        if len(idx) > 1:
+            logger.debug(
+                f"[dedup:position_check] group id={grp_id!r} size={len(idx)} "
+                f"member_original_indexes={sorted(idx.tolist())}"
+            )
     df = mark_duplicate_dois(df)
     df = mark_duplicate_links(df)
     _log_dedup_state(df, "after_mark_doi_link_duplicates", params)
@@ -335,7 +341,7 @@ def filter_duplicates(df, service, params):
                 continue
             if doi_title_filter(anchor_title, df.at[idx, "title"]):
                 false_positive_indexes.append(idx)
-                logger.info(
+                logger.debug(
                     f"[dedup:doi_title_filter] dropping false-positive DOI match "
                     f"doi={doi_val!r} anchor={anchor_title!r} "
                     f"candidate={df.at[idx, 'title']!r}"
@@ -373,7 +379,45 @@ def filter_duplicates(df, service, params):
     filtered_non_datasets = non_datasets[non_datasets.is_anchor == True]
     filtered_datasets = pure_datasets[pure_datasets.is_anchor == True]
     filtered = pd.concat([filtered_non_datasets, filtered_datasets])
+
+    # For each duplicate group whose anchor ended up at a higher index than
+    # another group member (which was dropped as non-anchor), move the anchor
+    # to the best-ranked (lowest) index in the group so it survives head(list_size).
+    seen_groups = set()
+    claimed_targets = set()
+    index_renames = {}
+    for _grp_id, idx in duplicate_groups.items():
+        if len(idx) <= 1:
+            continue
+        idx_key = frozenset(idx.tolist())
+        if idx_key in seen_groups:
+            continue
+        seen_groups.add(idx_key)
+        anchor_idxs = filtered.index.intersection(idx)
+        if len(anchor_idxs) == 0:
+            continue
+        min_idx = min(idx.tolist())
+        if min_idx in filtered.index or min_idx in claimed_targets:
+            continue
+        for anchor_idx in sorted(anchor_idxs):
+            if anchor_idx > min_idx:
+                index_renames[anchor_idx] = min_idx
+                claimed_targets.add(min_idx)
+                break
+    if index_renames:
+        filtered.rename(index=index_renames, inplace=True)
+        logger.info(f"[dedup:index_fix] moved {len(index_renames)} anchor(s) to best-ranked group position: {index_renames}")
+
     filtered.sort_index(inplace=True)
+
+    list_size = params.get("list_size")
+    for rank, (orig_idx, row) in enumerate(filtered.iterrows()):
+        beyond = list_size is not None and rank >= list_size
+        logger.debug(
+            f"[dedup:position_check] anchor id={row['id']!r} "
+            f"original_index={orig_idx} filtered_rank={rank} "
+            f"beyond_list_size={beyond} list_size={list_size}"
+        )
 
     for c in [
         "doi_duplicate",
