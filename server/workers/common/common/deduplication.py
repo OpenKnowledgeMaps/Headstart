@@ -5,7 +5,17 @@ import Levenshtein
 from rapidfuzz import fuzz
 from urllib.parse import urlparse
 
-pattern_doi = re.compile(r"\.v(\d)+$")
+# Strips dataset version/file suffixes to obtain a base DOI for grouping:
+# Please consider those content providers only as examples,
+# as the same DOI versioning patterns may be used by other providers as well.
+#   .v3  →  Figshare, UCT, Loughborough, SAGE, Monash  (10.1184/R1/6551801.v1)
+#   v3   →  arxive, ICPSR                                       (10.3886/e115525v3)
+#   .3   →  Mendeley Data                               (10.17632/675v9chxnt.2)
+#   v3-104960  →  ICPSR file-level sub-record           (10.3886/e115525v3-104960)
+# NOTE: the bare .N alternative is intentionally limited to 1-3 digits to avoid
+# false positives on DOIs like 10.1594/pangaea.982329 where the numeric suffix
+# is a record identifier, not a version number.
+pattern_doi = re.compile(r"(?:\.?v|\.)([0-9]{1,3})(?:-\d+)?$")
 _pattern_punctuation = re.compile(r"[^\w\s]")
 _DOI_TITLE_CUTOFF = 1/15.83*100  # ≈ 6.32 on rapidfuzz's 0–100 scale
 

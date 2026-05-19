@@ -1,6 +1,9 @@
 import os
+import logging
 import pandas as pd
 from common.deduplication import deduplicate_keywords, deduplicate_links
+
+logger = logging.getLogger(__name__)
 
 KEYWORD_SIMILARITY_THRESHOLD = 85
 
@@ -9,6 +12,38 @@ OA_STATE_PRIORITY = {
     "0": 1,  # no
     "2": 2,  # unknown
 }
+
+def _log_anchor_state(tag, df, anchor_idx, group_data=None):
+    """
+    Logs DOI, title, and keywords for an anchor record and, optionally, all
+    members of its duplicate group.  Use tag='BEFORE'/'AFTER' for the anchor
+    state and tag='GROUP' to dump every group member.
+
+    All messages share the prefix [ANCHOR_ENRICHMENT] so they can be extracted
+    with:  grep 'ANCHOR_ENRICHMENT' <logfile>
+    """
+    doi   = df.loc[anchor_idx, 'doi']       if 'doi'       in df.columns else 'N/A'
+    title = df.loc[anchor_idx, 'title']    if 'title'    in df.columns else 'N/A'
+    kw    = df.loc[anchor_idx, 'subject_orig']  if 'subject_orig'  in df.columns else 'N/A'
+    resulttype = df.loc[anchor_idx, 'resulttype'] if 'resulttype' in df.columns else 'N/A'
+
+    logger.debug(
+        "[ANCHOR_ENRICHMENT] anchor_%s doi=%s | title=%s | keywords=%s | resulttype=%s",
+        tag, doi, title, kw, resulttype
+    )
+
+    if group_data is not None:
+        for _, member in group_data.iterrows():
+            m_doi   = member.get('doi',      'N/A')
+            m_title = member.get('title',   'N/A')
+            m_kw    = member.get('subject_orig', 'N/A')
+            m_resulttype = member.get('resulttype', 'N/A')
+            is_anch = getattr(member, 'is_anchor', False)
+            logger.debug(
+                "[ANCHOR_ENRICHMENT] group_member is_anchor=%s doi=%s | title=%s | keywords=%s | resulttype=%s",
+                is_anch, m_doi, m_title, m_kw, m_resulttype
+            )
+
 
 def enrich_anchor_using_duplicates(df, duplicate_groups):
     """
@@ -61,6 +96,8 @@ def enrich_anchor_using_duplicates(df, duplicate_groups):
         anchor = anchors.iloc[0]
         anchor_idx = anchor.name
 
+        _log_anchor_state('BEFORE', df, anchor_idx, group_data=group_data)
+
         subject_orig_acc = {'all_keywords': set(), 'best_value': None, 'best_count': 0}
         subject_acc = {'all_keywords': set(), 'best_value': None, 'best_count': 0}
         paper_abstract_acc = {'best_value': None, 'best_length': 0}
@@ -102,6 +139,8 @@ def enrich_anchor_using_duplicates(df, duplicate_groups):
 
         if has_link:
             apply_link_improvements(df, anchor_idx, all_links)
+
+        _log_anchor_state('AFTER', df, anchor_idx)
 
     return df
 

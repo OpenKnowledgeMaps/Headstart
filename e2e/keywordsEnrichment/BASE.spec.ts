@@ -73,7 +73,7 @@ const testCases: EnrichmentTestCase[] = [
   },
   {
     suiteName: "bugfix: retain anchor record",
-    query: 'big Data',
+    query: 'big data',
     search_params: "&service=base&sorting=most-relevant&document_types%5B%5D=7&lang_id%5B%5D=all-lang&min_descsize=0",
     paperTitle: "Big Data or Big Fail? The Good, the Bad and the Ugly and the missing role of Statistics",
     abstract:
