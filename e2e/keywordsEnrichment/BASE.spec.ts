@@ -19,7 +19,7 @@ const testCases: EnrichmentTestCase[] = [
     abstract:
       "Solar eclipses offer unparalleled opportunities for public engagement in astronomy. Large groups of people often gather to view eclipses, and these events require affordable and easy to use tools to safely observe the Sun. One unique way to observe a solar eclipse is by using a disco ball. Here, we present an analysis of the experiences of educators who used a disco ball as a solar projector during various public outreach events. Through a survey conducted shortly after the April 2024 total solar eclipse and the March 2025 partial solar eclipse, we collected data on the use, engagement, and perceived educational value of a disco ball projector from 31 individual events. The results suggest that disco balls were not only affordable and safe, but also popular and educational. ... : 22 pages, 8 figures, to be published in CAPJournal Volume 19 Issue 2 ...",
     keywords:
-      "Instrumentation and Methods for Astrophysics astro-ph.IM; Physics Education physics.ed-ph; FOS: Physical sciences",
+      "FOS: Physical sciences; Instrumentation and Methods for Astrophysics astro-ph.IM; Physics Education physics.ed-ph",
   },
   {
     suiteName: "bugfix: retain anchor record",
