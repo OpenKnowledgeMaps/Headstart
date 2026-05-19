@@ -109,7 +109,7 @@ test.describe("Warm-up: pre-load BASE searches", () => {
 
 for (const tc of testCases) {
   test.describe(
-    `Verify abstract and keywords are merged correctly, ${tc.suiteName}`,
+    `Verify abstract and keywords are merged correctly, ${tc.suiteName} [${tc.query}]`,
     () => {
       const url = `/search?type=get&vis_type=overview${tc.search_params}&service=base&embed=true`;
 
