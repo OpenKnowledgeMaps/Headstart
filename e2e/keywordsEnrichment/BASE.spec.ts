@@ -59,7 +59,7 @@ const testCases: EnrichmentTestCase[] = [
     abstract:
       "Abstract Machine translation is one of the applications of natural language processing which has been explored in different languages. Recently researchers started paying attention towards machine translation for resource-poor languages and closely related languages. A widespread and underlying problem for these machine translation systems is the linguistic difference and variation in orthographic conventions which causes many issues to traditional approaches. Two languages written in two different orthographies are not easily comparable but orthographic information can also be used to improve the machine translation system. This article offers a survey of research regarding orthography’s influence on machine translation of under-resourced languages. It introduces under-resourced languages in terms of machine translation and how orthographic information can be utilised to improve machine translation. We describe previous work in this area, discussing what underlying assumptions were made, and showing how orthographic knowledge improves the performance of machine translation of under-resourced languages. We discuss different types of machine translation and demonstrate a recent trend that seeks to link orthographic information with well-established machine translation methods. Considerable attention is given to current efforts using cognate information at different levels of machine translation and the lessons that can be drawn from this. Additionally, multilingual neural machine translation of closely related languages is given a particular focus in this survey. This article ends with a discussion of the way forward in machine translation with orthographic information, focusing on multilingual settings and bilingual lexicon induction.",
     keywords:
-      "Computation and Language cs.CL; FOS: Computer and information sciences; Machine translation ; Neural machine translation; Orthography; Rule-based machine translation; Statistical machine translation; Under-resourced languages",
+      "Computation and Language cs.CL; FOS: Computer and information sciences; Machine translation; Neural machine translation; Orthography; Rule-based machine translation; Statistical machine translation; Under-resourced languages",
   },
   {
     suiteName: "bugfix: retain anchor record",
@@ -91,14 +91,33 @@ const testCases: EnrichmentTestCase[] = [
     keywords:
       "INF/01 Informatica; ING-INF/05 Sistemi di elaborazione delle informazioni",
   },
+  {
+    suiteName: "bugfix: retain anchor record",
+    query: '"game theory"',
+    search_params: "&service=base&sorting=most-relevant&document_types%5B%5D=121&lang_id%5B%5D=all-lang&min_descsize=300",
+    paperTitle: "Composing games into complex institutions",
+    keywords:
+      "Computer Science and Game Theory cs.GT; FOS: Computer and information sciences; Medicine; Q; R; Science; Social and Information Networks cs.SI",
+  },
+  {
+    suiteName: "bugfix: retain anchor record",
+    query: '"game theory"',
+    search_params: "&service=base&sorting=most-relevant&document_types%5B%5D=121&lang_id%5B%5D=all-lang&min_descsize=300",
+    paperTitle: "Medical ethics, logic traps, and game theory: an illustrative tale of brain death",
+    keywords:
+      "Adult [MeSH]; Analytical Approach; Attitude to Death [MeSH]; Brain Death [MeSH]; Decision Making [MeSH]; Female [MeSH]; Game Theory [MeSH]; Humans [MeSH]; Life Support Care [MeSH]; Logic [MeSH]; Withholding Treatment [MeSH]",
+  },
 ];
 
-const uniqueSearches = [...new Set(testCases.map((tc) => tc.search_params).filter(Boolean))];
+const uniqueWarmups = testCases.filter(
+  (tc, i, arr) =>
+    arr.findIndex((t) => t.query === tc.query && t.search_params === tc.search_params) === i
+);
 
 // This can also be used to pre-load the BASE searches, so that the subsequent tests run faster
 // npx playwright test "e2e/keywordsEnrichment/BASE.spec.ts" --grep "Warm-up: pre-load BASE searches"
 test.describe("Warm-up: pre-load BASE searches", () => {
-  for (const tc of testCases) {
+  for (const tc of uniqueWarmups) {
     test(`${tc.query}`, async ({ page }) => {
       const url = `/search?type=get&vis_type=overview&q=${tc.query}${tc.search_params}`;
       await prepareVisualisation(page, url);
