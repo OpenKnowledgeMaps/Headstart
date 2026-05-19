@@ -13,7 +13,7 @@ interface EnrichmentTestCase {
 const testCases: EnrichmentTestCase[] = [
   {
     suiteName: "bugfix: retain anchor record",
-    query: '“Solar eclipse”',
+    query: '"solar eclipse"',
     search_params: "&service=base&sorting=most-relevant&document_types%5B%5D=121&lang_id%5B%5D=all-lang&min_descsize=300",
     paperTitle: "Why every solar eclipse viewing event needs a disco ball",
     abstract:
@@ -23,7 +23,7 @@ const testCases: EnrichmentTestCase[] = [
   },
   {
     suiteName: "bugfix: retain anchor record",
-    query: 'Clinical trials',
+    query: 'clinical trials',
     search_params: "&service=base&sorting=most-relevant&document_types%5B%5D=121&lang_id%5B%5D=all-lang&min_descsize=0",
     paperTitle: "Clinical Trials and Clinical Research: A Comprehensive Review",
     abstract:
@@ -33,7 +33,7 @@ const testCases: EnrichmentTestCase[] = [
   },
   {
     suiteName: "bugfix: retain anchor record",
-    query: 'Antibiotics prescription',
+    query: 'antibiotics prescription',
     search_params: "&service=base&sorting=most-relevant&document_types%5B%5D=121&lang_id%5B%5D=all-lang&min_descsize=0",
     paperTitle: "Clinical Trials and Clinical Research: A Comprehensive Review",
     abstract:
@@ -43,7 +43,7 @@ const testCases: EnrichmentTestCase[] = [
   },
   {
     suiteName: "bugfix: retain anchor record",
-    query: '“Game theory”',
+    query: '"game theory"',
     search_params: "&service=base&sorting=most-relevant&document_types%5B%5D=121&lang_id%5B%5D=all-lang&min_descsize=300",
     paperTitle: "Game theory approaches for autonomy",
     abstract:
@@ -53,7 +53,7 @@ const testCases: EnrichmentTestCase[] = [
   },
   {
     suiteName: "bugfix: retain anchor record",
-    query: 'Machine translation',
+    query: 'machine translation',
     search_params: "&service=base&sorting=most-relevant&document_types%5B%5D=121&lang_id%5B%5D=all-lang&min_descsize=300",
     paperTitle: "A Survey of Orthographic Information in Machine Translation",
     abstract:
@@ -73,7 +73,7 @@ const testCases: EnrichmentTestCase[] = [
   },
   {
     suiteName: "bugfix: retain anchor record",
-    query: 'Big Data',
+    query: 'big Data',
     search_params: "&service=base&sorting=most-relevant&document_types%5B%5D=7&lang_id%5B%5D=all-lang&min_descsize=0",
     paperTitle: "Big Data or Big Fail? The Good, the Bad and the Ugly and the missing role of Statistics",
     abstract:
@@ -100,9 +100,9 @@ const uniqueSearches = [...new Set(testCases.map((tc) => tc.search_params).filte
 test.describe("Warm-up: pre-load BASE searches", () => {
   for (const tc of testCases) {
     test(`${tc.query}`, async ({ page }) => {
-      const url = `/search?type=get&vis_type=overview${tc.search_params}`;
+      const url = `/search?type=get&vis_type=overview&q=${tc.query}${tc.search_params}`;
       await prepareVisualisation(page, url);
-      await expect(page.locator("#search-term-unique")).toContainText(`(${tc.query})`);
+      await expect(page.locator("#search-term-unique")).toContainText(tc.query);
     });
   }
 });
@@ -111,12 +111,12 @@ for (const tc of testCases) {
   test.describe(
     `Verify abstract and keywords are merged correctly, ${tc.suiteName} [${tc.query}]`,
     () => {
-      const url = `/search?type=get&vis_type=overview${tc.search_params}&service=base&embed=true`;
+      const url = `/search?type=get&vis_type=overview&q=${tc.query}${tc.search_params}`;
 
       async function openPaper(page: Page) {
         await prepareVisualisation(page, url);
         await expect(page.locator("#search-term-unique")).toContainText(
-          `(${tc.query})`,
+          tc.query,
         );
         const paper = page.getByTitle(tc.paperTitle);
         await expect(paper).toBeVisible();
