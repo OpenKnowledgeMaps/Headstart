@@ -1,6 +1,6 @@
 asn1crypto==0.24.0
 async-timeout==4.0.2
-cryptography==2.1.4
+cryptography==44.0.1
 idna==2.6
 importlib-metadata==4.8.3
 keyring==10.6.0
