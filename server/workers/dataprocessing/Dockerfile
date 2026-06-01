@@ -152,6 +152,7 @@ RUN pip3 install --no-cache-dir -r requirements.txt
 COPY workers/dataprocessing/renv.lock .
 COPY workers/dataprocessing/activate.R .
 
+ENV RENV_CONFIG_INSTALL_PARALLEL=FALSE
 RUN R -e 'renv::consent(provided = TRUE)' && \
     R -e 'setwd("./"); renv::activate(); renv::restore(lockfile = "./renv.lock")'
 
