@@ -2166,7 +2166,7 @@
       "RemoteUsername": "OpenKnowledgeMaps",
       "RemoteRepo": "rcrossref",
       "RemoteRef": "feat/crossref-rate-limit-enhancement",
-      "RemoteSha": "55249e45bd6f2c6ba94e58b577a77f3b58ac35a0"
+      "RemoteSha": "b0191f08cda07caf3eb8cc97cadacafdd48abd7a"
     },
     "renv": {
       "Package": "renv",
