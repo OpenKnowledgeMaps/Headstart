@@ -1,5 +1,385 @@
 [
   {
+    "name": "Institutional Repository DAU",
+    "internal_name": "ftid14799"
+  },
+  {
+    "name": "DIRENO - Digitales Repositorium Niederösterreich",
+    "internal_name": "ftid14801"
+  },
+  {
+    "name": "Current Legal Problems",
+    "internal_name": "ftid14800"
+  },
+  {
+    "name": "South American Publishing",
+    "internal_name": "ftid14798"
+  },
+  {
+    "name": "IQVerse",
+    "internal_name": "ftid14810"
+  },
+  {
+    "name": "DergiPark Akademik",
+    "internal_name": "ftid14822"
+  },
+  {
+    "name": "Journal of Global Perspectives in Communication and Media (JGPCM)",
+    "internal_name": "ftid14823"
+  },
+  {
+    "name": "Repositório Institucional da Fasipe",
+    "internal_name": "ftid14833"
+  },
+  {
+    "name": "OpenXiv",
+    "internal_name": "ftid14852"
+  },
+  {
+    "name": "CamEd Open Access Repository",
+    "internal_name": "ftid14855"
+  },
+  {
+    "name": "Amoud University Institutional Repository",
+    "internal_name": "ftid14856"
+  },
+  {
+    "name": "Editorial Didaxis",
+    "internal_name": "ftid14797"
+  },
+  {
+    "name": "Nauka i tehnologija (International University Travnik)",
+    "internal_name": "ftid14819"
+  },
+  {
+    "name": "GSMS Publications (Green and Sustainable Materials Society)",
+    "internal_name": "ftid14808"
+  },
+  {
+    "name": "Jurnal di STMIK EL RAHMA Yogyakarta",
+    "internal_name": "ftid14811"
+  },
+  {
+    "name": "Publishing House \"Scientometric Center\" (Журнал биологических наук и сельского хозяйства)",
+    "internal_name": "crid14812"
+  },
+  {
+    "name": "Nexus House Editorial",
+    "internal_name": "ftid14818"
+  },
+  {
+    "name": "Jurnal Ilmiah",
+    "internal_name": "ftid14820"
+  },
+  {
+    "name": "Universitas Insan Budi Utomo",
+    "internal_name": "ftid14821"
+  },
+  {
+    "name": "Pondok Jurnal",
+    "internal_name": "ftid14825"
+  },
+  {
+    "name": "Michelangelo Scholar Publishing Limited (MSPL)",
+    "internal_name": "ftid14826"
+  },
+  {
+    "name": "Athenaeum Scientific Publishers",
+    "internal_name": "crid14827"
+  },
+  {
+    "name": "Omega Journals",
+    "internal_name": "ftid14828"
+  },
+  {
+    "name": "Hala Foundation Journals",
+    "internal_name": "ftid14830"
+  },
+  {
+    "name": "Sociological Studios",
+    "internal_name": "ftid14832"
+  },
+  {
+    "name": "World Organization of Applied Sciences",
+    "internal_name": "ftid14835"
+  },
+  {
+    "name": "Compusoft",
+    "internal_name": "ftid14837"
+  },
+  {
+    "name": "International Academic Research Center (IARC) - Florida Global University (FGU)",
+    "internal_name": "ftid14838"
+  },
+  {
+    "name": "Bhutan Journal of Business and Management",
+    "internal_name": "ftid14839"
+  },
+  {
+    "name": "Interdisciplinary Applied Qualifications",
+    "internal_name": "ftid14840"
+  },
+  {
+    "name": "TSUE Scientific Journal",
+    "internal_name": "ftid14843"
+  },
+  {
+    "name": "DORA WSL",
+    "internal_name": "ftid14844"
+  },
+  {
+    "name": "DORA PSI",
+    "internal_name": "ftid14845"
+  },
+  {
+    "name": "Mahkota Science Publishers",
+    "internal_name": "ftid14846"
+  },
+  {
+    "name": "TRESEARCH Technology Journals Platform",
+    "internal_name": "ftid14847"
+  },
+  {
+    "name": "Pubris",
+    "internal_name": "ftid14849"
+  },
+  {
+    "name": "E-Journal Al-Bayan Institute",
+    "internal_name": "ftid14850"
+  },
+  {
+    "name": "NIBM Journal of Knowledge Innovation",
+    "internal_name": "ftid14851"
+  },
+  {
+    "name": "International Multidisciplinary Journal of Emerging Technologies and Applications (IMJETA)",
+    "internal_name": "ftid14853"
+  },
+  {
+    "name": "Jurnal Contradixie",
+    "internal_name": "ftid14854"
+  },
+  {
+    "name": "Journal of national culture",
+    "internal_name": "ftid14780"
+  },
+  {
+    "name": "Portal de Periódicos do IFRS",
+    "internal_name": "ftid14802"
+  },
+  {
+    "name": "data.THM - Datenrepositorium der Technischen Hochschule Mittelhessen",
+    "internal_name": "ftid14729"
+  },
+  {
+    "name": "İstanbul Esenyurt Üniversitesi Kurumsal Akademik Arşivi",
+    "internal_name": "ftid14731"
+  },
+  {
+    "name": "SOLAV Journal (A Scholarly Platform for Interdisciplinary Applied Futures Research)",
+    "internal_name": "ftid14736"
+  },
+  {
+    "name": "Sulaimani Dental Journal",
+    "internal_name": "ftid14738"
+  },
+  {
+    "name": "Revista Entreparágrafos",
+    "internal_name": "ftid14739"
+  },
+  {
+    "name": "CACTUS – Journal of Tourism Business, Management and Economics",
+    "internal_name": "ftid14746"
+  },
+  {
+    "name": "Dandakaranya Review Journal",
+    "internal_name": "ftid14749"
+  },
+  {
+    "name": "Journal of Lie Theory",
+    "internal_name": "ftid14763"
+  },
+  {
+    "name": "STAI Di Al-Hikmah Jakarta",
+    "internal_name": "ftid14773"
+  },
+  {
+    "name": "Didaxis. Revista Educativa, Social y Humanista",
+    "internal_name": "ftid14775"
+  },
+  {
+    "name": "Physical and Mathematical Education",
+    "internal_name": "ftid14777"
+  },
+  {
+    "name": "Education. Innovation. Practice",
+    "internal_name": "ftid14778"
+  },
+  {
+    "name": "Publications Lawusn",
+    "internal_name": "ftid14781"
+  },
+  {
+    "name": "Hessisches Kommunalrechtslexikon",
+    "internal_name": "ftid14782"
+  },
+  {
+    "name": "Casting processes",
+    "internal_name": "ftid14783"
+  },
+  {
+    "name": "Journal of Big Data and Artificial Intelligence",
+    "internal_name": "ftid14784"
+  },
+  {
+    "name": "Luminis Editorial",
+    "internal_name": "ftid14785"
+  },
+  {
+    "name": "Repositorio Institucional de la Superintendencia del Mercado de Valores (SMV)",
+    "internal_name": "ftid14786"
+  },
+  {
+    "name": "Sorsogon Multidisciplinary Research Journal",
+    "internal_name": "ftid14787"
+  },
+  {
+    "name": "Medical Journal of Soeradji",
+    "internal_name": "ftid14788"
+  },
+  {
+    "name": "Revista Portuguesa de Doenças Infecciosas",
+    "internal_name": "ftid14790"
+  },
+  {
+    "name": "Focuscholar",
+    "internal_name": "ftid14791"
+  },
+  {
+    "name": "Australian Journal of Artificial Intelligence Review",
+    "internal_name": "ftid14792"
+  },
+  {
+    "name": "Trends in Intellectual Property Research",
+    "internal_name": "ftid14793"
+  },
+  {
+    "name": "Journal of Material Characterization and Applications",
+    "internal_name": "ftid14795"
+  },
+  {
+    "name": "Jurnal Online Kesehatan Indonesia",
+    "internal_name": "ftid14796"
+  },
+  {
+    "name": "UW Journal of Management Sciences (UWJMS)",
+    "internal_name": "ftid14803"
+  },
+  {
+    "name": "UW Journal of Social Sciences (UWJSS)",
+    "internal_name": "ftid14805"
+  },
+  {
+    "name": "University of Wah Journal of Computer Science (UWJCS)",
+    "internal_name": "ftid14806"
+  },
+  {
+    "name": "New Journal of Biology and Medicine",
+    "internal_name": "ftid14813"
+  },
+  {
+    "name": "Gemini Littera",
+    "internal_name": "ftid14814"
+  },
+  {
+    "name": "İnsan İzi Dergisi",
+    "internal_name": "ftid14815"
+  },
+  {
+    "name": "Gio Edutech",
+    "internal_name": "ftid14816"
+  },
+  {
+    "name": "Pensamiento Numinal: Revista de Ciencias Sociales y Humanidades",
+    "internal_name": "ftid14817"
+  },
+  {
+    "name": "Journal Regalia Institute",
+    "internal_name": "ftid14768"
+  },
+  {
+    "name": "Literati Global Network",
+    "internal_name": "ftid14713"
+  },
+  {
+    "name": "Afghan International Journal of Science (AIJS)",
+    "internal_name": "ftid14754"
+  },
+  {
+    "name": "Dasinya Journal for Engineering and Informatics",
+    "internal_name": "ftid14755"
+  },
+  {
+    "name": "Ceniiac Journal",
+    "internal_name": "ftid14756"
+  },
+  {
+    "name": "REGRASP (Revista para Graduandos/Instituto Federal de Educação, Ciência e Tecnologia de São Paulo)",
+    "internal_name": "ftid14757"
+  },
+  {
+    "name": "Journal Nacreva",
+    "internal_name": "ftid14758"
+  },
+  {
+    "name": "Gabungan Riset Edukasi dan Eksplorasi Teori (GREET)",
+    "internal_name": "ftid14759"
+  },
+  {
+    "name": "Era Scientific Publisher (ESP)",
+    "internal_name": "ftid14760"
+  },
+  {
+    "name": "Revista IESB",
+    "internal_name": "ftid14761"
+  },
+  {
+    "name": "PT. Berkah Smart Academica",
+    "internal_name": "ftid14762"
+  },
+  {
+    "name": "Tér – Gazdaság – Ember / Journal of Region, Economy and Society",
+    "internal_name": "ftid14764"
+  },
+  {
+    "name": "EL-IQTISHAD: Journal Economics, Business and Sharia Studies",
+    "internal_name": "ftid14765"
+  },
+  {
+    "name": "Bangladesh Journal of Dental Research & Education (BJDRE)",
+    "internal_name": "ftid14766"
+  },
+  {
+    "name": "Sofist: An International Journal of Philosophy",
+    "internal_name": "ftid14767"
+  },
+  {
+    "name": "Education@ETMA",
+    "internal_name": "ftid14769"
+  },
+  {
+    "name": "PEARL Multidisciplinary Journal",
+    "internal_name": "ftid14770"
+  },
+  {
+    "name": "Ecosistema, revista de educación y medioambiente",
+    "internal_name": "ftid14771"
+  },
+  {
+    "name": "Portal de Revistas Universidad del Atlántico",
+    "internal_name": "ftid14772"
+  },
+  {
     "name": "Revista Econômica do Nordeste",
     "internal_name": "ftid14670"
   },
@@ -18298,10 +18678,6 @@
   {
     "name": "Ufuk Universitesi Akademik Acikerisim Sistemi",
     "internal_name": "ftufukuniv"
-  },
-  {
-    "name": "Abdelhamid Mehri University Constantine2 ScholarlyWorks Repository",
-    "internal_name": "ftunivconst2"
   },
   {
     "name": "Jurnal Online IAIN Madura",
