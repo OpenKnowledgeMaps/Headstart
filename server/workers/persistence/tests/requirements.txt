@@ -1,6 +1,6 @@
 pytest
 pytest-mock
 flask
-flask_restx
+flask_restx==1.3.2
 sqlalchemy
 psycopg2
