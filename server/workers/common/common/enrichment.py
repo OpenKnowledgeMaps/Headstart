@@ -27,10 +27,15 @@ def _log_anchor_state(tag, df, anchor_idx, group_data=None):
     kw    = df.loc[anchor_idx, 'subject_orig']  if 'subject_orig'  in df.columns else 'N/A'
     resulttype = df.loc[anchor_idx, 'resulttype'] if 'resulttype' in df.columns else 'N/A'
     oa_state = df.loc[anchor_idx, 'oa_state'] if 'oa_state' in df.columns else 'N/A'
+    link = df.loc[anchor_idx, 'link'] if 'link' in df.columns else 'N/A'
+    pdf_candidates = (
+        df.loc[anchor_idx, 'pdf_link_candidates_from_duplicates']
+        if 'pdf_link_candidates_from_duplicates' in df.columns else 'N/A'
+    )
 
     logger.debug(
-        "[ANCHOR_ENRICHMENT] anchor_%s doi=%s | title=%s | keywords=%s | resulttype=%s | oa_state=%r (type=%s)",
-        tag, doi, title, kw, resulttype, oa_state, type(oa_state).__name__
+        "[ANCHOR_ENRICHMENT] anchor_%s doi=%s | title=%s | keywords=%s | resulttype=%s | oa_state=%r (type=%s) | link=%s | pdf_link_candidates_from_duplicates=%s",
+        tag, doi, title, kw, resulttype, oa_state, type(oa_state).__name__, link, pdf_candidates
     )
 
     if group_data is not None:
@@ -40,10 +45,11 @@ def _log_anchor_state(tag, df, anchor_idx, group_data=None):
             m_kw    = member.get('subject_orig', 'N/A')
             m_resulttype = member.get('resulttype', 'N/A')
             m_oa_state = member.get('oa_state', 'N/A')
+            m_link = member.get('link', 'N/A')
             is_anch = getattr(member, 'is_anchor', False)
             logger.debug(
-                "[ANCHOR_ENRICHMENT] group_member is_anchor=%s doi=%s | title=%s | keywords=%s | resulttype=%s | oa_state=%r (type=%s)",
-                is_anch, m_doi, m_title, m_kw, m_resulttype, m_oa_state, type(m_oa_state).__name__
+                "[ANCHOR_ENRICHMENT] group_member is_anchor=%s doi=%s | title=%s | keywords=%s | resulttype=%s | oa_state=%r (type=%s) | link=%s",
+                is_anch, m_doi, m_title, m_kw, m_resulttype, m_oa_state, type(m_oa_state).__name__, m_link
             )
 
 
@@ -288,6 +294,14 @@ def apply_link_improvements(df, anchor_idx, all_links):
 
             merged_links = '; '.join(sorted(unique_links_without_anchor_link))
             df.loc[anchor_idx, 'pdf_link_candidates_from_duplicates'] = merged_links
+
+            if merged_links:
+                anchor_doi = df.loc[anchor_idx, 'doi'] if 'doi' in df.columns else 'N/A'
+                anchor_title = df.loc[anchor_idx, 'title'] if 'title' in df.columns else 'N/A'
+                logger.debug(
+                    "[ENRICHMENT_APPLIED] link doi=%s | title=%s | anchor_link=%s | candidates_from_duplicates=%s",
+                    anchor_doi, anchor_title, anchor_link, merged_links
+                )
 
 def get_anchor_field_value(df, anchor_idx, column_name):
     """
