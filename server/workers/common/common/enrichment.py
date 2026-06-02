@@ -26,10 +26,11 @@ def _log_anchor_state(tag, df, anchor_idx, group_data=None):
     title = df.loc[anchor_idx, 'title']    if 'title'    in df.columns else 'N/A'
     kw    = df.loc[anchor_idx, 'subject_orig']  if 'subject_orig'  in df.columns else 'N/A'
     resulttype = df.loc[anchor_idx, 'resulttype'] if 'resulttype' in df.columns else 'N/A'
+    oa_state = df.loc[anchor_idx, 'oa_state'] if 'oa_state' in df.columns else 'N/A'
 
     logger.debug(
-        "[ANCHOR_ENRICHMENT] anchor_%s doi=%s | title=%s | keywords=%s | resulttype=%s",
-        tag, doi, title, kw, resulttype
+        "[ANCHOR_ENRICHMENT] anchor_%s doi=%s | title=%s | keywords=%s | resulttype=%s | oa_state=%r (type=%s)",
+        tag, doi, title, kw, resulttype, oa_state, type(oa_state).__name__
     )
 
     if group_data is not None:
@@ -38,10 +39,11 @@ def _log_anchor_state(tag, df, anchor_idx, group_data=None):
             m_title = member.get('title',   'N/A')
             m_kw    = member.get('subject_orig', 'N/A')
             m_resulttype = member.get('resulttype', 'N/A')
+            m_oa_state = member.get('oa_state', 'N/A')
             is_anch = getattr(member, 'is_anchor', False)
             logger.debug(
-                "[ANCHOR_ENRICHMENT] group_member is_anchor=%s doi=%s | title=%s | keywords=%s | resulttype=%s",
-                is_anch, m_doi, m_title, m_kw, m_resulttype
+                "[ANCHOR_ENRICHMENT] group_member is_anchor=%s doi=%s | title=%s | keywords=%s | resulttype=%s | oa_state=%r (type=%s)",
+                is_anch, m_doi, m_title, m_kw, m_resulttype, m_oa_state, type(m_oa_state).__name__
             )
 
 
