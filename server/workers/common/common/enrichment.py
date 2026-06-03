@@ -28,14 +28,10 @@ def _log_anchor_state(tag, df, anchor_idx, group_data=None):
     resulttype = df.loc[anchor_idx, 'resulttype'] if 'resulttype' in df.columns else 'N/A'
     oa_state = df.loc[anchor_idx, 'oa_state'] if 'oa_state' in df.columns else 'N/A'
     link = df.loc[anchor_idx, 'link'] if 'link' in df.columns else 'N/A'
-    pdf_candidates = (
-        df.loc[anchor_idx, 'pdf_link_candidates_from_duplicates']
-        if 'pdf_link_candidates_from_duplicates' in df.columns else 'N/A'
-    )
 
     logger.debug(
-        "[ANCHOR_ENRICHMENT] anchor_%s doi=%s | title=%s | keywords=%s | resulttype=%s | oa_state=%r (type=%s) | link=%s | pdf_link_candidates_from_duplicates=%s",
-        tag, doi, title, kw, resulttype, oa_state, type(oa_state).__name__, link, pdf_candidates
+        "[ANCHOR_ENRICHMENT] anchor_%s doi=%s | title=%s | keywords=%s | resulttype=%s | oa_state=%r (type=%s) | link=%s",
+        tag, doi, title, kw, resulttype, oa_state, type(oa_state).__name__, link
     )
 
     if group_data is not None:
