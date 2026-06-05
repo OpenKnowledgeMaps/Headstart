@@ -269,7 +269,12 @@ def _log_group_similarity(df, indexes, group_type, group_key):
     """Log titles, DOIs, and pairwise Levenshtein ratios for one duplicate group."""
     if not logger.isEnabledFor(logging.DEBUG):
         return
-    rows = df.loc[list(indexes)]
+    # Intersect with df.index — group members can be dropped by the
+    # false-positive DOI/title filter before this log fires.
+    present = df.index.intersection(list(indexes))
+    if len(present) == 0:
+        return
+    rows = df.loc[present]
     titles = rows["title"].fillna("").tolist()
     dois = rows["doi"].fillna("").tolist()
     ids = rows["id"].fillna("").tolist()
@@ -499,7 +504,7 @@ def sanitize_year(year_str):
 def _log_dataframe(df: pd.DataFrame, params: Dict[str, str], name: str, ):
     vis_id = params.get('vis_id')
     
-    columns_to_print = ['id', 'title', 'doi', 'merged_dois', 'paper_abstract', 'link', 'subject', 'subject_orig', 'oa_state']
+    columns_to_print = ['id', 'title', 'doi', 'additional_dois', 'paper_abstract', 'link', 'subject', 'subject_orig', 'oa_state']
 
     available_columns = df.columns.tolist()
     columns_to_print = [col for col in columns_to_print if col in available_columns]

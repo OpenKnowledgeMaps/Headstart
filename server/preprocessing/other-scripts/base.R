@@ -283,8 +283,22 @@ etl <- function(res, repo, non_public) {
   metadata$type = check_metadata(res$dctype)
   metadata$typenorm = check_metadata(res$dctypenorm) 
   metadata$doi = unlist(lapply(metadata$link, find_dois))
-  metadata$merged_dois = check_metadata(res$dcdoi) 
-  metadata$merged_dois = check_metadata(lapply(metadata$merged_dois, normalize_dois))
+  metadata$additional_dois = check_metadata(res$dcdoi)
+  metadata$additional_dois = check_metadata(lapply(metadata$additional_dois, normalize_dois))
+  # Fill primary doi from additional_dois when find_dois(link) returned nothing
+  # but dcdoi contains exactly one entry. Guarded to the single-entry case
+  # because multi-entry dcdoi can include related-but-different works
+  # so picking one from many would risk attaching foreign metadata to the record.
+  # additional_dois is a list-column (built via lapply), so flatten to a
+  # character vector before comparisons / assignment to keep `doi` typed.
+  additional_dois_char <- vapply(metadata$additional_dois, function(x) {
+    if (length(x) == 0) "" else as.character(x)[1]
+  }, character(1))
+  needs_doi_fill <- (is.na(metadata$doi) | metadata$doi == "") &
+                    !is.na(additional_dois_char) &
+                    additional_dois_char != "" &
+                    !grepl(";", additional_dois_char, fixed = TRUE)
+  metadata$doi[needs_doi_fill] <- additional_dois_char[needs_doi_fill]
   metadata$lang = check_metadata(res$dclang)
   metadata$language = check_metadata(res$dclanguage)
   metadata$content_provider = check_metadata(res$dcprovider)

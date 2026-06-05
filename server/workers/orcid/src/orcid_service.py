@@ -134,7 +134,7 @@ class OrcidService:
     def _log_dataframe(self, df: pd.DataFrame, params: Dict[str, str], name: str, ):
         orcid = params.get('orcid')
         
-        columns_to_print = ['id', 'title', 'doi', 'merged_dois', 'paper_abstract', 'link', 'subject', 'subject_orig', 'oa_state']
+        columns_to_print = ['id', 'title', 'doi', 'additional_dois', 'paper_abstract', 'link', 'subject', 'subject_orig', 'oa_state']
 
         available_columns = df.columns.tolist()
         columns_to_print = [col for col in columns_to_print if col in available_columns]
@@ -274,7 +274,7 @@ class OrcidService:
                        'relations', 'annotations', 'repo', 'source', 'volume', 'issue', 'page', 'issn',
                        'citation_count', 'cited_by_wikipedia_count', 'cited_by_msm_count', 'cited_by_policies_count',
                        'cited_by_patents_count', 'cited_by_accounts_count', 'cited_by_fbwalls_count',
-                       'merged_dois', 'pdf_link_candidates_from_duplicates',
+                       'additional_dois', 'pdf_link_candidates_from_duplicates',
                         'cited_by_feeds_count',
                         'cited_by_gplus_count',
                         'cited_by_rdts_count',
@@ -321,18 +321,18 @@ class OrcidService:
 
         base_metadata = base_metadata.reindex(columns=required_fields)
 
-        base_metadata['merged_dois'] = base_metadata['merged_dois'].apply(lambda x: x[0] if isinstance(x, list) and len(x) > 0 else x)
-        base_metadata['merged_dois'] = base_metadata['merged_dois'].apply(lambda x: x.split(';') if isinstance(x, str) else [])
-        base_metadata['merged_dois'] = base_metadata['merged_dois'].apply(lambda x: [x.strip() for x in x] if isinstance(x, list) else x)
+        base_metadata['additional_dois'] = base_metadata['additional_dois'].apply(lambda x: x[0] if isinstance(x, list) and len(x) > 0 else x)
+        base_metadata['additional_dois'] = base_metadata['additional_dois'].apply(lambda x: x.split(';') if isinstance(x, str) else [])
+        base_metadata['additional_dois'] = base_metadata['additional_dois'].apply(lambda x: [x.strip() for x in x] if isinstance(x, list) else x)
         # Save the normalized original doi before explode so we can rank direct fetches
-        # above rows whose doi was reassigned from merged_dois after explosion.
+        # above rows whose doi was reassigned from additional_dois after explosion.
         base_metadata['_fetch_doi'] = base_metadata['doi'].apply(remove_doi_prefix)
-        base_metadata = base_metadata.explode('merged_dois', ignore_index=True)
-        # replace doi with merged_dois if merged_dois is not empty, otherwise keep doi
-        base_metadata.loc[base_metadata['merged_dois'].notna() & (base_metadata['merged_dois'] != ''), 'doi'] = base_metadata.loc[base_metadata['merged_dois'].notna() & (base_metadata['merged_dois'] != ''), 'merged_dois']
+        base_metadata = base_metadata.explode('additional_dois', ignore_index=True)
+        # replace doi with additional_dois if additional_dois is not empty, otherwise keep doi
+        base_metadata.loc[base_metadata['additional_dois'].notna() & (base_metadata['additional_dois'] != ''), 'doi'] = base_metadata.loc[base_metadata['additional_dois'].notna() & (base_metadata['additional_dois'] != ''), 'additional_dois']
         base_metadata.loc[:, 'doi'] = base_metadata['doi'].apply(remove_doi_prefix)
         # True for rows whose final doi still matches the original fetched doi (direct);
-        # False for rows where doi was replaced by a merged_dois value (exploded).
+        # False for rows where doi was replaced by a additional_dois value (exploded).
         base_metadata['_is_direct_fetch'] = base_metadata['doi'] == base_metadata['_fetch_doi']
         base_metadata.drop(columns='_fetch_doi', inplace=True)
 
@@ -355,9 +355,9 @@ class OrcidService:
                     self.logger.debug(f"[doi_dedup] duplicate group for doi={doi!r}:\n{group.to_string()}")
             else:
                 self.logger.debug(f"[doi_dedup] {len(base_metadata)} records, no duplicate DOIs — dedup step is a no-op here")
-        # Sort by: direct fetch before exploded-from-merged_dois rows,
+        # Sort by: direct fetch before exploded-from-additional_dois rows,
         # This ensures the record actually fetched for a DOI wins over a record
-        # that acquired that DOI via merged_dois expansion.
+        # that acquired that DOI via additional_dois expansion.
         base_metadata = base_metadata.assign(
             _direct_sort=(~base_metadata['_is_direct_fetch']).astype(int),
         ).sort_values(by=['_direct_sort']).drop_duplicates(
