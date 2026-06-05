@@ -134,7 +134,7 @@ class OrcidService:
     def _log_dataframe(self, df: pd.DataFrame, params: Dict[str, str], name: str, ):
         orcid = params.get('orcid')
         
-        columns_to_print = ['id', 'title', 'doi_merge', 'doi_merge', 'additional_dois', 'paper_abstract', 'link', 'subject', 'subject_orig', 'oa_state']
+        columns_to_print = ['id', 'title', 'doi', 'doi_merge', 'additional_dois', 'paper_abstract', 'link', 'subject', 'subject_orig', 'oa_state']
 
         available_columns = df.columns.tolist()
         columns_to_print = [col for col in columns_to_print if col in available_columns]
@@ -274,7 +274,7 @@ class OrcidService:
                        'relations', 'annotations', 'repo', 'source', 'volume', 'issue', 'page', 'issn',
                        'citation_count', 'cited_by_wikipedia_count', 'cited_by_msm_count', 'cited_by_policies_count',
                        'cited_by_patents_count', 'cited_by_accounts_count', 'cited_by_fbwalls_count',
-                       'additional_dois', 'pdf_link_candidates_from_duplicates',
+                       'additional_dois', 'doi_merge','pdf_link_candidates_from_duplicates',
                         'cited_by_feeds_count',
                         'cited_by_gplus_count',
                         'cited_by_rdts_count',
