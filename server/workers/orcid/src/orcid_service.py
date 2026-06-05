@@ -5,6 +5,7 @@ import pandas as pd
 import os
 import uuid
 from common.decorators import error_logging_aspect
+from common.enrichment import oa_state_priority
 import numpy as np
 from pyorcid import Orcid, errors as pyorcid_errors
 from pyorcid.orcid_authentication import OrcidAuthentication
@@ -360,6 +361,20 @@ class OrcidService:
                     self.logger.debug(f"[doi_dedup] duplicate group for doi={doi!r}:\n{group.to_string()}")
             else:
                 self.logger.debug(f"[doi_dedup] {len(base_metadata)} records, no duplicate DOIs — dedup step is a no-op here")
+        # Reduce oa_state across doi_merge duplicates to the best-priority value
+        # (1 yes > 0 no > 2 unknown) BEFORE dedup, mirroring process_oa_state_element.
+        # Without this, drop_duplicates(keep='first') below can discard an open-access
+        # record (oa_state=1) in favour of an unknown one (oa_state=2) for the same DOI,
+        # silently losing the open-access status during enrichment.
+        if 'oa_state' in base_metadata.columns and not base_metadata.empty:
+            oa_priority = base_metadata['oa_state'].map(oa_state_priority)
+            best_oa_state = (
+                base_metadata.assign(_oa_priority=oa_priority)
+                .sort_values(by='_oa_priority')
+                .drop_duplicates(subset='doi_merge', keep='first')
+                .set_index('doi_merge')['oa_state']
+            )
+            base_metadata['oa_state'] = base_metadata['doi_merge'].map(best_oa_state)
         # Sort by: direct fetch before exploded-from-additional_dois rows,
         # This ensures the record actually fetched for a DOI wins over a record
         # that acquired that DOI via additional_dois expansion.

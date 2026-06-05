@@ -1,4 +1,5 @@
 import os
+import re
 import logging
 import pandas as pd
 from common.deduplication import deduplicate_keywords, deduplicate_links
@@ -76,8 +77,11 @@ def enrich_anchor_using_duplicates(df, duplicate_groups):
     has_paper_abstract = 'paper_abstract' in df.columns
     has_oa_state = 'oa_state' in df.columns
     has_link = 'link' in df.columns
+    has_additional_dois = 'additional_dois' in df.columns
+    has_doi = 'doi' in df.columns
 
-    is_all_columns_are_missing = not has_subject_orig and not has_subject and not has_paper_abstract and not has_oa_state and not has_link
+    is_all_columns_are_missing = (not has_subject_orig and not has_subject and not has_paper_abstract
+                                  and not has_oa_state and not has_link and not has_additional_dois)
     if is_all_columns_are_missing:
         return df
 
@@ -107,6 +111,7 @@ def enrich_anchor_using_duplicates(df, duplicate_groups):
         paper_abstract_acc = {'best_value': None, 'best_length': 0}
         oa_state_acc = {'best_value': None, 'best_priority': float('inf')}
         all_links = set()
+        additional_dois_acc = {}
 
         for element_idx in idx:
             if has_subject_orig:
@@ -129,6 +134,11 @@ def enrich_anchor_using_duplicates(df, duplicate_groups):
                 link_value = group_data.loc[element_idx, 'link']
                 process_link_element(link_value, all_links)
 
+            if has_additional_dois or has_doi:
+                doi_value = group_data.loc[element_idx, 'doi'] if has_doi else None
+                additional_dois_value = group_data.loc[element_idx, 'additional_dois'] if has_additional_dois else None
+                process_additional_dois_element(doi_value, additional_dois_value, additional_dois_acc)
+
         if has_subject_orig:
             apply_subject_improvements(df, anchor_idx, subject_orig_acc, 'subject_orig')
 
@@ -143,6 +153,9 @@ def enrich_anchor_using_duplicates(df, duplicate_groups):
 
         if has_link:
             apply_link_improvements(df, anchor_idx, all_links)
+
+        if has_additional_dois:
+            apply_additional_dois_improvements(df, anchor_idx, additional_dois_acc)
 
         _log_anchor_state('AFTER', df, anchor_idx)
 
@@ -195,6 +208,25 @@ def process_paper_abstract_element(value, accumulator):
         accumulator['best_length'] = abstract_length
         accumulator['best_value'] = value
 
+def oa_state_priority(value):
+    """
+    Maps an oa_state value to its merge priority (lower wins: 1 yes > 0 no > 2 unknown).
+
+    Accepts the canonical "0"/"1"/"2" strings produced by BASE as well as the int/float
+    forms seen after other workers cast oa_state (orcid -> int) or pandas upcasts it to
+    float on a left-join that introduced NaN (1 -> 1.0). NaN and unknown values map to
+    +inf so they never displace a known state.
+    """
+    if pd.isna(value):
+        return float('inf')
+
+    if isinstance(value, float) and value.is_integer():
+        key = str(int(value))
+    else:
+        key = str(value)
+
+    return OA_STATE_PRIORITY.get(key, float('inf'))
+
 def process_oa_state_element(value, accumulator):
     """
     Processes the oa_state value for one element of the group.
@@ -203,12 +235,7 @@ def process_oa_state_element(value, accumulator):
         value: The oa_state value from the element
         accumulator: Dictionary with accumulative data
     """
-    is_not_empty = not pd.isna(value)
-    if not is_not_empty:
-        return
-
-    oa_state_str = str(value)
-    priority = OA_STATE_PRIORITY.get(oa_state_str, float('inf'))
+    priority = oa_state_priority(value)
     if priority < accumulator['best_priority']:
         accumulator['best_priority'] = priority
         accumulator['best_value'] = value
@@ -227,6 +254,70 @@ def process_link_element(value, accumulator):
 
     links = [link.strip() for link in str(value).split(';') if link.strip()]
     accumulator.update(links)
+
+_DOI_PREFIX_RE = re.compile(r'^https?://(dx\.)?doi\.org/', re.IGNORECASE)
+
+def process_additional_dois_element(doi_value, additional_dois_value, accumulator):
+    """
+    Collects every DOI a group member represents — its primary ``doi`` and any
+    entries in ``additional_dois`` — into the accumulator, so the anchor can later
+    advertise all of them. Mirrors process_link_element, but for DOIs.
+
+    Duplicate group members are dropped after enrichment, so unless their DOIs are
+    folded into the anchor's additional_dois here, those DOIs become unmatchable
+    downstream (e.g. the ORCID worker's explode-and-merge on doi_merge).
+
+    ``additional_dois`` follows the base.R contract: a one-element list whose single
+    element is a "; "-joined string of DOIs (see normalize_dois). The accumulator is a
+    dict mapping a lower-cased bare DOI (dedup key) to its bare display form.
+
+    Args:
+        doi_value: The member's primary ``doi`` value (may be NaN/empty).
+        additional_dois_value: The member's ``additional_dois`` value (list/str/NaN).
+        accumulator: Dict collecting {lowercased_bare_doi: bare_doi}.
+    """
+    def add_raw(raw):
+        if isinstance(raw, list):
+            parts = []
+            for element in raw:
+                parts.extend(str(element).split(';'))
+        elif raw is None or (pd.isna(raw) or raw == ''):
+            return
+        else:
+            parts = str(raw).split(';')
+
+        for part in parts:
+            bare = _DOI_PREFIX_RE.sub('', part.strip())
+            if bare:
+                accumulator.setdefault(bare.lower(), bare)
+
+    add_raw(doi_value)
+    add_raw(additional_dois_value)
+
+def apply_additional_dois_improvements(df, anchor_idx, accumulator):
+    """
+    Writes the union of all group-member DOIs into the anchor's ``additional_dois``,
+    preserving the base.R contract (a one-element list holding a "; "-joined string of
+    ``https://doi.org/``-prefixed DOIs) so downstream explode/merge can match every DOI
+    the duplicate group represented back to this anchor.
+
+    Args:
+        df: DataFrame with data
+        anchor_idx: Index of the anchor element
+        accumulator: Dict of {lowercased_bare_doi: bare_doi}
+    """
+    if not accumulator:
+        return
+
+    merged = '; '.join('https://doi.org/' + bare for bare in sorted(accumulator.values()))
+    df.at[anchor_idx, 'additional_dois'] = [merged]
+
+    anchor_doi = df.loc[anchor_idx, 'doi'] if 'doi' in df.columns else 'N/A'
+    anchor_title = df.loc[anchor_idx, 'title'] if 'title' in df.columns else 'N/A'
+    logger.debug(
+        "[ENRICHMENT_APPLIED] additional_dois doi=%s | title=%s | additional_dois=%s",
+        anchor_doi, anchor_title, merged
+    )
 
 def apply_subject_improvements(df, anchor_idx, accumulator, column_name):
     """

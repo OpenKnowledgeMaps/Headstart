@@ -287,10 +287,11 @@ etl <- function(res, repo, non_public) {
   metadata$additional_dois = check_metadata(res$dcdoi)
   metadata$additional_dois = check_metadata(lapply(metadata$additional_dois, normalize_dois))
   # Fill primary doi for the ORCID enrichment
-  #from additional_dois when find_dois(link) returned nothing
+  # from additional_dois when find_dois(link) returned nothing
   # but dcdoi contains exactly one entry. Guarded to the single-entry case
-  # because multi-entry dcdoi can include related-but-different works
-  # so picking one from many would risk attaching foreign metadata to the record.
+  # because doi_merge field expects to contain a single DOI
+  # and we want to avoid filling it with multiple DOIs separated by ;
+  # Enrichment from multiple DOIs is happening in the enrichment step and not in the search step
   additional_dois_char <- vapply(metadata$additional_dois, function(x) {
     if (length(x) == 0) "" else as.character(x)[1]
   }, character(1))
