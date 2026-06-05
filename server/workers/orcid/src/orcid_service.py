@@ -134,7 +134,7 @@ class OrcidService:
     def _log_dataframe(self, df: pd.DataFrame, params: Dict[str, str], name: str, ):
         orcid = params.get('orcid')
         
-        columns_to_print = ['id', 'title', 'doi', 'additional_dois', 'paper_abstract', 'link', 'subject', 'subject_orig', 'oa_state']
+        columns_to_print = ['id', 'title', 'doi_merge', 'doi_merge', 'additional_dois', 'paper_abstract', 'link', 'subject', 'subject_orig', 'oa_state']
 
         available_columns = df.columns.tolist()
         columns_to_print = [col for col in columns_to_print if col in available_columns]
@@ -226,7 +226,7 @@ class OrcidService:
         """Log how often ORCID and BASE have differently-cased versions of the same DOI."""
         orcid_id = params.get('orcid', 'unknown')
 
-        raw_base_dois = base_metadata['doi'].dropna().unique().tolist() if not base_metadata.empty else []
+        raw_base_dois = base_metadata['doi_merge'].dropna().unique().tolist() if not base_metadata.empty else []
         # Strip URL prefixes so both sides are bare DOIs before comparing
         base_dois = [remove_doi_prefix(d) for d in raw_base_dois]
         base_dois = [d for d in base_dois if d and not pd.isna(d)]
@@ -306,6 +306,11 @@ class OrcidService:
             self.logger.debug(f"[doi_orcid_dedup] orcid={params.get('orcid')} no duplicate DOIs in ORCID metadata")
 
         base_metadata = self.request_base_metadata(dois, params)
+
+        if "doi_merge" not in base_metadata.columns:
+            self.logger.error(f"BASE metadata is missing 'doi_merge' column, cannot proceed with enrichment. Params: {params}")
+            raise ValueError("BASE metadata is missing 'doi_merge' column")
+
         self._log_doi_casing_comparison(dois, base_metadata, params)
 
         if self.logger.isEnabledFor(logging.DEBUG):
@@ -314,9 +319,9 @@ class OrcidService:
         # paper, doi= "10.17169/refubium-48053; 10.1371/journal.pone.0311918"
         # 1. step: split on "; " -> ["10.17169/refubium-48053", "10.1371/journal.pone.0311918"]
         # use pandas explode to create new rows for each DOI variant,
-        # then we can merge on the 'doi' column with the original metadata
-        # paper identical metadata except doi 1: "10.17169/refubium-48053"
-        # paper identical metadata except doi 2: "10.1371/journal.pone.0311918"
+        # then we can merge on the 'doi_merge' column with the original metadata
+        # paper identical metadata except doi_merge 1: "10.17169/refubium-48053"
+        # paper identical metadata except doi_merge 2: "10.1371/journal.pone.0311918"
         # after that we can apply the merge, but for the base_metadata is has to use the doi_merge field, not doi
 
         base_metadata = base_metadata.reindex(columns=required_fields)
@@ -326,24 +331,24 @@ class OrcidService:
         base_metadata['additional_dois'] = base_metadata['additional_dois'].apply(lambda x: [x.strip() for x in x] if isinstance(x, list) else x)
         # Save the normalized original doi before explode so we can rank direct fetches
         # above rows whose doi was reassigned from additional_dois after explosion.
-        base_metadata['_fetch_doi'] = base_metadata['doi'].apply(remove_doi_prefix)
+        base_metadata['_fetch_doi'] = base_metadata['doi_merge'].apply(remove_doi_prefix)
         base_metadata = base_metadata.explode('additional_dois', ignore_index=True)
-        # replace doi with additional_dois if additional_dois is not empty, otherwise keep doi
-        base_metadata.loc[base_metadata['additional_dois'].notna() & (base_metadata['additional_dois'] != ''), 'doi'] = base_metadata.loc[base_metadata['additional_dois'].notna() & (base_metadata['additional_dois'] != ''), 'additional_dois']
-        base_metadata.loc[:, 'doi'] = base_metadata['doi'].apply(remove_doi_prefix)
-        # True for rows whose final doi still matches the original fetched doi (direct);
-        # False for rows where doi was replaced by a additional_dois value (exploded).
-        base_metadata['_is_direct_fetch'] = base_metadata['doi'] == base_metadata['_fetch_doi']
+        # replace doi_merge with additional_dois if additional_dois is not empty, otherwise keep doi_merge
+        base_metadata.loc[base_metadata['additional_dois'].notna() & (base_metadata['additional_dois'] != ''), 'doi_merge'] = base_metadata.loc[base_metadata['additional_dois'].notna() & (base_metadata['additional_dois'] != ''), 'additional_dois']
+        base_metadata.loc[:, 'doi_merge'] = base_metadata['doi_merge'].apply(remove_doi_prefix)
+        # True for rows whose final doi_merge still matches the original fetched doi_merge (direct);
+        # False for rows where doi_merge was replaced by a additional_dois value (exploded).
+        base_metadata['_is_direct_fetch'] = base_metadata['doi_merge'] == base_metadata['_fetch_doi']
         base_metadata.drop(columns='_fetch_doi', inplace=True)
 
-        # Remove rows where 'doi' is pd.NaN
-        base_metadata = base_metadata[pd.notna(base_metadata['doi'])]
+        # Remove rows where 'doi_merge' is pd.NaN
+        base_metadata = base_metadata[pd.notna(base_metadata['doi_merge'])]
         base_metadata = self._match_dois_by_version(base_metadata, dois)
-        base_metadata = base_metadata[base_metadata['doi'].isin(dois)]
+        base_metadata = base_metadata[base_metadata['doi_merge'].isin(dois)]
 
         if self.logger.isEnabledFor(logging.DEBUG):
             self._log_dataframe(base_metadata.sort_values(by='title'), params, 'base_metadata_before_doi_dedup')
-            doi_counts = base_metadata['doi'].value_counts()
+            doi_counts = base_metadata['doi_merge'].value_counts()
             duplicate_dois = doi_counts[doi_counts > 1].index.tolist()
             if duplicate_dois:
                 self.logger.debug(
@@ -351,7 +356,7 @@ class OrcidService:
                     f"{len(duplicate_dois)} DOIs with multiple records: {duplicate_dois}"
                 )
                 for doi in duplicate_dois:
-                    group = base_metadata[base_metadata['doi'] == doi][['doi', 'title', 'paper_abstract', 'subject_orig', 'oa_state']]
+                    group = base_metadata[base_metadata['doi_merge'] == doi][['doi_merge', 'title', 'paper_abstract', 'subject_orig', 'oa_state']]
                     self.logger.debug(f"[doi_dedup] duplicate group for doi={doi!r}:\n{group.to_string()}")
             else:
                 self.logger.debug(f"[doi_dedup] {len(base_metadata)} records, no duplicate DOIs — dedup step is a no-op here")
@@ -361,7 +366,7 @@ class OrcidService:
         base_metadata = base_metadata.assign(
             _direct_sort=(~base_metadata['_is_direct_fetch']).astype(int),
         ).sort_values(by=['_direct_sort']).drop_duplicates(
-            subset='doi', keep='first'
+            subset='doi_merge', keep='first'
         ).drop(columns=['_direct_sort', '_is_direct_fetch'])
         if self.logger.isEnabledFor(logging.DEBUG):
             self._log_dataframe(base_metadata.sort_values(by='title'), params, 'base_metadata_after_doi_dedup')
@@ -384,9 +389,9 @@ class OrcidService:
         # while the original ORCID DOI casing is preserved in the output.
         enriched_metadata = pd.merge(
             metadata.assign(_doi_key=metadata['doi'].str.lower()),
-            base_metadata[['doi'] + list(fields_to_merge.values())]
-                .assign(_doi_key=base_metadata['doi'].str.lower())
-                .drop(columns='doi'),
+            base_metadata[['doi_merge'] + list(fields_to_merge.values())]
+                .assign(_doi_key=base_metadata['doi_merge'].str.lower())
+                .drop(columns='doi_merge'),
             on='_doi_key',
             how='left'
         ).drop(columns='_doi_key')
@@ -612,15 +617,15 @@ class OrcidService:
         Match BASE results that have versioned DOIs (e.g. .v1, .v2) to original DOIs without version.
 
         If BASE returned a DOI with a version suffix but the original ORCID DOI is without version,
-        this function updates the base_metadata 'doi' column so that those rows match the original
+        this function updates the base_metadata 'doi_merge' column so that those rows match the original
         DOI for merging.
 
         Parameters:
-        - base_metadata: DataFrame with 'doi' column (after explode and normalize)
+        - base_metadata: DataFrame with 'doi_merge' column (after explode and normalize)
         - original_dois: List of original DOIs from ORCID
 
         Returns:
-        - DataFrame with 'doi' updated where versioned variants were matched to original DOIs
+        - DataFrame with 'doi_merge' updated where versioned variants were matched to original DOIs
         """
         pattern_doi_version = re.compile(r"\.v(\d)+$")
 
@@ -629,7 +634,7 @@ class OrcidService:
                 return None
             return pattern_doi_version.sub("", str(doi_str))
 
-        dois_received = base_metadata['doi'].unique().tolist()
+        dois_received = base_metadata['doi_merge'].unique().tolist()
         base_unversioned_to_versioned = {}
         for doi_from_base in dois_received:
             unversioned = get_unversioned_doi(doi_from_base)
@@ -652,8 +657,8 @@ class OrcidService:
         for lost_doi_info in dois_lost_with_versions:
             original_doi = lost_doi_info['original']
             versioned_variants = lost_doi_info['versioned_variants_found']
-            versioned_mask = base_metadata['doi'].isin(versioned_variants)
+            versioned_mask = base_metadata['doi_merge'].isin(versioned_variants)
             if versioned_mask.any():
-                base_metadata.loc[versioned_mask, 'doi'] = original_doi
+                base_metadata.loc[versioned_mask, 'doi_merge'] = original_doi
 
         return base_metadata
