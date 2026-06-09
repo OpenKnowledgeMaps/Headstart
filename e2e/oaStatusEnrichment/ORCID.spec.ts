@@ -163,6 +163,12 @@ const testCases: OaStatusTestCase[] = [
     expectedOaState: "1",
     regression: "case-sensitive DOI matching regression",
   },
+  {
+    suiteName: "bugfix SOLR parsing of DOI",
+    orcid: "0000-0002-1193-6256",
+    paperTitle: "A controlled CO<sub>2</sub> release experiment in a fault zone at the In-Situ Laboratory in Western Australia",
+    expectedOaState: "1",
+  },
 ];
 
 const uniqueOrcids = [...new Set(testCases.map((tc) => tc.orcid).filter(Boolean))];
