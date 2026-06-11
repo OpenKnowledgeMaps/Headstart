@@ -161,7 +161,12 @@ class OrcidService:
 
         for batch in batches:
             start_time = time.time()
-            q_advanced = " OR ".join([f"dcdoi:{doi}" for doi in batch if doi])
+            # Quote DOIs so Lucene/Solr special characters (e.g. the parentheses
+            # in DOIs like 10.1061/40972(311)96) are treated as literal phrase
+            # content rather than query metacharacters. Without quoting, such a
+            # DOI degrades the exact dcdoi lookup into a free-text token search,
+            # poisoning the entire batch and silently dropping enrichment.
+            q_advanced = " OR ".join([f'dcdoi:"{doi}"' for doi in batch if doi])
 
             request_id = str(uuid.uuid4())
 
