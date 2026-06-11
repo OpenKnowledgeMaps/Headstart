@@ -3548,6 +3548,10 @@
     "internal_name": "ftid13960"
   },
   {
+    "name": "Edu Science Indonesia",
+    "internal_name": "ftid13946"
+  },
+  {
     "name": "Orthotomeo - Jurnal Penelitian Ilmiah",
     "internal_name": "ftid13933"
   },
@@ -46400,7 +46404,7 @@
     "internal_name": "ftlapress"
   },
   {
-    "name": "University of South Africa: UNISA Institutional Repository",
+    "name": "Unisa Institutional Repository (UnisaIR - University of South Africa)",
     "internal_name": "ftunivsafrica"
   },
   {
@@ -46716,7 +46720,7 @@
     "internal_name": "ftcochinuniv"
   },
   {
-    "name": "The University of Western Ontario: Scholarship@Western",
+    "name": "Western University Open Repository",
     "internal_name": "ftunivwestonta"
   },
   {
@@ -47100,7 +47104,7 @@
     "internal_name": "ftihe"
   },
   {
-    "name": "TU Darmstadt: tuprints",
+    "name": "TUprints - Publikationsplattform der TU Darmstadt",
     "internal_name": "ftulbdarmstadt"
   },
   {
@@ -49366,10 +49370,6 @@
   {
     "name": "Media SuUB Bremen (Staats- und Universitätsbibliothek Bremen)",
     "internal_name": "ftsubbremen"
-  },
-  {
-    "name": "Edu Science Indonesia",
-    "internal_name": "ftid13946"
   },
   {
     "name": "GoTriple",
