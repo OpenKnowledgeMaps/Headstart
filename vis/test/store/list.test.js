@@ -1,15 +1,14 @@
-import { expect, describe, it } from 'vitest';
+import { describe, expect, it } from "vitest";
 
 import {
-  toggleList,
-  showList,
-  search,
   filter,
-  sort,
   highlightArea,
+  search,
+  showList,
+  sort,
+  toggleList,
   updateDimensions,
 } from "../../js/actions";
-
 import listReducer from "../../js/reducers/list";
 
 describe("list state", () => {
@@ -76,6 +75,7 @@ describe("list state", () => {
         show: true,
         searchValue: "",
         showFilter: false,
+        showSort: false,
         filterField: null,
         filterValue: null,
         filterOptions: [],
@@ -152,7 +152,7 @@ describe("list state", () => {
 
       const result = listReducer(
         INITIAL_STATE,
-        updateDimensions({}, { height: 500 })
+        updateDimensions({}, { height: 500 }),
       );
 
       expect(result).toEqual(EXPECTED_STATE);

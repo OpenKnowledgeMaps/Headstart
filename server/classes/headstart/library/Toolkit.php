@@ -100,7 +100,7 @@ class Toolkit {
         //now, we should be good, let's open or create the file
         $handle = fopen($file, "w+");
         if ($handle == false)
-            throw new Exception("There was an error while opening/creating the following file: " . $file);
+            throw new \Exception("There was an error while opening/creating the following file: " . $file);
 
         return $handle;
     }

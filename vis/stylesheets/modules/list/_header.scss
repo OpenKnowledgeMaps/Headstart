@@ -1,246 +1,268 @@
 @import "list-show-button";
 
 #explorer_options {
-    padding: 15px 5px 15px 15px;
-    background-color: $list_explorer_header;
-    border-bottom: 2px solid #e8e8e8;
+  display: flex;
+  flex-direction: column;
+  padding: 15px;
+  background-color: $list_explorer_header;
+  border-bottom: 2px solid #e8e8e8;
+
+  & .input-group {
+    width: 100%;
+
+    & .form-control {
+      width: 100%;
+    }
+  }
 }
 
 .explorer_options_color {
-    background-color: $list_explorer_header;
+  background-color: $list_explorer_header;
 }
 
 #filter_container {
-    vertical-align: top;
-    float: none;
-    display: inline-block;
+  vertical-align: top;
+  float: none;
+  display: inline-block;
 }
 
 #filter_input {
-    padding-right: 22px;
+  padding-right: 22px;
 }
 
 #filter_parameter_container {
-    vertical-align: top;
-    float: none;
-    display: inline-block;
+  vertical-align: top;
+  float: none;
+  display: inline-block;
 }
 
 #sort_container {
-    vertical-align: top;
-    float: none;
-    display: none;
-    font-family: $link-font-family;
+  vertical-align: top;
+  float: none;
+  display: none;
+  font-family: $link-font-family;
 }
 
-#filter_parameter_container .dropdown-menu, #sort_container .dropdown-menu {
-    width: 140px !important;
-    min-width: 140px;
+#filter_parameter_container .dropdown-menu,
+#sort_container .dropdown-menu {
+  width: 140px !important;
+  min-width: 140px;
 }
 
-.btn-default.active, .btn-default:active, .btn-default:focus, .btn-default.active:focus, .btn-default.active.focus, .btn-default.focus, .open > .dropdown-toggle.btn-default {
-    color: $journal-gray;
-    background-color: $white;
-    border-color: $journal-gray;
-    font-weight: $fontweight700;
+.btn-default.active,
+.btn-default:active,
+.btn-default:focus,
+.btn-default.active:focus,
+.btn-default.active.focus,
+.btn-default.focus,
+.open > .dropdown-toggle.btn-default {
+  color: $journal-gray;
+  background-color: $white;
+  border-color: $journal-gray;
+  font-weight: $fontweight700;
 }
 
 .btn-default {
-    font-family: $link-font-family;
+  font-family: $link-font-family;
 }
 
-.btn:active, .btn.active {
-    outline: 0;
-    background-image: none;
-    -webkit-box-shadow: inset 0 0px 0px rgba(0, 0, 0, 0);
-    box-shadow: inset 0 0px 0px rgba(0, 0, 0, 0);
+.btn:active,
+.btn.active {
+  outline: 0;
+  background-image: none;
+  -webkit-box-shadow: inset 0 0px 0px rgba(0, 0, 0, 0);
+  box-shadow: inset 0 0px 0px rgba(0, 0, 0, 0);
 }
 
-.btn-default.active:hover, .btn-default:hover {
-    background-color: $okm-clouds;
-    color: black;
+.btn-default.active:hover,
+.btn-default:hover {
+  background-color: $okm-clouds;
+  color: black;
 }
 
 #sortby {
-    margin-right: 5px;
-    padding: 10px 0px;
-    line-height: 250%;
-    font-size: 12px;
-    font-family: $link-font-family;
+  margin-right: 5px;
+  padding: 10px 0px;
+  line-height: 250%;
+  font-size: 12px;
+  font-family: $link-font-family;
 }
 
 #filter_container input {
-    width: 260px;
-    height: 28px;
-    margin-bottom: 10px;
-    margin-right: 10px;
-    padding-left: 22px;
-    border-radius: 27px;
-    -webkit-border-radius: 27px;
-    -moz-border-radius: 27px;
+  width: 260px;
+  height: 28px;
+  margin-bottom: 10px;
+  margin-right: 10px;
+  padding-left: 22px;
+  border-radius: 27px;
+  -webkit-border-radius: 27px;
+  -moz-border-radius: 27px;
 }
 
 @media screen and (max-width: 1650px) {
-    #filter_container input {
-        width: 240px;
-    }
+  #filter_container input {
+    width: 240px;
+  }
 }
 
 @media screen and (max-width: 1600px) {
-    #filter_container input {
-        width: 220px;
-    }
+  #filter_container input {
+    width: 220px;
+  }
 }
 
 @media screen and (max-width: 1500px) {
-    #filter_container input {
-        width: 180px;
-    }
+  #filter_container input {
+    width: 180px;
+  }
 }
 
 @media screen and (max-width: 1220px) {
-    .btn-sm, .btn-group-sm > .btn {
-        font-size: 10px;
-    }
+  .btn-sm,
+  .btn-group-sm > .btn {
+    font-size: 10px;
+  }
 
-    #sort-buttons {
-        padding: 0px 0px;
-        float: none !important;
-    }
+  #sort-buttons {
+    padding: 0px 0px;
+    float: none !important;
+  }
 
-    #sortby {
-        font-size: 10px;
-    }
+  #sortby {
+    font-size: 10px;
+  }
 }
 
 @media screen and (max-width: 1160px) {
-    #sort_container {
-        float: none;
-        margin-top: 0px;
-    }
+  #sort_container {
+    float: none;
+    margin-top: 0px;
+  }
 
-    #filter_container {
-        float: none;
-    }
+  #filter_container {
+    float: none;
+  }
 }
 
 @media screen and (max-width: 1130px) {
-    #filter_container {
-        display: block;
+  #filter_container {
+    display: block;
 
-        input {
-            width: 230px;
-        }
+    input {
+      width: 230px;
     }
+  }
 
-    #filter_params, #sort {
-        margin-bottom: 0px;
-    }
+  #filter_params,
+  #sort {
+    margin-bottom: 0px;
+  }
 }
 
-@if $skin == 'cris_vis' {
+@if $skin == "cris_vis" {
+  #filter_container {
+    vertical-align: top;
+    float: left;
+    display: block;
+  }
+  #filter_parameter_container {
+    vertical-align: top;
+    float: right;
+    display: block;
+  }
 
-    #filter_container {
-        vertical-align: top;
-        float: left;
-        display: block;
-    }
-    #filter_parameter_container {
-        vertical-align: top;
-        float: right;
-        display: block;
-    }
+  #sort_container {
+    width: 150px;
+    vertical-align: top;
+    float: right;
+    display: none;
+  }
 
+  #sort {
+    width: 150px;
+  }
+
+  #filter_container input {
+    margin-bottom: 0px;
+    margin-right: 0px;
+  }
+
+  #explorer_options {
+    border-bottom: 2px solid #eaeaee;
+  }
+
+  @media screen and (max-width: 1000px) {
     #sort_container {
-        width: 150px;
-        vertical-align: top;
-        float: right;
-        display: none;
+      float: none;
+      margin-top: 10px;
     }
 
-    #sort {
-        width: 150px;
+    #filter_container {
+      float: none;
     }
-
-    #filter_container input {
-        margin-bottom: 0px;
-        margin-right: 0px;
-    }
-
-    #explorer_options {
-        border-bottom: 2px solid #EAEAEE;
-    }
-
-    @media screen and (max-width: 1000px) {
-        #sort_container {
-            float: none;
-            margin-top: 10px;
-        }
-
-        #filter_container {
-            float: none;
-        }
-    }
+  }
 }
 
-@if $skin == 'linkedcat' {
+@if $skin == "linkedcat" {
+  #sort_container .dropdown-menu {
+    width: 200px !important;
+    min-width: 140px;
+  }
+
+  #sort {
+    border-radius: 17px;
+    -webkit-border-radius: 17px;
+    -moz-border-radius: 17px;
+    width: 200px;
+  }
+
+  #filter_container input {
+    width: 360px;
+  }
+
+  @media screen and (max-width: 1650px) {
+    #filter_container input {
+      width: 360px;
+    }
+  }
+
+  @media screen and (max-width: 1600px) {
+    #filter_container input {
+      width: 360px;
+    }
+  }
+
+  @media screen and (max-width: 1500px) {
+    #filter_container input {
+      width: 260px;
+    }
+  }
+
+  @media screen and (max-width: 1260px) {
+    #sort {
+      border-radius: 17px;
+      -webkit-border-radius: 17px;
+      -moz-border-radius: 17px;
+      width: 160px;
+    }
     #sort_container .dropdown-menu {
-        width: 200px !important;
-        min-width:140px;
+      width: 160px !important;
     }
+  }
 
-    #sort {
-        border-radius: 17px;
-        -webkit-border-radius: 17px;
-        -moz-border-radius: 17px;
-        width: 200px;
+  @media screen and (max-width: 1130px) {
+    #filter_container {
+      display: block;
+
+      input {
+        width: 240px;
+      }
     }
-
-    #filter_container input {
-        width: 360px;
-    }
-
-    @media screen and (max-width: 1650px) {
-        #filter_container input {
-            width: 360px;
-        }
-    }
-
-    @media screen and (max-width: 1600px) {
-        #filter_container input {
-            width: 360px;
-        }
-    }
-
-    @media screen and (max-width: 1500px) {
-        #filter_container input {
-            width: 260px;
-        }
-    }
-
-    @media screen and (max-width: 1260px) {
-        #sort {
-            border-radius: 17px;
-            -webkit-border-radius: 17px;
-            -moz-border-radius: 17px;
-            width: 160px;
-        }
-        #sort_container .dropdown-menu {
-            width: 160px !important;
-        }
-    }
-
-    @media screen and (max-width: 1130px) {
-        #filter_container {
-            display: block;
-
-            input {
-                width: 240px;
-            }
-        }
-    }
+  }
 }
 
-#filter_params, #sort, #scale-menu {
-    font-weight: normal;
+#filter_params,
+#sort,
+#scale-menu {
+  font-weight: normal;
 }
