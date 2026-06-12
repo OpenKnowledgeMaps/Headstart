@@ -2165,8 +2165,8 @@
       "RemoteHost": "api.github.com",
       "RemoteUsername": "OpenKnowledgeMaps",
       "RemoteRepo": "rcrossref",
-      "RemoteRef": "feat/crossref-rate-limit-enhancement",
-      "RemoteSha": "6b9c52a4505a667a7ed06765de51162f19de5f1d"
+      "RemoteRef": "master",
+      "RemoteSha": "d829677b6d4244f1168f60ad1c4da5eafa682943"
     },
     "renv": {
       "Package": "renv",
