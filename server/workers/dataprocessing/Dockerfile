@@ -153,6 +153,7 @@ COPY workers/dataprocessing/renv.lock .
 COPY workers/dataprocessing/activate.R .
 
 RUN R -e 'renv::consent(provided = TRUE)' && \
+    R -e 'install.packages(c("gplots", "fossil", "foreach", "doParallel"), repos = "https://cran.wu.ac.at")' && \
     R -e 'setwd("./"); renv::activate(); renv::restore(lockfile = "./renv.lock")'
 
 COPY workers/common ../common
