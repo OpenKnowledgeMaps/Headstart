@@ -209,7 +209,7 @@ class BaseClient(RWrapper):
                     "input_data", json.dumps(res).encode("utf8")
                 )
                 q_len = self.redis_store.llen("input_data")
-                self.logger.debug(
+                self.logger.info(
                     "Queue length: %s %d %s" % ("input_data", q_len, request_id)
                 )
         except Exception as e:
