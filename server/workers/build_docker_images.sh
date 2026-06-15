@@ -5,7 +5,6 @@ SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
 
 build_for_linux=false
 skip_contentproviders_update=false
-push_to_dockerhub=false
 
 # Parse script flags
 for arg in "$@"; do

@@ -6,6 +6,8 @@ mlog <- getLogger("metrics")
 
 apikey_altmetric <- Sys.getenv("R_ALTMETRIC_APIKEY")
 email_crossref <- Sys.getenv("R_CROSSREF_APIMAIL")
+crossref_plus_token <- Sys.getenv("R_CROSSREF_PLUS_TOKEN")
+crossref_batch_size <- as.integer(Sys.getenv("R_CROSSREF_BATCH_SIZE", unset = "50"))
 
 enrich_metadata_metrics <- function(metadata, metrics_sources=c("altmetric", "crossref")) {
   start.time <- Sys.time()
@@ -95,24 +97,19 @@ add_citations <- function(metadata) {
   dois <- metadata$doi
   valid_dois <- unique(dois[which(dois != "")])
 
+  use_plus <- nchar(crossref_plus_token) > 0
+
   cc <- tryCatch(
-    {
-      cc_list <- list()
-      for (doi in valid_dois) {
-      tryCatch({
-        count <- cr_citation_count(doi = doi, key = email_crossref)
-        cc_list <- append(cc_list, list(count))
-      }, error = function(err) {
-        mlog$debug(gsub("[\r\n]", "", paste(err, doi, sep = " ")))
-        cc_list <- append(cc_list, list(list(doi = doi, count = NA)))
-      })
-      Sys.sleep(0.1)  # to avoid hitting rate limits
-      }
-      cc <- do.call(rbind.fill, cc_list)
-    },
+    cr_citation_count(
+      doi = valid_dois,
+      key = email_crossref,
+      async = !use_plus,
+      plus_token = crossref_plus_token,
+      batch_size = crossref_batch_size
+    ),
     error = function(err) {
-      mlog$debug(gsub("[\r\n]", "", paste(err, doi, sep = " ")))
-      return(list(doi = dois, count = NA))
+      mlog$error(gsub("[\r\n]", "", paste(err, sep = " ")))
+      data.frame(doi = valid_dois, count = NA_integer_, stringsAsFactors = FALSE)
     }
   )
   names(cc)[names(cc) == "count"] <- "citation_count"
