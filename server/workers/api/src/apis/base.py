@@ -84,7 +84,7 @@ class Search(Resource):
         base_ns.logger.debug(d)
         redis_store.rpush("base", json.dumps(d))
         q_len = redis_store.llen("base")
-        base_ns.logger.debug("Queue length: %s %d %s" %("base", q_len, request_id))
+        base_ns.logger.info("Queue length: %s %d %s" %("base", q_len, request_id))
         result = get_key(redis_store, request_id, 300)
         try:
             result, headers = set_response_headers(request.headers["Accept"], params.get("raw"), result, request_id)
