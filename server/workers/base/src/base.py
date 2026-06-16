@@ -139,6 +139,7 @@ class BaseClient(RWrapper):
                 )
                 # clean up content, start with stripping whitespace
                 text.content = text.content.map(lambda x: x.strip())
+                _log_dataframe(metadata, params, "metadata_before_return")
                 input_data = {}
                 input_data["metadata"] = metadata.to_json(orient="records")
                 input_data["text"] = text.to_json(orient="records")
