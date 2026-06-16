@@ -104,7 +104,7 @@ def enrich_anchor_using_duplicates(df, duplicate_groups):
         anchor = anchors.iloc[0]
         anchor_idx = anchor.name
 
-        _log_anchor_state('BEFORE', df, anchor_idx, group_data=group_data)
+        # _log_anchor_state('BEFORE', df, anchor_idx, group_data=group_data)
 
         subject_orig_acc = {'all_keywords': set(), 'best_value': None, 'best_count': 0}
         subject_acc = {'all_keywords': set(), 'best_value': None, 'best_count': 0}
@@ -157,7 +157,7 @@ def enrich_anchor_using_duplicates(df, duplicate_groups):
         if has_additional_dois:
             apply_additional_dois_improvements(df, anchor_idx, additional_dois_acc)
 
-        _log_anchor_state('AFTER', df, anchor_idx)
+        # _log_anchor_state('AFTER', df, anchor_idx)
 
     return df
 
@@ -314,10 +314,10 @@ def apply_additional_dois_improvements(df, anchor_idx, accumulator):
 
     anchor_doi = df.loc[anchor_idx, 'doi'] if 'doi' in df.columns else 'N/A'
     anchor_title = df.loc[anchor_idx, 'title'] if 'title' in df.columns else 'N/A'
-    logger.debug(
-        "[ENRICHMENT_APPLIED] additional_dois doi=%s | title=%s | additional_dois=%s",
-        anchor_doi, anchor_title, merged
-    )
+    # logger.debug(
+    #     "[ENRICHMENT_APPLIED] additional_dois doi=%s | title=%s | additional_dois=%s",
+    #     anchor_doi, anchor_title, merged
+    # )
 
 def apply_subject_improvements(df, anchor_idx, accumulator, column_name):
     """
@@ -385,10 +385,10 @@ def apply_link_improvements(df, anchor_idx, all_links):
             if merged_links:
                 anchor_doi = df.loc[anchor_idx, 'doi'] if 'doi' in df.columns else 'N/A'
                 anchor_title = df.loc[anchor_idx, 'title'] if 'title' in df.columns else 'N/A'
-                logger.debug(
-                    "[ENRICHMENT_APPLIED] link doi=%s | title=%s | anchor_link=%s | candidates_from_duplicates=%s",
-                    anchor_doi, anchor_title, anchor_link, merged_links
-                )
+                # logger.debug(
+                #     "[ENRICHMENT_APPLIED] link doi=%s | title=%s | anchor_link=%s | candidates_from_duplicates=%s",
+                #     anchor_doi, anchor_title, anchor_link, merged_links
+                # )
 
 def get_anchor_field_value(df, anchor_idx, column_name):
     """
