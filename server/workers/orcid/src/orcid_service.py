@@ -70,7 +70,7 @@ class OrcidService:
             
             metadata = self._process_metadata(metadata, author_info, params)
 
-            self.logger.debug('metadata processed inside of _process_metadata')
+            # self.logger.debug('metadata processed inside of _process_metadata')
             
             return self._format_response(data=metadata, author_info=author_info, params=params)
         except (
@@ -202,12 +202,13 @@ class OrcidService:
             
             end_time = time.time()
             duration = end_time - start_time
-            timing_data.append({
-                "request_id": request_id,
-                "batch_size": len(batch),
-                "duration": duration,
-                "timestamp": time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime(start_time))
-            })
+            # timing_data.append({
+            #     "request_id": request_id,
+            #     "batch_size": len(batch),
+            #     "duration": duration,
+            #     "timestamp": time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime(start_time))
+            # })
+            self.logger.debug(f"BASE request for ORCID {orcid} batch of {len(batch)} DOIs took {duration:.2f} seconds")
 
             base_response: str = get_nested_value(result, ["input_data", "metadata"], '[]') # type: ignore
             batch_df = pd.DataFrame(json.loads(base_response))
@@ -218,12 +219,12 @@ class OrcidService:
                 batch_df
             ], ignore_index=True)
 
-        if self.logger.isEnabledFor(logging.DEBUG):
-            timing_df = pd.DataFrame(timing_data)
-            folder = f'./output/{orcid}'
-            if not os.path.exists(folder):
-                os.makedirs(folder)
-            timing_df.to_csv(f'{folder}/stat_base_requests.csv', index=False)
+        # if self.logger.isEnabledFor(logging.DEBUG):
+        #     timing_df = pd.DataFrame(timing_data)
+        #     folder = f'./output/{orcid}'
+        #     if not os.path.exists(folder):
+        #         os.makedirs(folder)
+        #     timing_df.to_csv(f'{folder}/stat_base_requests.csv', index=False)
 
         base_metadata["oa_state"] = base_metadata["oa_state"].fillna("2").astype(int)
         return base_metadata
@@ -289,10 +290,10 @@ class OrcidService:
                         'cited_by_videos_count']
         required_fields = list(set(required_fields + metadata.columns.to_list()))
 
-        self.logger.debug(f'fields to reindex: {required_fields}')
+        # self.logger.debug(f'fields to reindex: {required_fields}')
         metadata = metadata.reindex(columns=required_fields)
 
-        self.logger.debug('metadata reindexed')
+        # self.logger.debug('metadata reindexed')
 
         # run only if loglevel is debug, otherwise it is too expensive and we don't want it on production
         # if self.logger.isEnabledFor(logging.DEBUG):
@@ -569,13 +570,13 @@ class OrcidService:
     def _process_metadata(self, metadata: pd.DataFrame, author_info: AuthorInfo, params: Dict[str, str]) -> pd.DataFrame:
         metadata["authors"] = metadata["authors"].replace("", author_info.author_name)
         metadata = self.enrich_metadata(params, metadata)
-        self.logger.debug(f'metadata shape after base enrichment: {metadata.shape}')
+        # self.logger.debug(f'metadata shape after base enrichment: {metadata.shape}')
         author_info = self.enrich_author_info(author_info, metadata, params)
-        self.logger.debug(f'metadata shape after enrichment: {metadata.shape}')
+        # self.logger.debug(f'metadata shape after enrichment: {metadata.shape}')
         limit = params.get("limit", '200')
         metadata = metadata.head(int(limit))
         metadata = self.enrich_metadata_with_base(params, metadata)
-        self.logger.debug(f'metadata shape after processing: {metadata.shape}')
+        # self.logger.debug(f'metadata shape after processing: {metadata.shape}')
         return metadata
 
     def _format_response(self, data: pd.DataFrame, author_info: AuthorInfo, params: Dict[str, str]) -> SuccessResult:
