@@ -53,11 +53,14 @@ services:
       BEHIND_PROXY: "${BEHIND_PROXY}"
       DEFAULT_DATABASE: "${DEFAULT_DATABASE}"
       FLASK_ENV: "${FLASK_ENV}"
+      LOGLEVEL: "${LOGLEVEL}"
+      LOGFILE: "/var/log/api/api.log"
     command: ["python", "app.py"]
     volumes:
       - ./api_cache:/var/api_cache
       - ./server/workers/api/src:/api
       - ./server/workers/common:/api/common
+      - /var/log/api:/var/log/api
     depends_on:
       - redis
       - base

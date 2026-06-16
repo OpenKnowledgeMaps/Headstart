@@ -79,7 +79,7 @@ class Search(Resource):
         pubmed_ns.logger.debug(request_data)
         redis_store.rpush("pubmed", json.dumps(request_data))
         queue_length = redis_store.llen("pubmed")
-        pubmed_ns.logger.debug("Queue length: %s %d %s" % ("pubmed", queue_length, request_id))
+        pubmed_ns.logger.info("Queue length: %s %d %s" % ("pubmed", queue_length, request_id))
         
         # Get the result
         result = get_key(redis_store, request_id)
