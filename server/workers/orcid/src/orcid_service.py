@@ -211,7 +211,7 @@ class OrcidService:
 
             base_response: str = get_nested_value(result, ["input_data", "metadata"], '[]') # type: ignore
             batch_df = pd.DataFrame(json.loads(base_response))
-            self._log_is_base_response_missing_dois(batch, batch_df)
+            #self._log_is_base_response_missing_dois(batch, batch_df)
 
             base_metadata = pd.concat([
                 base_metadata,
@@ -295,8 +295,8 @@ class OrcidService:
         self.logger.debug('metadata reindexed')
 
         # run only if loglevel is debug, otherwise it is too expensive and we don't want it on production
-        if self.logger.isEnabledFor(logging.DEBUG):
-            self._log_dataframe(metadata.sort_values(by='title'), params, '_original')
+        # if self.logger.isEnabledFor(logging.DEBUG):
+        #     self._log_dataframe(metadata.sort_values(by='title'), params, '_original')
 
         raw_dois = metadata["doi"].tolist()
         dois = [doi for doi in raw_dois if doi and pd.notna(doi)]
@@ -317,10 +317,11 @@ class OrcidService:
             self.logger.error(f"BASE metadata is missing 'doi_merge' column, cannot proceed with enrichment. Params: {params}")
             raise ValueError("BASE metadata is missing 'doi_merge' column")
 
-        self._log_doi_casing_comparison(dois, base_metadata, params)
+        # self._log_doi_casing_comparison(dois, base_metadata, params)
 
-        if self.logger.isEnabledFor(logging.DEBUG):
-            self._log_dataframe(base_metadata.sort_values(by='title'), params, 'base_metadata_raw')
+        # if self.logger.isEnabledFor(logging.DEBUG):
+        #     self._log_dataframe(base_metadata.sort_values(by='title'), params, 'base_metadata_raw')
+
         # dataframe
         # paper, doi= "10.17169/refubium-48053; 10.1371/journal.pone.0311918"
         # 1. step: split on "; " -> ["10.17169/refubium-48053", "10.1371/journal.pone.0311918"]
@@ -352,20 +353,21 @@ class OrcidService:
         base_metadata = self._match_dois_by_version(base_metadata, dois)
         base_metadata = base_metadata[base_metadata['doi_merge'].isin(dois)]
 
-        if self.logger.isEnabledFor(logging.DEBUG):
-            self._log_dataframe(base_metadata.sort_values(by='title'), params, 'base_metadata_before_doi_dedup')
-            doi_counts = base_metadata['doi_merge'].value_counts()
-            duplicate_dois = doi_counts[doi_counts > 1].index.tolist()
-            if duplicate_dois:
-                self.logger.debug(
-                    f"[doi_dedup] {len(base_metadata)} records before dedup, "
-                    f"{len(duplicate_dois)} DOIs with multiple records: {duplicate_dois}"
-                )
-                for doi in duplicate_dois:
-                    group = base_metadata[base_metadata['doi_merge'] == doi][['doi_merge', 'title', 'paper_abstract', 'subject_orig', 'oa_state']]
-                    self.logger.debug(f"[doi_dedup] duplicate group for doi={doi!r}:\n{group.to_string()}")
-            else:
-                self.logger.debug(f"[doi_dedup] {len(base_metadata)} records, no duplicate DOIs — dedup step is a no-op here")
+        # if self.logger.isEnabledFor(logging.DEBUG):
+        #     self._log_dataframe(base_metadata.sort_values(by='title'), params, 'base_metadata_before_doi_dedup')
+        #     doi_counts = base_metadata['doi_merge'].value_counts()
+        #     duplicate_dois = doi_counts[doi_counts > 1].index.tolist()
+        #     if duplicate_dois:
+        #         self.logger.debug(
+        #             f"[doi_dedup] {len(base_metadata)} records before dedup, "
+        #             f"{len(duplicate_dois)} DOIs with multiple records: {duplicate_dois}"
+        #         )
+        #         for doi in duplicate_dois:
+        #             group = base_metadata[base_metadata['doi_merge'] == doi][['doi_merge', 'title', 'paper_abstract', 'subject_orig', 'oa_state']]
+        #             self.logger.debug(f"[doi_dedup] duplicate group for doi={doi!r}:\n{group.to_string()}")
+        #     else:
+        #         self.logger.debug(f"[doi_dedup] {len(base_metadata)} records, no duplicate DOIs — dedup step is a no-op here")
+
         # Reduce oa_state across doi_merge duplicates to the best-priority value
         # (1 yes > 0 no > 2 unknown) BEFORE dedup, mirroring process_oa_state_element.
         # Without this, drop_duplicates(keep='first') below can discard an open-access
@@ -388,8 +390,8 @@ class OrcidService:
         ).sort_values(by=['_direct_sort']).drop_duplicates(
             subset='doi_merge', keep='first'
         ).drop(columns=['_direct_sort', '_is_direct_fetch'])
-        if self.logger.isEnabledFor(logging.DEBUG):
-            self._log_dataframe(base_metadata.sort_values(by='title'), params, 'base_metadata_after_doi_dedup')
+        # if self.logger.isEnabledFor(logging.DEBUG):
+        #     self._log_dataframe(base_metadata.sort_values(by='title'), params, 'base_metadata_after_doi_dedup')
 
         # Select and rename relevant fields from base_metadata, including subject_orig
         fields_to_merge = {
@@ -445,8 +447,8 @@ class OrcidService:
 
         enriched_metadata.drop(columns=['paper_abstract_base', 'subject_orig_base', 'subject_base', 'oa_state_base', 'link_base', 'relation_base'], inplace=True)
         
-        if self.logger.isEnabledFor(logging.DEBUG):
-            self._log_dataframe(enriched_metadata.sort_values(by='title'), params, '_enriched')
+        # if self.logger.isEnabledFor(logging.DEBUG):
+        #     self._log_dataframe(enriched_metadata.sort_values(by='title'), params, '_enriched')
 
         # temporal solution, for some reason if we have some undefined data, dataprocessing is failing
         enriched_metadata = enriched_metadata.reindex(columns=list(set(original_columns + ['oa_state', 'subject', 'subject_orig', 'paper_abstract', 'link', 'relation'])))

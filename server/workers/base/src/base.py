@@ -287,10 +287,11 @@ def _log_group_similarity(df, indexes, group_type, group_key):
 
 
 def filter_duplicates(df, service, params):
-    if logger.isEnabledFor(logging.DEBUG):
-        logger.debug(f"Filtering duplicates for service: {service}")
-        logger.debug(f"Initial number of records: {len(df)}")
-        _log_dataframe(df, params, "initial_records")
+    # if logger.isEnabledFor(logging.DEBUG):
+    #     logger.debug(f"Filtering duplicates for service: {service}")
+    #     logger.debug(f"Initial number of records: {len(df)}")
+    #     _log_dataframe(df, params, "initial_records")
+
     df.drop_duplicates("id", inplace=True, keep="first")
     df["is_anchor"] = False
     df["doi_duplicate"] = False
@@ -320,19 +321,19 @@ def filter_duplicates(df, service, params):
             )
     df = mark_duplicate_dois(df)
     df = mark_duplicate_links(df)
-    _log_dedup_state(df, "after_mark_doi_link_duplicates", params)
+    # _log_dedup_state(df, "after_mark_doi_link_duplicates", params)
     df = identify_relations(df)
     df = remove_false_positives_doi(df)
     df = remove_false_positives_link(df)
-    _log_dedup_state(df, "after_remove_false_positives", params)
+    # _log_dedup_state(df, "after_remove_false_positives", params)
     df = remove_textual_duplicates_from_different_sources(df, duplicate_groups)
-    _log_dedup_state(df, "after_remove_textual_duplicates", params)
+    # _log_dedup_state(df, "after_remove_textual_duplicates", params)
     df = add_false_negatives(df)
-    _log_dedup_state(df, "after_add_false_negatives", params)
+    # _log_dedup_state(df, "after_add_false_negatives", params)
     df = mark_latest_doi(df, duplicate_groups)
-    _log_dedup_state(df, "after_mark_latest_doi", params)
+    # _log_dedup_state(df, "after_mark_latest_doi", params)
     df.loc[df[~df.is_duplicate].index, "is_anchor"] = True
-    _log_dedup_state(df, "after_non_duplicate_anchors", params)
+    # _log_dedup_state(df, "after_non_duplicate_anchors", params)
 
     false_positive_indexes = []
     for doi_val, grp in df[df["doi_duplicate"]].groupby("doi"):
@@ -355,15 +356,15 @@ def filter_duplicates(df, service, params):
         df.drop(index=false_positive_indexes, inplace=True)
         logger.info(f"[dedup:doi_title_filter] dropped {len(false_positive_indexes)} false-positive records")
 
-    if logger.isEnabledFor(logging.DEBUG):
-        for idx_group in duplicate_groups:
-            if len(idx_group) > 1:
-                _log_group_similarity(df, idx_group, "textual_dup_group", group_key="duplicate_groups")
-    if logger.isEnabledFor(logging.DEBUG):
-        doi_groups = df[df["doi_duplicate"]].groupby("doi")
-        for doi_val, grp in doi_groups:
-            if len(grp) > 1:
-                _log_group_similarity(df, grp.index, "doi_dup_group", group_key=doi_val)
+    # if logger.isEnabledFor(logging.DEBUG):
+    #     for idx_group in duplicate_groups:
+    #         if len(idx_group) > 1:
+    #             _log_group_similarity(df, idx_group, "textual_dup_group", group_key="duplicate_groups")
+    # if logger.isEnabledFor(logging.DEBUG):
+    #     doi_groups = df[df["doi_duplicate"]].groupby("doi")
+    #     for doi_val, grp in doi_groups:
+    #         if len(grp) > 1:
+    #             _log_group_similarity(df, grp.index, "doi_dup_group", group_key=doi_val)
 
     pure_datasets = df[df.typenorm == "7"]
     non_datasets = df.loc[df.index.difference(pure_datasets.index)]
@@ -371,12 +372,12 @@ def filter_duplicates(df, service, params):
 
     non_datasets = prioritize_OA_and_latest(non_datasets, duplicate_groups)
     non_datasets = prioritize_doi_and_provider(non_datasets, duplicate_groups)
-    _log_dedup_state(non_datasets, "non_datasets_after_prioritize", params)
+    # _log_dedup_state(non_datasets, "non_datasets_after_prioritize", params)
     pure_datasets = mark_latest_doi(pure_datasets, duplicate_groups)
 
     pure_datasets_condition_mask = (pure_datasets.is_anchor == True) | (pure_datasets.is_duplicate == False)
     pure_datasets.loc[pure_datasets_condition_mask, "is_anchor"] = True
-    _log_dedup_state(pure_datasets, "pure_datasets_after_mark_latest", params)
+    # _log_dedup_state(pure_datasets, "pure_datasets_after_mark_latest", params)
 
     non_datasets = enrich_anchor_using_duplicates(non_datasets, duplicate_groups)
     pure_datasets = enrich_anchor_using_duplicates(pure_datasets, duplicate_groups)
@@ -438,9 +439,9 @@ def filter_duplicates(df, service, params):
         if c in filtered.columns:
             filtered.drop(c, axis=1, inplace=True)
 
-    if logger.isEnabledFor(logging.DEBUG):
-        logger.debug(f"Number of records after filtering: {len(filtered)}")
-        _log_dataframe(filtered, params, "filtered_records")
+    # if logger.isEnabledFor(logging.DEBUG):
+    #     logger.debug(f"Number of records after filtering: {len(filtered)}")
+    #     _log_dataframe(filtered, params, "filtered_records")
     return filtered
 
 
