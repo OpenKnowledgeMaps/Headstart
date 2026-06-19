@@ -252,6 +252,11 @@ etl <- function(res, repo, non_public) {
   if (!is.null(params$vis_type) && params$vis_type == "timeline") {
     subject_cleaned = remove_keywords_with_text_in_square_brackets(subject_cleaned)
   } else {
+    # de-invert comma-inverted MeSH descriptors (marker preserved).
+    # Runs before the marker-stripping steps so [MeSH]/(mesh) are still present.
+    subject_cleaned = deinvert_marked_mesh_keywords(subject_cleaned)
+    # strip the "(mesh)" marker ("[MeSH]" is handled just below).
+    subject_cleaned = remove_mesh_round_bracket_marker(subject_cleaned)
     subject_cleaned = remove_text_in_square_brackets_from_keywords(subject_cleaned)
   }
 
@@ -407,6 +412,77 @@ remove_text_in_square_brackets_from_keywords <- function(x) {
   # This function removes text in square brackets.
   # Example: 'Climate [MeSH]' -> 'Climate'| 'Some keywords [Chemical]' -> 'Some keywords'.
   gsub("\\[[^]]*\\]", "", x)
+}
+
+# --- MeSH keyword handling (label improvements) -------------------
+# Applied only in the non-"timeline" branch (see vis_layout subject cleaning).
+
+remove_mesh_round_bracket_marker <- function(x) {
+  # remove the "(mesh)" marker from keywords (case-insensitive),
+  # mirroring remove_text_in_square_brackets_from_keywords for the "[MeSH]" form.
+  # Only the literal "(mesh)" marker is removed -- NOT other parentheses, which
+  # carry real keyword content. Example: 'Climate (mesh)' -> 'Climate'.
+  gsub("\\s*\\(mesh\\)", "", x, ignore.case = TRUE)
+}
+
+# Reversal-exclusion set for MeSH de-inversion. Bare descriptors
+# listed here are kept in their original order instead of being reversed. To be
+# populated from the manual review of multi-comma MeSH descriptors;
+MESH_DEINVERSION_EXCLUSIONS <- c(
+  "Human Papillomavirus Recombinant Vaccine Quadrivalent, Types 6, 11, 16, 18",
+  "Dibenz(b,f)(1,4)oxazepine-10(11H)-carboxylic acid, 8-chloro-, 2-acetylhydrazide",
+  "Technology, Industry, and Agriculture",
+  "Multi-Ingredient Cold, Flu, and Allergy Medications",
+  "National Heart, Lung, and Blood Institute (U.S.)",
+  "Disruptive, Impulse Control, and Conduct Disorders",
+  "Health Care Quality, Access, and Evaluation",
+  "Gram-Negative Anaerobic Straight, Curved, and Helical Rods",
+  "Hormones, Hormone Substitutes, and Hormone Antagonists",
+  "Vaginal Creams, Foams, and Jellies",
+  "Neoplasms, Ductal, Lobular, and Medullary",
+  "Congenital, Hereditary, and Neonatal Diseases and Abnormalities",
+  "Nucleobase, Nucleoside, Nucleotide, and Nucleic Acid Transport Proteins",
+  "Nucleic Acids, Nucleotides, and Nucleosides",
+  "Diet, Food, and Nutrition",
+  "Amino Acids, Peptides, and Proteins",
+  "Neoplasms, Cystic, Mucinous, and Serous",
+  "Benzenaminium, 4,4'-(3-oxo-1,5-pentanediyl)bis(N,N-dimethyl-N-2-propenyl-), Dibromide",
+  "3-Pyridinecarboxylic acid, 1,4-dihydro-2,6-dimethyl-5-nitro-4-(2-(trifluoromethyl)phenyl)-, Methyl ester",
+  "Pneumonia, Atypical Interstitial, of Cattle",
+  "Pneumonia, Progressive Interstitial, of Sheep",
+  "Epidermitis, Exudative, of Swine",
+  "Gastroenteritis, Transmissible, of Swine",
+  "Enteritis, Transmissible, of Turkeys",
+  "Anemia, Refractory, with Excess of Blasts"
+)
+
+deinvert_mesh_term <- function(term) {
+  # Naive de-inversion: reverse the comma-separated parts and join with a space.
+  # "Adaptation, Physiological" -> "Physiological Adaptation"; "A, B, C" -> "C B A".
+  # Terms in MESH_DEINVERSION_EXCLUSIONS are left untouched.
+  if (term %in% MESH_DEINVERSION_EXCLUSIONS) return(term)
+  if (!grepl(",", term, fixed = TRUE)) return(term)
+  parts <- trimws(strsplit(term, ",", fixed = TRUE)[[1]])
+  paste(rev(parts), collapse = " ")
+}
+
+deinvert_marked_mesh_keywords <- function(x) {
+  # de-invert comma-inverted MeSH descriptors for readability. Only
+  # keywords carrying a [MeSH] or (mesh) marker are affected; the marker is
+  # preserved here and removed by the marker-stripping steps that follow.
+  marker_re <- "\\s*(\\[MeSH\\]|\\(mesh\\))\\s*$"
+  one <- function(subject) {
+    if (is.na(subject) || subject == "") return(subject)
+    kws <- trimws(strsplit(subject, ";", fixed = TRUE)[[1]])
+    out <- vapply(kws, function(kw) {
+      if (!grepl(marker_re, kw, ignore.case = TRUE, perl = TRUE)) return(kw)
+      marker <- regmatches(kw, regexpr(marker_re, kw, ignore.case = TRUE, perl = TRUE))
+      bare <- sub(marker_re, "", kw, ignore.case = TRUE, perl = TRUE)
+      paste0(deinvert_mesh_term(trimws(bare)), marker)
+    }, character(1), USE.NAMES = FALSE)
+    paste(out, collapse = "; ")
+  }
+  vapply(x, one, character(1), USE.NAMES = FALSE)
 }
 
 dctypenorm_decoder <- list(
