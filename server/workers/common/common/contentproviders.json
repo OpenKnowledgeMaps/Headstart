@@ -3132,10 +3132,6 @@
     "internal_name": "ftid14064"
   },
   {
-    "name": "UNEJ",
-    "internal_name": "ftid14068"
-  },
-  {
     "name": "Journals of Delitekno Media Mandiri",
     "internal_name": "ftid14070"
   },
@@ -15602,10 +15598,6 @@
   {
     "name": "IMDEA Networks Institute Digital Repository",
     "internal_name": "ftimdeanetinst"
-  },
-  {
-    "name": "AMAD - „Archivum Medii Aevi Digitale - Interdisziplinäres Open-Access-Fachrepositorium und Wissenschaftsblog für Mittelalterforschung‟",
-    "internal_name": "ftamad"
   },
   {
     "name": "EIR NUOS - Репозитарій НУК (електронний інституційний репозитарій)",
@@ -33324,10 +33316,6 @@
     "internal_name": "ftdonboscouniojs"
   },
   {
-    "name": "Universitas Jember (UNEJ): Digital Repository",
-    "internal_name": "ftunivjember"
-  },
-  {
     "name": "Frontiers (Publisher)",
     "internal_name": "crfrontiers"
   },
@@ -33482,10 +33470,6 @@
   {
     "name": "ScienceDirect (Elsevier)",
     "internal_name": "crelsevierbv"
-  },
-  {
-    "name": "Jurnal University of Jember",
-    "internal_name": "ftunivjemberojs"
   },
   {
     "name": "Deakin University: openjournals@Deakin",

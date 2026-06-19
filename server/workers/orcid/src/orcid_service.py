@@ -382,23 +382,30 @@ class OrcidService:
         # Without this, drop_duplicates(keep='first') below can discard an open-access
         # record (oa_state=1) in favour of an unknown one (oa_state=2) for the same DOI,
         # silently losing the open-access status during enrichment.
+        # DOIs are case-insensitive, but BASE/ORCID emit the same DOI in mixed
+        # casing (e.g. 10.1016/b978-... vs 10.1016/B978-...). Dedup on a lowercased
+        # key so case-only variants collapse into one record here, matching the
+        # case-insensitive join used later for enrichment. The stored 'doi_merge'
+        # value (and the ORCID DOI casing in the output) is left untouched.
         if 'oa_state' in base_metadata.columns and not base_metadata.empty:
             oa_priority = base_metadata['oa_state'].map(oa_state_priority)
+            doi_key = base_metadata['doi_merge'].str.lower()
             best_oa_state = (
-                base_metadata.assign(_oa_priority=oa_priority)
+                base_metadata.assign(_oa_priority=oa_priority, _doi_key=doi_key)
                 .sort_values(by='_oa_priority')
-                .drop_duplicates(subset='doi_merge', keep='first')
-                .set_index('doi_merge')['oa_state']
+                .drop_duplicates(subset='_doi_key', keep='first')
+                .set_index('_doi_key')['oa_state']
             )
-            base_metadata['oa_state'] = base_metadata['doi_merge'].map(best_oa_state)
+            base_metadata['oa_state'] = doi_key.map(best_oa_state)
         # Sort by: direct fetch before exploded-from-additional_dois rows,
         # This ensures the record actually fetched for a DOI wins over a record
         # that acquired that DOI via additional_dois expansion.
         base_metadata = base_metadata.assign(
             _direct_sort=(~base_metadata['_is_direct_fetch']).astype(int),
+            _doi_key=base_metadata['doi_merge'].str.lower(),
         ).sort_values(by=['_direct_sort']).drop_duplicates(
-            subset='doi_merge', keep='first'
-        ).drop(columns=['_direct_sort', '_is_direct_fetch'])
+            subset='_doi_key', keep='first'
+        ).drop(columns=['_direct_sort', '_is_direct_fetch', '_doi_key'])
         # if self.logger.isEnabledFor(logging.DEBUG):
         #     self._log_dataframe(base_metadata.sort_values(by='title'), params, 'base_metadata_after_doi_dedup')
 
