@@ -159,7 +159,7 @@ class OrcidService:
 
         timing_data = []
 
-        for batch in batches:
+        for batch_index, batch in enumerate(batches):
             start_time = time.time()
             # Quote DOIs so Lucene/Solr special characters (e.g. the parentheses
             # in DOIs like 10.1061/40972(311)96) are treated as literal phrase
@@ -169,6 +169,14 @@ class OrcidService:
             q_advanced = " OR ".join([f'dcdoi:"{doi}"' for doi in batch if doi])
 
             request_id = str(uuid.uuid4())
+
+            # Link this BASE run back to the originating ORCID profile. The
+            # request_id becomes the BASE vis_id and names the dataframe dump
+            # folder, so this is the join key for tying a BASE debug dump to an ORCID.
+            self.logger.debug(
+                f"[base_link] orcid={orcid} base_request_id={request_id} "
+                f"batch_index={batch_index} batch_size={len(batch)}"
+            )
 
             task_data = {
                 "id": request_id,
@@ -448,8 +456,8 @@ class OrcidService:
 
         enriched_metadata.drop(columns=['paper_abstract_base', 'subject_orig_base', 'subject_base', 'oa_state_base', 'link_base', 'relation_base'], inplace=True)
         
-        # if self.logger.isEnabledFor(logging.DEBUG):
-        #     self._log_dataframe(enriched_metadata.sort_values(by='title'), params, '_enriched')
+        if self.logger.isEnabledFor(logging.DEBUG):
+            self._log_dataframe(enriched_metadata.sort_values(by='title'), params, '_enriched')
 
         # temporal solution, for some reason if we have some undefined data, dataprocessing is failing
         enriched_metadata = enriched_metadata.reindex(columns=list(set(original_columns + ['oa_state', 'subject', 'subject_orig', 'paper_abstract', 'link', 'relation'])))

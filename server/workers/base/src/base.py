@@ -202,7 +202,7 @@ class BaseClient(RWrapper):
     def run(self):
         while True:
             while self.rate_limiter.rate_limit_reached():
-                self.logger.debug("🛑 Request is limited")
+                self.logger.warning("🛑 Request is limited")
                 time.sleep(0.1)
             request_id, params, endpoint = self.next_item()
             self.logger.debug(request_id)
@@ -255,15 +255,15 @@ def _log_dedup_state(df, step, params):
     n_anchor = int(df["is_anchor"].sum()) if "is_anchor" in df.columns else "?"
     n_doi_dup = int(df["doi_duplicate"].sum()) if "doi_duplicate" in df.columns else "?"
     n_link_dup = int(df["link_duplicate"].sum()) if "link_duplicate" in df.columns else "?"
-    logger.debug(
-        f"[dedup:{step}] total={len(df)} is_duplicate={n_dup} is_anchor={n_anchor}"
-        f" doi_duplicate={n_doi_dup} link_duplicate={n_link_dup}"
-    )
+    # logger.debug(
+    #     f"[dedup:{step}] total={len(df)} is_duplicate={n_dup} is_anchor={n_anchor}"
+    #     f" doi_duplicate={n_doi_dup} link_duplicate={n_link_dup}"
+    # )
     if "id" in df.columns and "is_duplicate" in df.columns:
         dup_ids = df.loc[df["is_duplicate"], "id"].tolist()
         anchor_ids = df.loc[df["is_anchor"], "id"].tolist() if "is_anchor" in df.columns else []
-        logger.debug(f"[dedup:{step}] duplicate_ids={dup_ids}")
-        logger.debug(f"[dedup:{step}] anchor_ids={anchor_ids}")
+        # logger.debug(f"[dedup:{step}] duplicate_ids={dup_ids}")
+        # logger.debug(f"[dedup:{step}] anchor_ids={anchor_ids}")
 
 
 def _log_group_similarity(df, indexes, group_type, group_key):
@@ -313,13 +313,13 @@ def filter_duplicates(df, service, params):
     )
     df["publisher_doi"] = df.doi.map(lambda x: get_publisher_doi(x))
     duplicate_groups = find_duplicate_groups(df)
-    logger.debug(f"[dedup:find_duplicate_groups] duplicate_groups groups: {len(duplicate_groups)}, multi-member groups: {sum(1 for idx in duplicate_groups if len(idx) > 1)}")
-    for grp_id, idx in duplicate_groups.items():
-        if len(idx) > 1:
-            logger.debug(
-                f"[dedup:position_check] group id={grp_id!r} size={len(idx)} "
-                f"member_original_indexes={sorted(idx.tolist())}"
-            )
+    # logger.debug(f"[dedup:find_duplicate_groups] duplicate_groups groups: {len(duplicate_groups)}, multi-member groups: {sum(1 for idx in duplicate_groups if len(idx) > 1)}")
+    # for grp_id, idx in duplicate_groups.items():
+    #     if len(idx) > 1:
+    #         logger.debug(
+    #             f"[dedup:position_check] group id={grp_id!r} size={len(idx)} "
+    #             f"member_original_indexes={sorted(idx.tolist())}"
+    #         )
     df = mark_duplicate_dois(df)
     df = mark_duplicate_links(df)
     # _log_dedup_state(df, "after_mark_doi_link_duplicates", params)
@@ -348,11 +348,11 @@ def filter_duplicates(df, service, params):
                 continue
             if doi_title_filter(anchor_title, df.at[idx, "title"]):
                 false_positive_indexes.append(idx)
-                logger.debug(
-                    f"[dedup:doi_title_filter] dropping false-positive DOI match "
-                    f"doi={doi_val!r} anchor={anchor_title!r} "
-                    f"candidate={df.at[idx, 'title']!r}"
-                )
+                # logger.debug(
+                #     f"[dedup:doi_title_filter] dropping false-positive DOI match "
+                #     f"doi={doi_val!r} anchor={anchor_title!r} "
+                #     f"candidate={df.at[idx, 'title']!r}"
+                # )
     if false_positive_indexes:
         df.drop(index=false_positive_indexes, inplace=True)
         logger.info(f"[dedup:doi_title_filter] dropped {len(false_positive_indexes)} false-positive records")
@@ -369,7 +369,7 @@ def filter_duplicates(df, service, params):
 
     pure_datasets = df[df.typenorm == "7"]
     non_datasets = df.loc[df.index.difference(pure_datasets.index)]
-    logger.debug(f"[dedup:split] non_datasets={len(non_datasets)} pure_datasets={len(pure_datasets)}")
+    # logger.debug(f"[dedup:split] non_datasets={len(non_datasets)} pure_datasets={len(pure_datasets)}")
 
     non_datasets = prioritize_OA_and_latest(non_datasets, duplicate_groups)
     non_datasets = prioritize_doi_and_provider(non_datasets, duplicate_groups)
@@ -420,11 +420,11 @@ def filter_duplicates(df, service, params):
     list_size = params.get("list_size")
     for rank, (orig_idx, row) in enumerate(filtered.iterrows()):
         beyond = list_size is not None and rank >= list_size
-        logger.debug(
-            f"[dedup:position_check] anchor id={row['id']!r} "
-            f"original_index={orig_idx} filtered_rank={rank} "
-            f"beyond_list_size={beyond} list_size={list_size}"
-        )
+        # logger.debug(
+        #     f"[dedup:position_check] anchor id={row['id']!r} "
+        #     f"original_index={orig_idx} filtered_rank={rank} "
+        #     f"beyond_list_size={beyond} list_size={list_size}"
+        # )
 
     for c in [
         "doi_duplicate",
