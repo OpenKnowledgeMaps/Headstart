@@ -56,3 +56,61 @@ test_that("the reversal-exclusion set is honoured (kept in original order)", {
   MESH_DEINVERSION_EXCLUSIONS <<- c("Aged, 80 and over")
   expect_equal(mesh_clean("Aged, 80 and over [MeSH]"), "Aged, 80 and over")
 })
+
+# --- classification cleanup --------------------------------------------------
+# Each classification keyword is dropped whole; the neighbour "cooperation" is
+# kept, verifying removal with no side-effect on adjacent keywords.
+drops_to_cooperation <- function(keyword) {
+  expect_equal(clean_classification_keywords(paste0(keyword, "; cooperation")), "cooperation")
+}
+
+test_that("name= key-value keywords are dropped", {
+  drops_to_cooperation("name=Connected World")
+})
+test_that("rcdc keywords are dropped", {
+  drops_to_cooperation("Autism (rcdc)")
+})
+test_that("'not elsewhere classified' keywords are dropped", {
+  drops_to_cooperation("Biological Sciences not elsewhere classified")
+})
+test_that("FoR keywords are dropped (all three serialisations)", {
+  drops_to_cooperation("01 Mathematical Sciences (for)")
+  drops_to_cooperation("38 Economics (for-2020)")
+  drops_to_cooperation("FoR 03 (Chemical Sciences)")
+})
+test_that("hrcs keywords are dropped", {
+  drops_to_cooperation("2.1 Biological and endogenous factors (hrcs-rac)")
+})
+test_that("science-metrix keywords are dropped", {
+  drops_to_cooperation("Bioinformatics (science-metrix)")
+})
+test_that("sdg keywords are dropped", {
+  drops_to_cooperation("3 Good Health and Well Being (sdg)")
+})
+test_that("ACM CCS keywords are dropped", {
+  drops_to_cooperation("Computing methodologies → Machine learning")
+})
+test_that("HAL domain keywords are dropped", {
+  drops_to_cooperation("[SHS.ECO]Humanities and Social Sciences/Economics and Finance")
+  drops_to_cooperation("[SDV]Life Sciences [q-bio]")
+})
+test_that("URL keywords are dropped", {
+  drops_to_cooperation("https://cdn.jamanetwork.com/x.pdf")
+})
+test_that("numeric path keywords are dropped", {
+  drops_to_cooperation("/692/308/174")
+})
+test_that("Toulouse letter-domain subjects are dropped (top level + sub-categories)", {
+  drops_to_cooperation("B- ECONOMIE ET FINANCE")
+  drops_to_cooperation("A1-4- Droit de l'informatique")
+  drops_to_cooperation("4-2- Droit des affaires – droit commercial")
+})
+
+# Guards: real keywords that look classification-ish must be kept.
+test_that("look-alike keywords are NOT dropped", {
+  for (kw in c("J-PET", "for 1347 (89.8%)", "COVID-19/diagnosis",
+               "Statistics (Mathematics)", "Mixed/Augmented Reality", "[SHSX]not-a-code",
+               "2138", "B-cell lymphoma", "Marketing")) {
+    expect_equal(clean_classification_keywords(kw), kw)
+  }
+})
