@@ -1,17 +1,15 @@
-# Unit & integration tests for the MeSH keyword cleaning.
+# Unit & integration tests for the subject/keyword cleaning.
 #
-# Run from the other-scripts directory in a healthy renv, e.g.:
+# Run from the other-scripts directory, e.g.:
 #   Rscript -e 'library(testthat); test_file("test/test_subject_cleaning.R")'
 #
-# base.R has top-level logging setup, so (as in test_base.R) utils.R must be
-# sourced and logging initialised before base.R can be sourced.
+# subject_cleaning.R is pure base R (no packages, no logging), so it can be
+# sourced and tested in isolation.
 
 library(testthat)
 
 if (!exists("deinvert_marked_mesh_keywords")) {
-  source("utils.R")
-  setup_logging("INFO")
-  source("base.R")
+  source("subject_cleaning.R")
 }
 
 # The non-"timeline" MeSH slice of vis_layout's subject cleaning, in order.
