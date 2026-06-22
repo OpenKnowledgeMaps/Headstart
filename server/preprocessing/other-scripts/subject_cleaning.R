@@ -125,10 +125,12 @@ drop_not_elsewhere_classified <- function(keywords) {
 }
 
 drop_for <- function(keywords) {
-  # ANZSRC Fields of Research, three serialisations:
-  #   "01 Mathematical Sciences (for)", "38 Economics (for-2020)", "FoR 03 (Chemical Sciences)".
+  # ANZSRC Fields of Research, serialisations seen in the data:
+  #   "01 Mathematical Sciences (for)", "38 Economics (for-2020)", "FoR 03 (Chemical Sciences)",
+  #   "anzsrc-for: 3402 Inorganic Chemistry".
   # The FoR-prefix form requires a letter after "(" so a stray "... (89.8%)" is not matched.
-  keywords[!grepl("\\(for(-2020)?\\)\\s*$|^FoR [0-9]+ \\([A-Za-z]", keywords, ignore.case = TRUE)]
+  keywords[!grepl("\\(for(-2020)?\\)\\s*$|^FoR [0-9]+ \\([A-Za-z]|^anzsrc-for ?: ?[0-9]+",
+                  keywords, ignore.case = TRUE)]
 }
 
 drop_hrcs <- function(keywords) {

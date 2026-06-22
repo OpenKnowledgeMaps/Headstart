@@ -71,10 +71,13 @@ test_that("rcdc keywords are dropped", {
 test_that("'not elsewhere classified' keywords are dropped", {
   drops_to_cooperation("Biological Sciences not elsewhere classified")
 })
-test_that("FoR keywords are dropped (all three serialisations)", {
+test_that("FoR keywords are dropped (all serialisations)", {
   drops_to_cooperation("01 Mathematical Sciences (for)")
   drops_to_cooperation("38 Economics (for-2020)")
   drops_to_cooperation("FoR 03 (Chemical Sciences)")
+  drops_to_cooperation("anzsrc-for: 3402 Inorganic Chemistry")
+  drops_to_cooperation("anzsrc-for: 34 Chemical Sciences")
+  drops_to_cooperation("anzsrc-for: 03 Chemical Sciences")
 })
 test_that("hrcs keywords are dropped", {
   drops_to_cooperation("2.1 Biological and endogenous factors (hrcs-rac)")
