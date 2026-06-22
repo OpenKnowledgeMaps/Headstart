@@ -82,8 +82,10 @@ test_that("hrcs keywords are dropped", {
 test_that("science-metrix keywords are dropped", {
   drops_to_cooperation("Bioinformatics (science-metrix)")
 })
-test_that("sdg keywords are dropped", {
+test_that("sdg keywords are dropped (suffix marker + numbered prefix)", {
   drops_to_cooperation("3 Good Health and Well Being (sdg)")
+  drops_to_cooperation("SDG 10: Reduced inequalities")
+  drops_to_cooperation("SDG 3: Good health and well-being")
 })
 test_that("ACM CCS keywords are dropped", {
   drops_to_cooperation("Computing methodologies → Machine learning")
@@ -108,7 +110,7 @@ test_that("Toulouse letter-domain subjects are dropped (top level + sub-categori
 test_that("look-alike keywords are NOT dropped", {
   for (kw in c("J-PET", "for 1347 (89.8%)", "COVID-19/diagnosis",
                "Statistics (Mathematics)", "Mixed/Augmented Reality", "[SHSX]not-a-code",
-               "2138", "B-cell lymphoma", "Marketing")) {
+               "2138", "B-cell lymphoma", "Marketing", "SDGs in practice")) {
     expect_equal(clean_classification_keywords(kw), kw)
   }
 })

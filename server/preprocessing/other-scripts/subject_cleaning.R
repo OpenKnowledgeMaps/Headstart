@@ -142,8 +142,12 @@ drop_science_metrix <- function(keywords) {
 }
 
 drop_sdg <- function(keywords) {
-  # UN Sustainable Development Goals, e.g. "3 Good Health and Well Being (sdg)".
-  keywords[!grepl("\\(sdg\\)\\s*$", keywords, ignore.case = TRUE)]
+  # UN Sustainable Development Goals, in two serialisations:
+  #   suffix marker, e.g. "3 Good Health and Well Being (sdg)"
+  #   numbered prefix, e.g. "SDG 10: Reduced inequalities"
+  is_sdg <- grepl("\\(sdg\\)\\s*$", keywords, ignore.case = TRUE) |
+    grepl("^SDG ?[0-9]+ ?[:.-]", keywords, ignore.case = TRUE)
+  keywords[!is_sdg]
 }
 
 drop_acm_ccs <- function(keywords) {
