@@ -251,6 +251,8 @@ etl <- function(res, repo, non_public) {
   subject_cleaned = gsub("\\[No keyword\\]", "", subject_cleaned)
 
   if (!is.null(params$vis_type) && params$vis_type == "timeline") {
+    # These classifications have not been cleaned for the streamgraph as the
+    # impact of cleaning them has not been evaluated
     subject_cleaned = remove_keywords_with_text_in_square_brackets(subject_cleaned)
   } else {
     # de-invert comma-inverted MeSH descriptors (marker preserved).
