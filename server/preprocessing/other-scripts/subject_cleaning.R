@@ -92,6 +92,71 @@ deinvert_marked_mesh_keywords <- function(x) {
   vapply(x, one, character(1), USE.NAMES = FALSE)
 }
 
+# MeSH subheadings/qualifiers, the authoritative NLM list
+# (https://www.nlm.nih.gov/mesh/subhierarchy.html), de-duplicated. Matching is
+# case-insensitive. The page's "adminstration & dosage" spelling is kept next to
+# the canonical "administration & dosage" so either form in the data is matched.
+MESH_QUALIFIERS <- c(
+  "analysis", "blood", "cerebrospinal fluid", "isolation & purification", "urine",
+  "anatomy & histology", "blood supply", "cytology", "ultrastructure", "embryology",
+  "abnormalities", "innervation", "pathology", "chemistry", "agonists",
+  "analogs & derivatives", "antagonists & inhibitors", "chemical synthesis",
+  "diagnosis", "diagnostic imaging", "etiology", "chemically induced", "complications",
+  "secondary", "congenital", "genetics", "immunology", "microbiology", "virology",
+  "parasitology", "transmission", "organization & administration", "economics",
+  "legislation & jurisprudence", "standards", "supply & distribution", "trends",
+  "pharmacology", "adminstration & dosage", "administration & dosage", "adverse effects",
+  "poisoning", "toxicity", "pharmacokinetics", "physiology", "growth & development",
+  "metabolism", "biosynthesis", "deficiency", "enzymology", "physiopathology",
+  "statistics & numerical data", "epidemiology", "ethnology", "mortality",
+  "therapeutic use", "therapy", "diet therapy", "drug therapy", "nursing",
+  "prevention & control", "radiotherapy", "rehabilitation", "surgery",
+  "transplantation", "classification", "drug effects", "education", "ethics",
+  "history", "injuries", "instrumentation", "methods", "pathogenicity", "psychology",
+  "radiation effects", "veterinary"
+)
+
+# Alternation built longest-first so multi-word qualifiers win over a substring
+# (e.g. "drug therapy" before "therapy"); the qualifiers contain no regex
+# metacharacters, so no escaping is needed.
+MESH_QUALIFIER_ALTERNATION <- paste(
+  unique(MESH_QUALIFIERS)[order(nchar(unique(MESH_QUALIFIERS)), decreasing = TRUE)],
+  collapse = "|"
+)
+
+strip_mesh_qualifier <- function(x) {
+  # MeSH descriptor/qualifier pairs: drop the trailing subheading, keep the
+  # descriptor. "Autistic Disorder/genetics" -> "Autistic Disorder",
+  # "Hospitals/*supply & distribution" -> "Hospitals". The separator is "/" or
+  # ":" (with or without surrounding spaces), the qualifier may carry a leading
+  # "*" major-topic marker, and a "*" left on the descriptor is trimmed too.
+  # Only subheadings from the authoritative NLM list are removed, so genuine
+  # compounds ("Mixed/Augmented Reality") are untouched.
+  #
+  # KNOWN LIMITATION: in the live base.R order the colon form ("Hypothermia:
+  # chemically induced") is usually already removed whole by the generic
+  # "prefix:annotation" gsub before this runs, taking the descriptor with it. So
+  # in practice this mainly affects the slash form; the colon form is the same
+  # legacy-ordering interference that trips up the classification drops.
+  pat <- paste0("^(.+?)\\s*[/:]\\s*\\*?\\s*(", MESH_QUALIFIER_ALTERNATION, ")\\s*$")
+  one <- function(subject) {
+    if (is.na(subject) || subject == "") return(subject)
+    kws <- trimws(strsplit(subject, ";", fixed = TRUE)[[1]])
+    out <- vapply(kws, function(kw) {
+      stripped <- kw
+      repeat {                                   # handle stacked qualifiers
+        s <- sub(pat, "\\1", stripped, ignore.case = TRUE, perl = TRUE)
+        if (identical(s, stripped)) break
+        stripped <- s
+      }
+      if (!identical(stripped, kw)) stripped <- trimws(gsub("*", "", stripped, fixed = TRUE))
+      stripped
+    }, character(1), USE.NAMES = FALSE)
+    paste(out, collapse = "; ")
+  }
+  vapply(x, one, character(1), USE.NAMES = FALSE)
+}
+
 # --- Classification keyword cleanup ------------------------------------------
 # Split the subject into a keyword vector, run individual filter functions that
 # drop whole classification keywords, then rejoin. Each classification is one

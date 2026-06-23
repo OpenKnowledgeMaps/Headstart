@@ -55,6 +55,36 @@ test_that("the reversal-exclusion set is honoured (kept in original order)", {
   expect_equal(mesh_clean("Aged, 80 and over [MeSH]"), "Aged, 80 and over")
 })
 
+# --- MeSH qualifier (subheading) stripping -----------------------------------
+test_that("MeSH subheading qualifiers are stripped, descriptor kept", {
+  expect_equal(strip_mesh_qualifier("Autistic Disorder/genetics"), "Autistic Disorder")
+  expect_equal(strip_mesh_qualifier("Pain / complications"), "Pain")
+  expect_equal(strip_mesh_qualifier("Bed Occupancy/statistics & numerical data"), "Bed Occupancy")
+  expect_equal(strip_mesh_qualifier("COVID-19/*epidemiology"), "COVID-19")
+  expect_equal(strip_mesh_qualifier("Hospitals/*supply & distribution"), "Hospitals")
+  expect_equal(strip_mesh_qualifier("COVID-19/diagnosis"), "COVID-19")
+})
+test_that("the major-topic '*' marker is trimmed from the descriptor", {
+  expect_equal(strip_mesh_qualifier("Raynaud Disease* / genetics"), "Raynaud Disease")
+})
+test_that("the colon form is stripped in isolation (live pipeline removes it earlier)", {
+  expect_equal(strip_mesh_qualifier("Hypothermia: chemically induced"), "Hypothermia")
+})
+test_that("stacked qualifiers are all stripped", {
+  expect_equal(strip_mesh_qualifier("Hypothermia/diagnosis/therapy"), "Hypothermia")
+})
+test_that("qualifier stripping acts per keyword within a subject", {
+  expect_equal(
+    strip_mesh_qualifier("Autistic Disorder/genetics; cooperation; Pain / complications"),
+    "Autistic Disorder; cooperation; Pain")
+})
+test_that("non-qualifier tails are left untouched", {
+  for (kw in c("Mixed/Augmented Reality", "Speech/Language", "Input/Output",
+               "Cost/benefit analysis")) {
+    expect_equal(strip_mesh_qualifier(kw), kw)
+  }
+})
+
 # --- classification cleanup --------------------------------------------------
 # Each classification keyword is dropped whole; the neighbour "cooperation" is
 # kept, verifying removal with no side-effect on adjacent keywords.

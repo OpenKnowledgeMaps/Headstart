@@ -258,6 +258,9 @@ etl <- function(res, repo, non_public) {
     # de-invert comma-inverted MeSH descriptors (marker preserved).
     # Runs before the marker-stripping steps so [MeSH]/(mesh) are still present.
     subject_cleaned = deinvert_marked_mesh_keywords(subject_cleaned)
+    # strip MeSH subheading qualifiers, keeping the descriptor
+    # ("Autistic Disorder/genetics" -> "Autistic Disorder").
+    subject_cleaned = strip_mesh_qualifier(subject_cleaned)
     # drop whole keywords that are additional classifications. Runs before the
     # bracket strip so leading-bracket classifications (e.g. HAL [SHS.ECO]...)
     # are still intact.
