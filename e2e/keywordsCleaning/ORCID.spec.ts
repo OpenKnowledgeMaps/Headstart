@@ -63,8 +63,16 @@ test.describe("Warm-up: pre-load unique ORCID profiles", () => {
 // detected by pattern without false positives, so they are out of scope here
 // and remain covered by the unit tests only.
 
-// Mirrors the marker-bearing schemes in kwlib.SCHEMES (the analysis oracle).
-// Keep in sync when a new marker-based scheme is added to the cleaner.
+// Keep in sync when a new marker-based scheme is added to the cleaner. Every
+// pattern below has been checked against real cleaned `subject` data to confirm
+// it does not appear after cleaning (so the invariant holds) while the scheme is
+// present in the source `subject_orig`.
+//
+// Deliberately NOT asserted: the "anzsrc-for: 3402 ..." form. In the current
+// pipeline an earlier generic gsub strips its "for: ..." tail and leaves an
+// orphan "anzsrc-" fragment, so neither the full marker nor a clean drop holds;
+// the fix requires some refactoring of the existing cleanup,
+// so it is left out rather than encoding a failing or misleading assertion.
 const CLASSIFICATION_MARKERS: { name: string; re: RegExp }[] = [
   { name: "mesh [MeSH]", re: /\[MeSH\]/i },
   { name: "mesh (mesh)", re: /\(mesh\)/i },
@@ -72,13 +80,26 @@ const CLASSIFICATION_MARKERS: { name: string; re: RegExp }[] = [
   { name: "rcdc", re: /\(rcdc\)/i },
   { name: "for / for-2020", re: /\(for(-2020)?\)/i },
   { name: "science-metrix", re: /\(science-metrix\)/i },
-  { name: "sdg", re: /\(sdg\)/i },
+  { name: "sdg (suffix marker)", re: /\(sdg\)/i },
+  { name: "sdg (numbered prefix)", re: /^SDG ?\d+ ?[:.-]/i },
   { name: "hrcs", re: /\(hrcs-[a-z]+\)/i },
   { name: "acm-ccs arrow", re: /→/ },
   { name: "keyvalue name=", re: /^name=/i },
   {
     name: "hal-shs domain code",
     re: /^\[(CHIM|INFO|MATH|NLIN|PHYS|SCCO|SDE|SDU|SDV|SHS|SPI|STAT|QFIN)(\.[A-Z-]+)*\]/,
+  },
+  { name: "ddc", re: /\bddc:\s*\d/i },
+  { name: "info:eu-repo", re: /info:eu-repo/i },
+  { name: "pure ontology path", re: /\/dk\/atira/i },
+  { name: "fos", re: /^FOS:\s/i },
+  {
+    name: "arxiv category (dotted)",
+    re: /\b(cs|econ|eess|math|astro-ph|nlin|q-bio|q-fin|stat)\.[A-Z]{2}\b/,
+  },
+  {
+    name: "arxiv category (bare)",
+    re: /\b(quant-ph|gr-qc|math-ph|cond-mat|hep-(ex|lat|ph|th)|nucl-(ex|th))\b/,
   },
   { name: "url", re: /^https?:\/\// },
   { name: "not elsewhere classified", re: /not elsewhere classified/i },
