@@ -129,6 +129,9 @@ drop_for <- function(keywords) {
   #   "01 Mathematical Sciences (for)", "38 Economics (for-2020)", "FoR 03 (Chemical Sciences)",
   #   "anzsrc-for: 3402 Inorganic Chemistry".
   # The FoR-prefix form requires a letter after "(" so a stray "... (89.8%)" is not matched.
+  # NOTE: in the current base.R order the "anzsrc-for: ..." form is already reduced to an
+  # orphan "anzsrc-" by an earlier generic "prefix:annotation" gsub, so this branch only
+  # takes effect if the per-scheme filters run before that legacy step.
   keywords[!grepl("\\(for(-2020)?\\)\\s*$|^FoR [0-9]+ \\([A-Za-z]|^anzsrc-for ?: ?[0-9]+",
                   keywords, ignore.case = TRUE)]
 }
