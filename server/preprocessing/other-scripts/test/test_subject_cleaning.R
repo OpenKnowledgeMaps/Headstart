@@ -195,12 +195,55 @@ test_that("Toulouse letter-domain subjects are dropped (top level + sub-categori
   drops_to_cooperation("A1-4- Droit de l'informatique")
   drops_to_cooperation("4-2- Droit des affaires – droit commercial")
 })
+test_that("LCC top-level classes are dropped (lone letter + code + caption)", {
+  drops_to_cooperation("Q")                       # lone class letter
+  drops_to_cooperation("Q Science")               # code + caption
+  drops_to_cooperation("R Medicine (General)")
+  drops_to_cooperation("B Philosophy (General)")
+  drops_to_cooperation("T Technology (General)")
+  drops_to_cooperation("H Social Sciences")
+})
+test_that("LCC subclasses are dropped in the code+caption form", {
+  drops_to_cooperation("QA Mathematics")
+  drops_to_cooperation("QB Astronomy")
+  drops_to_cooperation("BF Psychology")
+  drops_to_cooperation("ML Literature of music")
+  drops_to_cooperation("QA75 Electronic computers. Computer science")  # code + digits + caption
+  drops_to_cooperation("QA76 Computer software")
+  drops_to_cooperation("RC0321 Neuroscience. Biological psychiatry")
+})
+test_that("bare subclass + digits codes are dropped", {
+  drops_to_cooperation("QA76")    # bare code + digits, no caption
+  drops_to_cooperation("GF125")
+  drops_to_cooperation("RC321")
+  drops_to_cooperation("QA75.5")  # decimal class number
+})
+test_that("subclass codes shared with abbreviations survive the caption check", {
+  for (kw in c("ML Machine Learning", "AI Artificial Intelligence", "CT Computed Tomography",
+               "QA testing", "QC quality control", "PR public relations")) {
+    expect_equal(clean_classification_keywords(kw), kw)
+  }
+})
+test_that("bare subclass codes are dropped only when collision-free", {
+  drops_to_cooperation("QH")   # natural history/biology, not an abbreviation
+  drops_to_cooperation("QK")   # botany
+  drops_to_cooperation("TJ")   # mechanical engineering
+  drops_to_cooperation("RJ")   # pediatrics
+})
+test_that("bare subclass codes that are common abbreviations are kept", {
+  for (kw in c("ML", "AI", "QA", "QC", "CT", "PR", "NA", "RT", "RF", "PH")) {
+    expect_equal(clean_classification_keywords(kw), kw)
+  }
+})
 
 # Guards: real keywords that look classification-ish must be kept.
 test_that("look-alike keywords are NOT dropped", {
   for (kw in c("J-PET", "for 1347 (89.8%)", "COVID-19/diagnosis",
                "Statistics (Mathematics)", "Mixed/Augmented Reality", "[SHSX]not-a-code",
-               "2138", "B-cell lymphoma", "Marketing", "SDGs in practice")) {
+               "2138", "B-cell lymphoma", "Marketing", "SDGs in practice",
+               # LCC look-alikes: class letter + a non-caption word, bare caption, non-class letter
+               "B cell", "T cells", "T test", "G protein", "S phase", "R group",
+               "Q methodology", "Science", "I")) {
     expect_equal(clean_classification_keywords(kw), kw)
   }
 })

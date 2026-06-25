@@ -89,7 +89,19 @@ export const QUALIFIER_MARKERS: { name: string; re: RegExp }[] = [
   { name: "mesh blob (space-joined headings)", re: /\S+\/\S+\s+\S+\/\S+/ },
 ];
 
-const ALL_MARKERS = [...CLASSIFICATION_MARKERS, ...QUALIFIER_MARKERS];
+// Library of Congress Classification — clear-cut forms only, as regression
+// markers. Deliberately conservative: each pattern matches a form that is
+// unambiguously a classification, so an ambiguous true-negative (a non-LCC
+// keyword that the cleaner legitimately keeps) does NOT trip it. We do not assert
+// the bare-code / code+caption forms here, as those are intentionally ambiguous.
+export const LCC_MARKERS: { name: string; re: RegExp }[] = [
+  // Numeric class-number range, e.g. "QC1-999", "QH301-705.5", "HF5001-6182".
+  // Both sides are pure digits, so MRI sequences ("T1-T2") and cell markers
+  // ("CD4-CD8") — which have a letter after the dash — are not matched.
+  { name: "lcc range", re: /^[A-Z]{1,3}\d{1,4}(\.\d+)?-\d{1,4}(\.\d+)?$/ },
+];
+
+const ALL_MARKERS = [...CLASSIFICATION_MARKERS, ...QUALIFIER_MARKERS, ...LCC_MARKERS];
 
 export interface BackendDocument {
   subject?: string;

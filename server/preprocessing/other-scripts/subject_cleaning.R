@@ -370,6 +370,176 @@ drop_letter_domain <- function(keywords) {
   keywords[!(normalize_subject(keywords) %in% normalize_subject(TOULOUSE_SUBJECTS))]
 }
 
+# Library of Congress Classification, top-level classes (single letter). The
+# letters are the authoritative LCC class set (I, O, W, X, Y are not classes);
+# the value is the class's subject heading, used to recognise the "code + caption"
+# form. Subclasses (2-3 letters) are handled separately, with their own list.
+LCC_TOPLEVEL_CAPTIONS <- c(
+  A = "General Works",
+  B = "Philosophy|Psychology|Religion",
+  C = "Auxiliary Sciences",
+  D = "World History|History",
+  E = "History",
+  F = "History",
+  G = "Geography|Anthropology|Recreation",
+  H = "Social Sciences",
+  J = "Political Science",
+  K = "Law",
+  L = "Education",
+  M = "Music",
+  N = "Fine Arts",
+  P = "Language|Literature|Philology|Linguistics",
+  Q = "Science",
+  R = "Medicine",
+  S = "Agriculture",
+  T = "Technology",
+  U = "Military Science",
+  V = "Naval Science",
+  Z = "Bibliography|Library Science|Information Resources"
+)
+
+drop_lcc_toplevel <- function(keywords) {
+  # Drop LCC top-level classes in two forms:
+  #   * a lone class letter, e.g. "Q";
+  #   * the "code + caption" form, e.g. "Q Science", "R Medicine (General)".
+  # The caption must match the class's own subject heading, so genuine science
+  # terms that start with a class letter ("B cell", "T test", "G protein") are
+  # kept. The bare caption on its own ("Science") is left alone (no class code).
+  letters <- names(LCC_TOPLEVEL_CAPTIONS)
+  drop <- keywords %in% letters
+  for (l in letters) {
+    drop <- drop | grepl(paste0("^", l, " (", LCC_TOPLEVEL_CAPTIONS[[l]], ")\\b"),
+                         keywords, perl = TRUE)
+  }
+  keywords[!drop]
+}
+
+# LCC subclasses (2-3 letter codes), crawled from the LC Classification Outline
+# (itsmarc.com / US Library of Congress). The value is the significant words of
+# the subclass heading, used to recognise the "code + caption" form. Bare codes
+# are intentionally NOT matched here: ~27% of these subclasses collide with common
+# abbreviations (AI, ML, QA, QC, CT, PR, ...), so a bare code is too ambiguous.
+LCC_SUBCLASS_WORDS <- c(
+  AC = "collections series collected works", AE = "encyclopedias", AG = "dictionaries reference works", AI = "indexes",
+  AM = "museums collectors collecting", AN = "newspapers", AP = "periodicals", AS = "academies learned societies",
+  AY = "yearbooks almanacs directories", AZ = "history scholarship learning humanities", BC = "logic", BD = "speculative philosophy",
+  BF = "psychology", BH = "aesthetics", BJ = "ethics", BL = "religions mythology rationalism",
+  BM = "judaism", BP = "islam bahaism theosophy", BQ = "buddhism", BR = "christianity",
+  BS = "bible", BT = "doctrinal theology", BV = "practical theology", BX = "christian denominations",
+  CB = "history civilization", CC = "archaeology", CD = "diplomatics archives seals", CE = "technical chronology calendar",
+  CJ = "numismatics", CN = "inscriptions epigraphy", CR = "heraldry", CS = "genealogy",
+  CT = "biography", DA = "great britain", DAW = "central europe", DB = "austria liechtenstein hungary czechoslovakia",
+  DC = "france andorra monaco", DD = "germany", DE = "greco roman world", DF = "greece",
+  DG = "italy malta", DH = "low countries benelux", DJ = "netherlands holland", DJK = "eastern europe",
+  DK = "russia soviet union former republics poland", DL = "northern europe scandinavia", DP = "spain portugal", DQ = "switzerland",
+  DR = "balkan peninsula", DS = "asia", DT = "africa", DU = "oceania south seas",
+  DX = "romanies", GA = "mathematical geography cartography", GB = "physical geography", GC = "oceanography",
+  GE = "environmental sciences", GF = "human ecology anthropogeography", GN = "anthropology", GR = "folklore",
+  GT = "manners customs", GV = "recreation leisure", HA = "statistics", HB = "economic theory demography",
+  HC = "economic history conditions", HD = "industries land use labor", HE = "transportation communications", HF = "commerce",
+  HG = "finance", HJ = "public finance", HM = "sociology", HN = "social history conditions problems reform",
+  HQ = "family marriage women", HS = "societies secret benevolent", HT = "communities classes races", HV = "social pathology public welfare criminology",
+  HX = "socialism communism anarchism", JA = "political science", JC = "political theory", JF = "political institutions public administration",
+  JJ = "political institutions public administration north america", JK = "political institutions public administration united states", JL = "political institutions public administration canada latin america", JN = "political institutions public administration europe",
+  JQ = "political institutions public administration asia africa australia pacific area", JS = "local government municipal", JV = "colonies colonization emigration immigration international migration", JX = "obsolete",
+  JZ = "international relations", KB = "religious law comparative jurisprudence", KBM = "jewish law", KBP = "islamic law",
+  KBR = "history canon law", KBU = "law roman catholic church holy see", KDZ = "america north", KE = "canada",
+  KF = "united states", KG = "latin america mexico central west indies caribbean area", KH = "south america", KZ = "law nations",
+  LA = "history education", LB = "theory practice education", LC = "special aspects education", LD = "individual institutions united states",
+  LE = "individual institutions america except united states", LF = "individual institutions europe", LG = "individual institutions asia africa indian ocean islands australia new zealand pacific", LH = "college school magazines papers",
+  LJ = "student fraternities societies united states", LT = "textbooks", ML = "literature on music", MT = "instruction study",
+  "NA" = "architecture", NB = "sculpture", NC = "drawing design illustration", ND = "painting",
+  NE = "print media", NK = "decorative arts", NX = "arts", PA = "greek language literature latin",
+  PB = "modern languages celtic", PC = "romanic languages", PD = "germanic languages scandinavian", PE = "english language",
+  PF = "west germanic languages", PG = "slavic languages baltic albanian language", PH = "uralic languages basque language", PJ = "oriental languages literatures",
+  PK = "indo iranian languages literatures", PL = "languages literatures eastern asia africa oceania", PM = "hyperborean indian artificial languages", PN = "literature",
+  PQ = "french literature italian spanish portuguese", PR = "english literature", PS = "american literature", PT = "german literature dutch flemish since afrikaans scandinavian old norse icelandic norwegian modern faroese danish swedish",
+  PZ = "fiction juvenile belles lettres", QA = "mathematics", QB = "astronomy", QC = "physics",
+  QD = "chemistry", QE = "geology", QH = "natural history biology", QK = "botany",
+  QL = "zoology", QM = "human anatomy", QP = "physiology", QR = "microbiology",
+  RA = "public aspects medicine", RB = "pathology", RC = "internal medicine", RD = "surgery",
+  RE = "ophthalmology", RF = "otorhinolaryngology", RG = "gynecology obstetrics", RJ = "pediatrics",
+  RK = "dentistry", RL = "dermatology", RM = "therapeutics pharmacology", RS = "pharmacy materia medica",
+  RT = "nursing", RV = "botanic thomsonian eclectic medicine", RX = "homeopathy", RZ = "systems medicine",
+  SB = "plant culture", SD = "forestry", SF = "animal culture", SH = "aquaculture fisheries angling",
+  SK = "hunting sports", TA = "engineering civil", TC = "hydraulic engineering ocean", TD = "environmental technology sanitary engineering",
+  TE = "highway engineering roads pavements", TF = "railroad engineering operation", TG = "bridge engineering", TH = "building construction",
+  TJ = "mechanical engineering machinery", TK = "electrical engineering electronics nuclear", TL = "motor vehicles aeronautics astronautics", TN = "mining engineering metallurgy",
+  TP = "chemical technology", TR = "photography", TS = "manufactures", TT = "handicrafts arts crafts",
+  TX = "home economics", UA = "armies organization distribution military situation", UB = "military administration", UC = "maintenance transportation",
+  UD = "infantry", UE = "cavalry armor", UF = "artillery", UG = "military engineering air forces",
+  UH = "services", VA = "navies organization distribution naval situation", VB = "naval administration", VC = "naval maintenance",
+  VD = "naval seamen", VE = "marines", VF = "naval ordnance", VG = "minor services navies",
+  VK = "navigation merchant marine", VM = "naval architecture shipbuilding marine engineering", ZA = "information resources"
+)
+
+# Subclass codes that also read as a common abbreviation in scientific/everyday
+# use (curated, not exhaustive). A *bare* code from this set is too ambiguous to
+# treat as LCC (e.g. ML machine learning, QA quality assurance, CT scan, PR public
+# relations, NA not applicable), so only the code+caption form is removed for these.
+LCC_SUBCLASS_ABBREV <- c(
+  "AC", "AE", "AG", "AI", "AM", "AN", "AP", "AS", "AZ",
+  "BC", "BD", "BF", "BL", "BM", "BP", "BR", "BS", "BT", "BV",
+  "CB", "CC", "CD", "CE", "CN", "CR", "CS", "CT",
+  "DA", "DAW", "DB", "DC", "DE", "DF", "DJ", "DK", "DL", "DP", "DR", "DS", "DT", "DU", "DX",
+  "GA", "GB", "GC", "GE", "GF", "GN", "GR", "GT",
+  "HA", "HB", "HC", "HD", "HE", "HF", "HG", "HM", "HN", "HQ", "HS", "HT", "HV", "HX",
+  "JS", "JV", "KB", "KE", "KG",
+  "LA", "LB", "LC", "LD", "LF", "LG", "LH", "LT", "ML", "MT",
+  "NA", "NB", "NC", "ND", "NE", "NK",
+  "PA", "PB", "PC", "PD", "PE", "PG", "PH", "PK", "PL", "PM", "PN", "PR", "PS", "PT",
+  "QA", "QB", "QC", "QD", "QE", "QM", "QR",
+  "RA", "RB", "RC", "RD", "RE", "RF", "RL", "RM", "RS", "RT", "RV", "RX",
+  "SB", "SD", "SF", "SH", "SK",
+  "TA", "TC", "TD", "TE", "TF", "TG", "TH", "TL", "TN", "TP", "TR", "TS", "TX",
+  "UA", "UB", "UC", "UE", "UF", "UG",
+  "VA", "VB", "VC", "VD", "VF", "VM"
+)
+
+# Collision-free subclasses: a bare code from this set is safe to remove as LCC,
+# because it is not a common abbreviation. Derived so it always equals the full
+# subclass set minus the abbreviation collisions above.
+LCC_SUBCLASS_COLLISION_FREE <- setdiff(names(LCC_SUBCLASS_WORDS), LCC_SUBCLASS_ABBREV)
+
+drop_lcc_subclass <- function(keywords) {
+  # Drop LCC subclasses in the forms where the code is unambiguous:
+  #   * code + digits, bare or with caption ("QA76", "QA76 Computer software");
+  #   * code + caption whose first word is part of the subclass heading
+  #     ("QA Mathematics", "ML Literature of music").
+  # The caption match keeps abbreviation expansions that share a subclass code
+  # ("AI Artificial Intelligence", "CT Computed Tomography", "QA testing").
+  # The digit form drops bare codes too (e.g. "GF125"): the digits make it
+  # unambiguous LCC, and the rare biomedical-marker collisions (CD4, TP53) are an
+  # acceptable trade-off for cluster summarisation, where an LCC code surfacing in
+  # an area title is worse than dropping the occasional marker keyword.
+  # (A bare code WITHOUT digits is handled by drop_lcc_subclass_bare, which only
+  # touches the collision-free set.)
+  codes <- names(LCC_SUBCLASS_WORDS)
+  alt <- paste(codes[order(nchar(codes), decreasing = TRUE)], collapse = "|")  # longest first
+  # code + digits (bare, or followed by a caption)
+  drop <- grepl(paste0("^(", alt, ")[0-9]{1,4}(\\.[0-9]+)?( |$)"), keywords, perl = TRUE)
+  # code + caption whose leading word belongs to the subclass heading
+  m <- regmatches(keywords, regexec(paste0("^(", alt, ") (.+)$"), keywords, perl = TRUE))
+  for (i in which(!drop)) {
+    mm <- m[[i]]
+    if (length(mm) == 3) {
+      first <- tolower(sub("[^A-Za-z].*$", "", mm[[3]]))
+      if (nzchar(first) &&
+          first %in% strsplit(LCC_SUBCLASS_WORDS[[mm[[2]]]], " ", fixed = TRUE)[[1]]) {
+        drop[i] <- TRUE
+      }
+    }
+  }
+  keywords[!drop]
+}
+
+drop_lcc_subclass_bare <- function(keywords) {
+  # Drop a bare subclass code (no caption), but only from the collision-free set,
+  # so abbreviation collisions (ML, QA, CT, ...) are kept. Exact, case-sensitive
+  # match: a keyword that *is* exactly "QH"/"QK"/... and nothing else.
+  keywords[!(keywords %in% LCC_SUBCLASS_COLLISION_FREE)]
+}
+
 # drop_domain_general <- function(keywords) {
 #   # Library of Congress "(General)" subjects, e.g. "Biology (General)".
 #   # Currently removed by the legacy gsub chain; enable when that is retired.
@@ -392,6 +562,9 @@ clean_classification_keywords <- function(x) {
     keywords <- drop_url(keywords)
     keywords <- drop_numeric_path(keywords)
     keywords <- drop_letter_domain(keywords)
+    keywords <- drop_lcc_toplevel(keywords)
+    keywords <- drop_lcc_subclass(keywords)
+    keywords <- drop_lcc_subclass_bare(keywords)
     # keywords <- drop_domain_general(keywords)  # handled by legacy chain for now
     join_keywords(keywords)
   }
