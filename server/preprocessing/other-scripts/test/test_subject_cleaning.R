@@ -67,6 +67,63 @@ test_that("MeSH subheading qualifiers are stripped, descriptor kept", {
 test_that("the major-topic '*' marker is trimmed from the descriptor", {
   expect_equal(strip_mesh_qualifier("Raynaud Disease* / genetics"), "Raynaud Disease")
 })
+test_that("a '*' marker after the qualifier is handled", {
+  expect_equal(strip_mesh_qualifier("Lung Neoplasms/genetics*"), "Lung Neoplasms")
+  expect_equal(strip_mesh_qualifier("Anti-Inflammatory Agents/pharmacology*"), "Anti-Inflammatory Agents")
+  expect_equal(strip_mesh_qualifier("Antimutagenic Agents / pharmacology*"), "Antimutagenic Agents")
+})
+test_that("the ' - ' (spaced dash) separator is handled", {
+  expect_equal(strip_mesh_qualifier("Acyltransferases - genetics"), "Acyltransferases")
+  expect_equal(strip_mesh_qualifier("ATP-Binding Cassette Transporters - antagonists & inhibitors"),
+               "ATP-Binding Cassette Transporters")
+  expect_equal(
+    strip_mesh_qualifier("Adrenergic Alpha-Agonists - Antagonists & Inhibitors - Pharmacology"),
+    "Adrenergic Alpha-Agonists")
+})
+test_that("hyphenated descriptors are not split by the dash separator", {
+  for (kw in c("B-cell lymphoma", "Self-Esteem", "Brain - Computer Interface")) {
+    expect_equal(strip_mesh_qualifier(kw), kw)
+  }
+})
+test_that("space-delimited MeSH blobs are split at qualifier boundaries", {
+  expect_equal(
+    strip_mesh_qualifier("CXC/*antagonists & inhibitors/metabolism Chemotaxis/drug effects Docosahexaenoic Acids/pharmacology"),
+    "CXC; Chemotaxis; Docosahexaenoic Acids")
+  expect_equal(
+    strip_mesh_qualifier("Cell Cycle Proteins/*genetics Cell Line"),
+    "Cell Cycle Proteins; Cell Line")
+})
+test_that("a '*' major-topic marker also starts a new heading", {
+  expect_equal(strip_mesh_qualifier("Cytokines/immunology *Immunity"), "Cytokines; Immunity")
+})
+test_that("a stacked qualifier run splits even before a lower-case heading", {
+  # next heading is a gene name "rab3A" (lower-case); the 2+ qualifier stack is
+  # still unambiguous, so it splits and strips.
+  expect_equal(
+    strip_mesh_qualifier("Spermatozoa/cytology/drug effects/metabolism rab3A GTP-Binding Protein"),
+    "Spermatozoa; rab3A GTP-Binding Protein")
+})
+test_that("headings concatenated with no delimiter are split at the qualifier", {
+  expect_equal(
+    strip_mesh_qualifier("Adrenergic beta-Antagonists/therapeutic useCalcium Channel Blockers/therapeutic use"),
+    "Adrenergic beta-Antagonists; Calcium Channel Blockers")
+})
+test_that("qualifier-less headings stay merged (under-split, never wrongly broken)", {
+  # "Animals" has no qualifier to anchor on, so it stays glued to its neighbour.
+  expect_equal(strip_mesh_qualifier("Animals Cell Cycle Proteins/*genetics Cell Line"),
+               "Animals Cell Cycle Proteins; Cell Line")
+})
+test_that("a qualifier word inside a compound is not a blob boundary", {
+  # "/economics" is followed by lowercase "policy", so it is a compound, not a pair.
+  expect_equal(strip_mesh_qualifier("Health/economics policy"), "Health/economics policy")
+})
+test_that("a qualifier behind a MeSH marker is stripped (marker removed first, as in base.R)", {
+  # base.R strips [MeSH]/(mesh) before strip_mesh_qualifier, so the qualifier is no
+  # longer hidden behind the marker at the heading boundary.
+  s <- "Acetophenones/therapeutic use [MeSH]"
+  s <- remove_text_in_square_brackets_from_keywords(s)
+  expect_equal(strip_mesh_qualifier(s), "Acetophenones")
+})
 test_that("the colon form is stripped in isolation (live pipeline removes it earlier)", {
   expect_equal(strip_mesh_qualifier("Hypothermia: chemically induced"), "Hypothermia")
 })

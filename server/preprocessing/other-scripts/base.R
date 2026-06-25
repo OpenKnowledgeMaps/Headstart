@@ -258,9 +258,6 @@ etl <- function(res, repo, non_public) {
     # de-invert comma-inverted MeSH descriptors (marker preserved).
     # Runs before the marker-stripping steps so [MeSH]/(mesh) are still present.
     subject_cleaned = deinvert_marked_mesh_keywords(subject_cleaned)
-    # strip MeSH subheading qualifiers, keeping the descriptor
-    # ("Autistic Disorder/genetics" -> "Autistic Disorder").
-    subject_cleaned = strip_mesh_qualifier(subject_cleaned)
     # drop whole keywords that are additional classifications. Runs before the
     # bracket strip so leading-bracket classifications (e.g. HAL [SHS.ECO]...)
     # are still intact.
@@ -268,6 +265,11 @@ etl <- function(res, repo, non_public) {
     # strip the "(mesh)" marker ("[MeSH]" is handled just below).
     subject_cleaned = remove_mesh_round_bracket_marker(subject_cleaned)
     subject_cleaned = remove_text_in_square_brackets_from_keywords(subject_cleaned)
+    # strip MeSH subheading qualifiers, keeping the descriptor
+    # ("Autistic Disorder/genetics" -> "Autistic Disorder"). Runs AFTER marker
+    # removal so a trailing "[MeSH]"/"(mesh)" does not sit between the qualifier
+    # and the heading boundary and block the strip.
+    subject_cleaned = strip_mesh_qualifier(subject_cleaned)
   }
 
   subject_cleaned = gsub("\\[[^\\[]+\\][^\\;]+(;|$)?", "", subject_cleaned) # remove classification

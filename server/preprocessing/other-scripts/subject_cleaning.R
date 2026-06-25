@@ -125,32 +125,56 @@ MESH_QUALIFIER_ALTERNATION <- paste(
 )
 
 strip_mesh_qualifier <- function(x) {
-  # MeSH descriptor/qualifier pairs: drop the trailing subheading, keep the
-  # descriptor. "Autistic Disorder/genetics" -> "Autistic Disorder",
-  # "Hospitals/*supply & distribution" -> "Hospitals". The separator is "/" or
-  # ":" (with or without surrounding spaces), the qualifier may carry a leading
-  # "*" major-topic marker, and a "*" left on the descriptor is trimmed too.
-  # Only subheadings from the authoritative NLM list are removed, so genuine
-  # compounds ("Mixed/Augmented Reality") are untouched.
+  # MeSH descriptor/qualifier handling. A qualifier always ends a heading, so a
+  # qualifier run is the anchor for both jobs:
+  #   * strip the qualifier from a "Descriptor/qualifier" pair, keeping the
+  #     descriptor: "Autistic Disorder/genetics" -> "Autistic Disorder".
+  #   * split a space-delimited blob of headings (some sources deliver MeSH
+  #     space-joined rather than "; "-separated) by inserting "; " where a
+  #     qualifier run is followed by the next heading:
+  #     "Cell Cycle Proteins/*genetics Cell Line" -> "Cell Cycle Proteins; Cell Line".
+  # The separator is "/", ":" (optional surrounding spaces) or " - " (a dash that
+  # must be surrounded by spaces, so hyphenated descriptors like "Alpha-Agonists"
+  # are not split); the qualifier may carry a "*" major-topic marker on either
+  # side. A run is only treated as a boundary when followed by end-of-text or the
+  # start of another heading (space + capital/'*'/digit/'('), so genuine compounds
+  # like "Health/economics policy" or "Mixed/Augmented Reality" are left intact.
+  # Only subheadings from the authoritative NLM list are matched.
+  #
+  # Blob splitting is best-effort and intentionally under-splits: it never breaks
+  # a real descriptor, but runs of qualifier-less headings (MeSH check tags such
+  # as "Animals", "Humans") stay merged because there is no qualifier to anchor on.
   #
   # KNOWN LIMITATION: in the live base.R order the colon form ("Hypothermia:
   # chemically induced") is usually already removed whole by the generic
   # "prefix:annotation" gsub before this runs, taking the descriptor with it. So
-  # in practice this mainly affects the slash form; the colon form is the same
-  # legacy-ordering interference that trips up the classification drops.
-  pat <- paste0("^(.+?)\\s*[/:]\\s*\\*?\\s*(", MESH_QUALIFIER_ALTERNATION, ")\\s*$")
+  # in practice this mainly affects the slash and dash forms; the colon form is
+  # the same legacy-ordering interference that trips up the classification drops.
+  qual <- MESH_QUALIFIER_ALTERNATION
+  # a single "<sep><*?>qualifier<*?>" unit (separator is /, : or a spaced dash).
+  unit <- paste0("(?:\\s*[/:]\\s*|\\s+-\\s+)\\*?\\s*(?i:", qual, ")\\s*\\*?")
+  # A *stack* of 2+ qualifiers is unambiguously a MeSH descriptor/qualifier
+  # construction, so always split it (handles blobs whose next heading starts
+  # lower-case, e.g. a gene name "rab3A ...").
+  stack <- paste0("(?:", unit, "){2,}")
+  # A *single* qualifier is only a boundary before end-of-text or an upper-case
+  # next heading. The next heading may follow with no space (some sources mash
+  # headings together, "therapeutic useAngiotensin..."), so the space is optional;
+  # the case-sensitive capital still leaves a lower-case compound continuation
+  # ("Health/economics policy") intact.
+  single <- paste0("(?:", unit, ")(?=\\s*$|\\s*[*A-Z0-9(])")
   one <- function(subject) {
     if (is.na(subject) || subject == "") return(subject)
     kws <- trimws(strsplit(subject, ";", fixed = TRUE)[[1]])
     out <- vapply(kws, function(kw) {
-      stripped <- kw
-      repeat {                                   # handle stacked qualifiers
-        s <- sub(pat, "\\1", stripped, ignore.case = TRUE, perl = TRUE)
-        if (identical(s, stripped)) break
-        stripped <- s
-      }
-      if (!identical(stripped, kw)) stripped <- trimws(gsub("*", "", stripped, fixed = TRUE))
-      stripped
+      s <- gsub(stack, "; ", kw, perl = TRUE)
+      s <- gsub(single, "; ", s, perl = TRUE)
+      if (identical(s, kw)) return(kw)            # no qualifier: not a MeSH pair/blob
+      # a "*" major-topic marker also starts a new heading; trim leftover "*".
+      s <- gsub("\\s+\\*(?=[A-Za-z(])", "; ", s, perl = TRUE)
+      s <- sub("^\\*", "", s)
+      parts <- trimws(gsub("*", "", trimws(strsplit(s, ";", fixed = TRUE)[[1]]), fixed = TRUE))
+      paste(parts[nzchar(parts)], collapse = "; ")
     }, character(1), USE.NAMES = FALSE)
     paste(out, collapse = "; ")
   }
