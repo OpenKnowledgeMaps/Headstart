@@ -55,6 +55,14 @@ export const CLASSIFICATION_MARKERS: { name: string; re: RegExp }[] = [
   { name: "url", re: /^https?:\/\// },
   { name: "not elsewhere classified", re: /not elsewhere classified/i },
   { name: "numeric path", re: /^\/[0-9/]+$/ },
+  // Funder grant / scheme reference, e.g. "SP/19/3/34678", "MR/S003991/1".
+  // Conservative regression marker: requires 3+ slash-separated alphanumeric
+  // segments with both a letter and a digit, so 1-slash MeSH/gene forms
+  // ("COVID-19/epidemiology", "HER-2/neu") and all-digit dates are not matched.
+  {
+    name: "grant id (slash code)",
+    re: /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z0-9][A-Za-z0-9-]*(\/[A-Za-z0-9][A-Za-z0-9-]*){2,}$/,
+  },
 ];
 
 // MeSH subheadings/qualifiers (mirrors MESH_QUALIFIERS in subject_cleaning.R).

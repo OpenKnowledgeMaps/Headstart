@@ -268,6 +268,18 @@ drop_numeric_path <- function(keywords) {
   keywords[!grepl("^[0-9/]*/[0-9/]*$", keywords)]
 }
 
+drop_grant_id <- function(keywords) {
+  # Funder grant / scheme reference numbers: 3+ slash-separated alphanumeric
+  # segments (no spaces) containing a digit, e.g. "SP/19/3/34678", "HDRUK/CFC/01",
+  # "MR/S003991/1". Requiring 2+ slashes excludes the 1-slash forms that are MeSH
+  # descriptor/qualifier ("COVID-19/epidemiology") or gene names ("HER-2/neu");
+  # all-digit numeric paths are handled by drop_numeric_path. False positives are
+  # negligible: no such keyword occurs in a broad BASE corpus outside grant IDs.
+  is_grant <- grepl("^[A-Za-z0-9][A-Za-z0-9-]*(/[A-Za-z0-9][A-Za-z0-9-]*){2,}$", keywords, perl = TRUE) &
+    grepl("[0-9]", keywords) & !grepl("^[0-9/]+$", keywords)
+  keywords[!is_grant]
+}
+
 # Toulouse Capitole (TSE) subject headings (top level + sub-categories),
 # hardcoded from https://publications.ut-capitole.fr/view/subjects/ . A keyword
 # equal to one of these (e.g. "B- ECONOMIE et FINANCE") is a subject
@@ -561,6 +573,7 @@ clean_classification_keywords <- function(x) {
     keywords <- drop_hal_shs(keywords)
     keywords <- drop_url(keywords)
     keywords <- drop_numeric_path(keywords)
+    keywords <- drop_grant_id(keywords)
     keywords <- drop_letter_domain(keywords)
     keywords <- drop_lcc_toplevel(keywords)
     keywords <- drop_lcc_subclass(keywords)

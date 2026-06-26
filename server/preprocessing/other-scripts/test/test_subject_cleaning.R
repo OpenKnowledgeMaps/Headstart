@@ -190,6 +190,18 @@ test_that("URL keywords are dropped", {
 test_that("numeric path keywords are dropped", {
   drops_to_cooperation("/692/308/174")
 })
+test_that("funder grant / scheme IDs are dropped", {
+  drops_to_cooperation("SP/19/3/34678")
+  drops_to_cooperation("HDRUK/CFC/01")
+  drops_to_cooperation("MR/S003991/1")
+  drops_to_cooperation("FS/11/2/28579")
+})
+test_that("grant-id look-alikes are NOT dropped", {
+  # 1-slash forms (MeSH qualifier / gene names), no-digit, and dates are kept.
+  for (kw in c("COVID-19/epidemiology", "HER-2/neu", "CD4/CD8", "A/B/C", "2019/12/31")) {
+    expect_equal(drop_grant_id(kw), kw)
+  }
+})
 test_that("Toulouse letter-domain subjects are dropped (top level + sub-categories)", {
   drops_to_cooperation("B- ECONOMIE ET FINANCE")
   drops_to_cooperation("A1-4- Droit de l'informatique")
