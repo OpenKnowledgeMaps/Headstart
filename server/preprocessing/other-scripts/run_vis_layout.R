@@ -15,13 +15,11 @@ library(tibble)
 library(tidyr)
 source('utils.R')
 source("vis_layout.R")
-if (Sys.getenv("LOGLEVEL") == "DEBUG") {
-  DEBUG <- FALSE
-} else {
-  DEBUG <- TRUE
-}
+# DEBUG mirrors LOGLEVEL=DEBUG (the previous logic was inverted, so DEBUG had no
+# effect). It gates both verbose logging and the debug data dumps (see dump_data).
+DEBUG <- debug_enabled()
 
-if (DEBUG==TRUE){
+if (DEBUG) {
   setup_logging('DEBUG')
 } else {
   setup_logging('INFO')

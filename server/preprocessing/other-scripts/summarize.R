@@ -1,19 +1,38 @@
 library(stringr)
 vslog <- getLogger('vis.summarize')
 
+# summarize.R
+# Cluster labelling for the overview visualisation: turns each cluster of papers
+# into a short, human-readable area title. create_cluster_labels() is the entry
+# point (called from vis_layout.R); the helpers build a per-cluster text corpus,
+# rank candidate terms by tf-idf, prune and de-nest n-grams, and fix casing.
+# Tokens are kept ";"-separated throughout because SplitTokenizer (the
+# TermDocumentMatrix tokenizer) splits terms on ";".
+
+# Tokenizer used by the TermDocumentMatrix: splits a document into terms on ";".
+# The corpus joins tokens (words and "_"-joined n-grams) with ";", so this
+# recovers them as individual terms without re-splitting the n-grams.
 SplitTokenizer <- function(x) {
   tokens = unlist(lapply(strsplit(words(x), split=";"), paste), use.names = FALSE)
   return(tokens)
 }
 
+# Strip leading and trailing whitespace from a string.
 trim <- function (x) gsub("^\\s+|\\s+$", "", x)
 
 
+# Generate all contiguous n-grams of length n from each input string. The words
+# within an n-gram are joined with "_" so a whitespace tokenizer keeps the n-gram
+# intact. Returns, per input string, a single space-separated string of its n-grams.
 expand_ngrams <- function(text, n) {
   text <- trimws(text)
   lapply(lapply(text, function(x)unlist(lapply(ngrams(unlist(strsplit(x, split = " ")), n), paste, collapse  = "_"))), paste, collapse = " ")
 }
 
+# Drop low-value n-grams from a set of "_"-joined n-grams. Removes n-grams that
+# start or end with a stopword, whose first and last token are identical, or that
+# are shorter than 2 tokens; stopwords are checked in batches for speed. Returns,
+# per input, the surviving n-grams joined with ";".
 prune_ngrams <- function(ngrams, stops){
   ngrams = mapply(strsplit, ngrams, split=" |;")
   tokenized_ngrams = mapply(function(x) {
@@ -48,17 +67,39 @@ prune_ngrams <- function(ngrams, stops){
   return (pruned_ngrams)
 }
 
+# Entry point: assign a short label ("area title") to every cluster.
+# Builds one pseudo-document per cluster from its papers' subjects + title
+# n-grams (or a custom field), ranks terms by tf-idf (SMART "ntn"), and keeps the
+# top top_n as the label. Clusters with no surviving tf-idf terms fall back to the
+# most frequent bi-/tri-grams of their papers' titles and abstracts. Casing is
+# then normalised against the corpus.
+#   clusters           : list with $groups (cluster id per paper) and $num_clusters.
+#   metadata           : data frame with title, subject, paper_abstract (+ optional
+#                        custom_clustering / annotations fields named in params).
+#   type_counts        : term -> count map, used to restore original casing.
+#   top_n              : number of terms kept per label.
+#   stops              : stopword vector.
+#   taxonomy_separator : if set, taxonomy subjects keep only their last path segment.
+# Returns clusters with $cluster_labels filled: one label per paper, identical
+# for all papers in the same cluster.
 create_cluster_labels <- function(clusters, metadata,
                                   type_counts,
                                   weightingspec,
                                   top_n, stops, taxonomy_separator="/",
                                   params=NULL) {
+  vslog$debug(paste("create_cluster_labels:", clusters$num_clusters, "clusters,",
+                    nrow(metadata), "papers"))
+  dump_data(clusters, "summarize_01_clusters")
+  dump_data(metadata[, intersect(c("id", "title", "subject", "subject_orig", "paper_abstract"),
+                                  names(metadata)), drop = FALSE], "summarize_02_metadata")
+  dump_data(type_counts, "summarize_03_type_counts")
   cc <- params$custom_clustering
   if (!(is.null(cc)) && (cc %in% names(metadata))) {
     nn_corpus <- get_custom_cluster_corpus(clusters, metadata, stops, taxonomy_separator, custom_clustering=cc)
   } else {
     nn_corpus <- get_cluster_corpus(clusters, metadata, stops, taxonomy_separator)
   }
+  dump_data(nn_corpus, "summarize_04_corpus")
   nn_tfidf <- TermDocumentMatrix(nn_corpus, control = list(
     tokenize = SplitTokenizer,
     weighting = function(x) weightSMART(x, spec="ntn"),
@@ -67,8 +108,11 @@ create_cluster_labels <- function(clusters, metadata,
   ))
   tfidf_top <- apply(nn_tfidf, 2, function(x) {x2 <- sort(x, TRUE);x2[x2>0]})
   empty_tfidf <- which(apply(nn_tfidf, 2, sum)==0)
+  vslog$debug(paste("create_cluster_labels: tf-idf matrix", nTerms(nn_tfidf), "terms x",
+                    nDocs(nn_tfidf), "clusters;", length(empty_tfidf), "clusters need a fallback"))
   tfidf_top[c(empty_tfidf)] <- fill_empty_clusters(nn_tfidf, nn_corpus)[c(empty_tfidf)]
   tfidf_top_names <- get_top_names(tfidf_top, top_n, stops)
+  dump_data(tfidf_top_names, "summarize_05_tfidf_top_names")
   clusters$cluster_labels = ""
   batch_size <- 1000
   total_length <- length(stops)
@@ -76,6 +120,12 @@ create_cluster_labels <- function(clusters, metadata,
     matches = which(unname(clusters$groups == k) == TRUE)
     summary = tfidf_top_names[[k]]
     if (summary == "") {
+  # Cluster label generation fallback:
+  # This is applied to clusters that have no top names,
+  # and will be used to generate a label from the titles and
+  # abstracts of the papers in the cluster
+      vslog$debug(paste("create_cluster_labels: title/abstract fallback for cluster", k,
+                        "with", length(matches), "papers"))
       candidates = mapply(paste, metadata$title[matches], metadata$paper_abstract[matches])
       candidates = lapply(candidates, tolower)
       for (i in seq(1, total_length, batch_size)) {
@@ -100,10 +150,16 @@ create_cluster_labels <- function(clusters, metadata,
     clusters$cluster_labels = metadata$annotations[[cc]]
   }
   clusters$cluster_labels <- fix_cluster_labels(clusters$cluster_labels, type_counts)
+  dump_data(data.frame(cluster = clusters$groups, label = clusters$cluster_labels),
+            "summarize_06_cluster_labels")
+  vslog$debug(paste("create_cluster_labels: done,",
+                    length(unique(clusters$cluster_labels)), "distinct labels"))
   return(clusters)
 }
 
 
+# Normalise a vector of cluster labels: restore term casing (fix_keyword_casing)
+# and collapse repeated commas. Returns the cleaned labels.
 fix_cluster_labels <- function(clusterlabels, type_counts){
   unlist(mclapply(clusterlabels, function(x) {
     x <- fix_keyword_casing(x, type_counts)
@@ -112,6 +168,9 @@ fix_cluster_labels <- function(clusterlabels, type_counts){
     }))
 }
 
+# Restore the casing of each word in a single label and capitalise the first
+# letter of every comma-separated phrase. Words are matched back to their
+# original corpus casing via match_keyword_case(type_counts).
 fix_keyword_casing <- function(keyword, type_counts) {
   kw = strsplit(keyword, ", ")
   kw = lapply(kw, strsplit, " ")[[1]]
@@ -122,11 +181,18 @@ fix_keyword_casing <- function(keyword, type_counts) {
   return(paste(kw, collapse = ", "))
 }
 
+# Return the canonical (original-corpus) casing of a token: looks it up in
+# type_counts case-insensitively, ignoring hyphens. Falls back to the input
+# token if there is no match.
 match_keyword_case <- function(x, type_counts) {
   y <- names(type_counts[which(tolower(names(type_counts)) == gsub("-", "", tolower(x)))][1])
   if (!is.na(y)) return(y) else return(x)
 }
 
+# Build the per-cluster corpus from a custom metadata field (custom_clustering)
+# instead of subjects. Per cluster: removes stopwords, then joins and normalises
+# the field values into a single ";"-separated token string. Returns a VCorpus
+# with one document per cluster.
 get_custom_cluster_corpus <- function(clusters, metadata, stops, taxonomy_separator,
                                add_title_ngrams = T, custom_clustering=NULL) {
   subjectlist = list()
@@ -152,6 +218,12 @@ get_custom_cluster_corpus <- function(clusters, metadata, stops, taxonomy_separa
   return(nn_corpus)
 }
 
+# Build the per-cluster corpus used for tf-idf labelling. Per cluster: combines
+# the papers' `subject` keywords with bi-/tri-grams from their titles. Taxonomy
+# subjects (containing taxonomy_separator) are reduced to their last path segment.
+# Everything is normalised into one ";"-separated token string per cluster.
+# Returns a VCorpus with one document per cluster. add_title_ngrams toggles the
+# title n-gram contribution.
 get_cluster_corpus <- function(clusters, metadata, stops, taxonomy_separator,
                                add_title_ngrams = T, custom_clustering=NULL) {
   subjectlist = list()
@@ -196,6 +268,9 @@ get_cluster_corpus <- function(clusters, metadata, stops, taxonomy_separator,
 }
 
 
+# Turn the ranked tf-idf terms of each cluster into a display label: prunes
+# stopword-edged n-grams, removes n-grams nested inside others (keeping the more
+# specific one), capitalises, and returns the top_n terms joined with ", ".
 get_top_names <- function(tfidf_top, top_n, stops) {
   tfidf_top_names <- lapply(tfidf_top, names)
   tfidf_top_names <- lapply(tfidf_top_names, function(x) {another_prune_ngrams(x, stops)})
@@ -206,6 +281,9 @@ get_top_names <- function(tfidf_top, top_n, stops) {
   return(tfidf_top_names)
 }
 
+# Variant of prune_ngrams used on tf-idf term names: drops n-grams that start or
+# end with a stopword or whose first and last token are identical. Tolerant of
+# empty/NA tokens. Returns the surviving "_"-joined n-grams.
 another_prune_ngrams <- function(ngrams, stops){
   # filter out stopwords from start or stop of ngrams
   tokens <- unname(unlist(ngrams))
@@ -253,6 +331,10 @@ another_prune_ngrams <- function(ngrams, stops){
   return(tokens)
 }
 
+# Provide fallback top terms for clusters that produced none under the strict
+# tf-idf bound, by recomputing the TermDocumentMatrix with a looser local bound
+# (terms appearing at least once, instead of at least twice). Returns the
+# per-cluster sorted term lists.
 fill_empty_clusters <- function(nn_tfidf, nn_corpus){
   replacement_nn_tfidf <- TermDocumentMatrix(nn_corpus, control = list(tokenize = SplitTokenizer,
                                                           weighting = function(x) weightSMART(x, spec="ntn"),
@@ -263,6 +345,9 @@ fill_empty_clusters <- function(nn_tfidf, nn_corpus){
 }
 
 
+# Extract pruned bi- and tri-grams from a set of titles (see prune_ngrams) and
+# return them concatenated. Note: ngram_lengths is currently unused — lengths 2
+# and 3 are hardcoded.
 get_title_ngrams <- function(titles, stops, ngram_lengths) {
   # for ngrams: we have to collapse with "_" or else tokenizers will split ngrams again at that point and we'll be left with unigrams
   titles_bigrams = prune_ngrams(expand_ngrams(titles, 2), stops)
@@ -271,6 +356,10 @@ get_title_ngrams <- function(titles, stops, ngram_lengths) {
 }
 
 
+# De-duplicate overlapping n-grams, preferring the more specific phrase: if a
+# candidate is a substring of an already-kept name it is skipped; if a kept name
+# is a substring of the candidate it is replaced by the candidate; otherwise the
+# candidate is added. Returns up to top_n unique names.
 filter_out_nested_ngrams <- function(top_ngrams, top_n) {
   top_names <- list()
   for (ngram in top_ngrams) {

@@ -53,21 +53,53 @@ get_stopwords <- function(languages) {
 }
 
 
+# Configure logging at the given level. Sets the *root logger level* so that
+# records at `loglevel` and above are actually emitted -- the previous version
+# called getLogger(loglevel), which only created a logger named after the level
+# and left the root at INFO, so every $debug() message was silently dropped.
+# Records are written to LOGFILE when it is set, otherwise to the console.
 setup_logging <- function(loglevel) {
-  # checks if LOGFILE is defined,
-  # if not logs to console only
+  setLevel(loglevel)
+  removeHandler('basic.stdout')
   if (Sys.getenv("LOGFILE") == ""){
-    getLogger(loglevel)
-    removeHandler('basic.stdout')
-    addHandler(writeToConsole)
+    addHandler(writeToConsole, level = loglevel)
   } else {
     if (!file.exists(Sys.getenv("LOGFILE"))) {
       file.create(Sys.getenv("LOGFILE"))
     }
-    getLogger(loglevel)
-    removeHandler('basic.stdout')
-    addHandler(writeToFile, file=Sys.getenv("LOGFILE"))
+    addHandler(writeToFile, file = Sys.getenv("LOGFILE"), level = loglevel)
   }
+}
+
+
+# TRUE when debug logging and data dumping are enabled (LOGLEVEL=DEBUG). Single
+# source of truth for the debug flag, reused for both verbose logs and dumps.
+debug_enabled <- function() {
+  Sys.getenv("LOGLEVEL") == "DEBUG"
+}
+
+
+# Dump an intermediate object to a per-vis debug folder, for manual inspection
+# and as test fixtures -- mirrors the _log_dataframe pattern of the BASE/ORCID
+# workers. Only writes when debug_enabled(). Data frames are written as CSV, other
+# R objects (lists, corpora, ...) as RDS, under <DUMP_DIR>/<vis_id>/<stage>.<ext>
+# (DUMP_DIR defaults to /headstart/output). Failures are logged, never fatal.
+dump_data <- function(obj, stage) {
+  if (!debug_enabled()) return(invisible(NULL))
+  vis_id <- .GlobalEnv$VIS_ID
+  if (is.null(vis_id) || identical(vis_id, "")) vis_id <- "unknown"
+  out_dir <- file.path(Sys.getenv("DUMP_DIR", unset = "/headstart/output"), vis_id)
+  tryCatch({
+    dir.create(out_dir, recursive = TRUE, showWarnings = FALSE)
+    if (is.data.frame(obj)) {
+      write.csv(obj, file.path(out_dir, paste0(stage, ".csv")), row.names = FALSE)
+    } else {
+      saveRDS(obj, file.path(out_dir, paste0(stage, ".rds")))
+    }
+  }, error = function(e) {
+    logwarn(paste("dump_data failed for stage", stage, ":", conditionMessage(e)))
+  })
+  invisible(NULL)
 }
 
 
