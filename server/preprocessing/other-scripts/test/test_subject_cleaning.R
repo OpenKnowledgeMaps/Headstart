@@ -1,12 +1,19 @@
 # Unit & integration tests for the subject/keyword cleaning.
 #
-# Run from the other-scripts directory, e.g.:
+# Run via the test runner (from the other-scripts directory):
+#   Rscript test/run_tests.R
+# or, with testthat installed:
 #   Rscript -e 'library(testthat); test_file("test/test_subject_cleaning.R")'
 #
 # subject_cleaning.R is pure base R (no packages, no logging), so it can be
-# sourced and tested in isolation.
+# sourced and tested in isolation. When testthat is not installed, the runner
+# provides a dependency-free shim with the same test_that/expect_* API.
 
-library(testthat)
+if (!requireNamespace("testthat", quietly = TRUE)) {
+  if (!exists("test_that")) source("test/testthat_shim.R")
+} else {
+  library(testthat)
+}
 
 if (!exists("deinvert_marked_mesh_keywords")) {
   source("subject_cleaning.R")

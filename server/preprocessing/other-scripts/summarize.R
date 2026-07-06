@@ -80,13 +80,15 @@ prune_ngrams <- function(ngrams, stops){
 #   top_n              : number of terms kept per label.
 #   stops              : stopword vector.
 #   taxonomy_separator : if set, taxonomy subjects keep only their last path segment.
+#   service            : data integration name (base|pubmed|orcid|openaire|…), used
+#                        to resolve the per-integration ranking mode (see ranking.R).
 # Returns clusters with $cluster_labels filled: one label per paper, identical
 # for all papers in the same cluster.
 create_cluster_labels <- function(clusters, metadata,
                                   type_counts,
                                   weightingspec,
                                   top_n, stops, taxonomy_separator="/",
-                                  params=NULL) {
+                                  params=NULL, service=NULL) {
   vslog$debug(paste("create_cluster_labels:", clusters$num_clusters, "clusters,",
                     nrow(metadata), "papers"))
   dump_data(clusters, "summarize_01_clusters")
@@ -111,7 +113,13 @@ create_cluster_labels <- function(clusters, metadata,
   vslog$debug(paste("create_cluster_labels: tf-idf matrix", nTerms(nn_tfidf), "terms x",
                     nDocs(nn_tfidf), "clusters;", length(empty_tfidf), "clusters need a fallback"))
   tfidf_top[c(empty_tfidf)] <- fill_empty_clusters(nn_tfidf, nn_corpus)[c(empty_tfidf)]
-  tfidf_top_names <- get_top_names(tfidf_top, top_n, stops)
+  # Ranking-mode wedge (ranking.R): Mode 0 is the unchanged legacy selection;
+  # Modes 1-3 apply rank-aware selection (Stage 1+). The existing fallbacks below
+  # (title/abstract frequency) remain the final safety net in every mode.
+  mode <- ranking_mode(service)
+  vslog$debug(paste("create_cluster_labels: ranking mode", mode, "for service",
+                    if (is.null(service)) "(none)" else service))
+  tfidf_top_names <- select_cluster_label_names(tfidf_top, top_n, stops, mode = mode)
   dump_data(tfidf_top_names, "summarize_05_tfidf_top_names")
   clusters$cluster_labels = ""
   batch_size <- 1000
@@ -120,10 +128,10 @@ create_cluster_labels <- function(clusters, metadata,
     matches = which(unname(clusters$groups == k) == TRUE)
     summary = tfidf_top_names[[k]]
     if (summary == "") {
-  # Cluster label generation fallback:
-  # This is applied to clusters that have no top names,
-  # and will be used to generate a label from the titles and
-  # abstracts of the papers in the cluster
+      # Cluster label generation fallback:
+      # This is applied to clusters that have no top names,
+      # and will be used to generate a label from the titles and
+      # abstracts of the papers in the cluster
       vslog$debug(paste("create_cluster_labels: title/abstract fallback for cluster", k,
                         "with", length(matches), "papers"))
       candidates = mapply(paste, metadata$title[matches], metadata$paper_abstract[matches])
@@ -227,6 +235,7 @@ get_custom_cluster_corpus <- function(clusters, metadata, stops, taxonomy_separa
 get_cluster_corpus <- function(clusters, metadata, stops, taxonomy_separator,
                                add_title_ngrams = T, custom_clustering=NULL) {
   subjectlist = list()
+  subject_dbg = list(); title_ngram_dbg = list()  # debug: keep the two sources apart
   for (k in seq(1, clusters$num_clusters)) {
     matches = which(unname(clusters$groups == k) == TRUE)
     titles =  metadata$title[matches]
@@ -252,6 +261,8 @@ get_cluster_corpus <- function(clusters, metadata, stops, taxonomy_separator,
       subjects = lapply(subjects, function(x){paste(unlist(x), collapse=";")})
       subjects = mapply(paste, subjects, taxons, collapse=";")
     }
+    subject_dbg[[k]] = paste(unlist(subjects), collapse=";")
+    title_ngram_dbg[[k]] = paste(unlist(title_ngrams), collapse=";")
     if (add_title_ngrams == T) {
       all_subjects = paste(subjects, title_ngrams, collapse=" ")
     } else {
@@ -263,6 +274,12 @@ get_cluster_corpus <- function(clusters, metadata, stops, taxonomy_separator,
     all_subjects <- str_replace_all(all_subjects, " +", ";")
     subjectlist = c(subjectlist, all_subjects)
   }
+  # Debug: record, per cluster, the tokens contributed by subjects vs. by title
+  # n-grams, so a label term can be attributed to its source (see get_title_ngrams).
+  dump_data(data.frame(cluster = seq_along(subjectlist),
+                       subject_tokens = unlist(subject_dbg),
+                       title_ngrams = unlist(title_ngram_dbg)),
+            "summarize_04a_corpus_sources")
   nn_corpus <- VCorpus(VectorSource(subjectlist))
   return(nn_corpus)
 }
