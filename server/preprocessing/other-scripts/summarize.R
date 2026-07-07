@@ -95,6 +95,13 @@ create_cluster_labels <- function(clusters, metadata,
   dump_data(metadata[, intersect(c("id", "title", "subject", "subject_orig", "paper_abstract"),
                                   names(metadata)), drop = FALSE], "summarize_02_metadata")
   dump_data(type_counts, "summarize_03_type_counts")
+  # Replay-harness fixture: capture the complete input bundle so this map can be
+  # replayed offline under any ranking mode (see test/replay_harness.R). RDS only,
+  # debug-gated like the other dumps.
+  dump_data(list(clusters = clusters, metadata = metadata, type_counts = type_counts,
+                 weightingspec = weightingspec, top_n = top_n, stops = stops,
+                 taxonomy_separator = taxonomy_separator, params = params, service = service),
+            "summarize_00_label_inputs")
   cc <- params$custom_clustering
   if (!(is.null(cc)) && (cc %in% names(metadata))) {
     nn_corpus <- get_custom_cluster_corpus(clusters, metadata, stops, taxonomy_separator, custom_clustering=cc)
