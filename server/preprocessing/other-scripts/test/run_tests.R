@@ -24,7 +24,8 @@ if (use_testthat) {
 base_files <- c(
   "test/test_subject_cleaning.R",
   "test/test_ranking_config.R",
-  "test/test_ranking_wedge.R"
+  "test/test_ranking_wedge.R",
+  "test/test_ranking_select.R"
 )
 # Replay tests need the tm stack — included only when tm is available (i.e. inside
 # the pipeline image, run via test/run_tests.sh), skipped on a bare host.

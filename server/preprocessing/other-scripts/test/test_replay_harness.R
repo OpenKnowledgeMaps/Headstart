@@ -33,9 +33,16 @@ test_that("replay is deterministic across repeated runs", {
                replay_labels(bundle, mode = "0"))
 })
 
-test_that("Stage 0: mode 1 output equals mode 0 (wedge is a no-op)", {
-  expect_equal(replay_labels(bundle, mode = "1"),
-               replay_labels(bundle, mode = "0"))
+test_that("mode 1 runs and yields sensible rank-1 labels", {
+  labels <- replay_labels(bundle, mode = "1")
+  expect_equal(length(labels), bundle$clusters$num_clusters)
+  expect_true(all(nzchar(labels)))
+  expect_false(labels[["1"]] == labels[["2"]])
+  # rank 1 = the subject keywords; labels stay on-theme
+  expect_match(tolower(labels[["1"]]), "climate|sea level")
+  expect_match(tolower(labels[["2"]]), "machine|neural|learning")
+  # title-only heuristics (rank 2) are excluded while rank 1 is non-empty
+  expect_false(grepl("recognition|image", tolower(labels[["2"]])))
 })
 
 test_that("replay restores the environment it changed", {
