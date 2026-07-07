@@ -21,6 +21,21 @@ SplitTokenizer <- function(x) {
 trim <- function (x) gsub("^\\s+|\\s+$", "", x)
 
 
+# Normalise a combined token string to the ";"-separated form the SplitTokenizer
+# consumes: drop "?" artifacts, collapse repeated ";", trim spaces around ";", and
+# turn any remaining whitespace into ";". This is the SINGLE source of truth for
+# corpus tokenization, used both to build the corpus document and to derive the
+# per-cluster rank sources — so a rank token can never drift out of the tf-idf term
+# set (the §15-3 invariant; see get_cluster_corpus / ranking.R).
+normalize_corpus_tokens <- function(s) {
+  s <- str_replace_all(s, "\\?+_\\?+|\\?+|\\?+ ", "")
+  s <- str_replace_all(s, ";+", ";")
+  s <- str_replace_all(s, " ?; ?", ";")
+  s <- str_replace_all(s, " +", ";")
+  s
+}
+
+
 # Generate all contiguous n-grams of length n from each input string. The words
 # within an n-gram are joined with "_" so a whitespace tokenizer keeps the n-gram
 # intact. Returns, per input string, a single space-separated string of its n-grams.
@@ -102,17 +117,36 @@ create_cluster_labels <- function(clusters, metadata,
                  weightingspec = weightingspec, top_n = top_n, stops = stops,
                  taxonomy_separator = taxonomy_separator, params = params, service = service),
             "summarize_00_label_inputs")
+  # Additive rank column on the metadata data frame (§16 R6): the rank-1 source.
+  # In Stage 1 this is subject_cleaned verbatim (keywords + MeSH pooled); Stage 2
+  # carves MeSH out into an upstream keywords_rank_mesh column. subject_cleaned
+  # (metadata$subject) is left untouched, so Mode 0 is unaffected.
+  metadata$keywords_rank_cleaned <- metadata$subject
   cc <- params$custom_clustering
   if (!(is.null(cc)) && (cc %in% names(metadata))) {
-    nn_corpus <- get_custom_cluster_corpus(clusters, metadata, stops, taxonomy_separator, custom_clustering=cc)
+    corpus_out <- get_custom_cluster_corpus(clusters, metadata, stops, taxonomy_separator, custom_clustering=cc)
   } else {
-    nn_corpus <- get_cluster_corpus(clusters, metadata, stops, taxonomy_separator)
+    corpus_out <- get_cluster_corpus(clusters, metadata, stops, taxonomy_separator)
   }
+  # get_*_cluster_corpus returns the corpus plus per-cluster rank sources (the
+  # separated keyword/heuristic tokens used only for rank lookup, §3). rank_sources
+  # is NULL on the custom-clustering path, so ranked modes fall back to legacy there.
+  nn_corpus <- corpus_out$corpus
+  rank_sources <- corpus_out$rank_sources
   dump_data(nn_corpus, "summarize_04_corpus")
+  # Resolve the ranking mode BEFORE the TDM: the local frequency bound is
+  # mode-dependent (§6) — c(2, Inf) for Mode 0 (byte-identical legacy), c(1, Inf)
+  # for Modes 1-3 so low-frequency real keywords survive into the ranking. The
+  # corpus text and weighting are otherwise identical across modes.
+  mode <- ranking_mode(service)
+  local_bound <- if (identical(mode, "0")) c(2, Inf) else c(1, Inf)
+  vslog$debug(paste("create_cluster_labels: ranking mode", mode, "for service",
+                    if (is.null(service)) "(none)" else service,
+                    "; local bound", local_bound[1]))
   nn_tfidf <- TermDocumentMatrix(nn_corpus, control = list(
     tokenize = SplitTokenizer,
     weighting = function(x) weightSMART(x, spec="ntn"),
-    bounds = list(local = c(2, Inf)),
+    bounds = list(local = local_bound),
     tolower = TRUE
   ))
   tfidf_top <- apply(nn_tfidf, 2, function(x) {x2 <- sort(x, TRUE);x2[x2>0]})
@@ -121,12 +155,11 @@ create_cluster_labels <- function(clusters, metadata,
                     nDocs(nn_tfidf), "clusters;", length(empty_tfidf), "clusters need a fallback"))
   tfidf_top[c(empty_tfidf)] <- fill_empty_clusters(nn_tfidf, nn_corpus)[c(empty_tfidf)]
   # Ranking-mode wedge (ranking.R): Mode 0 is the unchanged legacy selection;
-  # Modes 1-3 apply rank-aware selection (Stage 1+). The existing fallbacks below
-  # (title/abstract frequency) remain the final safety net in every mode.
-  mode <- ranking_mode(service)
-  vslog$debug(paste("create_cluster_labels: ranking mode", mode, "for service",
-                    if (is.null(service)) "(none)" else service))
-  tfidf_top_names <- select_cluster_label_names(tfidf_top, top_n, stops, mode = mode)
+  # Modes 1-3 apply rank-aware selection over the same global ranking, partitioned
+  # by rank_sources. The existing fallbacks below (title/abstract frequency) remain
+  # the final safety net in every mode.
+  tfidf_top_names <- select_cluster_label_names(tfidf_top, top_n, stops, mode = mode,
+                                                rank_sources = rank_sources)
   dump_data(tfidf_top_names, "summarize_05_tfidf_top_names")
   clusters$cluster_labels = ""
   batch_size <- 1000
@@ -206,8 +239,9 @@ match_keyword_case <- function(x, type_counts) {
 
 # Build the per-cluster corpus from a custom metadata field (custom_clustering)
 # instead of subjects. Per cluster: removes stopwords, then joins and normalises
-# the field values into a single ";"-separated token string. Returns a VCorpus
-# with one document per cluster.
+# the field values into a single ";"-separated token string. Returns
+# list(corpus, rank_sources) with rank_sources = NULL (no provenance split on this
+# path, so ranked modes fall back to legacy selection).
 get_custom_cluster_corpus <- function(clusters, metadata, stops, taxonomy_separator,
                                add_title_ngrams = T, custom_clustering=NULL) {
   subjectlist = list()
@@ -223,22 +257,23 @@ get_custom_cluster_corpus <- function(clusters, metadata, stops, taxonomy_separa
     custom_input = mapply(gsub, custom_input, pattern=" ", replacement="_")
 
     all_subjects = paste(custom_input, collapse=" ")
-    all_subjects <- str_replace_all(all_subjects, "\\?+_\\?+|\\?+|\\?+ ", "")
-    all_subjects <- str_replace_all(all_subjects, ";+", ";")
-    all_subjects <- str_replace_all(all_subjects, " ?; ?", ";")
-    all_subjects <- str_replace_all(all_subjects, " +", ";")
+    all_subjects <- normalize_corpus_tokens(all_subjects)
     subjectlist = c(subjectlist, all_subjects)
   }
+  # Custom clustering has no keyword/heuristic provenance split, so rank_sources is
+  # NULL: ranked modes fall back to the legacy selection on this path (ranking.R).
   nn_corpus <- VCorpus(VectorSource(subjectlist))
-  return(nn_corpus)
+  return(list(corpus = nn_corpus, rank_sources = NULL))
 }
 
 # Build the per-cluster corpus used for tf-idf labelling. Per cluster: combines
 # the papers' `subject` keywords with bi-/tri-grams from their titles. Taxonomy
 # subjects (containing taxonomy_separator) are reduced to their last path segment.
 # Everything is normalised into one ";"-separated token string per cluster.
-# Returns a VCorpus with one document per cluster. add_title_ngrams toggles the
-# title n-gram contribution.
+# Returns list(corpus, rank_sources): a VCorpus with one document per cluster, and
+# per-cluster rank sources (cleaned = subject tokens, heuristic = title n-grams,
+# lowercased) used by the ranked selection. add_title_ngrams toggles the title
+# n-gram contribution.
 get_cluster_corpus <- function(clusters, metadata, stops, taxonomy_separator,
                                add_title_ngrams = T, custom_clustering=NULL) {
   subjectlist = list()
@@ -275,10 +310,7 @@ get_cluster_corpus <- function(clusters, metadata, stops, taxonomy_separator,
     } else {
       all_subjects = paste(subjects, collapse=" ")
     }
-    all_subjects <- str_replace_all(all_subjects, "\\?+_\\?+|\\?+|\\?+ ", "")
-    all_subjects <- str_replace_all(all_subjects, ";+", ";")
-    all_subjects <- str_replace_all(all_subjects, " ?; ?", ";")
-    all_subjects <- str_replace_all(all_subjects, " +", ";")
+    all_subjects <- normalize_corpus_tokens(all_subjects)
     subjectlist = c(subjectlist, all_subjects)
   }
   # Debug: record, per cluster, the tokens contributed by subjects vs. by title
@@ -287,8 +319,23 @@ get_cluster_corpus <- function(clusters, metadata, stops, taxonomy_separator,
                        subject_tokens = unlist(subject_dbg),
                        title_ngrams = unlist(title_ngram_dbg)),
             "summarize_04a_corpus_sources")
+  # Rank sources for the ranked selection (ranking.R): the same per-cluster tokens
+  # that feed the corpus, split by provenance and run through the SAME
+  # normalize_corpus_tokens() + lowercasing as the TDM terms — so every rank token
+  # matches a tf-idf term (the §15-3 invariant; without this, tokens like
+  # "population_growth " drift out of the map). cleaned = keywords_rank_cleaned
+  # (subject_cleaned, keywords + MeSH pooled in Stage 1); heuristic =
+  # keywords_rank_heuristic (title n-grams). Used only for rank lookup, never fed
+  # into the TDM.
+  split_tokens <- function(s) {
+    t <- tolower(unlist(strsplit(normalize_corpus_tokens(s), ";")))
+    t <- gsub("^_+|_+$", "", t)   # mirror the TDM tokenizer's edge-punctuation strip
+    t[nzchar(t)]
+  }
+  rank_sources <- list(cleaned   = lapply(subject_dbg,     split_tokens),
+                       heuristic = lapply(title_ngram_dbg, split_tokens))
   nn_corpus <- VCorpus(VectorSource(subjectlist))
-  return(nn_corpus)
+  return(list(corpus = nn_corpus, rank_sources = rank_sources))
 }
 
 
