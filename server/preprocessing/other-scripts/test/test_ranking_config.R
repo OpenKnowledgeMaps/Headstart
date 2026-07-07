@@ -3,9 +3,7 @@
 # Run via test/run_tests.R (from the other-scripts directory). ranking.R is pure
 # base R, so it is sourced and tested in isolation.
 #
-# Covers the config surface (§8) and edge case §15-13 of
-# docs/area_title_ranking_plan.md: unset, per-integration override, global
-# fallback, precedence, case-insensitivity, and invalid/misconfigured values.
+
 
 if (!exists("ranking_mode")) {
   source("ranking.R")

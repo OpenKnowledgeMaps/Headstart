@@ -20,12 +20,24 @@ if (use_testthat) {
   cat("testthat not installed — using dependency-free shim.\n")
 }
 
-# Default suite: the pure-base-R test files (run anywhere, no tm/logging needed).
-default_files <- c(
+# Pure-base-R test files (run anywhere, no tm/logging needed).
+base_files <- c(
   "test/test_subject_cleaning.R",
   "test/test_ranking_config.R",
   "test/test_ranking_wedge.R"
 )
+# Replay tests need the tm stack — included only when tm is available (i.e. inside
+# the pipeline image, run via test/run_tests.sh), skipped on a bare host.
+replay_files <- c(
+  "test/test_replay_harness.R",
+  "test/test_replay_modes.R"
+)
+default_files <- base_files
+if (requireNamespace("tm", quietly = TRUE)) {
+  default_files <- c(default_files, replay_files)
+} else {
+  cat("tm not available — skipping replay tests (run inside the container via test/run_tests.sh).\n")
+}
 test_files <- if (length(args) > 0) args else default_files
 
 for (f in test_files) {
