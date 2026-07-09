@@ -31,7 +31,8 @@ base_files <- c(
 # the pipeline image, run via test/run_tests.sh), skipped on a bare host.
 replay_files <- c(
   "test/test_replay_harness.R",
-  "test/test_replay_modes.R"
+  "test/test_replay_modes.R",
+  "test/test_replace_keywords_routing.R"
 )
 default_files <- base_files
 if (requireNamespace("tm", quietly = TRUE)) {

@@ -355,9 +355,19 @@ get_cluster_corpus <- function(clusters, metadata, stops, taxonomy_separator,
                                heuristic_col = HEUR_MIN2) {
   subjectlist = list()
   subject_dbg = list(); heuristic_dbg = list(); heuristic_min1_dbg = list()
+  replaced_subject_dbg = list()  # subjects synthesised from titles (rank 2, not rank 1)
   for (k in seq(1, clusters$num_clusters)) {
     matches = which(unname(clusters$groups == k) == TRUE)
     subjects = metadata$subject[matches]
+    # subject_is_heuristic flags papers whose `subject` was synthesised from the
+    # title by replace_keywords_if_empty (they had no real keywords). Their tokens
+    # are routed to the HEURISTIC rank source (rank 2), not the cleaned/keyword
+    # source (rank 1). Absent on fixtures captured before this change -> all FALSE.
+    flagged = if (!is.null(metadata$subject_is_heuristic)) {
+      as.logical(metadata$subject_is_heuristic[matches])
+    } else {
+      rep(FALSE, length(matches))
+    }
     # Heuristic keywords are pre-generated "_"-joined n-grams (see
     # add_heuristic_keyword_fields): the corpus uses heuristic_col (min2 initial /
     # min1 fallback); the rank map always uses min1 (the superset), so any heuristic
@@ -379,7 +389,11 @@ get_cluster_corpus <- function(clusters, metadata, stops, taxonomy_separator,
       subjects = lapply(subjects, function(x){paste(unlist(x), collapse=";")})
       subjects = mapply(paste, subjects, taxons, collapse=";")
     }
-    subject_dbg[[k]] = paste(unlist(subjects), collapse=";")
+    # Corpus is unchanged: it uses ALL subjects + heuristics (flagged or not), so
+    # tf-idf weights are identical. Only the RANK MAP splits them — flagged papers'
+    # subject tokens go to the heuristic rank source below, not the cleaned one.
+    subject_dbg[[k]]          = paste(unlist(subjects[!flagged]), collapse=";")   # rank 1 (real keywords)
+    replaced_subject_dbg[[k]] = paste(unlist(subjects[flagged]),  collapse=";")   # rank 2 (title-synthesised)
     heuristic_dbg[[k]] = paste(unlist(heuristics), collapse=";")
     heuristic_min1_dbg[[k]] = paste(unlist(heuristics_min1), collapse=";")
     all_subjects = paste(subjects, heuristics, collapse=" ")
@@ -402,8 +416,13 @@ get_cluster_corpus <- function(clusters, metadata, stops, taxonomy_separator,
     t <- gsub("^_+|_+$", "", t)   # mirror the TDM tokenizer's edge-punctuation strip
     t[nzchar(t)]
   }
-  rank_sources <- list(cleaned   = lapply(subject_dbg,        split_tokens),
-                       heuristic = lapply(heuristic_min1_dbg, split_tokens))
+  # cleaned = real-keyword subject tokens (non-flagged papers). heuristic = the min1
+  # title n-grams PLUS the flagged papers' synthesised subject tokens (title-derived,
+  # so they belong in rank 2). Both are already in the corpus, so no double-counting.
+  rank_sources <- list(
+    cleaned   = lapply(subject_dbg, split_tokens),
+    heuristic = mapply(function(h, r) unique(c(split_tokens(h), split_tokens(r))),
+                       heuristic_min1_dbg, replaced_subject_dbg, SIMPLIFY = FALSE))
   nn_corpus <- VCorpus(VectorSource(subjectlist))
   return(list(corpus = nn_corpus, rank_sources = rank_sources))
 }

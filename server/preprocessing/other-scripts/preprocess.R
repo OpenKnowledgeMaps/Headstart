@@ -114,10 +114,16 @@ deduplicate_titles <- function(metadata, list_size) {
 
 replace_keywords_if_empty <- function(metadata, stops) {
   metadata$subject <- unlist(lapply(metadata$subject, function(x) {gsub(" +", " ", x)}))
+  # Flag papers whose `subject` we are about to SYNTHESISE from the title/abstract
+  # (they had no real keywords). The ranking treats a flagged paper's subject as a
+  # heuristic source (rank 2), not real keywords (rank 1) — see get_cluster_corpus.
+  # Set for all rows first so the column always exists downstream.
+  metadata$subject_is_heuristic <- FALSE
   missing_subjects = which(lapply(metadata$subject, function(x) {nchar(x)}) <= 1)
   if (length(missing_subjects) == 0) {
     return(metadata)
   }
+  metadata$subject_is_heuristic[missing_subjects] <- TRUE
   vplog$info(paste("vis_id:", .GlobalEnv$VIS_ID, "Documents without subjects:", length(missing_subjects)))
   candidates = mapply(paste, metadata$title)
   batch_size <- 1000
