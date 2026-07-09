@@ -1,4 +1,4 @@
-# Unit tests for the rank-aware selection helpers (ranking.R): rank_policies,
+# Unit tests for the rank-aware selection helpers (ranking.R): rank_spec,
 # rank_of_terms, select_by_rank, format_label.
 #
 # Pure base R — the only summarize.R dependency (filter_out_nested_ngrams) is
@@ -12,33 +12,64 @@ if (!requireNamespace("testthat", quietly = TRUE)) {
   library(testthat)
 }
 
-spec1 <- rank_policies("1")
+spec1 <- rank_spec("1")
 id_denest <- function(x, n) head(x, n)   # identity-ish de-nester for isolation
 
-# --- rank_policies -----------------------------------------------------------
-test_that("rank_policies: mode 1 is topup rank1 then exclusive rank2", {
+# --- rank_spec ---------------------------------------------------------------
+test_that("rank_spec: mode 1 is topup rank1 (cleaned) then exclusive rank2 (heuristic)", {
   expect_equal(length(spec1), 2)
-  expect_equal(spec1[[1]]$rank, 1L); expect_equal(spec1[[1]]$policy, "topup")
-  expect_equal(spec1[[2]]$rank, 2L); expect_equal(spec1[[2]]$policy, "exclusive")
+  expect_equal(spec1[[1]]$rank, 1L); expect_equal(spec1[[1]]$sources, "cleaned");   expect_equal(spec1[[1]]$policy, "topup")
+  expect_equal(spec1[[2]]$rank, 2L); expect_equal(spec1[[2]]$sources, "heuristic"); expect_equal(spec1[[2]]$policy, "exclusive")
 })
 
-test_that("rank_policies: unimplemented modes return NULL", {
-  expect_null(rank_policies("2"))
-  expect_null(rank_policies("3"))
-  expect_null(rank_policies("9"))
+test_that("rank_spec: mode 2 pools cleaned_ex_mesh + specific in rank 1, generic exclusive", {
+  s <- rank_spec("2")
+  expect_equal(length(s), 3)
+  expect_equal(s[[1]]$sources, c("cleaned_ex_mesh", "mesh_specific")); expect_equal(s[[1]]$policy, "topup")
+  expect_equal(s[[2]]$sources, "mesh_generic"); expect_equal(s[[2]]$policy, "exclusive")
+  expect_equal(s[[3]]$sources, "heuristic");    expect_equal(s[[3]]$policy, "exclusive")
 })
 
-# --- rank_of_terms -----------------------------------------------------------
-test_that("rank_of_terms: cleaned->1, heuristic-only->2, unknown->lowest rank", {
-  r <- rank_of_terms(c("a", "b", "c"), cleaned = c("a"), heuristic = c("b"), spec1)
+test_that("rank_spec: mode 3 tops up specific MeSH, generic + heuristic exclusive", {
+  s <- rank_spec("3")
+  expect_equal(length(s), 4)
+  expect_equal(s[[1]]$sources, "cleaned_ex_mesh"); expect_equal(s[[1]]$policy, "topup")
+  expect_equal(s[[2]]$sources, "mesh_specific");   expect_equal(s[[2]]$policy, "topup")   # top-up (decision #1)
+  expect_equal(s[[3]]$sources, "mesh_generic");    expect_equal(s[[3]]$policy, "exclusive")
+  expect_equal(s[[4]]$sources, "heuristic");       expect_equal(s[[4]]$policy, "exclusive")
+})
+
+test_that("rank_spec: unimplemented modes return NULL", {
+  expect_null(rank_spec("9"))
+})
+
+# --- rank_of_terms (named source-sets) ---------------------------------------
+test_that("rank_of_terms: mode 1 — cleaned->1, heuristic-only->2, unknown->lowest", {
+  r <- rank_of_terms(c("a", "b", "c"), list(cleaned = "a", heuristic = "b"), spec1)
   expect_equal(r$ranks, c(1L, 2L, 2L))   # c is unknown -> lowest rank (2)
   expect_equal(r$unknown, 1L)
 })
 
-test_that("rank_of_terms: highest-rank-wins when a term is in both sources", {
-  r <- rank_of_terms("x", cleaned = "x", heuristic = "x", spec1)
-  expect_equal(unname(r$ranks), 1L)
+test_that("rank_of_terms: highest-rank-wins when a term is in two sources", {
+  r <- rank_of_terms("x", list(cleaned = "x", heuristic = "x"), spec1)
+  expect_equal(r$ranks, 1L)
   expect_equal(r$unknown, 0L)
+})
+
+test_that("rank_of_terms: mode 2 — specific pools into rank 1, generic is rank 2", {
+  s <- rank_spec("2")
+  srcs <- list(cleaned_ex_mesh = "kw", mesh_specific = "sp", mesh_generic = "gen", heuristic = "ng")
+  r <- rank_of_terms(c("kw", "sp", "gen", "ng"), srcs, s)
+  expect_equal(r$ranks, c(1L, 1L, 2L, 3L))   # kw & sp -> rank 1; gen -> 2; ng -> 3
+})
+
+test_that("rank_of_terms: mode 2 degrades when mesh sources are empty", {
+  s <- rank_spec("2")
+  # no mesh: cleaned_ex_mesh carries the keywords, mesh sources empty
+  srcs <- list(cleaned_ex_mesh = c("kw1", "kw2"), mesh_specific = character(0),
+               mesh_generic = character(0), heuristic = "ng")
+  r <- rank_of_terms(c("kw1", "kw2", "ng"), srcs, s)
+  expect_equal(r$ranks, c(1L, 1L, 3L))       # behaves like Mode 1 (keywords rank 1, heuristic last)
 })
 
 # --- select_by_rank ----------------------------------------------------------

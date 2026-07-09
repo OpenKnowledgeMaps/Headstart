@@ -74,6 +74,71 @@ write_expected <- function(name, labels) {
   saveRDS(labels, expected_file(name))
 }
 
+# Is `a` a contiguous run of words inside `b` (word-sequence containment)?
+is_nested <- function(a, b) {
+  a != b && grepl(paste0(" ", a, " "), paste0(" ", b, " "), fixed = TRUE)
+}
+
+# Per-cluster Mode-1 breakdown for a fixture bundle, computed exactly as
+# create_cluster_labels does (initial corpus = min2, fallback = min1, bound
+# c(1,Inf)). Returns list(clusters, unknown_total) where each cluster entry is
+# list(r1, r2, label): the rank-1 / rank-2 candidate terms (space form,
+# tf-idf-weight-ordered) and the resulting Mode-1 area label. Shared by the miner
+# (mine_cases.R) and the Mode-1 regression tests.
+mode1_cluster_breakdown <- function(bundle) {
+  md <- add_heuristic_keyword_fields(bundle$metadata, bundle$stops)
+  md$keywords_rank_cleaned <- md$subject
+  co <- get_cluster_corpus(bundle$clusters, md, bundle$stops, bundle$taxonomy_separator,
+                           heuristic_col = HEUR_MIN2)
+  tdm <- TermDocumentMatrix(co$corpus, control = list(
+    tokenize = SplitTokenizer, weighting = function(x) weightSMART(x, spec = "ntn"),
+    bounds = list(local = c(1, Inf)), tolower = TRUE))
+  tt <- apply(tdm, 2, function(x) { x2 <- sort(x, TRUE); x2[x2 > 0] })
+  empty <- which(apply(tdm, 2, sum) == 0)
+  if (length(empty)) {
+    fb <- get_cluster_corpus(bundle$clusters, md, bundle$stops, bundle$taxonomy_separator,
+                             heuristic_col = HEUR_MIN1)$corpus
+    tt[empty] <- fill_empty_clusters(fb)[empty]
+  }
+  spec <- rank_spec("1")
+  out <- vector("list", length(tt)); unknown_total <- 0L
+  for (k in seq_along(tt)) {
+    nms <- names(tt[[k]]); if (is.null(nms) || !length(nms)) next
+    pruned <- unlist(another_prune_ngrams(nms, bundle$stops)); if (!length(pruned)) next
+    sources_k <- lapply(co$rank_sources, function(src) src[[k]])
+    rr <- rank_of_terms(pruned, sources_k, spec)
+    unknown_total <- unknown_total + rr$unknown
+    sp <- trimws(gsub("_", " ", pruned))
+    lt <- select_by_rank(pruned, rr$ranks, 3, spec)   # selected label terms (space form)
+    out[[k]] <- list(r1 = sp[rr$ranks == 1], r2 = sp[rr$ranks == 2],
+                     label_terms = lt, label = format_label(lt))
+  }
+  list(clusters = out, unknown_total = unknown_total)
+}
+
+# Per-cluster Mode-0 fallback breakdown: the label each cluster would get from the
+# min2 (initial) corpus vs. the min1 (fallback) corpus, under the Mode-0 bound
+# c(2, Inf). Used to test the fallback trigger — a cluster whose min2 label is
+# empty but whose min1 label is not must end up with the min1 label, NOT the
+# abstract-frequency fallback (see create_cluster_labels). Returns list(min2, min1),
+# each a per-cluster character vector.
+mode0_fallback_breakdown <- function(bundle) {
+  md <- add_heuristic_keyword_fields(bundle$metadata, bundle$stops)
+  md$keywords_rank_cleaned <- md$subject
+  co2 <- get_cluster_corpus(bundle$clusters, md, bundle$stops, bundle$taxonomy_separator,
+                            heuristic_col = HEUR_MIN2)
+  tdm2 <- TermDocumentMatrix(co2$corpus, control = list(
+    tokenize = SplitTokenizer, weighting = function(x) weightSMART(x, spec = "ntn"),
+    bounds = list(local = c(2, Inf)), tolower = TRUE))
+  tt2 <- apply(tdm2, 2, function(x) { x2 <- sort(x, TRUE); x2[x2 > 0] })
+  min2 <- unlist(get_top_names(tt2, 3, bundle$stops))
+
+  co1 <- get_cluster_corpus(bundle$clusters, md, bundle$stops, bundle$taxonomy_separator,
+                            heuristic_col = HEUR_MIN1)
+  min1 <- unlist(get_top_names(fill_empty_clusters(co1$corpus), 3, bundle$stops))
+  list(min2 = min2, min1 = min1)
+}
+
 # A small, self-contained input bundle for validating the harness without any
 # external data: two clearly-separated clusters (climate vs. machine learning).
 build_synthetic_bundle <- function() {

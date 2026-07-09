@@ -8,6 +8,13 @@ vslog <- getLogger('vis.summarize')
 HEUR_MIN1 <- "keywords_rank_heuristically_generated_min1"
 HEUR_MIN2 <- "keywords_rank_heuristically_generated_min2"
 
+# MeSH rank columns, produced upstream by the data client (base.R, BASE only for
+# now). Used by Modes 2/3 to split subject tokens into specific/generic. When
+# absent (integrations without MeSH), the split is empty and Mode 2/3 degrade to
+# Mode-1-like behaviour (see get_cluster_corpus).
+KW_MESH_SPECIFIC <- "keywords_rank_mesh_specific"
+KW_MESH_GENERIC  <- "keywords_rank_mesh_generic"
+
 # summarize.R
 # Cluster labelling for the overview visualisation: turns each cluster of papers
 # into a short, human-readable area title. create_cluster_labels() is the entry
@@ -355,6 +362,8 @@ get_cluster_corpus <- function(clusters, metadata, stops, taxonomy_separator,
                                heuristic_col = HEUR_MIN2) {
   subjectlist = list()
   subject_dbg = list(); heuristic_dbg = list(); heuristic_min1_dbg = list()
+  mesh_spec_dbg = list(); mesh_gen_dbg = list()  # normalised MeSH tokens (empty if no mesh columns)
+  has_mesh <- !is.null(metadata[[KW_MESH_SPECIFIC]])
   for (k in seq(1, clusters$num_clusters)) {
     matches = which(unname(clusters$groups == k) == TRUE)
     subjects = metadata$subject[matches]
@@ -382,6 +391,17 @@ get_cluster_corpus <- function(clusters, metadata, stops, taxonomy_separator,
     subject_dbg[[k]] = paste(unlist(subjects), collapse=";")
     heuristic_dbg[[k]] = paste(unlist(heuristics), collapse=";")
     heuristic_min1_dbg[[k]] = paste(unlist(heuristics_min1), collapse=";")
+    # MeSH columns (Modes 2/3): aggregate per cluster, normalised the same way as
+    # subjects so their tokens match the subject tokens they classify. Empty when
+    # the client did not populate them (-> Mode 2/3 degrade to Mode-1 behaviour).
+    if (has_mesh) {
+      msp = gsub(" ", "_", gsub("; ", ";", as.character(metadata[[KW_MESH_SPECIFIC]][matches])))
+      mge = gsub(" ", "_", gsub("; ", ";", as.character(metadata[[KW_MESH_GENERIC]][matches])))
+      mesh_spec_dbg[[k]] = paste(unlist(msp), collapse=";")
+      mesh_gen_dbg[[k]]  = paste(unlist(mge), collapse=";")
+    } else {
+      mesh_spec_dbg[[k]] = ""; mesh_gen_dbg[[k]] = ""
+    }
     all_subjects = paste(subjects, heuristics, collapse=" ")
     all_subjects <- normalize_corpus_tokens(all_subjects)
     subjectlist = c(subjectlist, all_subjects)
@@ -392,18 +412,35 @@ get_cluster_corpus <- function(clusters, metadata, stops, taxonomy_separator,
                        subject_tokens = unlist(subject_dbg),
                        title_ngrams = unlist(heuristic_dbg)),
             "summarize_04a_corpus_sources")
-  # Rank sources for the ranked selection (ranking.R): the same per-cluster tokens,
-  # split by provenance and run through the SAME normalize_corpus_tokens() +
-  # lowercasing + edge-strip as the TDM terms — so every rank token matches a tf-idf
-  # term. cleaned = keywords_rank_cleaned (subject_cleaned);
-  # heuristic = the min1 n-gram set. Used only for rank lookup, never fed to the TDM.
+  # Rank sources for the ranked selection (ranking.R): per-cluster token-sets, all
+  # run through the SAME normalize_corpus_tokens() + lowercasing + edge-strip as the
+  # TDM terms — so every rank token matches a tf-idf term. The MeSH split is
+  # derived by MEMBERSHIP on the (already-normalised) subject tokens: a subject token
+  # is mesh_specific/generic if it is in the corresponding MeSH column, else it is a
+  # cleaned (ex-mesh) keyword. This keeps every rank token a genuine subject token
+  # (so it matches the TDM) and needs no separate normalization path.
+  #   cleaned         = all subject tokens (keywords + MeSH pooled) — Mode 1 rank 1.
+  #   mesh_specific/generic = subject tokens classified as specific/generic MeSH.
+  #   cleaned_ex_mesh = subject tokens minus MeSH — Modes 2/3 rank 1.
+  #   heuristic       = the min1 title-n-gram tokens.
+  # Used only for rank lookup, never fed to the TDM.
   split_tokens <- function(s) {
     t <- tolower(unlist(strsplit(normalize_corpus_tokens(s), ";")))
     t <- gsub("^_+|_+$", "", t)   # mirror the TDM tokenizer's edge-punctuation strip
     t[nzchar(t)]
   }
-  rank_sources <- list(cleaned   = lapply(subject_dbg,        split_tokens),
-                       heuristic = lapply(heuristic_min1_dbg, split_tokens))
+  subj_tok <- lapply(subject_dbg, split_tokens)
+  spec_tok <- lapply(mesh_spec_dbg, split_tokens)
+  gen_tok  <- lapply(mesh_gen_dbg,  split_tokens)
+  mesh_specific <- mapply(intersect, subj_tok, spec_tok, SIMPLIFY = FALSE)
+  mesh_generic  <- mapply(intersect, subj_tok, gen_tok,  SIMPLIFY = FALSE)
+  cleaned_ex_mesh <- mapply(function(all, sp, ge) setdiff(all, c(sp, ge)),
+                            subj_tok, mesh_specific, mesh_generic, SIMPLIFY = FALSE)
+  rank_sources <- list(cleaned         = subj_tok,
+                       cleaned_ex_mesh = cleaned_ex_mesh,
+                       mesh_specific   = mesh_specific,
+                       mesh_generic    = mesh_generic,
+                       heuristic       = lapply(heuristic_min1_dbg, split_tokens))
   nn_corpus <- VCorpus(VectorSource(subjectlist))
   return(list(corpus = nn_corpus, rank_sources = rank_sources))
 }

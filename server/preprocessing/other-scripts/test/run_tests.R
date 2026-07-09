@@ -25,13 +25,17 @@ base_files <- c(
   "test/test_subject_cleaning.R",
   "test/test_ranking_config.R",
   "test/test_ranking_wedge.R",
-  "test/test_ranking_select.R"
+  "test/test_ranking_select.R",
+  "test/test_mesh_classification.R"
 )
 # Replay tests need the tm stack — included only when tm is available (i.e. inside
 # the pipeline image, run via test/run_tests.sh), skipped on a bare host.
 replay_files <- c(
   "test/test_replay_harness.R",
-  "test/test_replay_modes.R"
+  "test/test_replay_modes.R",
+  "test/test_mode1_selection.R",
+  "test/test_fallback.R",
+  "test/test_mode2.R"
 )
 default_files <- base_files
 if (requireNamespace("tm", quietly = TRUE)) {

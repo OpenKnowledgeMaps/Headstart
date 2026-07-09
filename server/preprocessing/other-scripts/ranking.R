@@ -46,29 +46,47 @@ ranking_mode <- function(service = NULL) {
   "0"
 }
 
-# Ordered rank/fill-policy spec for a mode. Each entry is list(rank, policy) where
-# policy is "topup" (fill open label slots) or "exclusive" (contribute only if the
-# label is still empty). Returns NULL for modes with no ranked selection yet, which
-# fall back to the legacy selection.
-rank_policies <- function(mode) {
+# Ordered rank spec for a mode. Each entry is list(rank, sources, policy):
+#   rank    : the rank number (1 = highest priority).
+#   sources : names of the rank_sources token-sets that feed this rank (pooled).
+#   policy  : "topup" (fill open label slots) or "exclusive" (only if still empty).
+# Returns NULL for modes with no ranked selection (they fall back to legacy).
+# The corpus is unchanged across modes; only this source->rank mapping differs.
+rank_spec <- function(mode) {
   switch(as.character(mode),
-    "1" = list(list(rank = 1L, policy = "topup"),      # keywords + MeSH (pooled)
-               list(rank = 2L, policy = "exclusive")), # heuristic title n-grams
+    "1" = list(
+      list(rank = 1L, sources = c("cleaned"),                          policy = "topup"),      # keywords + MeSH pooled
+      list(rank = 2L, sources = c("heuristic"),                        policy = "exclusive")), # title n-grams
+    "2" = list(
+      list(rank = 1L, sources = c("cleaned_ex_mesh", "mesh_specific"), policy = "topup"),      # keywords + specific MeSH
+      list(rank = 2L, sources = c("mesh_generic"),                     policy = "exclusive"),  # generic MeSH
+      list(rank = 3L, sources = c("heuristic"),                        policy = "exclusive")),
+    "3" = list(
+      list(rank = 1L, sources = c("cleaned_ex_mesh"),                  policy = "topup"),      # keywords
+      list(rank = 2L, sources = c("mesh_specific"),                    policy = "topup"),      # specific MeSH tops up (decision #1)
+      list(rank = 3L, sources = c("mesh_generic"),                     policy = "exclusive"),  # generic MeSH
+      list(rank = 4L, sources = c("heuristic"),                        policy = "exclusive")),
     NULL)
 }
 
 # Assign a provenance rank to each candidate term (in "_"-joined, lowercased TDM
-# form) from the separated rank sources: rank 1 if it is a cleaned keyword, rank 2
-# if it is only a heuristic title n-gram. As a fallback, unknown terms (in neither — e.g. a
-# normalization straggler) take the lowest rank and are
-# counted for debug purposes. Returns list(ranks = <int vector>, unknown = <int>).
-rank_of_terms <- function(terms, cleaned, heuristic, policy_spec) {
-  max_rank <- max(vapply(policy_spec, function(s) s$rank, integer(1)))
-  r <- ifelse(terms %in% cleaned, 1L,
-       ifelse(terms %in% heuristic, 2L, NA_integer_))
-  unknown <- sum(is.na(r))
-  r[is.na(r)] <- max_rank
-  list(ranks = r, unknown = unknown)
+# form) from the per-cluster source token-sets. `sources` is a named list of token
+# vectors (cleaned, cleaned_ex_mesh, mesh_specific, mesh_generic, heuristic); `spec`
+# is the ordered rank_spec. A term takes the LOWEST rank among the sources that
+# contain it (highest-rank-wins). Unknown terms (in no source — e.g. a
+# normalization straggler) take the last rank and are counted for the drift alarm.
+# Returns list(ranks = <int vector>, unknown = <int>).
+rank_of_terms <- function(terms, sources, spec) {
+  ranks <- rep(NA_integer_, length(terms))
+  for (s in spec) {                       # spec is ordered by rank ascending
+    pool <- unique(unlist(sources[s$sources], use.names = FALSE))
+    hit <- is.na(ranks) & (terms %in% pool)
+    ranks[hit] <- s$rank
+  }
+  max_rank <- max(vapply(spec, function(s) s$rank, integer(1)))
+  unknown <- sum(is.na(ranks))
+  ranks[is.na(ranks)] <- max_rank
+  list(ranks = ranks, unknown = unknown)
 }
 
 # Waterfall selection over one cluster's ranked candidates. Walks the policy spec
@@ -116,15 +134,16 @@ format_label <- function(terms) {
 #   top_n        : number of terms kept per label.
 #   stops        : stopword vector.
 #   mode         : ranking mode string (see RANKING_MODES).
-#   rank_sources : list(cleaned, heuristic), each a per-cluster list of lowercased
-#                  "_"-joined tokens; NULL disables ranked selection.
+#   rank_sources : named list of per-cluster token-sets (cleaned, cleaned_ex_mesh,
+#                  mesh_specific, mesh_generic, heuristic), each a per-cluster list
+#                  of lowercased "_"-joined tokens; NULL disables ranked selection.
 #   legacy_fn    : the legacy selector; injectable for testing.
 select_cluster_label_names <- function(tfidf_top, top_n, stops, mode = "0",
                                         rank_sources = NULL,
                                         legacy_fn = get_top_names) {
-  policy_spec <- rank_policies(mode)
-  if (identical(mode, "0") || is.null(policy_spec) || is.null(rank_sources)) {
-    if (!identical(mode, "0") && (is.null(policy_spec) || is.null(rank_sources))) {
+  spec <- rank_spec(mode)
+  if (identical(mode, "0") || is.null(spec) || is.null(rank_sources)) {
+    if (!identical(mode, "0") && (is.null(spec) || is.null(rank_sources))) {
       msg <- sprintf(
         "select_cluster_label_names: ranking mode '%s' not applied (no rank sources or mode unimplemented); using legacy selection",
         mode)
@@ -141,13 +160,14 @@ select_cluster_label_names <- function(tfidf_top, top_n, stops, mode = "0",
     weights <- tfidf_top[[k]]
     nms <- names(weights)
     if (is.null(nms) || length(nms) == 0) { out[[k]] <- ""; next }
-    # Shared prune head (§3 step 1): same well-formedness filter as legacy, on the
+    # Shared prune head: same well-formedness filter as legacy, on the
     # global weight-ordered list. another_prune_ngrams preserves order.
     pruned <- unlist(another_prune_ngrams(nms, stops))
     if (length(pruned) == 0) { out[[k]] <- ""; next }
-    rr <- rank_of_terms(pruned, rank_sources$cleaned[[k]], rank_sources$heuristic[[k]], policy_spec)
+    sources_k <- lapply(rank_sources, function(src) src[[k]])   # this cluster's token-sets
+    rr <- rank_of_terms(pruned, sources_k, spec)
     unknown_total <- unknown_total + rr$unknown
-    out[[k]] <- format_label(select_by_rank(pruned, rr$ranks, top_n, policy_spec))
+    out[[k]] <- format_label(select_by_rank(pruned, rr$ranks, top_n, spec))
     dbg[[k]] <- data.frame(cluster = k, term = gsub("_", " ", pruned),
                            rank = rr$ranks, weight = as.numeric(weights[pruned]),
                            stringsAsFactors = FALSE)
