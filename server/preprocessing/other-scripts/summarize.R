@@ -1,6 +1,13 @@
 library(stringr)
 vslog <- getLogger('vis.summarize')
 
+# Metadata columns holding the heuristically generated (title n-gram) keywords,
+# pre-binned by map-wide document frequency (see add_heuristic_keyword_fields:
+#   _min1 = n-grams appearing in >= 1 resource (all)   -> used for the FALLBACK corpus
+#   _min2 = n-grams appearing in >= 2 resources         -> used for the INITIAL corpus
+HEUR_MIN1 <- "keywords_rank_heuristically_generated_min1"
+HEUR_MIN2 <- "keywords_rank_heuristically_generated_min2"
+
 # summarize.R
 # Cluster labelling for the overview visualisation: turns each cluster of papers
 # into a short, human-readable area title. create_cluster_labels() is the entry
@@ -26,7 +33,7 @@ trim <- function (x) gsub("^\\s+|\\s+$", "", x)
 # turn any remaining whitespace into ";". This is the SINGLE source of truth for
 # corpus tokenization, used both to build the corpus document and to derive the
 # per-cluster rank sources — so a rank token can never drift out of the tf-idf term
-# set (the §15-3 invariant; see get_cluster_corpus / ranking.R).
+# set (see get_cluster_corpus / ranking.R).
 normalize_corpus_tokens <- function(s) {
   s <- str_replace_all(s, "\\?+_\\?+|\\?+|\\?+ ", "")
   s <- str_replace_all(s, ";+", ";")
@@ -82,6 +89,47 @@ prune_ngrams <- function(ngrams, stops){
   return (pruned_ngrams)
 }
 
+# Heuristically generated keywords for a single paper: the bi- and tri-grams of
+# its title, pruned of degenerate forms (n-grams that start or end with a
+# stopword, or whose first and last token are identical). Words within an n-gram
+# are "_"-joined so the tokenizer keeps them intact. Returns a character vector of
+# unique "_"-joined n-grams (possibly empty).
+paper_title_ngrams <- function(title, stops) {
+  clean <- gsub("[^[:alnum:]-]", " ", if (is.na(title)) "" else title)
+  clean <- trimws(gsub("\\s+", " ", clean))
+  if (!nzchar(clean)) return(character(0))
+  grams <- unlist(c(expand_ngrams(clean, 2), expand_ngrams(clean, 3)))
+  grams <- unlist(strsplit(paste(grams, collapse = " "), " "))
+  grams <- grams[nzchar(grams)]
+  if (!length(grams)) return(character(0))
+  keep <- vapply(grams, function(g) {
+    toks <- strsplit(g, "_", fixed = TRUE)[[1]]
+    length(toks) >= 2 &&
+      !(tolower(toks[1]) %in% stops) &&
+      !(tolower(toks[length(toks)]) %in% stops) &&
+      toks[1] != toks[length(toks)]
+  }, logical(1), USE.NAMES = FALSE)
+  unique(grams[keep])
+}
+
+# Add the two heuristic-keyword metadata columns (HEUR_MIN1 / HEUR_MIN2) to the
+# metadata data frame. Generates each paper's title n-grams, computes each
+# n-gram's MAP-WIDE document frequency (number of distinct resources it appears
+# in), and stores per paper, as "; "-joined "_"-n-gram strings:
+#   HEUR_MIN1 = all of the paper's n-grams (DF >= 1)
+#   HEUR_MIN2 = the paper's n-grams with document frequency >= 2
+# Computed once, early in labelling.
+add_heuristic_keyword_fields <- function(metadata, stops) {
+  per_paper <- lapply(metadata$title, paper_title_ngrams, stops = stops)
+  df <- table(unlist(lapply(per_paper, unique)))          # map-wide document frequency
+  min2_set <- names(df)[df >= 2]
+  metadata[[HEUR_MIN1]] <- vapply(per_paper,
+    function(g) paste(g, collapse = "; "), character(1))
+  metadata[[HEUR_MIN2]] <- vapply(per_paper,
+    function(g) paste(g[g %in% min2_set], collapse = "; "), character(1))
+  metadata
+}
+
 # Entry point: assign a short label ("area title") to every cluster.
 # Builds one pseudo-document per cluster from its papers' subjects + title
 # n-grams (or a custom field), ranks terms by tf-idf (SMART "ntn"), and keeps the
@@ -117,25 +165,31 @@ create_cluster_labels <- function(clusters, metadata,
                  weightingspec = weightingspec, top_n = top_n, stops = stops,
                  taxonomy_separator = taxonomy_separator, params = params, service = service),
             "summarize_00_label_inputs")
-  # Additive rank column on the metadata data frame (§16 R6): the rank-1 source.
-  # In Stage 1 this is subject_cleaned verbatim (keywords + MeSH pooled); Stage 2
-  # carves MeSH out into an upstream keywords_rank_mesh column. subject_cleaned
-  # (metadata$subject) is left untouched, so Mode 0 is unaffected.
+  # Additive rank columns on the metadata data frame:
+  #  - keywords_rank_cleaned: the rank-1 source. Stage 1 = subject_cleaned verbatim
+  #    (keywords + MeSH pooled); Stage 2 carves MeSH out into an upstream mesh column.
+  #  - the two heuristic columns (min1/min2), pre-binned by map-wide document
+  #    frequency. subject_cleaned (metadata$subject) is left untouched.
+  metadata <- add_heuristic_keyword_fields(metadata, stops)
   metadata$keywords_rank_cleaned <- metadata$subject
   cc <- params$custom_clustering
   if (!(is.null(cc)) && (cc %in% names(metadata))) {
     corpus_out <- get_custom_cluster_corpus(clusters, metadata, stops, taxonomy_separator, custom_clustering=cc)
+    fallback_corpus <- corpus_out$corpus   # custom path: no heuristic min1/min2 split
   } else {
-    corpus_out <- get_cluster_corpus(clusters, metadata, stops, taxonomy_separator)
+    # Initial corpus uses the min2 heuristic set (DF >= 2); the fallback corpus
+    # swaps in min1 (all n-grams).
+    corpus_out <- get_cluster_corpus(clusters, metadata, stops, taxonomy_separator, heuristic_col = HEUR_MIN2)
+    fallback_corpus <- get_cluster_corpus(clusters, metadata, stops, taxonomy_separator, heuristic_col = HEUR_MIN1)$corpus
   }
   # get_*_cluster_corpus returns the corpus plus per-cluster rank sources (the
-  # separated keyword/heuristic tokens used only for rank lookup, §3). rank_sources
+  # separated keyword/heuristic tokens used only for rank lookup). rank_sources
   # is NULL on the custom-clustering path, so ranked modes fall back to legacy there.
   nn_corpus <- corpus_out$corpus
   rank_sources <- corpus_out$rank_sources
   dump_data(nn_corpus, "summarize_04_corpus")
   # Resolve the ranking mode BEFORE the TDM: the local frequency bound is
-  # mode-dependent (§6) — c(2, Inf) for Mode 0 (byte-identical legacy), c(1, Inf)
+  # mode-dependent c(2, Inf) for Mode 0 (byte-identical legacy), c(1, Inf)
   # for Modes 1-3 so low-frequency real keywords survive into the ranking. The
   # corpus text and weighting are otherwise identical across modes.
   mode <- ranking_mode(service)
@@ -153,7 +207,13 @@ create_cluster_labels <- function(clusters, metadata,
   empty_tfidf <- which(apply(nn_tfidf, 2, sum)==0)
   vslog$debug(paste("create_cluster_labels: tf-idf matrix", nTerms(nn_tfidf), "terms x",
                     nDocs(nn_tfidf), "clusters;", length(empty_tfidf), "clusters need a fallback"))
-  tfidf_top[c(empty_tfidf)] <- fill_empty_clusters(nn_tfidf, nn_corpus)[c(empty_tfidf)]
+
+  # fallback mechanism if first attempt to find tf-idf terms fails: 
+  # use the per-cluster corpus to get the top bi-/tri-grams from the titles of the papers in the cluster. 
+  # This is a last-resort fallback, so it is only applied to clusters that have no tf-idf terms at all (empty_tfidf). 
+  # The fallback is applied to the tfidf_top list, which is then used for label selection.
+  tfidf_top[c(empty_tfidf)] <- fill_empty_clusters(fallback_corpus)[c(empty_tfidf)]
+  
   # Ranking-mode wedge (ranking.R): Mode 0 is the unchanged legacy selection;
   # Modes 1-3 apply rank-aware selection over the same global ranking, partitioned
   # by rank_sources. The existing fallbacks below (title/abstract frequency) remain
@@ -275,24 +335,23 @@ get_custom_cluster_corpus <- function(clusters, metadata, stops, taxonomy_separa
 # lowercased) used by the ranked selection. add_title_ngrams toggles the title
 # n-gram contribution.
 get_cluster_corpus <- function(clusters, metadata, stops, taxonomy_separator,
-                               add_title_ngrams = T, custom_clustering=NULL) {
+                               heuristic_col = HEUR_MIN2) {
   subjectlist = list()
-  subject_dbg = list(); title_ngram_dbg = list()  # debug: keep the two sources apart
+  subject_dbg = list(); heuristic_dbg = list(); heuristic_min1_dbg = list()
   for (k in seq(1, clusters$num_clusters)) {
     matches = which(unname(clusters$groups == k) == TRUE)
-    titles =  metadata$title[matches]
     subjects = metadata$subject[matches]
-    titles = lapply(titles, function(x) {gsub("[^[:alnum:]-]", " ", x)})
-    titles = lapply(titles, gsub, pattern="\\s+", replacement=" ")
-    title_ngrams <- get_title_ngrams(titles, stops, c(2, 3))
-    batch_size <- 1000
-    total_length <- length(stops)
-    for (i in seq(1, total_length, batch_size)) {
-      titles = lapply(titles, function(x) {removeWords(x, stops[i:min(i+batch_size -1, total_length)])})
-    }
+    # Heuristic keywords are pre-generated "_"-joined n-grams (see
+    # add_heuristic_keyword_fields): the corpus uses heuristic_col (min2 initial /
+    # min1 fallback); the rank map always uses min1 (the superset), so any heuristic
+    # term resolves to rank 2 regardless of which pass produced it.
+    heuristics = as.character(metadata[[heuristic_col]][matches])
+    heuristics_min1 = as.character(metadata[[HEUR_MIN1]][matches])
+
     subjects = mapply(gsub, subjects, pattern = "; ", replacement=";")
     subjects = mapply(gsub, subjects, pattern=" ", replacement="_")
-    titles = mapply(gsub, titles, pattern=" ", replacement=";")
+    heuristics = gsub("; ", ";", heuristics)
+    heuristics_min1 = gsub("; ", ";", heuristics_min1)
 
     if (!is.null(taxonomy_separator)) {
       subjects = mapply(function(x){strsplit(x, ";")}, subjects)
@@ -304,36 +363,30 @@ get_cluster_corpus <- function(clusters, metadata, stops, taxonomy_separator,
       subjects = mapply(paste, subjects, taxons, collapse=";")
     }
     subject_dbg[[k]] = paste(unlist(subjects), collapse=";")
-    title_ngram_dbg[[k]] = paste(unlist(title_ngrams), collapse=";")
-    if (add_title_ngrams == T) {
-      all_subjects = paste(subjects, title_ngrams, collapse=" ")
-    } else {
-      all_subjects = paste(subjects, collapse=" ")
-    }
+    heuristic_dbg[[k]] = paste(unlist(heuristics), collapse=";")
+    heuristic_min1_dbg[[k]] = paste(unlist(heuristics_min1), collapse=";")
+    all_subjects = paste(subjects, heuristics, collapse=" ")
     all_subjects <- normalize_corpus_tokens(all_subjects)
     subjectlist = c(subjectlist, all_subjects)
   }
-  # Debug: record, per cluster, the tokens contributed by subjects vs. by title
-  # n-grams, so a label term can be attributed to its source (see get_title_ngrams).
+  # Debug: record, per cluster, the tokens contributed by subjects vs. by the
+  # heuristic (title n-gram) column, so a label term can be attributed to its source.
   dump_data(data.frame(cluster = seq_along(subjectlist),
                        subject_tokens = unlist(subject_dbg),
-                       title_ngrams = unlist(title_ngram_dbg)),
+                       title_ngrams = unlist(heuristic_dbg)),
             "summarize_04a_corpus_sources")
-  # Rank sources for the ranked selection (ranking.R): the same per-cluster tokens
-  # that feed the corpus, split by provenance and run through the SAME
-  # normalize_corpus_tokens() + lowercasing as the TDM terms — so every rank token
-  # matches a tf-idf term (the §15-3 invariant; without this, tokens like
-  # "population_growth " drift out of the map). cleaned = keywords_rank_cleaned
-  # (subject_cleaned, keywords + MeSH pooled in Stage 1); heuristic =
-  # keywords_rank_heuristic (title n-grams). Used only for rank lookup, never fed
-  # into the TDM.
+  # Rank sources for the ranked selection (ranking.R): the same per-cluster tokens,
+  # split by provenance and run through the SAME normalize_corpus_tokens() +
+  # lowercasing + edge-strip as the TDM terms — so every rank token matches a tf-idf
+  # term. cleaned = keywords_rank_cleaned (subject_cleaned);
+  # heuristic = the min1 n-gram set. Used only for rank lookup, never fed to the TDM.
   split_tokens <- function(s) {
     t <- tolower(unlist(strsplit(normalize_corpus_tokens(s), ";")))
     t <- gsub("^_+|_+$", "", t)   # mirror the TDM tokenizer's edge-punctuation strip
     t[nzchar(t)]
   }
-  rank_sources <- list(cleaned   = lapply(subject_dbg,     split_tokens),
-                       heuristic = lapply(title_ngram_dbg, split_tokens))
+  rank_sources <- list(cleaned   = lapply(subject_dbg,        split_tokens),
+                       heuristic = lapply(heuristic_min1_dbg, split_tokens))
   nn_corpus <- VCorpus(VectorSource(subjectlist))
   return(list(corpus = nn_corpus, rank_sources = rank_sources))
 }
@@ -406,10 +459,11 @@ another_prune_ngrams <- function(ngrams, stops){
 # tf-idf bound, by recomputing the TermDocumentMatrix with a looser local bound
 # (terms appearing at least once, instead of at least twice). Returns the
 # per-cluster sorted term lists.
-fill_empty_clusters <- function(nn_tfidf, nn_corpus){
-  replacement_nn_tfidf <- TermDocumentMatrix(nn_corpus, control = list(tokenize = SplitTokenizer,
+fill_empty_clusters <- function(fallback_corpus){
+  replacement_nn_tfidf <- TermDocumentMatrix(fallback_corpus, control = list(tokenize = SplitTokenizer,
                                                           weighting = function(x) weightSMART(x, spec="ntn"),
-                                                          bounds = list(local = c(1, Inf))
+                                                          bounds = list(local = c(1, Inf)),
+                                                          tolower = TRUE
                                                            ))
   replacement_tfidf_top <- apply(replacement_nn_tfidf, 2, function(x) {x2 <- sort(x, TRUE);x2[x2>0]})
   return(replacement_tfidf_top)
