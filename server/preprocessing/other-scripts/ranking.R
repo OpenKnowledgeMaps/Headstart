@@ -73,7 +73,7 @@ rank_of_terms <- function(terms, cleaned, heuristic, policy_spec) {
 
 # Waterfall selection over one cluster's ranked candidates. Walks the policy spec
 # top->down: a "topup" rank fills open label slots; an "exclusive" rank contributes
-# only if the label is still empty. De-nesting runs WITHIN each rank (decision #6).
+# only if the label is still empty. De-nesting runs WITHIN each rank.
 #   terms_us   : "_"-joined, weight-ordered survivors (post-prune).
 #   term_ranks : aligned provenance-rank vector.
 #   top_n      : max label terms.

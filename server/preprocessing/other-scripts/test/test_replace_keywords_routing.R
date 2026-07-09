@@ -32,7 +32,7 @@ build_md <- function() {
 test_that("a real keyword lands in rank 1 (cleaned), not rank 2", {
   md <- build_md()
   co <- get_cluster_corpus(list(groups = c(1, 1), num_clusters = 1),
-                           md, STOPS, taxonomy_separator = NULL, heuristic_col = HEUR_MIN2)
+                           md, STOPS, taxonomy_separator = NULL, percluster_filter = TRUE)
   cleaned <- co$rank_sources$cleaned[[1]]; heur <- co$rank_sources$heuristic[[1]]
   expect_true("neural_networks" %in% cleaned)
   expect_false("neural_networks" %in% heur)
@@ -41,7 +41,7 @@ test_that("a real keyword lands in rank 1 (cleaned), not rank 2", {
 test_that("a title-synthesised subject lands in rank 2 (heuristic), not rank 1", {
   md <- build_md()
   co <- get_cluster_corpus(list(groups = c(1, 1), num_clusters = 1),
-                           md, STOPS, taxonomy_separator = NULL, heuristic_col = HEUR_MIN2)
+                           md, STOPS, taxonomy_separator = NULL, percluster_filter = TRUE)
   cleaned <- co$rank_sources$cleaned[[1]]; heur <- co$rank_sources$heuristic[[1]]
   expect_true("taking_action" %in% heur)
   expect_false("taking_action" %in% cleaned)
@@ -51,7 +51,7 @@ test_that("a title-synthesised subject lands in rank 2 (heuristic), not rank 1",
 test_that("without the flag column, all subjects stay in rank 1 (backward compatible)", {
   md <- build_md(); md$subject_is_heuristic <- NULL   # simulate a pre-fix fixture
   co <- get_cluster_corpus(list(groups = c(1, 1), num_clusters = 1),
-                           md, STOPS, taxonomy_separator = NULL, heuristic_col = HEUR_MIN2)
+                           md, STOPS, taxonomy_separator = NULL, percluster_filter = TRUE)
   cleaned <- co$rank_sources$cleaned[[1]]
   expect_true("neural_networks" %in% cleaned)
   expect_true("taking_action" %in% cleaned)   # unflagged -> treated as keyword, as before

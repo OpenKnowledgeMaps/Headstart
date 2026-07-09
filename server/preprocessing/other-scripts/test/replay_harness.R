@@ -25,6 +25,23 @@ if (!exists("ranking_mode"))          source("ranking.R")
 
 REPLAY_DIR <- "test/replay"
 
+# Fixtures captured BEFORE the replace_keywords_if_empty routing fix lack the
+# `subject_is_heuristic` flag, so get_cluster_corpus falls back to treating every
+# subject as a real keyword (rank 1) — including subjects that were synthesised from
+# titles for keyword-less papers. That mis-labels complete-fallback clusters as
+# rank-1 situations. These fixtures still carry `subject_orig` (the subject BEFORE
+# synthesis), so reconstruct the flag the same way preprocess.R does: a paper whose
+# ORIGINAL subject was empty had its subject synthesised and must route to the
+# heuristic (rank-2) source. No-op once fixtures are captured post-fix (flag present)
+# and harmless in Mode 0 (the flag only affects rank sources, not the tf-idf corpus).
+backfill_subject_is_heuristic <- function(metadata) {
+  if ("subject_is_heuristic" %in% names(metadata)) return(metadata)
+  if (!"subject_orig" %in% names(metadata))        return(metadata)
+  so <- metadata$subject_orig
+  metadata$subject_is_heuristic <- nchar(ifelse(is.na(so), "", so)) <= 1
+  metadata
+}
+
 # Reduce clusters$cluster_labels (one entry per paper) to a deterministic,
 # cluster-keyed vector: one label per cluster id, ordered by id.
 labels_per_cluster <- function(clusters) {
@@ -52,7 +69,7 @@ replay_labels <- function(bundle, mode = "0") {
 
   clusters <- create_cluster_labels(
     clusters           = bundle$clusters,
-    metadata           = bundle$metadata,
+    metadata           = backfill_subject_is_heuristic(bundle$metadata),
     type_counts        = bundle$type_counts,
     weightingspec      = bundle$weightingspec,
     top_n              = bundle$top_n,
