@@ -82,13 +82,19 @@ replay_labels <- function(bundle, mode = "0") {
 
 # File helpers. Fixtures:            test/replay/<name>.inputs.rds
 #              expected Mode-0 out:  test/replay/<name>.expected.rds
+#              expected Mode-N out:  test/replay/<name>.expected.modeN.rds   (N = 1,2,3)
+# Mode 0 keeps the bare ".expected.rds" name for backward compatibility with the
+# baselines committed before ranked-mode baselining existed.
 fixture_files <- function() list.files(REPLAY_DIR, pattern = "\\.inputs\\.rds$", full.names = TRUE)
 fixture_name  <- function(path) sub("\\.inputs\\.rds$", "", basename(path))
-expected_file <- function(name) file.path(REPLAY_DIR, paste0(name, ".expected.rds"))
-read_expected <- function(name) readRDS(expected_file(name))
-write_expected <- function(name, labels) {
+expected_file <- function(name, mode = "0") {
+  suffix <- if (identical(mode, "0")) ".expected.rds" else paste0(".expected.mode", mode, ".rds")
+  file.path(REPLAY_DIR, paste0(name, suffix))
+}
+read_expected <- function(name, mode = "0") readRDS(expected_file(name, mode))
+write_expected <- function(name, labels, mode = "0") {
   dir.create(REPLAY_DIR, showWarnings = FALSE, recursive = TRUE)
-  saveRDS(labels, expected_file(name))
+  saveRDS(labels, expected_file(name, mode))
 }
 
 # A small, self-contained input bundle for validating the harness without any

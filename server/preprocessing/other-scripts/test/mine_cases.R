@@ -26,16 +26,16 @@ is_nested <- function(a, b) {
 
 # Recompute the Mode-1 per-cluster candidates exactly as create_cluster_labels does.
 cluster_candidates <- function(bundle) {
-  md <- add_heuristic_keyword_fields(bundle$metadata, bundle$stops)
+  md <- add_heuristic_keyword_fields(backfill_subject_is_heuristic(bundle$metadata), bundle$stops)
   md$keywords_rank_cleaned <- md$subject
-  co <- get_cluster_corpus(bundle$clusters, md, bundle$stops, bundle$taxonomy_separator, heuristic_col = HEUR_MIN2)
+  co <- get_cluster_corpus(bundle$clusters, md, bundle$stops, bundle$taxonomy_separator, percluster_filter = TRUE)
   tdm <- TermDocumentMatrix(co$corpus, control = list(
     tokenize = SplitTokenizer, weighting = function(x) weightSMART(x, spec = "ntn"),
     bounds = list(local = c(1, Inf)), tolower = TRUE))
   tt <- apply(tdm, 2, function(x) { x2 <- sort(x, TRUE); x2[x2 > 0] })
   empty <- which(apply(tdm, 2, sum) == 0)
   if (length(empty)) {
-    fb <- get_cluster_corpus(bundle$clusters, md, bundle$stops, bundle$taxonomy_separator, heuristic_col = HEUR_MIN1)$corpus
+    fb <- get_cluster_corpus(bundle$clusters, md, bundle$stops, bundle$taxonomy_separator, percluster_filter = FALSE)$corpus
     tt[empty] <- fill_empty_clusters(fb)[empty]
   }
 
@@ -78,6 +78,10 @@ mine <- function(path) {
   }
 }
 
-args <- commandArgs(trailingOnly = TRUE)
-files <- if (length(args)) args else fixture_files()
-for (f in files) mine(f)
+# Only mine when run as a script (Rscript test/mine_cases.R ...), not when another
+# script sources this file for its helpers (e.g. test/orcid_review_list.R).
+if (sys.nframe() == 0) {
+  args <- commandArgs(trailingOnly = TRUE)
+  files <- if (length(args)) args else fixture_files()
+  for (f in files) mine(f)
+}
