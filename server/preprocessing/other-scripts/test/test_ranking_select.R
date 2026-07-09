@@ -49,7 +49,7 @@ test_that("select_by_rank: rank 1 fills up to top_n", {
 
 test_that("select_by_rank: exclusive rank 2 is skipped while rank 1 is non-empty", {
   lab <- select_by_rank(c("k1", "h1", "h2"), c(1L, 2L, 2L), 3, spec1, id_denest)
-  expect_equal(lab, "k1")                 # < top_n is acceptable; no backfill (§15-0)
+  expect_equal(lab, "k1")                 # < top_n is acceptable; no backfill
 })
 
 test_that("select_by_rank: falls to rank 2 only when rank 1 is empty", {

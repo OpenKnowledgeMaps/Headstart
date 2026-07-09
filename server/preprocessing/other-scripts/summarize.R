@@ -3,7 +3,7 @@ vslog <- getLogger('vis.summarize')
 
 # Metadata column holding the heuristically generated (title n-gram) keywords for
 # each paper: the FULL per-paper n-gram set (DF >= 1). The document-frequency filter
-# is PER-CLUSTER and applied downstream in get_cluster_corpus (§6.1), not here — so a
+# is PER-CLUSTER and applied downstream in get_cluster_corpus, not here — so a
 # title phrase must recur within its OWN cluster to enter that cluster's initial corpus.
 HEUR_MIN1 <- "keywords_rank_heuristically_generated_min1"
 
@@ -114,7 +114,7 @@ paper_title_ngrams <- function(title, stops) {
 # Add the heuristic-keyword metadata column (HEUR_MIN1) to the metadata data frame:
 # each paper's pruned title bi-/tri-grams, stored as a "; "-joined "_"-n-gram string.
 # This is the FULL per-paper set (DF >= 1); the document-frequency filter is applied
-# PER-CLUSTER downstream in get_cluster_corpus (§6.1). Computed once, early in labelling.
+# PER-CLUSTER downstream in get_cluster_corpus. Computed once, early in labelling.
 add_heuristic_keyword_fields <- function(metadata, stops) {
   per_paper <- lapply(metadata$title, paper_title_ngrams, stops = stops)
   metadata[[HEUR_MIN1]] <- vapply(per_paper,
@@ -358,10 +358,9 @@ get_custom_cluster_corpus <- function(clusters, metadata, stops, taxonomy_separa
 
 # --- Mode 0 (legacy) corpus + fallback -------------------------------------
 # Verbatim from feat/keyword-label-improvements: Mode 0 is gated to this path so
-# it stays BYTE-IDENTICAL to the pre-ranking pipeline (docs §7). It generates the
+# it stays BYTE-IDENTICAL to the pre-ranking pipeline. It generates the
 # title n-grams INLINE (get_title_ngrams, unchanged) rather than reading the
-# per-paper heuristic column, and has no rank_sources. The team did not accept
-# a changed Mode-0 baseline, so the DF filter (§6.1) is confined to Modes 1-3.
+# per-paper heuristic column, and has no rank_sources.
 get_cluster_corpus_legacy <- function(clusters, metadata, stops, taxonomy_separator,
                                add_title_ngrams = T, custom_clustering=NULL) {
   subjectlist = list()
@@ -443,7 +442,7 @@ get_cluster_corpus <- function(clusters, metadata, stops, taxonomy_separator,
       rep(FALSE, length(matches))
     }
     # Heuristic keywords are pre-generated "_"-joined n-grams (add_heuristic_keyword_
-    # fields gives the FULL per-paper set). PER-CLUSTER DF FILTER (§6.1): for the
+    # fields gives the FULL per-paper set). PER-CLUSTER DF FILTER: for the
     # INITIAL corpus (percluster_filter=TRUE) a title n-gram is kept only if it recurs
     # in >= 2 papers of THIS cluster — local corroboration, so a cluster-local singleton
     # can't become a label just because the same n-gram appears once in another cluster.

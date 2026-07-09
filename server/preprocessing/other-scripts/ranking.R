@@ -141,7 +141,7 @@ select_cluster_label_names <- function(tfidf_top, top_n, stops, mode = "0",
     weights <- tfidf_top[[k]]
     nms <- names(weights)
     if (is.null(nms) || length(nms) == 0) { out[[k]] <- ""; next }
-    # Shared prune head (§3 step 1): same well-formedness filter as legacy, on the
+    # Shared prune head: same well-formedness filter as legacy, on the
     # global weight-ordered list. another_prune_ngrams preserves order.
     pruned <- unlist(another_prune_ngrams(nms, stops))
     if (length(pruned) == 0) { out[[k]] <- ""; next }
