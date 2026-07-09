@@ -130,6 +130,33 @@ add_heuristic_keyword_fields <- function(metadata, stops) {
   metadata
 }
 
+# Last-resort label for a cluster that produced no tf-idf label (empty even after
+# the min1 fallback): build one from the most frequent bi-/tri-grams of the
+# cluster's papers' titles + abstracts. Returns a single ", "-joined label string.
+#   matches  : row indices of the cluster's papers in `metadata`.
+#   top_n    : number of terms kept.
+title_abstract_fallback_label <- function(matches, metadata, stops, top_n = 3) {
+  batch_size <- 1000
+  total_length <- length(stops)
+  candidates = mapply(paste, metadata$title[matches], metadata$paper_abstract[matches])
+  candidates = lapply(candidates, tolower)
+  for (i in seq(1, total_length, batch_size)) {
+    candidates = lapply(candidates, function(x) {paste(removeWords(x, stops[i:min(i+batch_size -1, total_length)]), collapse="")})
+  }
+  candidates = lapply(candidates, function(x) {gsub("[^[:alpha:]]", " ", x)})
+  candidates = lapply(candidates, function(x) {gsub(" +", " ", x)})
+  candidates_bigrams = lapply(lapply(candidates, expand_ngrams, n=2), paste, collapse=" ")
+  candidates_trigrams = lapply(lapply(candidates, expand_ngrams, n=3), paste, collapse=" ")
+  candidates = unname(mapply(paste, candidates_bigrams, candidates_trigrams))
+  candidates =  unlist(lapply(candidates, str_split, " "), recursive = F)
+  candidates = unlist(lapply(candidates, function(x) {another_prune_ngrams(x, stops)}))
+  top_ngrams = sort(table(strsplit(paste(candidates, collapse=" "), " ")), decreasing = T)
+  summary <- filter_out_nested_ngrams(names(top_ngrams), top_n)
+  summary = lapply(summary, FUN = function(x) {paste(unlist(x), collapse="; ")})
+  summary = gsub("_", " ", summary)
+  paste(summary, collapse=", ")
+}
+
 # Entry point: assign a short label ("area title") to every cluster.
 # Builds one pseudo-document per cluster from its papers' subjects + title
 # n-grams (or a custom field), ranks terms by tf-idf (SMART "ntn"), and keeps the
@@ -204,53 +231,43 @@ create_cluster_labels <- function(clusters, metadata,
     tolower = TRUE
   ))
   tfidf_top <- apply(nn_tfidf, 2, function(x) {x2 <- sort(x, TRUE);x2[x2>0]})
-  empty_tfidf <- which(apply(nn_tfidf, 2, sum)==0)
   vslog$debug(paste("create_cluster_labels: tf-idf matrix", nTerms(nn_tfidf), "terms x",
-                    nDocs(nn_tfidf), "clusters;", length(empty_tfidf), "clusters need a fallback"))
+                    nDocs(nn_tfidf), "clusters"))
 
-  # fallback mechanism if first attempt to find tf-idf terms fails: 
-  # use the per-cluster corpus to get the top bi-/tri-grams from the titles of the papers in the cluster. 
-  # This is a last-resort fallback, so it is only applied to clusters that have no tf-idf terms at all (empty_tfidf). 
-  # The fallback is applied to the tfidf_top list, which is then used for label selection.
-  tfidf_top[c(empty_tfidf)] <- fill_empty_clusters(fallback_corpus)[c(empty_tfidf)]
-  
   # Ranking-mode wedge (ranking.R): Mode 0 is the unchanged legacy selection;
   # Modes 1-3 apply rank-aware selection over the same global ranking, partitioned
-  # by rank_sources. The existing fallbacks below (title/abstract frequency) remain
-  # the final safety net in every mode.
+  # by rank_sources. Initial labels come from the min2 (DF >= 2) corpus.
   tfidf_top_names <- select_cluster_label_names(tfidf_top, top_n, stops, mode = mode,
                                                 rank_sources = rank_sources)
+
+  # min1 fallback: any cluster whose label came out EMPTY is re-labelled from the
+  # min1 corpus (all title n-grams, bound 1). The trigger is "empty label", NOT
+  # "zero tf-idf sum": with the min2 DF filter a cluster can have a tiny tf-idf that
+  # prunes away to nothing, which the old zero-sum check missed, dropping it
+  # straight to the abstract-frequency fallback instead of the intended min1 rescue.
+  # The title/abstract-frequency fallback below remains the true last resort.
+  empty_label <- which(!vapply(tfidf_top_names,
+                               function(x) { s <- if (length(x)) x[[1]] else ""; nzchar(s) },
+                               logical(1)))
+  if (length(empty_label) > 0) {
+    vslog$debug(paste("create_cluster_labels: min1 fallback for", length(empty_label),
+                      "clusters with an empty min2 label"))
+    fallback_top   <- fill_empty_clusters(fallback_corpus)
+    fallback_names <- select_cluster_label_names(fallback_top, top_n, stops, mode = mode,
+                                                 rank_sources = rank_sources)
+    tfidf_top_names[empty_label] <- fallback_names[empty_label]
+  }
   dump_data(tfidf_top_names, "summarize_05_tfidf_top_names")
   clusters$cluster_labels = ""
-  batch_size <- 1000
-  total_length <- length(stops)
   for (k in seq(1, clusters$num_clusters)) {
     matches = which(unname(clusters$groups == k) == TRUE)
     summary = tfidf_top_names[[k]]
     if (summary == "") {
-      # Cluster label generation fallback:
-      # This is applied to clusters that have no top names,
-      # and will be used to generate a label from the titles and
-      # abstracts of the papers in the cluster
+      # No tf-idf label survived even the min1 fallback: last-resort label built
+      # from the papers' titles + abstracts (see title_abstract_fallback_label).
       vslog$debug(paste("create_cluster_labels: title/abstract fallback for cluster", k,
                         "with", length(matches), "papers"))
-      candidates = mapply(paste, metadata$title[matches], metadata$paper_abstract[matches])
-      candidates = lapply(candidates, tolower)
-      for (i in seq(1, total_length, batch_size)) {
-        candidates = lapply(candidates, function(x) {paste(removeWords(x, stops[i:min(i+batch_size -1, total_length)]), collapse="")})
-      }
-      candidates = lapply(candidates, function(x) {gsub("[^[:alpha:]]", " ", x)})
-      candidates = lapply(candidates, function(x) {gsub(" +", " ", x)})
-      candidates_bigrams = lapply(lapply(candidates, expand_ngrams, n=2), paste, collapse=" ")
-      candidates_trigrams = lapply(lapply(candidates, expand_ngrams, n=3), paste, collapse=" ")
-      candidates = unname(mapply(paste, candidates_bigrams, candidates_trigrams))
-      candidates =  unlist(lapply(candidates, str_split, " "), recursive = F)
-      candidates = unlist(lapply(candidates, function(x) {another_prune_ngrams(x, stops)}))
-      top_ngrams = sort(table(strsplit(paste(candidates, collapse=" "), " ")), decreasing = T)
-      summary <- filter_out_nested_ngrams(names(top_ngrams), 3)
-      summary = lapply(summary, FUN = function(x) {paste(unlist(x), collapse="; ")})
-      summary = gsub("_", " ", summary)
-      summary = paste(summary, collapse=", ")
+      summary <- title_abstract_fallback_label(matches, metadata, stops, top_n)
     }
     clusters$cluster_labels[c(matches)] = summary
   }
