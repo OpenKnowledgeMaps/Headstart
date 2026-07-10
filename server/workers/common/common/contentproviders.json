@@ -1,5 +1,77 @@
 [
   {
+    "name": "Scientific Journals Online Andrzej Frycz Modrzewski Krakow University",
+    "internal_name": "ftid14868"
+  },
+  {
+    "name": "Scholastic Research Publication (SRP)",
+    "internal_name": "ftid14881"
+  },
+  {
+    "name": "E-Journal Yayasan Pustaka Karya Mandiri",
+    "internal_name": "ftid14893"
+  },
+  {
+    "name": "Libyan Journal of Medical and Applied Sciences (LJMAS)",
+    "internal_name": "ftid14898"
+  },
+  {
+    "name": "Egertu Digital Library",
+    "internal_name": "ftid14901"
+  },
+  {
+    "name": "Fondo documental digital Melilla-Rif",
+    "internal_name": "ftid14902"
+  },
+  {
+    "name": "EduFacturing Open AM Knowledge Base",
+    "internal_name": "ftid14903"
+  },
+  {
+    "name": "IASRD Open Access Journals",
+    "internal_name": "ftid14904"
+  },
+  {
+    "name": "Revista Fórum Trabalhista - RFT",
+    "internal_name": "ftid14905"
+  },
+  {
+    "name": "Omni Journal",
+    "internal_name": "ftid14906"
+  },
+  {
+    "name": "True Parents Legacy Archive",
+    "internal_name": "ftid14907"
+  },
+  {
+    "name": "Journal of Educational Impact",
+    "internal_name": "ftid14908"
+  },
+  {
+    "name": "Rumah Jurnal Digital Edukasi Nusantara",
+    "internal_name": "ftid14909"
+  },
+  {
+    "name": "Institute of Advanced Technology and Green Innovation (INATGI)",
+    "internal_name": "ftid14910"
+  },
+  {
+    "name": "Journal of Health Synapse (JHS)",
+    "internal_name": "ftid14911"
+  },
+  {
+    "name": "Journal of Biomedical & Space Sciences (JBSS)",
+    "internal_name": "ftid14912"
+  },
+  {
+    "name": "Revista Esmat",
+    "internal_name": "ftid14913"
+  },
+  {
+    "name": "Journal of Computer Science, Engineering & Applied Mathematics (JCSEAM)",
+    "internal_name": "ftid14914"
+  },
+  {
     "name": "Adiyaman University Research and Academic Performance System",
     "internal_name": "ftid14865"
   },
@@ -8166,10 +8238,6 @@
   {
     "name": "Médiations et médiatisations",
     "internal_name": "ftjrmediations"
-  },
-  {
-    "name": "Österreichische Zeitschrift für Politikwissenschaft",
-    "internal_name": "ftjoezp"
   },
   {
     "name": "Pathfinder - A Canadian Journal for Information Science Students and Early Career Professionals",
@@ -31264,10 +31332,6 @@
     "internal_name": "ftjizgonzeit"
   },
   {
-    "name": "Informatics Journals (Informatics Publishing Ltd.)",
-    "internal_name": "ftinformaticsojs"
-  },
-  {
     "name": "Известия Национальной академии наук Беларуси. Серия химических наук",
     "internal_name": "ftjpnasbcs"
   },
@@ -46640,10 +46704,6 @@
     "internal_name": "ftsmithonian"
   },
   {
-    "name": "Deutsche Bodenkundliche Gesellschaft: DBGPrints-Archiv",
-    "internal_name": "ftdbg"
-  },
-  {
     "name": "Тверской государственный университе",
     "internal_name": "fttverstateuniv"
   },
@@ -48534,10 +48594,6 @@
   {
     "name": "HighWire Press (Stanford University)",
     "internal_name": "fthighwire"
-  },
-  {
-    "name": "Informatik an der Universität Stuttgart: Veröffentlichungen",
-    "internal_name": "ftunivstucsa"
   },
   {
     "name": "Papyrus Projekt Gießen (Justus-Liebig Universität, JLU)",
