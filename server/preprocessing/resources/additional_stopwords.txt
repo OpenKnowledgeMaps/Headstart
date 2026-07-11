@@ -600,6 +600,3 @@ psy
 relig
 anthro-se
 socio
-science
-medicine
-animals

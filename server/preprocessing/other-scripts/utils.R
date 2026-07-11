@@ -52,6 +52,21 @@ get_stopwords <- function(languages) {
   return(stopwords)
 }
 
+# Curated area-label exclusion list: terms that must never appear as an area label
+# (generic MeSH check-tags / classification words, e.g. "Humans", "Animals",
+# "Science", "Medicine"). Unlike stopwords this is applied ONLY at label selection
+# (post-tf-idf, pre-ranking) as a whole-term, case-insensitive exact match — it does
+# NOT touch n-gram generation or the corpus. Returns a lowercase character vector
+# (empty if the resource file is absent, so it is a no-op by default).
+get_label_exclusions <- function() {
+  path <- if (dir.exists("../resources")) "../resources/label_exclusions.txt" else
+          if (dir.exists("./resources"))  "./resources/label_exclusions.txt"  else
+          "../../resources/label_exclusions.txt"
+  if (!file.exists(path)) return(character(0))
+  x <- tolower(trimws(readLines(path, warn = FALSE)))
+  x[nzchar(x)]
+}
+
 
 # Configure logging at the given level. Sets the *root logger level* so that
 # records at `loglevel` and above are actually emitted -- the previous version

@@ -134,9 +134,11 @@ add_heuristic_keyword_fields <- function(metadata, stops) {
 # Last-resort label for a cluster that produced no tf-idf label (empty even after
 # the min1 fallback): build one from the most frequent bi-/tri-grams of the
 # cluster's papers' titles + abstracts. Returns a single ", "-joined label string.
-#   matches  : row indices of the cluster's papers in `metadata`.
-#   top_n    : number of terms kept.
-title_abstract_fallback_label <- function(matches, metadata, stops, top_n = 3) {
+#   matches          : row indices of the cluster's papers in `metadata`.
+#   top_n            : number of terms kept.
+#   label_exclusions : curated area-label exclusion list (whole-term, case-insensitive)
+#                      applied here too so listed terms never survive as a last resort.
+title_abstract_fallback_label <- function(matches, metadata, stops, top_n = 3, label_exclusions = character(0)) {
   batch_size <- 1000
   total_length <- length(stops)
   candidates = mapply(paste, metadata$title[matches], metadata$paper_abstract[matches])
@@ -152,6 +154,10 @@ title_abstract_fallback_label <- function(matches, metadata, stops, top_n = 3) {
   candidates =  unlist(lapply(candidates, str_split, " "), recursive = F)
   candidates = unlist(lapply(candidates, function(x) {another_prune_ngrams(x, stops)}))
   top_ngrams = sort(table(strsplit(paste(candidates, collapse=" "), " ")), decreasing = T)
+  if (length(label_exclusions)) {                              # whole-term exclusion (see drop_excluded_terms)
+    norm <- trimws(tolower(gsub("_", " ", names(top_ngrams))))
+    top_ngrams <- top_ngrams[!(norm %in% tolower(trimws(label_exclusions)))]
+  }
   summary <- filter_out_nested_ngrams(names(top_ngrams), top_n)
   summary = lapply(summary, FUN = function(x) {paste(unlist(x), collapse="; ")})
   summary = gsub("_", " ", summary)
@@ -199,6 +205,10 @@ create_cluster_labels <- function(clusters, metadata,
   # the map-wide DF-filtered (min2/min1) corpus + rank-aware selection.
   mode <- ranking_mode(service)
   cc <- params$custom_clustering
+  # Curated area-label exclusion list, applied post-tf-idf / pre-ranking at every
+  # candidate-producing tier (initial, fallback, title/abstract) so listed generic
+  # terms can never become a label — in all modes. See get_label_exclusions.
+  label_exclusions <- get_label_exclusions()
   vslog$debug(paste("create_cluster_labels: ranking mode", mode, "for service",
                     if (is.null(service)) "(none)" else service))
 
@@ -254,6 +264,7 @@ create_cluster_labels <- function(clusters, metadata,
       tolower = TRUE
     ))
     tfidf_top <- apply(nn_tfidf, 2, function(x) {x2 <- sort(x, TRUE);x2[x2>0]})
+    tfidf_top <- drop_excluded_terms(tfidf_top, label_exclusions)   # post-tf-idf, pre-ranking
     vslog$debug(paste("create_cluster_labels: tf-idf matrix", nTerms(nn_tfidf), "terms x",
                       nDocs(nn_tfidf), "clusters"))
 
@@ -274,7 +285,7 @@ create_cluster_labels <- function(clusters, metadata,
     if (length(empty_label) > 0) {
       vslog$debug(paste("create_cluster_labels: min1 fallback for", length(empty_label),
                         "clusters with an empty min2 label"))
-      fallback_top   <- fill_empty_clusters(fallback_corpus)
+      fallback_top   <- drop_excluded_terms(fill_empty_clusters(fallback_corpus), label_exclusions)
       fallback_names <- select_cluster_label_names(fallback_top, top_n, stops, mode = mode,
                                                    rank_sources = rank_sources)
       tfidf_top_names[empty_label] <- fallback_names[empty_label]
@@ -290,7 +301,7 @@ create_cluster_labels <- function(clusters, metadata,
       # from the papers' titles + abstracts (see title_abstract_fallback_label).
       vslog$debug(paste("create_cluster_labels: title/abstract fallback for cluster", k,
                         "with", length(matches), "papers"))
-      summary <- title_abstract_fallback_label(matches, metadata, stops, top_n)
+      summary <- title_abstract_fallback_label(matches, metadata, stops, top_n, label_exclusions)
     }
     clusters$cluster_labels[c(matches)] = summary
   }

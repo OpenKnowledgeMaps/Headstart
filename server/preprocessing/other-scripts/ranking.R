@@ -106,6 +106,24 @@ format_label <- function(terms) {
   paste(cap, collapse = ", ")
 }
 
+# Area-label exclusion filter (post-tf-idf, PRE-ranking). Drops excluded terms from
+# each cluster's tf-idf candidate list so they can never become a label AND never
+# consume a top-n slot. Matching is WHOLE-TERM, case-insensitive, exact: a candidate
+# term is normalised (underscores -> spaces, lowercased, trimmed) and dropped only if
+# the ENTIRE term equals an excluded term — no substring / partial / nested-n-gram
+# match, so multi-word terms ("Animal models", "Sports medicine") are untouched.
+#   tfidf_top  : per-cluster named, descending tf-idf term lists.
+#   exclusions : lowercase character vector (see get_label_exclusions). Empty = no-op.
+drop_excluded_terms <- function(tfidf_top, exclusions) {
+  if (!length(exclusions)) return(tfidf_top)
+  ex <- tolower(trimws(exclusions))
+  lapply(tfidf_top, function(w) {
+    if (is.null(w) || length(w) == 0 || is.null(names(w))) return(w)
+    norm <- trimws(tolower(gsub("_", " ", names(w))))
+    w[!(norm %in% ex)]
+  })
+}
+
 # Selection wedge: turn the per-cluster ranked tf-idf term lists into display
 # labels according to `mode`.
 #   - Mode 0 (or no rank_sources, or an unimplemented mode) -> the unchanged legacy

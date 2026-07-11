@@ -73,3 +73,31 @@ test_that("format_label capitalises each term and joins with ', '", {
 test_that("format_label of nothing is the empty string", {
   expect_equal(format_label(character(0)), "")
 })
+
+# --- drop_excluded_terms -----------------------------------------------------
+# tfidf_top entries are per-cluster named numeric weight vectors.
+nw <- function(...) { v <- c(...); v }
+test_that("drop_excluded_terms removes whole-term, case-insensitive exact matches", {
+  tt <- list(c(humans = 5, animals = 4, medicine = 3, neoplasms = 2))
+  out <- drop_excluded_terms(tt, c("humans", "animals", "science", "medicine"))
+  expect_equal(names(out[[1]]), "neoplasms")
+  expect_equal(unname(out[[1]]), 2)
+})
+
+test_that("drop_excluded_terms is case-insensitive and normalises underscores", {
+  tt <- list(c(Humans = 5, Sports_Medicine = 4))   # underscore n-gram
+  out <- drop_excluded_terms(tt, c("humans", "medicine"))
+  expect_equal(names(out[[1]]), "Sports_Medicine")  # whole term != "medicine" -> kept
+})
+
+test_that("drop_excluded_terms does NOT do partial / nested matches", {
+  tt <- list(c(medicine = 3, `sports medicine` = 2, `animal models` = 1))
+  out <- drop_excluded_terms(tt, c("medicine", "animals"))
+  expect_equal(sort(names(out[[1]])), sort(c("animal models", "sports medicine")))
+})
+
+test_that("drop_excluded_terms is a no-op with empty exclusions or empty cluster", {
+  tt <- list(c(a = 1, b = 2), numeric(0))
+  expect_equal(drop_excluded_terms(tt, character(0)), tt)
+  expect_equal(length(drop_excluded_terms(tt, c("a"))[[2]]), 0)
+})
