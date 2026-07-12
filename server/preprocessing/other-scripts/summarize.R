@@ -214,8 +214,10 @@ create_cluster_labels <- function(clusters, metadata,
   cc <- params$custom_clustering
   # Curated area-label exclusion list, applied post-tf-idf / pre-ranking at every
   # candidate-producing tier (initial, fallback, title/abstract) so listed generic
-  # terms can never become a label — in all modes. See get_label_exclusions.
-  label_exclusions <- get_label_exclusions()
+  # terms can never become a label. Scoped to Modes 1-3 ONLY: Mode 0 stays
+  # byte-identical to the legacy pipeline, so it gets no exclusion (empty list ->
+  # drop_excluded_terms is a no-op). See get_label_exclusions.
+  label_exclusions <- if (identical(mode, "0")) character(0) else get_label_exclusions()
   vslog$debug(paste("create_cluster_labels: ranking mode", mode, "for service",
                     if (is.null(service)) "(none)" else service))
 
@@ -238,6 +240,7 @@ create_cluster_labels <- function(clusters, metadata,
     # SAME corpus at bound c(1, Inf).
     empty_tfidf <- which(apply(nn_tfidf, 2, sum) == 0)
     tfidf_top[c(empty_tfidf)] <- fill_empty_clusters_legacy(nn_tfidf, nn_corpus)[c(empty_tfidf)]
+    # NB: no label-exclusion filter here — Mode 0 is byte-identical to legacy.
     tfidf_top_names <- get_top_names(tfidf_top, top_n, stops)
   } else {
     # ---- Modes 1-3: DF-filtered corpus + rank-aware selection ------------------
