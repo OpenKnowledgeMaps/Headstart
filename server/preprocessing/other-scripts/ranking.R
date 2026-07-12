@@ -91,7 +91,7 @@ rank_of_terms <- function(terms, sources, spec) {
 
 # Waterfall selection over one cluster's ranked candidates. Walks the policy spec
 # top->down: a "topup" rank fills open label slots; an "exclusive" rank contributes
-# only if the label is still empty. De-nesting runs WITHIN each rank (decision #6).
+# only if the label is still empty. De-nesting runs WITHIN each rank.
 #   terms_us   : "_"-joined, weight-ordered survivors (post-prune).
 #   term_ranks : aligned provenance-rank vector.
 #   top_n      : max label terms.
@@ -122,6 +122,24 @@ format_label <- function(terms) {
   terms <- trimws(terms)
   cap <- paste0(toupper(substr(terms, 1, 1)), substr(terms, 2, nchar(terms)))
   paste(cap, collapse = ", ")
+}
+
+# Area-label exclusion filter (post-tf-idf, PRE-ranking). Drops excluded terms from
+# each cluster's tf-idf candidate list so they can never become a label AND never
+# consume a top-n slot. Matching is WHOLE-TERM, case-insensitive, exact: a candidate
+# term is normalised (underscores -> spaces, lowercased, trimmed) and dropped only if
+# the ENTIRE term equals an excluded term — no substring / partial / nested-n-gram
+# match, so multi-word terms ("Animal models", "Sports medicine") are untouched.
+#   tfidf_top  : per-cluster named, descending tf-idf term lists.
+#   exclusions : lowercase character vector (see get_label_exclusions). Empty = no-op.
+drop_excluded_terms <- function(tfidf_top, exclusions) {
+  if (!length(exclusions)) return(tfidf_top)
+  ex <- tolower(trimws(exclusions))
+  lapply(tfidf_top, function(w) {
+    if (is.null(w) || length(w) == 0 || is.null(names(w))) return(w)
+    norm <- trimws(tolower(gsub("_", " ", names(w))))
+    w[!(norm %in% ex)]
+  })
 }
 
 # Selection wedge: turn the per-cluster ranked tf-idf term lists into display

@@ -33,6 +33,7 @@ base_files <- c(
 replay_files <- c(
   "test/test_replay_harness.R",
   "test/test_replay_modes.R",
+  "test/test_replace_keywords_routing.R",
   "test/test_mode1_selection.R",
   "test/test_fallback.R",
   "test/test_mode2.R"

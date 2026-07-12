@@ -17,6 +17,42 @@
 suppressWarnings(suppressMessages(source("test/replay_harness.R")))
 
 # is_nested() and mode1_cluster_breakdown() are provided by replay_harness.R.
+TOP_N <- 3
+SPEC  <- rank_policies("1")
+
+# word-sequence containment: is `a` a contiguous run of words inside `b`?
+is_nested <- function(a, b) {
+  a != b && grepl(paste0(" ", a, " "), paste0(" ", b, " "), fixed = TRUE)
+}
+
+# Recompute the Mode-1 per-cluster candidates exactly as create_cluster_labels does.
+cluster_candidates <- function(bundle) {
+  md <- add_heuristic_keyword_fields(backfill_subject_is_heuristic(bundle$metadata), bundle$stops)
+  md$keywords_rank_cleaned <- md$subject
+  co <- get_cluster_corpus(bundle$clusters, md, bundle$stops, bundle$taxonomy_separator, heuristic_col = HEUR_MIN2)
+  tdm <- TermDocumentMatrix(co$corpus, control = list(
+    tokenize = SplitTokenizer, weighting = function(x) weightSMART(x, spec = "ntn"),
+    bounds = list(local = c(1, Inf)), tolower = TRUE))
+  tt <- apply(tdm, 2, function(x) { x2 <- sort(x, TRUE); x2[x2 > 0] })
+  empty <- which(apply(tdm, 2, sum) == 0)
+  if (length(empty)) {
+    fb <- get_cluster_corpus(bundle$clusters, md, bundle$stops, bundle$taxonomy_separator, heuristic_col = HEUR_MIN1)$corpus
+    tt[empty] <- fill_empty_clusters(fb)[empty]
+  }
+
+  out <- vector("list", length(tt))
+  for (k in seq_along(tt)) {
+    nms <- names(tt[[k]]); if (is.null(nms) || !length(nms)) next
+    pruned <- unlist(another_prune_ngrams(nms, bundle$stops)); if (!length(pruned)) next
+    rr <- rank_of_terms(pruned, co$rank_sources$cleaned[[k]], co$rank_sources$heuristic[[k]], SPEC)
+    sp <- trimws(gsub("_", " ", pruned))
+    out[[k]] <- list(
+      r1    = sp[rr$ranks == 1],                       # rank-1 terms, weight-ordered
+      r2    = sp[rr$ranks == 2],                       # rank-2 terms, weight-ordered
+      label = format_label(select_by_rank(pruned, rr$ranks, TOP_N, SPEC)))
+  }
+  out
+}
 
 fmt <- function(x, n = 8) if (length(x)) paste(head(x, n), collapse = " | ") else "(none)"
 
@@ -43,6 +79,10 @@ mine <- function(path) {
   }
 }
 
-args <- commandArgs(trailingOnly = TRUE)
-files <- if (length(args)) args else fixture_files()
-for (f in files) mine(f)
+# Only mine when run as a script (Rscript test/mine_cases.R ...), not when another
+# script sources this file for its helpers (e.g. test/orcid_review_list.R).
+if (sys.nframe() == 0) {
+  args <- commandArgs(trailingOnly = TRUE)
+  files <- if (length(args)) args else fixture_files()
+  for (f in files) mine(f)
+}
