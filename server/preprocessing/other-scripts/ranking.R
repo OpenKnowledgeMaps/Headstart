@@ -62,9 +62,9 @@ rank_spec <- function(mode) {
       list(rank = 2L, sources = c("mesh_generic"),                     policy = "exclusive"),  # generic MeSH
       list(rank = 3L, sources = c("heuristic"),                        policy = "exclusive")),
     "3" = list(
-      list(rank = 1L, sources = c("cleaned_ex_mesh"),                  policy = "topup"),      # keywords
-      list(rank = 2L, sources = c("mesh_specific"),                    policy = "topup"),      # specific MeSH tops up (decision #1)
-      list(rank = 3L, sources = c("mesh_generic"),                     policy = "exclusive"),  # generic MeSH
+      list(rank = 1L, sources = c("cleaned_ex_mesh"),                  policy = "topup"),                       # keywords
+      list(rank = 2L, sources = c("mesh_specific"),                    policy = "topup", cross_denest = TRUE),  # specific MeSH tops up + cross-rank de-nest vs keywords (decisions #1/#6)
+      list(rank = 3L, sources = c("mesh_generic"),                     policy = "exclusive"),                   # generic MeSH
       list(rank = 4L, sources = c("heuristic"),                        policy = "exclusive")),
     NULL)
 }
@@ -102,14 +102,26 @@ select_by_rank <- function(terms_us, term_ranks, top_n, policy_spec,
   label <- character(0)
   for (step in policy_spec) {
     if (identical(step$policy, "exclusive") && length(label) > 0) next
+    # A cross-rank step (Mode 3 rank 2) may still REPLACE a nested term even when no
+    # slots are open, so it must not be short-circuited by the open-slot guard.
+    cross <- isTRUE(step$cross_denest) && length(label) > 0
     open <- top_n - length(label)
-    if (open <= 0) break
+    if (open <= 0 && !cross) break
     sel <- terms_us[term_ranks == step$rank]          # weight-ordered
     if (length(sel) == 0) next
     sel <- trimws(gsub("_", " ", sel))
     sel <- unlist(denest_fn(sel, top_n))              # de-nest within rank
     if (length(sel) == 0) next
-    label <- c(label, head(sel, open))
+    if (cross) {
+      # Cross-rank de-nesting (Mode 3, rank 1 <-> rank 2 only, decision #6): de-nest
+      # this rank's candidates TOGETHER with the label built so far. String nesting
+      # (filter_out_nested_ngrams): a specific-MeSH term that CONTAINS a selected
+      # keyword replaces it in place (backfill, e.g. "cancer" -> "breast cancer"); a
+      # specific-MeSH term nested INSIDE a keyword is dropped; keyword order is kept.
+      label <- unlist(denest_fn(c(label, sel), top_n))
+    } else {
+      label <- c(label, head(sel, open))
+    }
   }
   label
 }

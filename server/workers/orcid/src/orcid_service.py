@@ -283,7 +283,9 @@ class OrcidService:
 
         original_columns = metadata.columns.to_list()
         required_fields = ['id', 'identifier', 'relevance', 'relation', 'title', 'subtitle', 'doi',
-                       'paper_abstract', 'link', 'subject', 'oa_state', 'subject_orig', 'published_in',
+                       'paper_abstract', 'link', 'subject', 'oa_state', 'subject_orig',
+                       'keywords_rank_mesh_specific', 'keywords_rank_mesh_generic',  # ranking Modes 2/3 (from BASE enrichment)
+                       'published_in',
                        'year', 'authors', 'url', 'resulttype', 'type', 'typenorm', 'lang', 'language',
                        'content_provider', 'coverage', 'is_duplicate', 'has_dataset', 'sanitized_authors',
                        'relations', 'annotations', 'repo', 'source', 'volume', 'issue', 'page', 'issn',
@@ -467,7 +469,7 @@ class OrcidService:
             self._log_dataframe(enriched_metadata.sort_values(by='title'), params, '_enriched')
 
         # temporal solution, for some reason if we have some undefined data, dataprocessing is failing
-        enriched_metadata = enriched_metadata.reindex(columns=list(set(original_columns + ['oa_state', 'subject', 'subject_orig', 'paper_abstract', 'link', 'relation'])))
+        enriched_metadata = enriched_metadata.reindex(columns=list(set(original_columns + ['oa_state', 'subject', 'subject_orig', 'paper_abstract', 'link', 'relation', 'keywords_rank_mesh_specific', 'keywords_rank_mesh_generic'])))
 
         return enriched_metadata
 

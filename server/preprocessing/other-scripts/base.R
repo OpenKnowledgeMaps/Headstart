@@ -3,6 +3,7 @@ library(stringr)
 library(dplyr)
 source('preprocess.R')
 source('subject_cleaning.R')
+source('mesh_fields.R')   # add_mesh_rank_fields(): MeSH specific/generic columns (ranking Modes 2/3)
 
 # get_papers
 #
@@ -289,6 +290,9 @@ etl <- function(res, repo, non_public) {
   subject_cleaned = gsub("\\s+", " ", subject_cleaned) # clean up keyword separation
   subject_cleaned = stringi::stri_trim(subject_cleaned) # clean up keyword separation
   metadata$subject = subject_cleaned
+  # Additive MeSH rank-provenance columns for ranking Modes 2/3 (derived from the
+  # raw [MeSH]-marked subject_orig; subject/subject_orig untouched). Shared module.
+  metadata = add_mesh_rank_fields(metadata)
 
   metadata$authors = check_metadata(res$dccreator)
 

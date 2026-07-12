@@ -26,7 +26,8 @@ base_files <- c(
   "test/test_ranking_config.R",
   "test/test_ranking_wedge.R",
   "test/test_ranking_select.R",
-  "test/test_mesh_classification.R"
+  "test/test_mesh_classification.R",
+  "test/test_mesh_fields.R"
 )
 # Replay tests need the tm stack — included only when tm is available (i.e. inside
 # the pipeline image, run via test/run_tests.sh), skipped on a bare host.

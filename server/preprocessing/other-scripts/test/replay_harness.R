@@ -22,6 +22,7 @@ suppressWarnings(suppressMessages({
 if (!exists("dump_data"))              source("utils.R")
 if (!exists("create_cluster_labels")) source("summarize.R")
 if (!exists("ranking_mode"))          source("ranking.R")
+if (!exists("add_mesh_rank_fields"))  source("mesh_fields.R")
 
 REPLAY_DIR <- "test/replay"
 
@@ -67,9 +68,12 @@ replay_labels <- function(bundle, mode = "0") {
   if (length(rk)) Sys.unsetenv(rk)
   Sys.setenv(RANKING_MODE = mode, LOGLEVEL = "INFO")  # INFO => dump_data() no-ops
 
+  # Fixtures captured before the MeSH-column feature carry no keywords_rank_mesh_*
+  # columns; derive them from subject_orig (as base.R now does) so Modes 2/3 replay
+  # meaningfully. Harmless for Modes 0/1 (they don't read the columns). Idempotent.
   clusters <- create_cluster_labels(
     clusters           = bundle$clusters,
-    metadata           = backfill_subject_is_heuristic(bundle$metadata),
+    metadata           = add_mesh_rank_fields(backfill_subject_is_heuristic(bundle$metadata)),
     type_counts        = bundle$type_counts,
     weightingspec      = bundle$weightingspec,
     top_n              = bundle$top_n,

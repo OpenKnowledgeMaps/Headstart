@@ -18,8 +18,9 @@ if (!requireNamespace("testthat", quietly = TRUE)) {
 }
 
 # Modes with committed baselines. Mode 0 is the byte-identical legacy baseline;
-# Mode 1 pins the first ranked mode. Add "2"/"3" here as those modes land.
-REPLAY_MODES <- c("0", "1")
+# Modes 1-3 pin the ranked modes (2/3 use the MeSH split, derived from subject_orig
+# by the harness for fixtures captured before that feature).
+REPLAY_MODES <- c("0", "1", "2", "3")
 
 fixtures <- fixture_files()
 

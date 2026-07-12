@@ -132,3 +132,51 @@ test_that("drop_excluded_terms is a no-op with empty exclusions or empty cluster
   expect_equal(drop_excluded_terms(tt, character(0)), tt)
   expect_equal(length(drop_excluded_terms(tt, c("a"))[[2]]), 0)
 })
+
+# --- Mode-3 cross-rank de-nesting (rank 1 keywords <-> rank 2 specific MeSH) --
+spec3 <- rank_spec("3")
+# Faithful string-nesting de-nester mirroring filter_out_nested_ngrams: substring
+# nesting, replace a nested term IN PLACE with the more specific (containing) one,
+# preserve order, truncate to n. (The real fn needs stringi; this keeps the pure.)
+str_denest <- function(x, n) {
+  out <- character(0)
+  for (t in x) {
+    if (!nzchar(t)) next
+    if (length(out)) {
+      contains <- vapply(out, function(o) grepl(o, t, fixed = TRUE), logical(1))  # existing inside t
+      within   <- vapply(out, function(o) grepl(t, o, fixed = TRUE), logical(1))  # t inside existing
+      if (any(within)) next
+      if (any(contains)) { out[which(contains)] <- t; next }
+    }
+    out <- c(out, t)
+  }
+  head(unique(out), n)
+}
+
+test_that("spec3 rank 2 (specific MeSH) is flagged for cross-rank de-nesting", {
+  expect_true(isTRUE(spec3[[2]]$cross_denest))
+  expect_null(rank_spec("1")[[2]]$cross_denest)   # Mode 1 does NOT cross-denest
+})
+
+test_that("Mode 3: specific MeSH backfills a nested keyword (cancer -> breast cancer)", {
+  expect_equal(select_by_rank(c("cancer", "breast_cancer"), c(1L, 2L), 3, spec3, str_denest),
+               "breast cancer")
+})
+
+test_that("Mode 3: a keyword more specific than the MeSH is kept, the MeSH dropped", {
+  expect_equal(select_by_rank(c("breast_cancer", "cancer"), c(1L, 2L), 3, spec3, str_denest),
+               "breast cancer")
+})
+
+test_that("Mode 3: non-nested keyword + specific MeSH both appear (top-up)", {
+  expect_equal(sort(select_by_rank(c("diet", "breast_cancer"), c(1L, 2L), 3, spec3, str_denest)),
+               sort(c("diet", "breast cancer")))
+})
+
+test_that("Mode 3: backfill still fires when rank 1 already filled top_n", {
+  lab <- select_by_rank(c("cancer", "diet", "female", "breast_cancer"),
+                        c(1L, 1L, 1L, 2L), 3, spec3, str_denest)
+  expect_true("breast cancer" %in% lab)
+  expect_false("cancer" %in% lab)
+  expect_equal(length(lab), 3)
+})
