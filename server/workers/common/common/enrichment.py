@@ -79,6 +79,8 @@ def enrich_anchor_using_duplicates(df, duplicate_groups):
     has_link = 'link' in df.columns
     has_additional_dois = 'additional_dois' in df.columns
     has_doi = 'doi' in df.columns
+    has_mesh_specific = 'keywords_rank_mesh_specific' in df.columns
+    has_mesh_generic = 'keywords_rank_mesh_generic' in df.columns
 
     is_all_columns_are_missing = (not has_subject_orig and not has_subject and not has_paper_abstract
                                   and not has_oa_state and not has_link and not has_additional_dois)
@@ -112,6 +114,8 @@ def enrich_anchor_using_duplicates(df, duplicate_groups):
         oa_state_acc = {'best_value': None, 'best_priority': float('inf')}
         all_links = set()
         additional_dois_acc = {}
+        mesh_specific_acc = {'all_keywords': set(), 'best_value': None, 'best_count': 0}
+        mesh_generic_acc = {'all_keywords': set(), 'best_value': None, 'best_count': 0}
 
         for element_idx in idx:
             if has_subject_orig:
@@ -139,6 +143,15 @@ def enrich_anchor_using_duplicates(df, duplicate_groups):
                 additional_dois_value = group_data.loc[element_idx, 'additional_dois'] if has_additional_dois else None
                 process_additional_dois_element(doi_value, additional_dois_value, additional_dois_acc)
 
+            # MeSH rank columns (ranking Modes 2/3): merge them exactly like subject_orig,
+            # so a duplicate carrying MeSH is not lost when its subject_orig is absorbed
+            # into the anchor. Without this the anchor gets [MeSH]-marked subject_orig but
+            # EMPTY MeSH columns, and Modes 2/3 silently degrade to Mode 1.
+            if has_mesh_specific:
+                process_subject_element(group_data.loc[element_idx, 'keywords_rank_mesh_specific'], mesh_specific_acc)
+            if has_mesh_generic:
+                process_subject_element(group_data.loc[element_idx, 'keywords_rank_mesh_generic'], mesh_generic_acc)
+
         if has_subject_orig:
             apply_subject_improvements(df, anchor_idx, subject_orig_acc, 'subject_orig')
 
@@ -156,6 +169,11 @@ def enrich_anchor_using_duplicates(df, duplicate_groups):
 
         if has_additional_dois:
             apply_additional_dois_improvements(df, anchor_idx, additional_dois_acc)
+
+        if has_mesh_specific:
+            apply_subject_improvements(df, anchor_idx, mesh_specific_acc, 'keywords_rank_mesh_specific')
+        if has_mesh_generic:
+            apply_subject_improvements(df, anchor_idx, mesh_generic_acc, 'keywords_rank_mesh_generic')
 
         # _log_anchor_state('AFTER', df, anchor_idx)
 
