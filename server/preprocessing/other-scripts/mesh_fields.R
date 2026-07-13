@@ -1,6 +1,6 @@
 # mesh_fields.R
 # Shared, reusable production of the MeSH rank-provenance metadata columns used by
-# ranking Modes 2/3 (docs/area_title_ranking_plan.md §11). Data integrations
+# ranking Modes 2/3 . Data integrations
 # (base.R, and later pubmed/openaire) `source()` this file and call
 # add_mesh_rank_fields(metadata) once they have populated `subject_orig` (the RAW,
 # still-[MeSH]-marked subject). It adds two ADDITIVE columns and leaves
