@@ -413,12 +413,17 @@ class OrcidService:
 
         # Select and rename relevant fields from base_metadata, including subject_orig
         fields_to_merge = {
-            'oa_state': 'oa_state_base', 
-            'subject': 'subject_base', 
+            'oa_state': 'oa_state_base',
+            'subject': 'subject_base',
             'subject_orig': 'subject_orig_base',  # Include subject_orig
-            'paper_abstract': 'paper_abstract_base', 
+            'paper_abstract': 'paper_abstract_base',
             'link': 'link_base',
-            'relation': 'relation_base'
+            'relation': 'relation_base',
+            # ranking Modes 2/3: carry the MeSH rank columns produced by the BASE
+            # client through the enrichment merge (otherwise they are dropped here and
+            # only re-created empty by the reindex below -> Modes 2/3 degrade to Mode 1).
+            'keywords_rank_mesh_specific': 'keywords_rank_mesh_specific_base',
+            'keywords_rank_mesh_generic': 'keywords_rank_mesh_generic_base'
         }
 
         # Rename base metadata columns to avoid conflicts with original metadata
@@ -462,8 +467,15 @@ class OrcidService:
         enriched_metadata['relation'] = enriched_metadata.apply(
             lambda row: custom_merge(row['relation'], row['relation_base']), axis=1
         )
+        # ORCID records have no MeSH of their own, so take the BASE-derived columns.
+        enriched_metadata['keywords_rank_mesh_specific'] = enriched_metadata.apply(
+            lambda row: custom_merge(row.get('keywords_rank_mesh_specific'), row.get('keywords_rank_mesh_specific_base')), axis=1
+        )
+        enriched_metadata['keywords_rank_mesh_generic'] = enriched_metadata.apply(
+            lambda row: custom_merge(row.get('keywords_rank_mesh_generic'), row.get('keywords_rank_mesh_generic_base')), axis=1
+        )
 
-        enriched_metadata.drop(columns=['paper_abstract_base', 'subject_orig_base', 'subject_base', 'oa_state_base', 'link_base', 'relation_base'], inplace=True)
+        enriched_metadata.drop(columns=['paper_abstract_base', 'subject_orig_base', 'subject_base', 'oa_state_base', 'link_base', 'relation_base', 'keywords_rank_mesh_specific_base', 'keywords_rank_mesh_generic_base'], inplace=True)
         
         if self.logger.isEnabledFor(logging.DEBUG):
             self._log_dataframe(enriched_metadata.sort_values(by='title'), params, '_enriched')
