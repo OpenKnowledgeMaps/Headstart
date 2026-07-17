@@ -60,7 +60,7 @@ class Search(Resource):
             redis_store.rpush("orcid", json.dumps(task_data))
 
             queue_length = redis_store.llen("orcid")
-            orcid_ns.logger.debug(f"Queue length: orcid {queue_length} {request_id}")
+            orcid_ns.logger.info(f"Queue length: orcid {queue_length} {request_id}")
 
             result = get_key(redis_store, request_id, REDIS_TIMEOUT)
             headers = self.get_response_headers()

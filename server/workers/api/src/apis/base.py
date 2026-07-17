@@ -9,10 +9,10 @@ from flask_restx import Namespace, Resource, fields
 from .request_validators import SearchParamSchema
 from common.utils import get_key, redis_store, get_or_create_contentprovider_lookup
 
-contentprovider_lookup = get_or_create_contentprovider_lookup()
-
 base_ns = Namespace("base", description="BASE API operations")
 search_param_schema = SearchParamSchema()
+
+contentprovider_lookup = get_or_create_contentprovider_lookup(logger=base_ns.logger)
 
 
 base_querymodel = base_ns.model("SearchQuery",
@@ -84,7 +84,7 @@ class Search(Resource):
         base_ns.logger.debug(d)
         redis_store.rpush("base", json.dumps(d))
         q_len = redis_store.llen("base")
-        base_ns.logger.debug("Queue length: %s %d %s" %("base", q_len, request_id))
+        base_ns.logger.info("Queue length: %s %d %s" %("base", q_len, request_id))
         result = get_key(redis_store, request_id, 300)
         try:
             result, headers = set_response_headers(request.headers["Accept"], params.get("raw"), result, request_id)

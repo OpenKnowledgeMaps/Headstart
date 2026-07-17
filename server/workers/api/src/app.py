@@ -33,9 +33,19 @@ def api_patches(app):
 app = Flask('v1', instance_relative_config=True)
 # Configure logging
 app.logger.setLevel(os.getenv("LOGLEVEL") or logging.DEBUG)
+formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 handler = logging.StreamHandler(sys.stdout)
-handler.setFormatter(logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s'))
+handler.setFormatter(formatter)
 app.logger.addHandler(handler)
+
+# Optionally also write to a logfile so mtail can turn log lines (e.g.
+# "Queue length: ...") into Prometheus metrics. flask-restx copies these
+# handlers onto each namespace logger at add_namespace() time below.
+logfile = os.getenv("LOGFILE")
+if logfile:
+    file_handler = logging.FileHandler(logfile)
+    file_handler.setFormatter(formatter)
+    app.logger.addHandler(file_handler)
 
 app.wsgi_app = ProxyFix(app.wsgi_app, x_proto=1, x_port=1, x_for=1, x_host=1, x_prefix=1)
 app.wsgi_app = ReverseProxied(app.wsgi_app)
@@ -49,6 +59,12 @@ api.add_namespace(vis_ns, path='/vis')
 api.add_namespace(export_ns, path='/export')
 api.add_namespace(orcid_ns, path='/orcid')
 api.add_namespace(aquanavi_ns, path='/aquanavi')
+
+# Namespace loggers inherit app.logger's handlers (copied by add_namespace).
+# Disable propagation to the root logger to avoid every line being emitted
+# twice (once via these handlers, once via the Flask default root handler).
+for ns in (base_ns, pubmed_ns, openaire_ns, vis_ns, export_ns, orcid_ns, aquanavi_ns):
+    ns.logger.propagate = False
 
 app.logger.debug(app.config)
 app.logger.debug(app.url_map)

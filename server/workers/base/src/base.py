@@ -27,6 +27,7 @@ from datetime import datetime
 import dateparser
 import sys
 from common.rate_limiter import RateLimiter
+from common.utils import get_contentprovider_records
 
 
 class BaseClient(RWrapper):
@@ -35,8 +36,11 @@ class BaseClient(RWrapper):
         self.rate_limiter = RateLimiter(self.redis_store, "base-ratelimit", 1.5)
 
         try:
-            result = self.get_contentproviders()
-            df = pd.DataFrame(json.loads(result["contentproviders"]))
+            records = get_contentprovider_records(
+                self.redis_store, self._fetch_contentprovider_records,
+                logger=self.logger
+            )
+            df = pd.DataFrame(records)
             df.set_index("name", inplace=True)
             cp_dict = df.internal_name.to_dict()
             self.content_providers = cp_dict
@@ -156,6 +160,13 @@ class BaseClient(RWrapper):
         metadata = pd.concat([metadata, enrichment], axis=1)
         return metadata
 
+    def _fetch_contentprovider_records(self):
+        """Run the R fetch and return the parsed list of content provider records."""
+        result = self.get_contentproviders()
+        if result.get("status") == "error":
+            raise RuntimeError("contentproviders fetch returned an error")
+        return json.loads(result["contentproviders"])
+
     def get_contentproviders(self):
         runner = os.path.abspath(os.path.join(self.wd, "run_base_contentproviders.R"))
         cmd = [self.command, runner, self.wd]
@@ -209,7 +220,7 @@ class BaseClient(RWrapper):
                     "input_data", json.dumps(res).encode("utf8")
                 )
                 q_len = self.redis_store.llen("input_data")
-                self.logger.debug(
+                self.logger.info(
                     "Queue length: %s %d %s" % ("input_data", q_len, request_id)
                 )
         except Exception as e:
