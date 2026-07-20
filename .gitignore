@@ -81,5 +81,9 @@ local_dev/tools/**/*.log
 /blob-report/
 /playwright/.cache/
 
+# inspection output
+e2e/reproducibility/output/*
+e2e/reproducibility/logs/*
+
 # mac os
 .DS_Store
