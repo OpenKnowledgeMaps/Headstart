@@ -210,6 +210,18 @@ def test_get_contentproviders(client_base, monkeypatch):
     assert cp_list[0]["name"] == "cp1"
     assert cp_list[0]["internal_name"] == "Provider1"
 
+def test_fetch_contentprovider_records_parses(client_base):
+    # get_contentproviders is stubbed by the fixture to a fixed payload.
+    records = client_base._fetch_contentprovider_records()
+    assert records == [{"name": "cp1", "internal_name": "Provider1"}]
+
+
+def test_fetch_contentprovider_records_raises_on_error(client_base):
+    client_base.get_contentproviders = lambda: {"status": "error"}
+    with pytest.raises(RuntimeError):
+        client_base._fetch_contentprovider_records()
+
+
 # --- Tests for filter_duplicates ---
 
 def test_filter_duplicates_drops_internal_columns():
