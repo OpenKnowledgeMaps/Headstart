@@ -51,6 +51,15 @@ input_data <- data$input_data
 text <- fromJSON(input_data$text)
 metadata <- fromJSON(input_data$metadata)
 
+# Debug: what dataprocessing received before any processing. `text` (id + content)
+# is the clustering input; `metadata` feeds labelling. Lets a map be traced from the
+# data client's output through clustering and labelling.
+dump_data(text, "runvis_01_text_received")
+dump_data(metadata[, intersect(c("id", "title", "paper_abstract", "subject",
+                                 "subject_orig", "oa_state", "content_provider",
+                                 "link", "doi"), names(metadata)), drop = FALSE],
+          "runvis_02_metadata_received")
+
 MAX_CLUSTERS = params$MAX_CLUSTERS
 
 failed <- list(params=params)

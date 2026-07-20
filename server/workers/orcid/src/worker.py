@@ -53,6 +53,10 @@ class OrcidWorker:
             start_time = time.time()
             self.logger.debug(f"Handle search with request_id: {request_id} and params {params}")
 
+            # request_id is the map vis_id (it becomes res["id"] -> dataprocessing VIS_ID).
+            # Expose it in params so debug dumps key on the same vis_id the R side uses.
+            params.setdefault("vis_id", request_id)
+
             res = self.data_retriever.execute_search(params)
 
             if res.get("status") == "error" or params.get("raw") is True:

@@ -21,6 +21,7 @@ from common.deduplication import (
     mark_latest_doi,
     prioritize_OA_and_latest,
     prioritize_doi_and_provider,
+    get_provider_priority,
     doi_title_filter,
 )
 from common.enrichment import enrich_anchor_using_duplicates
@@ -382,6 +383,9 @@ def filter_duplicates(df, service, params):
     non_datasets = df.loc[df.index.difference(pure_datasets.index)]
     # logger.debug(f"[dedup:split] non_datasets={len(non_datasets)} pure_datasets={len(pure_datasets)}")
 
+    # Pre-prioritize snapshot: records in raw pre-tie-break order, with resp_pos /
+    # collection / provider_priority, so anchor decisions can be traced.
+    _dump_dedup(non_datasets, params, "base_09_non_datasets_pre_prioritize")
     non_datasets = prioritize_OA_and_latest(non_datasets, duplicate_groups)
     non_datasets = prioritize_doi_and_provider(non_datasets, duplicate_groups)
     # _log_dedup_state(non_datasets, "non_datasets_after_prioritize", params)
@@ -391,8 +395,12 @@ def filter_duplicates(df, service, params):
     pure_datasets.loc[pure_datasets_condition_mask, "is_anchor"] = True
     # _log_dedup_state(pure_datasets, "pure_datasets_after_mark_latest", params)
 
+    _dump_dedup(non_datasets, params, "base_10_non_datasets_pre_enrich")
+    _dump_dedup(pure_datasets, params, "base_11_pure_datasets_pre_enrich")
     non_datasets = enrich_anchor_using_duplicates(non_datasets, duplicate_groups)
     pure_datasets = enrich_anchor_using_duplicates(pure_datasets, duplicate_groups)
+    _dump_dedup(non_datasets, params, "base_12_non_datasets_post_enrich")
+    _dump_dedup(pure_datasets, params, "base_13_pure_datasets_post_enrich")
 
     filtered_non_datasets = non_datasets[non_datasets.is_anchor == True]
     filtered_datasets = pure_datasets[pure_datasets.is_anchor == True]
@@ -514,9 +522,37 @@ def sanitize_year(year_str):
 
     return sanitized_year
 
+def _dump_dedup(df: pd.DataFrame, params: Dict[str, str], name: str):
+    """Debug dump of a dedup/anchor stage to ./output/<vis_id>/<name>.csv.
+
+    Captures the anchor-deciding columns (is_anchor/is_duplicate/oa_state/content_provider/
+    collection/provider_priority) and the fields that survive into clustering content
+    (subject_orig/paper_abstract), plus `resp_pos` = the row's original BASE response
+    position. Keyed on the BASE request vis_id; correlate to the map via paper `id`.
+    DEBUG-gated, non-fatal. Traceability of the metadata transformations in dedup.
+    """
+    if not logger.isEnabledFor(logging.DEBUG):
+        return
+    try:
+        vis_id = params.get('vis_id')
+        out = df.copy()
+        out['resp_pos'] = out.index
+        if 'collection' in out.columns:
+            out['provider_priority'] = out['collection'].map(get_provider_priority)
+        cols = ['resp_pos', 'id', 'doi', 'collection', 'provider_priority', 'content_provider',
+                'is_anchor', 'is_duplicate', 'oa_state', 'year',
+                'link', 'subject_orig', 'paper_abstract', 'title']
+        cols = [c for c in cols if c in out.columns]
+        folder = f'./output/{vis_id}'
+        os.makedirs(folder, exist_ok=True)
+        out.reindex(columns=cols).fillna('missing').to_csv(f'{folder}/{name}.csv', index=False)
+    except Exception as e:
+        logger.warning(f"_dump_dedup failed for {name}: {e}")
+
+
 def _log_dataframe(df: pd.DataFrame, params: Dict[str, str], name: str, ):
     vis_id = params.get('vis_id')
-    
+
     columns_to_print = ['id', 'title', 'doi', 'additional_dois', 'paper_abstract', 'link', 'subject', 'subject_orig', 'oa_state']
 
     available_columns = df.columns.tolist()

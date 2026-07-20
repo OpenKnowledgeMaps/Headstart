@@ -67,7 +67,10 @@ class OrcidService:
 
             if metadata.empty:
                 return self._handle_insufficient_results(params, orcid_id)
-            
+
+            # (a) ORCID works as retrieved, before any enrichment.
+            self._dump_stage(metadata, params, "orcid_01_works_retrieved", columns=self._DUMP_COLS)
+
             metadata = self._process_metadata(metadata, author_info, params)
 
             # self.logger.debug('metadata processed inside of _process_metadata')
@@ -150,6 +153,37 @@ class OrcidService:
             os.makedirs(folder)
         file_path = f"{folder}/{name}.csv"
         transformed.to_csv(file_path, index=False)
+
+    def _dump_stage(self, obj, params: Dict[str, str], stage: str, columns=None):
+        """Debug dump of one pipeline stage to ./output/<vis_id>/<stage>.{csv,json}.
+
+        Keyed on the MAP vis_id (set in worker.handle_search) so runs sharing an ORCID
+        stay separate. DEBUG-gated and non-fatal. DataFrames -> CSV (optionally reduced
+        to `columns`); other objects -> JSON. Traceability of metadata transformations.
+        """
+        if not self.logger.isEnabledFor(logging.DEBUG):
+            return
+        try:
+            vis_id = params.get("vis_id") or params.get("unique_id") or params.get("orcid") or "unknown"
+            folder = f"./output/{vis_id}"
+            os.makedirs(folder, exist_ok=True)
+            if isinstance(obj, pd.DataFrame):
+                df = obj
+                if columns is not None:
+                    df = df.reindex(columns=[c for c in columns if c in df.columns])
+                df.fillna("").to_csv(f"{folder}/{stage}.csv", index=False)
+            else:
+                with open(f"{folder}/{stage}.json", "w") as fh:
+                    json.dump(obj, fh)
+        except Exception as e:
+            self.logger.warning(f"_dump_stage failed for {stage}: {e}")
+
+    # Columns worth capturing across the custody chain: retrieval, enrichment, and the
+    # fields that build the clustering `content` (title, paper_abstract, subject_orig).
+    _DUMP_COLS = ["id", "doi", "doi_merge", "title", "paper_abstract", "subject",
+                  "subject_orig", "oa_state", "content_provider", "link", "year",
+                  "is_anchor", "is_duplicate",
+                  "keywords_rank_mesh_specific", "keywords_rank_mesh_generic"]
 
     def request_base_metadata(self, dois: List[str], params: Dict[str, str]) -> pd.DataFrame:
         orcid = params.get('orcid')
@@ -324,6 +358,11 @@ class OrcidService:
 
         base_metadata = self.request_base_metadata(dois, params)
 
+        # (b) BASE metadata as received (post BASE-side dedup/enrichment): the anchors,
+        # their oa_state/content_provider, and the subject_orig/paper_abstract that will
+        # feed clustering content. Correlate to base.py's per-request dedup dumps by `id`.
+        self._dump_stage(base_metadata, params, "orcid_02_base_metadata", columns=self._DUMP_COLS)
+
         if "doi_merge" not in base_metadata.columns:
             self.logger.error(f"BASE metadata is missing 'doi_merge' column, cannot proceed with enrichment. Params: {params}")
             raise ValueError("BASE metadata is missing 'doi_merge' column")
@@ -480,6 +519,10 @@ class OrcidService:
         if self.logger.isEnabledFor(logging.DEBUG):
             self._log_dataframe(enriched_metadata.sort_values(by='title'), params, '_enriched')
 
+        # (c) ORCID metadata after the BASE merge — the enriched subject_orig/paper_abstract
+        # per surviving row, just before it becomes clustering content in _format_response.
+        self._dump_stage(enriched_metadata, params, "orcid_03_merged", columns=self._DUMP_COLS)
+
         # temporal solution, for some reason if we have some undefined data, dataprocessing is failing
         enriched_metadata = enriched_metadata.reindex(columns=list(set(original_columns + ['oa_state', 'subject', 'subject_orig', 'paper_abstract', 'link', 'relation', 'keywords_rank_mesh_specific', 'keywords_rank_mesh_generic'])))
 
@@ -626,6 +669,12 @@ class OrcidService:
             axis=1
         )
         text.columns = ["id", "content"]
+
+        # (d) THE clustering input: id + content (title + paper_abstract + subtitle +
+        # published_in + authors + subject_orig). What create_corpus tokenizes. Also dump
+        # the final metadata that travels alongside it for labelling.
+        self._dump_stage(text, params, "orcid_05_clustering_content")
+        self._dump_stage(data, params, "orcid_04_metadata_final", columns=self._DUMP_COLS)
 
         self.logger.debug(f"Returning response for ORCID {params.get('orcid')} len {len(data)}")
 
