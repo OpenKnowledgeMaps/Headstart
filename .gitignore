@@ -84,6 +84,8 @@ local_dev/tools/**/*.log
 # inspection output
 e2e/reproducibility/output/*
 e2e/reproducibility/logs/*
+local_dev/tools/label_analysis
+local_dev/tools/keyword_analysis
 
 # mac os
 .DS_Store
