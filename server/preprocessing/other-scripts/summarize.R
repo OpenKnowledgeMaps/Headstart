@@ -145,7 +145,7 @@ add_heuristic_keyword_fields <- function(metadata, stops) {
 #   top_n            : number of terms kept.
 #   label_exclusions : curated area-label exclusion list (whole-term, case-insensitive)
 #                      applied here too so listed terms never survive as a last resort.
-title_abstract_fallback_label <- function(matches, metadata, stops, top_n = 3, label_exclusions = character(0)) {
+title_abstract_fallback_label <- function(matches, metadata, stops, top_n = 3, label_exclusions = character(0), cluster = NA_integer_) {
   batch_size <- 1000
   total_length <- length(stops)
   candidates = mapply(paste, metadata$title[matches], metadata$paper_abstract[matches])
@@ -165,10 +165,91 @@ title_abstract_fallback_label <- function(matches, metadata, stops, top_n = 3, l
     norm <- trimws(tolower(gsub("_", " ", names(top_ngrams))))
     top_ngrams <- top_ngrams[!(norm %in% tolower(trimws(label_exclusions)))]
   }
+  # Debug: the title+abstract n-gram candidate pool (n-gram + frequency, post-exclusion)
+  # this last-resort fallback selects from. One file per cluster that reaches this path.
+  if (!is.na(cluster) && exists("debug_enabled") && debug_enabled() && length(top_ngrams)) {
+    tryCatch(dump_data(data.frame(cluster = cluster, term = gsub("_", " ", names(top_ngrams)),
+                                  freq = as.integer(top_ngrams), stringsAsFactors = FALSE),
+                       paste0("summarize_04g_titleabstract_candidates_c", cluster)),
+             error = function(e) NULL)
+  }
   summary <- filter_out_nested_ngrams(names(top_ngrams), top_n)
   summary = lapply(summary, FUN = function(x) {paste(unlist(x), collapse="; ")})
   summary = gsub("_", " ", summary)
   paste(summary, collapse=", ")
+}
+
+# --- Label-generation debug dumps ------------------------------------------------
+# Fine-grained, DEBUG-gated traces of how each cluster's area label is built, for
+# backtracking a label to its inputs: the corpus text that feeds tf-idf, the tf-idf
+# candidate terms with their weights, the rank-source provenance (Modes 1-3), the
+# terms removed by the exclusion list, and the per-cluster label provenance (which
+# path produced it, plus the label before/after casing). Each keyed on VIS_ID via
+# dump_data; all no-ops unless LOGLEVEL=DEBUG, and never fatal.
+
+# Per-cluster corpus document text (what tf-idf actually tokenizes). One row/cluster.
+dump_corpus_text <- function(corpus, stage) {
+  if (!debug_enabled()) return(invisible(NULL))
+  tryCatch({
+    txt <- vapply(seq_along(corpus),
+                  function(k) paste(as.character(content(corpus[[k]])), collapse = " "),
+                  character(1))
+    dump_data(data.frame(cluster = seq_along(txt), text = txt, stringsAsFactors = FALSE), stage)
+  }, error = function(e) vslog$warn(paste("dump_corpus_text failed:", conditionMessage(e))))
+}
+
+# Per-cluster tf-idf candidate terms, weight-ordered, with their scores. One row per
+# (cluster, term): the candidate pool that selection/ranking draws from.
+dump_tfidf_candidates <- function(tfidf_top, stage) {
+  if (!debug_enabled()) return(invisible(NULL))
+  tryCatch({
+    rows <- lapply(seq_along(tfidf_top), function(k) {
+      w <- tfidf_top[[k]]
+      if (is.null(w) || !length(w) || is.null(names(w))) return(NULL)
+      data.frame(cluster = k, weight_rank = seq_along(w),
+                 term = gsub("_", " ", names(w)), tfidf = as.numeric(w),
+                 stringsAsFactors = FALSE)
+    })
+    rows <- do.call(rbind, rows[!vapply(rows, is.null, logical(1))])
+    if (!is.null(rows) && nrow(rows)) dump_data(rows, stage)
+  }, error = function(e) vslog$warn(paste("dump_tfidf_candidates failed:", conditionMessage(e))))
+}
+
+# Per-cluster rank-source token-sets (Modes 1-3): which provenance set (cleaned,
+# mesh_specific, ...) each candidate token belongs to — i.e. what fixes its rank.
+dump_rank_sources <- function(rank_sources, stage) {
+  if (!debug_enabled() || is.null(rank_sources)) return(invisible(NULL))
+  tryCatch({
+    rows <- list()
+    for (src in names(rank_sources)) {
+      per_cluster <- rank_sources[[src]]
+      for (k in seq_along(per_cluster)) {
+        toks <- per_cluster[[k]]
+        if (length(toks)) rows[[length(rows) + 1L]] <-
+          data.frame(cluster = k, source = src, term = gsub("_", " ", toks),
+                     stringsAsFactors = FALSE)
+      }
+    }
+    if (length(rows)) dump_data(do.call(rbind, rows), stage)
+  }, error = function(e) vslog$warn(paste("dump_rank_sources failed:", conditionMessage(e))))
+}
+
+# Per-cluster terms removed by the exclusion list (tf-idf candidates before vs after
+# drop_excluded_terms). Makes each exclusion drop explicit.
+dump_excluded_terms <- function(before, after, stage) {
+  if (!debug_enabled()) return(invisible(NULL))
+  tryCatch({
+    rows <- lapply(seq_along(before), function(k) {
+      b <- before[[k]]; a <- after[[k]]
+      if (is.null(b) || !length(b) || is.null(names(b))) return(NULL)
+      dropped <- setdiff(names(b), names(a))
+      if (!length(dropped)) return(NULL)
+      data.frame(cluster = k, term = gsub("_", " ", dropped),
+                 tfidf = as.numeric(b[dropped]), stringsAsFactors = FALSE)
+    })
+    rows <- do.call(rbind, rows[!vapply(rows, is.null, logical(1))])
+    if (!is.null(rows) && nrow(rows)) dump_data(rows, stage)
+  }, error = function(e) vslog$warn(paste("dump_excluded_terms failed:", conditionMessage(e))))
 }
 
 # Entry point: assign a short label ("area title") to every cluster.
@@ -221,6 +302,11 @@ create_cluster_labels <- function(clusters, metadata,
   vslog$debug(paste("create_cluster_labels: ranking mode", mode, "for service",
                     if (is.null(service)) "(none)" else service))
 
+  # Tracks which path produced each cluster's label, for summarize_06b_label_provenance:
+  # "primary" (tf-idf/ranking), "legacy_fill"/"min1_fallback" (empty-label rescue), or
+  # "title_abstract_fallback" (last resort). Updated where each fallback fires.
+  label_source <- rep("primary", clusters$num_clusters)
+
   if (identical(mode, "0")) {
     # ---- Mode 0: legacy no-ranking path (inline title n-grams, no DF filter) ----
     if (!(is.null(cc)) && (cc %in% names(metadata))) {
@@ -229,6 +315,7 @@ create_cluster_labels <- function(clusters, metadata,
       nn_corpus <- get_cluster_corpus_legacy(clusters, metadata, stops, taxonomy_separator)
     }
     dump_data(nn_corpus, "summarize_04_corpus")
+    dump_corpus_text(nn_corpus, "summarize_04_corpus_text")
     nn_tfidf <- TermDocumentMatrix(nn_corpus, control = list(
       tokenize = SplitTokenizer,
       weighting = function(x) weightSMART(x, spec="ntn"),
@@ -241,6 +328,8 @@ create_cluster_labels <- function(clusters, metadata,
     empty_tfidf <- which(apply(nn_tfidf, 2, sum) == 0)
     tfidf_top[c(empty_tfidf)] <- fill_empty_clusters_legacy(nn_tfidf, nn_corpus)[c(empty_tfidf)]
     # NB: no label-exclusion filter here — Mode 0 is byte-identical to legacy.
+    dump_tfidf_candidates(tfidf_top, "summarize_04b_tfidf_candidates")   # candidates fed to selection (post empty-fill)
+    if (length(empty_tfidf)) label_source[empty_tfidf] <- "legacy_fill"
     tfidf_top_names <- get_top_names(tfidf_top, top_n, stops)
   } else {
     # ---- Modes 1-3: DF-filtered corpus + rank-aware selection ------------------
@@ -266,6 +355,8 @@ create_cluster_labels <- function(clusters, metadata,
     nn_corpus <- corpus_out$corpus
     rank_sources <- corpus_out$rank_sources
     dump_data(nn_corpus, "summarize_04_corpus")
+    dump_corpus_text(nn_corpus, "summarize_04_corpus_text")
+    dump_rank_sources(rank_sources, "summarize_04d_rank_sources")
     # Local bound c(1, Inf) so low-frequency real keywords survive into the ranking.
     nn_tfidf <- TermDocumentMatrix(nn_corpus, control = list(
       tokenize = SplitTokenizer,
@@ -274,7 +365,10 @@ create_cluster_labels <- function(clusters, metadata,
       tolower = TRUE
     ))
     tfidf_top <- apply(nn_tfidf, 2, function(x) {x2 <- sort(x, TRUE);x2[x2>0]})
+    dump_tfidf_candidates(tfidf_top, "summarize_04b_tfidf_candidates")   # raw candidates (pre-exclusion)
+    tfidf_top_pre_excl <- tfidf_top
     tfidf_top <- drop_excluded_terms(tfidf_top, label_exclusions)   # post-tf-idf, pre-ranking
+    dump_excluded_terms(tfidf_top_pre_excl, tfidf_top, "summarize_04e_excluded_terms")
     vslog$debug(paste("create_cluster_labels: tf-idf matrix", nTerms(nn_tfidf), "terms x",
                       nDocs(nn_tfidf), "clusters"))
 
@@ -296,9 +390,12 @@ create_cluster_labels <- function(clusters, metadata,
       vslog$debug(paste("create_cluster_labels: min1 fallback for", length(empty_label),
                         "clusters with an empty min2 label"))
       fallback_top   <- drop_excluded_terms(fill_empty_clusters(fallback_corpus), label_exclusions)
+      dump_tfidf_candidates(fallback_top, "summarize_04f_min1_fallback_candidates")
       fallback_names <- select_cluster_label_names(fallback_top, top_n, stops, mode = mode,
-                                                   rank_sources = rank_sources)
+                                                   rank_sources = rank_sources,
+                                                   dbg_stage = "summarize_04c_min1_rank_candidates")
       tfidf_top_names[empty_label] <- fallback_names[empty_label]
+      label_source[empty_label] <- "min1_fallback"
     }
   }
   dump_data(tfidf_top_names, "summarize_05_tfidf_top_names")
@@ -311,7 +408,8 @@ create_cluster_labels <- function(clusters, metadata,
       # from the papers' titles + abstracts (see title_abstract_fallback_label).
       vslog$debug(paste("create_cluster_labels: title/abstract fallback for cluster", k,
                         "with", length(matches), "papers"))
-      summary <- title_abstract_fallback_label(matches, metadata, stops, top_n, label_exclusions)
+      summary <- title_abstract_fallback_label(matches, metadata, stops, top_n, label_exclusions, cluster = k)
+      label_source[k] <- "title_abstract_fallback"
     }
     clusters$cluster_labels[c(matches)] = summary
   }
@@ -321,6 +419,21 @@ create_cluster_labels <- function(clusters, metadata,
   clusters$cluster_labels <- fix_cluster_labels(clusters$cluster_labels, type_counts)
   dump_data(data.frame(cluster = clusters$groups, label = clusters$cluster_labels),
             "summarize_06_cluster_labels")
+  # Per-cluster label provenance: which path built the label, plus the label as selected
+  # by tf-idf/ranking (pre-fallback, pre-casing) vs the final label (post-casing). Lets a
+  # single label be traced back to its source path and its transformation.
+  dump_data(data.frame(
+    cluster = seq_len(clusters$num_clusters),
+    n_papers = vapply(seq_len(clusters$num_clusters),
+                      function(k) sum(clusters$groups == k, na.rm = TRUE), integer(1)),
+    source = label_source,
+    label_selected = vapply(seq_len(clusters$num_clusters),
+                            function(k) { s <- tfidf_top_names[[k]]
+                                          if (length(s)) as.character(s[[1]]) else "" }, character(1)),
+    label_final = vapply(seq_len(clusters$num_clusters),
+                         function(k) { i <- which(clusters$groups == k)[1]
+                                       if (is.na(i)) "" else clusters$cluster_labels[i] }, character(1)),
+    stringsAsFactors = FALSE), "summarize_06b_label_provenance")
   vslog$debug(paste("create_cluster_labels: done,",
                     length(unique(clusters$cluster_labels)), "distinct labels"))
   return(clusters)

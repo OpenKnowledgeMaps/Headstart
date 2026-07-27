@@ -168,9 +168,13 @@ drop_excluded_terms <- function(tfidf_top, exclusions) {
 #                  mesh_specific, mesh_generic, heuristic), each a per-cluster list
 #                  of lowercased "_"-joined tokens; NULL disables ranked selection.
 #   legacy_fn    : the legacy selector; injectable for testing.
+#   dbg_stage    : dump_data stage name for the per-cluster rank-candidate debug dump;
+#                  overridden by callers (e.g. the min1 fallback) so a second selection
+#                  pass does not overwrite the primary pass's dump.
 select_cluster_label_names <- function(tfidf_top, top_n, stops, mode = "0",
                                         rank_sources = NULL,
-                                        legacy_fn = get_top_names) {
+                                        legacy_fn = get_top_names,
+                                        dbg_stage = "summarize_04c_rank_candidates") {
   spec <- rank_spec(mode)
   if (identical(mode, "0") || is.null(spec) || is.null(rank_sources)) {
     if (!identical(mode, "0") && (is.null(spec) || is.null(rank_sources))) {
@@ -208,7 +212,7 @@ select_cluster_label_names <- function(tfidf_top, top_n, stops, mode = "0",
   }
   if (exists("dump_data")) {
     dbg <- dbg[!vapply(dbg, is.null, logical(1))]
-    if (length(dbg)) dump_data(do.call(rbind, dbg), "summarize_04c_rank_candidates")
+    if (length(dbg)) dump_data(do.call(rbind, dbg), dbg_stage)
   }
   out
 }
