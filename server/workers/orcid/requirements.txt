@@ -23,5 +23,5 @@ PyYAML==6.0.1
 redis==4.3.6
 six==1.16.0
 typing-extensions==4.2.0
-zipp==3.6.0
+zipp==3.19.1
 pyorcid @ git+https://github.com/OpenKnowledgeMaps/PyOrcid.git@979c7733664df0936b2aef3b899f2d8de10b4315
