@@ -68,8 +68,9 @@ class OrcidService:
             if metadata.empty:
                 return self._handle_insufficient_results(params, orcid_id)
 
-            # (a) ORCID works as retrieved, before any enrichment.
-            self._dump_stage(metadata, params, "orcid_01_works_retrieved", columns=self._DUMP_COLS)
+            # Dump ORCID resources as retrieved, before any enrichment. Full column set
+            # (columns=None) so a DOI can be traced in any field it may occur in.
+            self._dump_stage(metadata, params, "orcid_01_works_retrieved", columns=None)
 
             metadata = self._process_metadata(metadata, author_info, params)
 
@@ -180,7 +181,10 @@ class OrcidService:
 
     # Columns worth capturing across the custody chain: retrieval, enrichment, and the
     # fields that build the clustering `content` (title, paper_abstract, subject_orig).
-    _DUMP_COLS = ["id", "doi", "doi_merge", "title", "paper_abstract", "subject",
+    # The full DOI provenance (doi, doi_merge, additional_dois, link) is captured so
+    # the DOI-based merge can be traced across every field a DOI may live in:
+    # doi/doi_merge derive from link, additional_dois carries the raw dcdoi values.
+    _DUMP_COLS = ["id", "doi", "doi_merge", "additional_dois", "title", "paper_abstract", "subject",
                   "subject_orig", "oa_state", "content_provider", "link", "year",
                   "is_anchor", "is_duplicate",
                   "keywords_rank_mesh_specific", "keywords_rank_mesh_generic"]
@@ -358,10 +362,12 @@ class OrcidService:
 
         base_metadata = self.request_base_metadata(dois, params)
 
-        # (b) BASE metadata as received (post BASE-side dedup/enrichment): the anchors,
+        # Dump BASE metadata as received (post BASE-side dedup/enrichment): the anchors,
         # their oa_state/content_provider, and the subject_orig/paper_abstract that will
         # feed clustering content. Correlate to base.py's per-request dedup dumps by `id`.
-        self._dump_stage(base_metadata, params, "orcid_02_base_metadata", columns=self._DUMP_COLS)
+        # Full column set (columns=None) so a DOI can be traced in any field it may
+        # occur in (relation/identifier/published_in), not just doi/doi_merge/additional_dois.
+        self._dump_stage(base_metadata, params, "orcid_02_base_metadata", columns=None)
 
         if "doi_merge" not in base_metadata.columns:
             self.logger.error(f"BASE metadata is missing 'doi_merge' column, cannot proceed with enrichment. Params: {params}")

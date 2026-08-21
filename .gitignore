@@ -86,6 +86,7 @@ e2e/reproducibility/output/*
 e2e/reproducibility/logs/*
 local_dev/tools/label_analysis
 local_dev/tools/keyword_analysis
+local_dev/tools/reproducibility
 
 # mac os
 .DS_Store

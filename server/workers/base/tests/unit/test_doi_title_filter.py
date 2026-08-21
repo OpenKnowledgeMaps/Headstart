@@ -15,7 +15,7 @@ Patterns observed:
 - Near-matches (90–99): trailing period, trailing/leading whitespace, Unicode vs
   ASCII punctuation (curly vs straight quote)
 - Journal-prefix prepended (65–89): one version carries "Journal Name / Title",
-  the other carries only "Title" — caught by substring matching after lowercasing
+  the other carries only "Title": caught by substring matching after lowercasing
 - ALL-CAPS vs title-case (23–36): very short titles; case-insensitive comparison
   resolves these
 """
@@ -33,7 +33,7 @@ def _case(anchor, candidate, doi=""):
 
 
 # ---------------------------------------------------------------------------
-# Ratio ~100 — identical titles, different repository records
+# Ratio ~100: identical titles, different repository records
 # ---------------------------------------------------------------------------
 
 EXACT_CASES = [
@@ -71,7 +71,7 @@ def test_exact_match_not_filtered(anchor, candidate):
 
 
 # ---------------------------------------------------------------------------
-# Ratio 90–99 — near-identical: trailing period, punctuation, version tag
+# Ratio 90–99: near-identical: trailing period, punctuation, version tag
 # ---------------------------------------------------------------------------
 
 NEAR_MATCH_CASES = [
@@ -119,7 +119,7 @@ def test_near_match_not_filtered(anchor, candidate):
 
 
 # ---------------------------------------------------------------------------
-# Ratio 65–89 — journal name prepended as title prefix
+# Ratio 65–89: journal name prepended as title prefix
 # One version: "Journal Name / Paper Title"
 # Other version: "Paper Title"
 # Substring matching (lowercased) resolves these.
@@ -285,7 +285,7 @@ def test_journal_prefix_not_filtered(anchor, candidate):
 
 
 # ---------------------------------------------------------------------------
-# Ratio 23–36 — ALL-CAPS vs title-case on short titles
+# Ratio 23–36: ALL-CAPS vs title-case on short titles
 # fuzz.partial_ratio is case-sensitive so these score very low on raw comparison;
 # lowercasing before comparison resolves them.
 # ---------------------------------------------------------------------------

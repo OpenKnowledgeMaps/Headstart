@@ -2,7 +2,11 @@ import os
 import re
 import logging
 import pandas as pd
-from common.deduplication import deduplicate_keywords, deduplicate_links
+from common.deduplication import (
+    deduplicate_keywords,
+    deduplicate_links,
+    select_anchor_index,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -103,7 +107,10 @@ def enrich_anchor_using_duplicates(df, duplicate_groups):
         if is_no_anchors:
             continue
 
-        anchor = anchors.iloc[0]
+        # A group can carry several anchors (e.g. the publisher-DOI branch marks
+        # every DOI-bearing member); pick the one to enrich by the content
+        # total order, not by row position.
+        anchor = anchors.loc[select_anchor_index(anchors)]
         anchor_idx = anchor.name
 
         # _log_anchor_state('BEFORE', df, anchor_idx, group_data=group_data)
@@ -225,6 +232,12 @@ def process_paper_abstract_element(value, accumulator):
     if abstract_length > accumulator['best_length']:
         accumulator['best_length'] = abstract_length
         accumulator['best_value'] = value
+    elif (abstract_length == accumulator['best_length']
+            and accumulator['best_value'] is not None
+            and str(value) < str(accumulator['best_value'])):
+        # Equal-length tie: break on the text itself so the winner does not
+        # depend on member iteration order.
+        accumulator['best_value'] = value
 
 def oa_state_priority(value):
     """
@@ -257,6 +270,12 @@ def process_oa_state_element(value, accumulator):
     if priority < accumulator['best_priority']:
         accumulator['best_priority'] = priority
         accumulator['best_value'] = value
+    elif (priority == accumulator['best_priority']
+            and accumulator['best_value'] is not None
+            and str(value) < str(accumulator['best_value'])):
+        # Equal priority can still mean different representations of the same
+        # state (e.g. "1" vs 1.0 after a numeric cast); keep a deterministic one.
+        accumulator['best_value'] = value
 
 def process_link_element(value, accumulator):
     """
@@ -277,8 +296,8 @@ _DOI_PREFIX_RE = re.compile(r'^https?://(dx\.)?doi\.org/', re.IGNORECASE)
 
 def process_additional_dois_element(doi_value, additional_dois_value, accumulator):
     """
-    Collects every DOI a group member represents — its primary ``doi`` and any
-    entries in ``additional_dois`` — into the accumulator, so the anchor can later
+    Collects every DOI a group member represents: its primary ``doi`` and any
+    entries in ``additional_dois``: into the accumulator, so the anchor can later
     advertise all of them. Mirrors process_link_element, but for DOIs.
 
     Duplicate group members are dropped after enrichment, so unless their DOIs are
@@ -307,7 +326,12 @@ def process_additional_dois_element(doi_value, additional_dois_value, accumulato
         for part in parts:
             bare = _DOI_PREFIX_RE.sub('', part.strip())
             if bare:
-                accumulator.setdefault(bare.lower(), bare)
+                # Case variants share a key; keep the lexicographically
+                # smaller display form so the choice is order-independent.
+                key = bare.lower()
+                existing = accumulator.get(key)
+                if existing is None or bare < existing:
+                    accumulator[key] = bare
 
     add_raw(doi_value)
     add_raw(additional_dois_value)

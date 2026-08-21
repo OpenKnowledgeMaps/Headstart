@@ -35,7 +35,7 @@ def _make_df(rows):
     defaults["is_anchor"] = False
     full_rows = [{**defaults, **r} for r in rows]
     df = pd.DataFrame(full_rows)
-    # Match the indexing the base worker uses — string ids as the index.
+    # Match the indexing the base worker uses: string ids as the index.
     df.index = df["id"]
     return df
 

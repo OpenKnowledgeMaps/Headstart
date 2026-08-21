@@ -155,7 +155,7 @@ def test_execute_search(client_base, monkeypatch):
 
     # Patch methods used inside execute_search.
     monkeypatch.setattr(client_base, "sanitize_metadata", lambda df: df)
-    # filter_duplicates takes (df, service, params) — use correct arity
+    # filter_duplicates takes (df, service, params): use correct arity
     monkeypatch.setattr("base.filter_duplicates", lambda df, service, params: df)
     monkeypatch.setattr("base.parse_annotations_for_all", lambda metadata, field:
                         pd.DataFrame({"annotations": [{}] * len(metadata)}))
@@ -167,6 +167,48 @@ def test_execute_search(client_base, monkeypatch):
     assert isinstance(res, dict)
     assert "input_data" in res
     assert "params" in res
+
+
+def test_execute_search_emits_deterministic_row_order(client_base, monkeypatch):
+    """The emitted metadata order must not depend on BASE's response order.
+
+    The relevance ranking decides the head(list_size) cutoff and stays
+    available in the `relevance` column; the serialized rows are sorted by id
+    so downstream consumers (persistence, dataprocessing) receive an
+    order-stable artifact.
+    """
+    class DummyProcess:
+        def __init__(self, stdout):
+            self._stdout = stdout
+        def communicate(self, input=None):
+            return (self._stdout, "")
+
+    def make_popen(rows):
+        def dummy_popen(cmd, stdin, stdout, stderr, encoding):
+            return DummyProcess("header\n" + json.dumps(rows) + "\ntrailer\n")
+        return dummy_popen
+
+    rows = [
+        {"id": i, "title": f"Title {i}", "paper_abstract": "A",
+         "subject_orig": "S", "published_in": "J", "sanitized_authors": "X"}
+        for i in ("ccc", "aaa", "bbb")
+    ]
+
+    monkeypatch.setattr(client_base, "sanitize_metadata", lambda df: df)
+    monkeypatch.setattr("base.filter_duplicates", lambda df, service, params: df)
+    monkeypatch.setattr("base.parse_annotations_for_all", lambda metadata, field:
+                        pd.DataFrame({"annotations": [{}] * len(metadata)}))
+    monkeypatch.setattr(client_base, "enrich_metadata", lambda df: df)
+
+    params = {"q": "dummy query", "service": "base", "list_size": 100}
+    emissions = []
+    for order in (rows, rows[::-1]):
+        monkeypatch.setattr(subprocess, "Popen", make_popen(order))
+        res = client_base.execute_search(params)
+        ids = [r["id"] for r in json.loads(res["input_data"]["metadata"])]
+        emissions.append(ids)
+
+    assert emissions[0] == emissions[1] == ["aaa", "bbb", "ccc"]
 
 def test_sanitize_metadata(client_base):
     # Create a dummy DataFrame with an "authors" column.
@@ -297,7 +339,7 @@ def test_filter_duplicates_doi_duplicates_resolved():
 
 def test_filter_duplicates_mixed_type_duplicates_no_double_anchor():
     """A dataset (typenorm=7) and a non-dataset that are textual duplicates must not
-    both appear in the output — the split into pure_datasets/non_datasets must not
+    both appear in the output: the split into pure_datasets/non_datasets must not
     accidentally give each sub-group an independent anchor."""
     df = pd.DataFrame([
         _make_record("dataset-A", typenorm="7", duplicates="non-dataset-B",
