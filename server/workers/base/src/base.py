@@ -11,6 +11,9 @@ from common.deduplication import (
     get_unversioned_doi,
     get_publisher_doi,
     find_duplicate_groups,
+    add_doi_keys,
+    extend_duplicates_with_doi_groups,
+    select_anchor_index,
     mark_duplicate_dois,
     mark_duplicate_links,
     identify_relations,
@@ -95,12 +98,22 @@ class BaseClient(RWrapper):
             else:
                 metadata = pd.DataFrame(raw_metadata)
                 metadata = self.sanitize_metadata(metadata)
+                _dump_full(metadata, params, "base_00_raw_retrieved")
                 metadata = filter_duplicates(metadata, original_service, params)
                 metadata = pd.concat(
                     [metadata, parse_annotations_for_all(metadata, "subject_orig")],
                     axis=1,
                 )
                 metadata = metadata.head(params.get("list_size"))
+                # Deterministic emission order: the cutoff above selects by
+                # BASE's relevance ranking (response order), which is not
+                # stable between identical requests. Row order is not a
+                # carrier of information. The rank is in the `relevance`
+                # column, so the survivors are emitted sorted by id, giving
+                # every downstream consumer an order-stable artifact
+                # (order-sensitive steps like the label pipeline otherwise
+                # inherit the response instability).
+                metadata = metadata.sort_values("id")
                 metadata.reset_index(inplace=True, drop=True)
                 metadata = self.enrich_metadata(metadata)
                 custom_clustering = params.get("custom_clustering")
@@ -282,7 +295,7 @@ def _log_group_similarity(df, indexes, group_type, group_key):
     """Log titles, DOIs, and pairwise Levenshtein ratios for one duplicate group."""
     if not logger.isEnabledFor(logging.DEBUG):
         return
-    # Intersect with df.index — group members can be dropped by the
+    # Intersect with df.index: group members can be dropped by the
     # false-positive DOI/title filter before this log fires.
     present = df.index.intersection(list(indexes))
     if len(present) == 0:
@@ -324,6 +337,11 @@ def filter_duplicates(df, service, params):
         lambda x: get_unversioned_doi(x) if type(x) is str else None
     )
     df["publisher_doi"] = df.doi.map(lambda x: get_publisher_doi(x))
+    # DOI merge key: records sharing a normalized DOI (coalesced from
+    # doi_merge / additional_dois / doi) join one duplicate group regardless
+    # of whether the textual pass linked them.
+    df = add_doi_keys(df)
+    df = extend_duplicates_with_doi_groups(df)
     duplicate_groups = find_duplicate_groups(df)
     # logger.debug(f"[dedup:find_duplicate_groups] duplicate_groups groups: {len(duplicate_groups)}, multi-member groups: {sum(1 for idx in duplicate_groups if len(idx) > 1)}")
     # for grp_id, idx in duplicate_groups.items():
@@ -332,7 +350,7 @@ def filter_duplicates(df, service, params):
     #             f"[dedup:position_check] group id={grp_id!r} size={len(idx)} "
     #             f"member_original_indexes={sorted(idx.tolist())}"
     #         )
-    df = mark_duplicate_dois(df)
+    df = mark_duplicate_dois(df, column="doi_key")
     df = mark_duplicate_links(df)
     # _log_dedup_state(df, "after_mark_doi_link_duplicates", params)
     df = identify_relations(df)
@@ -348,12 +366,18 @@ def filter_duplicates(df, service, params):
     df.loc[df[~df.is_duplicate].index, "is_anchor"] = True
     # _log_dedup_state(df, "after_non_duplicate_anchors", params)
 
+    # X11 guard, scoped to records sharing the same link-derived `doi`: two
+    # such records claiming one DOI with unrelated titles are mis-indexed and
+    # the non-anchor side is dropped. dcdoi-derived doi_key groups are exempt
+    # on purpose: a repository copy asserting the published DOI is trusted
+    # even when retitled (preprint renamed at publication), matching the
+    # downstream ORCID DOI-merge this grouping replaces.
     false_positive_indexes = []
     for doi_val, grp in df[df["doi_duplicate"]].groupby("doi"):
-        if len(grp) < 2:
+        if not doi_val or len(grp) < 2:
             continue
         anchors = grp[grp["is_anchor"]]
-        anchor_idx = anchors.index[0] if len(anchors) else grp.index[0]
+        anchor_idx = select_anchor_index(anchors if len(anchors) else grp)
         anchor_title = df.at[anchor_idx, "title"]
         for idx in grp.index:
             if idx == anchor_idx:
@@ -453,6 +477,7 @@ def filter_duplicates(df, service, params):
         "doi_version",
         "unversioned_doi",
         "publisher_doi",
+        "doi_key",
         "has_relations",
         "versions",
     ]:
@@ -529,6 +554,11 @@ def _dump_dedup(df: pd.DataFrame, params: Dict[str, str], name: str):
     collection/provider_priority) and the fields that survive into clustering content
     (subject_orig/paper_abstract), plus `resp_pos` = the row's original BASE response
     position. Keyed on the BASE request vis_id; correlate to the map via paper `id`.
+
+    The full DOI provenance is logged so anchor grouping can be assessed against
+    every field a DOI may live in: `doi`/`doi_merge` derive from `find_dois(link)`,
+    while `additional_dois` carries the raw `dcdoi` values. `doi_key` is the
+    normalized grouping key coalesced from those fields (see compute_doi_key).
     DEBUG-gated, non-fatal. Traceability of the metadata transformations in dedup.
     """
     if not logger.isEnabledFor(logging.DEBUG):
@@ -539,7 +569,8 @@ def _dump_dedup(df: pd.DataFrame, params: Dict[str, str], name: str):
         out['resp_pos'] = out.index
         if 'collection' in out.columns:
             out['provider_priority'] = out['collection'].map(get_provider_priority)
-        cols = ['resp_pos', 'id', 'doi', 'collection', 'provider_priority', 'content_provider',
+        cols = ['resp_pos', 'id', 'doi', 'doi_merge', 'additional_dois',
+                'doi_key', 'collection', 'provider_priority', 'content_provider',
                 'is_anchor', 'is_duplicate', 'oa_state', 'year',
                 'link', 'subject_orig', 'paper_abstract', 'title']
         cols = [c for c in cols if c in out.columns]
@@ -550,10 +581,36 @@ def _dump_dedup(df: pd.DataFrame, params: Dict[str, str], name: str):
         logger.warning(f"_dump_dedup failed for {name}: {e}")
 
 
+def _dump_full(df: pd.DataFrame, params: Dict[str, str], name: str):
+    """Debug dump of the initial-retrieval records with ALL columns.
+
+    Unlike `_dump_dedup` (a curated column subset), this captures every field
+    base.R populates so a DOI can be traced in any field it may occur in: not
+    just `doi`/`doi_merge`/`additional_dois`, but also `relation` (dcrelation),
+    `identifier` (dcidentifier), `published_in` (dcsource), `coverage`, etc.
+    Written before deduplication, so it reflects the raw BASE response pool.
+    `resp_pos` = the row's original BASE response position. Keyed on the BASE
+    request vis_id. DEBUG-gated, non-fatal.
+    """
+    if not logger.isEnabledFor(logging.DEBUG):
+        return
+    try:
+        vis_id = params.get('vis_id')
+        out = df.copy()
+        out['resp_pos'] = out.index
+        front = [c for c in ['resp_pos', 'id'] if c in out.columns]
+        cols = front + [c for c in out.columns if c not in front]
+        folder = f'./output/{vis_id}'
+        os.makedirs(folder, exist_ok=True)
+        out.reindex(columns=cols).fillna('missing').to_csv(f'{folder}/{name}.csv', index=False)
+    except Exception as e:
+        logger.warning(f"_dump_full failed for {name}: {e}")
+
+
 def _log_dataframe(df: pd.DataFrame, params: Dict[str, str], name: str, ):
     vis_id = params.get('vis_id')
 
-    columns_to_print = ['id', 'title', 'doi', 'additional_dois', 'paper_abstract', 'link', 'subject', 'subject_orig', 'oa_state']
+    columns_to_print = ['id', 'title', 'doi', 'doi_merge', 'additional_dois', 'paper_abstract', 'link', 'subject', 'subject_orig', 'oa_state']
 
     available_columns = df.columns.tolist()
     columns_to_print = [col for col in columns_to_print if col in available_columns]
