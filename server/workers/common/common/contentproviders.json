@@ -1,5 +1,9 @@
 [
   {
+    "name": "Afaq Research Horizons in Social and Human Sciences (ARH)",
+    "internal_name": "ftid14693"
+  },
+  {
     "name": "Research Parks Publishing",
     "internal_name": "ftid14944"
   },
@@ -2420,7 +2424,7 @@
     "internal_name": "ftid14302"
   },
   {
-    "name": "Educação Tecnológica",
+    "name": "Educação & Inovação",
     "internal_name": "ftid14303"
   },
   {
@@ -8756,10 +8760,6 @@
     "internal_name": "ftstikimalangojs"
   },
   {
-    "name": "Khulna University Studies (KU Studies)",
-    "internal_name": "ftjkus"
-  },
-  {
     "name": "Journal EKSTENSI (Eksplorasi Teknologi Enterprise & Sistem Informasi)",
     "internal_name": "ftjekstensi"
   },
@@ -9468,10 +9468,6 @@
     "internal_name": "ftlccintuniv"
   },
   {
-    "name": "Ιδρυματικό Αποθετήριο HELLANICUS",
-    "internal_name": "fthellanicus"
-  },
-  {
     "name": "Repository STIE Tri Bhakti Business School",
     "internal_name": "ftstietribhakti"
   },
@@ -10094,10 +10090,6 @@
   {
     "name": "Revista Inteligência Competitiva - RIC",
     "internal_name": "ftjrinteligencia"
-  },
-  {
-    "name": "Revistas Científicas de la Universidad Andina del Cusco",
-    "internal_name": "ftuandinacuscojs"
   },
   {
     "name": "Portal de Revistas UNCP (Universidad Nacional del Centro del Perú)",
@@ -15376,7 +15368,7 @@
     "internal_name": "ftqabascentre"
   },
   {
-    "name": "ITS OJS (Institut Teknologi Sepuluh Nopember)",
+    "name": "ITS Journals (Institut Teknologi Sepuluh Nopember)",
     "internal_name": "ftitsojs2"
   },
   {
@@ -19004,10 +18996,6 @@
     "internal_name": "ftiailatiojs"
   },
   {
-    "name": "ColNes Publications: Journals",
-    "internal_name": "ftcolnespubojs"
-  },
-  {
     "name": "Athena Commons - Digital Repository of Mississippi University for Women",
     "internal_name": "ftmissunivwom"
   },
@@ -19116,7 +19104,7 @@
     "internal_name": "ftgrodnosmu"
   },
   {
-    "name": "Illinois Library Digital Collections",
+    "name": "Digital Collections at the University of Illinois at Urbana-Champaign (UIUC) Library",
     "internal_name": "ftunivilldl"
   },
   {
@@ -19744,10 +19732,6 @@
     "internal_name": "ftstaimupamekesa"
   },
   {
-    "name": "Spizaetus - Jurnal Biologi dan Pendidikan Biologi",
-    "internal_name": "ftjspizaetus"
-  },
-  {
     "name": "UARTPress: Open Journal Systems",
     "internal_name": "ftuartpressojs"
   },
@@ -20190,10 +20174,6 @@
   {
     "name": "姫路大学学術機関リポジトリ",
     "internal_name": "fthimejiuniv"
-  },
-  {
-    "name": "Republica Panama Órgano Judicial: Repositorio Digital",
-    "internal_name": "ftpanamaorganoju"
   },
   {
     "name": "IPMAFA Journals (Institut Pesantren Mathali'ul Falah)",
@@ -26588,7 +26568,7 @@
     "internal_name": "ftjmgtr"
   },
   {
-    "name": "mediarep",
+    "name": "FID Media Publish (Fachinformationsdienst für die Kommunikations- und Medienwissenschaft)",
     "internal_name": "ftmediarep"
   },
   {
@@ -28060,10 +28040,6 @@
     "internal_name": "ftchungnaminst"
   },
   {
-    "name": "Journal of Maternal and Child Health (JMCH)",
-    "internal_name": "ftjmch"
-  },
-  {
     "name": "Stellenbosch University: SUNDigital Collections",
     "internal_name": "ftustellenboschd"
   },
@@ -28506,10 +28482,6 @@
   {
     "name": "Mineralis (Centro de Tecnologia Mineral - CETEM)",
     "internal_name": "ftcetem"
-  },
-  {
-    "name": "Indian Institute of Geomagnetism (IIG): Repository",
-    "internal_name": "ftindinstgeomagn"
   },
   {
     "name": "Saint Louis University Libraries Digital Collections",
@@ -29508,10 +29480,6 @@
     "internal_name": "ftuperucayetanoh"
   },
   {
-    "name": "Repositorio Digital Universidad Andina del Cusco (UAC)",
-    "internal_name": "ftuniandinacusco"
-  },
-  {
     "name": "Universidad Nacional Amazónica de Madre de Dios: Repositorio Institucional Digital",
     "internal_name": "ftuninamadredios"
   },
@@ -29766,10 +29734,6 @@
   {
     "name": "Re-visiones",
     "internal_name": "ftjrevisiones"
-  },
-  {
-    "name": "GIGA Journal Family (German Institute of Global and Area Studies)",
-    "internal_name": "ftjgiga"
   },
   {
     "name": "International Journal of Innovation in Enterprise System (IJIES)",
@@ -30536,10 +30500,6 @@
     "internal_name": "ftjvoprstat"
   },
   {
-    "name": "Romanian Journal of History and International Studies (RJHIS)",
-    "internal_name": "ftjrjhis"
-  },
-  {
     "name": "Open Journal Systems - Universitas Negeri Surabaya",
     "internal_name": "ftuninsurabaya2"
   },
@@ -31140,10 +31100,6 @@
     "internal_name": "ftunivgaluhojs"
   },
   {
-    "name": "Technologies for Lightweight Structures",
-    "internal_name": "ftjtls"
-  },
-  {
     "name": "Jurnal Agriment ( J. Agr - Jurusan Manajemen Pertanian, Politeknik Pertanian Negeri Samarinda)",
     "internal_name": "ftjagriment"
   },
@@ -31464,10 +31420,6 @@
     "internal_name": "ftwmcusurabaya"
   },
   {
-    "name": "Statistisk sentralbyrå: Open Research Repository (SNORRe - Brage)",
-    "internal_name": "ftssbcom"
-  },
-  {
     "name": "Università degli Studi di Messina: IRIS",
     "internal_name": "ftunimessinairis"
   },
@@ -31478,14 +31430,6 @@
   {
     "name": "Università Commerciale Luigi Bocconi: CINECA IRIS",
     "internal_name": "ftuniclbocconiir"
-  },
-  {
-    "name": "Høgskolen i Østfold: HiØ Brage",
-    "internal_name": "fthsoestfoldcom"
-  },
-  {
-    "name": "Handelshøyskolen BI: BI Open Archive (Brage)",
-    "internal_name": "fthhsbicom"
   },
   {
     "name": "Texas A&M University ﻿Galveston Campus: DSpace Repository",
@@ -33300,10 +33244,6 @@
     "internal_name": "fthsfurtwangen"
   },
   {
-    "name": "mdw Repository (Universität für Musik und darstellende Kunst Wien)",
-    "internal_name": "ftunivmdwien"
-  },
-  {
     "name": "NYBG/125: Mertz Digital Collections (New York Botanical Garden)",
     "internal_name": "ftnewyorkbgdc"
   },
@@ -33574,14 +33514,6 @@
   {
     "name": "MedienPädagogik - Zeitschrift für Theorie und Praxis der Medienbildung",
     "internal_name": "ftjmedienpaed"
-  },
-  {
-    "name": "Norsk institutt for bioøkonomi: NIBIO  Brage",
-    "internal_name": "ftnibiocom"
-  },
-  {
-    "name": "NTNU Samfunnsforskning (Norges teknisk-naturvitenskapelige universitet): Samforsk Open (Brage)",
-    "internal_name": "ftntnutrondhsamf"
   },
   {
     "name": "Işık Üniversitesi: DSpace Repository",
@@ -34752,10 +34684,6 @@
     "internal_name": "ftmatjournalsojs"
   },
   {
-    "name": "Gratis Open Access Publishers: Journals",
-    "internal_name": "ftgratisoaojs"
-  },
-  {
     "name": "Kalamatika: Jurnal Pendidikan Matematika",
     "internal_name": "ftjkalamatika"
   },
@@ -35266,10 +35194,6 @@
   {
     "name": "TU Graz OPEN Library",
     "internal_name": "fttunivgraz"
-  },
-  {
-    "name": "FWF-E-Book-Library (Fonds zur Förderung der wissenschaftlichen Forschung)",
-    "internal_name": "ftfwf"
   },
   {
     "name": "Vysoká škola ekonomická v Praze",
@@ -37908,10 +37832,6 @@
     "internal_name": "ftjrjs"
   },
   {
-    "name": "GESIS (Leibniz-Institut für Sozialwissenschaften)",
-    "internal_name": "ftgesis"
-  },
-  {
     "name": "浜松医科大学学術機関リ",
     "internal_name": "fthamamed"
   },
@@ -38228,7 +38148,7 @@
     "internal_name": "ftasiandbank"
   },
   {
-    "name": "U.S. National Library of Medicine (NLM): Images from the History of Medicine (IHM)",
+    "name": "National Library of Medicine (NLM): Images from the History of Medicine",
     "internal_name": "ftnlmihm"
   },
   {
@@ -38488,10 +38408,6 @@
     "internal_name": "ftkurashikiuniv"
   },
   {
-    "name": "Hong Kong Baptist University (HKBU): Heritage",
-    "internal_name": "fthkbaptistunidy"
-  },
-  {
     "name": "Journal for Foundations and Applications of Physics",
     "internal_name": "ftjfap"
   },
@@ -38546,10 +38462,6 @@
   {
     "name": "University of Cape Town: OpenUCT",
     "internal_name": "ftunivcapetownir"
-  },
-  {
-    "name": "Liburuklik (Biblioteca Digital Vasca)",
-    "internal_name": "ftliburuklik"
   },
   {
     "name": "Universidad de Deusto: Biblioteca Digital Loyola",
@@ -39224,10 +39136,6 @@
     "internal_name": "ftjsocrates"
   },
   {
-    "name": "Urbe et Ius",
-    "internal_name": "fturbeetiusojs"
-  },
-  {
     "name": "Uniwersytet Papieski Jana Pawła II w Krakowie: Platforma czasopism",
     "internal_name": "ftunipjpkrakow"
   },
@@ -39562,10 +39470,6 @@
   {
     "name": "Scholink Journals",
     "internal_name": "ftscholinkojs"
-  },
-  {
-    "name": "Portal de Revistas Académicas de la UNI (Universidad Nacional de Ingeniería, Nicaragua)",
-    "internal_name": "ftunivningeneria"
   },
   {
     "name": "Horizon e-Publishing Group (HePG): E-Journals",
@@ -40032,10 +39936,6 @@
     "internal_name": "ftunivscsojs"
   },
   {
-    "name": "Center for Scientific Publication: PPI (Pusat Publikasi Ilmiah - LPPM Institut Teknologi Sepuluh Nopember)",
-    "internal_name": "ftitsojs"
-  },
-  {
     "name": "Centro Universitário de Belo Horizonte: Portal de Revistas Eletrônicas do UniBH",
     "internal_name": "ftcubelohorizone"
   },
@@ -40390,10 +40290,6 @@
   {
     "name": "Kingston University London: Research Repository",
     "internal_name": "ftunivkingston"
-  },
-  {
-    "name": "Université de Valenciennes et du Hainaut-Cambrésis (UVHC): THEOREME (THEses, Open access, Recherche, MEmoires)",
-    "internal_name": "ftunvalenciennes"
   },
   {
     "name": "Universidad de Las Palmas de Gran Canaria: Jable",
@@ -40804,10 +40700,6 @@
     "internal_name": "ftunitulsacollaw"
   },
   {
-    "name": "Institut Teknologi Sepuluh Nopember (ITS): Publikasi Ilmiah Online Mahasiswa ITS (POMITS)",
-    "internal_name": "ftitssurabayaojs"
-  },
-  {
     "name": "University of Missouri, School of Law: Scholarship Repository",
     "internal_name": "ftunimissourilaw"
   },
@@ -40896,7 +40788,7 @@
     "internal_name": "ftcubrasiliaojs"
   },
   {
-    "name": "Cadernos de Educação, Tecnologia e Sociedade (Instituto Federal de Educação, Ciência e Tecnologia de Goiás)",
+    "name": "Cadernos de Educação, Tecnologia e Sociedade - CETS (Brazilian Journal of Education, Technology and Society - BRAJETS)",
     "internal_name": "ftjcets"
   },
   {
@@ -41196,7 +41088,7 @@
     "internal_name": "ftseattleunivlaw"
   },
   {
-    "name": "Miskin Hill: Journals",
+    "name": "Australian Slavonic and East European Studies (ASEES)",
     "internal_name": "ftmiskinhill"
   },
   {
@@ -41422,10 +41314,6 @@
   {
     "name": "Deutsches Textarchiv (DTA, Berlin-Brandenburgische Akademie der Wissenschaften)",
     "internal_name": "ftdta"
-  },
-  {
-    "name": "ISAE (Institut Supérieur de l'Aéronautique et de l'Espace): ArTeMIS",
-    "internal_name": "ftisae"
   },
   {
     "name": "Bibliothèque Royale, Bruxelles: Archives & Musée de la Littérature (AML)",
@@ -42432,20 +42320,12 @@
     "internal_name": "ftunivsanandres"
   },
   {
-    "name": "International Journal of Scientific and Research Publications (IJSRP)",
-    "internal_name": "ftjijsrp"
-  },
-  {
     "name": "Cedarville University: DigitalCommons@Cedarville",
     "internal_name": "ftcedarvilleuniv"
   },
   {
     "name": "Hong Kong Polytechnic University: PolyU Institutional Repository (PolyU IR)",
     "internal_name": "ftpolyuhongkong"
-  },
-  {
-    "name": "Université de Lorraine: PETALE (Publications Et Travaux Académiques de LorrainE)",
-    "internal_name": "ftunivlorraine"
   },
   {
     "name": "Pontificia Universidad Católica del Perú: Portal de Revistas PUCP",
@@ -42490,10 +42370,6 @@
   {
     "name": "Multimedia University, Malaysia: SHDL@MMU Digital Repository",
     "internal_name": "ftmultimediauniv"
-  },
-  {
-    "name": "University of the Sunshine Coast, Queensland, Australia: COAST Research Database",
-    "internal_name": "ftunivscoast"
   },
   {
     "name": "Maison de l’Orient et de la Méditerranée, Université Lumière Lyon 2: DIGIMOM",
@@ -42984,10 +42860,6 @@
     "internal_name": "ftsingaporemuniv"
   },
   {
-    "name": "La Trobe University (Melbourne): Research Online",
-    "internal_name": "ftlatrobeuniv"
-  },
-  {
     "name": "BRAC University, Bangladesh: Institutional Repository",
     "internal_name": "ftbracuniv"
   },
@@ -43010,10 +42882,6 @@
   {
     "name": "OAK - The Novartis Repository",
     "internal_name": "ftnovartisinst"
-  },
-  {
-    "name": "Language Box (University of Southampton)",
-    "internal_name": "ftlanguagebox"
   },
   {
     "name": "神奈川大学　学術機関リポジトリ",
@@ -43936,10 +43804,6 @@
     "internal_name": "ftuninewbrunojs"
   },
   {
-    "name": "Revistas Eletrônicas da Toledo Presidente Prudente, São Paulo",
-    "internal_name": "ftunivtoledoojs"
-  },
-  {
     "name": "Cadernos NPGA (Universidade Federal da Bahia)",
     "internal_name": "ftjccnpga"
   },
@@ -44156,10 +44020,6 @@
     "internal_name": "ftcornellunivlaw"
   },
   {
-    "name": "Murdoch University Research Portal",
-    "internal_name": "ftmurdochuniv"
-  },
-  {
     "name": "Journals@UIC (The University of Illinois at Chicago)",
     "internal_name": "ftunivillchojs"
   },
@@ -44316,10 +44176,6 @@
     "internal_name": "ftpomorskadl"
   },
   {
-    "name": "Universidad de Sevilla: Fondos digitalizados",
-    "internal_name": "ftunivsevilla"
-  },
-  {
     "name": "Tạp chí khoa học Việt Nam Trực tuyến",
     "internal_name": "ftjvietnamjo"
   },
@@ -44456,7 +44312,7 @@
     "internal_name": "ftunivcincinatti"
   },
   {
-    "name": "ARCA - IGC Repository (Access to Research and Communication Annals: Instituto Gulbenkian de Ciência)",
+    "name": "ARCA - Repositório do GIMM (Gulbenkian Institute for Molecular Medicine)",
     "internal_name": "ftinstgulbenkian"
   },
   {
@@ -44880,10 +44736,6 @@
     "internal_name": "ftchugokuguniv"
   },
   {
-    "name": "Central Queensland University: aCQUIRe",
-    "internal_name": "ftcquniv"
-  },
-  {
     "name": "Biblioteka Cyfrowa UMCS (Uniwersytet Marii Curie-Skłodowskiej, Lublin)",
     "internal_name": "ftmcsuniv"
   },
@@ -44976,10 +44828,6 @@
     "internal_name": "ftnationalinstsp"
   },
   {
-    "name": "Search4Dev (Digital documents by Dutch development organizations)",
-    "internal_name": "ftdprn"
-  },
-  {
     "name": "Tropicos.org (Missouri Botanical Garden)",
     "internal_name": "ftmbgarden"
   },
@@ -44998,10 +44846,6 @@
   {
     "name": "Iowa Research Online -  University of Iowa",
     "internal_name": "ftuniviowa"
-  },
-  {
-    "name": "UNIT - Université Numérique Ingénierie et Technologie",
-    "internal_name": "ftunit"
   },
   {
     "name": "Universidad del Rosario, Bogotá: E-docUR",
@@ -45172,7 +45016,7 @@
     "internal_name": "ftnaturalis"
   },
   {
-    "name": "Indiana University - Purdue University Indianapolis (IUPUI): eArchives",
+    "name": "IUPUI University eArchives (Indian University Purdue University Indianapolis)",
     "internal_name": "ftiupuiearch"
   },
   {
@@ -45298,10 +45142,6 @@
   {
     "name": "University of Massachusetts:  ScholarWorks@UMass Amherst",
     "internal_name": "ftunivmassamh"
-  },
-  {
-    "name": "مجلات دانشگاه علوم پزشکی اصفها",
-    "internal_name": "ftmui"
   },
   {
     "name": "高知工科大学学術情報リポジトリ",
@@ -45458,10 +45298,6 @@
   {
     "name": "The University of Melbourne: Digital Repository",
     "internal_name": "ftumelbourne"
-  },
-  {
-    "name": "DIR - Zasoby polskie (Interdyscyplinarne Centrum Modelowania Matematycznego i Komputeroweg, Uniwersytet Warszawski)",
-    "internal_name": "fticmwarschau"
   },
   {
     "name": "Repositorio Digital de la Universidad Politécnica de Cartagena",
@@ -45650,10 +45486,6 @@
   {
     "name": "Universidade de Coimbra: Estudo Geral",
     "internal_name": "ftunivcoimbra"
-  },
-  {
-    "name": "Flinders Academic Commons (FAC - Flinders University)",
-    "internal_name": "ftflindersuniv"
   },
   {
     "name": "University of Hong Kong: HKU Scholars Hub",
@@ -45872,10 +45704,6 @@
     "internal_name": "ftathabasuniv"
   },
   {
-    "name": "大阪教育大学リポジトリ",
-    "internal_name": "ftosakakyuniv"
-  },
-  {
     "name": "Rijksinstituut voor Volksgezondheid en Milieu (RIVM): Webbased Archive of RIVM Publications (WARP)",
     "internal_name": "ftrivm"
   },
@@ -45984,10 +45812,6 @@
     "internal_name": "fttsukubauniv"
   },
   {
-    "name": "神戸大学学術成果リポジトリ",
-    "internal_name": "ftkobeuniv"
-  },
-  {
     "name": "山口大学学術機関リポジトリ",
     "internal_name": "ftyamaguchiuniv"
   },
@@ -46018,10 +45842,6 @@
   {
     "name": "学術研究成果リポジトリ",
     "internal_name": "ftjaist"
-  },
-  {
-    "name": "Université Lumière Lyon 2: Presses Universitaires de Lyon (PUL)",
-    "internal_name": "ftunivlyon2unipr"
   },
   {
     "name": "oURspace - The University of Regina's Institutional Repository",
@@ -46356,7 +46176,7 @@
     "internal_name": "ftunivpaderb"
   },
   {
-    "name": "University of Illinois at Urbana-Champaign: UIUC Digitized Books",
+    "name": "Digitized Books from the University of Illinois at Urbana-Champaign (UIUC)",
     "internal_name": "ftunivillratri"
   },
   {
@@ -46632,10 +46452,6 @@
     "internal_name": "ftuvic"
   },
   {
-    "name": "Universidad de Oviedo: Tesis Doctorals en Xarxa (TDX)",
-    "internal_name": "ftuoviedo"
-  },
-  {
     "name": "epub.oeaw (Österreichische Akademie der Wissenschaften)",
     "internal_name": "ftoeakadwiss"
   },
@@ -46834,10 +46650,6 @@
   {
     "name": "University of Texas at El Paso: Digital Commons@UTEP",
     "internal_name": "ftutep"
-  },
-  {
-    "name": "Environmental Protection Agency (EPA): Science Inventory",
-    "internal_name": "ftepa"
   },
   {
     "name": "Universitat Ramon Llull, Barcelona: Tesis Doctorals en Xarxa (TDX)",
@@ -47122,10 +46934,6 @@
   {
     "name": "Gallica - bibliothèque numérique de la Bibliothèque nationale de France (BnF)",
     "internal_name": "ftbnfgallica"
-  },
-  {
-    "name": "Eindhoven University of Technology (TU/e): Research Portal",
-    "internal_name": "ftuniveindhoven"
   },
   {
     "name": "University of Southern Queensland: USQ ePrints",
@@ -47506,10 +47314,6 @@
   {
     "name": "University of Maryland: Digital Repository (DRUM)",
     "internal_name": "ftunivmaryland"
-  },
-  {
-    "name": "BioMed Central",
-    "internal_name": "ftbiomed"
   },
   {
     "name": "Krause & Pachernegg, Verlag für Medizin und Wirtschaft: Medizinische Publikationen",
