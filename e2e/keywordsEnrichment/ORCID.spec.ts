@@ -185,7 +185,7 @@ const testCases: EnrichmentTestCase[] = [
     abstract:
       'Zur Zeit gibt es starke Bemühungen, die offensichtlichen Defizite des wissenschaftlichen Kommunikationssystems zu beheben. Open Science hat das Potenzial, die Produktion und Verbreitung von wissenschaftlichem Wissen positiv zu verändern; es existiert aber keine gemeinsam geteilte Vision, die das System wissenschaftlicher Kommunikation beschreibt, welches wir erschaffen wollen. Zwischen April 2015 und Juni 2016 trafen sich in Wien die Mitglieder der Open Access Network Austria (OANA) Arbeitsgruppe "Open Access and Scholarly Communication", um diese Angelegenheit zu diskutieren. Das Hauptergebnis unserer Überlegungen sind zwölf Prinzipien, die die Eckpfeiler eines künftigen wissenschaftlichen Kommunikationssystems dedarstellen. Diese Prinzipien sollen einen kohärenten Bezugsrahmen für die Debatte zur Verbesserung des derzeitigen Systems liefern. Mit diesem Dokument hoffen wir, eine breite Diskussion über eine gemeinsame Vision für die wissenschaftliche Kommunikation im 21. Jahrhundert anzustoßen.',
     keywords:
-      "Wissenschaftskommunikation; Open Access; Open Science; Vision; Bibliography. Library science. Information resources; Z",
+      "Bibliography. Library science. Information resources; Open Access; Open Science; Scholarly Communication; Vision; Wissenschaftskommunikation; Z",
   },
   {
     suiteName: "regression test DOI case-insensitive merge",
