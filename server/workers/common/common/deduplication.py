@@ -65,7 +65,15 @@ def get_publisher_doi(doi):
 def find_duplicate_groups(df):
     duplicate_groups = df.id.map(lambda x: df[df.duplicates.str.contains(x)].index)
     tmp = pd.DataFrame(duplicate_groups).astype(str).drop_duplicates().index
-    return duplicate_groups[tmp]
+    duplicate_groups = duplicate_groups[tmp]
+    # Deterministic processing order. Groups can OVERLAP (e.g. a textual pair
+    # bridging two DOI-key groups); the anchor-marking passes reset and re-mark
+    # anchors per group, so for overlapping groups the last-processed group
+    # wins. Iterating in row order would make that outcome depend on response
+    # order — order groups by their member ids instead.
+    order = sorted(duplicate_groups.index,
+                   key=lambda i: tuple(sorted(df.id.loc[duplicate_groups[i]])))
+    return duplicate_groups.loc[order]
 
 
 # --- DOI merge key -----------------------------------------------------------

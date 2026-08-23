@@ -245,6 +245,38 @@ def test_dcdoi_asserted_same_work_with_retitled_preprint_merges_and_keeps_oa():
     assert str(out["records"][out["ids"][0]]["oa_state"]) == "1"
 
 
+def test_overlapping_groups_are_order_invariant():
+    # Real-world topology (an ORCID base batch): four copies of one work —
+    # journal + repository sharing the journal DOI key, an arXiv-collection
+    # copy also keyed on the journal DOI, and a DataCite copy whose PRIMARY
+    # key is the arXiv DOI (first in its dcdoi) but which the textual pass
+    # pairs with the arXiv copy. The textual pair bridges two DOI-key groups,
+    # so the groups OVERLAP; the anchor re-marking across overlapping groups
+    # must not depend on group iteration order (= row order before the fix).
+    df = make_df([
+        make_record("journal", oa_state="1", year="2023",
+                    doi="https://doi.org/10.1088/1361-6471/ac9fe6",
+                    title="On the geometric phase for Majorana and Dirac neutrinos",
+                    paper_abstract="A" * 100),
+        make_record("salerno", oa_state="2", year="2023", doi="",
+                    additional_dois=["https://doi.org/10.1088/1361-6471/ac9fe6"],
+                    title="On the geometric phase for Majorana and Dirac neutrinos",
+                    paper_abstract="B" * 90),
+        make_record("arxiv-copy", oa_state="1", year="2022", doi="",
+                    additional_dois=["https://doi.org/10.1088/1361-6471/ac9fe6"],
+                    duplicates="datacite",
+                    title="On the geometric phase for Majorana and Dirac neutrinos",
+                    paper_abstract="C" * 95),
+        make_record("datacite", oa_state="1", year="2022", doi="",
+                    additional_dois=["https://doi.org/10.48550/arxiv.2107.08719; "
+                                     "https://doi.org/10.1088/1361-6471/ac9fe6"],
+                    duplicates="arxiv-copy",
+                    title="On the geometric phase for Majorana and Dirac neutrinos",
+                    paper_abstract="D" * 105),
+    ])
+    assert_order_invariant(df)
+
+
 def test_doi_group_straddling_typenorm_split_keeps_one_survivor():
     # a DOI-key group whose members land on different sides of the
     # dataset/non-dataset split must not end up with an anchor on each side.
