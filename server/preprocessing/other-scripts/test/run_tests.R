@@ -23,6 +23,7 @@ if (use_testthat) {
 # Pure-base-R test files (run anywhere, no tm/logging needed).
 base_files <- c(
   "test/test_subject_cleaning.R",
+  "test/test_subject_chain.R",
   "test/test_ranking_config.R",
   "test/test_ranking_wedge.R",
   "test/test_ranking_select.R",
@@ -32,6 +33,9 @@ base_files <- c(
 # Replay tests need the tm stack — included only when tm is available (i.e. inside
 # the pipeline image, run via test/run_tests.sh), skipped on a bare host.
 replay_files <- c(
+  "test/test_label_casing.R",
+  "test/test_ngram_candidates.R",
+  "test/test_corpus_hygiene.R",
   "test/test_replay_harness.R",
   "test/test_replay_modes.R",
   "test/test_replace_keywords_routing.R",

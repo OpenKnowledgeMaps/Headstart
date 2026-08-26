@@ -103,6 +103,16 @@ test_that("space-delimited MeSH blobs are split at qualifier boundaries", {
 test_that("a '*' major-topic marker also starts a new heading", {
   expect_equal(strip_mesh_qualifier("Cytokines/immunology *Immunity"), "Cytokines; Immunity")
 })
+test_that("a standalone major-topic '*Descriptor' loses the marker without a qualifier", {
+  expect_equal(strip_mesh_qualifier("*Artificial Intelligence"), "Artificial Intelligence")
+  expect_equal(strip_mesh_qualifier("*Decision Support Systems"), "Decision Support Systems")
+})
+test_that("a plain descriptor without marker or qualifier is untouched", {
+  expect_equal(strip_mesh_qualifier("Artificial Intelligence"), "Artificial Intelligence")
+})
+test_that("an asterisk that is not a heading marker is untouched", {
+  expect_equal(strip_mesh_qualifier("2*2 factorial design"), "2*2 factorial design")
+})
 test_that("a stacked qualifier run splits even before a lower-case heading", {
   # next heading is a gene name "rab3A" (lower-case); the 2+ qualifier stack is
   # still unambiguous, so it splits and strips.
