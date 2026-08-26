@@ -7,7 +7,13 @@ TypeCountTokenizer <- function(x) {
 
 
 create_corpus <- function(metadata, text, stops) {
-  docs <- data.frame(doc_id = text$id, text = text$content)
+  # Corpus-side text hygiene (helpers in summarize.R): decode HTML entities
+  # before removePunctuation can reduce them to bare digits, and strip
+  # URL/HTML/signature noise that would otherwise become corpus terms. Runs
+  # before the unlowered snapshot, so the casing vocabulary (get_type_counts)
+  # is cleaned as well.
+  content <- sanitize_corpus_noise(decode_html_entities(text$content))
+  docs <- data.frame(doc_id = text$id, text = content)
   corpus <- VCorpus(DataframeSource(docs))
 
   # Replace non-convertible bytes in with strings showing their hex codes,

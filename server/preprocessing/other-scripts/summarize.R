@@ -50,6 +50,13 @@ normalize_corpus_tokens <- function(s) {
   s
 }
 
+# Remove a leading MeSH major-topic "*" from each "; "-separated keyword. Only
+# a keyword-initial asterisk is a marker; an interior one ("2*2 design") is
+# real content and stays.
+strip_major_topic_markers <- function(x) {
+  gsub("(^|;\\s*)\\*+", "\\1", x)
+}
+
 
 # Generate all contiguous n-grams of length n from each input string. The words
 # within an n-gram are joined with "_" so a whitespace tokenizer keeps the n-gram
@@ -120,6 +127,108 @@ paper_title_ngrams <- function(title, stops) {
   unique(grams[keep])
 }
 
+# Decode HTML character entities so they cannot fragment into bare digits or
+# stray tokens downstream (removePunctuation turns "&#8211;" into "8211" fused
+# into the surrounding word). Handles numeric decimal and hex forms and the
+# common named entities; "&amp;" is decoded last so a double-encoded entity is
+# only unwrapped one level. Decoded en-dash/hyphen codepoints are normalised to
+# "-" so they do not multiply spelling variants of hyphenated terms.
+decode_html_entities <- function(x) {
+  decode_one <- function(s) {
+    if (is.na(s) || !grepl("&", s, fixed = TRUE)) return(s)
+    m <- gregexpr("&#[0-9]{1,7};", s)
+    regmatches(s, m) <- lapply(regmatches(s, m), function(v) {
+      if (!length(v)) return(v)
+      vapply(v, function(e) intToUtf8(as.integer(sub("&#([0-9]+);", "\\1", e))),
+             character(1), USE.NAMES = FALSE)
+    })
+    m <- gregexpr("&#[xX][0-9a-fA-F]{1,6};", s)
+    regmatches(s, m) <- lapply(regmatches(s, m), function(v) {
+      if (!length(v)) return(v)
+      vapply(v, function(e) intToUtf8(strtoi(sub("&#[xX]([0-9a-fA-F]+);", "\\1", e), 16L)),
+             character(1), USE.NAMES = FALSE)
+    })
+    s <- gsub("&nbsp;", " ", s, fixed = TRUE)
+    s <- gsub("&lt;", "<", s, fixed = TRUE)
+    s <- gsub("&gt;", ">", s, fixed = TRUE)
+    s <- gsub("&quot;", "\"", s, fixed = TRUE)
+    s <- gsub("&apos;", "'", s, fixed = TRUE)
+    s <- gsub("&amp;", "&", s, fixed = TRUE)
+    s
+  }
+  x <- vapply(x, decode_one, character(1), USE.NAMES = FALSE)
+  # No-break/narrow spaces (decoded "&#160;"/"&nbsp;" or already present in the
+  # source) become plain spaces: they render invisibly but count as non-space
+  # in regex classes, which would let a "no-space run" span whole sentences.
+  x <- gsub("[\u00a0\u202f]", " ", x)
+  gsub("[\u2013\u2010]", "-", x)
+}
+
+# Strip text noise that would otherwise surface as corpus terms or label
+# candidates: URLs (including signed URLs with their query strings), HTML tags
+# and stray closing-tag fragments ("</ p"), and over-long no-space tokens
+# (base64/signature residue). Content words around the noise are kept.
+sanitize_corpus_noise <- function(x) {
+  # perl = TRUE throughout: the default TRE engine mis-evaluates a bounded
+  # repetition of \S ("\\S{80,}") against long strings, matching across spaces
+  # and wiping whole texts.
+  x <- gsub("(https?://|www\\.)\\S+", " ", x, perl = TRUE)
+  x <- gsub("\\S*&key-pair-id=\\S*", " ", x, perl = TRUE)
+  x <- gsub("</?[A-Za-z][^>]*>", " ", x, perl = TRUE)
+  x <- gsub("<\\s*/\\s*[A-Za-z]*>?", " ", x, perl = TRUE)
+  x <- gsub("\\S{80,}", " ", x, perl = TRUE)
+  x
+}
+
+# Shared n-gram candidate builder for the heuristic-keyword synthesizer
+# (replace_keywords_if_empty) and the last-resort fallback label
+# (title_abstract_fallback_label). Same method as paper_title_ngrams: keep
+# digits and intra-word hyphens, form n-grams on the stopword-RETAINING token
+# stream, then drop n-grams that start or end with a stopword — so interior
+# stopwords survive ("biomedical big data" stays a trigram; the fused
+# "biomedical data" bigram is never formed) and digit-bearing tokens stay whole
+# ("covid-19", "21st"). Stopword matching is case-insensitive so the outcome
+# does not depend on source casing. paper_title_ngrams stays its own
+# implementation: its per-word stopword semantics are pinned by the Mode 1-3
+# heuristic rank sources.
+#   text            : one string (title, or title + abstract).
+#   ngram_lengths   : which n-gram sizes to form.
+#   include_unigrams: also return single tokens that are neither stopwords nor
+#                     purely numeric (a lone number/year is noise; digits stay
+#                     inside tokens).
+# Returns a character vector of "_"-joined n-grams / bare tokens, in formation
+# order (not de-duplicated - callers count frequencies).
+ngram_candidates <- function(text, stops, ngram_lengths = c(2, 3),
+                             include_unigrams = FALSE) {
+  text <- if (is.na(text)) "" else text
+  # entity/URL/HTML hygiene before tokenization: an undecoded "&#8211;" would
+  # fragment into a bare-digit token, and abstract URLs would become candidate
+  # words.
+  text <- sanitize_corpus_noise(decode_html_entities(text))
+  clean <- gsub("[^[:alnum:]-]", " ", text)
+  clean <- trimws(gsub("\\s+", " ", clean))
+  if (!nzchar(clean)) return(character(0))
+  stops_lower <- tolower(stops)
+  grams <- unlist(lapply(ngram_lengths, function(n) expand_ngrams(clean, n)))
+  grams <- unlist(strsplit(paste(grams, collapse = " "), " "))
+  grams <- grams[nzchar(grams)]
+  keep <- vapply(grams, function(g) {
+    toks <- strsplit(g, "_", fixed = TRUE)[[1]]
+    length(toks) >= 2 &&
+      !(tolower(toks[1]) %in% stops_lower) &&
+      !(tolower(toks[length(toks)]) %in% stops_lower) &&
+      toks[1] != toks[length(toks)]
+  }, logical(1), USE.NAMES = FALSE)
+  out <- grams[keep]
+  if (include_unigrams) {
+    words <- strsplit(clean, " ", fixed = TRUE)[[1]]
+    words <- words[nzchar(words) & !(tolower(words) %in% stops_lower) &
+                     !grepl("^[0-9]+$", words)]
+    out <- c(words, out)
+  }
+  out
+}
+
 # Add the two heuristic-keyword metadata columns (HEUR_MIN1 / HEUR_MIN2) to the
 # metadata data frame. Generates each paper's title n-grams, computes each n-gram's
 # MAP-WIDE document frequency (number of distinct resources it appears in), and stores
@@ -146,21 +255,15 @@ add_heuristic_keyword_fields <- function(metadata, stops) {
 #   label_exclusions : curated area-label exclusion list (whole-term, case-insensitive)
 #                      applied here too so listed terms never survive as a last resort.
 title_abstract_fallback_label <- function(matches, metadata, stops, top_n = 3, label_exclusions = character(0), cluster = NA_integer_) {
-  batch_size <- 1000
-  total_length <- length(stops)
   candidates = mapply(paste, metadata$title[matches], metadata$paper_abstract[matches])
   candidates = lapply(candidates, tolower)
-  for (i in seq(1, total_length, batch_size)) {
-    candidates = lapply(candidates, function(x) {paste(removeWords(x, stops[i:min(i+batch_size -1, total_length)]), collapse="")})
-  }
-  candidates = lapply(candidates, function(x) {gsub("[^[:alpha:]]", " ", x)})
-  candidates = lapply(candidates, function(x) {gsub(" +", " ", x)})
-  candidates_bigrams = lapply(lapply(candidates, expand_ngrams, n=2), paste, collapse=" ")
-  candidates_trigrams = lapply(lapply(candidates, expand_ngrams, n=3), paste, collapse=" ")
-  candidates = unname(mapply(paste, candidates_bigrams, candidates_trigrams))
-  candidates =  unlist(lapply(candidates, str_split, " "), recursive = F)
-  candidates = unlist(lapply(candidates, function(x) {another_prune_ngrams(x, stops)}))
-  top_ngrams = sort(table(strsplit(paste(candidates, collapse=" "), " ")), decreasing = T)
+  # n-gram formation on the stopword-retaining stream (see ngram_candidates):
+  # keeps digit/hyphen tokens whole and interior stopwords in place; boundary
+  # stopword n-grams are pruned inside the helper.
+  candidates = unlist(lapply(candidates, ngram_candidates, stops = stops,
+                             ngram_lengths = c(2, 3)))
+  if (!length(candidates)) return("")
+  top_ngrams = sort(table(candidates), decreasing = T)
   if (length(label_exclusions)) {                              # whole-term exclusion (see drop_excluded_terms)
     norm <- trimws(tolower(gsub("_", " ", names(top_ngrams))))
     top_ngrams <- top_ngrams[!(norm %in% tolower(trimws(label_exclusions)))]
@@ -287,6 +390,15 @@ create_cluster_labels <- function(clusters, metadata,
                  weightingspec = weightingspec, top_n = top_n, stops = stops,
                  taxonomy_separator = taxonomy_separator, params = params, service = service),
             "summarize_00_label_inputs")
+  # Leading "*" (MeSH major-topic marker) can still be attached to subject
+  # keywords at this point: source-side cleaning strips it, but merging the
+  # subjects of duplicate records can re-introduce a marked spelling. Strip it
+  # here, where the subject tokens for the corpus and every rank source
+  # originate, so the marked and unmarked spelling of a keyword cannot compete
+  # as two distinct candidates. All modes and services.
+  if ("subject" %in% names(metadata)) {
+    metadata$subject <- strip_major_topic_markers(metadata$subject)
+  }
   # Resolve the ranking mode BEFORE building the corpus. Mode 0 is gated to the
   # verbatim legacy path (get_cluster_corpus_legacy + zero-sum fill_empty_clusters_
   # legacy), so it stays BYTE-IDENTICAL to the pre-ranking pipeline; Modes 1-3 take
@@ -464,10 +576,17 @@ fix_keyword_casing <- function(keyword, type_counts) {
 }
 
 # Return the canonical (original-corpus) casing of a token: looks it up in
-# type_counts case-insensitively, ignoring hyphens. Falls back to the input
-# token if there is no match.
+# type_counts case-insensitively. The lookup is exact on everything but case —
+# in particular hyphen-preserving: the vocabulary regularly holds a
+# de-hyphenated twin of a hyphenated token (source spelling variants), and a
+# hyphen-insensitive lookup would respell the token instead of re-casing it.
+# Falls back to the input token if there is no match. Edge hyphens are
+# separator debris, not part of the token, and are trimmed before the lookup
+# (a token that is only hyphens is returned unchanged).
 match_keyword_case <- function(x, type_counts) {
-  y <- names(type_counts[which(tolower(names(type_counts)) == gsub("-", "", tolower(x)))][1])
+  stripped <- gsub("^-+|-+$", "", x)
+  if (nzchar(stripped)) x <- stripped
+  y <- names(type_counts[which(tolower(names(type_counts)) == tolower(x))][1])
   if (!is.na(y)) return(y) else return(x)
 }
 

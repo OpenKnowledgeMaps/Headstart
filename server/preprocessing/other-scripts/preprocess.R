@@ -125,16 +125,14 @@ replace_keywords_if_empty <- function(metadata, stops) {
   }
   metadata$subject_is_heuristic[missing_subjects] <- TRUE
   vplog$info(paste("vis_id:", .GlobalEnv$VIS_ID, "Documents without subjects:", length(missing_subjects)))
-  candidates = mapply(paste, metadata$title)
-  batch_size <- 1000
-  total_length <- length(stops)
-  for (i in seq(1, total_length, batch_size)) {
-    candidates = mclapply(candidates, function(x)paste(removeWords(x, stops[i:min(i+batch_size -1, total_length)]), collapse=""))  
-  }  
-  candidates = lapply(candidates, function(x) {gsub("[^[:alpha:]]", " ", x)})
-  candidates = lapply(candidates, function(x) {gsub(" +", " ", x)})
-  candidates_bigrams = lapply(lapply(candidates, expand_ngrams, n=2), paste, collapse=" ")
-  candidates = mapply(paste, candidates, candidates_bigrams)
+  # Unigram + bigram candidates per title, built on the stopword-retaining
+  # token stream (ngram_candidates, summarize.R): digit/hyphen tokens stay
+  # whole ("covid-19", "21st"), interior stopwords stay in place so no fused
+  # bigram is formed, and stopword matching is case-insensitive. Lone
+  # stopword/numeric unigrams are dropped inside the helper.
+  candidates = lapply(metadata$title, ngram_candidates, stops = stops,
+                      ngram_lengths = 2, include_unigrams = TRUE)
+  candidates = vapply(candidates, paste, character(1), collapse = " ")
 
   nn_corpus = Corpus(VectorSource(candidates))
   nn_tfidf = TermDocumentMatrix(nn_corpus)
@@ -154,14 +152,12 @@ replace_keywords_if_empty <- function(metadata, stops) {
       } else {
         candidates = mapply(paste, metadata$title[i,], metadata$paper_abstract[i,])
       }
-      for (i in seq(1, total_length, batch_size)) {
-        candidates = mclapply(candidates, function(x)paste(removeWords(x, stops[i:min(i+batch_size -1, total_length)]), collapse=""))
-      }
-      candidates = lapply(candidates, function(x) {gsub("[^[:alpha:]]", " ", x)})
-      candidates = lapply(candidates, function(x) {gsub(" +", " ", x)})
-      candidates_bigrams = lapply(lapply(candidates, expand_ngrams, n=2), paste, collapse=" ")
-      candidates = mapply(paste, candidates, candidates_bigrams)
-      nn_count = sort(table(strsplit(candidates, " ")), decreasing = T)
+      # same unigram + bigram method as the title pass above
+      candidates = lapply(candidates, ngram_candidates, stops = stops,
+                          ngram_lengths = 2, include_unigrams = TRUE)
+      candidates = unlist(candidates)
+      if (!length(candidates)) candidates <- ""
+      nn_count = sort(table(candidates), decreasing = T)
       replacement_keywords <- filter_out_nested_ngrams(names(nn_count), 3)
       replacement_keywords = lapply(replacement_keywords, FUN = function(x) {paste(unlist(x), collapse="; ")})
       replacement_keywords = gsub("_", " ", replacement_keywords)

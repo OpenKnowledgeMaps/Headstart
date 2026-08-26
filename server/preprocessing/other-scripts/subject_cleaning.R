@@ -145,11 +145,10 @@ strip_mesh_qualifier <- function(x) {
   # a real descriptor, but runs of qualifier-less headings (MeSH check tags such
   # as "Animals", "Humans") stay merged because there is no qualifier to anchor on.
   #
-  # KNOWN LIMITATION: in the live base.R order the colon form ("Hypothermia:
-  # chemically induced") is usually already removed whole by the generic
-  # "prefix:annotation" gsub before this runs, taking the descriptor with it. So
-  # in practice this mainly affects the slash and dash forms; the colon form is
-  # the same legacy-ordering interference that trips up the classification drops.
+  # The colon form ("Hypothermia: chemically induced") reaches this function
+  # because the generic "prefix:annotation" strips in the cleaning chain only
+  # match a lowercase scheme with no space after the colon; a
+  # "Descriptor: qualifier" construct (capitalised, spaced) passes them.
   qual <- MESH_QUALIFIER_ALTERNATION
   # a single "<sep><*?>qualifier<*?>" unit (separator is /, : or a spaced dash).
   unit <- paste0("(?:\\s*[/:]\\s*|\\s+-\\s+)\\*?\\s*(?i:", qual, ")\\s*\\*?")
@@ -169,10 +168,13 @@ strip_mesh_qualifier <- function(x) {
     out <- vapply(kws, function(kw) {
       s <- gsub(stack, "; ", kw, perl = TRUE)
       s <- gsub(single, "; ", s, perl = TRUE)
-      if (identical(s, kw)) return(kw)            # no qualifier: not a MeSH pair/blob
-      # a "*" major-topic marker also starts a new heading; trim leftover "*".
+      # The "*" major-topic marker is handled independently of the qualifier
+      # match: a standalone "*Descriptor" carries no qualifier, so it must not
+      # depend on the gsubs above having fired. A " *Word" mid-string also
+      # starts a new heading; a leading "*" is plain marker noise.
       s <- gsub("\\s+\\*(?=[A-Za-z(])", "; ", s, perl = TRUE)
       s <- sub("^\\*", "", s)
+      if (identical(s, kw)) return(kw)   # no qualifier, no marker: not MeSH-shaped
       parts <- trimws(gsub("*", "", trimws(strsplit(s, ";", fixed = TRUE)[[1]]), fixed = TRUE))
       paste(parts[nzchar(parts)], collapse = "; ")
     }, character(1), USE.NAMES = FALSE)
@@ -223,6 +225,17 @@ drop_for <- function(keywords) {
   # takes effect if the per-scheme filters run before that legacy step.
   keywords[!grepl("\\(for(-2020)?\\)\\s*$|^FoR [0-9]+ \\([A-Za-z]|^anzsrc-for ?: ?[0-9]+",
                   keywords, ignore.case = TRUE)]
+}
+
+drop_lettered_code_dashed <- function(keywords) {
+  # Letter-prefixed classification codes in "CODE - Caption" form, e.g.
+  # "F331 - Atmospheric physics", "F800 - Physical geographical sciences"
+  # (ANZSRC-FOR-style serialisation with a letter prefix). Neither the generic
+  # classification strips nor the pure-digit rule match this shape, and the
+  # later residual-digit cleanup then fragments it to "F- Caption". The spaced
+  # dash and caption are required, so a real keyword that merely looks
+  # code-like ("B12", "T2 MRI sequences", "3D printing") is never matched.
+  keywords[!grepl("^[A-Z]{1,3}[0-9]{2,4} - .+$", keywords)]
 }
 
 drop_hrcs <- function(keywords) {
@@ -566,6 +579,7 @@ clean_classification_keywords <- function(x) {
     keywords <- drop_rcdc(keywords)
     keywords <- drop_not_elsewhere_classified(keywords)
     keywords <- drop_for(keywords)
+    keywords <- drop_lettered_code_dashed(keywords)
     keywords <- drop_hrcs(keywords)
     keywords <- drop_science_metrix(keywords)
     keywords <- drop_sdg(keywords)
@@ -582,4 +596,284 @@ clean_classification_keywords <- function(x) {
     join_keywords(keywords)
   }
   vapply(x, one, character(1), USE.NAMES = FALSE)
+}
+
+# --- DOAJ LCC caption/code block removal --------------------------------------
+# DOAJ appends journal-level Library of Congress classifications to dcsubject as
+# separate keywords: real keywords first, then "caption; code" pairs ordered
+# general -> specific (e.g. "Science; Q; Physics; QC1-999; Geophysics. Cosmic
+# physics; QC801-809"); records without author keywords carry only the block.
+# The codes are removed by other rules, but the caption keywords survive (or get
+# fragmented by the ". "-split steps) and then dominate tf-idf in
+# journal-homogeneous clusters. This filter drops the captions while the codes
+# are still present to pair against, so it must run before the code-removal and
+# "."-split steps of the cleaning chain.
+#
+# Caption vocabulary: normalized caption/fragment -> LCC class of the code it is
+# paired with in DOAJ data. Includes range-level captions ("Renewable energy
+# sources" TJ807-830) that the LCC_* heading lists above do not cover, and the
+# fragments of comma-split captions ("Economic growth, development, planning"
+# arrives as three keywords). Curated from a corpus sweep of DOAJ records; a
+# keyword is only dropped when BOTH its text matches this vocabulary AND a code
+# of the matching class is present in the same subject line, so caption
+# lookalikes used as real keywords ("Technology", "Ecology") survive on records
+# without the block, and real keywords that merely sit next to a code (a record
+# carrying "solar eclipse; RE1-994" without a caption) are never dropped.
+LCC_DOAJ_CAPTION_CLASSES <- c(
+  "agriculture" = "S",
+  "agriculture (general)" = "S",
+  "anthropology" = "GN",
+  "applied mathematics. quantitative methods" = "T",
+  "architecture" = "NA",
+  "arts in general" = "NX",
+  "astronomy" = "QB",
+  "astrophysics" = "QB",
+  "bibliography. library science. information resources" = "Z",
+  "biology (general)" = "QH",
+  "business" = "HF",
+  "business communication. including business report writing" = "HF",
+  "business correspondence" = "HF",
+  "chemical engineering" = "TP",
+  "chemical industries" = "HD",
+  "chemical technology" = "TP",
+  "chemistry" = "QD",
+  "cities. urban geography" = "GF",
+  "city planning" = "HT",
+  "colonies and colonization. emigration and immigration. international migration" = "JV",
+  "commerce" = "HF",
+  "communication. mass media" = "P",
+  "communities. classes. races" = "HT",
+  "computer applications to medicine. medical informatics" = "R",
+  "computer software" = "QA",
+  "crisis management. emergency management. inflation" = "HD",
+  "demography. population. vital events" = "HB",
+  "development" = "HD",
+  "diseases of the circulatory (cardiovascular) system" = "RC",
+  "diseases of the genitourinary system. urology" = "RC",
+  "ecology" = "QH",
+  "economic growth" = "HD",
+  "economic theory. demography" = "HB",
+  "economics as a science" = "HB",
+  "education" = "L",
+  "education (general)" = "L",
+  "electric apparatus and materials. electric circuits. electric networks" = "TK",
+  "electrical engineering. electronics. nuclear engineering" = "TK",
+  "electronic computers. computer science" = "QA",
+  "electronics" = "TK",
+  "engineering (general). civil engineering (general)" = "TA",
+  "engineering economy" = "TA",
+  "environmental effects of industries and plants" = "TD",
+  "environmental law" = "K",
+  "environmental pollution" = "TD",
+  "environmental sciences" = "GE",
+  "environmental technology. sanitary engineering" = "TD",
+  "etc" = "PN",
+  "ethics" = "BJ",
+  "forestry" = "SD",
+  "general works" = "A",
+  "general. including nature conservation" = "QH",
+  "genetics" = "QH",
+  "geodesy" = "QB",
+  "geographical distribution" = "QH",
+  "geography (general)" = "G",
+  "geography. anthropology. recreation" = "G",
+  "geology" = "QE",
+  "geophysics. cosmic physics" = "QC",
+  "history (general)" = "D",
+  "history of africa" = "DT",
+  "history of scholarship and learning. the humanities" = "AZ",
+  "human ecology. anthropogeography" = "GF",
+  "human settlements. communities" = "HT",
+  "industries. land use. labor" = "HD",
+  "infectious and parasitic diseases" = "RC",
+  "information technology" = "T",
+  "islam" = "BP",
+  "islamic law" = "KBP",
+  "journalism. the periodical press" = "PN",
+  "language and literature" = "P",
+  "law" = "K",
+  "management information systems" = "T",
+  "management. industrial management" = "HD",
+  "mathematical geography. cartography" = "GA",
+  "mathematics" = "QA",
+  "mechanical engineering and machinery" = "TJ",
+  "medical physics. medical radiology. nuclear medicine" = "R",
+  "medicine" = "R",
+  "medicine (general)" = "R",
+  "meteorology. climatology" = "QC",
+  "microbiology" = "QR",
+  "military science" = "U",
+  "naval architecture. shipbuilding. marine engineering" = "VM",
+  "neurology. diseases of the nervous system" = "RC",
+  "neurosciences. biological psychiatry. neuropsychiatry" = "RC",
+  "nuclear and particle physics. atomic energy. radioactivity" = "QC",
+  "nursing" = "RT",
+  "oceanography" = "GC",
+  "ophthalmology" = "RE",
+  "orthopedic surgery" = "RD",
+  "pediatrics" = "RJ",
+  "philosophy. psychology. religion" = "B",
+  "physical geography" = "GB",
+  "physics" = "QC",
+  "physiology" = "QP",
+  "planning" = "HD",
+  "political science" = "J",
+  "polymers and polymer manufacture" = "TP",
+  "practical theology" = "BV",
+  "psychiatry" = "RC",
+  "psychology" = "BF",
+  "public aspects of medicine" = "RA",
+  "regional economics. space in economics" = "HT",
+  "renewable energy sources" = "TJ",
+  "risk in industry. risk management" = "HD",
+  "science" = "Q",
+  "science (general)" = "Q",
+  "shipment of goods. delivery of goods" = "HF",
+  "social sciences" = "H",
+  "social sciences (general)" = "H",
+  "sociology (general)" = "HM",
+  "special aspects of education" = "LC",
+  "sports" = "GV",
+  "sports medicine" = "RC",
+  "surgery" = "RD",
+  "technology" = "T",
+  "telecommunication" = "TK",
+  "the family. marriage. woman" = "HQ",
+  "theory and practice of education" = "LB",
+  "transportation and communications" = "HE",
+  "urban groups. the city. urban sociology" = "HT",
+  "urbanization. city and country" = "HT"
+)
+
+LCC_RANGE_CODE_PATTERN <- "^[A-Z]{1,3}[0-9]+(\\.[0-9]+)?-[0-9]+(\\.[0-9]+)?$"
+
+drop_doaj_lcc_pairs <- function(x) {
+  # Drop LCC caption keywords whose class code is present in the same subject
+  # line (see the vocabulary comment above). The codes themselves (range form
+  # and bare top-level letter) are left in place for the existing removal rules.
+  # Class markers are range codes, single-number codes with a 2-3 letter prefix
+  # ("HT388"), and bare SINGLE top-level letters. A bare 2-3-letter token is a
+  # real acronym (OCT, GPS, UK) far more often than an LCC subclass code, and a
+  # single-letter prefix with digits ("T2", "B12") is a real keyword, so
+  # neither counts as a marker.
+  toplevel_letters <- names(LCC_TOPLEVEL_CAPTIONS)
+  single_code <- "^[A-Z]{2,3}[0-9]{1,4}(\\.[0-9]+)?$"
+  one <- function(subject) {
+    if (is.na(subject) || subject == "") return(subject)
+    kws <- split_keywords(subject)
+    if (length(kws) == 0) return(subject)
+    is_code <- grepl(LCC_RANGE_CODE_PATTERN, kws) | grepl(single_code, kws)
+    range_prefix <- ifelse(is_code, sub("^([A-Z]{1,3}).*$", "\\1", kws), NA_character_)
+    classes <- unique(c(range_prefix[!is.na(range_prefix)],
+                        kws[kws %in% toplevel_letters]))
+    if (length(classes) == 0) return(subject)
+    norm <- tolower(gsub("\\s+", " ", trimws(kws)))
+    caption_class <- LCC_DOAJ_CAPTION_CLASSES[norm]
+    # a caption's class and a present marker pair up when one is a prefix of
+    # the other (bare "G" marks the "GE..." subclass captions and vice versa).
+    compatible <- vapply(caption_class, function(cc) {
+      if (is.na(cc)) return(FALSE)
+      any(startsWith(classes, cc) | startsWith(cc, classes))
+    }, logical(1), USE.NAMES = FALSE)
+    join_keywords(kws[!compatible])
+  }
+  vapply(x, one, character(1), USE.NAMES = FALSE)
+}
+
+# --- Full subject-cleaning chain ----------------------------------------------
+
+clean_subject_string <- function(subject_all, vis_type = NULL, doaj = FALSE) {
+  # The BASE subject/keyword cleaning chain, extracted from the etl() inline
+  # gsub sequence so it is testable in isolation. Vectorized over records;
+  # `doaj` is a logical (recycled or per-record) marking records from the DOAJ
+  # collection, which get the LCC caption/code block removal first — that
+  # filter needs the codes still present and the captions unfragmented, so it
+  # must precede the code-removal and "."-split steps below.
+  subject_cleaned = ifelse(rep_len(doaj, length(subject_all)),
+                           drop_doaj_lcc_pairs(subject_all), subject_all)
+  subject_cleaned = gsub("DOAJ:[^;]*(;|$)?", "", subject_cleaned) # remove DOAJ classification
+  subject_cleaned = gsub("/dk/atira[^;]*(;|$)?", "", subject_cleaned) # remove atira classification
+  subject_cleaned = gsub("ddc:[0-9]+(;|$)?", "", subject_cleaned) # remove Dewey Decimal Classification
+  subject_cleaned = gsub("([\\w\\/\\:-])*?\\/ddc\\/([\\/0-9\\.])*", "", subject_cleaned) # remove Dewey Decimal Classification in URI form
+  subject_cleaned = gsub("[A-Z,0-9\\.]{2,}-[A-Z,0-9\\.]{2,}(;|$)?", "", subject_cleaned) #remove LOC classification (range form, incl. decimal-before-dash e.g. HT165.5-169.9)
+  subject_cleaned = gsub("[^\\(;]+\\(General\\)(;|$)?", "", subject_cleaned) # remove general subjects
+  subject_cleaned = gsub("[^\\(;]+\\(all\\)(;|$)?", "", subject_cleaned) # remove general subjects
+  subject_cleaned = gsub("[^:;]+ ?:: ?[^;]+(;|$)?", "", subject_cleaned) #remove classification with separator ::
+  subject_cleaned = gsub("[^\\[;]+\\[[A-Z,0-9]+\\](;|$)?", "", subject_cleaned) # remove WHO classification
+  subject_cleaned = gsub("Info:\\w+-(\\w+\\/)+", "", subject_cleaned) # remove Info:eu-repo/classification/
+  # Annotation prefixes ("theme:annotation") are a lowercase scheme token with
+  # no space after the colon; requiring both keeps "Descriptor: qualifier" and
+  # "Title: Subtitle" constructs (capitalised, spaced) intact, and the
+  # lookbehind stops the scheme from matching a lowercase tail of a longer
+  # word ("Lipopolysaccharides:" must not match as "ipopolysaccharides:").
+  subject_cleaned = gsub("(?<![A-Za-z0-9])([a-z]+:[A-Za-z0-9\\/\\.-][A-Za-z0-9 \\/\\.-]*);?", "", subject_cleaned, perl=TRUE) # clean up annotations with prefix e.g. theme:annotation
+  # The FOS colon form ("FOS: Health sciences") is removed whole, on both viz
+  # branches: it is an uppercase, spaced scheme, so the tightened annotation
+  # strip above deliberately no longer matches it, and the space-form FOS rules
+  # below do not either. Without this the later ": " normalisation would turn
+  # it into a plausible-looking "FOS Health sciences" keyword.
+  subject_cleaned = gsub("FOS ?:[^;]*(;|$)?", "", subject_cleaned)
+  if (!is.null(vis_type) && vis_type == "timeline") {
+    subject_cleaned = gsub("FOS ", "", subject_cleaned) # remove FOS classification tag, but keep classifcation name
+    arxiv_classification_string = "(cs|econ|eess|math|astro-ph|nlin|q-bio|q-fin|stat)\\.[A-Z]{2}|cond-mat\\.[a-z\\-]+|hep-(ex|lat|ph|th)|math-ph|nucl-(ex|th)|physics\\.[a-z\\-]+|(astro-ph|gr-qc|quant-ph|cond-mat)"
+    subject_cleaned = gsub(arxiv_classification_string, "", subject_cleaned, perl=TRUE) # remove arXiv classification short code, but keep classifcation name
+  } else {
+    subject_cleaned = gsub("FOS [A-Za-z ]+", "", subject_cleaned) # remove FOS classifications (Fields of Science and Technology)
+    arxiv_classification_string = "(([A-Za-z ]+ )?cond-mat\\.[a-z\\-]+)|([\\w ]+ )?(cs|econ|eess|math|astro-ph|nlin|q-bio|q-fin|stat)\\.[A-Z]{2}|cond-mat\\.[a-z\\-]+|hep-(ex|lat|ph|th)|math-ph|nucl-(ex|th)|physics\\.[a-z\\-]+|([\\w ]+ )(astro-ph|gr-qc|quant-ph|cond-mat)"
+    subject_cleaned = gsub(arxiv_classification_string, "", subject_cleaned, perl=TRUE) # remove arXiv classification, except on streamgraphs
+  }
+  subject_cleaned = gsub("(?<![A-Za-z0-9])([a-z]+:[A-Za-z0-9\\/\\.][A-Za-z0-9 \\/\\.]*);?", "", subject_cleaned, perl=TRUE) # clean up annotations with prefix e.g. theme:annotation
+  subject_cleaned = gsub("(wikidata)?\\.org/entity/[qQ]([\\d]+)?", "", subject_cleaned) # remove wikidata classification
+  subject_cleaned = gsub("</keyword><keyword>", "", subject_cleaned) # remove </keyword><keyword>
+  subject_cleaned = gsub("\\[No keyword\\]", "", subject_cleaned)
+
+  if (!is.null(vis_type) && vis_type == "timeline") {
+    # These classifications have not been cleaned for the streamgraph as the
+    # impact of cleaning them has not been evaluated
+    subject_cleaned = remove_keywords_with_text_in_square_brackets(subject_cleaned)
+  } else {
+    # de-invert comma-inverted MeSH descriptors (marker preserved).
+    # Runs before the marker-stripping steps so [MeSH]/(mesh) are still present.
+    subject_cleaned = deinvert_marked_mesh_keywords(subject_cleaned)
+    # drop whole keywords that are additional classifications. Runs before the
+    # bracket strip so leading-bracket classifications (e.g. HAL [SHS.ECO]...)
+    # are still intact.
+    subject_cleaned = clean_classification_keywords(subject_cleaned)
+    # strip the "(mesh)" marker ("[MeSH]" is handled just below).
+    subject_cleaned = remove_mesh_round_bracket_marker(subject_cleaned)
+    subject_cleaned = remove_text_in_square_brackets_from_keywords(subject_cleaned)
+    # strip MeSH subheading qualifiers, keeping the descriptor
+    # ("Autistic Disorder/genetics" -> "Autistic Disorder"). Runs AFTER marker
+    # removal so a trailing "[MeSH]"/"(mesh)" does not sit between the qualifier
+    # and the heading boundary and block the strip.
+    subject_cleaned = strip_mesh_qualifier(subject_cleaned)
+  }
+
+  subject_cleaned = gsub("\\[[^\\[]+\\][^\\;]+(;|$)?", "", subject_cleaned) # remove classification
+  subject_cleaned = gsub("[0-9]{2,} [A-Z]+[^;]*(;|$)?", "", subject_cleaned) #remove classification
+  subject_cleaned = gsub(" -- ", "; ", subject_cleaned) #replace inconsistent keyword separation
+  subject_cleaned = gsub("[-]{2,}", "; ", subject_cleaned) #replace inconsistent keyword separation
+  subject_cleaned = gsub("[A-Z]\\.\\d\\.\\d+", "", subject_cleaned) #replace inconsistent keyword separation
+  subject_cleaned = gsub(" \\(  ", "; ", subject_cleaned) #replace inconsistent keyword separation
+  subject_cleaned = gsub("(\\w* \\w*(\\.)( \\w* \\w*)?)", "; ", subject_cleaned) # remove overly broad keywords separated by .
+  subject_cleaned = gsub("\\. ", "; ", subject_cleaned) # replace inconsistent keyword separation
+  subject_cleaned = gsub(" ?\\d[:?-?]?(\\d+.)+", "", subject_cleaned) # replace residuals like 5:621.313.323 or '5-76.95'
+  # replace with a space, not the empty string: a "Title: Subtitle" keyword the
+  # annotation strip now preserves must not have its words fused together.
+  subject_cleaned = gsub(": ", " ", subject_cleaned) # clean up keyword separation
+  subject_cleaned = gsub("^; $", "", subject_cleaned) # clean up keyword separation
+  subject_cleaned = gsub(";+", ";", subject_cleaned) # clean up keyword separation
+  subject_cleaned = gsub(",+", ",", subject_cleaned) # clean up keyword separation
+  # NOTE: a comma is NOT normalised to comma-space here: a comma without a
+  # following space is an intra-tag join ("spaCy,Geography" is one keyword),
+  # and inserting the space would turn it into a separator downstream.
+  subject_cleaned = gsub("\\s+", " ", subject_cleaned) # clean up keyword separation
+  # stri_trim in the pipeline image; trimws is the dependency-free equivalent
+  # for plain-R test environments (identical on ASCII whitespace).
+  if (requireNamespace("stringi", quietly = TRUE)) {
+    subject_cleaned = stringi::stri_trim(subject_cleaned)
+  } else {
+    subject_cleaned = trimws(subject_cleaned)
+  }
+  subject_cleaned
 }

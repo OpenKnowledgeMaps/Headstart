@@ -226,69 +226,12 @@ etl <- function(res, repo, non_public) {
 
   metadata$subject_orig = subject_all
 
-  subject_cleaned = gsub("DOAJ:[^;]*(;|$)?", "", subject_all) # remove DOAJ classification
-  subject_cleaned = gsub("/dk/atira[^;]*(;|$)?", "", subject_cleaned) # remove atira classification
-  subject_cleaned = gsub("ddc:[0-9]+(;|$)?", "", subject_cleaned) # remove Dewey Decimal Classification
-  subject_cleaned = gsub("([\\w\\/\\:-])*?\\/ddc\\/([\\/0-9\\.])*", "", subject_cleaned) # remove Dewey Decimal Classification in URI form
-  subject_cleaned = gsub("[A-Z,0-9\\.]{2,}-[A-Z,0-9\\.]{2,}(;|$)?", "", subject_cleaned) #remove LOC classification (range form, incl. decimal-before-dash e.g. HT165.5-169.9)
-  subject_cleaned = gsub("[^\\(;]+\\(General\\)(;|$)?", "", subject_cleaned) # remove general subjects
-  subject_cleaned = gsub("[^\\(;]+\\(all\\)(;|$)?", "", subject_cleaned) # remove general subjects
-  subject_cleaned = gsub("[^:;]+ ?:: ?[^;]+(;|$)?", "", subject_cleaned) #remove classification with separator ::
-  subject_cleaned = gsub("[^\\[;]+\\[[A-Z,0-9]+\\](;|$)?", "", subject_cleaned) # remove WHO classification
-  subject_cleaned = gsub("Info:\\w+-(\\w+\\/)+", "", subject_cleaned) # remove Info:eu-repo/classification/
-  subject_cleaned = gsub("([A-Za-z]+:[A-Za-z0-9 \\/\\.-]+);?", "", subject_cleaned, perl=TRUE) # clean up annotations with prefix e.g. theme:annotation
-  if (!is.null(params$vis_type) && params$vis_type == "timeline") {
-    subject_cleaned = gsub("FOS ", "", subject_cleaned) # remove FOS classification tag, but keep classifcation name
-    arxiv_classification_string = "(cs|econ|eess|math|astro-ph|nlin|q-bio|q-fin|stat)\\.[A-Z]{2}|cond-mat\\.[a-z\\-]+|hep-(ex|lat|ph|th)|math-ph|nucl-(ex|th)|physics\\.[a-z\\-]+|(astro-ph|gr-qc|quant-ph|cond-mat)"
-    subject_cleaned = gsub(arxiv_classification_string, "", subject_cleaned, perl=TRUE) # remove arXiv classification short code, but keep classifcation name
-  } else {
-    subject_cleaned = gsub("FOS [A-Za-z ]+", "", subject_cleaned) # remove FOS classifications (Fields of Science and Technology)
-    arxiv_classification_string = "(([A-Za-z ]+ )?cond-mat\\.[a-z\\-]+)|([\\w ]+ )?(cs|econ|eess|math|astro-ph|nlin|q-bio|q-fin|stat)\\.[A-Z]{2}|cond-mat\\.[a-z\\-]+|hep-(ex|lat|ph|th)|math-ph|nucl-(ex|th)|physics\\.[a-z\\-]+|([\\w ]+ )(astro-ph|gr-qc|quant-ph|cond-mat)"
-    subject_cleaned = gsub(arxiv_classification_string, "", subject_cleaned, perl=TRUE) # remove arXiv classification, except on streamgraphs    
-  }
-  subject_cleaned = gsub("([A-Za-z]+:[A-Za-z0-9 \\/\\.]+);?", "", subject_cleaned, perl=TRUE) # clean up annotations with prefix e.g. theme:annotation
-  subject_cleaned = gsub("(wikidata)?\\.org/entity/[qQ]([\\d]+)?", "", subject_cleaned) # remove wikidata classification
-  subject_cleaned = gsub("</keyword><keyword>", "", subject_cleaned) # remove </keyword><keyword>
-  subject_cleaned = gsub("\\[No keyword\\]", "", subject_cleaned)
-
-  if (!is.null(params$vis_type) && params$vis_type == "timeline") {
-    # These classifications have not been cleaned for the streamgraph as the
-    # impact of cleaning them has not been evaluated
-    subject_cleaned = remove_keywords_with_text_in_square_brackets(subject_cleaned)
-  } else {
-    # de-invert comma-inverted MeSH descriptors (marker preserved).
-    # Runs before the marker-stripping steps so [MeSH]/(mesh) are still present.
-    subject_cleaned = deinvert_marked_mesh_keywords(subject_cleaned)
-    # drop whole keywords that are additional classifications. Runs before the
-    # bracket strip so leading-bracket classifications (e.g. HAL [SHS.ECO]...)
-    # are still intact.
-    subject_cleaned = clean_classification_keywords(subject_cleaned)
-    # strip the "(mesh)" marker ("[MeSH]" is handled just below).
-    subject_cleaned = remove_mesh_round_bracket_marker(subject_cleaned)
-    subject_cleaned = remove_text_in_square_brackets_from_keywords(subject_cleaned)
-    # strip MeSH subheading qualifiers, keeping the descriptor
-    # ("Autistic Disorder/genetics" -> "Autistic Disorder"). Runs AFTER marker
-    # removal so a trailing "[MeSH]"/"(mesh)" does not sit between the qualifier
-    # and the heading boundary and block the strip.
-    subject_cleaned = strip_mesh_qualifier(subject_cleaned)
-  }
-
-  subject_cleaned = gsub("\\[[^\\[]+\\][^\\;]+(;|$)?", "", subject_cleaned) # remove classification
-  subject_cleaned = gsub("[0-9]{2,} [A-Z]+[^;]*(;|$)?", "", subject_cleaned) #remove classification
-  subject_cleaned = gsub(" -- ", "; ", subject_cleaned) #replace inconsistent keyword separation
-  subject_cleaned = gsub("[-]{2,}", "; ", subject_cleaned) #replace inconsistent keyword separation
-  subject_cleaned = gsub("[A-Z]\\.\\d\\.\\d+", "", subject_cleaned) #replace inconsistent keyword separation
-  subject_cleaned = gsub(" \\(  ", "; ", subject_cleaned) #replace inconsistent keyword separation
-  subject_cleaned = gsub("(\\w* \\w*(\\.)( \\w* \\w*)?)", "; ", subject_cleaned) # remove overly broad keywords separated by .
-  subject_cleaned = gsub("\\. ", "; ", subject_cleaned) # replace inconsistent keyword separation
-  subject_cleaned = gsub(" ?\\d[:?-?]?(\\d+.)+", "", subject_cleaned) # replace residuals like 5:621.313.323 or '5-76.95'
-  subject_cleaned = gsub(": ", "", subject_cleaned) # clean up keyword separation
-  subject_cleaned = gsub("^; $", "", subject_cleaned) # clean up keyword separation
-  subject_cleaned = gsub(";+", ";", subject_cleaned) # clean up keyword separation
-  subject_cleaned = gsub(",+", ",", subject_cleaned) # clean up keyword separation
-  subject_cleaned = gsub(",", ", ", subject_cleaned) # clean up keyword separation
-  subject_cleaned = gsub("\\s+", " ", subject_cleaned) # clean up keyword separation
-  subject_cleaned = stringi::stri_trim(subject_cleaned) # clean up keyword separation
+  # The cleaning chain lives in subject_cleaning.R (clean_subject_string) so it
+  # can be tested in isolation. DOAJ records additionally get the LCC
+  # caption/code block removed; the collection is read from the raw response
+  # because metadata$collection is only assigned further down.
+  doaj_records = check_metadata(res$dccollection) %in% "ftdoajarticles"
+  subject_cleaned = clean_subject_string(subject_all, params$vis_type, doaj_records)
   metadata$subject = subject_cleaned
   # Additive MeSH rank-provenance columns for ranking Modes 2/3 (derived from the
   # raw [MeSH]-marked subject_orig; subject/subject_orig untouched). Shared module.
