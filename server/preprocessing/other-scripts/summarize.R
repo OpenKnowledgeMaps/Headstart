@@ -50,11 +50,13 @@ normalize_corpus_tokens <- function(s) {
   s
 }
 
-# Remove a leading MeSH major-topic "*" from each "; "-separated keyword. Only
-# a keyword-initial asterisk is a marker; an interior one ("2*2 design") is
-# real content and stays.
+# Remove a leading or trailing MeSH major-topic "*" from each "; "-separated
+# keyword (sources place the marker on either side). Only a keyword-edge
+# asterisk is a marker; an interior one ("2*2 design") is real content and
+# stays.
 strip_major_topic_markers <- function(x) {
-  gsub("(^|;\\s*)\\*+", "\\1", x)
+  x <- gsub("(^|;\\s*)\\*+", "\\1", x)
+  gsub("\\*+(\\s*;|$)", "\\1", x)
 }
 
 

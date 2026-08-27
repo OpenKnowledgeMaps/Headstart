@@ -169,11 +169,13 @@ strip_mesh_qualifier <- function(x) {
       s <- gsub(stack, "; ", kw, perl = TRUE)
       s <- gsub(single, "; ", s, perl = TRUE)
       # The "*" major-topic marker is handled independently of the qualifier
-      # match: a standalone "*Descriptor" carries no qualifier, so it must not
-      # depend on the gsubs above having fired. A " *Word" mid-string also
-      # starts a new heading; a leading "*" is plain marker noise.
+      # match: a standalone "*Descriptor" or "Descriptor*" carries no
+      # qualifier, so it must not depend on the gsubs above having fired. A
+      # " *Word" mid-string also starts a new heading; leading and trailing
+      # "*" are plain marker noise (some sources put the marker at the end).
       s <- gsub("\\s+\\*(?=[A-Za-z(])", "; ", s, perl = TRUE)
       s <- sub("^\\*", "", s)
+      s <- sub("\\*+\\s*$", "", s)
       if (identical(s, kw)) return(kw)   # no qualifier, no marker: not MeSH-shaped
       parts <- trimws(gsub("*", "", trimws(strsplit(s, ";", fixed = TRUE)[[1]]), fixed = TRUE))
       paste(parts[nzchar(parts)], collapse = "; ")
@@ -274,6 +276,13 @@ drop_hal_shs <- function(keywords) {
 drop_url <- function(keywords) {
   # URLs leaking in as keywords, e.g. supplementary-file links.
   keywords[!grepl("^https?://", keywords, ignore.case = TRUE)]
+}
+
+drop_standalone_number <- function(keywords) {
+  # A keyword that is only a number (or dot/comma/dash-joined digit groups,
+  # e.g. "004", "2020", "5-76.95") carries no topical meaning. Digits inside a
+  # word ("COVID-19", "H5N1") are untouched.
+  keywords[!grepl("^[0-9]+([.,-][0-9]+)*$", keywords)]
 }
 
 drop_numeric_path <- function(keywords) {
@@ -586,6 +595,7 @@ clean_classification_keywords <- function(x) {
     keywords <- drop_acm_ccs(keywords)
     keywords <- drop_hal_shs(keywords)
     keywords <- drop_url(keywords)
+    keywords <- drop_standalone_number(keywords)
     keywords <- drop_numeric_path(keywords)
     keywords <- drop_grant_id(keywords)
     keywords <- drop_letter_domain(keywords)
@@ -795,7 +805,12 @@ clean_subject_string <- function(subject_all, vis_type = NULL, doaj = FALSE) {
   subject_cleaned = gsub("/dk/atira[^;]*(;|$)?", "", subject_cleaned) # remove atira classification
   subject_cleaned = gsub("ddc:[0-9]+(;|$)?", "", subject_cleaned) # remove Dewey Decimal Classification
   subject_cleaned = gsub("([\\w\\/\\:-])*?\\/ddc\\/([\\/0-9\\.])*", "", subject_cleaned) # remove Dewey Decimal Classification in URI form
-  subject_cleaned = gsub("[A-Z,0-9\\.]{2,}-[A-Z,0-9\\.]{2,}(;|$)?", "", subject_cleaned) #remove LOC classification (range form, incl. decimal-before-dash e.g. HT165.5-169.9)
+  # LOC classification range form (HT165.5-169.9, GE1-350, DH1-925): at most a
+  # 3-letter class prefix, then digit groups either side of the dash; the right
+  # side of a range is always digits only. Both bounds matter: a looser
+  # "uppercase-or-digit run" on both sides also matches ordinary keywords of
+  # the same shape ("COVID-19", "CD4-CD8") and deletes them.
+  subject_cleaned = gsub("[A-Z]{0,3}[0-9]+(\\.[0-9]+)?-[0-9]+(\\.[0-9]+)?(;|$)?", "", subject_cleaned)
   subject_cleaned = gsub("[^\\(;]+\\(General\\)(;|$)?", "", subject_cleaned) # remove general subjects
   subject_cleaned = gsub("[^\\(;]+\\(all\\)(;|$)?", "", subject_cleaned) # remove general subjects
   subject_cleaned = gsub("[^:;]+ ?:: ?[^;]+(;|$)?", "", subject_cleaned) #remove classification with separator ::
@@ -850,17 +865,25 @@ clean_subject_string <- function(subject_all, vis_type = NULL, doaj = FALSE) {
   }
 
   subject_cleaned = gsub("\\[[^\\[]+\\][^\\;]+(;|$)?", "", subject_cleaned) # remove classification
-  subject_cleaned = gsub("[0-9]{2,} [A-Z]+[^;]*(;|$)?", "", subject_cleaned) #remove classification
+  # digit-code classifications ("32 Biomedical and clinical sciences"): the
+  # digits must start a keyword, otherwise the rule eats "19 Vaccines" out of
+  # "COVID-19 Vaccines" and leaves a bare "COVID-".
+  subject_cleaned = gsub("(?<![A-Za-z0-9-])[0-9]{2,} [A-Z]+[^;]*(;|$)?", "", subject_cleaned, perl=TRUE) #remove classification
   subject_cleaned = gsub(" -- ", "; ", subject_cleaned) #replace inconsistent keyword separation
   subject_cleaned = gsub("[-]{2,}", "; ", subject_cleaned) #replace inconsistent keyword separation
   subject_cleaned = gsub("[A-Z]\\.\\d\\.\\d+", "", subject_cleaned) #replace inconsistent keyword separation
   subject_cleaned = gsub(" \\(  ", "; ", subject_cleaned) #replace inconsistent keyword separation
   subject_cleaned = gsub("(\\w* \\w*(\\.)( \\w* \\w*)?)", "; ", subject_cleaned) # remove overly broad keywords separated by .
   subject_cleaned = gsub("\\. ", "; ", subject_cleaned) # replace inconsistent keyword separation
-  subject_cleaned = gsub(" ?\\d[:?-?]?(\\d+.)+", "", subject_cleaned) # replace residuals like 5:621.313.323 or '5-76.95'
-  # replace with a space, not the empty string: a "Title: Subtitle" keyword the
-  # annotation strip now preserves must not have its words fused together.
-  subject_cleaned = gsub(": ", " ", subject_cleaned) # clean up keyword separation
+  # Residuals like "5:621.313.323" or "5-76.95": digit groups joined by LITERAL
+  # dots. The dot must not be a wildcard here: an any-character repetition
+  # matches the digits AND the keyword separator of "COVID-19; Male", deleting
+  # both and fusing the keywords into "COVID- Male".
+  subject_cleaned = gsub(" ?\\d[:?-]?(\\d+\\.)+\\d+", "", subject_cleaned)
+  # NOTE: no ": " normalisation here. A "Title: Subtitle" keyword the
+  # annotation strip preserves keeps its colon verbatim; colon-bearing MeSH
+  # forms are consumed by strip_mesh_qualifier, and colon-prefixed
+  # classifications by their per-scheme rules.
   subject_cleaned = gsub("^; $", "", subject_cleaned) # clean up keyword separation
   subject_cleaned = gsub(";+", ";", subject_cleaned) # clean up keyword separation
   subject_cleaned = gsub(",+", ",", subject_cleaned) # clean up keyword separation
@@ -868,6 +891,9 @@ clean_subject_string <- function(subject_all, vis_type = NULL, doaj = FALSE) {
   # following space is an intra-tag join ("spaCy,Geography" is one keyword),
   # and inserting the space would turn it into a separator downstream.
   subject_cleaned = gsub("\\s+", " ", subject_cleaned) # clean up keyword separation
+  # a removal at the very start or end of the list can leave a dangling
+  # separator; trim it like whitespace.
+  subject_cleaned = gsub("^[; ]+|[; ]+$", "", subject_cleaned)
   # stri_trim in the pipeline image; trimws is the dependency-free equivalent
   # for plain-R test environments (identical on ASCII whitespace).
   if (requireNamespace("stringi", quietly = TRUE)) {
