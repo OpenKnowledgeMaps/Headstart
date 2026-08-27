@@ -50,10 +50,10 @@ test_that("a MeSH colon-form keeps its descriptor", {
                "Lipopolysaccharides")
 })
 
-test_that("a 'Title: Subtitle' keyword is kept whole (colon becomes a space)", {
+test_that("a 'Title: Subtitle' keyword is kept whole", {
   expect_equal(
     chain("Climate Change and Corporate Regulation: A Critical Analysis of Egypt’s Legal and Regulatory Regime"),
-    "Climate Change and Corporate Regulation A Critical Analysis of Egypt’s Legal and Regulatory Regime")
+    "Climate Change and Corporate Regulation: A Critical Analysis of Egypt’s Legal and Regulatory Regime")
 })
 
 test_that("a mid-phrase ampersand is untouched", {
@@ -73,13 +73,41 @@ test_that("a lettered dashed code is dropped whole, not fragmented", {
 test_that("existing classification removals still fire", {
   expect_equal(chain("32 Biomedical and clinical sciences; genetics"), "genetics")
   expect_equal(chain("5:621.313.323; electronics"), "electronics")
+  expect_equal(chain("5-76.95; electronics"), "electronics")
   expect_equal(chain("HT165.5-169.9; urban studies"), "urban studies")
+})
+
+test_that("digit-bearing keywords keep their digits and their separators", {
+  # three legacy rules used to break these forms: the residual-digit rule ate
+  # "19; " (fusing the neighbours into "COVID- Male"), the LOC range rule
+  # removed a standalone "COVID-19" whole, and the digit-classification rule
+  # ate "19 Vaccines" out of "COVID-19 Vaccines".
+  expect_equal(chain("COVID-19; Male; Cohort Studies"),
+               "COVID-19; Male; Cohort Studies")
+  expect_equal(chain("COVID-19 Vaccines; Aged"), "COVID-19 Vaccines; Aged")
+  expect_equal(chain("COVID-19 [MeSH]; Cohort Studies [MeSH]; Humans [MeSH]"),
+               "COVID-19; Cohort Studies; Humans")
+})
+
+test_that("a trailing major-topic marker is stripped in the full chain", {
+  # some repositories deliver the MeSH marker at the end of the keyword
+  expect_equal(chain("Genome-Wide Association Study*; Homeodomain Proteins; Pain / complications; Raynaud Disease* / genetics"),
+               "Genome-Wide Association Study; Homeodomain Proteins; Pain; Raynaud Disease")
+})
+
+test_that("standalone numeric keywords are dropped, digits inside words kept", {
+  expect_equal(chain("004; 624; Earth sciences"), "Earth sciences")
+  expect_equal(chain("2020; climate change"), "climate change")
+  expect_equal(chain("H5N1; influenza"), "H5N1; influenza")
 })
 
 test_that("code-like real keywords are kept", {
   expect_equal(chain("T2 MRI sequences; brain imaging"),
                "T2 MRI sequences; brain imaging")
   expect_equal(chain("3D printing; manufacturing"), "3D printing; manufacturing")
+  # the LOC range rule requires a digits-only right side, so a hyphenated
+  # marker pair is not mistaken for a classification range
+  expect_equal(chain("CD4-CD8 ratio; immunology"), "CD4-CD8 ratio; immunology")
 })
 
 # --- comma handling -----------------------------------------------------------

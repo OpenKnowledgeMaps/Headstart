@@ -68,6 +68,13 @@ test_that("a leading major-topic '*' is stripped per keyword", {
                "Artificial Intelligence; Humans; Research Design")
 })
 
+test_that("a trailing major-topic '*' is stripped per keyword", {
+  expect_equal(strip_major_topic_markers("Genome-Wide Association Study*; Humans"),
+               "Genome-Wide Association Study; Humans")
+  expect_equal(strip_major_topic_markers("Humans; Raynaud Disease*"),
+               "Humans; Raynaud Disease")
+})
+
 test_that("interior asterisks are kept", {
   expect_equal(strip_major_topic_markers("2*2 factorial design"), "2*2 factorial design")
 })

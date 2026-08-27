@@ -107,6 +107,10 @@ test_that("a standalone major-topic '*Descriptor' loses the marker without a qua
   expect_equal(strip_mesh_qualifier("*Artificial Intelligence"), "Artificial Intelligence")
   expect_equal(strip_mesh_qualifier("*Decision Support Systems"), "Decision Support Systems")
 })
+test_that("a trailing major-topic marker is stripped without a qualifier", {
+  expect_equal(strip_mesh_qualifier("Genome-Wide Association Study*"),
+               "Genome-Wide Association Study")
+})
 test_that("a plain descriptor without marker or qualifier is untouched", {
   expect_equal(strip_mesh_qualifier("Artificial Intelligence"), "Artificial Intelligence")
 })
@@ -247,6 +251,18 @@ test_that("bare subclass + digits codes are dropped", {
   drops_to_cooperation("RC321")
   drops_to_cooperation("QA75.5")  # decimal class number
 })
+test_that("biomedical markers colliding with subclass+digits are dropped (accepted trade-off)", {
+  # CD4/CD8/TP53 match a real subclass code + digits; they are rare as
+  # keywords and a leaked "QA76" area title is worse than losing them.
+  drops_to_cooperation("CD4")
+  drops_to_cooperation("CD8")
+  drops_to_cooperation("TP53")
+})
+test_that("code+digits look-alikes outside the subclass list are kept", {
+  for (kw in c("P53", "S100")) {
+    expect_equal(clean_classification_keywords(kw), kw)
+  }
+})
 test_that("subclass codes shared with abbreviations survive the caption check", {
   for (kw in c("ML Machine Learning", "AI Artificial Intelligence", "CT Computed Tomography",
                "QA testing", "QC quality control", "PR public relations")) {
@@ -269,10 +285,19 @@ test_that("bare subclass codes that are common abbreviations are kept", {
 test_that("look-alike keywords are NOT dropped", {
   for (kw in c("J-PET", "for 1347 (89.8%)", "COVID-19/diagnosis",
                "Statistics (Mathematics)", "Mixed/Augmented Reality", "[SHSX]not-a-code",
-               "2138", "B-cell lymphoma", "Marketing", "SDGs in practice",
+               "B-cell lymphoma", "Marketing", "SDGs in practice",
                # LCC look-alikes: class letter + a non-caption word, bare caption, non-class letter
                "B cell", "T cells", "T test", "G protein", "S phase", "R group",
                "Q methodology", "Science", "I")) {
     expect_equal(clean_classification_keywords(kw), kw)
   }
+})
+
+test_that("a purely numeric keyword is dropped, digits inside words are kept", {
+  # standalone numbers ("2138", a Springer subject-code fragment; years) carry
+  # no topical meaning; digit-bearing words are untouched.
+  expect_equal(clean_classification_keywords("2138"), "")
+  expect_equal(clean_classification_keywords("2020"), "")
+  expect_equal(clean_classification_keywords("COVID-19"), "COVID-19")
+  expect_equal(clean_classification_keywords("H5N1"), "H5N1")
 })
