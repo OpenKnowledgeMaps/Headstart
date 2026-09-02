@@ -133,6 +133,17 @@ test_that("drop_excluded_terms is a no-op with empty exclusions or empty cluster
   expect_equal(length(drop_excluded_terms(tt, c("a"))[[2]]), 0)
 })
 
+test_that("the shipped exclusion list carries the curated generic terms", {
+  if (!exists("get_label_exclusions")) source("utils.R")
+  ex <- get_label_exclusions()
+  expect_true(all(c("humans", "animals", "science", "medicine", "article") %in% ex))
+  # generic document-type words are dropped, specific n-grams containing them
+  # are not (whole-term matching)
+  tt <- list(c(Article = 9, `Article processing charges` = 4, Neoplasms = 2))
+  out <- drop_excluded_terms(tt, ex)
+  expect_equal(sort(names(out[[1]])), sort(c("Article processing charges", "Neoplasms")))
+})
+
 # --- Mode-3 cross-rank de-nesting (rank 1 keywords <-> rank 2 specific MeSH) --
 spec3 <- rank_spec("3")
 # Faithful string-nesting de-nester mirroring filter_out_nested_ngrams: substring

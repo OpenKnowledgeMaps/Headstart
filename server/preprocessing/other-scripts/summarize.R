@@ -73,10 +73,13 @@ expand_ngrams <- function(text, n) {
 # are shorter than 2 tokens; stopwords are checked in batches for speed. Returns,
 # per input, the surviving n-grams joined with ";".
 prune_ngrams <- function(ngrams, stops){
-  ngrams = mapply(strsplit, ngrams, split=" |;")
+  # lapply/SIMPLIFY = FALSE: with mapply's default simplification, equal
+  # n-gram counts across all inputs collapse the result into a matrix and
+  # every n-gram is silently lost
+  ngrams = lapply(ngrams, function(x) strsplit(x[[1]], split = " |;")[[1]])
   tokenized_ngrams = mapply(function(x) {
                             strsplit(x, split="_")
-                          }, ngrams)
+                          }, ngrams, SIMPLIFY = FALSE)
   # filter out empty tokens
   tokenized_ngrams = lapply(tokenized_ngrams, function(ngrams){ngrams[lapply(ngrams, length)>0]})
   # remove ngrams starting with a stopword
@@ -107,15 +110,15 @@ prune_ngrams <- function(ngrams, stops){
 }
 
 # Heuristically generated keywords for a single paper: the bi- and tri-grams of
-# its title, pruned of degenerate forms (n-grams that start or end with a
-# stopword, or whose first and last token are identical). Words within an n-gram
-# are "_"-joined so the tokenizer keeps them intact. Returns a character vector of
-# unique "_"-joined n-grams (possibly empty).
+# its title's punctuation-delimited segments (punctuation_segments), pruned of
+# degenerate forms (n-grams that start or end with a stopword, or whose first
+# and last token are identical). Words within an n-gram are "_"-joined so the
+# tokenizer keeps them intact. Returns a character vector of unique "_"-joined
+# n-grams (possibly empty).
 paper_title_ngrams <- function(title, stops) {
-  clean <- gsub("[^[:alnum:]-]", " ", if (is.na(title)) "" else title)
-  clean <- trimws(gsub("\\s+", " ", clean))
-  if (!nzchar(clean)) return(character(0))
-  grams <- unlist(c(expand_ngrams(clean, 2), expand_ngrams(clean, 3)))
+  segments <- punctuation_segments(title)
+  if (!length(segments)) return(character(0))
+  grams <- unlist(c(expand_ngrams(segments, 2), expand_ngrams(segments, 3)))
   grams <- unlist(strsplit(paste(grams, collapse = " "), " "))
   grams <- grams[nzchar(grams)]
   if (!length(grams)) return(character(0))
@@ -182,17 +185,79 @@ sanitize_corpus_noise <- function(x) {
   x
 }
 
+# Tight-colon tokens that keep their colon instead of splitting (matched as the
+# whole word:word token). Extend as legitimate ratio-style terms are found.
+COLON_KEEP_TOKENS <- c("80:20", "50:50")
+
+# Split a text into punctuation-delimited segments for n-gram formation, so
+# that no n-gram crosses a clause/subtitle boundary and no intra-word
+# punctuation compound is broken. A punctuation mark splits when whitespace
+# (or a string edge, or another boundary) adjoins it; a mark tight between two
+# word characters stays inside its token. Deviations: colon, em dash, pipe and
+# underscore always split (underscore because it is the n-gram joiner
+# character); colon keep-list tokens and multi-period abbreviation chains
+# ("U.S.", "e.g." — trailing period included) stay whole; a run of >= 2
+# consecutive punctuation marks always splits as a unit. Placeholders \x01
+# (chain periods), \x03 (kept colons) and \x02 (boundaries) cannot occur in
+# decoded titles. Returns a character vector of trimmed, whitespace-collapsed,
+# non-empty segments; case is preserved. NA/empty input -> character(0).
+punctuation_segments <- function(text) {
+  text <- if (is.null(text) || is.na(text)) "" else text
+  text <- sanitize_corpus_noise(decode_html_entities(text))
+  # C0 control characters are removed before anything else: \x01-\x03 are this
+  # function's own placeholders, so a source string containing them would be
+  # restored as a period/colon or silently split the text
+  text <- gsub("[\x01-\x08\x0b\x0c\x0e-\x1f]", " ", text)
+  # soft hyphen and zero-width characters render as nothing but count as
+  # non-space, so they would be kept inside a token and stop it matching the
+  # same word spelled without them
+  text <- gsub("[\u00ad\u200b\u200c\u200d\ufeff]", "", text)
+  # normalize spelling variants to one token identity (decode already maps
+  # en dash U+2013 and hyphen U+2010 to "-"); a tight "--" is a TeX en dash
+  # inside a compound, a spaced "--" is left as a run to split
+  text <- gsub("\u2011", "-", text)
+  text <- gsub("[\u2019\u2018\u02bc]", "'", text)
+  text <- gsub("\uff1a", ":", text)
+  text <- gsub("(?<=[^\\s-])--(?=[^\\s-])", "-", text, perl = TRUE)
+  # protect abbreviation chains (>= 2 single-letter.period components) before
+  # any boundary rule, so their periods - the trailing one included - survive
+  m <- gregexpr("(?<![\\p{L}\\p{N}])(?:\\p{L}\\.){2,}", text, perl = TRUE)
+  regmatches(text, m) <- lapply(regmatches(text, m), function(v) {
+    gsub(".", "\x01", v, fixed = TRUE)
+  })
+  # protect keep-list colons (whole-token match, bounded by non-word chars)
+  for (tok in COLON_KEEP_TOKENS) {
+    esc <- gsub("([^\\p{L}\\p{N}])", "\\\\\\1", tok, perl = TRUE)
+    pat <- paste0("(?<![\\p{L}\\p{N}])", esc, "(?![\\p{L}\\p{N}])")
+    text <- gsub(pat, gsub(":", "\x03", tok, fixed = TRUE), text, perl = TRUE)
+  }
+  # a run of consecutive punctuation marks splits as a unit, whatever its
+  # members or spacing; handled before the single-mark rules
+  punct <- "[^\\p{L}\\p{N}\\s\x01\x02\x03]"
+  text <- gsub(paste0(punct, "{2,}"), "\x02", text, perl = TRUE)
+  # always-split marks, regardless of spacing
+  text <- gsub("[\u2014|:_]", "\x02", text)
+  # the spacing rule for the remaining single marks: whitespace, a boundary or
+  # a string edge on either side makes the mark a boundary; tight marks keep
+  text <- gsub(paste0("(^|[\\s\x02])", punct), "\\1\x02", text, perl = TRUE)
+  text <- gsub(paste0(punct, "([\\s\x02]|$)"), "\x02\\1", text, perl = TRUE)
+  text <- gsub("\x01", ".", text, fixed = TRUE)
+  text <- gsub("\x03", ":", text, fixed = TRUE)
+  segments <- strsplit(text, "\x02", fixed = TRUE)[[1]]
+  segments <- trimws(gsub("\\s+", " ", segments))
+  segments[nzchar(segments)]
+}
+
 # Shared n-gram candidate builder for the heuristic-keyword synthesizer
 # (replace_keywords_if_empty) and the last-resort fallback label
-# (title_abstract_fallback_label). Same method as paper_title_ngrams: keep
-# digits and intra-word hyphens, form n-grams on the stopword-RETAINING token
-# stream, then drop n-grams that start or end with a stopword — so interior
-# stopwords survive ("biomedical big data" stays a trigram; the fused
-# "biomedical data" bigram is never formed) and digit-bearing tokens stay whole
-# ("covid-19", "21st"). Stopword matching is case-insensitive so the outcome
-# does not depend on source casing. paper_title_ngrams stays its own
-# implementation: its per-word stopword semantics are pinned by the Mode 1-3
-# heuristic rank sources.
+# (title_abstract_fallback_label). Same method as paper_title_ngrams: segment
+# the text at punctuation boundaries (punctuation_segments — tight compounds
+# like "covid-19" or "R&D" stay whole), form n-grams per segment on the
+# stopword-RETAINING token stream, then drop n-grams that start or end with a
+# stopword — so interior stopwords survive ("biomedical big data" stays a
+# trigram; the fused "biomedical data" bigram is never formed). Stopword
+# matching is case-insensitive so the outcome does not depend on source
+# casing.
 #   text            : one string (title, or title + abstract).
 #   ngram_lengths   : which n-gram sizes to form.
 #   include_unigrams: also return single tokens that are neither stopwords nor
@@ -202,16 +267,12 @@ sanitize_corpus_noise <- function(x) {
 # order (not de-duplicated - callers count frequencies).
 ngram_candidates <- function(text, stops, ngram_lengths = c(2, 3),
                              include_unigrams = FALSE) {
-  text <- if (is.na(text)) "" else text
-  # entity/URL/HTML hygiene before tokenization: an undecoded "&#8211;" would
-  # fragment into a bare-digit token, and abstract URLs would become candidate
-  # words.
-  text <- sanitize_corpus_noise(decode_html_entities(text))
-  clean <- gsub("[^[:alnum:]-]", " ", text)
-  clean <- trimws(gsub("\\s+", " ", clean))
-  if (!nzchar(clean)) return(character(0))
+  # punctuation_segments performs the entity/URL/HTML hygiene itself; forming
+  # n-grams per segment keeps them from crossing a punctuation boundary
+  segments <- punctuation_segments(text)
+  if (!length(segments)) return(character(0))
   stops_lower <- tolower(stops)
-  grams <- unlist(lapply(ngram_lengths, function(n) expand_ngrams(clean, n)))
+  grams <- unlist(lapply(ngram_lengths, function(n) expand_ngrams(segments, n)))
   grams <- unlist(strsplit(paste(grams, collapse = " "), " "))
   grams <- grams[nzchar(grams)]
   keep <- vapply(grams, function(g) {
@@ -223,9 +284,11 @@ ngram_candidates <- function(text, stops, ngram_lengths = c(2, 3),
   }, logical(1), USE.NAMES = FALSE)
   out <- grams[keep]
   if (include_unigrams) {
-    words <- strsplit(clean, " ", fixed = TRUE)[[1]]
+    # tokens may now carry tight punctuation, so a purely numeric token can
+    # contain separators too ("4.0", "350,067", "2013-2023") - all stay noise
+    words <- unlist(strsplit(segments, " ", fixed = TRUE))
     words <- words[nzchar(words) & !(tolower(words) %in% stops_lower) &
-                     !grepl("^[0-9]+$", words)]
+                     !grepl("^[0-9]+([.,:-][0-9]+)*$", words)]
     out <- c(words, out)
   }
   out
@@ -401,18 +464,19 @@ create_cluster_labels <- function(clusters, metadata,
   if ("subject" %in% names(metadata)) {
     metadata$subject <- strip_major_topic_markers(metadata$subject)
   }
-  # Resolve the ranking mode BEFORE building the corpus. Mode 0 is gated to the
-  # verbatim legacy path (get_cluster_corpus_legacy + zero-sum fill_empty_clusters_
-  # legacy), so it stays BYTE-IDENTICAL to the pre-ranking pipeline; Modes 1-3 take
-  # the map-wide DF-filtered (min2/min1) corpus + rank-aware selection.
+  # Resolve the ranking mode BEFORE building the corpus. Mode 0 keeps the legacy
+  # corpus/selection structure (get_cluster_corpus_legacy + zero-sum
+  # fill_empty_clusters_legacy, no DF filter); Modes 1-3 take the map-wide
+  # DF-filtered (min2/min1) corpus + rank-aware selection. The punctuation-aware
+  # title segmentation applies in every mode.
   mode <- ranking_mode(service)
   cc <- params$custom_clustering
   # Curated area-label exclusion list, applied post-tf-idf / pre-ranking at every
   # candidate-producing tier (initial, fallback, title/abstract) so listed generic
-  # terms can never become a label. Scoped to Modes 1-3 ONLY: Mode 0 stays
-  # byte-identical to the legacy pipeline, so it gets no exclusion (empty list ->
-  # drop_excluded_terms is a no-op). See get_label_exclusions.
-  label_exclusions <- if (identical(mode, "0")) character(0) else get_label_exclusions()
+  # terms can never become a label. Applied in EVERY mode, Mode 0 included: a
+  # generic term is unwanted as a label regardless of which selection path
+  # produced it. See get_label_exclusions.
+  label_exclusions <- get_label_exclusions()
   vslog$debug(paste("create_cluster_labels: ranking mode", mode, "for service",
                     if (is.null(service)) "(none)" else service))
 
@@ -441,8 +505,10 @@ create_cluster_labels <- function(clusters, metadata,
     # SAME corpus at bound c(1, Inf).
     empty_tfidf <- which(apply(nn_tfidf, 2, sum) == 0)
     tfidf_top[c(empty_tfidf)] <- fill_empty_clusters_legacy(nn_tfidf, nn_corpus)[c(empty_tfidf)]
-    # NB: no label-exclusion filter here — Mode 0 is byte-identical to legacy.
-    dump_tfidf_candidates(tfidf_top, "summarize_04b_tfidf_candidates")   # candidates fed to selection (post empty-fill)
+    dump_tfidf_candidates(tfidf_top, "summarize_04b_tfidf_candidates")   # raw candidates (post empty-fill, pre-exclusion)
+    tfidf_top_pre_excl <- tfidf_top
+    tfidf_top <- drop_excluded_terms(tfidf_top, label_exclusions)   # post-tf-idf, pre-selection (all modes)
+    dump_excluded_terms(tfidf_top_pre_excl, tfidf_top, "summarize_04e_excluded_terms")
     if (length(empty_tfidf)) label_source[empty_tfidf] <- "legacy_fill"
     tfidf_top_names <- get_top_names(tfidf_top, top_n, stops)
   } else {
@@ -622,10 +688,11 @@ get_custom_cluster_corpus <- function(clusters, metadata, stops, taxonomy_separa
 }
 
 # --- Mode 0 (legacy) corpus + fallback -------------------------------------
-# Verbatim from feat/keyword-label-improvements: Mode 0 is gated to this path so
-# it stays BYTE-IDENTICAL to the pre-ranking pipeline. It generates the
-# title n-grams INLINE (get_title_ngrams, unchanged) rather than reading the
-# DF-filtered min1/min2 columns, and has no rank_sources.
+# Mode 0 keeps the legacy corpus/selection STRUCTURE: title n-grams are
+# generated INLINE (get_title_ngrams) rather than read from the DF-filtered
+# min1/min2 columns, and there are no rank_sources. The title stream itself is
+# punctuation-aware (punctuation_segments) like every other mode, so Mode-0
+# labels are no longer byte-identical to the pre-ranking pipeline.
 get_cluster_corpus_legacy <- function(clusters, metadata, stops, taxonomy_separator,
                                add_title_ngrams = T, custom_clustering=NULL) {
   subjectlist = list()
@@ -633,9 +700,12 @@ get_cluster_corpus_legacy <- function(clusters, metadata, stops, taxonomy_separa
     matches = which(unname(clusters$groups == k) == TRUE)
     titles =  metadata$title[matches]
     subjects = metadata$subject[matches]
-    titles = lapply(titles, function(x) {gsub("[^[:alnum:]-]", " ", x)})
-    titles = lapply(titles, gsub, pattern="\\s+", replacement=" ")
-    title_ngrams <- get_title_ngrams(titles, stops, c(2, 3))
+    # segment each title at punctuation boundaries so the inline n-grams cannot
+    # span a boundary and tight compounds stay whole; the unigram word stream
+    # is built from the same segment tokens
+    title_segments = lapply(titles, punctuation_segments)
+    titles = lapply(title_segments, paste, collapse = " ")
+    title_ngrams <- get_title_ngrams(title_segments, stops, c(2, 3))
     batch_size <- 1000
     total_length <- length(stops)
     for (i in seq(1, total_length, batch_size)) {
@@ -875,12 +945,19 @@ fill_empty_clusters <- function(fallback_corpus){
 
 
 # Extract pruned bi- and tri-grams from a set of titles (see prune_ngrams) and
-# return them concatenated. Note: ngram_lengths is currently unused — lengths 2
-# and 3 are hardcoded.
+# return them concatenated. Each title arrives as its punctuation segments (one
+# character vector per title, from punctuation_segments); n-grams are formed
+# within a segment, so they cannot cross a punctuation boundary. The per-title
+# list structure is preserved because callers align the result with per-paper
+# subjects. Note: ngram_lengths is currently unused — lengths 2 and 3 are
+# hardcoded.
 get_title_ngrams <- function(titles, stops, ngram_lengths) {
   # for ngrams: we have to collapse with "_" or else tokenizers will split ngrams again at that point and we'll be left with unigrams
-  titles_bigrams = prune_ngrams(expand_ngrams(titles, 2), stops)
-  titles_trigrams = prune_ngrams(expand_ngrams(titles, 3), stops)
+  per_title <- function(n) lapply(titles, function(segments) {
+    paste(unlist(expand_ngrams(segments, n)), collapse = " ")
+  })
+  titles_bigrams = prune_ngrams(per_title(2), stops)
+  titles_trigrams = prune_ngrams(per_title(3), stops)
   return(c(titles_bigrams, titles_trigrams))
 }
 
