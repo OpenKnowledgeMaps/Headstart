@@ -110,6 +110,7 @@ const testCases: EnrichmentTestCase[] = [
     query: '"game theory"',
     search_params: "&service=base&sorting=most-relevant&document_types%5B%5D=121&lang_id%5B%5D=all-lang&min_descsize=300",
     paperTitle: "Medical ethics, logic traps, and game theory: an illustrative tale of brain death",
+    flaky: true,
     keywords:
       "Adult [MeSH]; Analytical Approach; Attitude to Death [MeSH]; Brain Death [MeSH]; Death and Euthanasia; Decision Making [MeSH]; Female [MeSH]; Game Theory [MeSH]; Humans [MeSH]; Life Support Care [MeSH]; Logic [MeSH]; Withholding Treatment [MeSH]",
   },

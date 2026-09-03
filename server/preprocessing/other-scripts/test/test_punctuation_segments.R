@@ -90,9 +90,9 @@ test_that("punctuation runs split as a unit, whatever their spacing", {
 })
 
 test_that("tight single wordplay parens keep (odd tokens accepted)", {
-  expect_equal(seg("Organisational (in)justice"), c("Organisational", "in)justice"))
+  expect_equal(seg("Organisational (in)justice"), c("Organisational", "(in)justice"))
   expect_equal(seg("micro(nano) plastic pollution"),
-               c("micro(nano", "plastic pollution"))
+               c("micro(nano)", "plastic pollution"))
 })
 
 # --- per-character deviations ---------------------------------------------
