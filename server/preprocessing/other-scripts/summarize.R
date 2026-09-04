@@ -196,17 +196,20 @@ COLON_KEEP_TOKENS <- c("80:20", "50:50")
 # word characters stays inside its token. Deviations: colon, em dash, pipe and
 # underscore always split (underscore because it is the n-gram joiner
 # character); colon keep-list tokens and multi-period abbreviation chains
-# ("U.S.", "e.g." — trailing period included) stay whole; a run of >= 2
-# consecutive punctuation marks always splits as a unit. Placeholders \x01
-# (chain periods), \x03 (kept colons) and \x02 (boundaries) cannot occur in
-# decoded titles. Returns a character vector of trimmed, whitespace-collapsed,
+# ("U.S.", "e.g." — trailing period included) stay whole; a balanced (word)
+# pair fused to a word character on at least one side keeps its parens as
+# token content ("(in)justice", "micro(nano)") while its spaced outer side
+# still bounds the segment; a run of >= 2 consecutive punctuation marks always
+# splits as a unit. Placeholders \x01 (chain periods), \x03 (kept colons),
+# \x04/\x05 (kept parens) and \x02 (boundaries) cannot occur in decoded
+# titles. Returns a character vector of trimmed, whitespace-collapsed,
 # non-empty segments; case is preserved. NA/empty input -> character(0).
 punctuation_segments <- function(text) {
   text <- if (is.null(text) || is.na(text)) "" else text
   text <- sanitize_corpus_noise(decode_html_entities(text))
-  # C0 control characters are removed before anything else: \x01-\x03 are this
+  # C0 control characters are removed before anything else: \x01-\x05 are this
   # function's own placeholders, so a source string containing them would be
-  # restored as a period/colon or silently split the text
+  # restored as a period/colon/paren or silently split the text
   text <- gsub("[\x01-\x08\x0b\x0c\x0e-\x1f]", " ", text)
   # soft hyphen and zero-width characters render as nothing but count as
   # non-space, so they would be kept inside a token and stop it matching the
@@ -231,9 +234,20 @@ punctuation_segments <- function(text) {
     pat <- paste0("(?<![\\p{L}\\p{N}])", esc, "(?![\\p{L}\\p{N}])")
     text <- gsub(pat, gsub(":", "\x03", tok, fixed = TRUE), text, perl = TRUE)
   }
+  # protect tight wordplay parens: a balanced (word) pair fused to a word
+  # character on at least one side ("(in)justice", "micro(nano)", "S(C)ENTINEL")
+  # is one token and keeps its parens. Its spaced outer side is still a segment
+  # boundary, so the wordplay token cannot fuse into an n-gram across the space.
+  # Pairs spaced on both sides ("model (ML) selection") are untouched and split
+  # as before, as does a pair abutting other punctuation ("(LLM)-Powered" - the
+  # run rule wins there).
+  text <- gsub("(?<=[\\p{L}\\p{N}])\\(([\\p{L}\\p{N}]+)\\)", "\x04\\1\x05", text, perl = TRUE)
+  text <- gsub("\\(([\\p{L}\\p{N}]+)\\)(?=[\\p{L}\\p{N}])", "\x04\\1\x05", text, perl = TRUE)
+  text <- gsub("(^|\\s)\x04", "\\1\x02\x04", text, perl = TRUE)
+  text <- gsub("\x05(?=\\s|$)", "\x05\x02", text, perl = TRUE)
   # a run of consecutive punctuation marks splits as a unit, whatever its
   # members or spacing; handled before the single-mark rules
-  punct <- "[^\\p{L}\\p{N}\\s\x01\x02\x03]"
+  punct <- "[^\\p{L}\\p{N}\\s\x01\x02\x03\x04\x05]"
   text <- gsub(paste0(punct, "{2,}"), "\x02", text, perl = TRUE)
   # always-split marks, regardless of spacing
   text <- gsub("[\u2014|:_]", "\x02", text)
@@ -243,6 +257,8 @@ punctuation_segments <- function(text) {
   text <- gsub(paste0(punct, "([\\s\x02]|$)"), "\x02\\1", text, perl = TRUE)
   text <- gsub("\x01", ".", text, fixed = TRUE)
   text <- gsub("\x03", ":", text, fixed = TRUE)
+  text <- gsub("\x04", "(", text, fixed = TRUE)
+  text <- gsub("\x05", ")", text, fixed = TRUE)
   segments <- strsplit(text, "\x02", fixed = TRUE)[[1]]
   segments <- trimws(gsub("\\s+", " ", segments))
   segments[nzchar(segments)]
@@ -259,14 +275,19 @@ punctuation_segments <- function(text) {
 # matching is case-insensitive so the outcome does not depend on source
 # casing.
 #   text            : one string (title, or title + abstract).
-#   ngram_lengths   : which n-gram sizes to form.
-#   include_unigrams: also return single tokens that are neither stopwords nor
-#                     purely numeric (a lone number/year is noise; digits stay
-#                     inside tokens).
+#   ngram_lengths   : which n-gram sizes to form; may include 1 for unigrams.
+#   include_unigrams: alias for putting 1 in ngram_lengths — returns single
+#                     tokens that are neither stopwords nor purely numeric (a
+#                     lone number/year is noise; digits stay inside tokens).
 # Returns a character vector of "_"-joined n-grams / bare tokens, in formation
-# order (not de-duplicated - callers count frequencies).
+# order (not de-duplicated - callers count frequencies; a caller that needs
+# per-text dedup wraps the call in unique()).
 ngram_candidates <- function(text, stops, ngram_lengths = c(2, 3),
                              include_unigrams = FALSE) {
+  # length 1 is the same switch as include_unigrams; unigrams take the
+  # token-filter path below, never the n-gram keep-filter
+  include_unigrams <- include_unigrams || 1 %in% ngram_lengths
+  ngram_lengths <- ngram_lengths[ngram_lengths != 1]
   # punctuation_segments performs the entity/URL/HTML hygiene itself; forming
   # n-grams per segment keeps them from crossing a punctuation boundary
   segments <- punctuation_segments(text)
@@ -295,14 +316,19 @@ ngram_candidates <- function(text, stops, ngram_lengths = c(2, 3),
 }
 
 # Add the two heuristic-keyword metadata columns (HEUR_MIN1 / HEUR_MIN2) to the
-# metadata data frame. Generates each paper's title n-grams, computes each n-gram's
+# metadata data frame. Generates each paper's title n-grams through the shared
+# generator (ngram_candidates, de-duplicated per paper), computes each n-gram's
 # MAP-WIDE document frequency (number of distinct resources it appears in), and stores
 # per paper, as "; "-joined "_"-n-gram strings:
 #   HEUR_MIN1 = all of the paper's n-grams (DF >= 1)
 #   HEUR_MIN2 = the paper's n-grams with map-wide document frequency >= 2
-# Computed once, early in labelling.
-add_heuristic_keyword_fields <- function(metadata, stops) {
-  per_paper <- lapply(metadata$title, paper_title_ngrams, stops = stops)
+# Computed once, early in labelling. ngram_lengths comes from the resolved
+# n-gram setting (ngram_setting_lengths); the Setting-0 default c(2, 3)
+# reproduces paper_title_ngrams exactly (pinned by the drop-in equivalence
+# test in test_ngram_generator.R).
+add_heuristic_keyword_fields <- function(metadata, stops, ngram_lengths = c(2, 3)) {
+  per_paper <- lapply(metadata$title, function(t)
+    unique(ngram_candidates(t, stops, ngram_lengths = ngram_lengths)))
   df <- table(unlist(lapply(per_paper, unique)))          # map-wide document frequency
   min2_set <- names(df)[df >= 2]
   metadata[[HEUR_MIN1]] <- vapply(per_paper,
@@ -471,6 +497,25 @@ create_cluster_labels <- function(clusters, metadata,
   # title segmentation applies in every mode.
   mode <- ranking_mode(service)
   cc <- params$custom_clustering
+  # N-gram setting axis (docs/ngram-generation-simplify.md §7.2/§7.3), resolved
+  # per service like the ranking mode. Mode 0 always runs Setting 0 (it keeps
+  # the legacy corpus/selection structure), and the setting is a no-op on the
+  # custom-clustering path (no title n-grams there). Setting 0 leaves every
+  # call site on its current behaviour.
+  nset <- ngram_setting(service)
+  if (identical(mode, "0") && !identical(nset, "0")) {
+    vslog$warn(paste("create_cluster_labels: ranking mode 0 forces ngram setting 0",
+                     "(requested:", nset, ")"))
+    nset <- "0"
+  }
+  if (!(is.null(cc)) && (cc %in% names(metadata)) && !identical(nset, "0")) {
+    vslog$info(paste("create_cluster_labels: ngram setting", nset,
+                     "is a no-op on the custom-clustering path"))
+  }
+  nset_lengths <- ngram_setting_lengths(nset)
+  nset_abstracts <- !identical(nset, "0") && include_abstracts(service)
+  vslog$debug(paste("create_cluster_labels: ngram setting", nset,
+                    "abstracts", nset_abstracts))
   # Curated area-label exclusion list, applied post-tf-idf / pre-ranking at every
   # candidate-producing tier (initial, fallback, title/abstract) so listed generic
   # terms can never become a label. Applied in EVERY mode, Mode 0 included: a
@@ -518,7 +563,8 @@ create_cluster_labels <- function(clusters, metadata,
     #  - the two heuristic columns (min1/min2), pre-binned by MAP-WIDE document
     #    frequency (add_heuristic_keyword_fields). subject_cleaned (metadata$subject)
     #    is left untouched.
-    metadata <- add_heuristic_keyword_fields(metadata, stops)
+    metadata <- add_heuristic_keyword_fields(metadata, stops,
+                                             ngram_lengths = nset_lengths)
     metadata$keywords_rank_cleaned <- metadata$subject
     if (!(is.null(cc)) && (cc %in% names(metadata))) {
       corpus_out <- get_custom_cluster_corpus(clusters, metadata, stops, taxonomy_separator, custom_clustering=cc)

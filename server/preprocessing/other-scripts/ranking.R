@@ -46,6 +46,88 @@ ranking_mode <- function(service = NULL) {
   "0"
 }
 
+NGRAM_SETTINGS <- c("0", "1", "2", "3", "4", "5")
+
+# Resolve the n-gram setting for a data integration
+# (docs/ngram-generation-simplify.md §7.2). Same resolution shape as
+# ranking_mode():
+#   1. per-integration override  NGRAM_SETTING_<SERVICE>  (e.g. NGRAM_SETTING_BASE)
+#   2. global                    NGRAM_SETTING
+#   3. default                   "0" (current sites unchanged)
+# A value is only honoured if it is one of NGRAM_SETTINGS; an invalid value at
+# one level falls through to the next, warning only when something was
+# configured but nothing valid resolved.
+ngram_setting <- function(service = NULL) {
+  pick <- function(v) if (nzchar(v) && v %in% NGRAM_SETTINGS) v else NA_character_
+
+  raw_svc <- if (!is.null(service) && nzchar(service)) {
+    Sys.getenv(paste0("NGRAM_SETTING_", toupper(service)))
+  } else {
+    ""
+  }
+  raw_glob <- Sys.getenv("NGRAM_SETTING")
+
+  setting <- pick(raw_svc)
+  if (is.na(setting)) setting <- pick(raw_glob)
+  if (!is.na(setting)) return(setting)
+
+  if (nzchar(raw_svc) || nzchar(raw_glob)) {
+    msg <- sprintf(
+      "ngram_setting: no valid n-gram setting for service '%s' (per-integration='%s', global='%s'); using setting 0",
+      if (is.null(service)) "" else service, raw_svc, raw_glob)
+    if (exists("logwarn")) logwarn(msg) else warning(msg)
+  }
+  "0"
+}
+
+# Resolve the abstract-inclusion flag for a data integration
+# (docs/ngram-generation-simplify.md §7.2/§7.3): with the flag on, no-keyword
+# (subject_is_heuristic) papers feed title+abstract to the n-gram generator.
+# Resolution mirrors ngram_setting(); valid values are "true"/"false"
+# (case-insensitive), anything else falls through. Default FALSE.
+include_abstracts <- function(service = NULL) {
+  pick <- function(v) {
+    v <- tolower(v)
+    if (v %in% c("true", "false")) v else NA_character_
+  }
+
+  raw_svc <- if (!is.null(service) && nzchar(service)) {
+    Sys.getenv(paste0("INCLUDE_ABSTRACTS_", toupper(service)))
+  } else {
+    ""
+  }
+  raw_glob <- Sys.getenv("INCLUDE_ABSTRACTS")
+
+  flag <- pick(raw_svc)
+  if (is.na(flag)) flag <- pick(raw_glob)
+  if (!is.na(flag)) return(identical(flag, "true"))
+
+  if (nzchar(raw_svc) || nzchar(raw_glob)) {
+    msg <- sprintf(
+      "include_abstracts: no valid value for service '%s' (per-integration='%s', global='%s'); abstracts stay off",
+      if (is.null(service)) "" else service, raw_svc, raw_glob)
+    if (exists("logwarn")) logwarn(msg) else warning(msg)
+  }
+  FALSE
+}
+
+# The setting -> title-site ngram_lengths mapping
+# (docs/ngram-generation-simplify.md §7.3). Setting 0 is the generator-routed
+# replication of the architectural no-op baseline: the title sites form
+# bi+tri-grams (the corpus-level "1,2,2,3" of Setting 0 is emergent — the
+# unigrams and second bigram route come from the untouched G1 subject
+# synthesis, which only Settings >= 1 bypass).
+ngram_setting_lengths <- function(setting) {
+  switch(as.character(setting),
+         "0" = c(2, 3),
+         "1" = c(1, 2, 3),
+         "2" = c(1, 2, 3, 4),
+         "3" = c(2, 3, 4),
+         "4" = c(1, 2, 3, 4, 5),
+         "5" = c(2, 3, 4, 5),
+         NULL)
+}
+
 # Ordered rank spec for a mode. Each entry is list(rank, sources, policy):
 #   rank    : the rank number (1 = highest priority).
 #   sources : names of the rank_sources token-sets that feed this rank (pooled).

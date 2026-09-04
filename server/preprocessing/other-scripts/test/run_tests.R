@@ -35,6 +35,7 @@ base_files <- c(
 replay_files <- c(
   "test/test_label_casing.R",
   "test/test_ngram_candidates.R",
+  "test/test_ngram_generator.R",
   "test/test_punctuation_segments.R",
   "test/test_corpus_hygiene.R",
   "test/test_replay_harness.R",
