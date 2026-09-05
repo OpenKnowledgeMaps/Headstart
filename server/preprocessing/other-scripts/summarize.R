@@ -315,8 +315,20 @@ ngram_candidates <- function(text, stops, ngram_lengths = c(2, 3),
   out
 }
 
+# bypass for the generator settings (>= 1): papers whose `subject` was
+# synthesised from the title (subject_is_heuristic) get it blanked, so the
+# synthesis reaches neither the corpus nor any rank source — those papers
+# contribute exclusively through the generator columns. Setting 0 must NOT
+# apply this: the synthesis is part of the replicated baseline.
+bypass_heuristic_subjects <- function(metadata) {
+  if (!is.null(metadata$subject_is_heuristic)) {
+    metadata$subject[as.logical(metadata$subject_is_heuristic)] <- ""
+  }
+  metadata
+}
+
 # Add the two heuristic-keyword metadata columns (HEUR_MIN1 / HEUR_MIN2) to the
-# metadata data frame. Generates each paper's title n-grams through the shared
+# metadata data frame. Generates each paper's n-grams through the shared
 # generator (ngram_candidates, de-duplicated per paper), computes each n-gram's
 # MAP-WIDE document frequency (number of distinct resources it appears in), and stores
 # per paper, as "; "-joined "_"-n-gram strings:
@@ -325,9 +337,19 @@ ngram_candidates <- function(text, stops, ngram_lengths = c(2, 3),
 # Computed once, early in labelling. ngram_lengths comes from the resolved
 # n-gram setting (ngram_setting_lengths); the Setting-0 default c(2, 3)
 # reproduces paper_title_ngrams exactly (pinned by the drop-in equivalence
-# test in test_ngram_generator.R).
-add_heuristic_keyword_fields <- function(metadata, stops, ngram_lengths = c(2, 3)) {
-  per_paper <- lapply(metadata$title, function(t)
+# test in test_ngram_generator.R). The generator input is the title — or
+# title + abstract for no-keyword (subject_is_heuristic) papers when the
+# abstract flag is on: the input is assembled per paper by the data, not a
+# code branch.
+add_heuristic_keyword_fields <- function(metadata, stops, ngram_lengths = c(2, 3),
+                                         include_abstracts = FALSE) {
+  input_text <- metadata$title
+  if (include_abstracts && !is.null(metadata$subject_is_heuristic) &&
+      !is.null(metadata$paper_abstract)) {
+    fl <- which(as.logical(metadata$subject_is_heuristic))
+    input_text[fl] <- paste(metadata$title[fl], metadata$paper_abstract[fl])
+  }
+  per_paper <- lapply(input_text, function(t)
     unique(ngram_candidates(t, stops, ngram_lengths = ngram_lengths)))
   df <- table(unlist(lapply(per_paper, unique)))          # map-wide document frequency
   min2_set <- names(df)[df >= 2]
@@ -345,14 +367,16 @@ add_heuristic_keyword_fields <- function(metadata, stops, ngram_lengths = c(2, 3
 #   top_n            : number of terms kept.
 #   label_exclusions : curated area-label exclusion list (whole-term, case-insensitive)
 #                      applied here too so listed terms never survive as a last resort.
-title_abstract_fallback_label <- function(matches, metadata, stops, top_n = 3, label_exclusions = character(0), cluster = NA_integer_) {
+title_abstract_fallback_label <- function(matches, metadata, stops, top_n = 3, label_exclusions = character(0), cluster = NA_integer_,
+                                          ngram_lengths = c(2, 3)) {
   candidates = mapply(paste, metadata$title[matches], metadata$paper_abstract[matches])
   candidates = lapply(candidates, tolower)
   # n-gram formation on the stopword-retaining stream (see ngram_candidates):
   # keeps digit/hyphen tokens whole and interior stopwords in place; boundary
-  # stopword n-grams are pruned inside the helper.
+  # stopword n-grams are pruned inside the helper. ngram_lengths follows the
+  # resolved n-gram setting (Setting 0 = c(2, 3), the historical fallback).
   candidates = unlist(lapply(candidates, ngram_candidates, stops = stops,
-                             ngram_lengths = c(2, 3)))
+                             ngram_lengths = ngram_lengths))
   if (!length(candidates)) return("")
   top_ngrams = sort(table(candidates), decreasing = T)
   if (length(label_exclusions)) {                              # whole-term exclusion (see drop_excluded_terms)
@@ -563,8 +587,14 @@ create_cluster_labels <- function(clusters, metadata,
     #  - the two heuristic columns (min1/min2), pre-binned by MAP-WIDE document
     #    frequency (add_heuristic_keyword_fields). subject_cleaned (metadata$subject)
     #    is left untouched.
+    # G1 bypass (settings >= 1, non-custom path only): must run BEFORE the
+    # heuristic columns and keywords_rank_cleaned are derived from `subject`
+    if (!identical(nset, "0") && (is.null(cc) || !(cc %in% names(metadata)))) {
+      metadata <- bypass_heuristic_subjects(metadata)
+    }
     metadata <- add_heuristic_keyword_fields(metadata, stops,
-                                             ngram_lengths = nset_lengths)
+                                             ngram_lengths = nset_lengths,
+                                             include_abstracts = nset_abstracts)
     metadata$keywords_rank_cleaned <- metadata$subject
     if (!(is.null(cc)) && (cc %in% names(metadata))) {
       corpus_out <- get_custom_cluster_corpus(clusters, metadata, stops, taxonomy_separator, custom_clustering=cc)
@@ -634,7 +664,8 @@ create_cluster_labels <- function(clusters, metadata,
       # from the papers' titles + abstracts (see title_abstract_fallback_label).
       vslog$debug(paste("create_cluster_labels: title/abstract fallback for cluster", k,
                         "with", length(matches), "papers"))
-      summary <- title_abstract_fallback_label(matches, metadata, stops, top_n, label_exclusions, cluster = k)
+      summary <- title_abstract_fallback_label(matches, metadata, stops, top_n, label_exclusions, cluster = k,
+                                               ngram_lengths = nset_lengths)
       label_source[k] <- "title_abstract_fallback"
     }
     clusters$cluster_labels[c(matches)] = summary

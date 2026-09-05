@@ -41,7 +41,7 @@ edge_tokens <- function(g) {
 
 # --- Part A: generator invariants (green — guard current behaviour) ----------
 
-test_that("G-I2 length-membership: every n-gram's token count is a requested length", {
+test_that("length-membership: every n-gram's token count is a requested length", {
   for (L in list(c(2, 3), c(2, 3, 4), c(2, 3, 4, 5))) {
     for (t in GOLD_TITLES) {
       out <- ngram_candidates(t, STOPS, ngram_lengths = L)
@@ -115,13 +115,13 @@ test_that("drop-in: unique(ngram_candidates(c(2,3))) reproduces paper_title_ngra
 
 # --- Part B: spec deltas (until implemented — TDD targets) ------------------
 
-test_that("B1 lengths accept 1 directly: c(1,2,3) yields unigrams", {
+test_that("lengths accept 1 directly: c(1,2,3) yields unigrams", {
   out <- ngram_candidates("biomedical data opportunities", STOPS,
                           ngram_lengths = c(1, 2, 3))
   expect_true(all(c("biomedical", "data", "opportunities") %in% out))
 })
 
-test_that("B1 alias: c(1, n...) is identical to include_unigrams = TRUE", {
+test_that("alias: c(1, n...) is identical to include_unigrams = TRUE", {
   for (t in GOLD_TITLES) {
     expect_identical(ngram_candidates(t, STOPS, ngram_lengths = c(1, 2, 3)),
                      ngram_candidates(t, STOPS, ngram_lengths = c(2, 3),
@@ -129,7 +129,7 @@ test_that("B1 alias: c(1, n...) is identical to include_unigrams = TRUE", {
   }
 })
 
-test_that("B1 unigram-only call works and applies the unigram rules", {
+test_that("unigram-only call works and applies the unigram rules", {
   out <- ngram_candidates("published in 2020 review", STOPS, ngram_lengths = 1)
   expect_true(setequal(out, c("published", "review")))
 })
@@ -141,14 +141,14 @@ clear_ngram_env <- function() {
   if (length(vars)) Sys.unsetenv(vars)
 }
 
-test_that("B2 ngram_setting: unset env defaults to setting 0", {
+test_that("ngram_setting: unset env defaults to setting 0", {
   expect_true(exists("ngram_setting"))
   clear_ngram_env()
   expect_equal(ngram_setting(), "0")
   expect_equal(ngram_setting("orcid"), "0")
 })
 
-test_that("B2 ngram_setting: global NGRAM_SETTING is honoured, invalid falls through", {
+test_that("ngram_setting: global NGRAM_SETTING is honoured, invalid falls through", {
   clear_ngram_env()
   Sys.setenv(NGRAM_SETTING = "3")
   expect_equal(ngram_setting(), "3")
@@ -158,7 +158,7 @@ test_that("B2 ngram_setting: global NGRAM_SETTING is honoured, invalid falls thr
   clear_ngram_env()
 })
 
-test_that("B2 ngram_setting: per-integration override beats global; invalid override falls to global", {
+test_that("ngram_setting: per-integration override beats global; invalid override falls to global", {
   clear_ngram_env()
   Sys.setenv(NGRAM_SETTING = "1", NGRAM_SETTING_ORCID = "5")
   expect_equal(ngram_setting("orcid"), "5")
@@ -168,7 +168,7 @@ test_that("B2 ngram_setting: per-integration override beats global; invalid over
   clear_ngram_env()
 })
 
-test_that("B2 include_abstracts: default FALSE, env-enabled, per-integration override", {
+test_that("include_abstracts: default FALSE, env-enabled, per-integration override", {
   expect_true(exists("include_abstracts"))
   clear_ngram_env()
   expect_false(include_abstracts())
@@ -180,7 +180,7 @@ test_that("B2 include_abstracts: default FALSE, env-enabled, per-integration ove
   clear_ngram_env()
 })
 
-test_that("B2 setting -> lengths mapping (C3, §7.3)", {
+test_that("setting -> lengths mapping (C3, §7.3)", {
   expect_true(exists("ngram_setting_lengths"))
   # Setting 0: generator-routed baseline replication — title sites form bi+tri;
   # the corpus-level "1,2,2,3" is emergent (G1 subject route stays active)
@@ -192,13 +192,99 @@ test_that("B2 setting -> lengths mapping (C3, §7.3)", {
   expect_equal(ngram_setting_lengths("5"), c(2, 3, 4, 5))
 })
 
-# --- Part C: integration tests to add WITH the implementation ----------------
-# (sketched here, not executable yet — they need create_cluster_labels wired):
-#  * C4 constraint: ranking mode 0 + NGRAM_SETTING=3 -> setting coerced to 0
-#    (replay an itu_ fixture in mode 0 with the env var set; labels must equal
-#    the recorded Setting-0 baseline).
-#  * G1 bypass (§7.4 edit 0): replay an itu_ fixture in mode 1 with
-#    NGRAM_SETTING=3; assert no token of a flagged paper's synthesised subject
-#    reaches the corpus dump (summarize_04_corpus_text).
-#  * 6.6b bounded-change assertions per setting (S1 dedup, S2/S4 4-/5-grams,
-#    S3/S5 no unigram labels, abstract flag on/off) over the itu_ fixtures.
+# --- Systematic sweep: the invariants over EVERY setting's length vector -----
+
+test_that("sweep: length-membership holds for every setting's lengths", {
+  for (s in as.character(1:5)) {
+    L <- ngram_setting_lengths(s)
+    for (t in GOLD_TITLES) {
+      out <- ngram_candidates(t, STOPS, ngram_lengths = L)
+      if (length(out))
+        expect_true(all(vapply(out, token_count, integer(1)) %in% L))
+    }
+  }
+})
+
+test_that("sweep: filter-correctness holds for every setting's lengths", {
+  for (s in as.character(1:5)) {
+    L <- ngram_setting_lengths(s)
+    for (t in GOLD_TITLES) {
+      out <- ngram_candidates(t, STOPS, ngram_lengths = L)
+      for (g in out) {
+        toks <- strsplit(g, "_", fixed = TRUE)[[1]]
+        expect_false(tolower(toks[1]) %in% STOPS)
+        expect_false(tolower(toks[length(toks)]) %in% STOPS)
+        if (length(toks) >= 2) expect_false(toks[1] == toks[length(toks)])
+        if (length(toks) == 1)                       # unigram rules
+          expect_false(grepl("^[0-9]+([.,:-][0-9]+)*$", g))
+      }
+    }
+  }
+})
+
+test_that("sweep: determinism and order-stability hold for every setting's lengths", {
+  for (s in as.character(1:5)) {
+    L <- ngram_setting_lengths(s)
+    for (t in GOLD_TITLES)
+      expect_identical(ngram_candidates(t, STOPS, ngram_lengths = L),
+                       ngram_candidates(t, STOPS, ngram_lengths = L))
+  }
+})
+
+# --- Part C: integration (the settings pipeline, replay-based) ---------------
+
+test_that("bypass helper blanks only flagged subjects", {
+  md <- data.frame(subject = c("real keywords", "synthesised stuff"),
+                   subject_is_heuristic = c(FALSE, TRUE), stringsAsFactors = FALSE)
+  expect_equal(bypass_heuristic_subjects(md)$subject, c("real keywords", ""))
+  md2 <- data.frame(subject = "keep", stringsAsFactors = FALSE)  # no flag column
+  expect_equal(bypass_heuristic_subjects(md2)$subject, "keep")
+})
+
+test_that("Setting 1 heuristic columns contain unigrams (6.6b S1)", {
+  md <- data.frame(title = c("solar photovoltaic efficiency", "solar energy analysis"),
+                   stringsAsFactors = FALSE)
+  out <- add_heuristic_keyword_fields(md, STOPS, ngram_lengths = c(1, 2, 3))
+  expect_true("solar" %in% strsplit(out[[HEUR_MIN1]][1], "; ", fixed = TRUE)[[1]])
+  expect_true("solar" %in% strsplit(out[[HEUR_MIN2]][1], "; ", fixed = TRUE)[[1]])  # DF 2
+})
+
+test_that("abstract flag feeds title+abstract for flagged papers only", {
+  md <- data.frame(title = c("short title", "flagged title"),
+                   paper_abstract = c("alpha ignored", "quantum entanglement experiments"),
+                   subject_is_heuristic = c(FALSE, TRUE), stringsAsFactors = FALSE)
+  out <- add_heuristic_keyword_fields(md, STOPS, ngram_lengths = c(1, 2, 3),
+                                      include_abstracts = TRUE)
+  expect_false("alpha" %in% strsplit(out[[HEUR_MIN1]][1], "; ", fixed = TRUE)[[1]])
+  expect_true("quantum" %in% strsplit(out[[HEUR_MIN1]][2], "; ", fixed = TRUE)[[1]])
+  off <- add_heuristic_keyword_fields(md, STOPS, ngram_lengths = c(1, 2, 3))
+  expect_false("quantum" %in% strsplit(off[[HEUR_MIN1]][2], "; ", fixed = TRUE)[[1]])
+})
+
+ITU_FX <- "test/replay/itu_0204881x.inputs.rds"
+
+test_that("sweep: EVERY setting is coerced to the mode-0 baseline under ranking mode 0", {
+  if (!file.exists(ITU_FX)) { cat("  (itu fixture missing - skipped)\n"); expect_true(TRUE) } else {
+    on.exit(clear_ngram_env(), add = TRUE)
+    base <- read_expected("itu_0204881x", "0")
+    for (s in as.character(1:5)) {
+      clear_ngram_env()
+      Sys.setenv(NGRAM_SETTING = s)
+      expect_equal(replay_labels(ITU_FX, mode = "0"), base)
+    }
+  }
+})
+
+test_that("Setting 1 runs end-to-end: every cluster labelled; a bounded behaviour change", {
+  if (!file.exists(ITU_FX)) { cat("  (itu fixture missing - skipped)\n"); expect_true(TRUE) } else {
+    clear_ngram_env()
+    Sys.setenv(NGRAM_SETTING = "1")
+    on.exit(clear_ngram_env(), add = TRUE)
+    labels <- replay_labels(ITU_FX, mode = "1")
+    base <- read_expected("itu_0204881x", "1")
+    expect_equal(length(labels), length(base))
+    expect_true(all(nzchar(as.character(labels))))
+    # S1 (bypass + deduped 1,2,3) is a deliberate behaviour change vs baseline
+    expect_false(identical(as.character(labels), as.character(base)))
+  }
+})
