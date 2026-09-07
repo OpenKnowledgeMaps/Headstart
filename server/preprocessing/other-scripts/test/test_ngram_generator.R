@@ -263,15 +263,24 @@ test_that("abstract flag feeds title+abstract for flagged papers only", {
 
 ITU_FX <- "test/replay/itu_0204881x.inputs.rds"
 
-test_that("sweep: EVERY setting is coerced to the mode-0 baseline under ranking mode 0", {
+test_that("mode 0 at setting 0 is byte-equivalent (generator + legacy_quirks flag)", {
   if (!file.exists(ITU_FX)) { cat("  (itu fixture missing - skipped)\n"); expect_true(TRUE) } else {
     on.exit(clear_ngram_env(), add = TRUE)
+    clear_ngram_env()   # default -> setting 0 -> quirk-emulated generator path
+    expect_equal(replay_labels(ITU_FX, mode = "0"), read_expected("itu_0204881x", "0"))
+  }
+})
+
+test_that("mode 0 at a non-0 setting switches generation only (quirks off, structure legacy)", {
+  if (!file.exists(ITU_FX)) { cat("  (itu fixture missing - skipped)\n"); expect_true(TRUE) } else {
+    on.exit(clear_ngram_env(), add = TRUE)
+    clear_ngram_env()
+    Sys.setenv(NGRAM_SETTING = "3")
+    l3 <- replay_labels(ITU_FX, mode = "0")
     base <- read_expected("itu_0204881x", "0")
-    for (s in as.character(1:5)) {
-      clear_ngram_env()
-      Sys.setenv(NGRAM_SETTING = s)
-      expect_equal(replay_labels(ITU_FX, mode = "0"), base)
-    }
+    expect_equal(length(l3), length(base))
+    expect_true(all(nzchar(as.character(l3))))
+    expect_false(identical(as.character(l3), as.character(base)))
   }
 })
 

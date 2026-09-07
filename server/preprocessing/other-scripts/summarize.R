@@ -528,9 +528,12 @@ create_cluster_labels <- function(clusters, metadata,
   # call site on its current behaviour.
   nset <- ngram_setting(service)
   if (identical(mode, "0") && !identical(nset, "0")) {
-    vslog$warn(paste("create_cluster_labels: ranking mode 0 forces ngram setting 0",
-                     "(requested:", nset, ")"))
-    nset <- "0"
+    # Mode 0 keeps its legacy corpus/selection structure at every setting; a
+    # non-0 setting switches ONLY the title n-gram generation step of the
+    # legacy corpus builder to the shared generator (synthesis stays part
+    # of the mode-0 subject stream — no bypass on this path).
+    vslog$info(paste("create_cluster_labels: mode 0 with ngram setting", nset,
+                     "- setting switches generation only, structure stays legacy"))
   }
   if (!(is.null(cc)) && (cc %in% names(metadata)) && !identical(nset, "0")) {
     vslog$info(paste("create_cluster_labels: ngram setting", nset,
@@ -559,7 +562,9 @@ create_cluster_labels <- function(clusters, metadata,
     if (!(is.null(cc)) && (cc %in% names(metadata))) {
       nn_corpus <- get_custom_cluster_corpus(clusters, metadata, stops, taxonomy_separator, custom_clustering=cc)$corpus
     } else {
-      nn_corpus <- get_cluster_corpus_legacy(clusters, metadata, stops, taxonomy_separator)
+      nn_corpus <- get_cluster_corpus_legacy(clusters, metadata, stops, taxonomy_separator,
+                                             ngram_lengths = nset_lengths,
+                                             legacy_quirks = identical(nset, "0"))
     }
     dump_data(nn_corpus, "summarize_04_corpus")
     dump_corpus_text(nn_corpus, "summarize_04_corpus_text")
@@ -764,14 +769,40 @@ get_custom_cluster_corpus <- function(clusters, metadata, stops, taxonomy_separa
   return(list(corpus = nn_corpus, rank_sources = NULL))
 }
 
+# Controlled emulation of the legacy prune_ngrams quirks, applied on top of
+# the shared generator's per-title output (Setting 0 only — the flag keeps the
+# generator as the single code path while reproducing the reference
+# behaviour):
+#   1. an n-gram is also dropped when an EDGE TOKEN occurs as a substring of
+#      any stopword (the legacy stri_detect_fixed haystack/needle inversion —
+#      over-pruning vs the generator's exact matching);
+#   2. a title whose surviving n-grams of one length number <= 1 loses them,
+#      and its slot is removed from the per-title list (shifting the later
+#      subject recycling exactly as the legacy pipeline did).
+legacy_prune_quirks <- function(per_title, stops) {
+  per_title <- lapply(per_title, function(grams) {
+    if (!length(grams)) return(grams)
+    keep <- vapply(grams, function(g) {
+      toks <- strsplit(g, "_", fixed = TRUE)[[1]]
+      !any(stringi::stri_detect_fixed(stops, tolower(toks[1]))) &&
+        !any(stringi::stri_detect_fixed(stops, tolower(toks[length(toks)])))
+    }, logical(1), USE.NAMES = FALSE)
+    grams[keep]
+  })
+  per_title[vapply(per_title, length, integer(1)) > 1]
+}
+
 # --- Mode 0 (legacy) corpus + fallback -------------------------------------
 # Mode 0 keeps the legacy corpus/selection STRUCTURE: title n-grams are
-# generated INLINE (get_title_ngrams) rather than read from the DF-filtered
-# min1/min2 columns, and there are no rank_sources. The title stream itself is
-# punctuation-aware (punctuation_segments) like every other mode, so Mode-0
-# labels are no longer byte-identical to the pre-ranking pipeline.
+# generated INLINE rather than read from the DF-filtered min1/min2 columns, and
+# there are no rank_sources. Generation always goes through the shared
+# generator (ngram_candidates); at Setting 0 (legacy_quirks = TRUE) the
+# legacy_prune_quirks post-filter reproduces the historical prune behaviour on
+# top of it, keeping Setting 0 byte-equivalent to the baseline. Settings >= 1
+# pass their own lengths with the quirks off.
 get_cluster_corpus_legacy <- function(clusters, metadata, stops, taxonomy_separator,
-                               add_title_ngrams = T, custom_clustering=NULL) {
+                               add_title_ngrams = T, custom_clustering=NULL,
+                               ngram_lengths = c(2, 3), legacy_quirks = TRUE) {
   subjectlist = list()
   for (k in seq(1, clusters$num_clusters)) {
     matches = which(unname(clusters$groups == k) == TRUE)
@@ -781,8 +812,18 @@ get_cluster_corpus_legacy <- function(clusters, metadata, stops, taxonomy_separa
     # span a boundary and tight compounds stay whole; the unigram word stream
     # is built from the same segment tokens
     title_segments = lapply(titles, punctuation_segments)
+    # per-title n-grams from the shared generator (raw stream, no dedup —
+    # mode-0 tf counts duplicates). One vector per length keeps the legacy tf
+    # property that subjects recycle over the length groups in the later
+    # paste(subjects, title_ngrams).
+    group_join <- function(n) {
+      per_title <- lapply(titles, function(t)
+        ngram_candidates(t, stops, ngram_lengths = n))
+      if (legacy_quirks) per_title <- legacy_prune_quirks(per_title, stops)
+      vapply(per_title, paste, character(1), collapse = ";", USE.NAMES = FALSE)
+    }
+    title_ngrams <- unlist(lapply(ngram_lengths, group_join))
     titles = lapply(title_segments, paste, collapse = " ")
-    title_ngrams <- get_title_ngrams(title_segments, stops, c(2, 3))
     batch_size <- 1000
     total_length <- length(stops)
     for (i in seq(1, total_length, batch_size)) {
@@ -1021,13 +1062,12 @@ fill_empty_clusters <- function(fallback_corpus){
 }
 
 
-# Extract pruned bi- and tri-grams from a set of titles (see prune_ngrams) and
-# return them concatenated. Each title arrives as its punctuation segments (one
-# character vector per title, from punctuation_segments); n-grams are formed
-# within a segment, so they cannot cross a punctuation boundary. The per-title
-# list structure is preserved because callers align the result with per-paper
-# subjects. Note: ngram_lengths is currently unused — lengths 2 and 3 are
-# hardcoded.
+# LEGACY, no production callers (the Mode-0 corpus builder now generates
+# through ngram_candidates): extract pruned bi- and tri-grams from a set of
+# titles (see prune_ngrams) and return them concatenated. Kept as the
+# reference implementation for tests until the cleanup
+# Note: ngram_lengths is unused —
+# lengths 2 and 3 are hardcoded.
 get_title_ngrams <- function(titles, stops, ngram_lengths) {
   # for ngrams: we have to collapse with "_" or else tokenizers will split ngrams again at that point and we'll be left with unigrams
   per_title <- function(n) lapply(titles, function(segments) {
