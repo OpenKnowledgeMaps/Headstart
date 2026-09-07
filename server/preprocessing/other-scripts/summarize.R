@@ -521,7 +521,7 @@ create_cluster_labels <- function(clusters, metadata,
   # title segmentation applies in every mode.
   mode <- ranking_mode(service)
   cc <- params$custom_clustering
-  # N-gram setting axis (docs/ngram-generation-simplify.md §7.2/§7.3), resolved
+  # N-gram setting axis, resolved
   # per service like the ranking mode. Mode 0 always runs Setting 0 (it keeps
   # the legacy corpus/selection structure), and the setting is a no-op on the
   # custom-clustering path (no title n-grams there). Setting 0 leaves every
