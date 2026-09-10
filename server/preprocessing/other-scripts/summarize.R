@@ -119,12 +119,12 @@ create_cluster_labels <- function(clusters, metadata,
   # call site on its current behaviour.
   nset <- ngram_setting(service)
   if (identical(mode, "0") && !identical(nset, "0")) {
-    # Mode 0 keeps its legacy corpus/selection structure at every setting; a
-    # non-0 setting switches ONLY the title n-gram generation step of the
-    # legacy corpus builder to the shared generator (synthesis stays part
-    # of the mode-0 subject stream — no bypass on this path).
+    # Mode 0 keeps its legacy corpus/selection STRUCTURE at every setting (inline
+    # title n-grams, no DF filter, zero-sum fill); the setting switches the
+    # generation step to the shared generator and, like every other mode, drops
+    # the heuristic subjects (see the bypass below).
     vslog$info(paste("create_cluster_labels: mode 0 with ngram setting", nset,
-                     "- setting switches generation only, structure stays legacy"))
+                     "- generation switched, legacy corpus/selection structure kept"))
   }
   if (!(is.null(cc)) && (cc %in% names(metadata)) && !identical(nset, "0")) {
     vslog$info(paste("create_cluster_labels: ngram setting", nset,
@@ -134,6 +134,14 @@ create_cluster_labels <- function(clusters, metadata,
   nset_abstracts <- !identical(nset, "0") && include_abstracts(service)
   vslog$debug(paste("create_cluster_labels: ngram setting", nset,
                     "abstracts", nset_abstracts))
+  # Bypass of the heuristic subjects (replace_keywords_if_empty), for EVERY
+  # mode at settings >= 1: papers that had no real keywords contribute through
+  # the generator columns only, never through the synthesis. Must run before any
+  # corpus builder or rank column reads `subject`. The custom-clustering path
+  # labels from its own field, so the bypass does not apply there.
+  if (!identical(nset, "0") && (is.null(cc) || !(cc %in% names(metadata)))) {
+    metadata <- bypass_heuristic_subjects(metadata)
+  }
   # Curated area-label exclusion list, applied post-tf-idf / pre-ranking at every
   # candidate-producing tier (initial, fallback, title/abstract) so listed generic
   # terms can never become a label. Applied in EVERY mode, Mode 0 included: a
@@ -183,11 +191,8 @@ create_cluster_labels <- function(clusters, metadata,
     #  - the two heuristic columns (min1/min2), pre-binned by MAP-WIDE document
     #    frequency (add_heuristic_keyword_fields). subject_cleaned (metadata$subject)
     #    is left untouched.
-    # G1 bypass (settings >= 1, non-custom path only): must run BEFORE the
-    # heuristic columns and keywords_rank_cleaned are derived from `subject`
-    if (!identical(nset, "0") && (is.null(cc) || !(cc %in% names(metadata)))) {
-      metadata <- bypass_heuristic_subjects(metadata)
-    }
+    # (the heuristic-keyword bypass for settings >= 1 already ran above, before
+    # any corpus builder or rank column reads `subject`)
     metadata <- add_heuristic_keyword_fields(metadata, stops,
                                              ngram_lengths = nset_lengths,
                                              include_abstracts = nset_abstracts)
