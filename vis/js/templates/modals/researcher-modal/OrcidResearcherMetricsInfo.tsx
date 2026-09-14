@@ -47,7 +47,7 @@ const ResearcherMetricsInfo = ({
         <p>
           Number of total citations: <span>{params.total_citations ? params.total_citations : localization.notAvailable}</span>
         </p>
-        <NotesOnMetrics notes={'Metrics are based on citation data provided by Crossref and information supplied by the researcher on their ORCID profile. Results may be impacted by accuracy and completeness of this data.'} />
+        <NotesOnMetrics notes={'The normalised h-index is calculated by dividing the h-index by academic age. Metrics are based on citation data provided by Crossref and information supplied by the researcher on their ORCID profile. Results may be impacted by accuracy and completeness of this data.'} />
 
         <h3>ALTMETRICS</h3>
         <p>
