@@ -304,7 +304,7 @@ def select_anchor_index(candidates, by=None, ascending=None):
 # cannot split such a pair and must not be loosened (it would tear apart 
 # trusted retitled-preprint merges), so the guard uses a dedicated criterion: 
 # exactly one of the two titles carries a correction-family prefix and the 
-# remainders are the same title. Curated, English-language prefix list; 
+# remainders are the same title. Curated, mainly English-language prefix list; 
 # longer alternatives must precede their own prefixes.
 correction_prefix_pattern = re.compile(
     r"(publisher correction|author correction|correction to"
