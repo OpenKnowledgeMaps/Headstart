@@ -9,6 +9,9 @@
 #     classifications (split the subject, filter the keyword vector, rejoin).
 
 
+# JEL code/caption lookup for drop_jel (generated file, see its header).
+if (!exists("JEL_CAPTIONS")) source("jel_codes.R")
+
 remove_keywords_with_text_in_square_brackets <- function(x) {
   # This function removes whole keywords that contain text in square brackets.
   # Example: 'Climate [MeSH]' | 'Some keywords [Chemical]'.
@@ -580,6 +583,67 @@ drop_lcc_subclass_bare <- function(keywords) {
 #   keywords[!grepl("\\([Gg]eneral\\)\\s*$", keywords)]
 # }
 
+# JEL classification (econstor and other economics repositories). LoC-style
+# approach: exact match against the official code list (jel_codes.R; 2- and
+# 3-char codes with captions), an explicit false-positive list of keywords
+# that must never be removed, and two removal forms:
+#   * an isolated code keyword ("C72"),
+#   * a code+caption keyword ("C71 Cooperative Games", "C71 - Cooperative
+#     Games"), where the text matches the official caption or its leading
+#     ";"-fragment (captions contain semicolons; a provider serializing
+#     code+caption into a ";"-separated field keeps the leading fragment
+#     attached to the code), tolerating a trailing " / translation" tail.
+# A bare letter+digit pattern without the list would collide with genuine
+# keywords (vitamin B12, C4 plants, L2); caption-only keywords are never
+# removed (an author keyword may equal a caption).
+normalize_jel_caption <- function(x) {
+  x <- tolower(x)
+  x <- gsub("[^a-z0-9]+", " ", x)
+  trimws(x)
+}
+
+JEL_CAPTIONS_NORM <- vapply(JEL_CAPTIONS, normalize_jel_caption,
+                            character(1))
+JEL_CAPTION_FIRST_NORM <- vapply(
+  JEL_CAPTIONS,
+  function(cap) normalize_jel_caption(strsplit(cap, ";", fixed = TRUE)[[1]][1]),
+  character(1))
+
+drop_jel <- function(keywords) {
+  if (!length(keywords)) return(keywords)
+  kw <- trimws(keywords)
+  is_isolated <- kw %in% JEL_CODES & !(kw %in% JEL_FALSE_POSITIVES)
+  is_code_caption <- vapply(kw, function(k) {
+    m <- regmatches(k, regexec("^([A-Z][0-9]{1,2})[ :-]+(.+)$", k))[[1]]
+    if (length(m) < 3) return(FALSE)
+    code <- m[2]
+    if (!(code %in% JEL_CODES)) return(FALSE)
+    text <- sub(" */.*$", "", m[3])   # drop a translation tail after " / "
+    text <- normalize_jel_caption(text)
+    nzchar(text) && (identical(text, JEL_CAPTIONS_NORM[[code]]) ||
+                     identical(text, JEL_CAPTION_FIRST_NORM[[code]]))
+  }, logical(1), USE.NAMES = FALSE)
+  keywords[!(is_isolated | is_code_caption)]
+}
+
+# AMS Mathematics Subject Classification (MSC 2020,
+# https://mathscinet.ams.org/msc/): "ddWdd" (81V25), the wildcard forms
+# "ddWxx" (81Vxx) and "dd-WW" (81-XX). The "dd-dd" form (81-06) is already
+# removed by the LCC range rule in the legacy chain and is pinned by a chain
+# test, not re-implemented here.
+drop_ams_msc <- function(keywords) {
+  keywords[!grepl("^[0-9]{2}([A-Z]([0-9]{2}|xx)|-[A-Z]{2})$", keywords)]
+}
+
+# Physics and Astronomy Classification Scheme (legacy PACS): "dd.dd.Ww"
+# (05.30.Rt) including the hyphen/plus suffix forms "dd.dd.-w" (03.67.-a) and
+# "dd.dd.+w" (42.50.+x). Whole-keyword removal here, before the residual
+# digit rules of the legacy chain mangle the code into a partial token
+# ("05.30.Rt" -> "30.Rt"). The successor scheme PhySH is out of scope.
+drop_pacs <- function(keywords) {
+  keywords[!grepl("^[0-9]{2}\\.[0-9]{2}\\.[+-]?[A-Za-z]{1,2}$", keywords)]
+}
+
 clean_classification_keywords <- function(x) {
   one <- function(subject) {
     if (is.na(subject) || subject == "") return(subject)
@@ -602,6 +666,9 @@ clean_classification_keywords <- function(x) {
     keywords <- drop_lcc_toplevel(keywords)
     keywords <- drop_lcc_subclass(keywords)
     keywords <- drop_lcc_subclass_bare(keywords)
+    keywords <- drop_jel(keywords)
+    keywords <- drop_ams_msc(keywords)
+    keywords <- drop_pacs(keywords)
     # keywords <- drop_domain_general(keywords)  # handled by legacy chain for now
     join_keywords(keywords)
   }
@@ -834,8 +901,25 @@ clean_subject_string <- function(subject_all, vis_type = NULL, doaj = FALSE) {
     subject_cleaned = gsub(arxiv_classification_string, "", subject_cleaned, perl=TRUE) # remove arXiv classification short code, but keep classifcation name
   } else {
     subject_cleaned = gsub("FOS [A-Za-z ]+", "", subject_cleaned) # remove FOS classifications (Fields of Science and Technology)
-    arxiv_classification_string = "(([A-Za-z ]+ )?cond-mat\\.[a-z\\-]+)|([\\w ]+ )?(cs|econ|eess|math|astro-ph|nlin|q-bio|q-fin|stat)\\.[A-Z]{2}|cond-mat\\.[a-z\\-]+|hep-(ex|lat|ph|th)|math-ph|nucl-(ex|th)|physics\\.[a-z\\-]+|([\\w ]+ )(astro-ph|gr-qc|quant-ph|cond-mat)"
-    subject_cleaned = gsub(arxiv_classification_string, "", subject_cleaned, perl=TRUE) # remove arXiv classification, except on streamgraphs
+    # arXiv "name + short code" keywords ("Adaptation and Self-Organizing
+    # Systems nlin.AO") are removed whole. The optional name prefix must
+    # include hyphen and comma (class names like "Self-Organizing Systems",
+    # "Data Analysis, Statistics and Probability") — a prefix class without
+    # them starts matching after the hyphen and leaves a partial keyword
+    # ("Adaptation and Self-"). The prefix is anchored to the keyword start
+    # (begin of string or after ";") so it can never eat across a keyword
+    # boundary, and applies to EVERY class family: physics.*, hep-*, nucl-*
+    # and math-ph codes previously had no name branch, so "Medical Physics",
+    # "High Energy Physics - Theory" etc. survived as plausible-looking
+    # keywords while cs.*/stat.* names were removed.
+    arxiv_classification_string = paste0(
+      "(^|;)[\\w ,-]*(",
+      "(cs|econ|eess|math|astro-ph|nlin|q-bio|q-fin|stat)\\.[A-Z]{2}",
+      "|cond-mat\\.[a-z-]+|physics\\.[a-z-]+",
+      "|hep-(ex|lat|ph|th)|math-ph|nucl-(ex|th)",
+      "|astro-ph|gr-qc|quant-ph|cond-mat",
+      ")")
+    subject_cleaned = gsub(arxiv_classification_string, "\\1", subject_cleaned, perl=TRUE) # remove arXiv classification, except on streamgraphs
   }
   subject_cleaned = gsub("(?<![A-Za-z0-9])([a-z]+:[A-Za-z0-9\\/\\.][A-Za-z0-9 \\/\\.]*);?", "", subject_cleaned, perl=TRUE) # clean up annotations with prefix e.g. theme:annotation
   subject_cleaned = gsub("(wikidata)?\\.org/entity/[qQ]([\\d]+)?", "", subject_cleaned) # remove wikidata classification
@@ -884,6 +968,14 @@ clean_subject_string <- function(subject_all, vis_type = NULL, doaj = FALSE) {
   # annotation strip preserves keeps its colon verbatim; colon-bearing MeSH
   # forms are consumed by strip_mesh_qualifier, and colon-prefixed
   # classifications by their per-scheme rules.
+  # TeX-style double quotes at keyword boundaries: a leading `` and a
+  # trailing '' are markup, not content ("``Valuation languages''"). Only the
+  # double forms at the very edge of a keyword are stripped — single
+  # apostrophes stay untouched (genitives: "teachers'"), as do quotes inside
+  # a keyword. Other typographic quote characters are deliberately out of
+  # scope (assessed as rare in a metadata sweep).
+  subject_cleaned = gsub("(^|; ?)`{2,}", "\\1", subject_cleaned)
+  subject_cleaned = gsub("'{2,}(?= ?;|$)", "", subject_cleaned, perl = TRUE)
   subject_cleaned = gsub("^; $", "", subject_cleaned) # clean up keyword separation
   subject_cleaned = gsub(";+", ";", subject_cleaned) # clean up keyword separation
   subject_cleaned = gsub(",+", ",", subject_cleaned) # clean up keyword separation
