@@ -301,3 +301,45 @@ test_that("a purely numeric keyword is dropped, digits inside words are kept", {
   expect_equal(clean_classification_keywords("COVID-19"), "COVID-19")
   expect_equal(clean_classification_keywords("H5N1"), "H5N1")
 })
+
+# --- JEL / AMS MSC / PACS classification filters ------------------------------
+
+test_that("drop_jel removes isolated official codes but keeps everything else", {
+  expect_equal(drop_jel(c("C72", "C73", "D03", "D64", "Game theory")), "Game theory")
+  # false-positive list: valid code shapes that are known real-world terms
+  expect_equal(drop_jel(c("R1", "B12", "D3", "C4", "L2")),
+               c("R1", "B12", "D3", "C4", "L2"))
+  # not on the official list (S/T/U/V/W/X are not JEL letters)
+  expect_equal(drop_jel(c("X99", "vitamin B12 deficiency")),
+               c("X99", "vitamin B12 deficiency"))
+})
+
+test_that("drop_jel removes code+caption keywords in all separator forms", {
+  expect_equal(drop_jel("C71 Cooperative Games"), character(0))
+  expect_equal(drop_jel("C71 - Cooperative Games"), character(0))
+  expect_equal(drop_jel("C71: Cooperative Games"), character(0))
+  # leading caption fragment (captions contain semicolons; the first fragment
+  # stays attached to the code when a provider serializes code+caption)
+  expect_equal(drop_jel("J26 Retirement"), character(0))
+  # trailing translation tail after " / "
+  expect_equal(drop_jel("C71 Cooperative Games / kooperative Spiele"), character(0))
+  # code followed by text that is NOT the official caption stays
+  expect_equal(drop_jel("C71 Something Else"), "C71 Something Else")
+})
+
+test_that("drop_jel never removes caption-only keywords", {
+  expect_equal(drop_jel(c("Social Security", "Cooperative Games")),
+               c("Social Security", "Cooperative Games"))
+})
+
+test_that("drop_ams_msc removes MSC code forms, leaves dd-dd to the LCC rule", {
+  expect_equal(drop_ams_msc(c("81V25", "86A05", "81Vxx", "81-XX", "Majorana fermion")),
+               "Majorana fermion")
+  expect_equal(drop_ams_msc("81-06"), "81-06")
+})
+
+test_that("drop_pacs removes PACS code forms including hyphen/plus suffixes", {
+  expect_equal(drop_pacs(c("05.30.Rt", "03.65.Ud", "89.75.Da",
+                           "03.67.-a", "42.50.+x", "keyword")), "keyword")
+  expect_equal(drop_pacs(c("1.2.3", "10.1234")), c("1.2.3", "10.1234"))
+})

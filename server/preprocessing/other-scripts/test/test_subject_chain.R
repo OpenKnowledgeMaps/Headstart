@@ -203,3 +203,63 @@ test_that("the doaj flag is applied per record", {
                doaj = c(TRUE, FALSE))
   expect_equal(out, c("hydrology", "Environmental sciences; hydrology"))
 })
+
+# --- JEL / AMS MSC / PACS classifications (corpus cases) ----------------------
+
+test_that("chain removes JEL code clusters, keeps topic keywords", {
+  expect_equal(chain("ddc:330; C72; C73; D03; D64; evolutionary game theory; cooperation"),
+               "evolutionary game theory; cooperation")
+})
+
+test_that("chain keeps JEL false positives", {
+  expect_equal(chain("R1; Supplementary Data; artificial intelligence"),
+               "R1; Supplementary Data; artificial intelligence")
+})
+
+test_that("chain removes AMS MSC codes; dd-dd is covered by the LCC range rule", {
+  expect_equal(chain("Geometric phase; 81V25; Majorana fermion"),
+               "Geometric phase; Majorana fermion")
+  expect_equal(chain("81-06; 81Vxx; Mathematical physics"), "Mathematical physics")
+})
+
+test_that("chain removes PACS codes whole instead of mangling them", {
+  expect_equal(chain("Quantum physics; Statistical mechanics; 05.30.Rt"),
+               "Quantum physics; Statistical mechanics")
+  expect_equal(chain("quantum entanglement; 03.65.Ud; 03.67.-a"),
+               "quantum entanglement")
+})
+
+test_that("classification drops stay off the timeline branch", {
+  expect_equal(chain("81V25; Geometric phase", vis_type = "timeline"),
+               "81V25; Geometric phase")
+})
+
+# --- arXiv name+code keywords (corpus cases) ----------------------------------
+
+test_that("hyphenated class names are removed whole, not left as partials", {
+  expect_equal(chain("Adaptation and Self-Organizing Systems nlin.AO"), "")
+  expect_equal(chain("Human-Computer Interaction cs.HC; real keyword"), "real keyword")
+})
+
+test_that("physics/hep/nucl/math-ph class names are removed like cs/stat names", {
+  expect_equal(chain("Applied Physics physics.app-ph"), "")
+  expect_equal(chain("Medical Physics physics.med-ph"), "")
+  expect_equal(chain("High Energy Physics - Experiment hep-ex"), "")
+  expect_equal(chain("Mathematical Physics math-ph"), "")
+  expect_equal(chain("Nuclear Experiment nucl-ex"), "")
+  expect_equal(chain("Data Analysis, Statistics and Probability physics.data-an"), "")
+})
+
+test_that("the arXiv name prefix never eats across a keyword boundary", {
+  expect_equal(chain("machine learning; Computation and Language cs.CL; corpora"),
+               "machine learning; corpora")
+})
+
+# --- TeX-style quote pairs at keyword boundaries ------------------------------
+
+test_that("leading `` and trailing '' are stripped, single apostrophes stay", {
+  expect_equal(chain("``Commodification''; ``Valuation languages''"),
+               "Commodification; Valuation languages")
+  expect_equal(chain("climate policy; teachers'"), "climate policy; teachers'")
+  expect_equal(chain("women's rights"), "women's rights")
+})
