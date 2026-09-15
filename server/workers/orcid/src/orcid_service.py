@@ -5,7 +5,7 @@ import pandas as pd
 import os
 import uuid
 from common.decorators import error_logging_aspect
-from common.enrichment import oa_state_priority
+from common.enrichment import oa_state_priority, select_rows_per_doi
 import numpy as np
 from pyorcid import Orcid, errors as pyorcid_errors
 from pyorcid.orcid_authentication import OrcidAuthentication
@@ -395,7 +395,13 @@ class OrcidService:
         # Save the normalized original doi before explode so we can rank direct fetches
         # above rows whose doi was reassigned from additional_dois after explosion.
         base_metadata['_fetch_doi'] = base_metadata['doi_merge'].apply(remove_doi_prefix)
+        base_metadata['_orig_row'] = np.arange(len(base_metadata))
         base_metadata = base_metadata.explode('additional_dois', ignore_index=True)
+        # Position of each exploded DOI within its source record's dcdoi list:
+        # front positions are identity assertions, deep positions are closer to
+        # bibliography entries. Consumed by select_rows_per_doi.
+        base_metadata['_dcdoi_pos'] = base_metadata.groupby('_orig_row').cumcount()
+        base_metadata.drop(columns='_orig_row', inplace=True)
         # replace doi_merge with additional_dois if additional_dois is not empty, otherwise keep doi_merge
         base_metadata.loc[base_metadata['additional_dois'].notna() & (base_metadata['additional_dois'] != ''), 'doi_merge'] = base_metadata.loc[base_metadata['additional_dois'].notna() & (base_metadata['additional_dois'] != ''), 'additional_dois']
         base_metadata.loc[:, 'doi_merge'] = base_metadata['doi_merge'].apply(remove_doi_prefix)
@@ -444,15 +450,10 @@ class OrcidService:
                 .set_index('_doi_key')['oa_state']
             )
             base_metadata['oa_state'] = doi_key.map(best_oa_state)
-        # Sort by: direct fetch before exploded-from-additional_dois rows,
-        # This ensures the record actually fetched for a DOI wins over a record
-        # that acquired that DOI via additional_dois expansion.
-        base_metadata = base_metadata.assign(
-            _direct_sort=(~base_metadata['_is_direct_fetch']).astype(int),
-            _doi_key=base_metadata['doi_merge'].str.lower(),
-        ).sort_values(by=['_direct_sort']).drop_duplicates(
-            subset='_doi_key', keep='first'
-        ).drop(columns=['_direct_sort', '_is_direct_fetch', '_doi_key'])
+        # Deterministic per-DOI selection: direct fetch first, then
+        # front-of-dcdoi assertions, then abstract-bearing rows, stable
+        # throughout — see common.enrichment.select_rows_per_doi.
+        base_metadata = select_rows_per_doi(base_metadata)
         # if self.logger.isEnabledFor(logging.DEBUG):
         #     self._log_dataframe(base_metadata.sort_values(by='title'), params, 'base_metadata_after_doi_dedup')
 

@@ -443,3 +443,42 @@ def get_anchor_field_value(df, anchor_idx, column_name):
     if pd.isna(value) or value == '':
         return None
     return value
+
+
+def select_rows_per_doi(base_metadata):
+    """Deterministic per-DOI row selection for the ORCID enrichment merge.
+
+    Input rows are BASE records exploded over their dcdoi values, one row per
+    (record, DOI) pair, carrying `_is_direct_fetch` (the record was fetched
+    for this DOI) and `_dcdoi_pos` (the DOI's position in the record's dcdoi
+    list). Exactly one row survives per lowercased `doi_merge`, ranked by:
+
+      1. direct fetches before rows that acquired the DOI through dcdoi
+         explosion;
+      2. front-of-list dcdoi assertions before deep-list mentions — a DOI
+         deep in a long dcdoi list is a bibliography entry, not an identity
+         claim (buckets: position 0, positions 1-4, position >= 5);
+      3. longer abstracts first — an enrichment candidate without an
+         abstract must not shadow one that has it;
+      4. id, as the final tie-break.
+
+    The sort is stable and every key is row content, so the winner is a pure
+    function of the records, never of frame size or layout. The previous
+    implementation sorted by the direct flag alone with pandas' default
+    unstable quicksort: tied rows won by an arbitrary, layout-dependent
+    permutation, and unrelated upstream changes flipped which record
+    enriched a work.
+    """
+    pos = pd.to_numeric(base_metadata['_dcdoi_pos'], errors='coerce').fillna(0)
+    ranked = base_metadata.assign(
+        _direct_sort=(~base_metadata['_is_direct_fetch']).astype(int),
+        _assert_rank=(pos > 0).astype(int) + (pos >= 5).astype(int),
+        _abs_len_neg=-base_metadata['paper_abstract'].fillna('').astype(str).str.len(),
+        _doi_key=base_metadata['doi_merge'].str.lower(),
+    )
+    ranked = ranked.sort_values(
+        by=['_direct_sort', '_assert_rank', '_abs_len_neg', 'id'],
+        kind='stable',
+    ).drop_duplicates(subset='_doi_key', keep='first')
+    return ranked.drop(columns=['_direct_sort', '_assert_rank', '_abs_len_neg',
+                                '_doi_key', '_is_direct_fetch', '_dcdoi_pos'])
