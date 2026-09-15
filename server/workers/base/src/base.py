@@ -26,6 +26,7 @@ from common.deduplication import (
     prioritize_doi_and_provider,
     get_provider_priority,
     doi_title_filter,
+    split_correction_groups,
 )
 from common.enrichment import enrich_anchor_using_duplicates
 import re
@@ -392,6 +393,16 @@ def filter_duplicates(df, service, params):
     if false_positive_indexes:
         df.drop(index=false_positive_indexes, inplace=True)
         logger.info(f"[dedup:doi_title_filter] dropped {len(false_positive_indexes)} false-positive records")
+
+    # Second-pass guard over ALL assembled groups (textual + dcdoi-key):
+    # article/correction-notice conflations asserted by source dcdoi fields
+    # are severed into two works, so prioritization and enrichment below
+    # operate on the split groups and the correction cannot inherit the
+    # article's abstract or DOIs. See split_correction_groups.
+    df, n_correction_splits = split_correction_groups(df)
+    if n_correction_splits:
+        logger.info(f"[dedup:correction_split] severed {n_correction_splits} article/correction groups")
+        duplicate_groups = find_duplicate_groups(df)
 
     # if logger.isEnabledFor(logging.DEBUG):
     #     for idx_group in duplicate_groups:
