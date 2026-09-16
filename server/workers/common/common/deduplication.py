@@ -294,6 +294,94 @@ def select_anchor_index(candidates, by=None, ascending=None):
     return candidates.index[winner_pos]
 
 
+# --- correction-notice split guard ------------------------------------------
+# A correction/erratum notice and its article are related-but-distinct works,
+# but source metadata routinely conflates them: repositories list the
+# correction's DOI in the article's dcdoi field (or vice versa), and the two
+# titles differ only by a short prefix, so both the DOI-key pass and the
+# textual pass merge them into one duplicate group, and the correction
+# anchor then inherits the article's abstract and DOIs. doi_title_filter
+# cannot split such a pair and must not be loosened (it would tear apart 
+# trusted retitled-preprint merges), so the guard uses a dedicated criterion: 
+# exactly one of the two titles carries a correction-family prefix and the 
+# remainders are the same title. Curated, mainly English-language prefix list; 
+# longer alternatives must precede their own prefixes.
+correction_prefix_pattern = re.compile(
+    r"(publisher correction|author correction|correction to"
+    r"|corrigendum to|corrigendum|erratum zu|erratum to|erratum"
+    r"|retraction note to|retraction note|retraction of"
+    r"|expression of concern on|expression of concern"
+    r"|addendum to|addendum)\s+"
+)
+# Note: bare "retracted" is deliberately NOT in the family: "[Retracted] X" is
+# the retracted article ITSELF with a marker added to its title (same work,
+# must keep merging with plain-titled copies), unlike a retraction notice
+# ("Retraction of: X"), which is a separate work.
+
+
+def _correction_prefix_match(title):
+    return correction_prefix_pattern.match(_normalize_title(title))
+
+
+def is_correction_variant(title_a, title_b):
+    """True if one title is a correction-family variant of the other.
+
+    Exactly one of the two titles must carry a correction-family prefix, and
+    stripping it must leave the other title (case- and punctuation-folded).
+    Two plain or two prefixed titles never match, so corrections of one
+    article still deduplicate normally, and a title that merely happens to
+    start with a correction word does not match its own copies.
+    """
+    ma = _correction_prefix_match(title_a)
+    mb = _correction_prefix_match(title_b)
+    if bool(ma) == bool(mb):
+        return False
+    if ma:
+        stem, plain = _normalize_title(title_a)[ma.end():], _normalize_title(title_b)
+    else:
+        stem, plain = _normalize_title(title_b)[mb.end():], _normalize_title(title_a)
+    return bool(stem) and stem == plain
+
+
+def split_correction_groups(df):
+    """Second-pass guard over the assembled duplicate groups.
+
+    A group containing both an article and its correction-notice variant (see
+    is_correction_variant) is severed into its article side and its correction
+    side. Both works are real, so the group is split, not dropped: cross-side
+    ids are removed from the `duplicates` marking and each side keeps (or
+    gets) its own anchor. Callers must recompute duplicate_groups afterwards
+    so prioritization and enrichment operate on the split groups.
+
+    Returns (df, number_of_groups_split).
+    """
+    n_split = 0
+    for _, idx in find_duplicate_groups(df).items():
+        idx = df.index.intersection(idx)
+        if len(idx) < 2:
+            continue
+        prefixed = [i for i in idx if _correction_prefix_match(df.at[i, "title"])]
+        plain = [i for i in idx if not _correction_prefix_match(df.at[i, "title"])]
+        if not prefixed or not plain:
+            continue
+        if not any(is_correction_variant(df.at[p, "title"], df.at[q, "title"])
+                   for p in prefixed for q in plain):
+            continue
+        for side, other in ((prefixed, plain), (plain, prefixed)):
+            other_ids = set(df.loc[other, "id"])
+            for i in side:
+                members = [m for m in str(df.at[i, "duplicates"]).split(",")
+                           if m and m not in other_ids]
+                df.at[i, "duplicates"] = ",".join(members)
+            side_frame = df.loc[side]
+            if not side_frame.is_anchor.any():
+                anchor_idx = select_anchor_index(side_frame)
+                df.at[anchor_idx, "is_anchor"] = True
+                df.at[anchor_idx, "is_duplicate"] = False
+        n_split += 1
+    return df, n_split
+
+
 def remove_textual_duplicates_from_different_sources(df, duplicate_groups):
     for _, idx in duplicate_groups.items():
         if len(idx) > 1:
