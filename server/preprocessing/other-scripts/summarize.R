@@ -274,7 +274,14 @@ create_cluster_labels <- function(clusters, metadata,
   if (!(is.null(cc)) && (cc %in% names(metadata$annotations))) {
     clusters$cluster_labels = metadata$annotations[[cc]]
   }
+  pre_casing_labels <- clusters$cluster_labels
   clusters$cluster_labels <- fix_cluster_labels(clusters$cluster_labels, type_counts)
+  # Which spelling each label word was restored to, and out of which variants.
+  # Computed only under DEBUG: it walks the vocabulary once per distinct token.
+  if (debug_enabled()) {
+    dump_data(casing_decisions(pre_casing_labels, type_counts),
+              "summarize_06c_casing_decisions")
+  }
   dump_data(data.frame(cluster = clusters$groups, label = clusters$cluster_labels),
             "summarize_06_cluster_labels")
   # Per-cluster label provenance: which path built the label, plus the label as selected
