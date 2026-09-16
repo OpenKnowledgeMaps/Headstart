@@ -57,6 +57,38 @@ get_type_counts <- function(corpus) {
   return(type_counts)
 }
 
+
+# TRUE for a string written entirely in capitals: it has letters and none of
+# them is lowercase. Digits and punctuation do not count either way.
+is_allcaps <- function(s) {
+  s <- as.character(s)
+  !is.na(s) & nzchar(s) & grepl("[[:alpha:]]", s) & !grepl("[[:lower:]]", s)
+}
+
+
+# Lowercase the title span of every document whose title is ALL-CAPS, in the
+# unlowered corpus that feeds the casing vocabulary (get_type_counts). A
+# shouting title otherwise attests a capitalised spelling of every one of its
+# words, and the casing restoration would carry that into the area labels.
+# Documents are matched to metadata rows by id. The title is put through the
+# same hygiene the document content received, so it matches verbatim; a title
+# that does not match (altered by the noise sanitiser) is left as it is.
+# Returns the modified corpus; the caller's other corpus copies are untouched.
+lower_allcaps_titles <- function(corpus, metadata) {
+  caps <- which(is_allcaps(metadata$title))
+  if (!length(caps)) return(corpus)
+  ids <- vapply(seq_along(corpus), function(k) as.character(meta(corpus[[k]], "id")), "")
+  for (i in caps) {
+    j <- match(as.character(metadata$id[i]), ids)
+    if (is.na(j)) next
+    title <- sanitize_corpus_noise(decode_html_entities(metadata$title[i]))
+    doc <- corpus[[j]]
+    content(doc) <- sub(title, tolower(title), content(doc), fixed = TRUE)
+    corpus[[j]] <- doc
+  }
+  corpus
+}
+
 concatenate_features <- function(...) {
   # expects a list of feature matrices which can be extended horizontally
   return(cbind(...))

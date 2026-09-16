@@ -151,3 +151,78 @@ test_that("a word with a single non-lowercase form takes it", {
   expect_equal(match_keyword_case("frauenberger", vocab_n(Frauenberger = 135)),
                "Frauenberger")
 })
+
+# --- lower_allcaps_titles: ALL-CAPS titles do not attest capitalised spellings --
+#
+# The casing vocabulary is built from the unlowered corpus, where each document
+# starts with the paper's title. A title written entirely in capitals is
+# lowered there first, so a single shouting title cannot set the casing of its
+# words for the whole map. Only the casing vocabulary sees this; the clustering
+# and tf-idf corpora are lowercased anyway.
+
+if (!exists("getLogger")) suppressMessages(library(logging))
+if (!exists("lower_allcaps_titles")) source("features.R")
+
+allcaps_fixture <- function() {
+  metadata <- data.frame(
+    id = c("p1", "p2", "p3"),
+    title = c("DIMENSIONALITY REDUCTION FOR FEW-SHOT LEARNING",
+              "Dimensionality reduction in practice",
+              "COVID-19 outcomes in adults"),
+    paper_abstract = c("We study gradient space methods.",
+                       "Gradient methods are common.",
+                       "COVID-19 is compared with COVID-19 variants."),
+    stringsAsFactors = FALSE)
+  text <- data.frame(id = metadata$id,
+                     content = paste(metadata$title, metadata$paper_abstract),
+                     stringsAsFactors = FALSE)
+  list(metadata = metadata, corpus = create_corpus(metadata, text, c("the")))
+}
+
+test_that("is_allcaps flags capital-only titles and nothing else", {
+  expect_equal(is_allcaps(c("DIMENSIONALITY REDUCTION", "COVID-19 IN 2020", "Covid-19 outcomes",
+                            "COVID-19 outcomes", "2020", "", NA)),
+               c(TRUE, TRUE, FALSE, FALSE, FALSE, FALSE, FALSE))
+})
+
+test_that("an ALL-CAPS title no longer attests capitalised variants", {
+  fx <- allcaps_fixture()
+  before <- get_type_counts(fx$corpus$unlowered)
+  after  <- get_type_counts(lower_allcaps_titles(fx$corpus$unlowered, fx$metadata))
+  expect_equal(unname(before["DIMENSIONALITY"]), 1)
+  expect_true(is.na(after["DIMENSIONALITY"]))
+  expect_equal(unname(after["dimensionality"]), 1)
+  expect_true(is.na(after["FEW-SHOT"]))
+  expect_equal(unname(after["few-shot"]), 1)
+})
+
+test_that("mixed-case titles and abstracts are left as they are", {
+  fx <- allcaps_fixture()
+  after <- get_type_counts(lower_allcaps_titles(fx$corpus$unlowered, fx$metadata))
+  # p2's Titlecase title word and p3's acronym are untouched...
+  expect_equal(unname(after["Dimensionality"]), 1)
+  expect_equal(unname(after["COVID-19"]), 3)
+  # ...and so is the abstract of the ALL-CAPS paper.
+  expect_equal(unname(after["gradient"]), 1)
+  expect_equal(unname(after["Gradient"]), 1)
+})
+
+test_that("the lowered title feeds the pick: the shouting title no longer wins", {
+  fx <- allcaps_fixture()
+  tc <- get_type_counts(lower_allcaps_titles(fx$corpus$unlowered, fx$metadata))
+  expect_equal(match_keyword_case("dimensionality", tc), "dimensionality")
+})
+
+test_that("the input corpus and the metadata are not modified", {
+  fx <- allcaps_fixture()
+  invisible(lower_allcaps_titles(fx$corpus$unlowered, fx$metadata))
+  expect_true(startsWith(content(fx$corpus$unlowered[[1]]), "DIMENSIONALITY"))
+  expect_equal(fx$metadata$title[1], "DIMENSIONALITY REDUCTION FOR FEW-SHOT LEARNING")
+})
+
+test_that("a map without ALL-CAPS titles is returned unchanged", {
+  fx <- allcaps_fixture()
+  md <- fx$metadata; md$title[1] <- "Dimensionality reduction for few-shot learning"
+  expect_identical(get_type_counts(lower_allcaps_titles(fx$corpus$unlowered, md)),
+                   get_type_counts(fx$corpus$unlowered))
+})
