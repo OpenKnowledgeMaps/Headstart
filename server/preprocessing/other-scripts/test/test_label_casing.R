@@ -152,7 +152,7 @@ test_that("a word with a single non-lowercase form takes it", {
                "Frauenberger")
 })
 
-# --- lower_allcaps_titles: ALL-CAPS titles do not attest capitalised spellings --
+# --- lower_allcaps_spans: ALL-CAPS titles and keywords do not attest capitalised spellings --
 #
 # The casing vocabulary is built from the unlowered corpus, where each document
 # starts with the paper's title. A title written entirely in capitals is
@@ -161,7 +161,7 @@ test_that("a word with a single non-lowercase form takes it", {
 # and tf-idf corpora are lowercased anyway.
 
 if (!exists("getLogger")) suppressMessages(library(logging))
-if (!exists("lower_allcaps_titles")) source("features.R")
+if (!exists("lower_allcaps_spans")) source("features.R")
 
 allcaps_fixture <- function() {
   metadata <- data.frame(
@@ -172,9 +172,12 @@ allcaps_fixture <- function() {
     paper_abstract = c("We study gradient space methods.",
                        "Gradient methods are common.",
                        "COVID-19 is compared with COVID-19 variants."),
+    subject_orig = c("REDES COMPLEXAS; HIV; EORTC 1709",
+                     "Prosocial behavior; machine learning",
+                     "SNOMED CT"),
     stringsAsFactors = FALSE)
   text <- data.frame(id = metadata$id,
-                     content = paste(metadata$title, metadata$paper_abstract),
+                     content = paste(metadata$title, metadata$paper_abstract, metadata$subject_orig),
                      stringsAsFactors = FALSE)
   list(metadata = metadata, corpus = create_corpus(metadata, text, c("the")))
 }
@@ -188,7 +191,7 @@ test_that("is_allcaps flags capital-only titles and nothing else", {
 test_that("an ALL-CAPS title no longer attests capitalised variants", {
   fx <- allcaps_fixture()
   before <- get_type_counts(fx$corpus$unlowered)
-  after  <- get_type_counts(lower_allcaps_titles(fx$corpus$unlowered, fx$metadata))
+  after  <- get_type_counts(lower_allcaps_spans(fx$corpus$unlowered, fx$metadata))
   expect_equal(unname(before["DIMENSIONALITY"]), 1)
   expect_true(is.na(after["DIMENSIONALITY"]))
   expect_equal(unname(after["dimensionality"]), 1)
@@ -198,7 +201,7 @@ test_that("an ALL-CAPS title no longer attests capitalised variants", {
 
 test_that("mixed-case titles and abstracts are left as they are", {
   fx <- allcaps_fixture()
-  after <- get_type_counts(lower_allcaps_titles(fx$corpus$unlowered, fx$metadata))
+  after <- get_type_counts(lower_allcaps_spans(fx$corpus$unlowered, fx$metadata))
   # p2's Titlecase title word and p3's acronym are untouched...
   expect_equal(unname(after["Dimensionality"]), 1)
   expect_equal(unname(after["COVID-19"]), 3)
@@ -209,20 +212,64 @@ test_that("mixed-case titles and abstracts are left as they are", {
 
 test_that("the lowered title feeds the pick: the shouting title no longer wins", {
   fx <- allcaps_fixture()
-  tc <- get_type_counts(lower_allcaps_titles(fx$corpus$unlowered, fx$metadata))
+  tc <- get_type_counts(lower_allcaps_spans(fx$corpus$unlowered, fx$metadata))
   expect_equal(match_keyword_case("dimensionality", tc), "dimensionality")
 })
 
 test_that("the input corpus and the metadata are not modified", {
   fx <- allcaps_fixture()
-  invisible(lower_allcaps_titles(fx$corpus$unlowered, fx$metadata))
+  invisible(lower_allcaps_spans(fx$corpus$unlowered, fx$metadata))
   expect_true(startsWith(content(fx$corpus$unlowered[[1]]), "DIMENSIONALITY"))
   expect_equal(fx$metadata$title[1], "DIMENSIONALITY REDUCTION FOR FEW-SHOT LEARNING")
 })
 
-test_that("a map without ALL-CAPS titles is returned unchanged", {
+test_that("a map without ALL-CAPS titles or keywords is returned unchanged", {
   fx <- allcaps_fixture()
-  md <- fx$metadata; md$title[1] <- "Dimensionality reduction for few-shot learning"
-  expect_identical(get_type_counts(lower_allcaps_titles(fx$corpus$unlowered, md)),
+  md <- fx$metadata
+  md$title[1] <- "Dimensionality reduction for few-shot learning"
+  md$subject_orig <- c("Redes complexas; HIV; EORTC 1709", "Prosocial behavior; machine learning", "Snomed CT")
+  expect_identical(get_type_counts(lower_allcaps_spans(fx$corpus$unlowered, md)),
                    get_type_counts(fx$corpus$unlowered))
+})
+
+test_that("is_allcaps_phrase needs capitals and at least two alphabetic words", {
+  expect_equal(is_allcaps_phrase(c("REDES COMPLEXAS", "SNOMED CT", "HIV", "EORTC 1709",
+                                   "Machine LEARNING", "COVID-19", "", NA)),
+               c(TRUE, TRUE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE))
+})
+
+test_that("a multi-word ALL-CAPS keyword no longer attests capitalised variants", {
+  fx <- allcaps_fixture()
+  before <- get_type_counts(fx$corpus$unlowered)
+  after  <- get_type_counts(lower_allcaps_spans(fx$corpus$unlowered, fx$metadata))
+  expect_equal(unname(before["REDES"]), 1)
+  expect_true(is.na(after["REDES"]))
+  expect_equal(unname(after["redes"]), 1)
+  expect_equal(unname(after["complexas"]), 1)
+  # a phrase of two acronyms is still a phrase and is lowered too
+  expect_true(is.na(after["SNOMED"]))
+  expect_equal(unname(after["snomed"]), 1)
+})
+
+test_that("single-word acronym keywords and acronym-plus-number keywords are kept", {
+  fx <- allcaps_fixture()
+  after <- get_type_counts(lower_allcaps_spans(fx$corpus$unlowered, fx$metadata))
+  expect_equal(unname(after["HIV"]), 1)
+  expect_equal(unname(after["EORTC"]), 1)
+  expect_true(is.na(after["eortc"]))
+})
+
+test_that("mixed-case keywords are left as they are", {
+  fx <- allcaps_fixture()
+  after <- get_type_counts(lower_allcaps_spans(fx$corpus$unlowered, fx$metadata))
+  expect_equal(unname(after["Prosocial"]), 1)
+  expect_equal(unname(after["machine"]), 1)
+})
+
+test_that("keywords come from subject when subject_orig is absent", {
+  fx <- allcaps_fixture()
+  md <- fx$metadata; md$subject <- md$subject_orig; md$subject_orig <- NULL
+  after <- get_type_counts(lower_allcaps_spans(fx$corpus$unlowered, md))
+  expect_true(is.na(after["REDES"]))
+  expect_equal(unname(after["redes"]), 1)
 })

@@ -52,9 +52,10 @@ vis_layout <- function(text, metadata, service,
 
     vlog$debug("get cluster summaries")
     metadata = replace_keywords_if_empty(metadata, stops)
-    # Casing vocabulary for the area labels. ALL-CAPS titles are lowered first
-    # so they do not attest capitalised spellings (see lower_allcaps_titles).
-    type_counts <- get_type_counts(lower_allcaps_titles(corpus$unlowered, metadata))
+    # Casing vocabulary for the area labels. ALL-CAPS titles and multi-word
+    # keywords are lowered first so they do not attest capitalised spellings
+    # (see lower_allcaps_spans).
+    type_counts <- get_type_counts(lower_allcaps_spans(corpus$unlowered, metadata))
     named_clusters <- create_cluster_labels(clusters, metadata,
                                             type_counts,
                                             weightingspec="ntn", top_n=3,
