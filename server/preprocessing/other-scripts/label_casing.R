@@ -39,13 +39,40 @@ CAPS_ATTESTATION_FLOOR <- 2
 
 # Return the canonical (original-corpus) casing of a token: looks it up in
 # type_counts case-insensitively and picks among the variants by weight of
-# evidence. The lookup is exact on everything but case — in particular
-# hyphen-preserving: the vocabulary regularly holds a de-hyphenated twin of a
-# hyphenated token (source spelling variants), and a hyphen-insensitive lookup
-# would respell the token instead of re-casing it. Falls back to the input token
-# if there is no match. Edge hyphens are separator debris, not part of the
-# token, and are trimmed before the lookup (a token that is only hyphens is
+# evidence (see lookup_case). Edge hyphens are separator debris, not part of
+# the token, and are trimmed before the lookup (a token that is only hyphens is
 # returned unchanged).
+#
+# The lookup is on the whole token first, so a hyphenated token is restored as
+# one unit ("SARS-CoV-2"). The vocabulary regularly holds a de-hyphenated twin
+# of a hyphenated token (source spelling variants), and a hyphen-insensitive
+# lookup would respell the token instead of re-casing it, so the whole-token
+# lookup is exact on everything but case. A token the vocabulary does not hold
+# as a whole is restored piecewise: the vocabulary tokeniser splits on every
+# character but letters, digits and hyphens, so a token such as "hiv/aids",
+# "(sdgs)", "alzheimer's" or "rj.45" never matches whole; each of its
+# alphanumeric runs is looked up on its own and the separators are kept
+# ("HIV/AIDS", "(SDGs)", "Alzheimer's", "RJ.45"). A run without a match keeps
+# its spelling, so an unknown token comes back unchanged.
+match_keyword_case <- function(x, type_counts) {
+  stripped <- gsub("^-+|-+$", "", x)
+  if (nzchar(stripped)) x <- stripped
+  hit <- lookup_case(x, type_counts)
+  if (!is.null(hit)) return(hit)
+  if (!grepl("[^[:alnum:]]", x)) return(x)
+  m <- gregexpr("[[:alnum:]]+", x)
+  runs <- regmatches(x, m)[[1]]
+  if (!length(runs)) return(x)
+  regmatches(x, m) <- list(vapply(runs, function(r) {
+    h <- lookup_case(r, type_counts)
+    if (is.null(h)) r else h
+  }, character(1), USE.NAMES = FALSE))
+  x
+}
+
+
+# The casing pick for one vocabulary key: NULL when the vocabulary holds no
+# variant of `x` (compared case-insensitively), else the chosen variant.
 #
 # The pick is a guarded majority: the most frequent variant wins, except that
 # a non-lowercase variant must reach twice the lowercase count to displace
@@ -53,11 +80,9 @@ CAPS_ATTESTATION_FLOOR <- 2
 # common noun), and an ALL-CAPS variant below CAPS_ATTESTATION_FLOOR yields.
 # Ties break on count, then on the string in C order, so the result does not
 # depend on the collation locale of the machine running the pipeline.
-match_keyword_case <- function(x, type_counts) {
-  stripped <- gsub("^-+|-+$", "", x)
-  if (nzchar(stripped)) x <- stripped
+lookup_case <- function(x, type_counts) {
   idx <- which(tolower(names(type_counts)) == tolower(x))
-  if (!length(idx)) return(x)
+  if (!length(idx)) return(NULL)
 
   variants <- names(type_counts)[idx]
   counts   <- as.numeric(type_counts[idx])
@@ -82,6 +107,18 @@ match_keyword_case <- function(x, type_counts) {
 }
 
 
+# The vocabulary keys match_keyword_case consults for a label token: the token
+# itself when the vocabulary holds it, else its alphanumeric runs (the
+# piecewise fallback). Edge hyphens are trimmed as in match_keyword_case.
+casing_units <- function(x, type_counts) {
+  stripped <- gsub("^-+|-+$", "", x)
+  if (nzchar(stripped)) x <- stripped
+  if (tolower(x) %in% tolower(names(type_counts)) || !grepl("[^[:alnum:]]", x)) return(x)
+  runs <- regmatches(x, gregexpr("[[:alnum:]]+", x))[[1]]
+  if (length(runs)) runs else x
+}
+
+
 # Classify a spelling: lowercase / allcaps / titlecase / mixed. Used to report
 # the shape of each casing decision (see casing_decisions).
 casing_shape <- function(s) {
@@ -96,6 +133,8 @@ casing_shape <- function(s) {
 
 # Per-token record of the casing decisions behind a set of labels: the variants
 # the vocabulary offered with their counts, the variant picked, and its shape.
+# A token restored piecewise (see match_keyword_case) is recorded per
+# alphanumeric run.
 # Counting rows by `shape` gives a map's promotion rate away from lowercase,
 # which is the quantity under qualitative review for the guarded-majority pick.
 # Takes the labels BEFORE casing restoration. Debug-only (see dump_data).
@@ -107,11 +146,11 @@ casing_decisions <- function(clusterlabels, type_counts) {
   tokens <- unlist(strsplit(unlist(clusterlabels), "[ ,]+"))
   tokens <- unique(tokens[nzchar(tokens)])
   if (!length(tokens)) return(empty)
+  tokens <- unique(unlist(lapply(tokens, casing_units, type_counts = type_counts)))
 
   vocab_lower <- tolower(names(type_counts))
   rows <- lapply(tokens, function(t) {
-    stripped <- gsub("^-+|-+$", "", t)
-    key <- tolower(if (nzchar(stripped)) stripped else t)
+    key <- tolower(t)
     idx <- which(vocab_lower == key)
     chosen <- match_keyword_case(t, type_counts)
     v <- names(type_counts)[idx]

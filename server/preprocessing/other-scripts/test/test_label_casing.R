@@ -16,6 +16,8 @@ vocab <- function(...) {
   v <- c(...)
   setNames(rep(1, length(v)), v)
 }
+# A vocabulary with explicit counts: vocab_n(HIV = 806, hiv = 3).
+vocab_n <- function(...) c(...)
 
 # --- match_keyword_case: casing only, never respelling ------------------------
 
@@ -61,6 +63,53 @@ test_that("a label term keeps interior hyphens through casing restoration", {
                "Rainfall-runoff models")
 })
 
+# --- match_keyword_case: piecewise fallback for tokens with punctuation -------
+
+test_that("a token the vocabulary does not hold whole is restored per alphanumeric run", {
+  v <- vocab("HIV", "AIDS", "SDGs", "Alzheimer", "T2", "MRI", "CD4", "CD8")
+  expect_equal(match_keyword_case("hiv/aids", v), "HIV/AIDS")
+  expect_equal(match_keyword_case("(sdgs)", v), "(SDGs)")
+  expect_equal(match_keyword_case("alzheimer's", v), "Alzheimer's")
+  expect_equal(match_keyword_case("t2/mri", v), "T2/MRI")
+  expect_equal(match_keyword_case("cd4/cd8", v), "CD4/CD8")
+})
+
+test_that("a whole-token match takes precedence over the piecewise fallback", {
+  expect_equal(match_keyword_case("sars-cov-2", vocab("SARS-CoV-2", "SARS", "COV")),
+               "SARS-CoV-2")
+  expect_equal(match_keyword_case("e-learning", vocab("e-learning", "E", "Learning")),
+               "e-learning")
+})
+
+test_that("runs without a match keep their spelling, and the guard applies per run", {
+  expect_equal(match_keyword_case("hiv/hcv", vocab("HIV")), "HIV/hcv")
+  expect_equal(match_keyword_case("rj456", vocab("RJ")), "rj456")
+  expect_equal(match_keyword_case("hiv/aids", vocab_n(HIV = 5, AIDS = 1, aids = 1)),
+               "HIV/aids")
+  expect_equal(match_keyword_case("pa*erns", vocab("other")), "pa*erns")
+})
+
+test_that("the piecewise fallback covers the punctuation review vector", {
+  # Spellings the corpus offers; AIDS is attested often enough to displace the
+  # lowercase twin under the guarded pick (the review vector lists all three).
+  v <- vocab_n(HIV = 3, aiDs = 1, aids = 1, AIDS = 3, Prevention = 1, LSTM = 1,
+               MC = 1, Conserving = 1, RJ = 1, RJ45 = 1, J = 1, PET = 1)
+  starting <- c("hiv", "hiv/aids", "aids", "normal keyword", "hivemind", "maidsen",
+                "hiv infections", "hiv prevention", "lstm-based rainfall-runoff",
+                "mc-lstm mass-conserving", "rj45", "rj.45", "rj456", "j-pet detector")
+  expected <- c("HIV", "HIV/AIDS", "AIDS", "Normal keyword", "Hivemind", "Maidsen",
+                "HIV infections", "HIV Prevention", "LSTM-based rainfall-runoff",
+                "MC-LSTM mass-Conserving", "RJ45", "RJ.45", "Rj456", "J-PET detector")
+  expect_equal(vapply(starting, fix_keyword_casing, "", type_counts = v,
+                      USE.NAMES = FALSE), expected)
+})
+
+test_that("casing_decisions records a piecewise token per run", {
+  d <- casing_decisions(list("hiv/aids ratio"), vocab("HIV", "AIDS", "ratio"))
+  expect_equal(d$token, c("hiv", "aids", "ratio"))
+  expect_equal(d$chosen, c("HIV", "AIDS", "ratio"))
+})
+
 # --- strip_major_topic_markers ------------------------------------------------
 
 test_that("a leading major-topic '*' is stripped per keyword", {
@@ -91,9 +140,6 @@ test_that("plain subjects are untouched", {
 # evidence said (HIV 806 lost to hiv 3). The rule below uses the counts, with
 # two guards, and breaks ties on count-then-string so the result does not depend
 # on the collation locale.
-
-# A vocabulary with explicit counts: vocab_n(HIV = 806, hiv = 3).
-vocab_n <- function(...) c(...)
 
 test_that("the most frequent variant wins over a rare lowercase twin", {
   expect_equal(match_keyword_case("hiv", vocab_n(HIV = 806, hiv = 3)), "HIV")
