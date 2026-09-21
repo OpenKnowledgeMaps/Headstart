@@ -314,6 +314,8 @@ def process_additional_dois_element(doi_value, additional_dois_value, accumulato
         accumulator: Dict collecting {lowercased_bare_doi: bare_doi}.
     """
     def add_raw(raw):
+        """Splits one field value (list / ';'-joined str / NaN / empty) into
+        DOIs and adds each, stripped of its doi.org prefix, to the accumulator."""
         if isinstance(raw, list):
             parts = []
             for element in raw:

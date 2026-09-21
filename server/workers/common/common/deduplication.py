@@ -27,6 +27,7 @@ _DOI_TITLE_CUTOFF = 1/15.83*100  # ≈ 6.32 on rapidfuzz's 0–100 scale
 
 
 def _normalize_title(title: str) -> str:
+    """Lowercased title with punctuation removed; whitespace is kept as is."""
     return _pattern_punctuation.sub("", title.lower())
 
 
@@ -45,17 +46,33 @@ def doi_title_filter(anchor_title: str, candidate_title: str) -> bool:
 
 
 def find_version_in_doi(doi):
+    """Version number carried by a DOI's trailing suffix, or None.
+
+    Recognizes the suffix forms listed at pattern_doi (".v3", "v3", ".3",
+    "v3-104960"); the file-level part after the hyphen is ignored.
+    """
     m = pattern_doi.findall(doi)
     if m:
         return int(m[0])
     else:
         return None
-    
+
 def get_unversioned_doi(doi):
+    """Bare DOI with the version suffix stripped, used to group versions.
+
+    Expects the URL form ("https://doi.org/10.x/suffix"): the scheme and host
+    are dropped by position, and at most three path segments are kept. A value
+    that is not in URL form yields an empty or truncated string.
+    """
     doi = "/".join(doi.split("/")[3:6])
     return pattern_doi.sub("", doi)
 
 def get_publisher_doi(doi):
+    """Registrant code of a doi.org URL (the digits after "10."), else "".
+
+    A non-empty result marks a record whose `doi` field holds a real DOI
+    and not an arbitrary link.
+    """
     pdoi = re.findall(r"org/10\.(\d+)", doi)
     if len(pdoi) > 0:
         return pdoi[0]
@@ -63,6 +80,17 @@ def get_publisher_doi(doi):
         return ""
 
 def find_duplicate_groups(df):
+    """Duplicate groups derived from the `duplicates` marking.
+
+    For each record, the group is the index of all rows whose comma-joined
+    `duplicates` string contains the record's id. Callers include each
+    record's own id in its marking, so a record is a member of its own group
+    and an unduplicated record forms a group of one. Identical groups are
+    collapsed to a single entry.
+
+    Returns a Series of pandas Index objects (row labels of df), ordered by
+    the sorted member ids of each group.
+    """
     duplicate_groups = df.id.map(lambda x: df[df.duplicates.str.contains(x)].index)
     tmp = pd.DataFrame(duplicate_groups).astype(str).drop_duplicates().index
     duplicate_groups = duplicate_groups[tmp]
@@ -164,6 +192,11 @@ def extend_duplicates_with_doi_groups(df):
 
 
 def mark_duplicate_dois(df, column="doi"):
+    """Sets doi_duplicate=True on records sharing a non-empty value in `column`.
+
+    `column` selects the DOI representation to compare: the link-derived
+    `doi`, or the normalized `doi_key`.
+    """
     for doi, index in df.groupby(column).groups.items():
         if doi:
             if len(index) > 1:
@@ -171,6 +204,7 @@ def mark_duplicate_dois(df, column="doi"):
     return df
 
 def mark_duplicate_links(df):
+    """Sets link_duplicate=True on records sharing a non-empty `link`."""
     for link, index in df.groupby("link").groups.items():
         if link:
             if len(index) > 1:
@@ -179,6 +213,14 @@ def mark_duplicate_links(df):
 
 
 def identify_relations(df):
+    """Links records that reference the same unversioned DOI.
+
+    For each unversioned DOI, the records whose `identifier` field contains it
+    (plain substring match) are related: versions of one dataset, or records
+    citing it as an identifier. When more than one record matches, each gets
+    the full list of related ids in `relations` and has_relations=True.
+    Relations are informational and do not affect the duplicate marking.
+    """
     for udoi in df.unversioned_doi.unique():
         if udoi:
             tmp = df[df.identifier.str.contains(udoi, regex=False)]
@@ -190,14 +232,29 @@ def identify_relations(df):
     return df
 
 def remove_false_positives_doi(df):
+    """Clears is_duplicate on records whose DOI is unique in the result set.
+
+    A record flagged as a textual duplicate that carries a DOI no other
+    record shares is treated as a distinct work with a similar title.
+    Requires mark_duplicate_dois to have run.
+    """
     df.loc[df[(df.doi != "") & (df.is_duplicate) & (~df.doi_duplicate)].index, "is_duplicate"] = False
     return df
 
 def remove_false_positives_link(df):
+    """Clears is_duplicate on records whose link is unique in the result set.
+
+    Same reasoning as remove_false_positives_doi, applied to `link`.
+    Requires mark_duplicate_links to have run.
+    """
     df.loc[df[(df.link != "") & (df.is_duplicate) & (~df.link_duplicate)].index, "is_duplicate"] = False
     return df
 
 def add_false_negatives(df):
+    """Sets is_duplicate on records sharing a link or DOI with another record.
+
+    Covers duplicates the textual pass missed because their titles differ.
+    """
     df.loc[df[(~df.is_duplicate) & (df.link_duplicate)].index, "is_duplicate"] = True
     df.loc[df[(~df.is_duplicate) & (df.doi_duplicate)].index, "is_duplicate"] = True
     return df
@@ -320,6 +377,8 @@ correction_prefix_pattern = re.compile(
 
 
 def _correction_prefix_match(title):
+    """Match object for a correction-family prefix at the start of the
+    normalized title, or None. Offsets refer to the normalized title."""
     return correction_prefix_pattern.match(_normalize_title(title))
 
 
@@ -383,6 +442,15 @@ def split_correction_groups(df):
 
 
 def remove_textual_duplicates_from_different_sources(df, duplicate_groups):
+    """First anchor pass over the duplicate groups.
+
+    Every member of a multi-member group is marked is_duplicate and loses its
+    anchor flag; then anchors are set: if any member has a publisher DOI,
+    all members with one become anchors (so a group can hold several anchors
+    at this stage; later passes narrow them down). Otherwise a single anchor
+    is chosen, preferring a non-empty `doi`, then the latest year, then the
+    content tie-break of select_anchor_index.
+    """
     for _, idx in duplicate_groups.items():
         if len(idx) > 1:
             tmp = df.loc[idx]
@@ -397,6 +465,14 @@ def remove_textual_duplicates_from_different_sources(df, duplicate_groups):
     return df
 
 def mark_latest_doi(df, duplicate_groups):
+    """Anchors the latest version among records sharing an unversioned DOI.
+
+    Within each group, the records of one unversioned DOI lose their anchor
+    flags, the one with the highest doi_version becomes the anchor, and all of
+    them get a `versions` entry ({"versions": [ids], "latest": [id]}). Group
+    members without an unversioned DOI are left untouched. Indices missing
+    from df (callers pass subsets of the grouped frame) are ignored.
+    """
     for _, idx in duplicate_groups.items():
         idx = df.index.intersection(idx)
         tmp = df.loc[idx]
@@ -412,6 +488,12 @@ def mark_latest_doi(df, duplicate_groups):
     return df
     
 def prioritize_OA_and_latest(df, duplicate_groups):
+    """Re-anchors each multi-member group on its most recent open access record.
+
+    Existing anchors in the group are cleared. The anchor is the latest-year
+    member with oa_state "1", or the latest-year member overall when the
+    group has no open access record; ties go to select_anchor_index.
+    """
     for _, idx in duplicate_groups.items():
         idx = df.index.intersection(idx)
         if len(idx) > 1:
@@ -424,11 +506,35 @@ def prioritize_OA_and_latest(df, duplicate_groups):
     return df
 
 def mark_duplicates(metadata):
+    """Adds the is_duplicate column from deduplicate_titles' candidate list.
+
+    deduplicate_titles currently returns an empty candidate list, so every
+    record is marked False; the pairwise result is in `identified_duplicates`.
+    Modifies metadata in place.
+    """
     dt = deduplicate_titles(metadata, 0)
     duplicate_candidates = dt["duplicate_candidates"]
     metadata["is_duplicate"] = metadata["id"].map(lambda x: x in duplicate_candidates)
 
 def deduplicate_titles(metadata, list_size=-1):
+    """Textual duplicate detection by pairwise title edit distance.
+
+    Two records are duplicates when the Levenshtein distance of their
+    lowercased titles, divided by the longer title's length, is below 0.03.
+    Titles without a space or shorter than 15 characters get the authors
+    appended before comparison, so short generic titles ("Editorial") only
+    match when the authors match too. The looser 1/15.83 threshold is computed
+    but not used for the result. `list_size` has no effect on the result.
+
+    Returns a dict with
+      - "identified_duplicates": DataFrame(id, duplicates), where `duplicates`
+        is the comma-joined ids of the record's duplicates (own id excluded,
+        "" when there are none);
+      - "duplicate_candidates": always an empty list.
+
+    Side effect: oa_state "2" is replaced with 0 in the caller's frame; the
+    title changes apply to a sorted copy only.
+    """
     duplicate_candidates = []
 
     metadata['oa_state'] = metadata['oa_state'].replace("2", 0)
@@ -478,6 +584,11 @@ def deduplicate_titles(metadata, list_size=-1):
     return {"duplicate_candidates": duplicate_candidates, "identified_duplicates": identified_duplicates_df}
 
 def compute_lv_matrix(titles, n):
+    """Symmetric n x n matrix of Levenshtein distances between the titles.
+
+    Computes each pair once (upper triangle), so cost grows quadratically
+    with the number of titles. The diagonal is zero.
+    """
     distance_matrix = np.zeros((n, n))
     for i in range(n):
         for j in range(i + 1, n):  # Only compute upper triangle
@@ -487,6 +598,14 @@ def compute_lv_matrix(titles, n):
     return distance_matrix
 
 def prioritize_doi_and_provider(df, duplicate_groups):
+    """Re-anchors each multi-member group on its best DOI-bearing record.
+
+    Candidates are the members with both a `doi` and a `collection`. The one
+    with the highest provider priority (see get_provider_priority) becomes the
+    group's only anchor; ties go to select_anchor_index. A group without
+    candidates keeps the anchor set by the earlier passes, so this overrides
+    prioritize_OA_and_latest only where a DOI-bearing record exists.
+    """
     for _, idx in duplicate_groups.items():
         idx = df.index.intersection(idx)
 
@@ -523,6 +642,12 @@ def prioritize_doi_and_provider(df, duplicate_groups):
     return df
 
 def get_provider_priority(provider):
+    """Anchor priority of a BASE collection code; higher wins.
+
+    2 for Crossref (collection contains "cr"), 1 for DataCite ("ftdatacite"),
+    0 for any other provider, -1 when the collection is missing. Matching is
+    by case-insensitive substring, with DataCite checked first.
+    """
     is_provider_not_available = pd.isna(provider) or provider == ""
     if is_provider_not_available:
         return -1
