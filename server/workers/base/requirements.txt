@@ -7,6 +7,7 @@ importlib-metadata==4.8.3
 keyring==10.6.0
 keyrings.alt==3.0
 Levenshtein==0.21.1
+rapidfuzz==3.9.7
 numpy==1.19.5
 packaging==21.3
 pandas==1.1.5

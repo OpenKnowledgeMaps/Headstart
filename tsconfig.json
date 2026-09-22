@@ -1,10 +1,12 @@
 {
   "compilerOptions": {
-    "target": "es5",
+    "target": "ES2015",
     "allowJs": true,
     "lib": ["es2022", "DOM"],
     "jsx": "react-jsx",
-    "moduleResolution": "node",
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "skipLibCheck": true,
     "outDir": "./dist",
     "strict": true,
     "esModuleInterop": true,

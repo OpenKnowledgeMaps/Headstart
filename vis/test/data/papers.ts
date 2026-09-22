@@ -55,6 +55,8 @@ const MOCK_COMMON_PAPER_DATA: CommonPaperDataForAllIntegrations = {
   zoomedY: 1,
   zoomedWidth: 1,
   zoomedHeight: 1,
+
+  pdf_link_candidates_from_duplicates: null,
 };
 
 export const MOCK_BASE_PAPER_DATA: BasePaper = {

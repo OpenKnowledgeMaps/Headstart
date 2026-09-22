@@ -15,13 +15,11 @@ library(tibble)
 library(tidyr)
 source('utils.R')
 source("vis_layout.R")
-if (Sys.getenv("LOGLEVEL") == "DEBUG") {
-  DEBUG <- FALSE
-} else {
-  DEBUG <- TRUE
-}
+# DEBUG mirrors LOGLEVEL=DEBUG (the previous logic was inverted, so DEBUG had no
+# effect). It gates both verbose logging and the debug data dumps (see dump_data).
+DEBUG <- debug_enabled()
 
-if (DEBUG==TRUE){
+if (DEBUG) {
   setup_logging('DEBUG')
 } else {
   setup_logging('INFO')
@@ -52,6 +50,15 @@ if (!is.null(params$vis_type)) {
 input_data <- data$input_data
 text <- fromJSON(input_data$text)
 metadata <- fromJSON(input_data$metadata)
+
+# Debug: what dataprocessing received before any processing. `text` (id + content)
+# is the clustering input; `metadata` feeds labelling. Lets a map be traced from the
+# data client's output through clustering and labelling.
+dump_data(text, "runvis_01_text_received")
+dump_data(metadata[, intersect(c("id", "title", "paper_abstract", "subject",
+                                 "subject_orig", "oa_state", "content_provider",
+                                 "link", "doi"), names(metadata)), drop = FALSE],
+          "runvis_02_metadata_received")
 
 MAX_CLUSTERS = params$MAX_CLUSTERS
 
