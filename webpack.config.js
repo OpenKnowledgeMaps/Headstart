@@ -148,6 +148,7 @@ module.exports = (env) => {
                 additionalData: `$skin: "${process.env.SKIN || ""}";`,
                 sassOptions: {
                   includePaths: ["node_modules"],
+                  silenceDeprecations: ["import"],
                 },
               },
             },

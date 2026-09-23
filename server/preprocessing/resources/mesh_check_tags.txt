@@ -1,0 +1,27 @@
+Humans
+Animals
+Male
+Female
+Adolescent
+Adult
+Aged
+Aged, 80 and over
+Child
+Child, Preschool
+Infant
+Infant, Newborn
+Middle Aged
+Young Adult
+Pregnancy
+Rats
+Mice
+Cattle
+Dogs
+Cats
+Rabbits
+Swine
+Sheep
+Horses
+Guinea Pigs
+Chick Embryo
+Haplorhini

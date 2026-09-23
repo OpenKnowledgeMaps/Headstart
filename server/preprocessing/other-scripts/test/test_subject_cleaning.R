@@ -1,0 +1,345 @@
+# Unit & integration tests for the subject/keyword cleaning.
+#
+# Run via the test runner (from the other-scripts directory):
+#   Rscript test/run_tests.R
+# or, with testthat installed:
+#   Rscript -e 'library(testthat); test_file("test/test_subject_cleaning.R")'
+#
+# subject_cleaning.R is pure base R (no packages, no logging), so it can be
+# sourced and tested in isolation. When testthat is not installed, the runner
+# provides a dependency-free shim with the same test_that/expect_* API.
+
+if (!requireNamespace("testthat", quietly = TRUE)) {
+  if (!exists("test_that")) source("test/testthat_shim.R")
+} else {
+  library(testthat)
+}
+
+if (!exists("deinvert_marked_mesh_keywords")) {
+  source("subject_cleaning.R")
+}
+
+# The non-"timeline" MeSH slice of vis_layout's subject cleaning, in order.
+mesh_clean <- function(s) {
+  s <- deinvert_marked_mesh_keywords(s)        # de-invert (marker preserved)
+  s <- remove_mesh_round_bracket_marker(s)     # strip "(mesh)"
+  s <- remove_text_in_square_brackets_from_keywords(s)  # existing: strip "[MeSH]"
+  trimws(s)
+}
+
+# --- marker removal ---------------------------------------------
+test_that("the (mesh) marker is removed", {
+  expect_equal(mesh_clean("Cooperative Behavior (mesh)"), "Cooperative Behavior")
+})
+
+test_that("the [MeSH] marker is removed (existing behaviour preserved)", {
+  expect_equal(mesh_clean("Humans [MeSH]"), "Humans")
+})
+
+test_that("non-MeSH parentheses are NOT removed", {
+  expect_equal(mesh_clean("Statistics (Mathematics)"), "Statistics (Mathematics)")
+})
+
+# --- de-inversion -----------------------------------------------
+test_that("a single-comma MeSH term is de-inverted", {
+  expect_equal(mesh_clean("Adaptation, Physiological [MeSH]"), "Physiological Adaptation")
+})
+
+test_that("a multi-comma MeSH term is reversed (A, B, C, D -> D C B A)", {
+  expect_equal(mesh_clean("Leukemia, Lymphocytic, Chronic, B-Cell [MeSH]"),
+               "B-Cell Chronic Lymphocytic Leukemia")
+})
+
+test_that("an untagged comma keyword is NOT de-inverted", {
+  expect_equal(mesh_clean("Journalismus, Verlagswesen"), "Journalismus, Verlagswesen")
+})
+
+# --- Integration: I1, exclusion set honoured ---------------------------------
+test_that("the reversal-exclusion set is honoured (kept in original order)", {
+  old <- MESH_DEINVERSION_EXCLUSIONS
+  on.exit(MESH_DEINVERSION_EXCLUSIONS <<- old)
+  MESH_DEINVERSION_EXCLUSIONS <<- c("Aged, 80 and over")
+  expect_equal(mesh_clean("Aged, 80 and over [MeSH]"), "Aged, 80 and over")
+})
+
+# --- MeSH qualifier (subheading) stripping -----------------------------------
+test_that("MeSH subheading qualifiers are stripped, descriptor kept", {
+  expect_equal(strip_mesh_qualifier("Autistic Disorder/genetics"), "Autistic Disorder")
+  expect_equal(strip_mesh_qualifier("Pain / complications"), "Pain")
+  expect_equal(strip_mesh_qualifier("Bed Occupancy/statistics & numerical data"), "Bed Occupancy")
+  expect_equal(strip_mesh_qualifier("COVID-19/*epidemiology"), "COVID-19")
+  expect_equal(strip_mesh_qualifier("Hospitals/*supply & distribution"), "Hospitals")
+  expect_equal(strip_mesh_qualifier("COVID-19/diagnosis"), "COVID-19")
+})
+test_that("the major-topic '*' marker is trimmed from the descriptor", {
+  expect_equal(strip_mesh_qualifier("Raynaud Disease* / genetics"), "Raynaud Disease")
+})
+test_that("a '*' marker after the qualifier is handled", {
+  expect_equal(strip_mesh_qualifier("Lung Neoplasms/genetics*"), "Lung Neoplasms")
+  expect_equal(strip_mesh_qualifier("Anti-Inflammatory Agents/pharmacology*"), "Anti-Inflammatory Agents")
+  expect_equal(strip_mesh_qualifier("Antimutagenic Agents / pharmacology*"), "Antimutagenic Agents")
+})
+test_that("the ' - ' (spaced dash) separator is handled", {
+  expect_equal(strip_mesh_qualifier("Acyltransferases - genetics"), "Acyltransferases")
+  expect_equal(strip_mesh_qualifier("ATP-Binding Cassette Transporters - antagonists & inhibitors"),
+               "ATP-Binding Cassette Transporters")
+  expect_equal(
+    strip_mesh_qualifier("Adrenergic Alpha-Agonists - Antagonists & Inhibitors - Pharmacology"),
+    "Adrenergic Alpha-Agonists")
+})
+test_that("hyphenated descriptors are not split by the dash separator", {
+  for (kw in c("B-cell lymphoma", "Self-Esteem", "Brain - Computer Interface")) {
+    expect_equal(strip_mesh_qualifier(kw), kw)
+  }
+})
+test_that("space-delimited MeSH blobs are split at qualifier boundaries", {
+  expect_equal(
+    strip_mesh_qualifier("CXC/*antagonists & inhibitors/metabolism Chemotaxis/drug effects Docosahexaenoic Acids/pharmacology"),
+    "CXC; Chemotaxis; Docosahexaenoic Acids")
+  expect_equal(
+    strip_mesh_qualifier("Cell Cycle Proteins/*genetics Cell Line"),
+    "Cell Cycle Proteins; Cell Line")
+})
+test_that("a '*' major-topic marker also starts a new heading", {
+  expect_equal(strip_mesh_qualifier("Cytokines/immunology *Immunity"), "Cytokines; Immunity")
+})
+test_that("a standalone major-topic '*Descriptor' loses the marker without a qualifier", {
+  expect_equal(strip_mesh_qualifier("*Artificial Intelligence"), "Artificial Intelligence")
+  expect_equal(strip_mesh_qualifier("*Decision Support Systems"), "Decision Support Systems")
+})
+test_that("a trailing major-topic marker is stripped without a qualifier", {
+  expect_equal(strip_mesh_qualifier("Genome-Wide Association Study*"),
+               "Genome-Wide Association Study")
+})
+test_that("a plain descriptor without marker or qualifier is untouched", {
+  expect_equal(strip_mesh_qualifier("Artificial Intelligence"), "Artificial Intelligence")
+})
+test_that("an asterisk that is not a heading marker is untouched", {
+  expect_equal(strip_mesh_qualifier("2*2 factorial design"), "2*2 factorial design")
+})
+test_that("a stacked qualifier run splits even before a lower-case heading", {
+  # next heading is a gene name "rab3A" (lower-case); the 2+ qualifier stack is
+  # still unambiguous, so it splits and strips.
+  expect_equal(
+    strip_mesh_qualifier("Spermatozoa/cytology/drug effects/metabolism rab3A GTP-Binding Protein"),
+    "Spermatozoa; rab3A GTP-Binding Protein")
+})
+test_that("headings concatenated with no delimiter are split at the qualifier", {
+  expect_equal(
+    strip_mesh_qualifier("Adrenergic beta-Antagonists/therapeutic useCalcium Channel Blockers/therapeutic use"),
+    "Adrenergic beta-Antagonists; Calcium Channel Blockers")
+})
+test_that("qualifier-less headings stay merged (under-split, never wrongly broken)", {
+  # "Animals" has no qualifier to anchor on, so it stays glued to its neighbour.
+  expect_equal(strip_mesh_qualifier("Animals Cell Cycle Proteins/*genetics Cell Line"),
+               "Animals Cell Cycle Proteins; Cell Line")
+})
+test_that("a qualifier word inside a compound is not a blob boundary", {
+  # "/economics" is followed by lowercase "policy", so it is a compound, not a pair.
+  expect_equal(strip_mesh_qualifier("Health/economics policy"), "Health/economics policy")
+})
+test_that("a qualifier behind a MeSH marker is stripped (marker removed first, as in base.R)", {
+  # base.R strips [MeSH]/(mesh) before strip_mesh_qualifier, so the qualifier is no
+  # longer hidden behind the marker at the heading boundary.
+  s <- "Acetophenones/therapeutic use [MeSH]"
+  s <- remove_text_in_square_brackets_from_keywords(s)
+  expect_equal(strip_mesh_qualifier(s), "Acetophenones")
+})
+test_that("the colon form is stripped in isolation (live pipeline removes it earlier)", {
+  expect_equal(strip_mesh_qualifier("Hypothermia: chemically induced"), "Hypothermia")
+})
+test_that("stacked qualifiers are all stripped", {
+  expect_equal(strip_mesh_qualifier("Hypothermia/diagnosis/therapy"), "Hypothermia")
+})
+test_that("qualifier stripping acts per keyword within a subject", {
+  expect_equal(
+    strip_mesh_qualifier("Autistic Disorder/genetics; cooperation; Pain / complications"),
+    "Autistic Disorder; cooperation; Pain")
+})
+test_that("non-qualifier tails are left untouched", {
+  for (kw in c("Mixed/Augmented Reality", "Speech/Language", "Input/Output",
+               "Cost/benefit analysis")) {
+    expect_equal(strip_mesh_qualifier(kw), kw)
+  }
+})
+
+# --- classification cleanup --------------------------------------------------
+# Each classification keyword is dropped whole; the neighbour "cooperation" is
+# kept, verifying removal with no side-effect on adjacent keywords.
+drops_to_cooperation <- function(keyword) {
+  expect_equal(clean_classification_keywords(paste0(keyword, "; cooperation")), "cooperation")
+}
+
+test_that("name= key-value keywords are dropped", {
+  drops_to_cooperation("name=Connected World")
+})
+test_that("rcdc keywords are dropped", {
+  drops_to_cooperation("Autism (rcdc)")
+})
+test_that("'not elsewhere classified' keywords are dropped", {
+  drops_to_cooperation("Biological Sciences not elsewhere classified")
+})
+test_that("FoR keywords are dropped (all serialisations)", {
+  drops_to_cooperation("01 Mathematical Sciences (for)")
+  drops_to_cooperation("38 Economics (for-2020)")
+  drops_to_cooperation("FoR 03 (Chemical Sciences)")
+  drops_to_cooperation("anzsrc-for: 3402 Inorganic Chemistry")
+  drops_to_cooperation("anzsrc-for: 34 Chemical Sciences")
+  drops_to_cooperation("anzsrc-for: 03 Chemical Sciences")
+})
+test_that("hrcs keywords are dropped", {
+  drops_to_cooperation("2.1 Biological and endogenous factors (hrcs-rac)")
+})
+test_that("science-metrix keywords are dropped", {
+  drops_to_cooperation("Bioinformatics (science-metrix)")
+})
+test_that("sdg keywords are dropped (suffix marker + numbered prefix)", {
+  drops_to_cooperation("3 Good Health and Well Being (sdg)")
+  drops_to_cooperation("SDG 10: Reduced inequalities")
+  drops_to_cooperation("SDG 3: Good health and well-being")
+})
+test_that("ACM CCS keywords are dropped", {
+  drops_to_cooperation("Computing methodologies → Machine learning")
+})
+test_that("HAL domain keywords are dropped", {
+  drops_to_cooperation("[SHS.ECO]Humanities and Social Sciences/Economics and Finance")
+  drops_to_cooperation("[SDV]Life Sciences [q-bio]")
+})
+test_that("URL keywords are dropped", {
+  drops_to_cooperation("https://cdn.jamanetwork.com/x.pdf")
+})
+test_that("numeric path keywords are dropped", {
+  drops_to_cooperation("/692/308/174")
+})
+test_that("funder grant / scheme IDs are dropped", {
+  drops_to_cooperation("SP/19/3/34678")
+  drops_to_cooperation("HDRUK/CFC/01")
+  drops_to_cooperation("MR/S003991/1")
+  drops_to_cooperation("FS/11/2/28579")
+})
+test_that("grant-id look-alikes are NOT dropped", {
+  # 1-slash forms (MeSH qualifier / gene names), no-digit, and dates are kept.
+  for (kw in c("COVID-19/epidemiology", "HER-2/neu", "CD4/CD8", "A/B/C", "2019/12/31")) {
+    expect_equal(drop_grant_id(kw), kw)
+  }
+})
+test_that("Toulouse letter-domain subjects are dropped (top level + sub-categories)", {
+  drops_to_cooperation("B- ECONOMIE ET FINANCE")
+  drops_to_cooperation("A1-4- Droit de l'informatique")
+  drops_to_cooperation("4-2- Droit des affaires – droit commercial")
+})
+test_that("LCC top-level classes are dropped (lone letter + code + caption)", {
+  drops_to_cooperation("Q")                       # lone class letter
+  drops_to_cooperation("Q Science")               # code + caption
+  drops_to_cooperation("R Medicine (General)")
+  drops_to_cooperation("B Philosophy (General)")
+  drops_to_cooperation("T Technology (General)")
+  drops_to_cooperation("H Social Sciences")
+})
+test_that("LCC subclasses are dropped in the code+caption form", {
+  drops_to_cooperation("QA Mathematics")
+  drops_to_cooperation("QB Astronomy")
+  drops_to_cooperation("BF Psychology")
+  drops_to_cooperation("ML Literature of music")
+  drops_to_cooperation("QA75 Electronic computers. Computer science")  # code + digits + caption
+  drops_to_cooperation("QA76 Computer software")
+  drops_to_cooperation("RC0321 Neuroscience. Biological psychiatry")
+})
+test_that("bare subclass + digits codes are dropped", {
+  drops_to_cooperation("QA76")    # bare code + digits, no caption
+  drops_to_cooperation("GF125")
+  drops_to_cooperation("RC321")
+  drops_to_cooperation("QA75.5")  # decimal class number
+})
+test_that("biomedical markers colliding with subclass+digits are dropped (accepted trade-off)", {
+  # CD4/CD8/TP53 match a real subclass code + digits; they are rare as
+  # keywords and a leaked "QA76" area title is worse than losing them.
+  drops_to_cooperation("CD4")
+  drops_to_cooperation("CD8")
+  drops_to_cooperation("TP53")
+})
+test_that("code+digits look-alikes outside the subclass list are kept", {
+  for (kw in c("P53", "S100")) {
+    expect_equal(clean_classification_keywords(kw), kw)
+  }
+})
+test_that("subclass codes shared with abbreviations survive the caption check", {
+  for (kw in c("ML Machine Learning", "AI Artificial Intelligence", "CT Computed Tomography",
+               "QA testing", "QC quality control", "PR public relations")) {
+    expect_equal(clean_classification_keywords(kw), kw)
+  }
+})
+test_that("bare subclass codes are dropped only when collision-free", {
+  drops_to_cooperation("QH")   # natural history/biology, not an abbreviation
+  drops_to_cooperation("QK")   # botany
+  drops_to_cooperation("TJ")   # mechanical engineering
+  drops_to_cooperation("RJ")   # pediatrics
+})
+test_that("bare subclass codes that are common abbreviations are kept", {
+  for (kw in c("ML", "AI", "QA", "QC", "CT", "PR", "NA", "RT", "RF", "PH")) {
+    expect_equal(clean_classification_keywords(kw), kw)
+  }
+})
+
+# Guards: real keywords that look classification-ish must be kept.
+test_that("look-alike keywords are NOT dropped", {
+  for (kw in c("J-PET", "for 1347 (89.8%)", "COVID-19/diagnosis",
+               "Statistics (Mathematics)", "Mixed/Augmented Reality", "[SHSX]not-a-code",
+               "B-cell lymphoma", "Marketing", "SDGs in practice",
+               # LCC look-alikes: class letter + a non-caption word, bare caption, non-class letter
+               "B cell", "T cells", "T test", "G protein", "S phase", "R group",
+               "Q methodology", "Science", "I")) {
+    expect_equal(clean_classification_keywords(kw), kw)
+  }
+})
+
+test_that("a purely numeric keyword is dropped, digits inside words are kept", {
+  # standalone numbers ("2138", a Springer subject-code fragment; years) carry
+  # no topical meaning; digit-bearing words are untouched.
+  expect_equal(clean_classification_keywords("2138"), "")
+  expect_equal(clean_classification_keywords("2020"), "")
+  expect_equal(clean_classification_keywords("COVID-19"), "COVID-19")
+  expect_equal(clean_classification_keywords("H5N1"), "H5N1")
+})
+
+# --- JEL / AMS MSC / PACS classification filters ------------------------------
+
+test_that("drop_jel removes isolated official codes but keeps everything else", {
+  expect_equal(drop_jel(c("C72", "C73", "D03", "D64", "Game theory")), "Game theory")
+  # false-positive list: valid code shapes that are known real-world terms
+  expect_equal(drop_jel(c("R1", "B12", "D3", "C4", "L2")),
+               c("R1", "B12", "D3", "C4", "L2"))
+  # not on the official list (S/T/U/V/W/X are not JEL letters)
+  expect_equal(drop_jel(c("X99", "vitamin B12 deficiency")),
+               c("X99", "vitamin B12 deficiency"))
+})
+
+test_that("drop_jel removes code+caption keywords in all separator forms", {
+  expect_equal(drop_jel("C71 Cooperative Games"), character(0))
+  expect_equal(drop_jel("C71 - Cooperative Games"), character(0))
+  expect_equal(drop_jel("C71: Cooperative Games"), character(0))
+  # leading caption fragment (captions contain semicolons; the first fragment
+  # stays attached to the code when a provider serializes code+caption)
+  expect_equal(drop_jel("J26 Retirement"), character(0))
+  # trailing translation tail after " / "
+  expect_equal(drop_jel("C71 Cooperative Games / kooperative Spiele"), character(0))
+  # code followed by text that is NOT the official caption stays
+  expect_equal(drop_jel("C71 Something Else"), "C71 Something Else")
+})
+
+test_that("drop_jel never removes caption-only keywords", {
+  expect_equal(drop_jel(c("Social Security", "Cooperative Games")),
+               c("Social Security", "Cooperative Games"))
+})
+
+test_that("drop_ams_msc removes MSC code forms, leaves dd-dd to the LCC rule", {
+  expect_equal(drop_ams_msc(c("81V25", "86A05", "81Vxx", "81-XX", "Majorana fermion")),
+               "Majorana fermion")
+  expect_equal(drop_ams_msc("81-06"), "81-06")
+})
+
+test_that("drop_pacs removes PACS code forms including hyphen/plus suffixes", {
+  expect_equal(drop_pacs(c("05.30.Rt", "03.65.Ud", "89.75.Da",
+                           "03.67.-a", "42.50.+x", "keyword")), "keyword")
+  expect_equal(drop_pacs(c("1.2.3", "10.1234")), c("1.2.3", "10.1234"))
+})

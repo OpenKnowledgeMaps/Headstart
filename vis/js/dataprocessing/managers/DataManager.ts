@@ -14,6 +14,7 @@ import {
   getListLink,
   getOpenAccessLink,
   getOutlink,
+  getPdfLinkCandidatesFromDuplicates,
   getValueOrZero,
   getVisibleMetric,
   isOpenAccess,
@@ -257,6 +258,9 @@ class DataManager {
     paper.oa_link = getOpenAccessLink(paper, this.config);
     paper.outlink = getOutlink(paper, this.config);
     paper.list_link = getListLink(paper, this.config, this.context);
+
+    paper.pdf_link_candidates_from_duplicates =
+      getPdfLinkCandidatesFromDuplicates(paper);
   }
 
   __parseComments(paper: any) {

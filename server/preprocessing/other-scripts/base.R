@@ -2,6 +2,8 @@ library(rbace)
 library(stringr)
 library(dplyr)
 source('preprocess.R')
+source('subject_cleaning.R')
+source('mesh_fields.R')   # add_mesh_rank_fields(): MeSH specific/generic columns (ranking Modes 2/3)
 
 # get_papers
 #
@@ -58,7 +60,7 @@ get_papers <- function(query, params,
   document_types = paste("dctypenorm:", "(", paste(params$document_types, collapse=" OR "), ")", sep="")
   
   sortby_string = ifelse(params$sorting == "most-recent", "dcyear desc", "")
-  return_fields <- "dcdocid,dctitle,dcdescription,dcsource,dcdate,dcsubject,dccreator,dclink,dcoa,dcidentifier,dcrelation,dctype,dctypenorm,dcprovider,dclang,dclanguage,dccoverage"
+  return_fields <- "dcdocid,dctitle,dcdescription,dcsource,dcdate,dcsubject,dccreator,dclink,dcoa,dcidentifier,dcrelation,dctype,dctypenorm,dcprovider,dclang,dclanguage,dccoverage,dccollection,dcdoi"
 
   if (!is.null(exact_query) && exact_query != '') {
     base_query <- paste(paste0("(",exact_query,")"), document_types, collapse=" ")
@@ -89,6 +91,11 @@ get_papers <- function(query, params,
   q_advanced = params$q_advanced
   if (!is.null(q_advanced)) {
     base_query <- paste(base_query, q_advanced)
+  }
+
+  if (!is.null(params$q_advanced_only)
+      && (params$q_advanced_only == TRUE || params$q_advanced_only == "true")) {
+    base_query <- q_advanced
   }
 
   min_descsize <- if (is.null(params$min_descsize)) 300 else params$min_descsize
@@ -151,37 +158,32 @@ get_papers <- function(query, params,
       has_custom_clustering_annotation <- unlist(lapply(metadata$subject_orig, function(x) grepl(paste0(cc, ":"), x, fixed=TRUE)))
       metadata <- metadata[has_custom_clustering_annotation,]
   }}
-  # don't deduplicate if params$deduplicate_base is set to FALSE
-  if (!is.null(params$deduplicate_base) && params$deduplicate_base != FALSE) {
-    # log to skip deduplication
-    blog$info(paste("vis_id:", .GlobalEnv$VIS_ID, "Deduplication skipped"))
-  } else {
-    while (nrow(metadata) - sum(metadata$is_duplicate) < limit && attr(res_raw, "numFound") > offset+120 && r < req_limit) {
-      offset <- offset+120
-      res_raw <- get_raw_data(limit,
-                              base_query,
-                              return_fields,
-                              sortby_string,
-                              filter,
-                              repo,
-                              coll,
-                              retry_opts,
-                              offset,
-                              non_public)
-      res <- bind_rows(res, res_raw$docs)
-      metadata <- etl(res, repo, non_public)
-      metadata <- unique(metadata, by = "id")
-      metadata <- sanitize_abstract(metadata)
-      metadata <- mark_duplicates(metadata)
-      metadata$has_dataset <- unlist(lapply(metadata$resulttype, function(x) "Dataset" %in% x))
-      # check if custom clustering annotation param is in metadata
-      if (!is.null(cc)) {
-        if (!(cc %in% names(fieldmapper))) {
-          has_custom_clustering_annotation <- unlist(lapply(metadata$subject_orig, function(x) grepl(paste0(cc, ":"), x, fixed=TRUE)))
-          metadata <- metadata[has_custom_clustering_annotation,]
-      }}
-      r <- r+1
-    }
+
+  while (nrow(metadata) - sum(metadata$is_duplicate) < limit && attr(res_raw, "numFound") > offset+120 && r < req_limit) {
+    offset <- offset+120
+    res_raw <- get_raw_data(limit,
+                            base_query,
+                            return_fields,
+                            sortby_string,
+                            filter,
+                            repo,
+                            coll,
+                            retry_opts,
+                            offset,
+                            non_public)
+    res <- bind_rows(res, res_raw$docs)
+    metadata <- etl(res, repo, non_public)
+    metadata <- unique(metadata, by = "id")
+    metadata <- sanitize_abstract(metadata)
+    metadata <- mark_duplicates(metadata)
+    metadata$has_dataset <- unlist(lapply(metadata$resulttype, function(x) "Dataset" %in% x))
+    # check if custom clustering annotation param is in metadata
+    if (!is.null(cc)) {
+      if (!(cc %in% names(fieldmapper))) {
+        has_custom_clustering_annotation <- unlist(lapply(metadata$subject_orig, function(x) grepl(paste0(cc, ":"), x, fixed=TRUE)))
+        metadata <- metadata[has_custom_clustering_annotation,]
+    }}
+    r <- r+1
   }
   # check if custom clustering annotation param is in metadata
   if (!is.null(cc)) {
@@ -224,54 +226,16 @@ etl <- function(res, repo, non_public) {
 
   metadata$subject_orig = subject_all
 
-  subject_cleaned = gsub("DOAJ:[^;]*(;|$)?", "", subject_all) # remove DOAJ classification
-  subject_cleaned = gsub("/dk/atira[^;]*(;|$)?", "", subject_cleaned) # remove atira classification
-  subject_cleaned = gsub("ddc:[0-9]+(;|$)?", "", subject_cleaned) # remove Dewey Decimal Classification
-  subject_cleaned = gsub("([\\w\\/\\:-])*?\\/ddc\\/([\\/0-9\\.])*", "", subject_cleaned) # remove Dewey Decimal Classification in URI form
-  subject_cleaned = gsub("[A-Z,0-9]{2,}-[A-Z,0-9\\.]{2,}(;|$)?", "", subject_cleaned) #remove LOC classification
-  subject_cleaned = gsub("[^\\(;]+\\(General\\)(;|$)?", "", subject_cleaned) # remove general subjects
-  subject_cleaned = gsub("[^\\(;]+\\(all\\)(;|$)?", "", subject_cleaned) # remove general subjects
-  subject_cleaned = gsub("[^:;]+ ?:: ?[^;]+(;|$)?", "", subject_cleaned) #remove classification with separator ::
-  subject_cleaned = gsub("[^\\[;]+\\[[A-Z,0-9]+\\](;|$)?", "", subject_cleaned) # remove WHO classification
-  subject_cleaned = gsub("Info:\\w+-(\\w+\\/)+", "", subject_cleaned) # remove Info:eu-repo/classification/
-  subject_cleaned = gsub("([A-Za-z]+:[A-Za-z0-9 \\/\\.-]+);?", "", subject_cleaned, perl=TRUE) # clean up annotations with prefix e.g. theme:annotation
-  if (!is.null(params$vis_type) && params$vis_type == "timeline") {
-    subject_cleaned = gsub("FOS ", "", subject_cleaned) # remove FOS classification tag, but keep classifcation name
-    arxiv_classification_string = "(cs|econ|eess|math|astro-ph|nlin|q-bio|q-fin|stat)\\.[A-Z]{2}|cond-mat\\.[a-z\\-]+|hep-(ex|lat|ph|th)|math-ph|nucl-(ex|th)|physics\\.[a-z\\-]+|(astro-ph|gr-qc|quant-ph|cond-mat)"
-    subject_cleaned = gsub(arxiv_classification_string, "", subject_cleaned, perl=TRUE) # remove arXiv classification short code, but keep classifcation name
-  } else {
-    subject_cleaned = gsub("FOS [A-Za-z ]+", "", subject_cleaned) # remove FOS classifications (Fields of Science and Technology)
-    arxiv_classification_string = "(([A-Za-z ]+ )?cond-mat\\.[a-z\\-]+)|([\\w ]+ )?(cs|econ|eess|math|astro-ph|nlin|q-bio|q-fin|stat)\\.[A-Z]{2}|cond-mat\\.[a-z\\-]+|hep-(ex|lat|ph|th)|math-ph|nucl-(ex|th)|physics\\.[a-z\\-]+|([\\w ]+ )(astro-ph|gr-qc|quant-ph|cond-mat)"
-    subject_cleaned = gsub(arxiv_classification_string, "", subject_cleaned, perl=TRUE) # remove arXiv classification, except on streamgraphs    
-  }
-  subject_cleaned = gsub("([A-Za-z]+:[A-Za-z0-9 \\/\\.]+);?", "", subject_cleaned, perl=TRUE) # clean up annotations with prefix e.g. theme:annotation
-  subject_cleaned = gsub("(wikidata)?\\.org/entity/[qQ]([\\d]+)?", "", subject_cleaned) # remove wikidata classification
-  subject_cleaned = gsub("</keyword><keyword>", "", subject_cleaned) # remove </keyword><keyword>
-  subject_cleaned = gsub("\\[No keyword\\]", "", subject_cleaned)
-
-  if (!is.null(params$vis_type) && params$vis_type == "timeline") {
-    subject_cleaned = remove_keywords_with_text_in_square_brackets(subject_cleaned)
-  } else {
-    subject_cleaned = remove_text_in_square_brackets_from_keywords(subject_cleaned)
-  }
-
-  subject_cleaned = gsub("\\[[^\\[]+\\][^\\;]+(;|$)?", "", subject_cleaned) # remove classification
-  subject_cleaned = gsub("[0-9]{2,} [A-Z]+[^;]*(;|$)?", "", subject_cleaned) #remove classification
-  subject_cleaned = gsub(" -- ", "; ", subject_cleaned) #replace inconsistent keyword separation
-  subject_cleaned = gsub("[-]{2,}", "; ", subject_cleaned) #replace inconsistent keyword separation
-  subject_cleaned = gsub("[A-Z]\\.\\d\\.\\d+", "", subject_cleaned) #replace inconsistent keyword separation
-  subject_cleaned = gsub(" \\(  ", "; ", subject_cleaned) #replace inconsistent keyword separation
-  subject_cleaned = gsub("(\\w* \\w*(\\.)( \\w* \\w*)?)", "; ", subject_cleaned) # remove overly broad keywords separated by .
-  subject_cleaned = gsub("\\. ", "; ", subject_cleaned) # replace inconsistent keyword separation
-  subject_cleaned = gsub(" ?\\d[:?-?]?(\\d+.)+", "", subject_cleaned) # replace residuals like 5:621.313.323 or '5-76.95'
-  subject_cleaned = gsub(": ", "", subject_cleaned) # clean up keyword separation
-  subject_cleaned = gsub("^; $", "", subject_cleaned) # clean up keyword separation
-  subject_cleaned = gsub(";+", ";", subject_cleaned) # clean up keyword separation
-  subject_cleaned = gsub(",+", ",", subject_cleaned) # clean up keyword separation
-  subject_cleaned = gsub(",", ", ", subject_cleaned) # clean up keyword separation
-  subject_cleaned = gsub("\\s+", " ", subject_cleaned) # clean up keyword separation
-  subject_cleaned = stringi::stri_trim(subject_cleaned) # clean up keyword separation
+  # The cleaning chain lives in subject_cleaning.R (clean_subject_string) so it
+  # can be tested in isolation. DOAJ records additionally get the LCC
+  # caption/code block removed; the collection is read from the raw response
+  # because metadata$collection is only assigned further down.
+  doaj_records = check_metadata(res$dccollection) %in% "ftdoajarticles"
+  subject_cleaned = clean_subject_string(subject_all, params$vis_type, doaj_records)
   metadata$subject = subject_cleaned
+  # Additive MeSH rank-provenance columns for ranking Modes 2/3 (derived from the
+  # raw [MeSH]-marked subject_orig; subject/subject_orig untouched). Shared module.
+  metadata = add_mesh_rank_fields(metadata)
 
   metadata$authors = check_metadata(res$dccreator)
 
@@ -281,12 +245,30 @@ etl <- function(res, repo, non_public) {
   metadata$relevance = c(nrow(metadata):1)
   metadata$resulttype = lapply(res$dctypenorm, decode_dctypenorm)
   metadata$type = check_metadata(res$dctype)
-  metadata$typenorm = check_metadata(res$dctypenorm)
+  metadata$typenorm = check_metadata(res$dctypenorm) 
   metadata$doi = unlist(lapply(metadata$link, find_dois))
+  metadata$doi_merge = unlist(lapply(metadata$link, find_dois))
+  metadata$additional_dois = check_metadata(res$dcdoi)
+  metadata$additional_dois = check_metadata(lapply(metadata$additional_dois, normalize_dois))
+  # Fill primary doi for the ORCID enrichment
+  # from additional_dois when find_dois(link) returned nothing
+  # but dcdoi contains exactly one entry. Guarded to the single-entry case
+  # because doi_merge field expects to contain a single DOI
+  # and we want to avoid filling it with multiple DOIs separated by ;
+  # Enrichment from multiple DOIs is happening in the enrichment step and not in the search step
+  additional_dois_char <- vapply(metadata$additional_dois, function(x) {
+    if (length(x) == 0) "" else as.character(x)[1]
+  }, character(1))
+  needs_doi_fill <- (is.na(metadata$doi_merge) | metadata$doi_merge == "") &
+                    !is.na(additional_dois_char) &
+                    additional_dois_char != "" &
+                    !grepl(";", additional_dois_char, fixed = TRUE)
+  metadata$doi_merge[needs_doi_fill] <- additional_dois_char[needs_doi_fill]
   metadata$lang = check_metadata(res$dclang)
   metadata$language = check_metadata(res$dclanguage)
   metadata$content_provider = check_metadata(res$dcprovider)
   metadata$coverage = check_metadata(res$dccoverage)
+  metadata$collection = check_metadata(res$dccollection)
   if(repo=="fttriple" && non_public==TRUE) {
     metadata$content_provider <- "GoTriple"
   }
@@ -355,24 +337,28 @@ find_dois <- function(link) {
   return(doi)
 }
 
+normalize_dois <- function(doi_string) {
+  dois <- strsplit(doi_string, ";")[[1]]
+  dois <- trimws(dois)
+  dois <- dois[!is.na(dois) & nchar(dois) > 0]
+
+  if (length(dois) == 0) {
+    return("")
+  }
+
+  dois_cleaned <- gsub("^https?://(dx\\.)?doi\\.org/", "", dois, ignore.case = TRUE)
+  result <- paste0("https://doi.org/", dois_cleaned)
+  final_result <- paste(result, collapse = "; ")
+
+  return(final_result)
+}
+
 
 decode_dctypenorm <- function(dctypestring) {
   typecodes <- strsplit(dctypestring, "; ")
   typecodes <- lapply(typecodes, function(x) {dctypenorm_decoder[x]})
   typecodes <- unlist(unname(typecodes[[1]]))
   return(typecodes)
-}
-
-remove_keywords_with_text_in_square_brackets <- function(x) {
-  # This function removes whole keywords that contain text in square brackets.
-  # Example: 'Climate [MeSH]' | 'Some keywords [Chemical]'.
-  gsub("[^;]*\\[[^]]+\\][^;]*;?", "", x)
-}
-
-remove_text_in_square_brackets_from_keywords <- function(x) {
-  # This function removes text in square brackets.
-  # Example: 'Climate [MeSH]' -> 'Climate'| 'Some keywords [Chemical]' -> 'Some keywords'.
-  gsub("\\[[^]]*\\]", "", x)
 }
 
 dctypenorm_decoder <- list(
@@ -424,5 +410,6 @@ fieldmapper <- list(
   "lang"="dclang",
   "language"="dclanguage",
   "content_provider"="dcprovider",
-  "coverage"="dccoverage"
+  "coverage"="dccoverage",
+  "collection"="dccollection"
 )

@@ -1,201 +1,314 @@
 library(stringr)
 vslog <- getLogger('vis.summarize')
 
-SplitTokenizer <- function(x) {
-  tokens = unlist(lapply(strsplit(words(x), split=";"), paste), use.names = FALSE)
-  return(tokens)
-}
+# summarize.R
+# Cluster labelling for the overview visualisation: turns each cluster of papers
+# into a short, human-readable area title. create_cluster_labels() is the entry
+# point (called from vis_layout.R); the helpers build a per-cluster text corpus,
+# rank candidate terms by tf-idf, prune and de-nest n-grams, and fix casing.
+# Tokens are kept ";"-separated throughout because SplitTokenizer (the
+# TermDocumentMatrix tokenizer, label_corpus.R) splits terms on ";".
+#
+# Split by concern; the parts load here so both entry points
+# (vis_layout.R and test/replay_harness.R) keep working unchanged:
+#   text_hygiene.R     - entity decode, noise stripping, punctuation_segments
+#   ngram_generation.R - the shared generator + legacy-quirk emulation
+#   label_corpus.R     - heuristic columns, bypass, corpus builders
+#   label_casing.R     - final label casing
+#   label_debug.R      - DEBUG-gated dump helpers
+source("text_hygiene.R")
+source("ngram_generation.R")
+source("label_corpus.R")
+source("label_casing.R")
+source("label_debug.R")
 
-trim <- function (x) gsub("^\\s+|\\s+$", "", x)
 
-
-expand_ngrams <- function(text, n) {
-  text <- trimws(text)
-  lapply(lapply(text, function(x)unlist(lapply(ngrams(unlist(strsplit(x, split = " ")), n), paste, collapse  = "_"))), paste, collapse = " ")
-}
-
-prune_ngrams <- function(ngrams, stops){
-  ngrams = mapply(strsplit, ngrams, split=" |;")
-  tokenized_ngrams = mapply(function(x) {
-                            strsplit(x, split="_")
-                          }, ngrams)
-  # filter out empty tokens
-  tokenized_ngrams = lapply(tokenized_ngrams, function(ngrams){ngrams[lapply(ngrams, length)>0]})
-  # remove ngrams starting with a stopword
-  batch_size <- 1000
-  total_length <- length(stops)
-  for (i in seq(1, total_length, batch_size)) {
-    tokenized_ngrams = lapply(tokenized_ngrams, function(x) {
-                              Filter(function(tokens){
-                                !any(stringi::stri_detect_fixed(stops[i:min(i+batch_size -1, total_length)], tolower(tokens[[1]])))
-                              }, x)})
-    # remove ngrams ending with a stopword
-    tokenized_ngrams = lapply(tokenized_ngrams, function(x) {
-                              Filter(function(tokens){
-                                !any(stringi::stri_detect_fixed(stops[i:min(i+batch_size -1, total_length)], tolower(tail(tokens,1))))
-                              }, x)})
+# Last-resort label for a cluster that produced no tf-idf label (empty even after
+# the min1 fallback): build one from the most frequent bi-/tri-grams of the
+# cluster's papers' titles + abstracts. Returns a single ", "-joined label string.
+#   matches          : row indices of the cluster's papers in `metadata`.
+#   top_n            : number of terms kept.
+#   label_exclusions : curated area-label exclusion list (whole-term, case-insensitive)
+#                      applied here too so listed terms never survive as a last resort.
+title_abstract_fallback_label <- function(matches, metadata, stops, top_n = 3, label_exclusions = character(0), cluster = NA_integer_,
+                                          ngram_lengths = c(2, 3)) {
+  candidates = mapply(paste, metadata$title[matches], metadata$paper_abstract[matches])
+  candidates = lapply(candidates, tolower)
+  # n-gram formation on the stopword-retaining stream (see ngram_candidates):
+  # keeps digit/hyphen tokens whole and interior stopwords in place; boundary
+  # stopword n-grams are pruned inside the helper. ngram_lengths follows the
+  # resolved n-gram setting (Setting 0 = c(2, 3), the historical fallback).
+  candidates = unlist(lapply(candidates, ngram_candidates, stops = stops,
+                             ngram_lengths = ngram_lengths))
+  if (!length(candidates)) return("")
+  top_ngrams = sort(table(candidates), decreasing = T)
+  if (length(label_exclusions)) {                              # whole-term exclusion (see drop_excluded_terms)
+    norm <- trimws(tolower(gsub("_", " ", names(top_ngrams))))
+    top_ngrams <- top_ngrams[!(norm %in% tolower(trimws(label_exclusions)))]
   }
-  # remove ngrams starting and ending with the same word
-  tokenized_ngrams = lapply(tokenized_ngrams, function(x) {
-                            Filter(function(tokens){
-                              !(tokens[[1]]==tail(tokens,1))
-                            }, x)})
-  # keep ngrams with min length 2
-  tokenized_ngrams = lapply(tokenized_ngrams, function(x){x[lapply(x, length)>1]})
-  tokenized_ngrams = tokenized_ngrams[lapply(tokenized_ngrams, length)>1]
-  tokenized_ngrams = lapply(tokenized_ngrams, function(x){mapply(paste, x, collapse="_")})
-  pruned_ngrams = lapply(tokenized_ngrams, paste, collapse=";")
-  return (pruned_ngrams)
+  # Debug: the title+abstract n-gram candidate pool (n-gram + frequency, post-exclusion)
+  # this last-resort fallback selects from. One file per cluster that reaches this path.
+  if (!is.na(cluster) && exists("debug_enabled") && debug_enabled() && length(top_ngrams)) {
+    tryCatch(dump_data(data.frame(cluster = cluster, term = gsub("_", " ", names(top_ngrams)),
+                                  freq = as.integer(top_ngrams), stringsAsFactors = FALSE),
+                       paste0("summarize_04g_titleabstract_candidates_c", cluster)),
+             error = function(e) NULL)
+  }
+  summary <- filter_out_nested_ngrams(names(top_ngrams), top_n)
+  summary = lapply(summary, FUN = function(x) {paste(unlist(x), collapse="; ")})
+  summary = gsub("_", " ", summary)
+  paste(summary, collapse=", ")
 }
 
+
+# Entry point: assign a short label ("area title") to every cluster.
+# Builds one pseudo-document per cluster from its papers' subjects + title
+# n-grams (or a custom field), ranks terms by tf-idf (SMART "ntn"), and keeps the
+# top top_n as the label. Clusters with no surviving tf-idf terms fall back to the
+# most frequent bi-/tri-grams of their papers' titles and abstracts. Casing is
+# then normalised against the corpus.
+#   clusters           : list with $groups (cluster id per paper) and $num_clusters.
+#   metadata           : data frame with title, subject, paper_abstract (+ optional
+#                        custom_clustering / annotations fields named in params).
+#   type_counts        : term -> count map, used to restore original casing.
+#   top_n              : number of terms kept per label.
+#   stops              : stopword vector.
+#   taxonomy_separator : if set, taxonomy subjects keep only their last path segment.
+#   service            : data integration name (base|pubmed|orcid|openaire|…), used
+#                        to resolve the per-integration ranking mode (see ranking.R).
+# Returns clusters with $cluster_labels filled: one label per paper, identical
+# for all papers in the same cluster.
 create_cluster_labels <- function(clusters, metadata,
                                   type_counts,
                                   weightingspec,
                                   top_n, stops, taxonomy_separator="/",
-                                  params=NULL) {
-  cc <- params$custom_clustering
-  if (!(is.null(cc)) && (cc %in% names(metadata))) {
-    nn_corpus <- get_custom_cluster_corpus(clusters, metadata, stops, taxonomy_separator, custom_clustering=cc)
-  } else {
-    nn_corpus <- get_cluster_corpus(clusters, metadata, stops, taxonomy_separator)
+                                  params=NULL, service=NULL) {
+  vslog$debug(paste("create_cluster_labels:", clusters$num_clusters, "clusters,",
+                    nrow(metadata), "papers"))
+  dump_data(clusters, "summarize_01_clusters")
+  dump_data(metadata[, intersect(c("id", "title", "subject", "subject_orig", "paper_abstract"),
+                                  names(metadata)), drop = FALSE], "summarize_02_metadata")
+  dump_data(type_counts, "summarize_03_type_counts")
+  # Replay-harness fixture: capture the complete input bundle so this map can be
+  # replayed offline under any ranking mode (see test/replay_harness.R). RDS only,
+  # debug-gated like the other dumps.
+  dump_data(list(clusters = clusters, metadata = metadata, type_counts = type_counts,
+                 weightingspec = weightingspec, top_n = top_n, stops = stops,
+                 taxonomy_separator = taxonomy_separator, params = params, service = service),
+            "summarize_00_label_inputs")
+  # Leading "*" (MeSH major-topic marker) can still be attached to subject
+  # keywords at this point: source-side cleaning strips it, but merging the
+  # subjects of duplicate records can re-introduce a marked spelling. Strip it
+  # here, where the subject tokens for the corpus and every rank source
+  # originate, so the marked and unmarked spelling of a keyword cannot compete
+  # as two distinct candidates. All modes and services.
+  if ("subject" %in% names(metadata)) {
+    metadata$subject <- strip_major_topic_markers(metadata$subject)
   }
-  nn_tfidf <- TermDocumentMatrix(nn_corpus, control = list(
-    tokenize = SplitTokenizer,
-    weighting = function(x) weightSMART(x, spec="ntn"),
-    bounds = list(local = c(2, Inf)),
-    tolower = TRUE
-  ))
-  tfidf_top <- apply(nn_tfidf, 2, function(x) {x2 <- sort(x, TRUE);x2[x2>0]})
-  empty_tfidf <- which(apply(nn_tfidf, 2, sum)==0)
-  tfidf_top[c(empty_tfidf)] <- fill_empty_clusters(nn_tfidf, nn_corpus)[c(empty_tfidf)]
-  tfidf_top_names <- get_top_names(tfidf_top, top_n, stops)
+  # Resolve the ranking mode BEFORE building the corpus. Mode 0 keeps the legacy
+  # corpus/selection structure (get_cluster_corpus_legacy + zero-sum
+  # fill_empty_clusters_legacy, no DF filter); Modes 1-3 take the map-wide
+  # DF-filtered (min2/min1) corpus + rank-aware selection. The punctuation-aware
+  # title segmentation applies in every mode.
+  mode <- ranking_mode(service)
+  cc <- params$custom_clustering
+  # N-gram setting axis, resolved
+  # per service like the ranking mode. Mode 0 always runs Setting 0 (it keeps
+  # the legacy corpus/selection structure), and the setting is a no-op on the
+  # custom-clustering path (no title n-grams there). Setting 0 leaves every
+  # call site on its current behaviour.
+  nset <- ngram_setting(service)
+  if (identical(mode, "0") && !identical(nset, "0")) {
+    # Mode 0 keeps its legacy corpus/selection STRUCTURE at every setting (inline
+    # title n-grams, no DF filter, zero-sum fill); the setting switches the
+    # generation step to the shared generator and, like every other mode, drops
+    # the heuristic subjects (see the bypass below).
+    vslog$info(paste("create_cluster_labels: mode 0 with ngram setting", nset,
+                     "- generation switched, legacy corpus/selection structure kept"))
+  }
+  if (!(is.null(cc)) && (cc %in% names(metadata)) && !identical(nset, "0")) {
+    vslog$info(paste("create_cluster_labels: ngram setting", nset,
+                     "is a no-op on the custom-clustering path"))
+  }
+  nset_lengths <- ngram_setting_lengths(nset)
+  nset_abstracts <- !identical(nset, "0") && include_abstracts(service)
+  vslog$debug(paste("create_cluster_labels: ngram setting", nset,
+                    "abstracts", nset_abstracts))
+  # Bypass of the heuristic subjects (replace_keywords_if_empty), for EVERY
+  # mode at settings >= 1: papers that had no real keywords contribute through
+  # the generator columns only, never through the synthesis. Must run before any
+  # corpus builder or rank column reads `subject`. The custom-clustering path
+  # labels from its own field, so the bypass does not apply there.
+  if (!identical(nset, "0") && (is.null(cc) || !(cc %in% names(metadata)))) {
+    metadata <- bypass_heuristic_subjects(metadata)
+  }
+  # Curated area-label exclusion list, applied post-tf-idf / pre-ranking at every
+  # candidate-producing tier (initial, fallback, title/abstract) so listed generic
+  # terms can never become a label. Applied in EVERY mode, Mode 0 included: a
+  # generic term is unwanted as a label regardless of which selection path
+  # produced it. See get_label_exclusions.
+  label_exclusions <- get_label_exclusions()
+  vslog$debug(paste("create_cluster_labels: ranking mode", mode, "for service",
+                    if (is.null(service)) "(none)" else service))
+
+  # Tracks which path produced each cluster's label, for summarize_06b_label_provenance:
+  # "primary" (tf-idf/ranking), "legacy_fill"/"min1_fallback" (empty-label rescue), or
+  # "title_abstract_fallback" (last resort). Updated where each fallback fires.
+  label_source <- rep("primary", clusters$num_clusters)
+
+  if (identical(mode, "0")) {
+    # ---- Mode 0: legacy no-ranking path (inline title n-grams, no DF filter) ----
+    if (!(is.null(cc)) && (cc %in% names(metadata))) {
+      nn_corpus <- get_custom_cluster_corpus(clusters, metadata, stops, taxonomy_separator, custom_clustering=cc)$corpus
+    } else {
+      nn_corpus <- get_cluster_corpus_legacy(clusters, metadata, stops, taxonomy_separator,
+                                             ngram_lengths = nset_lengths,
+                                             legacy_quirks = identical(nset, "0"))
+    }
+    dump_data(nn_corpus, "summarize_04_corpus")
+    dump_corpus_text(nn_corpus, "summarize_04_corpus_text")
+    nn_tfidf <- TermDocumentMatrix(nn_corpus, control = list(
+      tokenize = SplitTokenizer,
+      weighting = function(x) weightSMART(x, spec="ntn"),
+      bounds = list(local = c(2, Inf)),
+      tolower = TRUE
+    ))
+    tfidf_top <- apply(nn_tfidf, 2, function(x) {x2 <- sort(x, TRUE);x2[x2>0]})
+    # Legacy fallback: clusters whose tf-idf summed to zero are re-filled from the
+    # SAME corpus at bound c(1, Inf).
+    empty_tfidf <- which(apply(nn_tfidf, 2, sum) == 0)
+    tfidf_top[c(empty_tfidf)] <- fill_empty_clusters_legacy(nn_tfidf, nn_corpus)[c(empty_tfidf)]
+    dump_tfidf_candidates(tfidf_top, "summarize_04b_tfidf_candidates")   # raw candidates (post empty-fill, pre-exclusion)
+    tfidf_top_pre_excl <- tfidf_top
+    tfidf_top <- drop_excluded_terms(tfidf_top, label_exclusions)   # post-tf-idf, pre-selection (all modes)
+    dump_excluded_terms(tfidf_top_pre_excl, tfidf_top, "summarize_04e_excluded_terms")
+    if (length(empty_tfidf)) label_source[empty_tfidf] <- "legacy_fill"
+    tfidf_top_names <- get_top_names(tfidf_top, top_n, stops)
+  } else {
+    # ---- Modes 1-3: DF-filtered corpus + rank-aware selection ------------------
+    # Additive rank columns on the metadata data frame:
+    #  - keywords_rank_cleaned: the rank-1 source (Stage 1 = subject_cleaned verbatim).
+    #  - the two heuristic columns (min1/min2), pre-binned by MAP-WIDE document
+    #    frequency (add_heuristic_keyword_fields). subject_cleaned (metadata$subject)
+    #    is left untouched.
+    # (the heuristic-keyword bypass for settings >= 1 already ran above, before
+    # any corpus builder or rank column reads `subject`)
+    metadata <- add_heuristic_keyword_fields(metadata, stops,
+                                             ngram_lengths = nset_lengths,
+                                             include_abstracts = nset_abstracts)
+    metadata$keywords_rank_cleaned <- metadata$subject
+    if (!(is.null(cc)) && (cc %in% names(metadata))) {
+      corpus_out <- get_custom_cluster_corpus(clusters, metadata, stops, taxonomy_separator, custom_clustering=cc)
+      fallback_corpus <- corpus_out$corpus   # custom path: no heuristic min1/min2 split
+    } else {
+      # Initial corpus uses the map-wide min2 heuristic set (DF >= 2); the fallback
+      # corpus swaps in min1 (all n-grams).
+      corpus_out <- get_cluster_corpus(clusters, metadata, stops, taxonomy_separator, heuristic_col = HEUR_MIN2)
+      fallback_corpus <- get_cluster_corpus(clusters, metadata, stops, taxonomy_separator, heuristic_col = HEUR_MIN1)$corpus
+    }
+    # get_*_cluster_corpus returns the corpus plus per-cluster rank sources (the
+    # separated keyword/heuristic tokens used only for rank lookup). rank_sources
+    # is NULL on the custom-clustering path, so ranked modes fall back to legacy there.
+    nn_corpus <- corpus_out$corpus
+    rank_sources <- corpus_out$rank_sources
+    dump_data(nn_corpus, "summarize_04_corpus")
+    dump_corpus_text(nn_corpus, "summarize_04_corpus_text")
+    dump_rank_sources(rank_sources, "summarize_04d_rank_sources")
+    # Local bound c(1, Inf) so low-frequency real keywords survive into the ranking.
+    nn_tfidf <- TermDocumentMatrix(nn_corpus, control = list(
+      tokenize = SplitTokenizer,
+      weighting = function(x) weightSMART(x, spec="ntn"),
+      bounds = list(local = c(1, Inf)),
+      tolower = TRUE
+    ))
+    tfidf_top <- apply(nn_tfidf, 2, function(x) {x2 <- sort(x, TRUE);x2[x2>0]})
+    dump_tfidf_candidates(tfidf_top, "summarize_04b_tfidf_candidates")   # raw candidates (pre-exclusion)
+    tfidf_top_pre_excl <- tfidf_top
+    tfidf_top <- drop_excluded_terms(tfidf_top, label_exclusions)   # post-tf-idf, pre-ranking
+    dump_excluded_terms(tfidf_top_pre_excl, tfidf_top, "summarize_04e_excluded_terms")
+    vslog$debug(paste("create_cluster_labels: tf-idf matrix", nTerms(nn_tfidf), "terms x",
+                      nDocs(nn_tfidf), "clusters"))
+
+    # Rank-aware selection (ranking.R) over the global ranking, partitioned by
+    # rank_sources. Initial labels come from the map-wide min2 (DF >= 2) corpus.
+    tfidf_top_names <- select_cluster_label_names(tfidf_top, top_n, stops, mode = mode,
+                                                  rank_sources = rank_sources)
+
+    # min1 fallback: any cluster whose label came out EMPTY is re-labelled from the
+    # min1 corpus (all title n-grams, bound 1). The trigger is "empty label", NOT
+    # "zero tf-idf sum": with the DF filter a cluster can have a tiny tf-idf that prunes
+    # away to nothing, which the old zero-sum check missed, dropping it straight to the
+    # abstract-frequency fallback instead of the intended min1 rescue.
+    # The title/abstract-frequency fallback below remains the true last resort.
+    empty_label <- which(!vapply(tfidf_top_names,
+                                 function(x) { s <- if (length(x)) x[[1]] else ""; nzchar(s) },
+                                 logical(1)))
+    if (length(empty_label) > 0) {
+      vslog$debug(paste("create_cluster_labels: min1 fallback for", length(empty_label),
+                        "clusters with an empty min2 label"))
+      fallback_top   <- drop_excluded_terms(fill_empty_clusters(fallback_corpus), label_exclusions)
+      dump_tfidf_candidates(fallback_top, "summarize_04f_min1_fallback_candidates")
+      fallback_names <- select_cluster_label_names(fallback_top, top_n, stops, mode = mode,
+                                                   rank_sources = rank_sources,
+                                                   dbg_stage = "summarize_04c_min1_rank_candidates")
+      tfidf_top_names[empty_label] <- fallback_names[empty_label]
+      label_source[empty_label] <- "min1_fallback"
+    }
+  }
+  dump_data(tfidf_top_names, "summarize_05_tfidf_top_names")
   clusters$cluster_labels = ""
-  batch_size <- 1000
-  total_length <- length(stops)
   for (k in seq(1, clusters$num_clusters)) {
     matches = which(unname(clusters$groups == k) == TRUE)
     summary = tfidf_top_names[[k]]
     if (summary == "") {
-      candidates = mapply(paste, metadata$title[matches], metadata$paper_abstract[matches])
-      candidates = lapply(candidates, tolower)
-      for (i in seq(1, total_length, batch_size)) {
-        candidates = lapply(candidates, function(x) {paste(removeWords(x, stops[i:min(i+batch_size -1, total_length)]), collapse="")})
-      }
-      candidates = lapply(candidates, function(x) {gsub("[^[:alpha:]]", " ", x)})
-      candidates = lapply(candidates, function(x) {gsub(" +", " ", x)})
-      candidates_bigrams = lapply(lapply(candidates, expand_ngrams, n=2), paste, collapse=" ")
-      candidates_trigrams = lapply(lapply(candidates, expand_ngrams, n=3), paste, collapse=" ")
-      candidates = unname(mapply(paste, candidates_bigrams, candidates_trigrams))
-      candidates =  unlist(lapply(candidates, str_split, " "), recursive = F)
-      candidates = unlist(lapply(candidates, function(x) {another_prune_ngrams(x, stops)}))
-      top_ngrams = sort(table(strsplit(paste(candidates, collapse=" "), " ")), decreasing = T)
-      summary <- filter_out_nested_ngrams(names(top_ngrams), 3)
-      summary = lapply(summary, FUN = function(x) {paste(unlist(x), collapse="; ")})
-      summary = gsub("_", " ", summary)
-      summary = paste(summary, collapse=", ")
+      # No tf-idf label survived even the min1 fallback: last-resort label built
+      # from the papers' titles + abstracts (see title_abstract_fallback_label).
+      vslog$debug(paste("create_cluster_labels: title/abstract fallback for cluster", k,
+                        "with", length(matches), "papers"))
+      summary <- title_abstract_fallback_label(matches, metadata, stops, top_n, label_exclusions, cluster = k,
+                                               ngram_lengths = nset_lengths)
+      label_source[k] <- "title_abstract_fallback"
     }
     clusters$cluster_labels[c(matches)] = summary
   }
   if (!(is.null(cc)) && (cc %in% names(metadata$annotations))) {
     clusters$cluster_labels = metadata$annotations[[cc]]
   }
+  pre_casing_labels <- clusters$cluster_labels
   clusters$cluster_labels <- fix_cluster_labels(clusters$cluster_labels, type_counts)
+  # Which spelling each label word was restored to, and out of which variants.
+  # Computed only under DEBUG: it walks the vocabulary once per distinct token.
+  if (debug_enabled()) {
+    dump_data(casing_decisions(pre_casing_labels, type_counts),
+              "summarize_06c_casing_decisions")
+  }
+  dump_data(data.frame(cluster = clusters$groups, label = clusters$cluster_labels),
+            "summarize_06_cluster_labels")
+  # Per-cluster label provenance: which path built the label, plus the label as selected
+  # by tf-idf/ranking (pre-fallback, pre-casing) vs the final label (post-casing). Lets a
+  # single label be traced back to its source path and its transformation.
+  dump_data(data.frame(
+    cluster = seq_len(clusters$num_clusters),
+    n_papers = vapply(seq_len(clusters$num_clusters),
+                      function(k) sum(clusters$groups == k, na.rm = TRUE), integer(1)),
+    source = label_source,
+    label_selected = vapply(seq_len(clusters$num_clusters),
+                            function(k) { s <- tfidf_top_names[[k]]
+                                          if (length(s)) as.character(s[[1]]) else "" }, character(1)),
+    label_final = vapply(seq_len(clusters$num_clusters),
+                         function(k) { i <- which(clusters$groups == k)[1]
+                                       if (is.na(i)) "" else clusters$cluster_labels[i] }, character(1)),
+    stringsAsFactors = FALSE), "summarize_06b_label_provenance")
+  vslog$debug(paste("create_cluster_labels: done,",
+                    length(unique(clusters$cluster_labels)), "distinct labels"))
   return(clusters)
 }
 
 
-fix_cluster_labels <- function(clusterlabels, type_counts){
-  unlist(mclapply(clusterlabels, function(x) {
-    x <- fix_keyword_casing(x, type_counts)
-    # clean up titles from format issues
-    x <- gsub(",+", ",", x)
-    }))
-}
 
-fix_keyword_casing <- function(keyword, type_counts) {
-  kw = strsplit(keyword, ", ")
-  kw = lapply(kw, strsplit, " ")[[1]]
-  kw = lapply(kw, function(x){lapply(x, match_keyword_case, type_counts=type_counts)})
-  kw = lapply(kw, paste, collapse = " ")
-  kw = lapply(kw, function(x) {paste0(toupper(substr(x, 1, 1)), substr(x, 2, nchar(x)))})
-  kw = paste(kw, collapse = ", ")
-  return(paste(kw, collapse = ", "))
-}
-
-match_keyword_case <- function(x, type_counts) {
-  y <- names(type_counts[which(tolower(names(type_counts)) == gsub("-", "", tolower(x)))][1])
-  if (!is.na(y)) return(y) else return(x)
-}
-
-get_custom_cluster_corpus <- function(clusters, metadata, stops, taxonomy_separator,
-                               add_title_ngrams = T, custom_clustering=NULL) {
-  subjectlist = list()
-  for (k in seq(1, clusters$num_clusters)) {
-    matches = which(unname(clusters$groups == k) == TRUE)
-    custom_input = metadata[[custom_clustering]][matches]
-    batch_size <- 1000
-    total_length <- length(stops)
-    for (i in seq(1, total_length, batch_size)) {
-      custom_input = lapply(custom_input, function(x) {removeWords(x, stops[i:min(i+batch_size -1, total_length)])})
-    }
-    custom_input = mapply(gsub, custom_input, pattern = "; ", replacement=";")
-    custom_input = mapply(gsub, custom_input, pattern=" ", replacement="_")
-
-    all_subjects = paste(custom_input, collapse=" ")
-    all_subjects <- str_replace_all(all_subjects, "\\?+_\\?+|\\?+|\\?+ ", "")
-    all_subjects <- str_replace_all(all_subjects, ";+", ";")
-    all_subjects <- str_replace_all(all_subjects, " ?; ?", ";")
-    all_subjects <- str_replace_all(all_subjects, " +", ";")
-    subjectlist = c(subjectlist, all_subjects)
-  }
-  nn_corpus <- VCorpus(VectorSource(subjectlist))
-  return(nn_corpus)
-}
-
-get_cluster_corpus <- function(clusters, metadata, stops, taxonomy_separator,
-                               add_title_ngrams = T, custom_clustering=NULL) {
-  subjectlist = list()
-  for (k in seq(1, clusters$num_clusters)) {
-    matches = which(unname(clusters$groups == k) == TRUE)
-    titles =  metadata$title[matches]
-    subjects = metadata$subject[matches]
-    titles = lapply(titles, function(x) {gsub("[^[:alnum:]-]", " ", x)})
-    titles = lapply(titles, gsub, pattern="\\s+", replacement=" ")
-    title_ngrams <- get_title_ngrams(titles, stops, c(2, 3))
-    batch_size <- 1000
-    total_length <- length(stops)
-    for (i in seq(1, total_length, batch_size)) {
-      titles = lapply(titles, function(x) {removeWords(x, stops[i:min(i+batch_size -1, total_length)])})
-    }
-    subjects = mapply(gsub, subjects, pattern = "; ", replacement=";")
-    subjects = mapply(gsub, subjects, pattern=" ", replacement="_")
-    titles = mapply(gsub, titles, pattern=" ", replacement=";")
-
-    if (!is.null(taxonomy_separator)) {
-      subjects = mapply(function(x){strsplit(x, ";")}, subjects)
-      taxons = lapply(subjects, function(y){Filter(function(x){grepl(taxonomy_separator, x)}, y)})
-      subjects = lapply(subjects, function(y){Filter(function(x){!grepl(taxonomy_separator, x)}, y)})
-      taxons = lapply(taxons, function(x){lapply(strsplit(x, taxonomy_separator), function(y){tail(y,1)})})
-      taxons = lapply(taxons, function(x){paste(unlist(x), collapse=";")})
-      subjects = lapply(subjects, function(x){paste(unlist(x), collapse=";")})
-      subjects = mapply(paste, subjects, taxons, collapse=";")
-    }
-    if (add_title_ngrams == T) {
-      all_subjects = paste(subjects, title_ngrams, collapse=" ")
-    } else {
-      all_subjects = paste(subjects, collapse=" ")
-    }
-    all_subjects <- str_replace_all(all_subjects, "\\?+_\\?+|\\?+|\\?+ ", "")
-    all_subjects <- str_replace_all(all_subjects, ";+", ";")
-    all_subjects <- str_replace_all(all_subjects, " ?; ?", ";")
-    all_subjects <- str_replace_all(all_subjects, " +", ";")
-    subjectlist = c(subjectlist, all_subjects)
-  }
-  nn_corpus <- VCorpus(VectorSource(subjectlist))
-  return(nn_corpus)
-}
-
-
+# Turn the ranked tf-idf terms of each cluster into a display label: prunes
+# stopword-edged n-grams, removes n-grams nested inside others (keeping the more
+# specific one), capitalises, and returns the top_n terms joined with ", ".
 get_top_names <- function(tfidf_top, top_n, stops) {
   tfidf_top_names <- lapply(tfidf_top, names)
   tfidf_top_names <- lapply(tfidf_top_names, function(x) {another_prune_ngrams(x, stops)})
@@ -206,6 +319,10 @@ get_top_names <- function(tfidf_top, top_n, stops) {
   return(tfidf_top_names)
 }
 
+
+# Variant of prune_ngrams used on tf-idf term names: drops n-grams that start or
+# end with a stopword or whose first and last token are identical. Tolerant of
+# empty/NA tokens. Returns the surviving "_"-joined n-grams.
 another_prune_ngrams <- function(ngrams, stops){
   # filter out stopwords from start or stop of ngrams
   tokens <- unname(unlist(ngrams))
@@ -252,45 +369,3 @@ another_prune_ngrams <- function(ngrams, stops){
   tokens = lapply(tokens, function(x){mapply(paste, x, collapse="_")})
   return(tokens)
 }
-
-fill_empty_clusters <- function(nn_tfidf, nn_corpus){
-  replacement_nn_tfidf <- TermDocumentMatrix(nn_corpus, control = list(tokenize = SplitTokenizer,
-                                                          weighting = function(x) weightSMART(x, spec="ntn"),
-                                                          bounds = list(local = c(1, Inf))
-                                                           ))
-  replacement_tfidf_top <- apply(replacement_nn_tfidf, 2, function(x) {x2 <- sort(x, TRUE);x2[x2>0]})
-  return(replacement_tfidf_top)
-}
-
-
-get_title_ngrams <- function(titles, stops, ngram_lengths) {
-  # for ngrams: we have to collapse with "_" or else tokenizers will split ngrams again at that point and we'll be left with unigrams
-  titles_bigrams = prune_ngrams(expand_ngrams(titles, 2), stops)
-  titles_trigrams = prune_ngrams(expand_ngrams(titles, 3), stops)
-  return(c(titles_bigrams, titles_trigrams))
-}
-
-
-filter_out_nested_ngrams <- function(top_ngrams, top_n) {
-  top_names <- list()
-  for (ngram in top_ngrams) {
-    if (ngram == "")
-      next;
-
-    ngram_in_top_names = stringi::stri_detect_fixed(top_names, ngram)
-    top_names_with_ngram = sapply(top_names, function(x)(stringi::stri_detect_fixed(ngram, x)))
-
-    # ngram substring of any top_name, and no top_name substring of ngram -> skip ngram
-    if (any(ngram_in_top_names == TRUE) && all(top_names_with_ngram == FALSE)) {}
-    # ngram not substring of any top_name, but at least one top_name is a substring of ngram -> replace top_name with ngram
-    else if (all(ngram_in_top_names == FALSE) && any(top_names_with_ngram == TRUE)) {
-      top_names[which(top_names_with_ngram)] <- ngram
-    }
-    # a not substring of b, b not substring of a -> add b, next
-    else if (all(ngram_in_top_names == FALSE) && all(top_names_with_ngram == FALSE)) {
-      top_names <- unlist(c(top_names, ngram))
-    }
-  }
-  return(head(unique(top_names), top_n))
-}
-

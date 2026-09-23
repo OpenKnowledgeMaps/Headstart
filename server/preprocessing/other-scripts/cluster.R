@@ -9,6 +9,9 @@ get_cut_off <- function(css_cluster, attempt=1){
 }
 
 create_clusters <- function(distance_matrix, max_clusters=-1, method="ward.D") {
+  # Debug: the distance matrix that clustering runs on — the deterministic input to
+  # cutree, keyed by paper id (row labels).
+  dump_data(as.matrix(distance_matrix), "cluster_00_distance_matrix")
   if (nrow(distance_matrix) < 2) {
     warning("Not enough papers for clustering, N < 2.")
     num_clusters <- 1
@@ -81,6 +84,11 @@ create_clusters <- function(distance_matrix, max_clusters=-1, method="ward.D") {
 
     vclog$info(paste("vis_id:", .GlobalEnv$VIS_ID, "Number of Clusters:", num_clusters, sep=" "))
     vclog$debug(paste("CutOff-Description:", attributes(cut_off)$description))
+    # Debug: per-paper cluster membership + the chosen k. Aligns with
+    # cluster_00_distance_matrix by row label (paper id).
+    dump_data(data.frame(id = labels, cluster = unname(groups)), "cluster_01_groups")
+    dump_data(data.frame(num_clusters = num_clusters, n_items = num_items,
+                         k_attempts = attempt), "cluster_02_meta")
   }
   clusters = list("labels"=labels, "groups"=groups, "num_clusters"=num_clusters)
   return(clusters)

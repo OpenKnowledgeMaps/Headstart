@@ -286,6 +286,25 @@ export const getListLink = (paper, config, context) => {
 };
 
 /**
+ * Parses the paper's pdf link candidates from duplicates into an array of strings.
+ *
+ * @param {object} paper paper object
+ *
+ * @returns array of strings or null if no candidates are found
+ */
+export const getPdfLinkCandidatesFromDuplicates = (paper): string[] | null => {
+  if (
+    typeof paper.pdf_link_candidates_from_duplicates !== "string" ||
+    !paper.pdf_link_candidates_from_duplicates
+  ) {
+    return null;
+  }
+
+  const links = paper.pdf_link_candidates_from_duplicates.split(";");
+  return links.length > 0 ? links : null;
+};
+
+/**
  * Parses the paper's authors string into an object array.
  *
  * @param {string} authors semicolon-separated authors
