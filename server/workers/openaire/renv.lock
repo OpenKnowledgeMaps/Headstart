@@ -1018,8 +1018,8 @@
       "RemoteHost": "api.github.com",
       "RemoteUsername": "OpenKnowledgeMaps",
       "RemoteRepo": "ropenaire",
-      "RemoteRef": "aca6c728326da9868bf16d11d2cf3bb52723f006",
-      "RemoteSha": "aca6c728326da9868bf16d11d2cf3bb52723f006"
+      "RemoteRef": "master",
+      "RemoteSha": "02fa7e1c367534ebe7610e562b529c851e29e898"
     },
     "stringdist": {
       "Package": "stringdist",
