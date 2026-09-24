@@ -9,4 +9,4 @@ typing-extensions==4.16.0
 # same versions the other workers use -- a change here can change dedup outcomes.
 Levenshtein==0.25.1
 rapidfuzz==3.9.7
-pyorcid @ git+https://github.com/OpenKnowledgeMaps/PyOrcid.git@979c7733664df0936b2aef3b899f2d8de10b4315
+pyorcid @ git+https://github.com/OpenKnowledgeMaps/PyOrcid.git@0f04f1f05dcc019e2d458e854141da94df80d083

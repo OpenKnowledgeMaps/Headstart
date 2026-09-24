@@ -9,6 +9,7 @@ description = "A common utility package shared across microservices."
 
 [tool.setuptools.packages.find]
 where = ["."]
+exclude = ["tests", "tests.*"]
 
 [tool.setuptools]
 package-dir = {"" = "."}

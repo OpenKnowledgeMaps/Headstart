@@ -23,4 +23,3 @@ COPY ./workers/api/requirements-e.txt ./api/requirements-e.txt
 RUN cd api && pip install --no-cache-dir -r requirements-e.txt
 
 COPY ./workers/api/src ./
-COPY ./workers/api/tests ./api/tests

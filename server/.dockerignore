@@ -1,0 +1,44 @@
+# Every worker image is built with server/ as the context (docker-compose.yml,
+# docker-compose-integration-tests.yml, workers/build_docker_images.sh), so this is
+# the file Docker reads for all of them. It keeps local working-tree state out of
+# the images: caches, notebooks, editor and R session files, local renv projects,
+# and local secrets and env files. A build from a clean checkout is unaffected.
+
+# Python
+**/__pycache__
+**/*.pyc
+**/.pytest_cache
+**/.venv
+**/.cache
+**/.ipynb_checkpoints
+**/*.ipynb
+
+# R and RStudio. The image's renv project is created by the build, not copied.
+**/renv
+**/.Rprofile
+**/.Rhistory
+**/.RData
+**/.Rproj.user
+**/*.Rproj
+
+# Local secrets and environment files
+**/.orcidtoken.json
+**/*.env
+workers/certs
+
+# Tests, test data and coverage output. Tests run from the working tree or from a
+# mounted volume (docker-compose-integration-tests.yml), not from the images.
+**/tests
+**/test
+**/test_*.py
+**/*_test.py
+**/conftest.py
+**/pytest.ini
+**/requirements-dev.txt
+**/.coverage
+**/coverage.xml
+
+# Other local files
+**/.DS_Store
+**/*.bkp
+workers/base/output

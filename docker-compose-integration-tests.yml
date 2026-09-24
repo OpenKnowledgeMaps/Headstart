@@ -72,8 +72,8 @@ services:
 
   api:
     build:
-      context: server/workers
-      dockerfile: api/Dockerfile
+      context: server
+      dockerfile: workers/api/Dockerfile
     container_name: api
     hostname: "api"
     restart: unless-stopped
@@ -89,6 +89,9 @@ services:
       POSTGRES_PASSWORD: "${POSTGRES_PASSWORD}"
       POSTGRES_HOST: "${POSTGRES_HOSTS}"
       DEFAULT_DATABASE: "${POSTGRES_DB}"
+    # Tests are not part of the image; the mock app runs from the mounted folder.
+    volumes:
+      - ./server/workers/api/tests:/api/api/tests
     command: ["python", "api/tests/mock_app.py"]
     depends_on:
       - redis
