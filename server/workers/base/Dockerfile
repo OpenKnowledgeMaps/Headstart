@@ -31,7 +31,7 @@ ENV LC_ALL=en_US.UTF-8 \
     RENV_PATHS_CACHE=/renv/cache \
     PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1 \
-    PYTHONPATH="${PYTHONPATH}:/headstart/:/headstart/base/:/headstart/base/src/"
+    PYTHONPATH="/headstart/:/headstart/base/:/headstart/base/src/"
 
 # Binary repository URL, so renv itself does not need compiling either.
 RUN R -e 'install.packages("renv", repos="https://packagemanager.posit.co/cran/__linux__/noble/2026-09-22")'
