@@ -4,14 +4,13 @@
 On root level of Headstart:
 
 
-* Install PHP unit 9 which works for PHP 8.0 and 8.2
+* Install the dev dependencies (PHPUnit and PHP_CodeSniffer) from `composer.lock`
 
-`docker-compose -f docker-compose-phptest.yml run composer require --dev phpunit/phpunit 9 --ignore-platform-reqs`
+`docker-compose -f docker-compose-phptest.yml run composer install`
 
-* Test that PHPUnit can run for PHP versions 8.0 and 8.2
+* Test that PHPUnit runs on PHP 8.2, the version the application runs on
 
 ```
-docker-compose -f docker-compose-phptest.yml run phpunit80 --version
 docker-compose -f docker-compose-phptest.yml run phpunit82 --version
 ```
 

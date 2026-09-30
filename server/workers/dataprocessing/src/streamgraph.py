@@ -36,7 +36,11 @@ class Streamgraph(object):
     def get_streamgraph_data(self, metadata, query, n=12, method="count"):
         metadata = pd.DataFrame.from_records(metadata)
         df = metadata.copy()
-        df.year = pd.to_datetime(df.year, utc=True, errors="coerce").dt.tz_convert(None)
+        # `year` arrives in mixed formats ("2018", "2019-05", "2019-05-01",
+        # "2014-01-01T00:00:00Z", "2019 Jan/Feb"). format="mixed" parses each value on
+        # its own; without it pandas >= 2 applies the format inferred from the first
+        # value to all of them and silently coerces the rest to NaT.
+        df.year = pd.to_datetime(df.year, utc=True, errors="coerce", format="mixed").dt.tz_convert(None)
         df.dropna(axis=0, subset=["year"], inplace=True)
         df.year = pd.to_datetime(df.year.map(lambda x: x.replace(month=1, day=1).strftime('%Y-%m-%d')))
         df = df[df.subject.map(lambda x: x is not None)]
@@ -66,7 +70,7 @@ class Streamgraph(object):
     def get_daterange(boundaries):
         daterange = pd.date_range(start=min(boundaries.year),
                                   end=max(boundaries.year),
-                                  freq='AS')
+                                  freq='YS')
         if len(daterange) > 0:
             return sorted(daterange)
         else:
@@ -100,35 +104,42 @@ class Streamgraph(object):
         # set stopwords , stop_words='english'
         tf_vectorizer = CountVectorizer(max_df=0.95, min_df=2,
                                         tokenizer=lambda x: self.tokenize(x),
+                                        token_pattern=None,
                                         lowercase=True,
                                         stop_words=[query] + stopwords
                                         )
         tfidf_vectorizer = TfidfVectorizer(max_df=0.95, min_df=2,
                                            tokenizer=lambda x: self.tokenize(x),
+                                           token_pattern=None,
                                            lowercase=True,
                                            stop_words=[query] + stopwords
                                            )
         if method == "count":
             tf = tf_vectorizer.fit_transform(corpus)
             counts = pd.DataFrame(tf.toarray(),
-                                  columns=tf_vectorizer.get_feature_names())
-            candidates = counts.sum().sort_values(ascending=False).index.tolist()
+                                  columns=tf_vectorizer.get_feature_names_out())
+            # Stable sort: terms with equal counts keep the vectorizer's (alphabetical)
+            # order, so the top-n cut does not depend on the sort implementation.
+            candidates = counts.sum().sort_values(ascending=False, kind="stable").index.tolist()
             candidates = [c for c in candidates if len(c) > 2]
             top_n = candidates[:n]
         if method == "tfidf":
             tfidf = tfidf_vectorizer.fit_transform(corpus)
             weights = pd.DataFrame(tfidf.toarray(),
-                                   columns=tfidf_vectorizer.get_feature_names())
-            candidates = weights.sum().sort_values(ascending=False).index.tolist()
+                                   columns=tfidf_vectorizer.get_feature_names_out())
+            candidates = weights.sum().sort_values(ascending=False, kind="stable").index.tolist()
             candidates = [c for c in candidates if len(c) > 2]
             top_n = candidates[:n]
         if method == "nmf":
             tfidf = tfidf_vectorizer.fit_transform(corpus)
+            # scikit-learn >= 1.0 scales the regularization by n_features (W) and
+            # n_samples (H); dividing by them keeps the strength of the former alpha=.1.
             nmf = NMF(n_components=n,
-                      alpha=.1, l1_ratio=.5, init='nndsvd',
+                      alpha_W=.1 / tfidf.shape[1], alpha_H=.1 / tfidf.shape[0],
+                      l1_ratio=.5, init='nndsvd',
                       random_state=42).fit(tfidf)
             top_n = list(chain.from_iterable(
-                            [self.get_top_words(t, tfidf_vectorizer.get_feature_names(), 1)
+                            [self.get_top_words(t, tfidf_vectorizer.get_feature_names_out(), 1)
                              for t in nmf.components_]))
         if method == "lda":
             tf = tf_vectorizer.fit_transform(corpus)
@@ -137,7 +148,7 @@ class Streamgraph(object):
                                             learning_offset=50.,
                                             random_state=42).fit(tf)
             top_n = list(chain.from_iterable(
-                            [self.get_top_words(t, tf_vectorizer.get_feature_names(), 1)
+                            [self.get_top_words(t, tf_vectorizer.get_feature_names_out(), 1)
                              for t in lda.components_]))
         return top_n
 
@@ -160,12 +171,14 @@ class Streamgraph(object):
                            "counts": "sum",
                            "id": aggregate_ids,
                            "boundary_label": "max"})
-                     .fillna({"counts": 0, "subject": item, "id": "NA"})
+                     .fillna({"id": "NA"})
                      .sort_values("year"))
             tmp["subject"] = item
             tmp["counts"] = tmp["id"].map(lambda x: len(set(filter(lambda x: x!="NA", x.split(", ")))))
             y = tmp.counts.astype(int).to_list()
-            ids_timestep = tmp.id.map(lambda x: list(set(filter(lambda x: x!="NA", x.split(", "))))).tolist()
+            # Sorted, so the id lists (and ids_overall, built from them) have the same
+            # order on every run instead of the set's iteration order.
+            ids_timestep = tmp.id.map(lambda x: sorted(set(filter(lambda x: x!="NA", x.split(", "))))).tolist()
             temp.append({"name": item, "y": y,
                          "ids_timestep": ids_timestep})
         df = pd.DataFrame.from_records(temp)

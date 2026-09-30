@@ -1,5 +1,17 @@
-import { test, expect } from "@playwright/test";
+import { test, expect, Page } from "@playwright/test";
 import { prepareVisualisation } from "../../vis/js/utils/e2eVisualisationLoader";
+
+const CUSTOM_TITLE = "custom+title+via+URL";
+
+// PubMed takes custom_title only on the /map/<vis_id> URL, not on the search URL.
+// The search flow ends on /map/<vis_id>, so build the map first and append the
+// title to that URL; vis_ids are not stable across databases or days.
+const openWithCustomTitle = async (page: Page, searchUrl: string, customTitle: string) => {
+  await prepareVisualisation(page, searchUrl);
+  const mapUrl = page.url();
+  expect(mapUrl).toMatch(/\/map\/[0-9a-f]+$/);
+  await page.goto(`${mapUrl}&custom_title=${customTitle}`);
+};
 
 test.describe("More information modal window in PubMed", () => {
   test.describe("Interactivity tests", () => {
@@ -114,10 +126,7 @@ test.describe("More information modal window in PubMed", () => {
     test("No query, custom title", async ({ page }) => {
       const VISUALISATION_DYNAMIC_URL =
         "/search?type=get&vis_type=overview&q=&service=pubmed&sorting=most-relevant";
-      await prepareVisualisation(page, VISUALISATION_DYNAMIC_URL);
-      await page.goto(
-        "/map/f3bfddcad6bbdaef4647517827e6a6cb&custom_title=custom+title+via+URL",
-      );
+      await openWithCustomTitle(page, VISUALISATION_DYNAMIC_URL, CUSTOM_TITLE);
 
       await page.getByTestId("context").getByText("More information").click();
       await expect(page.locator("#info-body")).toContainText(
@@ -159,9 +168,10 @@ test.describe("More information modal window in PubMed", () => {
     });
 
     test("Query, custom title", async ({ page }) => {
-      await page.goto(
-        "http://localhost:8085/map/6d9987f5edd8165da49a51774bc4f7a1&custom_title=custom+title+via+URL",
-      );
+      const VISUALISATION_DYNAMIC_URL =
+        "/search?type=get&vis_type=overview&q=infection&service=pubmed&sorting=most-relevant";
+      await openWithCustomTitle(page, VISUALISATION_DYNAMIC_URL, CUSTOM_TITLE);
+
       await page.getByTestId("context").getByText("More information").click();
       await expect(page.locator("#info-body")).toContainText(
         "This knowledge map presents you with a topical overview of research on custom title via URL based on the 100 most relevant resources matching your search query.",

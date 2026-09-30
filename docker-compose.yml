@@ -16,7 +16,7 @@ services:
       - headstart
 
   redis:
-    image: "redis:6.0-alpine"
+    image: "redis:8.10-alpine"
     restart: unless-stopped
     hostname: "${REDIS_HOST}"
     environment:

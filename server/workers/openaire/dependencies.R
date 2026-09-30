@@ -1,7 +1,6 @@
 library(xml2)
 library(plyr)
 library(ropenaire)
-library(rcrossref)
 library(stringr)
 library(stringdist)
 library(logging)
