@@ -159,9 +159,13 @@ export function assertNoClassificationLeaks(
     ...new Set(documents.map((d) => d.area).filter(Boolean) as string[]),
   ];
   for (const title of areaTitles) {
+    // An area title joins several labels with ", ". Check each label on its own,
+    // so a pattern cannot match across two labels (e.g. the MeSH blob pattern on
+    // "a/b, C/d").
+    const labels = title.split(", ").map((l) => l.trim()).filter(Boolean);
     for (const { name, re } of ALL_MARKERS) {
       expect(
-        re.test(title),
+        labels.some((l) => re.test(l)),
         `area title "${title}" (${label}) still carries the ${name} marker`,
       ).toBe(false);
     }

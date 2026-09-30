@@ -1,113 +1,38 @@
-FROM ubuntu:18.04
+FROM rocker/r-ver:4.4.2
 
 LABEL maintainer="Chris Kittel <christopher.kittel@openknowledgemaps.org>"
 
 ENV DEBIAN_FRONTEND=noninteractive
 
-ARG R_VERSION
-ARG BUILD_DATE
-ARG CRAN
-ENV R_VERSION=${R_VERSION:-3.6.3} \
-    CRAN=${CRAN:-https://cran.rstudio.com}
+# Same base as Dockerfile, without the Python layer: R packages install as P3M
+# binaries, so the compiler that rocker/r-ver ships is purged. See Dockerfile.
+RUN apt-get update && apt-get upgrade -y \
+    && apt-get install -y --no-install-recommends locales \
+    && apt-mark manual libgfortran5 libgomp1 libquadmath0 \
+        libblas3 liblapack3 libopenblas0-pthread \
+    && apt-get purge -y \
+        gcc g++ gfortran cpp gcc-13 g++-13 gfortran-13 cpp-13 \
+        libc6-dev libc-dev-bin linux-libc-dev libcrypt-dev \
+        libgcc-13-dev libgfortran-13-dev libstdc++-13-dev \
+        libblas-dev liblapack-dev libopenblas-dev libopenblas-pthread-dev \
+        libjpeg-turbo8-dev binutils make \
+    && apt-get autoremove --purge -y \
+    && locale-gen en_US.UTF-8 \
+    && update-locale LANG=en_US.UTF-8 LC_ALL=en_US.UTF-8 \
+    && rm -rf /var/lib/apt/lists/*
 
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    bash-completion \
-    ca-certificates \
-    file \
-    fonts-texgyre \
-    g++ \
-    gfortran \
-    gsfonts \
-    libblas-dev \
-    libbz2-1.0 \
-    libcurl4 \
-    libjpeg-turbo8-dev \
-    libopenblas-dev \
-    libpangocairo-1.0-0 \
-    libpcre3 \
-    libpng16-16 \
-    libreadline7 \
-    libtiff5 \
-    liblzma5 \
-    locales \
-    make \
-    unzip \
-    zip \
-    zlib1g && \
-    BUILDDEPS="curl \
-    default-jdk \
-    libbz2-dev \
-    libcairo2-dev \
-    libcurl4-openssl-dev \
-    libpango1.0-dev \
-    libjpeg-dev \
-    libpcre3-dev \
-    libpng-dev \
-    libreadline-dev \
-    libtiff5-dev \
-    liblzma-dev \
-    libx11-dev \
-    libxt-dev \
-    perl \
-    tcl8.6-dev \
-    tk8.6-dev \
-    x11proto-core-dev \
-    xauth \
-    xfonts-base \
-    xvfb \
-    zlib1g-dev" && \
-    apt-get install -y --no-install-recommends $BUILDDEPS && \
-    mkdir -p tmp && cd tmp && \
-    curl -O https://cran.r-project.org/src/base/R-3/R-${R_VERSION}.tar.gz && \
-    tar -xf R-${R_VERSION}.tar.gz && cd R-${R_VERSION} && \
-    R_PAPERSIZE=letter \
-    R_BATCHSAVE="--no-save --no-restore" \
-    R_BROWSER=xdg-open \
-    PAGER=/usr/bin/pager \
-    PERL=/usr/bin/perl \
-    R_UNZIPCMD=/usr/bin/unzip \
-    R_ZIPCMD=/usr/bin/zip \
-    R_PRINTCMD=/usr/bin/lpr \
-    LIBnn=lib \
-    AWK=/usr/bin/awk \
-    CFLAGS="-g -O2 -fstack-protector-strong -Wformat -Werror=format-security -Wdate-time -D_FORTIFY_SOURCE=2 -g" \
-    CXXFLAGS="-g -O2 -fstack-protector-strong -Wformat -Werror=format-security -Wdate-time -D_FORTIFY_SOURCE=2 -g" \
-    ./configure --enable-R-shlib --enable-memory-profiling --with-readline --with-blas --with-tcltk --disable-nls --with-recommended-packages && \
-    make && make install && \
-    mkdir -p /usr/local/lib/R/site-library && \
-    chown root:staff /usr/local/lib/R/site-library && chmod g+ws /usr/local/lib/R/site-library && \
-    sed -i '/^R_LIBS_USER=.*$/d' /usr/local/lib/R/etc/Renviron && \
-    echo "R_LIBS_USER=\${R_LIBS_USER-'/usr/local/lib/R/site-library'}" >> /usr/local/lib/R/etc/Renviron && \
-    echo "R_LIBS=\${R_LIBS-'/usr/local/lib/R/site-library:/usr/local/lib/R/library:/usr/lib/R/library'}" >> /usr/local/lib/R/etc/Renviron && \
-    if [ -z "$BUILD_DATE" ]; then MRAN=$CRAN; else MRAN=https://mran.microsoft.com/snapshot/${BUILD_DATE}; fi && \
-    echo MRAN=$MRAN >> /etc/environment && \
-    echo "options(repos = c(CRAN='$MRAN'), download.file.method = 'libcurl')" >> /usr/local/lib/R/etc/Rprofile.site && \
-    Rscript -e "install.packages(c('littler', 'docopt'), repo='$CRAN')" && \
-    ln -s /usr/local/lib/R/site-library/littler/examples/install2.r /usr/local/bin/install2.r && \
-    ln -s /usr/local/lib/R/site-library/littler/examples/installGithub.r /usr/local/bin/installGithub.r && \
-    ln -s /usr/local/lib/R/site-library/littler/bin/r /usr/local/bin/r && \
-    cd / && rm -rf tmp && \
-    apt-get remove --purge -y $BUILDDEPS && apt-get autoremove -y && apt-get autoclean -y && rm -rf /var/lib/apt/lists/*
+ENV LC_ALL=en_US.UTF-8 \
+    LANG=en_US.UTF-8 \
+    RENV_PATHS_CACHE=/renv/cache
 
-RUN locale-gen en_US.UTF-8 && update-locale LANG=en_US.UTF-8 LC_ALL=en_US.UTF-8 && dpkg-reconfigure locales
-
-RUN apt update && apt full-upgrade -y && \
-    apt install -y links curl vim libcurl4-openssl-dev \
-    libxml2-dev libz-dev libpoppler-cpp-dev \
-    libopenmpi-dev libzmq3-dev build-essential python3-dev \
-    libssl1.1 libssl-dev && \
-    apt clean && \
-    rm -f /etc/localtime && \
-    ln -s /usr/share/zoneinfo/Europe/Vienna /etc/localtime && \
-    dpkg --configure -a
-
-RUN apt-get -y install python3 python3-pip
-
-RUN R -e 'options(repos="https://cran.wu.ac.at")' && \
-    R -e 'install.packages("remotes")' && \
-    R -e 'install.packages("renv", version="0.14.0-5")'
+RUN R -e 'install.packages("renv", repos="https://packagemanager.posit.co/cran/__linux__/noble/2026-09-22")'
 
 WORKDIR /headstart
+COPY workers/pubmed/renv.lock .
+COPY workers/pubmed/activate.R .
+
+RUN R -e 'renv::consent(provided = TRUE)' && \
+    R -e 'setwd("/headstart"); renv::activate(); renv::restore(lockfile = "renv.lock")'
 
 COPY workers/pubmed/test_r_packages.R /usr/local/bin/test_r_packages.R
 RUN chmod +x /usr/local/bin/test_r_packages.R

@@ -3,8 +3,6 @@ import json
 import uuid
 import time
 import redis
-import asyncio
-import aioredis
 import pandas as pd
 
 from flask import request, make_response, jsonify, abort

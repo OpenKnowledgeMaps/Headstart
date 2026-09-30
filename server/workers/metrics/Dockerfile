@@ -4,34 +4,39 @@ LABEL maintainer="Chris Kittel <christopher.kittel@openknowledgemaps.org>"
 
 ENV DEBIAN_FRONTEND=noninteractive
 
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    locales \
-    curl \
-    vim \
-    python3 \
-    python3-dev \
-    python3-pip \
-    libcurl4-openssl-dev \
-    libssl-dev \
-    libxml2-dev \
-    libz-dev \
-    libpoppler-cpp-dev \
-    libopenmpi-dev \
-    libzmq3-dev \
-    libuv1-dev \
-    build-essential \
+# R packages install as P3M binaries and Python packages as wheels, so the image
+# needs no compiler. rocker/r-ver ships one, so it is purged here. The shared
+# libraries R itself links against (BLAS/LAPACK, gfortran, OpenMP) are marked as
+# manually installed first, so the purge and autoremove leave them in place.
+# libuv1t64: runtime library of the fs binary.
+RUN apt-get update && apt-get upgrade -y \
+    && apt-get install -y --no-install-recommends \
+        locales \
+        libuv1t64 \
+        python3 \
+        python3-pip \
+    && apt-mark manual libgfortran5 libgomp1 libquadmath0 \
+        libblas3 liblapack3 libopenblas0-pthread \
+    && apt-get purge -y \
+        gcc g++ gfortran cpp gcc-13 g++-13 gfortran-13 cpp-13 \
+        libc6-dev libc-dev-bin linux-libc-dev libcrypt-dev \
+        libgcc-13-dev libgfortran-13-dev libstdc++-13-dev \
+        libblas-dev liblapack-dev libopenblas-dev libopenblas-pthread-dev \
+        libjpeg-turbo8-dev binutils make \
+    && apt-get autoremove --purge -y \
     && locale-gen en_US.UTF-8 \
     && update-locale LANG=en_US.UTF-8 LC_ALL=en_US.UTF-8 \
-    && rm -f /etc/localtime \
-    && ln -s /usr/share/zoneinfo/Europe/Vienna /etc/localtime \
     && rm -rf /var/lib/apt/lists/*
 
 ENV LC_ALL=en_US.UTF-8 \
     LANG=en_US.UTF-8 \
     RENV_PATHS_CACHE=/renv/cache \
-    PYTHONPATH="/headstart/:/headstart/metrics/:/headstart/metrics/src/"
+    PYTHONPATH="/headstart/:/headstart/metrics/:/headstart/metrics/src/" \
+    PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1
 
-RUN R -e 'install.packages("renv", repos="https://packagemanager.posit.co/cran/latest")'
+# Binary repository URL, so renv itself does not need compiling either.
+RUN R -e 'install.packages("renv", repos="https://packagemanager.posit.co/cran/__linux__/noble/2026-09-22")'
 
 WORKDIR /headstart
 COPY workers/metrics/requirements.txt .

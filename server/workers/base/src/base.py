@@ -508,7 +508,7 @@ def parse_annotations(field):
             matches = pattern_annotations.findall(field)
             matches = [{m.split(":")[0]: m.split(":")[1]} for m in matches]
             annotations = pd.DataFrame(matches)
-            annotations = annotations.fillna(method="backfill").head(1).T[0]
+            annotations = annotations.bfill().head(1).T[0]
             return annotations.to_dict()
         except Exception as e:
             return {}

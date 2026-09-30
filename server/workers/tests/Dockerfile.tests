@@ -1,12 +1,21 @@
-FROM python:3.9
+FROM python:3.12-slim-trixie
 
 LABEL maintainer="Chris Kittel <christopher.kittel@openknowledgemaps.org>"
 
-RUN apt-get update
-RUN apt-get install -y --no-install-recommends gcc git python3-dev
-RUN apt-get install -y libpq-dev
+ENV PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1
 
 WORKDIR /app
 
-RUN pip install git+https://github.com/python-restx/flask-restx@1.3.2
-RUN pip install pytest requests sqlalchemy sqlalchemy-utils psycopg2-binary
+# The test code is mounted at /app (docker-compose-integration-tests.yml). Everything
+# below installs as wheels, so no compiler, git or libpq headers are needed. Flask,
+# flask-restx and the SQLAlchemy packages match the api and persistence workers.
+RUN pip install --no-cache-dir \
+    Flask==3.1.3 \
+    flask-restx==1.3.2 \
+    Werkzeug==3.1.8 \
+    SQLAlchemy==2.0.54 \
+    SQLAlchemy-Utils==0.42.1 \
+    psycopg2-binary==2.9.13 \
+    pytest==9.1.1 \
+    requests==2.34.2
