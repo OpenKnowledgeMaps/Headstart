@@ -102,6 +102,11 @@ get_ndms <- function(distance_matrix, mindim=2, maxdim=2) {
   # nm <- par.nmds(distance_matrix, mindim=mindim, maxdim=maxdim, maxit=maxit)
   # nm.nmin = nmds.min(nm)
   dm_nrows <- max(nrow(distance_matrix),1)
+  # Ceiling of the dissimilarities, used by metaMDS's halfchange scaling
+  # (postMDS). A plain dist object carries no "maxdist" attribute: vegan < 2.7
+  # then assumed 1, vegan >= 2.7 computes the scaling from the missing value
+  # and fails, which sends the layout into the random fallback below.
+  attr(distance_matrix, "maxdist") <- 1
   if (dm_nrows <= 2) {
     points <- tryCatch({
       ord <- metaMDS(distance_matrix, k = 2, parallel = 7, trymax=30,

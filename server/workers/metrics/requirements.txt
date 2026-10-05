@@ -1,8 +1,1 @@
-Levenshtein==0.25.1
-numpy==1.26.4
-pandas==2.2.2
-python-dateutil==2.9.0.post0
-pytz==2024.1
-redis==5.0.8
-six==1.16.0
-typing-extensions==4.12.2
+redis==5.3.1
