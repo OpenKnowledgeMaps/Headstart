@@ -1,4 +1,4 @@
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 
 import { STREAMGRAPH_MODE } from "@/js/reducers/chartType";
 
@@ -542,6 +542,50 @@ describe("config and context state", () => {
       );
 
       expect(result).toEqual("11 Aug 2019 - 12 Aug 2020");
+    });
+
+    it("should initialize a correct timespan 'Until 12 Aug 2020' (base, Pacific time zone)", () => {
+      // historical dates use the local mean time offset, which is not a whole
+      // number of minutes (e.g. -7:52:58 in America/Los_Angeles in 1665)
+      vi.stubEnv("TZ", "America/Los_Angeles");
+
+      try {
+        const SERVICE_NAME = "base";
+        const FROM = "1665-01-01";
+        const TO = "2020-08-12";
+
+        const initialState = {};
+        const { configObject, contextObject } = setup(
+          {
+            service: SERVICE_NAME,
+          },
+          {
+            params: {
+              from: FROM,
+              to: TO,
+            },
+          },
+        );
+
+        const result = timespanReducer(
+          initialState,
+          initializeStore(
+            configObject,
+            contextObject,
+            [],
+            null,
+            500,
+            null,
+            null,
+            500,
+            {},
+          ),
+        );
+
+        expect(result).toEqual("Until 12 Aug 2020");
+      } finally {
+        vi.unstubAllEnvs();
+      }
     });
 
     it("should initialize a correct timespan 'Until 12 Aug 2020' (default)", () => {
