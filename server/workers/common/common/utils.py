@@ -13,6 +13,7 @@ from datetime import timedelta
 from dateutil.parser import parse
 from typing import Dict, List, Union
 from typing_extensions import Literal
+from common.queue_timing import mark_enqueued
 
 
 redis_config = {
@@ -204,7 +205,7 @@ def get_contentprovider_records(
 def _fetch_contentprovider_records_via_queue():
     """Produce records by asking a BASE worker over the Redis queue (API side)."""
     k = str(uuid.uuid4())
-    d = {"id": k, "params": {}, "endpoint": "contentproviders"}
+    d = mark_enqueued({"id": k, "params": {}, "endpoint": "contentproviders"})
     redis_store.rpush("base", json.dumps(d))
     result = get_key(redis_store, k, 100)
     if result.get("status") == "error":
@@ -275,14 +276,14 @@ def push_metadata_to_queue(
     params["metrics_sources"] = source_list
 
     # Payload object creation
-    task_data = json.dumps({
+    task_data = mark_enqueued({
         "id": request_id,
         "params": params,
         "metadata": metadata.to_json(orient="records"),
     })
 
     # Pushing request to Redis and returning request id
-    redis_store.rpush("metrics", task_data)
+    redis_store.rpush("metrics", json.dumps(task_data))
     return request_id
 
 

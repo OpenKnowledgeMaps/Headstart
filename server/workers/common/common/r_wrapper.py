@@ -5,6 +5,7 @@ import json
 import logging
 from typing import Optional
 from redis import StrictRedis
+from common.queue_timing import mark_enqueued
 
 
 formatter = logging.Formatter(fmt='%(asctime)s %(levelname)-8s %(message)s',
@@ -59,6 +60,7 @@ class RWrapper(object):
                     if params.get('raw') is True:
                         self.redis_store.set(k+"_output", json.dumps(res))
                     else:
+                        mark_enqueued(res)
                         self.redis_store.rpush("input_data", json.dumps(res).encode('utf8'))
                         q_len = self.redis_store.llen("input_data")
                         self.logger.debug("Queue length: %s %d %s" %("input_data", q_len, k))

@@ -110,8 +110,11 @@ services:
       LC_ALL: "en_US.UTF-8"
       LANG: "en_US.UTF-8"
       PYTHONIOENCODING: "utf-8"
+      API_LOGFILE: "/var/log/api/api.log"
       ORCID_CLIENT_ID: "${ORCID_CLIENT_ID}"
       ORCID_CLIENT_SECRET: "${ORCID_CLIENT_SECRET}"
+    volumes:
+      - /var/log/api:/var/log/api
     depends_on:
       - redis
     networks:
@@ -146,10 +149,12 @@ services:
       LANG: "en_US.UTF-8"
       RENV_PATHS_CACHE: /renv/cache
       PYTHONIOENCODING: "utf-8"
+      API_LOGFILE: "/var/log/api/api.log"
     restart: unless-stopped
     volumes:
       - ./local_dev/renv/cache:/renv/cache
       - /var/log/headstart:/var/log/headstart
+      - /var/log/api:/var/log/api
       - ./server/preprocessing/other-scripts:/headstart/other-scripts
     depends_on:
       - redis
@@ -174,11 +179,13 @@ services:
       LANG: "en_US.UTF-8"
       RENV_PATHS_CACHE: /renv/cache
       PYTHONIOENCODING: "utf-8"
+      API_LOGFILE: "/var/log/api/api.log"
       R_BASE_APIKEY: "${R_BASE_APIKEY}"
     restart: unless-stopped
     volumes:
       - ./local_dev/renv/cache:/renv/cache
       - /var/log/headstart:/var/log/headstart
+      - /var/log/api:/var/log/api
       - ./server/preprocessing/other-scripts:/headstart/other-scripts
     depends_on:
       - redis
@@ -203,10 +210,12 @@ services:
       LANG: "en_US.UTF-8"
       RENV_PATHS_CACHE: /renv/cache
       PYTHONIOENCODING: "utf-8"
+      API_LOGFILE: "/var/log/api/api.log"
     restart: unless-stopped
     volumes:
       - ./local_dev/renv/cache:/renv/cache
       - /var/log/headstart:/var/log/headstart
+      - /var/log/api:/var/log/api
       - ./server/preprocessing/other-scripts:/headstart/other-scripts
     depends_on:
       - redis
@@ -231,10 +240,12 @@ services:
       LANG: "en_US.UTF-8"
       RENV_PATHS_CACHE: /renv/cache
       PYTHONIOENCODING: "utf-8"
+      API_LOGFILE: "/var/log/api/api.log"
     restart: unless-stopped
     volumes:
       - ./local_dev/renv/cache:/renv/cache
       - /var/log/headstart:/var/log/headstart
+      - /var/log/api:/var/log/api
       - ./server/preprocessing/other-scripts:/headstart/other-scripts
     depends_on:
       - redis
@@ -259,6 +270,7 @@ services:
       LANG: "en_US.UTF-8"
       RENV_PATHS_CACHE: /renv/cache
       PYTHONIOENCODING: "utf-8"
+      API_LOGFILE: "/var/log/api/api.log"
       R_ALTMETRIC_APIKEY: "${R_ALTMETRIC_APIKEY}"
       R_CROSSREF_APIMAIL: "${R_CROSSREF_APIMAIL}"
       R_CROSSREF_PLUS_TOKEN: "${R_CROSSREF_PLUS_TOKEN}"
@@ -267,6 +279,7 @@ services:
     volumes:
       - ./local_dev/renv/cache:/renv/cache
       - /var/log/headstart:/var/log/headstart
+      - /var/log/api:/var/log/api
       - ./server/preprocessing/other-scripts:/headstart/other-scripts
     depends_on:
       - redis
