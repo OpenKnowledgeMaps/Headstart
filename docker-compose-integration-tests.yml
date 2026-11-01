@@ -180,6 +180,15 @@ services:
       LC_ALL: "en_US.UTF-8"
       LANG: "en_US.UTF-8"
       RENV_PATHS_CACHE: /renv/cache
+      # renv 1.x runs these on every R start: a lock watchdog process (fixed wait
+      # at R exit), a package-manager status request over the network, system
+      # requirement and lockfile sync checks. None are needed at job time and
+      # together they add several seconds per Rscript call.
+      RENV_WATCHDOG_ENABLED: "FALSE"
+      RENV_CONFIG_SANDBOX_ENABLED: "FALSE"
+      RENV_CONFIG_PPM_ENABLED: "FALSE"
+      RENV_CONFIG_SYSREQS_CHECK: "FALSE"
+      RENV_CONFIG_SYNCHRONIZED_CHECK: "FALSE"
       PYTHONIOENCODING: "utf-8"
       API_LOGFILE: "/var/log/api/api.log"
     restart: unless-stopped
@@ -210,6 +219,15 @@ services:
       LC_ALL: "en_US.UTF-8"
       LANG: "en_US.UTF-8"
       RENV_PATHS_CACHE: /renv/cache
+      # renv 1.x runs these on every R start: a lock watchdog process (fixed wait
+      # at R exit), a package-manager status request over the network, system
+      # requirement and lockfile sync checks. None are needed at job time and
+      # together they add several seconds per Rscript call.
+      RENV_WATCHDOG_ENABLED: "FALSE"
+      RENV_CONFIG_SANDBOX_ENABLED: "FALSE"
+      RENV_CONFIG_PPM_ENABLED: "FALSE"
+      RENV_CONFIG_SYSREQS_CHECK: "FALSE"
+      RENV_CONFIG_SYNCHRONIZED_CHECK: "FALSE"
       PYTHONIOENCODING: "utf-8"
       API_LOGFILE: "/var/log/api/api.log"
       R_BASE_APIKEY: "${R_BASE_APIKEY}"
@@ -241,6 +259,15 @@ services:
       LC_ALL: "en_US.UTF-8"
       LANG: "en_US.UTF-8"
       RENV_PATHS_CACHE: /renv/cache
+      # renv 1.x runs these on every R start: a lock watchdog process (fixed wait
+      # at R exit), a package-manager status request over the network, system
+      # requirement and lockfile sync checks. None are needed at job time and
+      # together they add several seconds per Rscript call.
+      RENV_WATCHDOG_ENABLED: "FALSE"
+      RENV_CONFIG_SANDBOX_ENABLED: "FALSE"
+      RENV_CONFIG_PPM_ENABLED: "FALSE"
+      RENV_CONFIG_SYSREQS_CHECK: "FALSE"
+      RENV_CONFIG_SYNCHRONIZED_CHECK: "FALSE"
       PYTHONIOENCODING: "utf-8"
       API_LOGFILE: "/var/log/api/api.log"
     restart: unless-stopped
@@ -271,6 +298,15 @@ services:
       LC_ALL: "en_US.UTF-8"
       LANG: "en_US.UTF-8"
       RENV_PATHS_CACHE: /renv/cache
+      # renv 1.x runs these on every R start: a lock watchdog process (fixed wait
+      # at R exit), a package-manager status request over the network, system
+      # requirement and lockfile sync checks. None are needed at job time and
+      # together they add several seconds per Rscript call.
+      RENV_WATCHDOG_ENABLED: "FALSE"
+      RENV_CONFIG_SANDBOX_ENABLED: "FALSE"
+      RENV_CONFIG_PPM_ENABLED: "FALSE"
+      RENV_CONFIG_SYSREQS_CHECK: "FALSE"
+      RENV_CONFIG_SYNCHRONIZED_CHECK: "FALSE"
       PYTHONIOENCODING: "utf-8"
       API_LOGFILE: "/var/log/api/api.log"
     restart: unless-stopped
@@ -301,6 +337,15 @@ services:
       LC_ALL: "en_US.UTF-8"
       LANG: "en_US.UTF-8"
       RENV_PATHS_CACHE: /renv/cache
+      # renv 1.x runs these on every R start: a lock watchdog process (fixed wait
+      # at R exit), a package-manager status request over the network, system
+      # requirement and lockfile sync checks. None are needed at job time and
+      # together they add several seconds per Rscript call.
+      RENV_WATCHDOG_ENABLED: "FALSE"
+      RENV_CONFIG_SANDBOX_ENABLED: "FALSE"
+      RENV_CONFIG_PPM_ENABLED: "FALSE"
+      RENV_CONFIG_SYSREQS_CHECK: "FALSE"
+      RENV_CONFIG_SYNCHRONIZED_CHECK: "FALSE"
       PYTHONIOENCODING: "utf-8"
       API_LOGFILE: "/var/log/api/api.log"
     restart: unless-stopped
