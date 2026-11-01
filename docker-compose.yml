@@ -143,8 +143,6 @@ services:
       NGRAM_SETTING_ORCID: "${NGRAM_SETTING_ORCID}"
       NGRAM_SETTING_OPENAIRE: "${NGRAM_SETTING_OPENAIRE}"
       INCLUDE_ABSTRACTS: "${INCLUDE_ABSTRACTS}"
-      RENV_VERSION: 0.14.0-5
-      CRAN_REPOS: https://cran.wu.ac.at
       LC_ALL: "en_US.UTF-8"
       LANG: "en_US.UTF-8"
       RENV_PATHS_CACHE: /renv/cache
@@ -182,8 +180,6 @@ services:
       REDIS_PASSWORD: "${REDIS_PASSWORD}"
       LOGLEVEL: "${LOGLEVEL}"
       LOGFILE: "/var/log/headstart/headstart.log"
-      RENV_VERSION: 0.14.0-5
-      CRAN_REPOS: https://cran.wu.ac.at
       LC_ALL: "en_US.UTF-8"
       LANG: "en_US.UTF-8"
       RENV_PATHS_CACHE: /renv/cache
@@ -222,8 +218,6 @@ services:
       REDIS_PASSWORD: "${REDIS_PASSWORD}"
       LOGLEVEL: "${LOGLEVEL}"
       LOGFILE: "${LOGFILE}"
-      RENV_VERSION: 0.14.0-5
-      CRAN_REPOS: https://cran.wu.ac.at
       LC_ALL: "en_US.UTF-8"
       LANG: "en_US.UTF-8"
       RENV_PATHS_CACHE: /renv/cache
@@ -261,8 +255,6 @@ services:
       REDIS_PASSWORD: "${REDIS_PASSWORD}"
       LOGLEVEL: "${LOGLEVEL}"
       LOGFILE: "${LOGFILE}"
-      RENV_VERSION: 0.14.0-5
-      CRAN_REPOS: https://cran.wu.ac.at
       LC_ALL: "en_US.UTF-8"
       LANG: "en_US.UTF-8"
       RENV_PATHS_CACHE: /renv/cache
@@ -300,8 +292,6 @@ services:
       REDIS_PASSWORD: "${REDIS_PASSWORD}"
       LOGLEVEL: "${LOGLEVEL}"
       LOGFILE: "${LOGFILE}"
-      RENV_VERSION: 0.14.0-5
-      CRAN_REPOS: https://cran.wu.ac.at
       LC_ALL: "en_US.UTF-8"
       LANG: "en_US.UTF-8"
       RENV_PATHS_CACHE: /renv/cache
