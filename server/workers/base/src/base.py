@@ -39,6 +39,7 @@ import sys
 from typing import Dict
 from common.rate_limiter import RateLimiter
 from common.utils import get_contentprovider_records
+from common.queue_timing import mark_enqueued, mark_dequeued
 
 logger = logging.getLogger(__name__)
 
@@ -63,6 +64,7 @@ class BaseClient(RWrapper):
     def next_item(self):
         _, message = self.redis_store.blpop("base")
         message = json.loads(message.decode("utf-8"))
+        mark_dequeued("base", message)
         request_id = message.get("id")
         params = self.add_default_params(message.get("params"))
         original_service = params.get("original_service")
@@ -246,6 +248,7 @@ class BaseClient(RWrapper):
             if res.get("status") == "error" or params.get("raw") is True:
                 self.redis_store.set(request_id + "_output", json.dumps(res))
             else:
+                mark_enqueued(res)
                 self.redis_store.rpush(
                     "input_data", json.dumps(res).encode("utf8")
                 )

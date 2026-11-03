@@ -5,6 +5,7 @@ import subprocess
 from common.r_wrapper import RWrapper
 from common.rate_limiter import RateLimiter
 from common.decorators import error_logging_aspect
+from common.queue_timing import mark_dequeued
 
 
 formatter = logging.Formatter(
@@ -28,6 +29,7 @@ class MetricsClient(RWrapper):
     def next_item(self):
         queue, msg = self.redis_store.blpop("metrics")
         msg = json.loads(msg.decode('utf-8'))
+        mark_dequeued("metrics", msg)
         item_id = msg.get('id')
         params = self.add_default_params(msg.get('params'))
         metadata = msg.get('metadata')

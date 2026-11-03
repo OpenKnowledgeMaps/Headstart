@@ -8,6 +8,7 @@ import pandas as pd
 import logging
 
 from redis import RedisError
+from common.queue_timing import mark_dequeued
 from .streamgraph import Streamgraph
 
 
@@ -47,6 +48,7 @@ class Dataprocessing(object):
     def next_item(self):
         queue, msg = self.redis_store.blpop("input_data")
         msg = json.loads(msg.decode('utf-8'))
+        mark_dequeued("input_data", msg)
         request_id = msg.get('id')
         params = self.add_default_params(msg.get('params'))
         input_data = msg.get('input_data')

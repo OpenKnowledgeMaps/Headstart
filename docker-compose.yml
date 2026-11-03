@@ -110,8 +110,11 @@ services:
       LC_ALL: "en_US.UTF-8"
       LANG: "en_US.UTF-8"
       PYTHONIOENCODING: "utf-8"
+      API_LOGFILE: "/var/log/api/api.log"
       ORCID_CLIENT_ID: "${ORCID_CLIENT_ID}"
       ORCID_CLIENT_SECRET: "${ORCID_CLIENT_SECRET}"
+    volumes:
+      - /var/log/api:/var/log/api
     depends_on:
       - redis
     networks:
@@ -140,16 +143,25 @@ services:
       NGRAM_SETTING_ORCID: "${NGRAM_SETTING_ORCID}"
       NGRAM_SETTING_OPENAIRE: "${NGRAM_SETTING_OPENAIRE}"
       INCLUDE_ABSTRACTS: "${INCLUDE_ABSTRACTS}"
-      RENV_VERSION: 0.14.0-5
-      CRAN_REPOS: https://cran.wu.ac.at
       LC_ALL: "en_US.UTF-8"
       LANG: "en_US.UTF-8"
       RENV_PATHS_CACHE: /renv/cache
+      # renv 1.x runs these on every R start: a lock watchdog process (fixed wait
+      # at R exit), a package-manager status request over the network, system
+      # requirement and lockfile sync checks. None are needed at job time and
+      # together they add several seconds per Rscript call.
+      RENV_WATCHDOG_ENABLED: "FALSE"
+      RENV_CONFIG_SANDBOX_ENABLED: "FALSE"
+      RENV_CONFIG_PPM_ENABLED: "FALSE"
+      RENV_CONFIG_SYSREQS_CHECK: "FALSE"
+      RENV_CONFIG_SYNCHRONIZED_CHECK: "FALSE"
       PYTHONIOENCODING: "utf-8"
+      API_LOGFILE: "/var/log/api/api.log"
     restart: unless-stopped
     volumes:
       - ./local_dev/renv/cache:/renv/cache
       - /var/log/headstart:/var/log/headstart
+      - /var/log/api:/var/log/api
       - ./server/preprocessing/other-scripts:/headstart/other-scripts
     depends_on:
       - redis
@@ -168,17 +180,26 @@ services:
       REDIS_PASSWORD: "${REDIS_PASSWORD}"
       LOGLEVEL: "${LOGLEVEL}"
       LOGFILE: "/var/log/headstart/headstart.log"
-      RENV_VERSION: 0.14.0-5
-      CRAN_REPOS: https://cran.wu.ac.at
       LC_ALL: "en_US.UTF-8"
       LANG: "en_US.UTF-8"
       RENV_PATHS_CACHE: /renv/cache
+      # renv 1.x runs these on every R start: a lock watchdog process (fixed wait
+      # at R exit), a package-manager status request over the network, system
+      # requirement and lockfile sync checks. None are needed at job time and
+      # together they add several seconds per Rscript call.
+      RENV_WATCHDOG_ENABLED: "FALSE"
+      RENV_CONFIG_SANDBOX_ENABLED: "FALSE"
+      RENV_CONFIG_PPM_ENABLED: "FALSE"
+      RENV_CONFIG_SYSREQS_CHECK: "FALSE"
+      RENV_CONFIG_SYNCHRONIZED_CHECK: "FALSE"
       PYTHONIOENCODING: "utf-8"
+      API_LOGFILE: "/var/log/api/api.log"
       R_BASE_APIKEY: "${R_BASE_APIKEY}"
     restart: unless-stopped
     volumes:
       - ./local_dev/renv/cache:/renv/cache
       - /var/log/headstart:/var/log/headstart
+      - /var/log/api:/var/log/api
       - ./server/preprocessing/other-scripts:/headstart/other-scripts
     depends_on:
       - redis
@@ -197,16 +218,25 @@ services:
       REDIS_PASSWORD: "${REDIS_PASSWORD}"
       LOGLEVEL: "${LOGLEVEL}"
       LOGFILE: "${LOGFILE}"
-      RENV_VERSION: 0.14.0-5
-      CRAN_REPOS: https://cran.wu.ac.at
       LC_ALL: "en_US.UTF-8"
       LANG: "en_US.UTF-8"
       RENV_PATHS_CACHE: /renv/cache
+      # renv 1.x runs these on every R start: a lock watchdog process (fixed wait
+      # at R exit), a package-manager status request over the network, system
+      # requirement and lockfile sync checks. None are needed at job time and
+      # together they add several seconds per Rscript call.
+      RENV_WATCHDOG_ENABLED: "FALSE"
+      RENV_CONFIG_SANDBOX_ENABLED: "FALSE"
+      RENV_CONFIG_PPM_ENABLED: "FALSE"
+      RENV_CONFIG_SYSREQS_CHECK: "FALSE"
+      RENV_CONFIG_SYNCHRONIZED_CHECK: "FALSE"
       PYTHONIOENCODING: "utf-8"
+      API_LOGFILE: "/var/log/api/api.log"
     restart: unless-stopped
     volumes:
       - ./local_dev/renv/cache:/renv/cache
       - /var/log/headstart:/var/log/headstart
+      - /var/log/api:/var/log/api
       - ./server/preprocessing/other-scripts:/headstart/other-scripts
     depends_on:
       - redis
@@ -225,16 +255,25 @@ services:
       REDIS_PASSWORD: "${REDIS_PASSWORD}"
       LOGLEVEL: "${LOGLEVEL}"
       LOGFILE: "${LOGFILE}"
-      RENV_VERSION: 0.14.0-5
-      CRAN_REPOS: https://cran.wu.ac.at
       LC_ALL: "en_US.UTF-8"
       LANG: "en_US.UTF-8"
       RENV_PATHS_CACHE: /renv/cache
+      # renv 1.x runs these on every R start: a lock watchdog process (fixed wait
+      # at R exit), a package-manager status request over the network, system
+      # requirement and lockfile sync checks. None are needed at job time and
+      # together they add several seconds per Rscript call.
+      RENV_WATCHDOG_ENABLED: "FALSE"
+      RENV_CONFIG_SANDBOX_ENABLED: "FALSE"
+      RENV_CONFIG_PPM_ENABLED: "FALSE"
+      RENV_CONFIG_SYSREQS_CHECK: "FALSE"
+      RENV_CONFIG_SYNCHRONIZED_CHECK: "FALSE"
       PYTHONIOENCODING: "utf-8"
+      API_LOGFILE: "/var/log/api/api.log"
     restart: unless-stopped
     volumes:
       - ./local_dev/renv/cache:/renv/cache
       - /var/log/headstart:/var/log/headstart
+      - /var/log/api:/var/log/api
       - ./server/preprocessing/other-scripts:/headstart/other-scripts
     depends_on:
       - redis
@@ -253,12 +292,20 @@ services:
       REDIS_PASSWORD: "${REDIS_PASSWORD}"
       LOGLEVEL: "${LOGLEVEL}"
       LOGFILE: "${LOGFILE}"
-      RENV_VERSION: 0.14.0-5
-      CRAN_REPOS: https://cran.wu.ac.at
       LC_ALL: "en_US.UTF-8"
       LANG: "en_US.UTF-8"
       RENV_PATHS_CACHE: /renv/cache
+      # renv 1.x runs these on every R start: a lock watchdog process (fixed wait
+      # at R exit), a package-manager status request over the network, system
+      # requirement and lockfile sync checks. None are needed at job time and
+      # together they add several seconds per Rscript call.
+      RENV_WATCHDOG_ENABLED: "FALSE"
+      RENV_CONFIG_SANDBOX_ENABLED: "FALSE"
+      RENV_CONFIG_PPM_ENABLED: "FALSE"
+      RENV_CONFIG_SYSREQS_CHECK: "FALSE"
+      RENV_CONFIG_SYNCHRONIZED_CHECK: "FALSE"
       PYTHONIOENCODING: "utf-8"
+      API_LOGFILE: "/var/log/api/api.log"
       R_ALTMETRIC_APIKEY: "${R_ALTMETRIC_APIKEY}"
       R_CROSSREF_APIMAIL: "${R_CROSSREF_APIMAIL}"
       R_CROSSREF_PLUS_TOKEN: "${R_CROSSREF_PLUS_TOKEN}"
@@ -267,6 +314,7 @@ services:
     volumes:
       - ./local_dev/renv/cache:/renv/cache
       - /var/log/headstart:/var/log/headstart
+      - /var/log/api:/var/log/api
       - ./server/preprocessing/other-scripts:/headstart/other-scripts
     depends_on:
       - redis

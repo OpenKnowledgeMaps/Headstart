@@ -7,6 +7,7 @@ from flask import Blueprint, request, make_response, jsonify, abort
 from flask_restx import Namespace, Resource, fields
 from .request_validators import SearchParamSchema
 from common.utils import get_key, redis_store
+from common.queue_timing import mark_enqueued, log_backend_time
 
 
 pubmed_ns = Namespace("pubmed", description="PubMed API operations")
@@ -75,14 +76,15 @@ class Search(Resource):
 
         # Log and queue the request
         request_id = str(uuid.uuid4())
-        request_data = {"id": request_id, "params": params, "endpoint": "search"}
+        request_data = mark_enqueued({"id": request_id, "params": params, "endpoint": "search"})
         pubmed_ns.logger.debug(request_data)
         redis_store.rpush("pubmed", json.dumps(request_data))
         queue_length = redis_store.llen("pubmed")
         pubmed_ns.logger.info("Queue length: %s %d %s" % ("pubmed", queue_length, request_id))
-        
+
         # Get the result
         result = get_key(redis_store, request_id)
+        log_backend_time(pubmed_ns.logger, "pubmed", request_data, result)
         try:
             result, headers = set_response_headers(request.headers.get("Accept"), params.get("raw"), result, request_id)
             return make_response(result, 200, headers)

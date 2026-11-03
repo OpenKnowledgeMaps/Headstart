@@ -4,6 +4,7 @@ from common.decorators import error_logging_aspect
 import time
 from typing import Tuple, Dict
 from common.rate_limiter import RateLimiter
+from common.queue_timing import mark_enqueued, mark_dequeued
 from redis import Redis
 from orcid_service import OrcidService
 from typing import Optional
@@ -30,6 +31,7 @@ class OrcidWorker:
         except (json.JSONDecodeError, AttributeError) as e:
             raise ValueError(f"Failed to decode message: {e}")
 
+        mark_dequeued(self.service, message_data)
         request_id = message_data.get("id")
         params = message_data.get("params")
         params["service"] = self.service
@@ -64,6 +66,7 @@ class OrcidWorker:
             else:
                 res = res.get('data') 
                 res["id"] = request_id # type: ignore
+                mark_enqueued(res)
                 self.redis_store.rpush("input_data", json.dumps(res).encode("utf8"))
                 queue_length = self.redis_store.llen("input_data")
                 self.logger.debug(f"Queue length: input_data {queue_length} {request_id}")
