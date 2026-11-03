@@ -8,6 +8,7 @@ from flask import request, make_response, jsonify, abort, g
 from flask_restx import Namespace, Resource, fields
 from .request_validators import SearchParamSchema
 from common.utils import get_key, redis_store
+from common.queue_timing import mark_enqueued, log_backend_time
 
 
 # Namespace setup
@@ -55,7 +56,7 @@ class Search(Resource):
             self.clean_params(params)
 
             request_id = str(uuid.uuid4())
-            task_data = {"id": request_id, "params": params, "endpoint": "search"}
+            task_data = mark_enqueued({"id": request_id, "params": params, "endpoint": "search"})
             orcid_ns.logger.debug(task_data)
             redis_store.rpush("orcid", json.dumps(task_data))
 
@@ -63,6 +64,7 @@ class Search(Resource):
             orcid_ns.logger.info(f"Queue length: orcid {queue_length} {request_id}")
 
             result = get_key(redis_store, request_id, REDIS_TIMEOUT)
+            log_backend_time(orcid_ns.logger, "orcid", task_data, result)
             headers = self.get_response_headers()
 
             return make_response(result, 200, headers)

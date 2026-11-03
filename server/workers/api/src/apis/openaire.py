@@ -7,6 +7,7 @@ from flask import Blueprint, request, make_response, jsonify, abort
 from flask_restx import Namespace, Resource, fields
 from .request_validators import SearchParamSchema
 from common.utils import get_key, redis_store
+from common.queue_timing import mark_enqueued, log_backend_time
 
 
 openaire_ns = Namespace("openaire", description="OpenAIRE API operations")
@@ -66,12 +67,13 @@ class Search(Resource):
         params["limit"] = 100
         params["list_size"] = -1
         k = str(uuid.uuid4())
-        d = {"id": k, "params": params, "endpoint": "search"}
+        d = mark_enqueued({"id": k, "params": params, "endpoint": "search"})
         openaire_ns.logger.debug(d)
         redis_store.rpush("openaire", json.dumps(d))
         q_len = redis_store.llen("openaire")
         openaire_ns.logger.info("Queue length: %s %d %s" % ("openaire", q_len, k))
         result = get_key(redis_store, k, 300)
+        log_backend_time(openaire_ns.logger, "openaire", d, result)
         try:
             # Call the utility function once.
             result, headers = set_response_headers(request.headers["Accept"], params.get("raw"), result, k)
@@ -88,10 +90,13 @@ class ProjectData(Resource):
     def post(self):
         params = request.get_json()
         k = str(uuid.uuid4())
-        d = {"id": k, "params": params,
-             "endpoint": "projectdata"}
+        d = mark_enqueued({"id": k, "params": params,
+                           "endpoint": "projectdata"})
         redis_store.rpush("openaire", json.dumps(d))
+        q_len = redis_store.llen("openaire")
+        openaire_ns.logger.info("Queue length: %s %d %s" % ("openaire", q_len, k))
         result = get_key(redis_store, k)
+        log_backend_time(openaire_ns.logger, "openaire", d, result)
         try:
             headers = {}
             if request.headers["Accept"] == "application/json":

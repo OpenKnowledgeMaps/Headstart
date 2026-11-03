@@ -1,5 +1,245 @@
 [
   {
+    "name": "Knowledge E",
+    "internal_name": "ftid14972"
+  },
+  {
+    "name": "Nortis Journal Of Sports Sciences",
+    "internal_name": "ftid14935"
+  },
+  {
+    "name": "Neva Akademik Araştırmalar Dergisi",
+    "internal_name": "ftid14951"
+  },
+  {
+    "name": "International Journal of Progression and Development in Education",
+    "internal_name": "ftid14952"
+  },
+  {
+    "name": "Dibon Journals",
+    "internal_name": "ftid14955"
+  },
+  {
+    "name": "Word Astra Publishers",
+    "internal_name": "ftid14978"
+  },
+  {
+    "name": "ChapJuly",
+    "internal_name": "ftid14979"
+  },
+  {
+    "name": "International Journal of Communication Systems and Network Technologies (IJCSNT)",
+    "internal_name": "ftid14981"
+  },
+  {
+    "name": "Edag Online",
+    "internal_name": "ftid14984"
+  },
+  {
+    "name": "PhytoPharm",
+    "internal_name": "ftid14993"
+  },
+  {
+    "name": "Journal of Teaching Innovation and Reform",
+    "internal_name": "ftid14995"
+  },
+  {
+    "name": "Immersive Media and User Experience",
+    "internal_name": "ftid14997"
+  },
+  {
+    "name": "Journals GD Academy",
+    "internal_name": "ftid15002"
+  },
+  {
+    "name": "International Journal of Social Sciences Dimensions",
+    "internal_name": "ftid15014"
+  },
+  {
+    "name": "Isroset",
+    "internal_name": "ftid15009"
+  },
+  {
+    "name": "Majestic International Journal of AI Innovations",
+    "internal_name": "ftid14969"
+  },
+  {
+    "name": "Iraqi Journal for Applied Science",
+    "internal_name": "ftid14926"
+  },
+  {
+    "name": "Kashf Journal of Multidisciplinary Research",
+    "internal_name": "ftid14962"
+  },
+  {
+    "name": "Majestic Global Trends in Marketing & Supply Chain Management",
+    "internal_name": "ftid14970"
+  },
+  {
+    "name": "Majestic Multidisciplinary Science Insight",
+    "internal_name": "ftid14971"
+  },
+  {
+    "name": "Journal of Contemporary Social Issues (JCSI)",
+    "internal_name": "ftid14989"
+  },
+  {
+    "name": "International Journal of Phytomedicine",
+    "internal_name": "ftid15000"
+  },
+  {
+    "name": "Journal of Fatima Jinnah Institute of Dental Sciences",
+    "internal_name": "ftid15003"
+  },
+  {
+    "name": "International Journal of Frontier Science and Multidisciplinary Research (IJFSMR)",
+    "internal_name": "ftid15005"
+  },
+  {
+    "name": "International Journal of Physiology, Pathophysiology and Pharmacotherapy (IJPPP)",
+    "internal_name": "ftid15006"
+  },
+  {
+    "name": "Multidisciplinary Research Archives (MRA)",
+    "internal_name": "ftid15007"
+  },
+  {
+    "name": "Journal of Statistics",
+    "internal_name": "ftid15008"
+  },
+  {
+    "name": "Arab Media Renewal Journal",
+    "internal_name": "ftid15010"
+  },
+  {
+    "name": "Desafíos Educativos REDECI",
+    "internal_name": "ftid15019"
+  },
+  {
+    "name": "Innovative Medical and Biological Sciences Journal",
+    "internal_name": "ftid14930"
+  },
+  {
+    "name": "Journal of Multidisciplinary Research & Development Studies (JMRDS)",
+    "internal_name": "ftid14932"
+  },
+  {
+    "name": "International Journal of Primary and Secondary Research (IJPSR)",
+    "internal_name": "ftid14938"
+  },
+  {
+    "name": "Journal of Global Research in Electronics and Communications",
+    "internal_name": "ftid14939"
+  },
+  {
+    "name": "Review of Public Policy and Social Systems (RPPSS)",
+    "internal_name": "ftid14954"
+  },
+  {
+    "name": "Journal of Global Research in Multidisciplinary Studies (JGRMS)",
+    "internal_name": "ftid14946"
+  },
+  {
+    "name": "Advanced Natural Sciences: Life and Health Sciences",
+    "internal_name": "ftid14953"
+  },
+  {
+    "name": "Journals Nujs",
+    "internal_name": "ftid14961"
+  },
+  {
+    "name": "GPI Journal",
+    "internal_name": "ftid14963"
+  },
+  {
+    "name": "International Journal of Management Thinking",
+    "internal_name": "ftid14965"
+  },
+  {
+    "name": "Journal of Advances in Humanities Research (JADHUR)",
+    "internal_name": "ftid14966"
+  },
+  {
+    "name": "Rumah Jurnal",
+    "internal_name": "ftid14983"
+  },
+  {
+    "name": "Centre for Aerospace Power and Strategic Studies",
+    "internal_name": "ftid14988"
+  },
+  {
+    "name": "International Journal of Law, Culture & Society (IJLCS)",
+    "internal_name": "ftid14991"
+  },
+  {
+    "name": "Presidency University Journal",
+    "internal_name": "ftid14992"
+  },
+  {
+    "name": "Yemeni Journal of Life Sciences",
+    "internal_name": "ftid15017"
+  },
+  {
+    "name": "Rumah Jurnal Algoria Global Indonesia",
+    "internal_name": "ftid14977"
+  },
+  {
+    "name": "Jurnal Universitas Pejuang Republik Indonesia",
+    "internal_name": "ftid14925"
+  },
+  {
+    "name": "Jurnal Otorinolaringologi Kepala dan Leher Indonesia",
+    "internal_name": "ftid14933"
+  },
+  {
+    "name": "Universitas Tarakanita",
+    "internal_name": "ftid14936"
+  },
+  {
+    "name": "Tarfomedia",
+    "internal_name": "ftid14937"
+  },
+  {
+    "name": "GWS Tech Publishing",
+    "internal_name": "ftid14948"
+  },
+  {
+    "name": "Rumah Jurnal IAIN Takengon",
+    "internal_name": "ftid14949"
+  },
+  {
+    "name": "Journal of Technology Integration, Management, and Islamic Education",
+    "internal_name": "ftid14950"
+  },
+  {
+    "name": "Huma Betang: Jurnal Pengabdian Kepada Masyarakat",
+    "internal_name": "ftid14958"
+  },
+  {
+    "name": "Journal Sustainable Environment and Society",
+    "internal_name": "ftid14964"
+  },
+  {
+    "name": "Journal Kopialinea",
+    "internal_name": "ftid14985"
+  },
+  {
+    "name": "E-Journal Hmedupustaka",
+    "internal_name": "ftid14994"
+  },
+  {
+    "name": "Balla Caradde Education",
+    "internal_name": "ftid15018"
+  },
+  {
+    "name": "Journal Tabeqcarecenter",
+    "internal_name": "ftid15020"
+  },
+  {
+    "name": "Journal of Managerial Sciences & Studies",
+    "internal_name": "ftid15022"
+  },
+  {
     "name": "Afaq Research Horizons in Social and Human Sciences (ARH)",
     "internal_name": "ftid14693"
   },
@@ -318,10 +558,6 @@
   {
     "name": "IQVerse",
     "internal_name": "ftid14810"
-  },
-  {
-    "name": "DergiPark Akademik",
-    "internal_name": "ftid14822"
   },
   {
     "name": "Journal of Global Perspectives in Communication and Media (JGPCM)",

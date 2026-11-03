@@ -4,6 +4,7 @@ import subprocess
 import pandas as pd
 from common.r_wrapper import RWrapper
 from common.utils import enrich_metadata
+from common.queue_timing import mark_enqueued, mark_dequeued
 
 formatter = logging.Formatter(fmt='%(asctime)s %(levelname)-8s %(message)s',
                               datefmt='%Y-%m-%d %H:%M:%S')
@@ -14,6 +15,7 @@ class PubMedClient(RWrapper):
     def next_item(self):
         queue, msg = self.redis_store.blpop("pubmed")
         msg = json.loads(msg.decode('utf-8'))
+        mark_dequeued("pubmed", msg)
         k = msg.get('id')
         params = self.add_default_params(msg.get('params'))
         params["service"] = "pubmed"
@@ -69,6 +71,7 @@ class PubMedClient(RWrapper):
                     if res.get("status") == "error" or params.get('raw') is True:
                         self.redis_store.set(k+"_output", json.dumps(res))
                     else:
+                        mark_enqueued(res)
                         self.redis_store.rpush("input_data", json.dumps(res).encode('utf8'))
                         q_len = self.redis_store.llen("input_data")
                         self.logger.debug("Queue length: %s %d %s" %("input_data", q_len, k))

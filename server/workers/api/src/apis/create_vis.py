@@ -9,6 +9,7 @@ from flask import request, make_response, jsonify, abort
 from flask_restx import Namespace, Resource, fields
 from .request_validators import SearchParamSchema
 from common.utils import get_key
+from common.queue_timing import mark_enqueued, log_backend_time
 from apis.base import base_querymodel
 
 
@@ -54,12 +55,13 @@ class Create(Resource):
         vis_ns.logger.debug(params)
         input_data = data["input_data"]
         request_id = str(uuid.uuid4())
-        d = {"id": request_id, "params": params,
-             "input_data": input_data}
+        d = mark_enqueued({"id": request_id, "params": params,
+                           "input_data": input_data})
         redis_store.rpush("input_data", json.dumps(d).encode('utf8'))
         q_len = redis_store.llen("input_data")
         vis_ns.logger.info("Queue length: %s %d %s" %("input_data", q_len, request_id))
         result = get_key(redis_store, request_id)
+        log_backend_time(vis_ns.logger, "input_data", d, result)
         try:
             result, headers = set_response_headers(request.headers["Accept"], params.get("raw"), result, request_id)
             return make_response(result, 200, headers)

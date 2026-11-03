@@ -11,6 +11,7 @@ from pyorcid import Orcid, errors as pyorcid_errors
 from pyorcid.orcid_authentication import OrcidAuthentication
 from typing import Tuple
 from common.utils import get_key, get_nested_value
+from common.queue_timing import mark_enqueued
 from repositories.author_info import AuthorInfoRepository
 from repositories.works import WorksRepository
 from redis import StrictRedis
@@ -106,11 +107,11 @@ class OrcidService:
         self.logger.debug(f"Enriching metadata for ORCID {params.get('orcid')}")
         
         request_id = str(uuid.uuid4())
-        task_data = {
+        task_data = mark_enqueued({
             "id": request_id,
             "params": params,
             "metadata": metadata.to_json(orient="records"),
-        }
+        })
         self.redis_store.rpush("metrics", json.dumps(task_data))
         result = get_key(self.redis_store, request_id, 900)
         
@@ -218,6 +219,9 @@ class OrcidService:
 
             task_data = {
                 "id": request_id,
+                # The map this lookup belongs to; the queue timing log repeats it
+                # so the batch can be tied back to the ORCID map.
+                "origin_vis_id": params.get("vis_id"),
                 "params": {
                     "q_advanced": q_advanced,
                     "raw": True,
@@ -242,7 +246,7 @@ class OrcidService:
                 },
                 "endpoint": "search"
             }
-            
+            mark_enqueued(task_data)
             self.redis_store.rpush("base", json.dumps(task_data))
             result = get_key(self.redis_store, request_id, 900)
             
