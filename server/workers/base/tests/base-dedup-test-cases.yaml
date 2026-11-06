@@ -1,0 +1,512 @@
+# Test-case catalog — BASE deduplication deterministic anchor selection
+# Companion to docs/base-dedup-anchor-tiebreak.md (§10 review methodology).
+# One universal envelope: every case exercises the shared invariants; mechanism
+# (A/B/hybrid) and edge case (X1-X17) are inputs, not separate suites.
+#
+# Consume this to generate tests. Deterministic unit/integration cases are fully
+# specified (input -> expect). e2e / gold-set cases reference real vis_ids in
+# local_dev/tools/reproducibility/doi_coverage/ and grow as more ORCID dumps land.
+schema_version: 1
+
+invariants:            # see §10.3
+  I1: "order-invariance — dedup(shuffle(C)) == dedup(C) (the core property)"
+  I2: "idempotence — dedup(dedup(C)) == dedup(C)"
+  I3: "duplication-invariance — adding an exact copy does not change the anchor set"
+  I4: "distinct-injection — same title + different PID adds exactly one anchor (no false merge)"
+  I5: "version-injection — newer version keeps count, anchor moves to latest"
+  I6: "merge-injection — same PID keeps count, metadata folded in (no false split)"
+  I7: "enrichment completeness/determinism — anchor fields = sorted union over group"
+
+edge_cases:            # see §8.9 (X1-X17)
+  X1: no identifier at all
+  X2: same work, same PID, different title
+  X3: distinct works, same/similar title
+  X4: same unversioned DOI, different versions
+  X5: unversioned/supplementary DOI -> doi_version=None, all tie
+  X6: DOI case-only variants
+  X7: record carries multiple DOIs/PIDs
+  X8: observation gap — DOI only in a field dedup did not read
+  X9: same work via different PID namespaces (DOI vs Handle)
+  X10: conflicting PIDs, same title
+  X11: same DOI, genuinely different papers (mis-indexed)
+  X12: group straddling dataset/non-dataset typenorm split
+  X13: enrichment field ties (equal-length abstract, oa_state)
+  X14: full anchor-ladder tie (OA/provider/year all equal)
+  X15: short/generic title
+  X16: title truncation / encoding variance
+  X17: publisher_doi-based false grouping
+
+functionality_changes: # see §10.2 / §10.7
+  FC1: PID key computation & normalization
+  FC2: deterministic grouping + PID-conflict split
+  FC3: deterministic anchor selection (total order at the 5 tie-break sites)
+  FC4: deterministic enrichment
+  FC5: deterministic ordering into head(list_size)
+
+fixtures:
+  source: local_dev/tools/reproducibility/doi_coverage/
+  real:
+    FIX_VER3:
+      note: "microplastic; figshare unversioned + .v3 + .v1 share one unversioned DOI; anchor=.v3 (X4/X5/FC3)"
+      unversioned_key: "10.6084/m9.figshare.23691672"
+      members:
+        - {doi_merge: "https://dx.doi.org/10.6084/m9.figshare.23691672",    doi_version: null}
+        - {doi_merge: "https://dx.doi.org/10.6084/m9.figshare.23691672.v3", doi_version: 3}
+        - {doi_merge: "https://dx.doi.org/10.6084/m9.figshare.23691672.v1", doi_version: 1}
+    FIX_SUPPL:
+      note: "supplementary DOI -> version=None (X5)"
+      doi_merge: "https://doi.org/10.3389/feart.2024.1339822.s001"
+      parsed_version: null
+    FIX_HANDLE:
+      note: "armutsrisiko EconStor; no DOI, Handle only (X1/X9)"
+      id: "6b2cbbba0d0bbc4a79e5ba05e05b89b7807f28b3e164440335ebcc6379397451"
+      doi: ""
+      identifier: "https://hdl.handle.net/10419/151667"
+      handle_key: "10419/151667"
+    FIX_URN:
+      note: "SSOAR; URN only (X1)"
+      id: "8b155f53241c48c49492bc710dc856daefe6c5cc132b434c5df2666e8c5b7a12"
+      identifier: "http://nbn-resolving.org/urn:nbn:de:0168-ssoar-201980"
+      urn_key: "urn:nbn:de:0168-ssoar-201980"
+  synthetic:
+    - "X6  case-only DOI variant"
+    - "X10 two distinct works, identical title, different DOI"
+    - "X3  same as X10 without any PID on one side"
+  generated:
+    tool: local_dev/tools/dedup_review/extract_fixtures.py
+    orcid_v2: server/workers/base/tests/fixtures/orcid_v2_fixtures.json
+    base_v1: server/workers/base/tests/fixtures/base_v1_fixtures.json
+    yield_orcid: "668 merge fixtures, 144 split fixtures (101 ORCID pools, 17 authors)"
+    yield_base: "234 merge, 38 split (10 keyword queries); adds X9 Handle/URN cases"
+    base_pid_coverage: "10 queries, 2253 recs: DOI 77%, PID-union 83%, DOI-less tail 17% (up to 29%)"
+    x10_composition_caveat: >
+      Of the 144 same-title/different-DOI 'split' groups: 90 are preprint<->published
+      (arXiv/SSRN + journal) = arguably the SAME work; 50 same-type distinct-work
+      candidates (the true X10); 4 dataset<->article (X12). See §9.1 — the preprint
+      case is an OPEN product decision (keep-both vs merge-preferring-published), so
+      gold-set 'should_not_merge' labels must exclude preprint<->published until decided.
+
+cases:
+
+  # ---------- FC1: PID key computation & normalization (unit; >=12) ----------
+  - id: FC1-U01
+    fc: FC1
+    layer: unit
+    kind: normalization
+    edge: [X6]
+    input: {doi: "https://dx.doi.org/10.1234/ABC.v2", additional_dois: []}
+    expect: {pid_key: "10.1234/abc", namespace: doi}
+    desc: "prefix strip + lowercase + unversion (.v2 removed)"
+  - id: FC1-U02
+    fc: FC1
+    layer: unit
+    kind: coalesce
+    edge: [X8]
+    input: {doi: "", doi_merge: "", additional_dois: ["https://doi.org/10.1234/xy"]}
+    expect: {pid_key: "10.1234/xy", namespace: doi}
+    desc: "coalesce to additional_dois[0] when link-derived doi empty (observation gap)"
+  - id: FC1-U03
+    fc: FC1
+    layer: unit
+    kind: coalesce
+    input: {doi: "10.1/a", doi_merge: "10.2/b", additional_dois: ["10.3/c"]}
+    expect: {pid_key: "10.2/b"}
+    desc: "coalesce precedence — doi_merge wins over doi and additional_dois"
+  - id: FC1-U04
+    fc: FC1
+    layer: unit
+    kind: unversion
+    edge: [X4]
+    fixture: FIX_VER3
+    input: {doi_merge: "https://dx.doi.org/10.6084/m9.figshare.23691672.v3"}
+    expect: {pid_key: "10.6084/m9.figshare.23691672", doi_version: 3}
+    desc: "real figshare .v3 -> unversioned key + parsed version 3"
+  - id: FC1-U05
+    fc: FC1
+    layer: unit
+    kind: unversion
+    edge: [X5]
+    fixture: FIX_SUPPL
+    input: {doi_merge: "https://doi.org/10.3389/feart.2024.1339822.s001"}
+    expect: {pid_key: "10.3389/feart.2024.1339822.s001", doi_version: null}
+    desc: "supplementary .s001 is NOT a version -> version=None (must tie, not mis-parse)"
+  - id: FC1-U06
+    fc: FC1
+    layer: unit
+    kind: unversion
+    input: {doi_merge: "https://dx.doi.org/10.1594/pangaea.982329"}
+    expect: {pid_key: "10.1594/pangaea.982329", doi_version: null}
+    desc: "trailing numeric record-id (>3 digits) is not a version (pattern_doi guard)"
+  - id: FC1-U07
+    fc: FC1
+    layer: unit
+    kind: handle
+    edge: [X1, X9]
+    fixture: FIX_HANDLE
+    input: {doi: "", identifier: "https://hdl.handle.net/10419/151667"}
+    expect: {pid_key: "10419/151667", namespace: handle}
+    desc: "Handle extracted from identifier when no DOI"
+  - id: FC1-U08
+    fc: FC1
+    layer: unit
+    kind: urn
+    edge: [X1]
+    fixture: FIX_URN
+    input: {doi: "", identifier: "http://nbn-resolving.org/urn:nbn:de:0168-ssoar-201980"}
+    expect: {pid_key: "urn:nbn:de:0168-ssoar-201980", namespace: urn}
+    desc: "URN extracted when no DOI and no Handle"
+  - id: FC1-U09
+    fc: FC1
+    layer: unit
+    kind: precedence
+    edge: [X7, X9]
+    input: {doi: "10.1/a", identifier: "https://hdl.handle.net/10419/1"}
+    expect: {pid_key: "10.1/a", namespace: doi}
+    desc: "namespace precedence DOI > Handle > URN when several present"
+  - id: FC1-U10
+    fc: FC1
+    layer: unit
+    kind: multi-doi
+    edge: [X7]
+    input: {doi_merge: "10.1/a", additional_dois: ["10.1/a", "10.2/b"]}
+    expect: {pid_key: "10.1/a", folded_additional: ["10.1/a", "10.2/b"]}
+    desc: "primary key deterministic; all DOIs retained for the fold (FC4)"
+  - id: FC1-U11
+    fc: FC1
+    layer: unit
+    kind: empty
+    edge: [X1]
+    input: {doi: "", doi_merge: "", additional_dois: [], identifier: "", relation: ""}
+    expect: {pid_key: null}
+    desc: "identifier-less record -> no PID key (falls to title path)"
+  - id: FC1-U12
+    fc: FC1
+    layer: unit
+    kind: case-variant
+    edge: [X6]
+    synthetic: true
+    input: {doi_merge: "10.1016/B978-0-12.x"}
+    expect: {pid_key: "10.1016/b978-0-12.x"}
+    desc: "case-only variants collapse to one key (synthetic; absent from sample)"
+
+  # ---------- FC2: grouping + PID-conflict split (unit >=10; + metamorphic; + gold) ----------
+  - id: FC2-U01
+    fc: FC2
+    layer: unit
+    kind: rule1-samePID
+    edge: [X2]
+    invariant: [I6]
+    input: "two records same pid_key, different titles"
+    expect: "one group (merge)"
+    desc: "same PID merges regardless of title (B's reach; A would false-split)"
+  - id: FC2-U02
+    fc: FC2
+    layer: unit
+    kind: rule2-conflictPID
+    edge: [X3, X10]
+    invariant: [I4]
+    synthetic: true
+    input: "two records identical normalized title, different pid_key"
+    expect: "two groups (NO merge)"
+    desc: "THE false-merge guard — conflicting PID splits even on identical title"
+  - id: FC2-U03
+    fc: FC2
+    layer: unit
+    kind: rule3-titleCorroborate
+    edge: [X1]
+    input: "two records no PID, similar title, same authors+year"
+    expect: "one group (merge)"
+    desc: "title merge allowed only with corroborating fields"
+  - id: FC2-U04
+    fc: FC2
+    layer: unit
+    kind: rule3-corroborateFail
+    edge: [X3]
+    input: "two records no PID, similar title, different authors AND year"
+    expect: "two groups (NO merge)"
+    desc: "corroboration gate blocks the title collision"
+  - id: FC2-U05
+    fc: FC2
+    layer: unit
+    kind: rule4-onePID
+    edge: [X9]
+    fixture: FIX_HANDLE
+    input: "one record with Handle, one none, similar title + corroboration"
+    expect: "one group; anchor carries the Handle PID"
+    desc: "PID-less member folds into the PID-bearing anchor"
+  - id: FC2-U06
+    fc: FC2
+    layer: unit
+    kind: crossNamespace
+    edge: [X9]
+    input: "one DOI record, one Handle record, same work, similar title + corroboration"
+    expect: "one group (via title path; PIDs not comparable)"
+    desc: "cross-namespace treated as no-shared-PID -> rule 3"
+  - id: FC2-U07
+    fc: FC2
+    layer: unit
+    kind: misindexed-sameDOI
+    edge: [X11]
+    input: "two records same DOI, very different titles (doi_title_filter trips)"
+    expect: "split by doi_title_filter (not merged)"
+    desc: "same-DOI-different-work guard still runs after PID grouping"
+  - id: FC2-U08
+    fc: FC2
+    layer: unit
+    kind: version-group
+    edge: [X4]
+    fixture: FIX_VER3
+    input: "the 3 FIX_VER3 members"
+    expect: "one group (shared unversioned key)"
+    desc: "versioned + unversioned figshare records group together"
+  - id: FC2-P01
+    fc: FC2
+    layer: unit
+    kind: metamorphic
+    invariant: [I1]
+    input: "any multi-group corpus, rows shuffled"
+    expect: "identical grouping (membership sets unchanged)"
+    desc: "grouping is a function of content, not row order"
+  - id: FC2-P02
+    fc: FC2
+    layer: unit
+    kind: metamorphic
+    invariant: [I3]
+    input: "corpus + one exact-duplicate row"
+    expect: "anchor set unchanged"
+    desc: "duplication-invariance"
+
+  - id: FC2-U09
+    fc: FC2
+    layer: unit
+    kind: short-title
+    edge: [X15]
+    input: "two PID-less records, generic title 'Editorial' (len<15), different authors"
+    expect: "author-append prevents collision -> two groups (NO merge)"
+    desc: "short/generic title guarded by the authors append (deduplication.py:156-157)"
+  - id: FC2-U10
+    fc: FC2
+    layer: unit
+    kind: title-normalization
+    edge: [X16]
+    input: "two records, same work, one title with trailing ' ...' + non-Latin diacritics"
+    expect: "one group — normalization (base.R trailing-dot strip + _normalize_title) stable"
+    desc: "truncation/encoding must not defeat title grouping"
+  - id: FC2-U11
+    fc: FC2
+    layer: unit
+    kind: publisher-doi
+    edge: [X17]
+    input: "two records sharing only a publisher_doi prefix (get_publisher_doi), distinct works"
+    expect: "NOT grouped on publisher_doi alone"
+    desc: "guard against publisher-prefix false grouping in remove_textual_duplicates_from_different_sources"
+
+  # ---------- FC3: anchor total-order (unit >=8; + metamorphic I1) ----------
+  - id: FC3-U01
+    fc: FC3
+    layer: unit
+    kind: rung-oa
+    edge: [X14]
+    input: "group; one member oa_state=1, others 0/2"
+    expect: "anchor = the oa_state=1 member"
+  - id: FC3-U02
+    fc: FC3
+    layer: unit
+    kind: rung-provider
+    input: "group tied on oa; provider priorities differ"
+    expect: "anchor = highest get_provider_priority"
+  - id: FC3-U03
+    fc: FC3
+    layer: unit
+    kind: rung-version
+    edge: [X4]
+    fixture: FIX_VER3
+    input: "the 3 FIX_VER3 members (versions null,3,1)"
+    expect: "anchor = .v3 (max doi_version)"
+  - id: FC3-U04
+    fc: FC3
+    layer: unit
+    kind: rung-year
+    input: "group tied on oa/provider/version; years differ"
+    expect: "anchor = latest year"
+  - id: FC3-U05
+    fc: FC3
+    layer: unit
+    kind: rung-title
+    edge: [X14]
+    input: "group tied on oa/provider/version/year; distinct titles"
+    expect: "anchor = title-order winner (ordering per §9 decision, TBD length/lex)"
+  - id: FC3-U06
+    fc: FC3
+    layer: unit
+    kind: rung-secondaryPID
+    input: "group tied through title (~identical titles), distinct PIDs"
+    expect: "anchor = secondary-PID-order winner"
+  - id: FC3-U07
+    fc: FC3
+    layer: unit
+    kind: rung-id
+    input: "group tied through secondary PID (none present)"
+    expect: "anchor = id-order winner (final deterministic fallback)"
+  - id: FC3-U08
+    fc: FC3
+    layer: unit
+    kind: versionNone-tie
+    edge: [X5]
+    fixture: FIX_SUPPL
+    input: "several supplementary .sNNN sharing a base, all doi_version=None"
+    expect: "deterministic anchor via title->id (the microplastic instability case)"
+  - id: FC3-P01
+    fc: FC3
+    layer: unit
+    kind: metamorphic
+    invariant: [I1]
+    input: "any group, members shuffled"
+    expect: "identical anchor"
+    desc: "anchor selection independent of input order (all 5 sites §1.1)"
+
+  # ---------- FC4: enrichment determinism (unit >=5; + metamorphic I7) ----------
+  - id: FC4-U01
+    fc: FC4
+    layer: unit
+    kind: abstract-tie
+    edge: [X13]
+    input: "two members, different abstracts of equal length"
+    expect: "deterministic pick (stable key, not first-seen)"
+    desc: "fixes enrichment.py:224 first-wins length tie"
+  - id: FC4-U02
+    fc: FC4
+    layer: unit
+    kind: pid-fold
+    edge: [X7]
+    input: "group members with distinct DOIs"
+    expect: "anchor.additional_dois = sorted union of all member DOIs"
+    desc: "no DOI becomes unmatchable downstream"
+  - id: FC4-U03
+    fc: FC4
+    layer: unit
+    kind: subject-union
+    invariant: [I7]
+    input: "group members with overlapping subject keyword sets, shuffled"
+    expect: "anchor.subject = sorted union, identical regardless of order"
+  - id: FC4-U04
+    fc: FC4
+    layer: unit
+    kind: single-anchor
+    input: "group where FC3 selected exactly one anchor"
+    expect: "enrichment iloc[0] unambiguous (no multi-anchor)"
+  - id: FC4-P01
+    fc: FC4
+    layer: unit
+    kind: metamorphic
+    invariant: [I7, I1]
+    input: "group members shuffled"
+    expect: "identical enriched anchor (all fields)"
+
+  # ---------- FC5: ordering / cutoff (integration >=3; + metamorphic I1) ----------
+  - id: FC5-I01
+    fc: FC5
+    layer: integration
+    kind: binding-cutoff
+    edge: [X12]
+    invariant: [I1]
+    query: microplastic
+    input: "dataset-heavy pool > list_size (100), rows shuffled"
+    expect: "identical set of 100 survivors across shuffles"
+    desc: "deterministic top-N under a binding cutoff"
+  - id: FC5-I02
+    fc: FC5
+    layer: integration
+    kind: nonbinding-cutoff
+    context: ORCID
+    input: "base-request pool << list_size=360"
+    expect: "cutoff not triggered; all anchors retained"
+  - id: FC5-I03
+    fc: FC5
+    layer: integration
+    kind: typenorm-straddle
+    edge: [X12]
+    input: "a duplicate group with one dataset (typenorm=7) and one non-dataset member"
+    expect: "group reduced consistently, not double-processed across the split"
+    desc: "split (base.py:382) happens after grouping — must stay consistent"
+
+  # ---------- Integration: filter_duplicates end-to-end on fixture corpus ----------
+  - id: INT-01
+    layer: integration
+    kind: metamorphic
+    invariant: [I1]
+    query: armutsrisiko
+    input: "full non-dataset pool (88 records), rows shuffled 10x"
+    expect: "identical anchor set + enriched fields across all shuffles"
+  - id: INT-02
+    layer: integration
+    kind: metamorphic
+    invariant: [I1]
+    context: ORCID
+    corpus: orcid_base_requests
+    input: "each base-request pool (581 records total) shuffled"
+    expect: "identical anchors (the base-side flip reference-fixed masked)"
+
+  # ---------- Gold set: absolute merge/split correctness (§10.4) ----------
+  - id: GOLD-structure
+    layer: gold
+    kind: labelled-partition
+    desc: >
+      ~2-3 dozen real groups from doi_coverage/; each labelled with expected member
+      partition + expected anchor. Populate as ORCID dumps expand. Seeds: FIX_VER3
+      (should-merge X4), FIX_HANDLE + matching-title (X9), FIX_SUPPL siblings (X5);
+      synthetic should-NOT-merge pairs (X10).
+    should_merge: [X2, X4, X6, X7]
+    should_not_merge: [X3, X9-different-work, X10, X11]
+
+  # ---------- e2e / reproducibility (§10.5b invariant+parity) ----------
+  - id: E2E-ORCID-parity
+    layer: e2e
+    kind: parity
+    invariant: [I1]
+    queries: ["0000-0001-5116-955X", "0000-0002-2233-6926"]
+    runs: 10
+    expect: {subject_orig_variation: 0, membership_ARI: 1.0, label_mismatches: 0}
+    parity_reference: e2e/reproducibility/output/reference-fixed
+  - id: E2E-BASE-armutsrisiko
+    layer: e2e
+    kind: reproducible-no-spurious-merge
+    query: armutsrisiko
+    runs: 10
+    expect: {paper_set: identical, membership_ARI: 1.0, spurious_merges: 0}
+  - id: E2E-BASE-microplastic
+    layer: e2e
+    kind: reproducible
+    edge: [X5, X12]
+    query: microplastic
+    runs: 10
+    expect: {paper_set: identical, membership_ARI: 1.0}
+    desc: "datasets + binding cutoff; version/supplementary tie must be stable"
+
+  # ---------- Regression: exact-match, was-deterministic-before (§10.5a) ----------
+  - id: REG-exact
+    layer: e2e
+    kind: golden-exact
+    desc: >
+      >=5 maps known deterministic under the OLD code (no multi-member duplicate
+      groups, or already-ARI-1.0 clustering e.g. armutsrisiko clustering) must be
+      BYTE-IDENTICAL after the change on cluster_01_groups, summarize_06_cluster_labels,
+      and cleaned subject. Guards clustering/labelling/clean-up from collateral change.
+    capture: golden fixtures from current dumps before the code change
+  - id: REG-label-modes
+    layer: e2e
+    kind: mode-coverage
+    modes: [0, 1, 2, 3]
+    expect: "one map per label mode; labels well-formed and not degraded vs baseline"
+    desc: "dedup alters subject -> confirm each labelling mode still valid"
+
+acceptance_gates:      # see §10.9
+  phase_1_orcid:
+    - all metamorphic invariants green on orcid_base_requests corpus
+    - E2E-ORCID-parity passes (vs reference-fixed)
+    - REG-exact byte-identical on deterministic-before maps
+  phase_2_base_keyword:
+    - Handle/URN grouping green (FC1-U07/08, FC2-U05/06)
+    - E2E-BASE-armutsrisiko reproducible, 0 spurious merges
+    - gold set merge/split all correct
+    - REG-label-modes modes 0-3 not degraded
