@@ -1,0 +1,44 @@
+<!--
+  This is a custom HTML page that loads the PDF.js viewer in an iframe and enables Hypothesis annotations.
+
+  The page loads the Hypothesis embed script in the parent page and uses a child iframe to load the PDF.js viewer. 
+  The `enable-annotation` attribute on the iframe allows Hypothesis to annotate the content inside the iframe.
+  The `file` query parameter is passed to the viewer to specify which PDF to display.
+-->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>PDF Viewer with Hypothesis</title>
+  <style>
+    html, body, iframe { margin: 0; padding: 0; width: 100%; height: 100%; border: 0; }
+  </style>
+  <!-- Load Hypothesis on the parent page -->
+  <script src="https://hypothes.is/embed.js" async></script>
+</head>
+<body>
+  <!-- Direct child iframe required for Hypothesis enable-annotation -->
+  <iframe id="pdf-viewer" enable-annotation></iframe>
+
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const fileParam = params.get('file');
+
+    const viewerUrl = new URL('./pdfjs/web/viewer.html', window.location.href);
+    const iframe = document.getElementById('pdf-viewer');
+
+    if (fileParam) {
+      const resolvedFile = new URL(fileParam, window.location.href).toString();
+      viewerUrl.searchParams.set('file', resolvedFile);
+    }
+
+    if (window.location.hash) {
+      viewerUrl.hash = window.location.hash;
+    }
+
+    iframe.src = viewerUrl.toString();
+
+  </script>
+</body>
+</html>

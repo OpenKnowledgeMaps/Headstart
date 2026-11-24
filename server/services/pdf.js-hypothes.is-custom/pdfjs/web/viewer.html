@@ -28,20 +28,17 @@ See https://github.com/adobe-type-tools/cmap-resources
     <title>PDF.js viewer</title>
 
   <meta
-    http-equiv="Content-Security-Policy"
-    content="default-src 'none'; script-src 'self' 'wasm-unsafe-eval' https://hypothes.is https://cdn.hypothes.is; worker-src 'self' blob:; style-src 'self' 'unsafe-inline' https://cdn.hypothes.is; img-src 'self' blob: data: https://cdn.hypothes.is; media-src blob:; font-src 'self' data: https://cdn.hypothes.is; frame-src https://hypothes.is; connect-src * blob: data:; base-uri 'none'; form-action 'none';"
-  />
+      http-equiv="Content-Security-Policy"
+      content="default-src 'none'; script-src 'self' 'wasm-unsafe-eval'; worker-src 'self' blob:; style-src 'self'; img-src 'self' blob: data:; media-src blob:; font-src 'self' data:; connect-src * blob: data:; base-uri 'none'; form-action 'none';"
+    />
 
-  <!-- This snippet is used in production (included from viewer.html) -->
-  <link rel="resource" type="application/l10n" href="locale/locale.json" />
-  <script src="../build/pdf.mjs" type="module"></script>
+<!-- This snippet is used in production (included from viewer.html) -->
+<link rel="resource" type="application/l10n" href="locale/locale.json" />
+<script src="../build/pdf.mjs" type="module"></script>
 
-  <link rel="stylesheet" href="viewer.css" />
+    <link rel="stylesheet" href="viewer.css" />
 
   <script src="viewer.mjs" type="module"></script>
-  <script src="hypothesis-loader.js" type="module"></script>
-
-  
   </head>
 
   <body tabindex="0">
