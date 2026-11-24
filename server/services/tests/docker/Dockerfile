@@ -1,4 +1,4 @@
-FROM php:8.2-cli-trixie
+FROM php:8.4-cli-trixie
 
 # Installing dependencies
 RUN apt-get update && apt-get install -y \

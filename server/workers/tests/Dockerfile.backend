@@ -1,7 +1,7 @@
 # Use the official PHP image with Apache as the base image. PHP 8.2 is the version the
 # application runs on; the image already includes the extensions the backend needs
 # (pdo_sqlite, mbstring, xml, fileinfo, curl).
-FROM php:8.2-apache-trixie
+FROM php:8.4-apache-trixie
 
 RUN a2enmod rewrite
 

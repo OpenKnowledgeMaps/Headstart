@@ -1,4 +1,4 @@
-FROM php:8.2-apache-trixie
+FROM php:8.4-apache-trixie
 
 LABEL maintainer="Chris Kittel <christopher.kittel@openknowledgemaps.org>"
 

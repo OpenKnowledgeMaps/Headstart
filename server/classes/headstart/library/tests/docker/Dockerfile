@@ -1,5 +1,5 @@
 # Setup PHP using the project version
-FROM php:8.2-cli
+FROM php:8.4-cli
 
 # Installing dependencies
 RUN apt-get update && apt-get install -y \
