@@ -10,15 +10,15 @@ services:
   # PHP_CodeSniffer is a dev dependency of server/classes/headstart; install it with
   # the composer service first.
   phpcs:
-    image: php:8.2-cli-trixie
+    image: php:8.4-cli-trixie
     restart: never
     volumes:
       - ./server:/data
     working_dir: /data
     entrypoint: classes/headstart/vendor/bin/phpcs
 
-  phpunit82:
-    image: php:8.2-cli-trixie
+  phpunit84:
+    image: php:8.4-cli-trixie
     restart: never
     volumes:
       - ./server/classes/headstart:/app

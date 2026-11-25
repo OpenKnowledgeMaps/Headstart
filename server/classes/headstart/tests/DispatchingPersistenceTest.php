@@ -6,10 +6,9 @@ require_once("autoload.inc.php"); // use some autoloading script that was alread
 
 use headstart\persistence\Persistence;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
 
-/**
- * @covers \headstart\persistence\DispatchingPersistence
- */
+#[CoversClass(\headstart\persistence\DispatchingPersistence::class)]
 class DispatchingPersistenceTest extends TestCase
 {
 

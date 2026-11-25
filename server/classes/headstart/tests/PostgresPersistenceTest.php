@@ -10,10 +10,9 @@ use headstart\persistence\PostgresPersistence;
 use headstart\library\APIClient;
 use PHPUnit\Framework\TestCase;
 use headstart\persistence\VisualizationContext;
+use PHPUnit\Framework\Attributes\CoversClass;
 
-/**
- * @covers \headstart\persistence\PostgresPersistence
- */
+#[CoversClass(PostgresPersistence::class)]
 class PostgresPersistenceTest extends TestCase
 {
     public function testThatInSuccesfulConditionsReturnsAResponseObjectWeCanHandle(): void {

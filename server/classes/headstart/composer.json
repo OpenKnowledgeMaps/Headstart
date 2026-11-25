@@ -1,6 +1,11 @@
 {
     "require-dev": {
-        "phpunit/phpunit": "10.3.0",
+        "phpunit/phpunit": "^12.0",
         "squizlabs/php_codesniffer": "^4.0"
+    },
+    "config": {
+        "platform": {
+            "php": "8.4.0"
+        }
     }
 }
