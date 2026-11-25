@@ -5,9 +5,9 @@ Run all commands from the root directory of Headstart.
 ### Install development dependencies
 
 Install the dev dependencies (PHPUnit and PHP_CodeSniffer) from `composer.lock`
-
-`docker-compose -f docker-compose-phptest.yml run composer install`
-
+```
+docker-compose -f docker-compose-phptest.yml run composer install
+```
 Check that PHPUnit runs on PHP 8.4, the version the application runs on
 
 ```
@@ -28,7 +28,7 @@ docker-compose -f docker-compose-phptest.yml run --rm phpcs ./classes/headstart/
 ### Run tests
 
 ```
-docker-compose -f docker-compose-phptest.yml run phpunit84
+docker-compose -f docker-compose-phptest.yml run phpunit84 --testdox
 ```
 
 ### Update PHPUnit
